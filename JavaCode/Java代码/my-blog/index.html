@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <!-- 响应式核心：手机端自适应，必须加 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的个人博客 - 记录生活与学习</title>
+    <!-- 引入CSS样式文件（IDEA会自动识别路径，红色报错则检查文件夹命名） -->
+    <link rel="stylesheet" href="css/style.css">
+    <!-- 引入免费图标库（字体图标，导航/按钮/时间标签用，无需本地下载） -->
+    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+<!-- 1. 导航栏模块：固定顶部，手机端折叠，电脑端横向 -->
+<nav class="navbar">
+    <div class="container">
+        <!-- 博客LOGO/名称 -->
+        <a href="#" class="logo">我的博客</a>
+        <!-- 电脑端导航菜单 -->
+        <ul class="nav-menu">
+            <li><a href="#home" class="nav-link">首页</a></li>
+            <li><a href="#about" class="nav-link">关于我</a></li>
+            <li><a href="#blog" class="nav-link">博客文章</a></li>
+            <li><a href="#category" class="nav-link">文章分类</a></li>
+            <li><a href="#message" class="nav-link">留言区</a></li>
+        </ul>
+        <!-- 手机端菜单按钮（JS控制展开/折叠） -->
+        <div class="menu-btn" id="menuBtn">
+            <i class="fas fa-bars"></i>
+        </div>
+    </div>
+</nav>
+
+<!-- 回到顶部按钮（JS控制显示/隐藏） -->
+<div class="back-to-top" id="backToTop">
+    <i class="fas fa-arrow-up"></i>
+</div>
+
+<!-- 2. 首页横幅模块（点击导航「首页」跳转） -->
+<section class="home" id="home">
+    <div class="container">
+        <h1>欢迎来到我的个人博客</h1>
+        <p>记录生活点滴 · 分享学习心得 · 遇见同频的你</p>
+        <a href="#blog" class="btn">查看我的文章</a>
+    </div>
+</section>
+
+<!-- 3. 关于我模块（带个人头像+简介+社交链接） -->
+<section class="about section" id="about">
+    <div class="container">
+        <h2 class="section-title">关于我</h2>
+        <div class="about-content">
+            <img src="images/avatar.jpg" alt="个人头像" class="avatar">
+            <div class="about-text">
+                <h3>你好，我是编程小博主</h3>
+                <p>一名热爱编程、喜欢记录的开发者，专注于前端/Java技术学习，本博客用于分享学习笔记、项目实战、生活感悟，希望我的内容能给你带来帮助～</p>
+                <p>擅长技术：HTML+CSS+JS、Java、MySQL、SpringBoot</p>
+                <p>兴趣爱好：阅读、摄影、旅行、敲代码</p>
+                <!-- 社交链接（字体图标，可替换为自己的链接） -->
+                <div class="social-links">
+                    <a href="#" title="GitHub"><i class="fab fa-github"></i></a>
+                    <a href="#" title="微信"><i class="fab fa-weixin"></i></a>
+                    <a href="#" title="QQ"><i class="fab fa-qq"></i></a>
+                    <a href="#" title="CSDN"><i class="fas fa-code"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 4. 博客文章模块（核心，文章卡片式展示） -->
+<section class="blog section" id="blog">
+    <div class="container">
+        <h2 class="section-title">博客文章</h2>
+        <p class="section-desc">这里是我的原创文章，持续更新中，欢迎交流～</p>
+        <!-- 文章列表（卡片布局，响应式自动换行） -->
+        <div class="blog-list">
+            <!-- 文章卡片1 -->
+            <div class="blog-card">
+                <img src="images/blog1.jpg" alt="HTML+CSS+JS实战" class="blog-img">
+                <div class="blog-info">
+                    <span class="blog-date"><i class="far fa-calendar"></i> 2026-02-04</span>
+                    <span class="blog-cate"><i class="fas fa-tag"></i> 前端学习</span>
+                    <h3 class="blog-title"><a href="#">HTML+CSS+JS从入门到实战，手把手教你做个人博客</a></h3>
+                    <p class="blog-desc">本文详细讲解了HTML+CSS+JS的核心用法，从基础标签到布局技巧，再到交互实现，手把手带你做一个可对外使用的个人博客，响应式适配电脑和手机...</p>
+                    <a href="#" class="blog-btn">阅读全文 <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+            <!-- 文章卡片2 -->
+            <div class="blog-card">
+                <img src="images/blog2.jpg" alt="Java数据库实战" class="blog-img">
+                <div class="blog-info">
+                    <span class="blog-date"><i class="far fa-calendar"></i> 2026-02-03</span>
+                    <span class="blog-cate"><i class="fas fa-tag"></i> Java学习</span>
+                    <h3 class="blog-title"><a href="#">Java连接MySQL，手把手实现批量插入1000条数据</a></h3>
+                    <p class="blog-desc">本文讲解了JDBC的核心用法，从数据库连接到PreparedStatement使用，再到批量插入优化，手把手教你用Java操作MySQL，实现1000条数据高效插入...</p>
+                    <a href="#" class="blog-btn">阅读全文 <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+            <!-- 文章卡片3 -->
+            <div class="blog-card">
+                <img src="images/blog3.jpg" alt="编程学习心得" class="blog-img">
+                <div class="blog-info">
+                    <span class="blog-date"><i class="far fa-calendar"></i> 2026-02-02</span>
+                    <span class="blog-cate"><i class="fas fa-tag"></i> 学习心得</span>
+                    <h3 class="blog-title"><a href="#">编程小白入门指南，从0到1搭建自己的技术学习体系</a></h3>
+                    <p class="blog-desc">本文结合自身学习经历，分享编程小白的入门技巧，如何选择学习方向、如何高效记笔记、如何通过实战提升能力，帮你搭建属于自己的技术学习体系...</p>
+                    <a href="#" class="blog-btn">阅读全文 <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 5. 文章分类模块 -->
+<section class="category section" id="category">
+    <div class="container">
+        <h2 class="section-title">文章分类</h2>
+        <p class="section-desc">按技术方向分类，快速找到你想看的内容</p>
+        <div class="category-list">
+            <div class="category-item">
+                <i class="fas fa-code category-icon"></i>
+                <h3>前端开发</h3>
+                <p>HTML/CSS/JS、Vue、React、小程序开发相关文章</p>
+                <span class="cate-count">5篇</span>
+            </div>
+            <div class="category-item">
+                <i class="fas fa-java category-icon"></i>
+                <h3>Java开发</h3>
+                <p>Java基础、MySQL、SpringBoot、SSM框架相关文章</p>
+                <span class="cate-count">8篇</span>
+            </div>
+            <div class="category-item">
+                <i class="fas fa-book category-icon"></i>
+                <h3>学习心得</h3>
+                <p>编程学习方法、笔记技巧、职业规划相关文章</p>
+                <span class="cate-count">4篇</span>
+            </div>
+            <div class="category-item">
+                <i class="fas fa-life-ring category-icon"></i>
+                <p>项目实战</p>
+                <span class="cate-count">6篇</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 6. 留言区模块（带非空校验，JS实现） -->
+<section class="message section" id="message">
+    <div class="container">
+        <h2 class="section-title">留言区</h2>
+        <p class="section-desc">有什么想说的，欢迎留言交流～</p>
+        <div class="message-form">
+            <input type="text" id="msg-name" placeholder="请输入你的昵称" class="msg-input">
+            <textarea id="msg-content" placeholder="请输入你的留言内容" class="msg-input msg-textarea"></textarea>
+            <button class="btn msg-btn" id="sendMsg">发送留言</button>
+        </div>
+        <!-- 留言展示区 -->
+        <div class="message-list" id="msgList">
+            <!-- 留言由JS动态添加，初始为空 -->
+        </div>
+    </div>
+</section>
+
+<!-- 7. 底部信息模块 -->
+<footer class="footer">
+    <div class="container">
+        <p>© 2026 我的个人博客 | 用HTML+CSS+JS+IDEA开发 | 所有文章均为原创</p>
+        <p>本博客已部署上线，欢迎访问：<a href="#" style="color: #3498db;">blog.xxx.com</a></p>
+    </div>
+</footer>
+
+<!-- 引入JS脚本文件（放在body末尾，确保HTML加载完再执行JS） -->
+<script src="js/main.js"></script>
+</body>
+</html>
