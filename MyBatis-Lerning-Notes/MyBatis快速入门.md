@@ -118,6 +118,6 @@
   - 什么时候用 JPA 或其他 ORM；  
   - 团队内 SQL 管理和审查习惯。 [c.biancheng](https://c.biancheng.net/mybatis/)
 
-可以找一篇“从零入门 + 核心概念讲解 + 适用场景总结”的文章细看一遍，把你平时遇到的问题对上号。 [edu.51cto](https://edu.51cto.com/article/note/15309.html)
+
 
 ***
