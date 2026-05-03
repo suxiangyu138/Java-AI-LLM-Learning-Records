@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.example.jingbin.designpattern">
+
+    <application
+        android:name=".app.PatternApplication"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme"
+        tools:ignore="GoogleAppIndexingWarning">
+        <activity android:name=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".observer.ObserverActivity" />
+        <activity android:name=".factory.FactoryActivity" />
+        <activity android:name=".singleton.SingletonActivity" />
+        <activity android:name=".strategy.StrategyActivity" />
+        <activity android:name=".adapter.AdapterActivity" />
+        <activity android:name=".command.CommandActivity" />
+        <activity android:name=".decorator.DecoratorActivity" />
+        <activity android:name=".facade.FacadeActivity" />
+        <activity android:name=".templatemethod.TemplateMethodActivity" />
+        <activity android:name=".state.StateActivity" />
+        <activity android:name=".builder.BuilderActivity" />
+        <activity android:name=".flyweight.FlyweightActivity" />
+        <activity android:name=".prototype.PrototypeActivity" />
+        <activity android:name=".proxy.ProxyActivity" />
+        <activity android:name=".bridge.BridgeActivity" />
+        <activity android:name=".composite.CompositeActivity" />
+        <activity android:name=".iterator.IteratorActivity" />
+        <activity android:name=".mediator.MediatorActivity" />
+        <activity android:name=".memento.MementoActivity" />
+        <activity android:name=".interpreter.InterpreterActivity" />
+        <activity android:name=".chainofresponsibility.ChainOfResponsibilityActivity" />
+        <activity android:name=".visitor.VisitorActivity" />
+    </application>
+
+</manifest>
