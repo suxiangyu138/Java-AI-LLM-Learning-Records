@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="UserMapper">
+    <!-- 1. 查询所有用户 -->
+    <select id="findAll" resultType="com.demo.User">
+        SELECT * FROM user
+    </select>
+
+    <!-- 2. 根据ID查询单个用户 -->
+    <select id="findById" parameterType="int" resultType="com.demo.User">
+        SELECT * FROM user WHERE id = #{id}
+    </select>
+
+    <!-- 3. 新增用户 -->
+    <insert id="insertUser" parameterType="com.demo.User">
+        INSERT INTO user(name, age) VALUES (#{name}, #{age})
+    </insert>
+
+    <!-- 4. 更新用户 -->
+    <update id="updateUser" parameterType="com.demo.User">
+        UPDATE user SET name = #{name}, age = #{age} WHERE id = #{id}
+    </update>
+
+    <!-- 5. 删除用户 -->
+    <delete id="deleteUser" parameterType="int">
+        DELETE FROM user WHERE id = #{id}
+    </delete>
+</mapper>

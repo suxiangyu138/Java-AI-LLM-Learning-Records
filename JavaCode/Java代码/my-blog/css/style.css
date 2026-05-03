@@ -1,0 +1,516 @@
+/* 全局样式重置：消除浏览器默认边距和样式，统一基础 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "微软雅黑", "宋体", sans-serif;
+}
+
+/* 全局变量：统一管理颜色和字体，方便后续修改 */
+:root {
+    --primary-color: #3498db; /* 主色调：天蓝色 */
+    --primary-dark: #2980b9; /* 主色调加深 */
+    --secondary-color: #2ecc71; /* 辅助色：绿色 */
+    --text-dark: #2c3e50; /* 文字深色 */
+    --text-light: #7f8c8d; /* 文字浅色 */
+    --bg-light: #f5f7fa; /* 背景浅色 */
+    --white: #ffffff; /* 白色 */
+    --shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* 通用阴影 */
+    --transition: all 0.3s ease; /* 通用过渡效果 */
+}
+
+/* 全局滚动条美化：提升体验 */
+::-webkit-scrollbar {
+    width: 8px;
+}
+::-webkit-scrollbar-thumb {
+    background-color: var(--primary-color);
+    border-radius: 4px;
+}
+::-webkit-scrollbar-track {
+    background-color: var(--bg-light);
+}
+
+body {
+    color: var(--text-dark);
+    background-color: var(--white);
+    line-height: 1.6;
+}
+
+/* 通用容器：限制页面最大宽度，居中显示，适配宽屏 */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* 通用.section：所有模块的基础间距 */
+.section {
+    padding: 80px 0;
+}
+
+/* 通用标题：所有模块的标题样式统一 */
+.section-title {
+    text-align: center;
+    font-size: 32px;
+    margin-bottom: 10px;
+    color: var(--text-dark);
+    position: relative;
+}
+.section-title::after {
+    content: "";
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 3px;
+    background-color: var(--primary-color);
+    border-radius: 2px;
+}
+
+/* 通用描述文字 */
+.section-desc {
+    text-align: center;
+    color: var(--text-light);
+    font-size: 16px;
+    margin-bottom: 50px;
+}
+
+/* 通用按钮样式 */
+.btn {
+    display: inline-block;
+    padding: 12px 30px;
+    background-color: var(--primary-color);
+    color: var(--white);
+    text-decoration: none;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    transition: var(--transition);
+    box-shadow: var(--shadow);
+}
+.btn:hover {
+    background-color: var(--primary-dark);
+    transform: translateY(-3px);
+}
+
+/* 1. 导航栏样式：固定顶部，透明背景渐变 */
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: rgba(255, 255, 255, 0.95);
+    box-shadow: var(--shadow);
+    z-index: 999; /* 保证导航栏在最上层 */
+}
+.navbar .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 70px;
+}
+/* 博客LOGO */
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+    color: var(--primary-color);
+    text-decoration: none;
+}
+/* 电脑端导航菜单 */
+.nav-menu {
+    display: flex;
+    list-style: none;
+    gap: 30px; /* 菜单之间的间距 */
+}
+.nav-link {
+    color: var(--text-dark);
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 500;
+    transition: var(--transition);
+}
+.nav-link:hover, .nav-link.active {
+    color: var(--primary-color);
+}
+/* 手机端菜单按钮：默认隐藏，小屏幕显示 */
+.menu-btn {
+    font-size: 24px;
+    color: var(--text-dark);
+    cursor: pointer;
+    display: none;
+}
+
+/* 2. 回到顶部按钮：默认隐藏，固定右下角 */
+.back-to-top {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 45px;
+    height: 45px;
+    background-color: var(--primary-color);
+    color: var(--white);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: var(--shadow);
+    transition: var(--transition);
+    opacity: 0;
+    visibility: hidden;
+    z-index: 998;
+}
+.back-to-top:hover {
+    background-color: var(--primary-dark);
+    transform: scale(1.1);
+}
+/* 显示回到顶部按钮的类 */
+.back-to-top.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* 3. 首页横幅模块 */
+.home {
+    height: 100vh;
+    background: linear-gradient(rgba(44, 62, 80, 0.7), rgba(44, 62, 80, 0.7)), url("../images/blog1.jpg") center/cover no-repeat;
+    color: var(--white);
+    display: flex;
+    align-items: center;
+    text-align: center;
+    margin-top: 70px; /* 避开固定导航栏 */
+}
+.home h1 {
+    font-size: 48px;
+    margin-bottom: 20px;
+}
+.home p {
+    font-size: 20px;
+    margin-bottom: 30px;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+}
+.home .btn {
+    background-color: var(--white);
+    color: var(--primary-color);
+    font-weight: bold;
+}
+.home .btn:hover {
+    background-color: #f1f1f1;
+}
+
+/* 4. 关于我模块 */
+.about {
+    background-color: var(--bg-light);
+}
+.about-content {
+    display: flex;
+    align-items: center;
+    gap: 50px;
+    flex-wrap: wrap; /* 小屏幕自动换行 */
+    justify-content: center;
+}
+/* 个人头像 */
+.avatar {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%; /* 圆形头像 */
+    object-fit: cover; /* 保持图片比例，不拉伸 */
+    border: 5px solid var(--white);
+    box-shadow: var(--shadow);
+}
+.about-text {
+    flex: 1;
+    min-width: 300px; /* 小屏幕最小宽度，避免挤压 */
+}
+.about-text h3 {
+    font-size: 24px;
+    margin-bottom: 15px;
+}
+.about-text p {
+    color: var(--text-light);
+    margin-bottom: 10px;
+    font-size: 16px;
+}
+/* 社交链接 */
+.social-links {
+    margin-top: 20px;
+    display: flex;
+    gap: 15px;
+}
+.social-links a {
+    width: 40px;
+    height: 40px;
+    background-color: var(--primary-color);
+    color: var(--white);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    transition: var(--transition);
+}
+.social-links a:hover {
+    background-color: var(--primary-dark);
+    transform: rotate(360deg); /* 旋转动画 */
+}
+
+/* 5. 博客文章模块 */
+.blog-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); /* 响应式网格布局 */
+    gap: 30px;
+}
+/* 文章卡片 */
+.blog-card {
+    background-color: var(--white);
+    border-radius: 10px;
+    box-shadow: var(--shadow);
+    overflow: hidden; /* 裁剪图片圆角外的部分 */
+    transition: var(--transition);
+}
+.blog-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+}
+/* 文章封面图 */
+.blog-img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover; /* 保持比例，填充容器 */
+}
+.blog-info {
+    padding: 25px;
+}
+/* 文章时间+分类 */
+.blog-date, .blog-cate {
+    font-size: 14px;
+    color: var(--text-light);
+    margin-right: 15px;
+    display: inline-block;
+    margin-bottom: 10px;
+}
+.blog-title {
+    font-size: 20px;
+    margin-bottom: 15px;
+}
+.blog-title a {
+    color: var(--text-dark);
+    text-decoration: none;
+    transition: var(--transition);
+}
+.blog-title a:hover {
+    color: var(--primary-color);
+}
+.blog-desc {
+    color: var(--text-light);
+    font-size: 15px;
+    margin-bottom: 20px;
+    display: -webkit-box;
+    -webkit-line-clamp: 3; /* 限制3行，超出省略 */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+.blog-btn {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    transition: var(--transition);
+}
+.blog-btn:hover {
+    color: var(--primary-dark);
+    transform: translateX(5px);
+}
+
+/* 6. 文章分类模块 */
+.category {
+    background-color: var(--bg-light);
+}
+.category-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 25px;
+}
+.category-item {
+    background-color: var(--white);
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: var(--shadow);
+    text-align: center;
+    transition: var(--transition);
+    position: relative;
+}
+.category-item:hover {
+    transform: translateY(-5px);
+}
+/* 分类图标 */
+.category-icon {
+    font-size: 36px;
+    color: var(--primary-color);
+    margin-bottom: 20px;
+}
+.category-item h3 {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+.category-item p {
+    color: var(--text-light);
+    font-size: 15px;
+    margin-bottom: 20px;
+}
+/* 分类文章数量 */
+.cate-count {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background-color: var(--secondary-color);
+    color: var(--white);
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+}
+
+/* 7. 留言区模块 */
+.message-form {
+    max-width: 800px;
+    margin: 0 auto 50px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+.msg-input {
+    padding: 15px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 16px;
+    outline: none;
+    transition: var(--transition);
+}
+.msg-input:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 5px rgba(52, 152, 219, 0.3);
+}
+.msg-textarea {
+    height: 150px;
+    resize: none; /* 禁止拖动改变大小 */
+}
+.msg-btn {
+    align-self: flex-start; /* 按钮左对齐 */
+}
+/* 留言展示区 */
+.message-list {
+    max-width: 800px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+/* 动态生成的留言项 */
+.msg-item {
+    background-color: var(--bg-light);
+    padding: 20px;
+    border-radius: 8px;
+    border-left: 4px solid var(--primary-color);
+}
+.msg-item-name {
+    font-weight: bold;
+    font-size: 18px;
+    margin-bottom: 5px;
+}
+.msg-item-time {
+    font-size: 14px;
+    color: var(--text-light);
+    margin-bottom: 10px;
+    display: block;
+}
+.msg-item-content {
+    color: var(--text-dark);
+    line-height: 1.8;
+}
+
+/* 8. 底部信息模块 */
+.footer {
+    background-color: var(--text-dark);
+    color: var(--white);
+    text-align: center;
+    padding: 40px 0;
+    margin-top: 50px;
+}
+.footer p {
+    margin-bottom: 10px;
+    font-size: 16px;
+}
+.footer a {
+    color: var(--primary-color);
+    text-decoration: none;
+}
+.footer a:hover {
+    text-decoration: underline;
+}
+
+/* 响应式适配：小屏幕（手机/平板）样式调整，核心是折叠导航、适配布局 */
+@media (max-width: 768px) {
+    /* 手机端导航：隐藏菜单，显示按钮 */
+    .menu-btn {
+        display: block;
+    }
+    .nav-menu {
+        position: fixed;
+        top: 70px;
+        left: -100%; /* 初始隐藏在左侧 */
+        width: 100%;
+        height: calc(100vh - 70px);
+        background-color: var(--white);
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 20px;
+        box-shadow: var(--shadow);
+        transition: var(--transition);
+        z-index: 997;
+    }
+    /* 导航菜单展开的类 */
+    .nav-menu.active {
+        left: 0;
+    }
+    /* 首页横幅文字缩小 */
+    .home h1 {
+        font-size: 32px;
+    }
+    .home p {
+        font-size: 18px;
+    }
+    /* 关于我模块：头像居中 */
+    .about-content {
+        text-align: center;
+    }
+    /* 留言按钮居中 */
+    .msg-btn {
+        align-self: center;
+    }
+}
+
+/* 超小屏幕（小手机） */
+@media (max-width: 480px) {
+    .home h1 {
+        font-size: 24px;
+    }
+    .section-title {
+        font-size: 28px;
+    }
+    .blog-list {
+        grid-template-columns: 1fr;
+    }
+}

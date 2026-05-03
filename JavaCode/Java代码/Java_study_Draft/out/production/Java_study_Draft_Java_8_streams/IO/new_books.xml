@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<books xmlns="http://example.com/books">
+    <book id="3">
+        <name>Python 编程</name>
+        <author>李四</author>
+        <price>79.0</price>
+    </book>
+</books>

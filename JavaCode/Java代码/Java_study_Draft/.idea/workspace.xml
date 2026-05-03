@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="6ac048b6-4a25-40ce-8c88-006b2d4abfa9" name="更改" comment="">
+      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/codeStyles/codeStyleConfig.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Java_study_Draft_Java_8_streams.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/IO/BufferDemo.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/IO/ByteStreamDemo.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/IO/CharsetDemo.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/IO/CustomSerializationDemo.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/IO/DOMParserDemo.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/IO/DataStreamDemo.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/IO/DirectoryStreamDemo.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/IO/FileLockDemo.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/IO/FilesCopyMoveDeleteDemo.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/IO/FilesCreateDemo.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/IO/FilesInfoDemo.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/IO/FilesListDemo.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/IO/FilesReadWriteDemo.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/IO/FilterStreamDemo.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/IO/GenerateXMLDemo.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/IO/MappedFileDemo.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/IO/PathDemo.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/IO/RandomAccessDemo.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/IO/RegexFindAllDemo.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/IO/RegexMatchDemo.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/IO/RegexReplaceDemo.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/IO/RegexSplitDemo.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/IO/RegexSyntaxDemo.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/IO/SAXParserDemo.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/IO/SerialCloneDemo.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/IO/SerializationDemo.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/IO/SingletonSerializationDemo.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/IO/StreamFamilyDemo.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/IO/TextInputDemo.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/IO/TextObjectStoreDemo.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/IO/TextOutputDemo.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/IO/TextStreamDemo.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/IO/XMLSchemaValidateDemo.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/IO/XPathDemo.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/IO/XSLTransformDemo.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/IO/ZipDemo.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/IO/ZipFileSystemDemo.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/IO/book.xsl" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/IO/books.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/IO/books.xsd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/streams/OptionalDemo.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/streams/StreamCollectDemo.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/streams/StreamCreateDemo.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/streams/StreamDownstreamCollectorDemo.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/streams/StreamGroupPartitionDemo.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/streams/StreamMapFilterDemo.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/streams/StreamOtherTransformDemo.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/streams/StreamPrimitiveDemo.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/streams/StreamReduceDemo.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/streams/StreamReductionDemo.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/streams/StreamSubCombineDemo.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/streams/StreamToMapDemo.java" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="localRepository" value="C:\Users\34966\.m2\repository" />
+        <option name="userSettingsFile" value="C:\Users\34966\.m2\settings.xml" />
+      </MavenGeneralSettings>
+    </option>
+  </component>
+  <component name="ProjectCodeStyleSettingsMigration">
+    <option name="version" value="2" />
+  </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 7
+}]]></component>
+  <component name="ProjectId" id="39CEGwHGKlcuFcvaZHtrnwtPKTF" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+    <option name="sortKey" value="BY_TIME_ASCENDING" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "dart.analysis.tool.window.visible": "false",
+    "git-widget-placeholder": "master",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "工件",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "MavenSettings",
+    "show.migrate.to.gradle.popup": "false",
+    "vue.rearranger.settings.migration": "true",
+    "应用程序.BufferDemo.executor": "Run",
+    "应用程序.ByteStreamDemo.executor": "Run",
+    "应用程序.CharsetDemo.executor": "Run",
+    "应用程序.CountLongWords.executor": "Run",
+    "应用程序.CustomSerializationDemo.executor": "Run",
+    "应用程序.DOMParserDemo.executor": "Run",
+    "应用程序.DataStreamDemo.executor": "Run",
+    "应用程序.DirectoryStreamDemo.executor": "Run",
+    "应用程序.FileLockDemo.executor": "Run",
+    "应用程序.FilesCopyMoveDeleteDemo.executor": "Run",
+    "应用程序.FilesCreateDemo.executor": "Run",
+    "应用程序.FilesInfoDemo.executor": "Run",
+    "应用程序.FilesListDemo.executor": "Run",
+    "应用程序.FilesReadWriteDemo.executor": "Run",
+    "应用程序.FilterStreamDemo.executor": "Run",
+    "应用程序.GenerateXMLDemo.executor": "Run",
+    "应用程序.MappedFileDemo.executor": "Run",
+    "应用程序.OptionalDemo.executor": "Run",
+    "应用程序.PathDemo.executor": "Run",
+    "应用程序.RandomAccessDemo.executor": "Run",
+    "应用程序.RegexFindAllDemo.executor": "Run",
+    "应用程序.RegexMatchDemo.executor": "Run",
+    "应用程序.RegexReplaceDemo.executor": "Run",
+    "应用程序.RegexSplitDemo.executor": "Run",
+    "应用程序.RegexSyntaxDemo.executor": "Run",
+    "应用程序.SAXParserDemo.executor": "Run",
+    "应用程序.SerialCloneDemo.executor": "Run",
+    "应用程序.SerializationDemo.executor": "Run",
+    "应用程序.SingletonSerializationDemo.executor": "Run",
+    "应用程序.StreamCollectDemo.executor": "Run",
+    "应用程序.StreamCreateDemo.executor": "Run",
+    "应用程序.StreamDownstreamCollectorDemo.executor": "Run",
+    "应用程序.StreamFamilyDemo.executor": "Run",
+    "应用程序.StreamGroupPartitionDemo.executor": "Run",
+    "应用程序.StreamIterationDemo.executor": "Run",
+    "应用程序.StreamMapFilterDemo.executor": "Run",
+    "应用程序.StreamOtherTransformDemo.executor": "Run",
+    "应用程序.StreamPrimitiveDemo.executor": "Run",
+    "应用程序.StreamReduceDemo.executor": "Run",
+    "应用程序.StreamReductionDemo.executor": "Run",
+    "应用程序.StreamSubCombineDemo.executor": "Run",
+    "应用程序.StreamToMapDemo.executor": "Run",
+    "应用程序.TextInputDemo.executor": "Run",
+    "应用程序.TextObjectStoreDemo (1).executor": "Run",
+    "应用程序.TextObjectStoreDemo.executor": "Run",
+    "应用程序.TextOutputDemo.executor": "Run",
+    "应用程序.TextStreamDemo.executor": "Run",
+    "应用程序.XMLSchemaValidateDemo.executor": "Run",
+    "应用程序.XPathDemo.executor": "Run",
+    "应用程序.XSLTransformDemo.executor": "Run",
+    "应用程序.ZipDemo.executor": "Run",
+    "应用程序.ZipFileSystemDemo.executor": "Run"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\Desktop\Java代码\Java_study_Draft" />
+    </key>
+  </component>
+  <component name="RunManager" selected="应用程序.XSLTransformDemo">
+    <configuration name="GenerateXMLDemo" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="IO.GenerateXMLDemo" />
+      <module name="Java_study_Draft_Java_8_streams" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="IO.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="SAXParserDemo" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="IO.SAXParserDemo" />
+      <module name="Java_study_Draft_Java_8_streams" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="IO.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="XMLSchemaValidateDemo" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="IO.XMLSchemaValidateDemo" />
+      <module name="Java_study_Draft_Java_8_streams" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="IO.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="XPathDemo" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="IO.XPathDemo" />
+      <module name="Java_study_Draft_Java_8_streams" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="IO.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="XSLTransformDemo" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="IO.XSLTransformDemo" />
+      <module name="Java_study_Draft_Java_8_streams" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="IO.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="JetRunConfigurationType">
+      <module name="Java_study_Draft_Java_8_streams" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+      <module name="Java_study_Draft_Java_8_streams" />
+      <option name="filePath" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="应用程序.XSLTransformDemo" />
+        <item itemvalue="应用程序.GenerateXMLDemo" />
+        <item itemvalue="应用程序.XPathDemo" />
+        <item itemvalue="应用程序.XMLSchemaValidateDemo" />
+        <item itemvalue="应用程序.SAXParserDemo" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9823dce3aa75-fbdcb00ec9e3-intellij.indexing.shared.core-IU-251.25410.129" />
+        <option value="bundled-js-predefined-d6986cc7102b-6a121458b545-JavaScript-IU-251.25410.129" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="默认任务">
+      <changelist id="6ac048b6-4a25-40ce-8c88-006b2d4abfa9" name="更改" comment="" />
+      <created>1770191559595</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1770191559595</updated>
+      <workItem from="1770191560809" duration="4732000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>

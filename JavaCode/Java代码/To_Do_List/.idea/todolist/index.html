@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>精致版待办事项</title>
+    <link rel="stylesheet" href="../../style.css">
+</head>
+<body>
+<div class="todo-container">
+    <h1>我的待办清单 📝</h1>
+
+    <!-- 新增：统计面板 -->
+    <div class="stats-bar">
+        <span class="stat total">总待办: <span class="num">0</span></span>
+        <span class="stat completed">已完成: <span class="num">0</span></span>
+        <span class="stat active">未完成: <span class="num">0</span></span>
+        <button id="clear-completed" class="clear-btn">清空已完成</button>
+    </div>
+
+    <!-- 输入区域 -->
+    <div class="todo-input">
+        <input type="text" id="todo-input" placeholder="添加新的待办事项...">
+        <button id="add-btn">✨ 添加</button>
+    </div>
+
+    <!-- 筛选按钮组 -->
+    <div class="filter-group">
+        <button class="filter-btn active" data-filter="all">全部</button>
+        <button class="filter-btn" data-filter="active">未完成</button>
+        <button class="filter-btn" data-filter="completed">已完成</button>
+    </div>
+
+    <!-- 待办列表区域 -->
+    <ul id="todo-list"></ul>
+</div>
+
+<script src="../../script.js"></script>
+</body>
+</html>

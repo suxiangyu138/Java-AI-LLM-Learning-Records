@@ -1,0 +1,221 @@
+# 快速学会 哈希（Hash）数据结构
+## 一、核心本质
+**哈希 = 快速查找**
+- 数组：按下标 O(1) 随机访问，但下标连续、不能随意映射
+- 链表：查找 O(n) 很慢
+- **哈希**：通过哈希函数，把「任意key」映射成「数组下标」，实现 **平均 O(1) 增删改查**
+
+一句话：
+> 哈希 = 数组 + 哈希函数 + 解决冲突
+
+---
+
+## 二、三大基础概念
+### 1. 哈希函数
+输入任意 key → 算出一个整数下标
+公式极简理解：
+\[
+index = hash(key) \% 数组长度
+\]
+作用：把分散的数据，均匀散落存到数组里。
+
+### 2. 哈希冲突
+不同 key，算出**同一个下标**，就是哈希冲突。
+例：
+key1、key2 算出来都要存在 index=5，互相抢占位置。
+
+### 3. 解决冲突两种主流方案
+1. **链地址法（拉链法）**【Java HashMap 用这个】
+   数组每个位置挂一条链表/红黑树，冲突元素挂在后面
+2. **开放寻址法**
+   冲突就往下找空位（线性探测、二次探测）
+
+---
+
+## 三、哈希结构分类
+1. **哈希表 HashTable**：整体数据结构
+2. **哈希集合 HashSet**：只存元素、不可重复
+3. **哈希映射 HashMap**：键值对 key-value
+
+底层共性：
+**底层都是数组 + 链表/红黑树**
+
+---
+
+## 四、Java 原生使用（最常用）
+### 1. HashSet 集合（去重、快速查找）
+```java
+import java.util.HashSet;
+
+public class Test {
+    public static void main(String[] args) {
+        HashSet<Integer> set = new HashSet<>();
+        set.add(1);
+        set.add(2);
+        set.add(1); // 重复，自动舍弃
+
+        System.out.println(set.contains(2));
+        set.remove(2);
+    }
+}
+```
+
+### 2. HashMap 键值对
+```java
+import java.util.HashMap;
+
+public class Test {
+    public static void main(String[] args) {
+        HashMap<String, Integer> map = new HashMap<>();
+        map.put("张三", 20);
+        map.put("李四", 22);
+
+        System.out.println(map.get("张三"));
+        map.remove("李四");
+        map.containsKey("张三");
+    }
+}
+```
+
+---
+
+## 五、手写极简哈希表（拉链法，理解底层）
+```java
+import java.util.LinkedList;
+
+// 手写简单哈希表：数组+链表 解决冲突
+class MyHashTable {
+    private LinkedList<Integer>[] table;
+    private int capacity;
+
+    public MyHashTable() {
+        capacity = 10;
+        table = new LinkedList[capacity];
+        for (int i = 0; i < capacity; i++) {
+            table[i] = new LinkedList<>();
+        }
+    }
+
+    // 哈希函数
+    private int hash(int key) {
+        return key % capacity;
+    }
+
+    // 添加元素
+    public void add(int key) {
+        int idx = hash(key);
+        if (!table[idx].contains(key)) {
+            table[idx].add(key);
+        }
+    }
+
+    // 查询元素
+    public boolean contains(int key) {
+        int idx = hash(key);
+        return table[idx].contains(key);
+    }
+
+    // 删除元素
+    public void remove(int key) {
+        int idx = hash(key);
+        table[idx].remove(Integer.valueOf(key));
+    }
+}
+
+public class HashDemo {
+    public static void main(String[] args) {
+        MyHashTable ht = new MyHashTable();
+        ht.add(15);
+        ht.add(25);
+        // 15%10 和 25%10 相同，发生哈希冲突，挂在同一条链表
+        System.out.println(ht.contains(15));
+    }
+}
+```
+
+---
+
+## 六、HashMap 底层核心（面试必背）
+
+### 1. 底层数据结构演进
+- **JDK 1.7**：`数组 + 链表`
+  - 头插法（多线程扩容可能导致死循环）
+- **JDK 1.8**：`数组 + 链表 + 红黑树`
+  - 尾插法（解决死循环问题）
+  - 引入红黑树优化长链表查询性能
+
+### 2. 关键阈值与转换机制
+- **树化条件**：
+  1. 链表长度 `>= 8`
+  2. 数组容量 `>= 64`
+  - *注意*：若仅满足链表长度 >=8 但数组容量 <64，则优先进行**扩容**而非树化。
+- **退化条件**：
+  - 红黑树节点数 `<= 6` 时，退化为链表。
+
+### 3. 负载因子（Load Factor）
+- **默认值**：`0.75`
+- **触发时机**：当 `size > capacity * loadFactor` 时，触发扩容。
+- **扩容机制**：
+  - 容量扩大为原来的 **2倍**。
+  - 重新计算哈希并迁移元素（JDK 1.8 优化了迁移逻辑，无需重新计算 hash，只需判断高位比特）。
+
+### 4. Key 的去重与定位原理
+- **定位桶位置**：依赖 `hashCode()`
+  - `(n - 1) & hash` 确定数组下标。
+- **判断键相等**：依赖 `equals()`
+  - 先比较 `hash` 值，再比较 `key` 是否 `==` 或 `equals` 为 true。
+- **最佳实践**：
+  - 作为 Key 的对象必须同时重写 `hashCode()` 和 `equals()` 方法，以保证哈希契约。
+
+---
+
+## 七、时间复杂度总结
+
+| 操作 | 平均情况 (Average) | 最坏情况 (Worst Case) | 说明 |
+| :--- | :---: | :---: | :--- |
+| **查找 (Get)** | $O(1)$ | $O(\log n)$ | JDK 1.8+ 引入红黑树优化，极端冲突下由 $O(n)$ 降至 $O(\log n)$ |
+| **插入 (Put)** | $O(1)$ | $O(\log n)$ | 同查找，若触发扩容则为 $O(n)$ |
+| **删除 (Remove)** | $O(1)$ | $O(\log n)$ | 同查找 |
+| **空间复杂度** | $O(n)$ | $O(n)$ | 取决于存储的元素数量及负载因子 |
+
+**关键点解析：**
+1. **理想状态**：哈希函数分布均匀，无冲突或冲突极少，直接通过数组下标访问，耗时恒定。
+2. **退化状态**：
+   - **JDK 1.7 及以前**：所有元素冲突在同一桶，退化为链表，操作耗时 $O(n)$。
+   - **JDK 1.8 及以后**：当链表长度 $\ge 8$ 且数组容量 $\ge 64$ 时，链表转为红黑树，最坏情况优化为 $O(\log n)$。
+3. **扩容影响**：当元素数量超过阈值（容量 * 负载因子）时，会触发扩容（Resize），此时需要重新计算哈希并迁移数据，单次操作耗时 $O(n)$，但分摊到每次操作仍为 $O(1)$。
+
+---
+## 八、哈希高频算法场景与实战技巧
+
+### 1. 经典题型分类
+- **查找类**：两数之和 (Two Sum)、三数之和、四数之和
+  - *技巧*：用 `HashMap` 存 `<值, 索引>` 或 `<值, 出现次数>`，将 $O(n^2)$ 暴力搜索优化为 $O(n)$。
+- **去重与集合运算**：数组去重、求交集/并集/差集
+  - *技巧*：利用 `HashSet` 的 `add()` 返回值判断是否重复，或使用 `retainAll()`/`removeAll()`。
+- **统计类**：字符/元素出现频率、多数元素
+  - *技巧*：`HashMap<Key, Integer>` 计数，或当 Key 范围有限（如小写字母）时使用 `int[26]` 数组替代哈希表以提升性能。
+- **映射与转换**：字符串异位词 (Anagram)、模式匹配
+  - *技巧*：将字符串排序后作为 Key，或统计字符频次作为特征值进行比对。
+- **图与缓存**：邻接表表示图、LRU 缓存设计
+  - *技巧*：`HashMap<Key, LinkedList<Node>>` 构建邻接表；`LinkedHashMap` 实现 LRU。
+
+### 2. 避坑指南
+- **Key 的选择**：确保 Key 不可变且正确重写了 `hashCode` 和 `equals`（自定义对象时）。
+- **初始容量**：若已知数据量，创建时指定 `initialCapacity` 避免频繁扩容。
+- **遍历安全**：不要在增强 for 循环中直接删除元素，应使用 `Iterator.remove()`。
+
+---
+
+## 九、核心总结
+
+| 维度 | 关键点 |
+| :--- | :--- |
+| **核心原理** | **Key → Hash函数 → 数组下标**，实现平均 $O(1)$ 访问 |
+| **冲突解决** | Java HashMap 采用 **拉链法** (链表 + 红黑树) |
+| **常用容器** | `HashMap` (键值对), `HashSet` (去重), `LinkedHashMap` (有序) |
+| **性能权衡** | 时间换空间：通过额外的内存占用换取极致的查询速度 |
+| **刷题地位** | **万能钥匙**：遇到“查找”、“去重”、“计数”、“配对”优先考虑哈希 |
+
+ **一句话心法**：
+ 哈希是用**空间换时间**的艺术，掌握它，就掌握了快速查找的精髓。
