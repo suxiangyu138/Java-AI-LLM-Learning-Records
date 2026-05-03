@@ -1,0 +1,85 @@
+04.29 23:17
+SpringMVC 必做项目清单
+一、入门级（掌握基础流程）
+1. 用户登录注册系统
+核心掌握
+-  @RequestMapping 、 @PostMapping 、 @GetMapping 
+- 表单参数绑定、 @RequestParam 、 @ModelAttribute 
+-  HttpServletRequest  /  HttpServletResponse 
+- 页面跳转、转发与重定向
+产出
+登录、注册、页面跳转、简单会话保存
+2. 简单CRUD员工管理系统
+核心掌握
+- MVC三层架构：Controller → Service → Dao
+- JdbcTemplate 或 MyBatis 数据交互
+- 列表分页、条件查询
+产出
+员工增删改查、分页展示、条件筛选
+ 
+二、进阶级（SpringMVC 核心功能）
+3. 全局异常处理 + 统一返回体
+核心掌握
+-  @ControllerAdvice 、 @ExceptionHandler 
+- 自定义业务异常
+- 统一 JSON 返回格式
+产出
+全项目统一异常拦截、标准化接口响应
+4. 拦截器实现登录鉴权
+核心掌握
+-  HandlerInterceptor 
+- 登录状态校验、未登录拦截
+- 放行白名单配置
+产出
+未登录用户无法访问后台接口，自动跳转登录页
+5. 文件上传与下载
+核心掌握
+-  MultipartFile  文件上传
+- 文件类型校验、大小限制
+- 服务器文件保存、文件下载流
+产出
+图片/文档上传、文件下载、上传文件预览
+6. JSON 数据交互项目
+核心掌握
+-  @ResponseBody 、 @RequestBody 
+- 前后端分离 JSON 交互
+- Jackson 序列化、日期格式化
+产出
+纯接口形式的用户管理系统，返回 JSON 数据
+ 
+三、综合实战级（企业级规范）
+7. 完整后台权限管理系统
+核心掌握
+- 多角色、多权限控制
+- 拦截器 + 角色校验
+- 菜单动态渲染
+产出
+用户、角色、权限、菜单管理的完整后台
+8. 商品购物车系统
+核心掌握
+- Session 购物车存储
+- 商品列表、加入购物车、结算
+- 事务控制、订单生成
+产出
+简易商城购物流程、订单创建
+9. SSM 整合博客系统
+核心掌握
+- Spring + SpringMVC + MyBatis 完整整合
+- 动态 SQL、多表联查
+- 分页插件、事务管理
+产出
+文章发布、评论、分类、标签、权限控制
+ 
+最简必做优先级（只做这5个就够）
+1. 用户登录注册系统
+2. 全局异常 + 统一返回体
+3. 拦截器登录鉴权
+4. 文件上传下载
+5. SSM 整合博客系统
+ 
+配套要求（保证能写进简历）
+- 每个项目代码规范分层：Controller / Service / Dao / Entity
+- 配置文件清晰：web.xml、springmvc.xml、applicationContext.xml
+- 全部代码上传 GitHub，写标准 README.md
+- 严格处理异常、参数校验、编码乱码问题
+

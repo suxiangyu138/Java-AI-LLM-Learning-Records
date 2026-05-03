@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?><teachers>
+    <teacher id="1">
+        <name>张老师</name>
+        <subject>Java</subject>
+    </teacher>
+    <teacher id="2">
+        <name>李老师</name>
+        <subject>Python</subject>
+    </teacher>
+</teachers>

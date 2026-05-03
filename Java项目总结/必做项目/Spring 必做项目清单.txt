@@ -1,0 +1,113 @@
+04.29 23:15
+Spring 必做项目清单
+Spring 必做项目清单
+下面按 Spring 基础 → SpringMVC → SpringBoot → 全家桶整合 → 企业级实战 → AI融合 分层整理，全部是面试高频、简历硬通货、企业真实业务场景，做完一套直接吃透 Spring 生态核心。
+ 
+一、Spring 核心基础项目（吃透IOC/AOP/事务）
+目标：脱离Boot，原生手写Spring，理解底层原理，面试必问
+1. 手写简易IOC容器
+- 核心：BeanDefinition、反射实例化、依赖注入、单例池
+- 知识点：Bean生命周期、循环依赖、注解扫描
+2. 手写AOP动态代理框架
+- 核心：JDK/CGLIB代理、切面、切点、通知、事务环绕
+3. Spring声明式事务实战
+- 场景：转账业务、库存扣减
+- 知识点：事务传播机制、隔离级别、@Transactional、事务失效场景
+4. Spring 整合JDBC用户管理系统
+- 核心：JdbcTemplate、DAO层封装、CRUD、事务控制
+ 
+二、SpringMVC 必做项目（MVC架构+Web请求处理）
+目标：掌握请求分发、参数绑定、视图解析、拦截器、异常处理
+1. SpringMVC 登录注册系统
+- 核心：请求映射、参数绑定、JSON序列化、@ResponseBody
+2. 全局异常处理+统一返回体
+- 核心：@RestControllerAdvice、自定义异常、统一响应格式
+3. 拦截器实现登录鉴权
+- 核心：HandlerInterceptor、Token校验、未登录拦截
+4. 文件上传与下载
+- 核心：MultipartFile、文件校验、断点续传基础
+ 
+三、SpringBoot 入门必做（现代开发核心，企业标配）
+目标：掌握自动配置、约定大于配置、快速开发
+1. SpringBoot 个人博客后端
+- 技术：SpringBoot + MyBatis-Plus + MySQL
+- 功能：文章CRUD、分页、评论、标签、分类
+2. 前后端分离后台管理系统
+- 技术：SpringBoot + Vue + JWT
+- 核心：RBAC权限、菜单管理、用户角色、登录认证
+3. 接口文档自动化（Swagger/Knife4j）
+- 核心：接口注解、参数说明、在线调试
+4. 定时任务调度系统
+- 核心：@Scheduled、Cron表达式、动态任务配置
+ 
+四、Spring 全家桶整合项目（SSM / SpringBoot + 中间件）
+目标：整合主流组件，对标企业开发标准
+1. SSM 校园二手交易平台
+- 技术：Spring + SpringMVC + MyBatis
+- 核心：多表联查、动态SQL、事务、文件上传
+2. SpringBoot + Redis 缓存实战
+- 场景：商品详情、首页热点数据
+- 核心：缓存穿透/击穿/雪崩、分布式锁、热点Key优化
+3. SpringBoot + RabbitMQ 异步消息系统
+- 场景：订单异步通知、邮件发送、日志异步落库
+- 核心：交换机、队列、死信队列、消息可靠性
+4. SpringBoot + Elasticsearch 搜索引擎
+- 场景：商品搜索、文章全文检索
+- 核心：分词、高亮、分页、聚合查询
+ 
+五、企业级高并发实战项目（Spring生态高阶）
+目标：解决性能、并发、分布式问题，实习/校招加分核心
+1. SpringBoot 秒杀系统
+- 技术：SpringBoot + Redis + MQ
+- 核心：库存预扣、超卖防护、限流、异步下单、防刷
+2. 分布式会话共享系统
+- 核心：Redis存储Session、集群登录、单点登录基础
+3. 多级缓存商品详情系统
+- 核心：Caffeine本地缓存 + Redis + MySQL、缓存更新策略
+4. 分布式日志追踪系统
+- 核心：MDC链路追踪、全局日志格式、异常告警
+ 
+六、SpringCloud 微服务项目（大厂标配）
+目标：掌握微服务架构、服务治理、分布式协作
+1. 微服务电商平台
+- 技术：SpringCloud Alibaba（Nacos + Gateway + Feign + Sentinel）
+- 核心：服务注册发现、网关路由、限流熔断、配置中心
+2. 分布式订单系统
+- 核心：Seata分布式事务、库存锁定、订单超时关闭
+3. 统一认证授权中心
+- 核心：OAuth2.0、JWT、资源服务、客户端认证
+ 
+七、Spring + AI大模型融合项目（贴合你的职业规划）
+目标：打造差异化竞争力，Java后端+AI应用结合
+1. SpringBoot + Ollama 本地大模型接口服务
+- 核心：封装大模型调用接口、参数控制、流式输出
+2. Java版 RAG 知识库问答系统
+- 技术：SpringBoot + Milvus + Ollama + PDF解析
+- 核心：文档向量化、检索增强、上下文问答、会话管理
+3. AI智能客服后端
+- 核心：多轮对话、意图识别、知识库匹配、接口限流
+4. 代码生成器后端
+- 核心：调用大模型生成Java代码、格式化、语法校验
+ 
+八、Spring 进阶硬核项目（面试天花板）
+1. 手写SpringBoot自动配置
+- 核心：SPI机制、@EnableAutoConfiguration、条件注解
+2. 基于Spring的RPC框架
+- 核心：Netty、自定义协议、服务注册、序列化
+3. Spring AOP 实现日志埋点与监控
+- 核心：切面采集请求耗时、异常信息、监控告警
+ 
+学习优先级建议（直接照着做）
+1. 先做 IOC/AOP手写 + SpringBoot博客后端，打牢Spring基础
+2. 再做 Redis缓存 + MQ异步 + 秒杀系统，掌握企业级问题解决
+3. 重点攻坚 SpringBoot+AI大模型项目，打造个人差异化优势
+4. 有余力再上 SpringCloud微服务，冲击大厂实习
+ 
+项目落地标准（简历加分关键）
+每个项目必须做到：
+- 代码规范（阿里巴巴Java开发手册）
+- 统一异常处理 + 统一返回体
+- 接口文档齐全
+- 上传GitHub + 标准README
+- 核心难点写出问题+方案+优化
+

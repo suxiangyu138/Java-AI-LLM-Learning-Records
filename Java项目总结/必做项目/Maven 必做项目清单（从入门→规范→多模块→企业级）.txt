@@ -1,0 +1,146 @@
+04.29 23:50
+Maven 必做项目清单（从入门→规范→多模块→企业级）
+ 
+Maven 是 Java 生态的构建与依赖管理标准，是 SpringBoot、SpringCloud、后端工程化的底层基石。
+结合你的 Java后端 + AI大模型应用 技术栈，下面项目循序渐进，覆盖 Maven 核心能力、工程规范、多模块、私服、CI/CD 集成，全部是企业开发刚需，练完能彻底搞懂 Java 项目构建体系。
+ 
+一、入门必做（吃透 Maven 基础核心）
+1. 单模块 Java 项目从零构建
+核心知识点
+- Maven 核心生命周期：clean、compile、test、package、install、deploy
+-  pom.xml  基础结构：坐标、依赖、打包方式、JDK 版本
+- 目录约定： src/main/java  /  src/main/resources  /  src/test/java 
+核心功能
+手写  pom.xml ，完成编译、测试、打包、本地安装全流程
+预计耗时：1天
+2. 依赖管理与冲突解决实战
+核心知识点
+- 依赖范围： compile  /  test  /  provided  /  runtime 
+- 依赖传递、依赖排除  exclusions 
+- 版本锁定  dependencyManagement 
+- 依赖冲突排查、树状依赖分析  mvn dependency:tree 
+核心功能
+解决常见 Jar 包冲突、版本不一致问题
+预计耗时：1~2天
+3. 自定义属性与资源过滤
+核心知识点
+- 自定义属性、环境变量引用
+- 资源文件过滤、动态占位符替换
+- Profile 多环境配置（dev/test/prod）
+核心功能
+一套代码适配多环境，打包时自动替换配置
+预计耗时：1天
+ 
+二、进阶必做（规范工程 + 插件实战）
+4. 整合常用插件体系
+核心知识点
+- 编译插件  maven-compiler-plugin 
+- 打包插件  maven-jar-plugin  /  maven-war-plugin 
+- 单元测试插件  maven-surefire-plugin 
+- 代码格式化、静态代码检查  checkstyle 、 spotbugs 
+核心功能
+标准化项目构建、质量校验、规范约束
+预计耗时：2天
+5. SpringBoot 项目 Maven 工程化
+核心知识点
+- SpringBoot 父工程继承、starter 依赖机制
+- SpringBoot 打包插件  spring-boot-maven-plugin 
+- 可执行 Jar 打包、外部配置文件加载
+核心功能
+规范 SpringBoot 项目构建，实现一键打包、运行
+预计耗时：1天
+6. 单元测试与测试覆盖率
+核心知识点
+- JUnit 5 整合、测试用例编写
+- 测试覆盖率插件  jacoco 
+- 跳过测试、指定用例执行
+核心功能
+保障代码质量，输出覆盖率报告
+预计耗时：1天
+ 
+三、核心必做（多模块项目，企业级架构刚需）
+7. 父子多模块聚合项目
+核心知识点
+- 父 POM 统一管理版本、依赖、插件
+- 子模块继承、模块间依赖
+- 聚合打包、并行构建
+项目场景
+common 公共模块、service 业务模块、web 接口模块拆分
+预计耗时：2天
+8. 自定义公共依赖组件
+核心知识点
+- 编写通用工具类、异常类、配置类
+- 打包成独立 Jar 包，供多个项目依赖
+核心功能
+实现代码复用，统一团队基础组件
+预计耗时：2天
+9. 多环境打包与配置分离
+核心知识点
+- Maven Profile + SpringBoot 多环境
+- 打包时区分环境、排除/包含资源
+核心功能
+一键打包 dev/test/prod 环境包
+预计耗时：1~2天
+ 
+四、高阶必做（私服、部署、工程化）
+10. 搭建 Maven 私服（Nexus）
+核心知识点
+- Nexus 私服安装、仓库类型（hosted/proxy/group）
+- 镜像源配置、私服上传/下载
+- 私服权限、仓库分组
+核心功能
+企业级依赖管理、私有组件托管、加速依赖下载
+预计耗时：2~3天
+11. 自定义 Maven 插件开发
+核心知识点
+- Mojo 插件开发、注解定义目标
+- 插件参数配置、生命周期绑定
+核心功能
+开发自己的构建工具，实现代码生成、资源处理等定制逻辑
+预计耗时：3天
+12. Maven + Docker 一体化打包
+核心知识点
+-  docker-maven-plugin 
+- 一键构建镜像、推送私服
+- 多阶段构建、镜像优化
+核心功能
+代码提交 → Maven 打包 → 自动构建 Docker 镜像
+预计耗时：2天
+ 
+五、工程化必做（CI/CD、规范落地）
+13. Maven + GitHub Actions 自动化流水线
+核心知识点
+- 提交触发自动构建、测试、打包
+- 制品上传、版本管理
+核心功能
+实现代码提交后自动编译、测试、打包、发布
+预计耗时：2天
+14. 版本号规范与发布管理
+核心知识点
+-  maven-release-plugin 
+- SNAPSHOT / Release 版本切换
+- 自动打 Tag、更新版本号
+核心功能
+规范化项目版本迭代、发布流程
+预计耗时：2天
+ 
+极简必做优先级（6 个项目覆盖求职核心）
+1. 单模块 Java 项目从零构建
+2. 依赖管理与冲突解决实战
+3. SpringBoot 项目 Maven 工程化
+4. 父子多模块聚合项目
+5. 搭建 Maven 私服（Nexus）
+6. Maven + Docker 一体化打包
+ 
+项目落地标准
+1. 所有项目手写  pom.xml ，不依赖 IDE 一键生成
+2. 熟练掌握：生命周期、依赖管理、多模块、插件、私服
+3. 项目上传 GitHub，README 写明构建命令、依赖说明、打包方式
+4. 能独立解决：Jar 冲突、打包失败、环境切换、私服上传等常见问题
+ 
+推荐配套学习
+- 镜像源：阿里云 Maven 镜像
+- 私服：Nexus3
+- 插件：compiler、surefire、spring-boot、docker、jacoco
+- 规范：阿里巴巴 Java 开发手册 Maven 规范
+
