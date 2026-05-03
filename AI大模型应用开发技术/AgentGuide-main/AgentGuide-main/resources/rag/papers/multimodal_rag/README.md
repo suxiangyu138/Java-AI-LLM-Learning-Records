@@ -1,6 +1,0 @@
-# Multimodal RAG Papers
-
-
-
-
-
