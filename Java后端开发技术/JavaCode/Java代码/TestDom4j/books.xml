@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<books>
+  <book id="1">
+    <title>Java 编程思想</title>
+    <author>Bruce Eckel</author>
+    <price>108.00</price>
+  </book>
+  <book id="2">
+    <title>XML 实战</title>
+    <author>张三</author>
+    <price>88.00</price>
+  </book>
+</books>
