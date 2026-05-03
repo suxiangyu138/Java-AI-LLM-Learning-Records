@@ -1,0 +1,30 @@
+---
+interface Props {
+  title: string;
+  description: string;
+  href: string;
+  icon?: string;
+  stat?: string;
+}
+
+const { title, description, href, icon = '📄', stat = '' } = Astro.props;
+const base = import.meta.env.BASE_URL;
+const withBase = (path: string) => (base === '/' ? path : `${base.replace(/\/$/, '')}${path}`);
+---
+
+<a href={withBase(href)} class="spotlight-card group relative bg-secondary border border-slate-900/10 rounded-xl p-8 hover:border-slate-900/20 transition-all duration-300 overflow-hidden flex flex-col min-h-[230px]">
+  <div class="pointer-events-none absolute -inset-px opacity-0 group-hover:opacity-100 transition duration-300 z-10"
+    style="background: radial-gradient(600px circle at var(--x) var(--y), rgba(255,255,255,0.06), transparent 40%);"></div>
+
+  <div class="relative z-20 flex-1 flex flex-col">
+    <div class="flex justify-between items-start mb-6">
+      <div class="text-4xl">{icon}</div>
+      {stat && <span class="px-2 py-1 bg-slate-900/5 rounded text-xs text-slate-500 border border-slate-900/10 font-mono">{stat}</span>}
+    </div>
+
+    <h3 class="text-xl font-bold mb-3 group-hover:text-accent transition-colors">{title}</h3>
+    <p class="text-slate-600 leading-relaxed line-clamp-3 mb-6">{description}</p>
+
+    <span class="mt-auto text-accent text-sm font-medium inline-flex items-center gap-1">进入章节 <span>→</span></span>
+  </div>
+</a>

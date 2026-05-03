@@ -1,0 +1,23 @@
+# SpecStory auto-save files
+.specstory/
+
+# Cursor IDE configuration
+.cursorindexingignore
+
+# License file (if you want to keep it local only)
+LICENSE
+
+# 临时学习资源文件
+可用内容.md
+CHANGELOG.md
+READY_TO_LAUNCH.md
+
+# ai-research-ebook 构建产物和依赖
+external/ai-research-ebook/dist/
+external/ai-research-ebook/node_modules/
+external/ai-research-ebook/.astro/
+
+# InterviewGuide 构建产物和依赖
+external/InterviewGuide/dist/
+external/InterviewGuide/node_modules/
+external/InterviewGuide/.astro/

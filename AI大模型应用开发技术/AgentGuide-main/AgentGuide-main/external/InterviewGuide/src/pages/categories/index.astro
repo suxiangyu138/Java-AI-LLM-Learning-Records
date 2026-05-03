@@ -1,0 +1,37 @@
+---
+import categoriesData from '../../data/categories.json';
+import Layout from '../../layouts/Layout.astro';
+import { toCategorySlug, withBase } from '../../lib/path';
+
+interface CategoryStat {
+  key: string;
+  name: string;
+  questionCount: number;
+  highFrequencyCount: number;
+  questionIds: string[];
+}
+
+const categories = (categoriesData as CategoryStat[]).slice().sort((a, b) => b.questionCount - a.questionCount);
+---
+
+<Layout title="知识点学习 | InterviewGuide" description="按知识点系统学习 AI 面经题目">
+  <section class="py-12 px-6">
+    <div class="max-w-6xl mx-auto">
+      <h1 class="text-3xl md:text-4xl font-bold mb-2">知识点学习</h1>
+      <p class="text-slate-600 mb-8">按分类系统复习，可与公司定向互补。</p>
+
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {categories.map((category) => (
+          <a
+            href={withBase(`/categories/${toCategorySlug(category.key)}`)}
+            class="question-card bg-secondary rounded-xl border border-slate-900/10 p-5 block"
+          >
+            <h2 class="text-lg font-semibold text-slate-900">{category.name}</h2>
+            <p class="text-sm text-slate-600 mt-2">题目 {category.questionCount}</p>
+            <p class="text-sm text-slate-600 mt-1">高频 {category.highFrequencyCount}</p>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+</Layout>

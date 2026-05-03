@@ -1,0 +1,191 @@
+<!DOCTYPE html><html lang="zh-CN" class="scroll-smooth"> <head><meta charset="UTF-8"><meta name="description" content="AI研究电子书 - 从idea到论文发表的完整指南"><meta name="viewport" content="width=device-width"><meta name="generator" content="Astro v5.17.1"><link rel="icon" type="image/svg+xml" href="/AgentGuide/research/favicon.svg"><link rel="canonical" href="https://adongwanai.github.io/AgentGuide/research/docs/intro/01-overview/"><script>
+      (() => {
+        const key = 'vr-theme';
+        try {
+          const saved = localStorage.getItem(key);
+          const theme = saved === 'dark' || saved === 'light' ? saved : 'light';
+          document.documentElement.dataset.theme = theme;
+        } catch {
+          document.documentElement.dataset.theme = 'light';
+        }
+      })();
+    </script><script type="module" src="/AgentGuide/research/scripts/mermaid-init.js"></script><title>Vibe Research | Vibe Research</title><link rel="stylesheet" href="/AgentGuide/research/_astro/_slug_.CgnI8BI1.css"></head> <body class="bg-primary text-slate-900 min-h-screen flex flex-col font-sans selection:bg-accent/25 selection:text-slate-900"> <header class="fixed top-0 left-0 right-0 bg-primary/80 backdrop-blur-md border-b border-slate-900/10 z-50"> <nav class="max-w-7xl mx-auto px-6 h-[70px] flex justify-between items-center"> <a href="/AgentGuide/research/" class="text-xl font-bold"> <span class="bg-gradient-to-br from-blue-500 to-violet-600 bg-clip-text text-transparent">Vibe Research</span> </a> <div class="flex items-center gap-3"> <button type="button" data-theme-toggle class="theme-toggle-btn" aria-label="切换主题" title="切换浅色/深色"> <span data-theme-icon>🌙</span> <span data-theme-label>深色</span> </button> <ul class="hidden md:flex gap-8 items-center"> <li><a href="/AgentGuide/research/" class="text-slate-500 hover:text-slate-900 transition-colors text-sm font-medium">首页</a></li> <li><a href="/AgentGuide/research/#chapters" class="text-slate-500 hover:text-slate-900 transition-colors text-sm font-medium">章节</a></li> <li><a href="/AgentGuide/research/#workflow" class="text-slate-500 hover:text-slate-900 transition-colors text-sm font-medium">工作流</a></li> <li><a href="/AgentGuide/research/#about" class="text-slate-500 hover:text-slate-900 transition-colors text-sm font-medium">关于</a></li> <li><a href="/AgentGuide/research/docs/intro/01-overview" class="text-slate-500 hover:text-slate-900 transition-colors text-sm font-medium">文档</a></li> <li><a href="/AgentGuide/research/skills" class="text-slate-500 hover:text-slate-900 transition-colors text-sm font-medium">Skills</a></li> <li><a href="https://github.com/yiweinanzi/ai-research-ebook" target="_blank" rel="noopener" class="text-slate-500 hover:text-slate-900 transition-colors text-sm font-medium">GitHub</a></li> </ul> </div> </nav> </header> <main class="flex-1 pt-[70px]">  <section class="py-12"> <div class="max-w-[1500px] mx-auto px-4 md:px-6 xl:px-8 flex flex-col lg:flex-row gap-5 xl:gap-7"> <aside class="w-full lg:w-72 lg:sticky lg:top-[90px] lg:self-start bg-secondary/85 border border-slate-900/10 rounded-xl p-4 lg:p-5 backdrop-blur-sm max-h-[calc(100vh-108px)] overflow-y-auto overscroll-contain sidebar-scroll"> <p class="text-xs tracking-widest text-slate-500 mb-4 font-mono">CHAPTERS</p> <nav class="space-y-4"> <section> <h3 class="text-xs font-semibold text-slate-500 mb-2 uppercase tracking-wide">0. 导读</h3> <ul class="space-y-1.5"> <li> <a href="/AgentGuide/research/docs/intro/01-overview" class="block rounded-md px-3 py-2 text-sm transition-colors leading-relaxed bg-accent/15 text-accent border border-accent/30"> Vibe Research </a> </li> </ul> </section><section> <h3 class="text-xs font-semibold text-slate-500 mb-2 uppercase tracking-wide">1. Idea 生成</h3> <ul class="space-y-1.5"> <li> <a href="/AgentGuide/research/docs/idea/01-research" class="block rounded-md px-3 py-2 text-sm transition-colors leading-relaxed text-slate-600 hover:text-slate-900 hover:bg-slate-900/5 border border-transparent"> 调研方法 </a> </li><li> <a href="/AgentGuide/research/docs/idea/02-projects" class="block rounded-md px-3 py-2 text-sm transition-colors leading-relaxed text-slate-600 hover:text-slate-900 hover:bg-slate-900/5 border border-transparent"> 调研项目 </a> </li> </ul> </section><section> <h3 class="text-xs font-semibold text-slate-500 mb-2 uppercase tracking-wide">2. 代码实现</h3> <ul class="space-y-1.5"> <li> <a href="/AgentGuide/research/docs/code/01-claude" class="block rounded-md px-3 py-2 text-sm transition-colors leading-relaxed text-slate-600 hover:text-slate-900 hover:bg-slate-900/5 border border-transparent"> Claude Code </a> </li><li> <a href="/AgentGuide/research/docs/code/02-gpt" class="block rounded-md px-3 py-2 text-sm transition-colors leading-relaxed text-slate-600 hover:text-slate-900 hover:bg-slate-900/5 border border-transparent"> GPT-5.2 系列 </a> </li><li> <a href="/AgentGuide/research/docs/code/03-agents" class="block rounded-md px-3 py-2 text-sm transition-colors leading-relaxed text-slate-600 hover:text-slate-900 hover:bg-slate-900/5 border border-transparent"> 多Agent框架 </a> </li> </ul> </section><section> <h3 class="text-xs font-semibold text-slate-500 mb-2 uppercase tracking-wide">3. 论文图表</h3> <ul class="space-y-1.5"> <li> <a href="/AgentGuide/research/docs/figures/01-tools" class="block rounded-md px-3 py-2 text-sm transition-colors leading-relaxed text-slate-600 hover:text-slate-900 hover:bg-slate-900/5 border border-transparent"> 自动化绘图工具 </a> </li><li> <a href="/AgentGuide/research/docs/figures/02-comparison" class="block rounded-md px-3 py-2 text-sm transition-colors leading-relaxed text-slate-600 hover:text-slate-900 hover:bg-slate-900/5 border border-transparent"> 专业绘图对比 </a> </li><li> <a href="/AgentGuide/research/docs/figures/03-design" class="block rounded-md px-3 py-2 text-sm transition-colors leading-relaxed text-slate-600 hover:text-slate-900 hover:bg-slate-900/5 border border-transparent"> 图表设计规范 </a> </li> </ul> </section><section> <h3 class="text-xs font-semibold text-slate-500 mb-2 uppercase tracking-wide">4. 论文写作</h3> <ul class="space-y-1.5"> <li> <a href="/AgentGuide/research/docs/writing/01-methods" class="block rounded-md px-3 py-2 text-sm transition-colors leading-relaxed text-slate-600 hover:text-slate-900 hover:bg-slate-900/5 border border-transparent"> 写作方法 </a> </li><li> <a href="/AgentGuide/research/docs/writing/02-prism" class="block rounded-md px-3 py-2 text-sm transition-colors leading-relaxed text-slate-600 hover:text-slate-900 hover:bg-slate-900/5 border border-transparent"> Prism 编辑器 </a> </li><li> <a href="/AgentGuide/research/docs/writing/03-collaboration" class="block rounded-md px-3 py-2 text-sm transition-colors leading-relaxed text-slate-600 hover:text-slate-900 hover:bg-slate-900/5 border border-transparent"> 多模型协作写作 </a> </li><li> <a href="/AgentGuide/research/docs/writing/04-rebuttal" class="block rounded-md px-3 py-2 text-sm transition-colors leading-relaxed text-slate-600 hover:text-slate-900 hover:bg-slate-900/5 border border-transparent"> Rebuttal 策略 </a> </li> </ul> </section><section> <h3 class="text-xs font-semibold text-slate-500 mb-2 uppercase tracking-wide">5. 审稿与 Rebuttal</h3> <ul class="space-y-1.5"> <li> <a href="/AgentGuide/research/docs/review/01-structured" class="block rounded-md px-3 py-2 text-sm transition-colors leading-relaxed text-slate-600 hover:text-slate-900 hover:bg-slate-900/5 border border-transparent"> 结构化审稿 </a> </li><li> <a href="/AgentGuide/research/docs/review/02-templates" class="block rounded-md px-3 py-2 text-sm transition-colors leading-relaxed text-slate-600 hover:text-slate-900 hover:bg-slate-900/5 border border-transparent"> 会议审稿模板 </a> </li> </ul> </section><section> <h3 class="text-xs font-semibold text-slate-500 mb-2 uppercase tracking-wide">6. 工具生态</h3> <ul class="space-y-1.5"> <li> <a href="/AgentGuide/research/docs/tools/01-overview" class="block rounded-md px-3 py-2 text-sm transition-colors leading-relaxed text-slate-600 hover:text-slate-900 hover:bg-slate-900/5 border border-transparent"> 工具总览 </a> </li><li> <a href="/AgentGuide/research/docs/tools/02-workflow" class="block rounded-md px-3 py-2 text-sm transition-colors leading-relaxed text-slate-600 hover:text-slate-900 hover:bg-slate-900/5 border border-transparent"> 完整工作流 </a> </li> </ul> </section><section> <h3 class="text-xs font-semibold text-slate-500 mb-2 uppercase tracking-wide">7. 资料库</h3> <ul class="space-y-1.5"> <li> <a href="/AgentGuide/research/docs/library/01-root-assets" class="block rounded-md px-3 py-2 text-sm transition-colors leading-relaxed text-slate-600 hover:text-slate-900 hover:bg-slate-900/5 border border-transparent"> 科研圣经 </a> </li> </ul> </section> </nav> </aside> <article class="flex-1 min-w-0 bg-secondary/70 border border-slate-900/10 rounded-2xl p-6 md:p-9 backdrop-blur-sm"> <div class="mb-7 pb-6 border-b border-slate-900/10"> <p class="text-xs font-mono tracking-widest text-slate-500 mb-2">DOCS</p> <h1 class="text-3xl md:text-[2.55rem] font-bold text-slate-900 leading-tight">Vibe Research</h1> <p class="mt-3 text-slate-600 text-[1.02rem] leading-relaxed">AI研究电子书 - 从idea到论文发表的完整指南</p> </div> <div class="markdown-content">  <h2 id="研究工作流概览">研究工作流概览</h2>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="mermaid"><code><span class="line"><span style="color:#E1E4E8">flowchart LR</span></span>
+<span class="line"><span style="color:#E1E4E8">    subgraph Phase1[&quot;Phase 1: Idea&quot;]</span></span>
+<span class="line"><span style="color:#E1E4E8">        A(文献调研) --&gt; B(创新模式分析)</span></span>
+<span class="line"><span style="color:#E1E4E8">        B --&gt; C(Gap 识别)</span></span>
+<span class="line"><span style="color:#E1E4E8">        C --&gt; D(Claim 产出)</span></span>
+<span class="line"><span style="color:#E1E4E8">    end</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">    subgraph Phase2[&quot;Phase2:代码&quot;]</span></span>
+<span class="line"><span style="color:#E1E4E8">        D --&gt; E(项目设计)</span></span>
+<span class="line"><span style="color:#E1E4E8">        E --&gt; F(Claude Code 构建)</span></span>
+<span class="line"><span style="color:#E1E4E8">        F --&gt; G(实验验证)</span></span>
+<span class="line"><span style="color:#E1E4E8">    end</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">    subgraph Phase3[&quot;Phase3:写作&quot;]</span></span>
+<span class="line"><span style="color:#E1E4E8">        G --&gt; H(结构化写作)</span></span>
+<span class="line"><span style="color:#E1E4E8">        H --&gt; I(图表制作)</span></span>
+<span class="line"><span style="color:#E1E4E8">        I --&gt; J(审稿迭代)</span></span>
+<span class="line"><span style="color:#E1E4E8">    end</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">    Phase1 --&gt; Phase2</span></span>
+<span class="line"><span style="color:#E1E4E8">    Phase2 --&gt; Phase3</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">    classDef phase fill:#f8fafc,stroke:#10a37f,stroke-width:1.6px,color:#111827</span></span>
+<span class="line"><span style="color:#E1E4E8">    class Phase1,Phase2,Phase3 phase</span></span>
+<span class="line"></span>
+<span class="line"></span></code></pre>
+<h2 id="快速价值">快速价值</h2>
+<ul class="index-highlights"><li>🚀 用 14 周路线，把科研任务拆成可执行流水线。</li><li>🧠 用多模型交叉审查，减少方向性失误和实验返工。</li><li>🧪 用结构化实验与审稿闭环，提升投稿成功率。</li><li>📊 用流程图与模板化文档，让团队协作更稳定。</li></ul>
+<h2 id="核心功能">核心功能</h2>
+<h3 id="idea-生成">Idea 生成</h3>
+<p>系统化的文献调研方法，使用多模型交叉验证，从2000+论文中发现可写的研究空白。</p>
+<p><strong>核心方法：</strong></p>
+<ul>
+<li>Related Work Map 构建</li>
+<li>Assumption Matrix 分析</li>
+<li>Gap List 产出</li>
+<li>Claim Candidate Pool</li>
+</ul>
+<h3 id="代码实现">代码实现</h3>
+<p>Claude Code、GPT-5.2系列、多Agent框架的最佳实践，高效构建实验系统。</p>
+<p><strong>核心能力：</strong></p>
+<ul>
+<li>并行协作架构</li>
+<li>CLAUDE.md 团队记忆</li>
+<li>Sub-agents 交叉验证</li>
+<li>自动化验证闭环</li>
+</ul>
+<h3 id="论文图表">论文图表</h3>
+<p>自动化绘图工具推荐，专业图表设计规范，让论文插图更具说服力。</p>
+<p><strong>工具生态：</strong></p>
+<ul>
+<li>PaperBanana 自动生成</li>
+<li>Mermaid 流程图</li>
+<li>D3.js 自定义可视化</li>
+<li>Figma 专业设计</li>
+</ul>
+<h3 id="论文写作">论文写作</h3>
+<p>论证链构建方法，多模型协作写作，Prism等新一代写作工具使用指南。</p>
+<p><strong>写作方法：</strong></p>
+<ul>
+<li>Claim → Evidence 论证链</li>
+<li>多模型协作 tmux 配置</li>
+<li>会议特定写作模板</li>
+</ul>
+<h3 id="审稿迭代">审稿迭代</h3>
+<p>结构化审稿流水线，会议特定审稿模板，Rebuttal写作策略。</p>
+<p><strong>审稿流水线：</strong></p>
+<ul>
+<li>10+ 轮自动审稿</li>
+<li>TODO 驱动修改</li>
+<li>分类回应策略</li>
+</ul>
+<h3 id="工具生态">工具生态</h3>
+<p>Elicit、Zotero-MCP、Sci-Reasoning等最新工具，构建完整科研工具链。</p>
+<hr/>
+<h2 id="14-周完整时间线">14 周完整时间线</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>周次</th><th>阶段</th><th>核心任务</th><th>输出</th></tr></thead><tbody><tr><td>Week 1-2</td><td>调研</td><td>Elicit 扫描 + Sci-Reasoning 分析</td><td>Gap 清单</td></tr><tr><td>Week 3</td><td>设计</td><td>Claude Code 生成文档</td><td>项目设计</td></tr><tr><td>Week 4-7</td><td>实现</td><td>Sub-agents 并行开发</td><td>代码 + 实验</td></tr><tr><td>Week 8-9</td><td>写作</td><td>Prism + 图表生成</td><td>初稿</td></tr><tr><td>Week 10</td><td>审稿</td><td>10+ 轮自动审稿</td><td>修改版</td></tr><tr><td>Week 11</td><td>投稿</td><td>格式检查</td><td>最终版</td></tr><tr><td>Week 12+</td><td>Rebuttal</td><td>如有需要</td><td>录用</td></tr></tbody></table>
+<hr/>
+<h2 id="适用场景">适用场景</h2>
+<ul>
+<li><strong>研究生/博士生</strong>: 系统学习 AI 研究方法，提升论文产出质量</li>
+<li><strong>工业界研究员</strong>: 快速掌握最新工具，提高研发效率</li>
+<li><strong>独立研究者</strong>: 建立完整的科研工作流，从零开始发表顶会论文</li>
+</ul>
+<h2 id="从这里开始">从这里开始</h2>
+<ul>
+<li>新手建议先读：<a href="/docs/idea/01-research"><code>/docs/idea/01-research</code></a> → <a href="/docs/idea/02-projects"><code>/docs/idea/02-projects</code></a></li>
+<li>需要快速落地：<a href="/docs/tools/02-workflow"><code>/docs/tools/02-workflow</code></a> + <a href="/docs/review/01-structured"><code>/docs/review/01-structured</code></a></li>
+<li>关注工程效率：<a href="/docs/code/01-claude"><code>/docs/code/01-claude</code></a> + <a href="/docs/code/03-agents"><code>/docs/code/03-agents</code></a></li>
+</ul>
+<hr/>
+<p class="index-footnote"><strong>本书持续更新中</strong> · 视觉系统升级：2026-02-12 · 默认主题：暗色</p>  </div> <div class="mt-10 pt-6 border-t border-slate-900/10 grid gap-4 sm:grid-cols-2"> <div>  </div> <div> <a href="/AgentGuide/research/docs/idea/01-research" class="block rounded-xl border border-slate-900/10 p-4 hover:border-accent/40 transition-colors bg-slate-50 text-right"> <p class="text-xs text-slate-500 mb-2">下一篇</p> <p class="font-semibold text-slate-900">调研方法</p> </a> </div> </div> </article> <aside class="hidden xl:block w-64 sticky top-[90px] self-start bg-secondary/85 border border-slate-900/10 rounded-xl p-4 lg:p-5 backdrop-blur-sm max-h-[calc(100vh-108px)] overflow-y-auto overscroll-contain sidebar-scroll"><p class="text-xs tracking-widest text-slate-500 mb-4 font-mono">ON THIS PAGE</p><ul class="space-y-2"><li><a href="#研究工作流概览" class="block text-sm text-slate-500 hover:text-slate-900 transition-colors leading-relaxed pl-0">研究工作流概览</a></li><li><a href="#快速价值" class="block text-sm text-slate-500 hover:text-slate-900 transition-colors leading-relaxed pl-0">快速价值</a></li><li><a href="#核心功能" class="block text-sm text-slate-500 hover:text-slate-900 transition-colors leading-relaxed pl-0">核心功能</a></li><li><a href="#idea-生成" class="block text-sm text-slate-500 hover:text-slate-900 transition-colors leading-relaxed pl-3">Idea 生成</a></li><li><a href="#代码实现" class="block text-sm text-slate-500 hover:text-slate-900 transition-colors leading-relaxed pl-3">代码实现</a></li><li><a href="#论文图表" class="block text-sm text-slate-500 hover:text-slate-900 transition-colors leading-relaxed pl-3">论文图表</a></li><li><a href="#论文写作" class="block text-sm text-slate-500 hover:text-slate-900 transition-colors leading-relaxed pl-3">论文写作</a></li><li><a href="#审稿迭代" class="block text-sm text-slate-500 hover:text-slate-900 transition-colors leading-relaxed pl-3">审稿迭代</a></li><li><a href="#工具生态" class="block text-sm text-slate-500 hover:text-slate-900 transition-colors leading-relaxed pl-3">工具生态</a></li><li><a href="#14-周完整时间线" class="block text-sm text-slate-500 hover:text-slate-900 transition-colors leading-relaxed pl-0">14 周完整时间线</a></li><li><a href="#适用场景" class="block text-sm text-slate-500 hover:text-slate-900 transition-colors leading-relaxed pl-0">适用场景</a></li><li><a href="#从这里开始" class="block text-sm text-slate-500 hover:text-slate-900 transition-colors leading-relaxed pl-0">从这里开始</a></li></ul></aside> </div> </section>  </main> <footer class="bg-secondary border-t border-slate-900/10 py-8 mt-auto"> <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4"> <p class="text-slate-500 text-sm">&copy; 2026 Vibe Research. Built with Astro + Tailwind.</p> <div class="flex gap-6"> <a href="https://github.com/yiweinanzi/ai-research-ebook" target="_blank" rel="noopener" class="text-slate-500 hover:text-accent transition-colors text-sm">GitHub</a> <a href="/AgentGuide/research/docs/intro/01-overview" class="text-slate-500 hover:text-accent transition-colors text-sm">开始阅读</a> </div> </div> </footer> <script>
+      (() => {
+        const key = 'vr-theme';
+        const root = document.documentElement;
+        const iconNodes = () => document.querySelectorAll('[data-theme-icon]');
+        const labelNodes = () => document.querySelectorAll('[data-theme-label]');
+
+        const currentTheme = () => (root.dataset.theme === 'dark' ? 'dark' : 'light');
+
+        const syncThemeUI = () => {
+          const isDark = currentTheme() === 'dark';
+          for (const node of iconNodes()) node.textContent = isDark ? '☀️' : '🌙';
+          for (const node of labelNodes()) node.textContent = isDark ? '浅色' : '深色';
+        };
+
+        const setTheme = (theme) => {
+          root.dataset.theme = theme === 'dark' ? 'dark' : 'light';
+          try {
+            localStorage.setItem(key, root.dataset.theme);
+          } catch {}
+          syncThemeUI();
+        };
+
+        document.addEventListener('click', (event) => {
+          const target = event.target;
+          if (!(target instanceof Element)) return;
+          const button = target.closest('[data-theme-toggle]');
+          if (!button) return;
+          setTheme(currentTheme() === 'dark' ? 'light' : 'dark');
+        });
+
+        document.addEventListener('astro:after-swap', syncThemeUI);
+        syncThemeUI();
+      })();
+    </script> </body> </html>

@@ -1,0 +1,64 @@
+---
+import companiesData from '../../data/companies.json';
+import statsData from '../../data/stats.json';
+import Layout from '../../layouts/Layout.astro';
+import { withBase, toCompanySlug } from '../../lib/path';
+
+interface CompanyStat {
+  name: string;
+  questionCount: number;
+  highFrequencyCount: number;
+  questionIds: string[];
+}
+
+const companies = (companiesData as CompanyStat[]).slice().sort((a, b) => b.questionCount - a.questionCount);
+const stats = statsData as {
+  totalQuestions: number;
+  totalCompanies: number;
+  highFrequencyQuestions: number;
+};
+---
+
+<Layout title="公司定向 | InterviewGuide" description="按公司维度定向准备 AI 面经题目">
+  <section class="py-14 px-6">
+    <div class="max-w-6xl mx-auto">
+      <h1 class="text-3xl md:text-4xl font-bold mb-3">公司定向刷题</h1>
+      <p class="text-slate-600 mb-8">默认学习入口：按目标公司快速定位高频题。</p>
+
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
+        <div class="bg-secondary rounded-xl border border-slate-900/10 p-4">
+          <p class="text-xs text-slate-500">公司数量</p>
+          <p class="text-2xl font-bold">{stats.totalCompanies}</p>
+        </div>
+        <div class="bg-secondary rounded-xl border border-slate-900/10 p-4">
+          <p class="text-xs text-slate-500">题目总量</p>
+          <p class="text-2xl font-bold">{stats.totalQuestions}</p>
+        </div>
+        <div class="bg-secondary rounded-xl border border-slate-900/10 p-4">
+          <p class="text-xs text-slate-500">高频题</p>
+          <p class="text-2xl font-bold">{stats.highFrequencyQuestions}</p>
+        </div>
+        <div class="bg-secondary rounded-xl border border-slate-900/10 p-4">
+          <p class="text-xs text-slate-500">默认策略</p>
+          <p class="text-lg font-bold">公司定向</p>
+        </div>
+      </div>
+
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {companies.map((company) => (
+          <a
+            href={withBase(`/companies/${toCompanySlug(company.name)}`)}
+            class="question-card bg-secondary rounded-xl border border-slate-900/10 p-5 block"
+          >
+            <div class="flex items-start justify-between gap-2">
+              <h2 class="text-lg font-semibold text-slate-900">{company.name}</h2>
+              <span class="text-xs font-semibold px-2 py-1 rounded-full bg-indigo-500/10 text-indigo-600">TOP</span>
+            </div>
+            <p class="text-sm text-slate-600 mt-2">题目数 {company.questionCount}</p>
+            <p class="text-sm text-slate-600 mt-1">高频题 {company.highFrequencyCount}</p>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+</Layout>

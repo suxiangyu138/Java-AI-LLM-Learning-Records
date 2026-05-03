@@ -1,0 +1,376 @@
+<!DOCTYPE html><html lang="zh-CN" class="scroll-smooth"> <head><meta charset="UTF-8"><meta name="description" content="重要调研项目分析, 包括 Sci-Reasoning、AI Research、Idea2Story 等"><meta name="viewport" content="width=device-width"><meta name="generator" content="Astro v5.17.1"><link rel="icon" type="image/svg+xml" href="/AgentGuide/research/favicon.svg"><link rel="canonical" href="https://adongwanai.github.io/AgentGuide/research/docs/idea/02-projects/"><script>
+      (() => {
+        const key = 'vr-theme';
+        try {
+          const saved = localStorage.getItem(key);
+          const theme = saved === 'dark' || saved === 'light' ? saved : 'light';
+          document.documentElement.dataset.theme = theme;
+        } catch {
+          document.documentElement.dataset.theme = 'light';
+        }
+      })();
+    </script><script type="module" src="/AgentGuide/research/scripts/mermaid-init.js"></script><title>调研项目 | Vibe Research</title><link rel="stylesheet" href="/AgentGuide/research/_astro/_slug_.CgnI8BI1.css"></head> <body class="bg-primary text-slate-900 min-h-screen flex flex-col font-sans selection:bg-accent/25 selection:text-slate-900"> <header class="fixed top-0 left-0 right-0 bg-primary/80 backdrop-blur-md border-b border-slate-900/10 z-50"> <nav class="max-w-7xl mx-auto px-6 h-[70px] flex justify-between items-center"> <a href="/AgentGuide/research/" class="text-xl font-bold"> <span class="bg-gradient-to-br from-blue-500 to-violet-600 bg-clip-text text-transparent">Vibe Research</span> </a> <div class="flex items-center gap-3"> <button type="button" data-theme-toggle class="theme-toggle-btn" aria-label="切换主题" title="切换浅色/深色"> <span data-theme-icon>🌙</span> <span data-theme-label>深色</span> </button> <ul class="hidden md:flex gap-8 items-center"> <li><a href="/AgentGuide/research/" class="text-slate-500 hover:text-slate-900 transition-colors text-sm font-medium">首页</a></li> <li><a href="/AgentGuide/research/#chapters" class="text-slate-500 hover:text-slate-900 transition-colors text-sm font-medium">章节</a></li> <li><a href="/AgentGuide/research/#workflow" class="text-slate-500 hover:text-slate-900 transition-colors text-sm font-medium">工作流</a></li> <li><a href="/AgentGuide/research/#about" class="text-slate-500 hover:text-slate-900 transition-colors text-sm font-medium">关于</a></li> <li><a href="/AgentGuide/research/docs/intro/01-overview" class="text-slate-500 hover:text-slate-900 transition-colors text-sm font-medium">文档</a></li> <li><a href="/AgentGuide/research/skills" class="text-slate-500 hover:text-slate-900 transition-colors text-sm font-medium">Skills</a></li> <li><a href="https://github.com/yiweinanzi/ai-research-ebook" target="_blank" rel="noopener" class="text-slate-500 hover:text-slate-900 transition-colors text-sm font-medium">GitHub</a></li> </ul> </div> </nav> </header> <main class="flex-1 pt-[70px]">  <section class="py-12"> <div class="max-w-[1500px] mx-auto px-4 md:px-6 xl:px-8 flex flex-col lg:flex-row gap-5 xl:gap-7"> <aside class="w-full lg:w-72 lg:sticky lg:top-[90px] lg:self-start bg-secondary/85 border border-slate-900/10 rounded-xl p-4 lg:p-5 backdrop-blur-sm max-h-[calc(100vh-108px)] overflow-y-auto overscroll-contain sidebar-scroll"> <p class="text-xs tracking-widest text-slate-500 mb-4 font-mono">CHAPTERS</p> <nav class="space-y-4"> <section> <h3 class="text-xs font-semibold text-slate-500 mb-2 uppercase tracking-wide">0. 导读</h3> <ul class="space-y-1.5"> <li> <a href="/AgentGuide/research/docs/intro/01-overview" class="block rounded-md px-3 py-2 text-sm transition-colors leading-relaxed text-slate-600 hover:text-slate-900 hover:bg-slate-900/5 border border-transparent"> Vibe Research </a> </li> </ul> </section><section> <h3 class="text-xs font-semibold text-slate-500 mb-2 uppercase tracking-wide">1. Idea 生成</h3> <ul class="space-y-1.5"> <li> <a href="/AgentGuide/research/docs/idea/01-research" class="block rounded-md px-3 py-2 text-sm transition-colors leading-relaxed text-slate-600 hover:text-slate-900 hover:bg-slate-900/5 border border-transparent"> 调研方法 </a> </li><li> <a href="/AgentGuide/research/docs/idea/02-projects" class="block rounded-md px-3 py-2 text-sm transition-colors leading-relaxed bg-accent/15 text-accent border border-accent/30"> 调研项目 </a> </li> </ul> </section><section> <h3 class="text-xs font-semibold text-slate-500 mb-2 uppercase tracking-wide">2. 代码实现</h3> <ul class="space-y-1.5"> <li> <a href="/AgentGuide/research/docs/code/01-claude" class="block rounded-md px-3 py-2 text-sm transition-colors leading-relaxed text-slate-600 hover:text-slate-900 hover:bg-slate-900/5 border border-transparent"> Claude Code </a> </li><li> <a href="/AgentGuide/research/docs/code/02-gpt" class="block rounded-md px-3 py-2 text-sm transition-colors leading-relaxed text-slate-600 hover:text-slate-900 hover:bg-slate-900/5 border border-transparent"> GPT-5.2 系列 </a> </li><li> <a href="/AgentGuide/research/docs/code/03-agents" class="block rounded-md px-3 py-2 text-sm transition-colors leading-relaxed text-slate-600 hover:text-slate-900 hover:bg-slate-900/5 border border-transparent"> 多Agent框架 </a> </li> </ul> </section><section> <h3 class="text-xs font-semibold text-slate-500 mb-2 uppercase tracking-wide">3. 论文图表</h3> <ul class="space-y-1.5"> <li> <a href="/AgentGuide/research/docs/figures/01-tools" class="block rounded-md px-3 py-2 text-sm transition-colors leading-relaxed text-slate-600 hover:text-slate-900 hover:bg-slate-900/5 border border-transparent"> 自动化绘图工具 </a> </li><li> <a href="/AgentGuide/research/docs/figures/02-comparison" class="block rounded-md px-3 py-2 text-sm transition-colors leading-relaxed text-slate-600 hover:text-slate-900 hover:bg-slate-900/5 border border-transparent"> 专业绘图对比 </a> </li><li> <a href="/AgentGuide/research/docs/figures/03-design" class="block rounded-md px-3 py-2 text-sm transition-colors leading-relaxed text-slate-600 hover:text-slate-900 hover:bg-slate-900/5 border border-transparent"> 图表设计规范 </a> </li> </ul> </section><section> <h3 class="text-xs font-semibold text-slate-500 mb-2 uppercase tracking-wide">4. 论文写作</h3> <ul class="space-y-1.5"> <li> <a href="/AgentGuide/research/docs/writing/01-methods" class="block rounded-md px-3 py-2 text-sm transition-colors leading-relaxed text-slate-600 hover:text-slate-900 hover:bg-slate-900/5 border border-transparent"> 写作方法 </a> </li><li> <a href="/AgentGuide/research/docs/writing/02-prism" class="block rounded-md px-3 py-2 text-sm transition-colors leading-relaxed text-slate-600 hover:text-slate-900 hover:bg-slate-900/5 border border-transparent"> Prism 编辑器 </a> </li><li> <a href="/AgentGuide/research/docs/writing/03-collaboration" class="block rounded-md px-3 py-2 text-sm transition-colors leading-relaxed text-slate-600 hover:text-slate-900 hover:bg-slate-900/5 border border-transparent"> 多模型协作写作 </a> </li><li> <a href="/AgentGuide/research/docs/writing/04-rebuttal" class="block rounded-md px-3 py-2 text-sm transition-colors leading-relaxed text-slate-600 hover:text-slate-900 hover:bg-slate-900/5 border border-transparent"> Rebuttal 策略 </a> </li> </ul> </section><section> <h3 class="text-xs font-semibold text-slate-500 mb-2 uppercase tracking-wide">5. 审稿与 Rebuttal</h3> <ul class="space-y-1.5"> <li> <a href="/AgentGuide/research/docs/review/01-structured" class="block rounded-md px-3 py-2 text-sm transition-colors leading-relaxed text-slate-600 hover:text-slate-900 hover:bg-slate-900/5 border border-transparent"> 结构化审稿 </a> </li><li> <a href="/AgentGuide/research/docs/review/02-templates" class="block rounded-md px-3 py-2 text-sm transition-colors leading-relaxed text-slate-600 hover:text-slate-900 hover:bg-slate-900/5 border border-transparent"> 会议审稿模板 </a> </li> </ul> </section><section> <h3 class="text-xs font-semibold text-slate-500 mb-2 uppercase tracking-wide">6. 工具生态</h3> <ul class="space-y-1.5"> <li> <a href="/AgentGuide/research/docs/tools/01-overview" class="block rounded-md px-3 py-2 text-sm transition-colors leading-relaxed text-slate-600 hover:text-slate-900 hover:bg-slate-900/5 border border-transparent"> 工具总览 </a> </li><li> <a href="/AgentGuide/research/docs/tools/02-workflow" class="block rounded-md px-3 py-2 text-sm transition-colors leading-relaxed text-slate-600 hover:text-slate-900 hover:bg-slate-900/5 border border-transparent"> 完整工作流 </a> </li> </ul> </section><section> <h3 class="text-xs font-semibold text-slate-500 mb-2 uppercase tracking-wide">7. 资料库</h3> <ul class="space-y-1.5"> <li> <a href="/AgentGuide/research/docs/library/01-root-assets" class="block rounded-md px-3 py-2 text-sm transition-colors leading-relaxed text-slate-600 hover:text-slate-900 hover:bg-slate-900/5 border border-transparent"> 科研圣经 </a> </li> </ul> </section> </nav> </aside> <article class="flex-1 min-w-0 bg-secondary/70 border border-slate-900/10 rounded-2xl p-6 md:p-9 backdrop-blur-sm"> <div class="mb-7 pb-6 border-b border-slate-900/10"> <p class="text-xs font-mono tracking-widest text-slate-500 mb-2">DOCS</p> <h1 class="text-3xl md:text-[2.55rem] font-bold text-slate-900 leading-tight">调研项目</h1> <p class="mt-3 text-slate-600 text-[1.02rem] leading-relaxed">重要调研项目分析, 包括 Sci-Reasoning、AI Research、Idea2Story 等</p> </div> <div class="markdown-content">  <h2 id="1-sci-reasoning-数据集">1. Sci-Reasoning 数据集</h2>
+<h3 id="11-核心价值">1.1 核心价值</h3>
+<p><strong>Sci-Reasoning</strong> 通过 LLM+Human Review的方法, 对 2023–2025 年 NeurIPS、ICML、ICLR 的 <strong>3819 篇 Oral/Spotlight 论文</strong>进行”学术谱系”建模。</p>
+<p><strong>资源链接</strong>:</p>
+<ul>
+<li>代码: <a href="https://github.com/AmberLJC/Sci-Reasoning">Sci-Reasoning GitHub</a></li>
+<li>数据集: <a href="https://huggingface.co/datasets/AmberLJC/Sci-Reasoning">HuggingFace Dataset</a></li>
+</ul>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="mermaid"><code><span class="line"><span style="color:#E1E4E8">flowchart TD</span></span>
+<span class="line"><span style="color:#E1E4E8">    A[3819 Papers] --&gt; B[LLM Annotation]</span></span>
+<span class="line"><span style="color:#E1E4E8">    B --&gt; C[Human Review]</span></span>
+<span class="line"><span style="color:#E1E4E8">    C --&gt; D[15 Patterns]</span></span>
+<span class="line"><span style="color:#E1E4E8">    C --&gt; E[Innovation Recipes]</span></span>
+<span class="line"><span style="color:#E1E4E8">    D --&gt; F(科研创新规律)</span></span>
+<span class="line"><span style="color:#E1E4E8">    E --&gt; F</span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"></span></code></pre>
+<hr/>
+<h2 id="2-15-种科研思维模式详解">2. 15 种科研思维模式详解</h2>
+<div class="card-grid"><p><strong>诊断+重构</strong>：识别当前方法的局限性, 将限制转化为设计约束。</p><p><strong>跨域融合</strong>：从相邻领域引入解决方案, 激活创新可能。</p><p><strong>表示转化</strong>：替换问题的基本表示单元, 开辟新视角。</p></div>
+<h3 id="21-完整模式列表">2.1 完整模式列表</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>编号</th><th>模式</th><th>比例</th><th>核心价值</th></tr></thead><tbody><tr><td>P01</td><td>Gap-Driven Reframing</td><td>24.2%</td><td>转化限制为设计约束</td></tr><tr><td>P02</td><td>Cross-Domain Synthesis</td><td>18.0%</td><td>跨领域融合</td></tr><tr><td>P03</td><td>Representation Shift</td><td>10.5%</td><td>表示转化</td></tr><tr><td>P04</td><td>Modular Pipeline Composition</td><td>4.2%</td><td>模块化组合</td></tr><tr><td>P05</td><td>Data &amp; Evaluation Engineering</td><td>5.4%</td><td>数据与评测工程</td></tr><tr><td>P06</td><td>Principled Probabilistic Modeling</td><td>5.4%</td><td>概率建模</td></tr><tr><td>P07</td><td>Formal-Experimental Tightening</td><td>6.7%</td><td>理论实验紧密结合</td></tr><tr><td>P08</td><td>Approximation Engineering</td><td>4.9%</td><td>可扩展性近似</td></tr><tr><td>P09</td><td>Inference-Time Control</td><td>2.4%</td><td>推理时控制</td></tr><tr><td>P10</td><td>Structural Inductive Bias</td><td>5.1%</td><td>结构归纳偏置</td></tr><tr><td>P11</td><td>Multiscale Modeling</td><td>1.4%</td><td>多尺度建模</td></tr><tr><td>P12</td><td>Mechanistic Decomposition</td><td>1.9%</td><td>机制分解</td></tr><tr><td>P13</td><td>Adversary Modeling</td><td>1.5%</td><td>对手建模</td></tr><tr><td>P14</td><td>Numerics &amp; Systems Co-design</td><td>1.4%</td><td>数值与系统协同</td></tr><tr><td>P15</td><td>Data-Centric Optimization</td><td>2.1%</td><td>以数据为中心</td></tr></tbody></table>
+<hr/>
+<h2 id="3-innovation-recipesinnovation-recipes">3. Innovation Recipes（Innovation Recipes）</h2>
+<h3 id="31-高价值组合">3.1 高价值组合</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="mermaid"><code><span class="line"><span style="color:#E1E4E8">flowchart LR</span></span>
+<span class="line"><span style="color:#E1E4E8">    A[Gap-Driven] --&gt;|诊断+重构| B[Representation Shift]</span></span>
+<span class="line"><span style="color:#E1E4E8">    C[Cross-Domain] --&gt;|导入+适配| D[Representation Shift]</span></span>
+<span class="line"><span style="color:#E1E4E8">    E[Gap-Driven] --&gt;|诊断+借用| F[Cross-Domain]</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">    B --&gt; G(&quot;318次&quot;)</span></span>
+<span class="line"><span style="color:#E1E4E8">    D --&gt; H(&quot;233次&quot;)</span></span>
+<span class="line"><span style="color:#E1E4E8">    F --&gt; I(&quot;204次&quot;)</span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"></span></code></pre>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>组合模式</th><th>出现次数</th><th>策略</th></tr></thead><tbody><tr><td>Gap-Driven + Representation Shift</td><td>318</td><td>”诊断+重构”</td></tr><tr><td>Cross-Domain + Representation Shift</td><td>233</td><td>”导入+适配”</td></tr><tr><td>Gap-Driven + Cross-Domain</td><td>204</td><td>”诊断+借用”</td></tr></tbody></table>
+<hr/>
+<h2 id="4-会议偏好分析">4. 会议偏好分析</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>会议</th><th>偏好模式</th><th>写作建议</th></tr></thead><tbody><tr><td><strong>ICML</strong></td><td>形式化方法 (8.3%), 概率建模 (7.5%)</td><td>增加理论分析和证明</td></tr><tr><td><strong>ICLR</strong></td><td>表示创新 (11.8%), 基准测试 (8.5%)</td><td>侧重表示分析和可视化</td></tr><tr><td><strong>NeurIPS</strong></td><td>平衡跨学科覆盖</td><td>强调方法的生物学合理性</td></tr></tbody></table>
+<hr/>
+<h2 id="5-llm-评估基准-hit10">5. LLM 评估基准 (Hit@10)</h2>
+<p>这个评估衡量：给定前人工作, LLM 能否预测出研究方向的准确度。</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>模型</th><th>Hit@10 得分</th></tr></thead><tbody><tr><td><strong>Gemini 2.5 Pro</strong></td><td>49.35%</td></tr><tr><td>Claude Opus 4</td><td>42.86%</td></tr><tr><td>GPT-5.2</td><td>38.89%</td></tr><tr><td>Claude Sonnet 4</td><td>29.87%</td></tr></tbody></table>
+<hr/>
+<h2 id="6-ai-scientist-系列">6. AI Scientist 系列</h2>
+<h3 id="61-完整对比">6.1 完整对比</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>项目</th><th>时间</th><th>核心特点</th><th>代码</th></tr></thead><tbody><tr><td><strong>The AI Scientist</strong></td><td>2024.08</td><td>完整研究自动化</td><td><a href="https://github.com/SakanaAI/AI-Scientist">SakanaAI</a></td></tr><tr><td><strong>The AI Scientist-v2</strong></td><td>2025</td><td>无代码模板自动化</td><td>-</td></tr><tr><td><strong>ChemCrow</strong></td><td>2024</td><td>化学研究 Agent (728+ 引用)</td><td>-</td></tr><tr><td><strong>Virtual-Scientists</strong></td><td>ACL 2025</td><td>端到端科研协作</td><td><a href="https://github.com/InternScience/Virtual-Scientists">InternScience</a></td></tr><tr><td><strong>Kosmos</strong></td><td>2025</td><td>自主数据驱动发现</td><td>-</td></tr><tr><td><strong>AI-Researcher</strong></td><td>2025</td><td>完全自主研究系统</td><td>-</td></tr></tbody></table>
+<hr/>
+<h2 id="7-实践建议">7. 实践建议</h2>
+<h3 id="71-如何借鉴-sci-reasoning">7.1 如何借鉴 Sci-Reasoning</h3>
+<ol>
+<li>
+<p><strong>构建调研库时做标签化</strong></p>
+<ul>
+<li>每篇论文标注其”创新类型”</li>
+<li>便于后续 pattern mining</li>
+</ul>
+</li>
+<li>
+<p><strong>关注Innovation Recipes</strong></p>
+<ul>
+<li>高频组合往往意味着”成熟赛道”</li>
+<li>低频组合可能有更大的创新空间</li>
+</ul>
+</li>
+<li>
+<p><strong>结合会议偏好</strong></p>
+<ul>
+<li>ICML 侧重理论</li>
+<li>ICLR 侧重表示</li>
+<li>NeurIPS 平衡跨学科</li>
+</ul>
+</li>
+</ol>
+<div class="tip"><p><strong>核心启示</strong>：创新不是玄学, 是可以被系统化分析和复制的模式。</p></div>
+<hr/>
+<h2 id="8-根目录论文内容整合不上传-pdf-本体">8. 根目录论文内容整合（不上传 PDF 本体）</h2>
+<h3 id="81-论文一towards-execution-grounded-automated-ai-research-260114525">8.1 论文一：Towards Execution-Grounded Automated AI Research (2601.14525)</h3>
+<p>根据原文摘要与项目环境说明, 这项工作提出了一个 <strong>execution-grounded</strong> 的自动科研框架, 核心不是只生成“看起来合理”的 idea, 而是把 idea 真实落地执行并用反馈反哺下一轮搜索。</p>
+<p><strong>关键点：</strong></p>
+<ul>
+<li>构建自动执行器：自动打补丁、提交代码、分配 GPU、回收训练日志。</li>
+<li>设定两个可执行研究环境：
+<ul>
+<li>post-training：GRPO + MATH（Qwen2.5-Math-1.5B）</li>
+<li>pre-training：nanoGPT + FineWeb</li>
+</ul>
+</li>
+<li>研究目标从“语言 plausibility”转为“执行后有效性”。</li>
+<li>强调 execution feedback 对后续 idea 迭代的价值。</li>
+</ul>
+<h3 id="82-论文二idea2story-260120833">8.2 论文二：Idea2Story (2601.20833)</h3>
+<p>该工作把”research idea → 可写论文叙事”的过程做成了结构化流水线, 核心贡献是 <strong>pre-computation-driven</strong> 思路：尽量把文献理解和结构化表征前置, 降低在线大上下文推理成本与幻觉风险。</p>
+<p><strong>关键点：</strong></p>
+<ul>
+<li>用知识图谱组织 Idea / Pattern / Domain / Paper 节点。</li>
+<li>通过模式选择、故事生成、反思修正, 产出完整 scientific narrative skeleton。</li>
+<li>引入 anchored multi-agent review, 使打分更可审计、更可复现。</li>
+<li>输出可直接进入写作阶段的结构化结果（title/abstract/problem/method/contrib/experiments）。</li>
+</ul>
+<h3 id="83-并入现有工作流的建议">8.3 并入现有工作流的建议</h3>
+<ol>
+<li>在 <code>1.1 调研</code> 阶段优先落地“可执行环境”, 避免只停留在概念验证。</li>
+<li>在 <code>1.2 项目</code> 阶段增加“叙事骨架检查”, 确保 idea 到论文表达不断层。</li>
+<li>让“执行反馈”与“叙事反馈”双闭环并行：一个校验有效性, 一个校验可写性。</li>
+</ol>  </div> <div class="mt-10 pt-6 border-t border-slate-900/10 grid gap-4 sm:grid-cols-2"> <div> <a href="/AgentGuide/research/docs/idea/01-research" class="block rounded-xl border border-slate-900/10 p-4 hover:border-accent/40 transition-colors bg-slate-50"> <p class="text-xs text-slate-500 mb-2">上一篇</p> <p class="font-semibold text-slate-900">调研方法</p> </a> </div> <div> <a href="/AgentGuide/research/docs/code/01-claude" class="block rounded-xl border border-slate-900/10 p-4 hover:border-accent/40 transition-colors bg-slate-50 text-right"> <p class="text-xs text-slate-500 mb-2">下一篇</p> <p class="font-semibold text-slate-900">Claude Code</p> </a> </div> </div> </article> <aside class="hidden xl:block w-64 sticky top-[90px] self-start bg-secondary/85 border border-slate-900/10 rounded-xl p-4 lg:p-5 backdrop-blur-sm max-h-[calc(100vh-108px)] overflow-y-auto overscroll-contain sidebar-scroll"><p class="text-xs tracking-widest text-slate-500 mb-4 font-mono">ON THIS PAGE</p><ul class="space-y-2"><li><a href="#1-sci-reasoning-数据集" class="block text-sm text-slate-500 hover:text-slate-900 transition-colors leading-relaxed pl-0">1. Sci-Reasoning 数据集</a></li><li><a href="#11-核心价值" class="block text-sm text-slate-500 hover:text-slate-900 transition-colors leading-relaxed pl-3">1.1 核心价值</a></li><li><a href="#2-15-种科研思维模式详解" class="block text-sm text-slate-500 hover:text-slate-900 transition-colors leading-relaxed pl-0">2. 15 种科研思维模式详解</a></li><li><a href="#21-完整模式列表" class="block text-sm text-slate-500 hover:text-slate-900 transition-colors leading-relaxed pl-3">2.1 完整模式列表</a></li><li><a href="#3-innovation-recipesinnovation-recipes" class="block text-sm text-slate-500 hover:text-slate-900 transition-colors leading-relaxed pl-0">3. Innovation Recipes（Innovation Recipes）</a></li><li><a href="#31-高价值组合" class="block text-sm text-slate-500 hover:text-slate-900 transition-colors leading-relaxed pl-3">3.1 高价值组合</a></li><li><a href="#4-会议偏好分析" class="block text-sm text-slate-500 hover:text-slate-900 transition-colors leading-relaxed pl-0">4. 会议偏好分析</a></li><li><a href="#5-llm-评估基准-hit10" class="block text-sm text-slate-500 hover:text-slate-900 transition-colors leading-relaxed pl-0">5. LLM 评估基准 (Hit@10)</a></li><li><a href="#6-ai-scientist-系列" class="block text-sm text-slate-500 hover:text-slate-900 transition-colors leading-relaxed pl-0">6. AI Scientist 系列</a></li><li><a href="#61-完整对比" class="block text-sm text-slate-500 hover:text-slate-900 transition-colors leading-relaxed pl-3">6.1 完整对比</a></li><li><a href="#7-实践建议" class="block text-sm text-slate-500 hover:text-slate-900 transition-colors leading-relaxed pl-0">7. 实践建议</a></li><li><a href="#71-如何借鉴-sci-reasoning" class="block text-sm text-slate-500 hover:text-slate-900 transition-colors leading-relaxed pl-3">7.1 如何借鉴 Sci-Reasoning</a></li><li><a href="#8-根目录论文内容整合不上传-pdf-本体" class="block text-sm text-slate-500 hover:text-slate-900 transition-colors leading-relaxed pl-0">8. 根目录论文内容整合（不上传 PDF 本体）</a></li><li><a href="#81-论文一towards-execution-grounded-automated-ai-research-260114525" class="block text-sm text-slate-500 hover:text-slate-900 transition-colors leading-relaxed pl-3">8.1 论文一：Towards Execution-Grounded Automated AI Research (2601.14525)</a></li><li><a href="#82-论文二idea2story-260120833" class="block text-sm text-slate-500 hover:text-slate-900 transition-colors leading-relaxed pl-3">8.2 论文二：Idea2Story (2601.20833)</a></li><li><a href="#83-并入现有工作流的建议" class="block text-sm text-slate-500 hover:text-slate-900 transition-colors leading-relaxed pl-3">8.3 并入现有工作流的建议</a></li></ul></aside> </div> </section>  </main> <footer class="bg-secondary border-t border-slate-900/10 py-8 mt-auto"> <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4"> <p class="text-slate-500 text-sm">&copy; 2026 Vibe Research. Built with Astro + Tailwind.</p> <div class="flex gap-6"> <a href="https://github.com/yiweinanzi/ai-research-ebook" target="_blank" rel="noopener" class="text-slate-500 hover:text-accent transition-colors text-sm">GitHub</a> <a href="/AgentGuide/research/docs/intro/01-overview" class="text-slate-500 hover:text-accent transition-colors text-sm">开始阅读</a> </div> </div> </footer> <script>
+      (() => {
+        const key = 'vr-theme';
+        const root = document.documentElement;
+        const iconNodes = () => document.querySelectorAll('[data-theme-icon]');
+        const labelNodes = () => document.querySelectorAll('[data-theme-label]');
+
+        const currentTheme = () => (root.dataset.theme === 'dark' ? 'dark' : 'light');
+
+        const syncThemeUI = () => {
+          const isDark = currentTheme() === 'dark';
+          for (const node of iconNodes()) node.textContent = isDark ? '☀️' : '🌙';
+          for (const node of labelNodes()) node.textContent = isDark ? '浅色' : '深色';
+        };
+
+        const setTheme = (theme) => {
+          root.dataset.theme = theme === 'dark' ? 'dark' : 'light';
+          try {
+            localStorage.setItem(key, root.dataset.theme);
+          } catch {}
+          syncThemeUI();
+        };
+
+        document.addEventListener('click', (event) => {
+          const target = event.target;
+          if (!(target instanceof Element)) return;
+          const button = target.closest('[data-theme-toggle]');
+          if (!button) return;
+          setTheme(currentTheme() === 'dark' ? 'light' : 'dark');
+        });
+
+        document.addEventListener('astro:after-swap', syncThemeUI);
+        syncThemeUI();
+      })();
+    </script> </body> </html>

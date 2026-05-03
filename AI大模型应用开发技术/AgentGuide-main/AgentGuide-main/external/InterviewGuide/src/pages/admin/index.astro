@@ -1,0 +1,254 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { withBase } from '../../lib/path';
+---
+
+<Layout title="管理员更新入口 | InterviewGuide" description="弱门禁管理页：生成结构化更新 payload">
+  <section class="py-12 px-6">
+    <div class="max-w-5xl mx-auto">
+      <div class="mb-8">
+        <h1 class="text-3xl md:text-4xl font-bold">管理员更新入口</h1>
+        <p class="text-slate-600 mt-2">用于生成结构化更新 payload 并跳转创建 GitHub Issue。</p>
+      </div>
+
+      <div id="gate-panel" class="bg-secondary rounded-2xl border border-slate-900/10 p-6">
+        <h2 class="text-lg font-semibold">弱门禁校验</h2>
+        <p class="text-sm text-slate-500 mt-2">请输入管理口令。默认口令：<code>interview-guide-admin</code></p>
+        <div class="mt-4 flex flex-wrap gap-3">
+          <input
+            id="admin-key-input"
+            type="password"
+            autocomplete="off"
+            placeholder="输入管理口令"
+            class="w-full md:w-96 rounded-xl border border-slate-900/10 bg-tertiary px-4 py-3 text-sm"
+          />
+          <button
+            id="admin-key-submit"
+            type="button"
+            class="rounded-xl px-5 py-3 text-sm font-semibold bg-indigo-600 text-white hover:bg-indigo-500 transition-colors"
+          >
+            解锁
+          </button>
+        </div>
+        <p id="gate-message" class="text-sm text-slate-500 mt-3">当前状态：未解锁</p>
+      </div>
+
+      <div id="admin-form-panel" class="hidden mt-8 bg-secondary rounded-2xl border border-slate-900/10 p-6">
+        <form id="admin-form" class="space-y-4">
+          <div class="grid md:grid-cols-2 gap-4">
+            <label class="text-sm font-medium text-slate-700">
+              变更标题
+              <input name="title" required class="mt-2 w-full rounded-xl border border-slate-900/10 bg-tertiary px-4 py-3 text-sm" />
+            </label>
+            <label class="text-sm font-medium text-slate-700">
+              题目 ID（可选）
+              <input name="questionId" placeholder="q-123" class="mt-2 w-full rounded-xl border border-slate-900/10 bg-tertiary px-4 py-3 text-sm" />
+            </label>
+          </div>
+
+          <div class="grid md:grid-cols-2 gap-4">
+            <label class="text-sm font-medium text-slate-700">
+              公司（可选）
+              <input name="company" class="mt-2 w-full rounded-xl border border-slate-900/10 bg-tertiary px-4 py-3 text-sm" />
+            </label>
+            <label class="text-sm font-medium text-slate-700">
+              分类（可选）
+              <input name="category" class="mt-2 w-full rounded-xl border border-slate-900/10 bg-tertiary px-4 py-3 text-sm" />
+            </label>
+          </div>
+
+          <div class="grid md:grid-cols-2 gap-4">
+            <label class="text-sm font-medium text-slate-700">
+              变更类型
+              <select name="changeType" class="mt-2 w-full rounded-xl border border-slate-900/10 bg-tertiary px-4 py-3 text-sm">
+                <option value="add">add</option>
+                <option value="update">update</option>
+                <option value="delete">delete</option>
+                <option value="other">other</option>
+              </select>
+            </label>
+            <label class="text-sm font-medium text-slate-700">
+              优先级
+              <select name="priority" class="mt-2 w-full rounded-xl border border-slate-900/10 bg-tertiary px-4 py-3 text-sm">
+                <option value="medium">medium</option>
+                <option value="high">high</option>
+                <option value="low">low</option>
+              </select>
+            </label>
+          </div>
+
+          <label class="text-sm font-medium text-slate-700 block">
+            背景与原因
+            <textarea
+              name="reason"
+              required
+              rows={4}
+              class="mt-2 w-full rounded-xl border border-slate-900/10 bg-tertiary px-4 py-3 text-sm"
+            ></textarea>
+          </label>
+
+          <label class="text-sm font-medium text-slate-700 block">
+            期望变更
+            <textarea
+              name="proposedChange"
+              required
+              rows={4}
+              class="mt-2 w-full rounded-xl border border-slate-900/10 bg-tertiary px-4 py-3 text-sm"
+            ></textarea>
+          </label>
+
+          <div class="grid md:grid-cols-2 gap-4">
+            <label class="text-sm font-medium text-slate-700">
+              参考资料（可选）
+              <input name="references" class="mt-2 w-full rounded-xl border border-slate-900/10 bg-tertiary px-4 py-3 text-sm" />
+            </label>
+            <label class="text-sm font-medium text-slate-700">
+              提交人（可选）
+              <input name="reporter" class="mt-2 w-full rounded-xl border border-slate-900/10 bg-tertiary px-4 py-3 text-sm" />
+            </label>
+          </div>
+
+          <div class="flex flex-wrap gap-3 pt-2">
+            <button
+              type="submit"
+              class="rounded-xl px-5 py-3 text-sm font-semibold bg-indigo-600 text-white hover:bg-indigo-500 transition-colors"
+            >
+              生成 Payload
+            </button>
+            <a
+              id="open-issue-link"
+              href="#"
+              target="_blank"
+              rel="noopener"
+              class="hidden rounded-xl px-5 py-3 text-sm font-semibold border border-indigo-400 text-indigo-600 hover:bg-indigo-50 transition-colors"
+            >
+              打开 GitHub Issue
+            </a>
+          </div>
+        </form>
+      </div>
+
+      <div class="mt-8 bg-secondary rounded-2xl border border-slate-900/10 p-6">
+        <div class="flex items-center justify-between gap-3 mb-3">
+          <h2 class="text-lg font-semibold">结构化 Payload 预览</h2>
+          <a href={withBase('/progress')} class="text-sm text-indigo-600 hover:underline">返回学习进度</a>
+        </div>
+        <pre
+          id="payload-preview"
+          class="bg-slate-900 text-slate-100 rounded-xl p-4 text-xs md:text-sm overflow-x-auto min-h-[180px]"
+        >尚未生成 payload</pre>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    import { buildAdminIssuePayload, toIssueQueryString } from '../../lib/admin_payload';
+
+    (() => {
+      const GATE_STORAGE_KEY = 'ig-admin-access-v1';
+      const GATE_SECRET = 'interview-guide-admin';
+      const REPO_ISSUE_URL = 'https://github.com/yiweinanzi/InterviewGuide/issues/new';
+
+      const gateInput = document.getElementById('admin-key-input');
+      const gateButton = document.getElementById('admin-key-submit');
+      const gateMessage = document.getElementById('gate-message');
+      const formPanel = document.getElementById('admin-form-panel');
+      const form = document.getElementById('admin-form');
+      const payloadPreview = document.getElementById('payload-preview');
+      const issueLink = document.getElementById('open-issue-link');
+
+      const isUnlocked = () => {
+        try {
+          return window.localStorage.getItem(GATE_STORAGE_KEY) === 'granted';
+        } catch {
+          return false;
+        }
+      };
+
+      const setUnlocked = (enabled: boolean) => {
+        if (formPanel instanceof HTMLElement) {
+          formPanel.classList.toggle('hidden', !enabled);
+        }
+        if (gateMessage instanceof HTMLElement) {
+          gateMessage.textContent = enabled ? '当前状态：已解锁' : '当前状态：未解锁';
+          gateMessage.classList.toggle('text-emerald-600', enabled);
+          gateMessage.classList.toggle('text-slate-500', !enabled);
+        }
+      };
+
+      const persistUnlockState = (enabled: boolean) => {
+        try {
+          if (enabled) {
+            window.localStorage.setItem(GATE_STORAGE_KEY, 'granted');
+          } else {
+            window.localStorage.removeItem(GATE_STORAGE_KEY);
+          }
+        } catch {}
+      };
+
+      if (gateButton instanceof HTMLButtonElement && gateInput instanceof HTMLInputElement) {
+        gateButton.addEventListener('click', () => {
+          const passed = gateInput.value.trim() === GATE_SECRET;
+          if (!passed) {
+            setUnlocked(false);
+            if (gateMessage instanceof HTMLElement) {
+              gateMessage.textContent = '口令错误，请重试';
+              gateMessage.classList.remove('text-emerald-600');
+              gateMessage.classList.add('text-red-600');
+            }
+            return;
+          }
+
+          persistUnlockState(true);
+          setUnlocked(true);
+          gateInput.value = '';
+        });
+      }
+
+      if (form instanceof HTMLFormElement) {
+        form.addEventListener('submit', (event) => {
+          event.preventDefault();
+
+          const data = new FormData(form);
+          const rawChangeType = String(data.get('changeType') ?? '');
+          const rawPriority = String(data.get('priority') ?? '');
+          const changeType =
+            rawChangeType === 'add' ||
+            rawChangeType === 'update' ||
+            rawChangeType === 'delete' ||
+            rawChangeType === 'other'
+              ? rawChangeType
+              : undefined;
+          const priority =
+            rawPriority === 'low' || rawPriority === 'medium' || rawPriority === 'high'
+              ? rawPriority
+              : undefined;
+
+          const payload = buildAdminIssuePayload({
+            title: String(data.get('title') ?? ''),
+            company: String(data.get('company') ?? ''),
+            category: String(data.get('category') ?? ''),
+            questionId: String(data.get('questionId') ?? ''),
+            changeType,
+            priority,
+            reason: String(data.get('reason') ?? ''),
+            proposedChange: String(data.get('proposedChange') ?? ''),
+            references: String(data.get('references') ?? ''),
+            reporter: String(data.get('reporter') ?? ''),
+          });
+
+          if (payloadPreview instanceof HTMLElement) {
+            payloadPreview.textContent = JSON.stringify(payload, null, 2);
+          }
+
+          if (issueLink instanceof HTMLAnchorElement) {
+            issueLink.href = `${REPO_ISSUE_URL}?${toIssueQueryString(payload)}`;
+            issueLink.classList.remove('hidden');
+          }
+        });
+      }
+
+      setUnlocked(isUnlocked());
+    })();
+  </script>
+</Layout>

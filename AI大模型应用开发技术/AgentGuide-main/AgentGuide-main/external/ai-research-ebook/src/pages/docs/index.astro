@@ -1,0 +1,15 @@
+---
+import Layout from '../../layouts/Layout.astro';
+const base = import.meta.env.BASE_URL;
+const withBase = (path: string) => (base === '/' ? path : `${base.replace(/\/$/, '')}${path}`);
+---
+
+<Layout title="Docs - Vibe Research">
+  <section class="py-32 px-6 text-center">
+    <h1 class="text-3xl font-bold mb-4">Docs</h1>
+    <p class="text-slate-600 mb-8">文档入口已迁移。</p>
+    <a href={withBase('/docs/intro/01-overview')} class="inline-flex px-6 py-3 bg-white text-black rounded-lg font-semibold hover:bg-gray-200 transition-colors">
+      进入导读
+    </a>
+  </section>
+</Layout>

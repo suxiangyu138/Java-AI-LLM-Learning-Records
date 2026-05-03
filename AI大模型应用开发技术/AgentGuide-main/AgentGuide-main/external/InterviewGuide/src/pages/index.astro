@@ -1,0 +1,81 @@
+---
+import statsData from '../data/stats.json';
+import Layout from '../layouts/Layout.astro';
+import { withBase } from '../lib/path';
+
+const stats = statsData as {
+  totalQuestions: number;
+  totalCategories: number;
+  totalCompanies: number;
+  highFrequencyQuestions: number;
+};
+
+const highlights = [
+  {
+    title: '公司定向（默认）',
+    description: '按目标公司快速筛题，优先突击高价值问题。',
+    href: '/companies',
+  },
+  {
+    title: '高频优先',
+    description: '按出现次数从高到低刷题，冲刺期效率更高。',
+    href: '/hot',
+  },
+  {
+    title: '知识点学习',
+    description: '按 NLP/ML/DL/推荐/CV 等模块系统复习。',
+    href: '/categories',
+  },
+];
+---
+
+<Layout>
+  <section class="py-20 px-6">
+    <div class="max-w-5xl mx-auto text-center">
+      <h1 class="text-5xl md:text-6xl font-bold mb-6">
+        <span class="gradient-text">InterviewGuide</span>
+      </h1>
+      <p class="text-xl text-slate-600 mb-10">
+        面向 AI 算法岗的结构化面经学习站
+      </p>
+
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10 text-left">
+        <div class="bg-secondary rounded-xl border border-slate-900/10 p-4">
+          <p class="text-xs text-slate-500">题目总量</p>
+          <p class="text-2xl font-bold">{stats.totalQuestions}</p>
+        </div>
+        <div class="bg-secondary rounded-xl border border-slate-900/10 p-4">
+          <p class="text-xs text-slate-500">公司数</p>
+          <p class="text-2xl font-bold">{stats.totalCompanies}</p>
+        </div>
+        <div class="bg-secondary rounded-xl border border-slate-900/10 p-4">
+          <p class="text-xs text-slate-500">分类数</p>
+          <p class="text-2xl font-bold">{stats.totalCategories}</p>
+        </div>
+        <div class="bg-secondary rounded-xl border border-slate-900/10 p-4">
+          <p class="text-xs text-slate-500">高频题</p>
+          <p class="text-2xl font-bold">{stats.highFrequencyQuestions}</p>
+        </div>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-4">
+        {highlights.map((item) => (
+          <a href={withBase(item.href)} class="question-card bg-secondary rounded-xl border border-slate-900/10 p-6 text-left">
+            <h2 class="text-lg font-semibold text-slate-900">{item.title}</h2>
+            <p class="text-sm text-slate-600 mt-2">{item.description}</p>
+          </a>
+        ))}
+      </div>
+
+      <div class="mt-10">
+        <a
+          href={withBase('/companies')}
+          class="inline-block px-10 py-4 rounded-xl font-semibold text-white transition-all hover:shadow-lg hover:scale-105"
+          style="background: linear-gradient(135deg, #6366f1, #8b5cf6)"
+        >
+          进入公司定向刷题
+        </a>
+      </div>
+    </div>
+  </section>
+</Layout>

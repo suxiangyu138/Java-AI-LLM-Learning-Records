@@ -1,6 +1,0 @@
-## Web Server
-
-### Tomcat
-
-### Nginx
-

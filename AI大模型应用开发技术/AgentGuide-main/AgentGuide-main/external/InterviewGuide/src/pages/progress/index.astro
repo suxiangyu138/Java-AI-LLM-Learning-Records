@@ -1,0 +1,165 @@
+---
+import questionsData from '../../data/questions.json';
+import Layout from '../../layouts/Layout.astro';
+import { toQuestionSlug, withBase } from '../../lib/path';
+
+interface QuestionItem {
+  id: string;
+  title: string;
+  categoryName: string;
+  frequency: number;
+}
+
+const questionIndex = (questionsData as QuestionItem[]).map((question) => ({
+  id: question.id,
+  title: question.title,
+  categoryName: question.categoryName,
+  frequency: question.frequency,
+  href: withBase(`/questions/${toQuestionSlug(question.id)}`),
+}));
+---
+
+<Layout title="学习进度 | InterviewGuide" description="查看收藏与完成进度">
+  <section class="py-12 px-6">
+    <div class="max-w-6xl mx-auto">
+      <div class="flex items-center justify-between gap-4 flex-wrap mb-8">
+        <div>
+          <h1 class="text-3xl md:text-4xl font-bold">学习进度看板</h1>
+          <p class="text-slate-600 mt-2">基于本地浏览器存储，跨页面同步收藏和完成状态。</p>
+        </div>
+        <a href={withBase('/companies')} class="text-sm text-indigo-600 hover:underline">返回刷题入口</a>
+      </div>
+
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+        <div class="bg-secondary rounded-xl border border-slate-900/10 p-4">
+          <p class="text-xs text-slate-500">题目总量</p>
+          <p class="text-2xl font-bold" id="progress-total">{questionIndex.length}</p>
+        </div>
+        <div class="bg-secondary rounded-xl border border-slate-900/10 p-4">
+          <p class="text-xs text-slate-500">已完成</p>
+          <p class="text-2xl font-bold" id="progress-completed">0</p>
+        </div>
+        <div class="bg-secondary rounded-xl border border-slate-900/10 p-4">
+          <p class="text-xs text-slate-500">已收藏</p>
+          <p class="text-2xl font-bold" id="progress-favorite">0</p>
+        </div>
+        <div class="bg-secondary rounded-xl border border-slate-900/10 p-4">
+          <p class="text-xs text-slate-500">完成率</p>
+          <p class="text-2xl font-bold" id="progress-rate">0%</p>
+        </div>
+      </div>
+
+      <div class="bg-secondary rounded-2xl border border-slate-900/10 p-5 md:p-6">
+        <h2 class="text-lg font-semibold mb-4">已跟进题目</h2>
+        <div id="progress-question-list" class="grid gap-3"></div>
+      </div>
+    </div>
+  </section>
+
+  <script type="application/json" id="progress-question-source">{JSON.stringify(questionIndex)}</script>
+
+  <script>
+    import { getProgressSummary, loadProgressState } from '../../lib/progress';
+
+    (() => {
+      /** @typedef {{ id: string; title: string; categoryName: string; frequency: number; href: string }} ProgressQuestion */
+
+      const source = document.getElementById('progress-question-source');
+      if (!(source instanceof HTMLScriptElement)) return;
+
+      /** @type {ProgressQuestion[]} */
+      let questions = [];
+      try {
+        const parsed = JSON.parse(source.textContent ?? '[]');
+        if (Array.isArray(parsed)) {
+          questions = parsed.filter((item) => {
+            if (!item || typeof item !== 'object') return false;
+            const row = item;
+            return (
+              typeof row.id === 'string' &&
+              typeof row.title === 'string' &&
+              typeof row.categoryName === 'string' &&
+              typeof row.frequency === 'number' &&
+              typeof row.href === 'string'
+            );
+          });
+        }
+      } catch {
+        questions = [];
+      }
+
+      /** @type {Map<string, ProgressQuestion>} */
+      const byId = new Map(questions.map((item) => [item.id, item]));
+      const completedNode = document.getElementById('progress-completed');
+      const favoriteNode = document.getElementById('progress-favorite');
+      const rateNode = document.getElementById('progress-rate');
+      const listNode = document.getElementById('progress-question-list');
+
+      if (!(listNode instanceof HTMLElement)) return;
+
+      const render = () => {
+        const state = loadProgressState();
+        const summary = getProgressSummary(questions.length, state);
+
+        if (completedNode instanceof HTMLElement) completedNode.textContent = String(summary.completedCount);
+        if (favoriteNode instanceof HTMLElement) favoriteNode.textContent = String(summary.favoriteCount);
+        if (rateNode instanceof HTMLElement) rateNode.textContent = `${summary.completionRate}%`;
+
+        listNode.innerHTML = '';
+
+        const orderedIds = [
+          ...state.completedIds,
+          ...state.favoriteIds.filter((id) => !state.completedIds.includes(id)),
+        ];
+
+        if (orderedIds.length === 0) {
+          const emptyNode = document.createElement('p');
+          emptyNode.className = 'text-sm text-slate-500';
+          emptyNode.textContent = '还没有收藏或完成的题目，去题库点击“查看详情”开始记录。';
+          listNode.appendChild(emptyNode);
+          return;
+        }
+
+        for (const id of orderedIds) {
+          const question = byId.get(id);
+          if (!question) continue;
+
+          const card = document.createElement('a');
+          card.href = question.href;
+          card.className = 'question-card bg-tertiary rounded-xl border border-slate-900/10 p-4 block';
+
+          const title = document.createElement('p');
+          title.className = 'font-semibold text-slate-900';
+          title.textContent = question.title;
+
+          const meta = document.createElement('p');
+          meta.className = 'text-xs text-slate-500 mt-2';
+          meta.textContent = `${question.categoryName} · 频次 ${question.frequency}`;
+
+          const tag = document.createElement('p');
+          tag.className = 'text-xs mt-2';
+          const isCompleted = state.completedIds.includes(id);
+          const isFavorite = state.favoriteIds.includes(id);
+          if (isCompleted && isFavorite) {
+            tag.textContent = '已完成 · 已收藏';
+            tag.classList.add('text-emerald-600');
+          } else if (isCompleted) {
+            tag.textContent = '已完成';
+            tag.classList.add('text-emerald-600');
+          } else {
+            tag.textContent = '已收藏';
+            tag.classList.add('text-indigo-600');
+          }
+
+          card.appendChild(title);
+          card.appendChild(meta);
+          card.appendChild(tag);
+          listNode.appendChild(card);
+        }
+      };
+
+      window.addEventListener('storage', render);
+      render();
+    })();
+  </script>
+</Layout>

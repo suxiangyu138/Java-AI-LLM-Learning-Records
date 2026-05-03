@@ -1,0 +1,30 @@
+---
+import { toQuestionSlug, withBase } from '../../lib/path';
+
+interface Props {
+  id: string;
+  title: string;
+  frequency: number;
+  categoryName: string;
+  companies: string[];
+}
+
+const { id, title, frequency, categoryName, companies } = Astro.props;
+const detailHref = withBase(`/questions/${toQuestionSlug(id)}`);
+---
+
+<article class="question-card bg-secondary rounded-xl p-4 border border-slate-900/10" data-id={id} data-title={title.toLowerCase()}>
+  <div class="flex items-start justify-between gap-3">
+    <h3 class="text-sm md:text-base font-semibold text-slate-900 line-clamp-2">
+      <a href={detailHref} class="hover:text-indigo-600 transition-colors">{title}</a>
+    </h3>
+    <span class="shrink-0 text-xs font-bold px-2 py-1 rounded-full bg-indigo-500/10 text-indigo-600">
+      {frequency}
+    </span>
+  </div>
+  <p class="text-xs text-slate-500 mt-2">{categoryName}</p>
+  <p class="text-xs text-slate-500 mt-2 line-clamp-2">{companies.slice(0, 3).join(' · ')}</p>
+  <div class="mt-3">
+    <a href={detailHref} class="text-xs text-indigo-600 hover:underline">查看详情 →</a>
+  </div>
+</article>

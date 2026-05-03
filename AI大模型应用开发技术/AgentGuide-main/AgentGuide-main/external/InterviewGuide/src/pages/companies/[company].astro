@@ -1,0 +1,131 @@
+---
+import companiesData from '../../data/companies.json';
+import questionsData from '../../data/questions.json';
+import QuestionCard from '../../components/questions/QuestionCard.astro';
+import Layout from '../../layouts/Layout.astro';
+import { fromCompanySlug, withBase, toCompanySlug } from '../../lib/path';
+
+interface CompanyStat {
+  name: string;
+  questionCount: number;
+  highFrequencyCount: number;
+  questionIds: string[];
+}
+
+interface QuestionItem {
+  id: string;
+  title: string;
+  frequency: number;
+  categoryKey: string;
+  categoryName: string;
+  companies: string[];
+  variants: string[];
+  isHighFrequency: boolean;
+  aiSystemDesign: boolean;
+  source: string;
+}
+
+export async function getStaticPaths() {
+  const companies = companiesData as CompanyStat[];
+  const questions = questionsData as QuestionItem[];
+  const byId = new Map(questions.map((q) => [q.id, q]));
+
+  return companies.map((company) => {
+    const companyQuestions = company.questionIds
+      .map((id) => byId.get(id))
+      .filter((item): item is QuestionItem => Boolean(item))
+      .sort((a, b) => b.frequency - a.frequency);
+
+    return {
+      params: {
+        company: toCompanySlug(company.name),
+      },
+      props: {
+        company,
+        companyQuestions,
+      },
+    };
+  });
+}
+
+const { company, companyQuestions } = Astro.props as {
+  company: CompanyStat;
+  companyQuestions: QuestionItem[];
+};
+
+const decodedName = fromCompanySlug(Astro.params.company ?? company.name);
+const categoryOptions = Array.from(
+  new Map(companyQuestions.map((item) => [item.categoryKey, item.categoryName])).entries(),
+).map(([key, name]) => ({ key, name }));
+---
+
+<Layout title={`${company.name} | InterviewGuide`} description={`${company.name} AI 面经题库`}>
+  <section class="py-12 px-6">
+    <div class="max-w-6xl mx-auto">
+      <a href={withBase('/companies')} class="text-sm text-indigo-600 hover:underline">← 返回公司列表</a>
+
+      <div class="mt-4 mb-8">
+        <h1 class="text-3xl md:text-4xl font-bold">{decodedName}</h1>
+        <p class="text-slate-600 mt-2">题目 {company.questionCount} · 高频 {company.highFrequencyCount}</p>
+      </div>
+
+      <div class="mb-6 grid gap-3 md:grid-cols-2">
+        <input
+          id="question-search"
+          type="search"
+          placeholder="搜索题目关键词"
+          class="w-full rounded-xl border border-slate-900/10 bg-secondary px-4 py-3 text-sm"
+        />
+        <select
+          id="company-category-filter"
+          class="w-full rounded-xl border border-slate-900/10 bg-secondary px-4 py-3 text-sm"
+        >
+          <option value="">全部知识点</option>
+          {categoryOptions.map((option) => (
+            <option value={option.key}>{option.name}</option>
+          ))}
+        </select>
+      </div>
+
+      <div id="question-list" class="grid gap-3">
+        {companyQuestions.map((question) => (
+          <div class="question-item" data-title={question.title.toLowerCase()} data-category={question.categoryKey}>
+            <QuestionCard
+              id={question.id}
+              title={question.title}
+              frequency={question.frequency}
+              categoryName={question.categoryName}
+              companies={question.companies}
+            />
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <script is:inline>
+    (() => {
+      const input = document.getElementById('question-search');
+      const categoryFilter = document.getElementById('company-category-filter');
+      const items = document.querySelectorAll('.question-item');
+      if (!(input instanceof HTMLInputElement)) return;
+      if (!(categoryFilter instanceof HTMLSelectElement)) return;
+
+      const applyFilters = () => {
+        const keyword = input.value.trim().toLowerCase();
+        const category = categoryFilter.value;
+        for (const item of items) {
+          if (!(item instanceof HTMLElement)) continue;
+          const title = item.dataset.title || '';
+          const itemCategory = item.dataset.category || '';
+          const keywordMatched = !keyword || title.includes(keyword);
+          const categoryMatched = !category || category === itemCategory;
+          item.style.display = keywordMatched && categoryMatched ? '' : 'none';
+        }
+      };
+
+      input.addEventListener('input', applyFilters);
+      categoryFilter.addEventListener('change', applyFilters);
+    })();
+  </script>
+</Layout>
