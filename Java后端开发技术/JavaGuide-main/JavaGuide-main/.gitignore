@@ -1,0 +1,19 @@
+node_modules/
+# *.drawio
+*.drawio.bkp
+.DS_Store
+# VS Code Config file
+.vscode/
+# VuePress Cache
+**/.vuepress/.cache/
+# VuePress Temp
+**/.vuepress/.temp/
+# VuePress Output
+dist/
+traversal-folder-replace-string.py
+format-markdown.py
+
+.npmrc
+package-lock.json
+lintmd-config.json
+.claude/settings.local.json
