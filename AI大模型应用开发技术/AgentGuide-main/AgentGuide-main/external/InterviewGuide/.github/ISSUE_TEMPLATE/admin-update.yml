@@ -1,0 +1,81 @@
+name: InterviewGuide Admin Update
+description: 管理员提交题库更新请求（结构化）
+title: "[Admin][medium] "
+labels:
+  - admin-update
+body:
+  - type: markdown
+    attributes:
+      value: |
+        请填写本表单，提交后将用于题库更新处理。
+
+  - type: input
+    id: question_id
+    attributes:
+      label: 题目 ID
+      placeholder: q-123
+    validations:
+      required: false
+
+  - type: input
+    id: company
+    attributes:
+      label: 公司
+      placeholder: 字节跳动
+    validations:
+      required: false
+
+  - type: input
+    id: category
+    attributes:
+      label: 分类
+      placeholder: ai系统设计
+    validations:
+      required: false
+
+  - type: dropdown
+    id: change_type
+    attributes:
+      label: 变更类型
+      options:
+        - add
+        - update
+        - delete
+        - other
+    validations:
+      required: true
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: 优先级
+      options:
+        - high
+        - medium
+        - low
+    validations:
+      required: true
+
+  - type: textarea
+    id: reason
+    attributes:
+      label: 背景与原因
+      placeholder: 为什么需要这次更新
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected_change
+    attributes:
+      label: 期望变更
+      placeholder: 希望具体怎么改
+    validations:
+      required: true
+
+  - type: textarea
+    id: references
+    attributes:
+      label: 参考资料
+      placeholder: 链接、截图、来源等
+    validations:
+      required: false

@@ -1,0 +1,206 @@
+---
+title: 工具总览
+description: AI 研究全流程工具选择矩阵
+category: tools
+order: 1
+tags: []
+---
+
+
+
+## 1. 工具选择矩阵
+
+```mermaid
+flowchart TD
+    subgraph ["调研"]
+        A[Elicit] --> B(文献检索)
+        C[Sci-Reasoning] --> D(创新分析)
+    end
+
+    subgraph ["实现"]
+        E[Claude Code] --> F(代码生成)
+        G[LangGraph] --> H(工作流编排)
+    end
+
+    subgraph ["写作"]
+        I[Prism] --> J(论文写作)
+        K[PaperBanana] --> L(图表生成)
+    end
+
+    subgraph ["审稿"]
+        M[Claude + GPT-5.2] --> N(多模型审稿)
+    end
+
+
+
+```
+
+| 任务阶段 | 推荐工具 | 备选方案 | 选择理由 |
+|---------|---------|---------|---------|
+| **文献检索** | Elicit | Consensus, Semantic Scholar | 1.25亿+论文, 自动化综述 |
+| **文献管理** | Zotero-MCP | Mendeley, Papers | Claude 集成, 语义搜索 |
+| **代码生成** | Claude Code | GPT-5.2, Codex | 200K上下文, 80.9% SWE-bench |
+| **Agent编排** | LangChain/LangGraph | CrewAI, AutoGen | 灵活工作流, 强大社区 |
+| **论文写作** | Prism | Overleaf | GPT-5.2 集成, LaTeX 原生 |
+| **审稿模拟** | Claude + GPT-5.2 | Gemini Pro | 多模型交叉验证 |
+| **画图** | PaperBanana + Mermaid | D3.js, Figma | 自动化 + 版本控制 |
+
+---
+
+## 2. 工具能力对比
+
+### 2.1 LLM 能力对比
+
+| 模型 | 上下文 | SWE-bench | ARC-AGI | 适用场景 |
+|------|--------|-----------|---------|---------|
+| **Claude Opus 4.6** | 200K | 80.9% | - | 长文档、代码 |
+| **GPT-5.2 Pro** | - | - | 90%+ | 复杂推理 |
+| **GPT-5.2 Thinking** | - | - | - | 深度分析 |
+| **Gemini 2.5 Pro** | 1M+ | - | 49.35% | 超长文档 |
+
+### 2.2 文献检索工具对比
+
+| 工具 | 论文数 | 特色 | 价格 |
+|------|--------|------|------|
+| **Elicit** | 1.25亿+ | 自动化综述 | 免费+付费 |
+| **Semantic Scholar** | 2亿+ | AI驱动 | 免费 |
+| **Consensus** | - | 证据搜索 | 免费+付费 |
+| **Scite** | - | 引用质量 | 付费 |
+
+---
+
+## 3. 快速参考
+
+### 3.1 常用命令速查
+
+```bash
+# Claude Code
+npm run dev          # 启动开发服务器
+astro build          # 构建项目
+astro preview        # 预览构建结果
+
+# MCP
+mcp list             # 列出已安装的 MCP 服务器
+mcp install zotero   # 安装 Zotero-MCP
+
+# 文献检索
+elicit search "topic"  # Elicit 搜索
+```
+
+### 3.2 关键链接汇总
+
+| 资源 | 链接 |
+|------|------|
+| **Sci-Reasoning** | https://github.com/AmberLJC/Sci-Reasoning |
+| **The AI Scientist** | https://github.com/SakanaAI/AI-Scientist |
+| **Elicit** | https://elicit.com |
+| **Prism** | https://openai.com/prism/ |
+| **claude-scientific-skills** | https://github.com/K-Dense-AI/claude-scientific-skills |
+| **LangChain** | https://github.com/langchain-ai |
+| **LlamaIndex** | https://github.com/run-llama |
+
+---
+
+## 4. 根目录项目/论文内容并入说明
+
+以下内容来自你根目录的项目与论文文件, 已并入现有章节（未上传 PDF 文件本体）：
+
+| 来源 | 并入内容 | 已落地章节 |
+|---|---|---|
+| 2601.14525 + Automated-AI-Researcher | execution-grounded 自动科研执行闭环（idea→patch→run→feedback） | `idea/projects`, `code/agents` |
+| 2601.20833 + Idea2Paper | pre-computation + KG + anchored review 的叙事生成路线 | `idea/projects` |
+| 2601.23265 + PaperBanana | 自动学术插图框架、基准与工程策略 | `figures/tools` |
+| AutoFigure-edit README | 方法图到可编辑 SVG 的工程流水线实践 | `figures/tools` |
+
+### 4.1 额外说明
+
+- `AI research.md` 的增量内容已融合到现有章节正文（idea / code / figures / writing / review / tools），未新增独立来源页。
+- `vibe` 三文档已先做并集去重，再融合到现有 `2. 代码实现` 及相关工作流章节。
+- 严格来源映射表见 [`library/01-root-assets`](../library/01-root-assets) 的“严格映射清单（来源 → 现有章节）”。
+
+---
+
+## 5. Book 实战增补（逐篇并入）
+
+### 5.1 1) VSCode Agent Skills：从启用到复用
+
+来源：`book/在_VScode_中玩转_Agent_Skills（科研工作者必备skill推荐_一定要收藏）.md`
+
+#### 5.1.1 详细步骤（VSCode 路线）
+
+1. 打开设置并启用 `chat.useAgentSkills`。
+2. 在项目内创建目录：`.github/skills/<skill-name>/`。
+3. 创建 `SKILL.md`，写清触发条件、输入输出、执行步骤。
+4. 按需添加资源文件（示例、脚本、模板）。
+5. 在会话中通过任务描述触发，验证 skill 是否被自动加载。
+
+#### 5.1.2 复用策略
+
+- 优先复用社区技能库，再做本地改造；
+- 改造时优先替换路径、命名、验证命令；
+- 先用小样本测试，再扩展到完整任务。
+
+#### 5.1.3 文章细节补充（VSCode 实操顺序）
+
+1. 先创建一个最小 skill（仅 1 个步骤），验证可触发。
+2. 再添加 `workflow-example` 与脚本资源，验证可读取。
+3. 最后引入社区 skill 并本地改造，避免一次导入过大难排错。
+
+#### 5.1.4 推荐社区资源（与原文一致）
+
+- `awesome-copilot`（社区技能集合）
+- `anthropics/skills`（官方参考）
+- `K-Dense-AI/claude-scientific-skills`（科研场景）
+
+### 5.2 2) 三 CLI 联动：Claude + Codex + Gemini
+
+来源：`book/老金开源_Claude4_5_Codex5_1_Gemini3_3大顶级CLI终极联动整合技巧_省钱_高质量_快_.md`
+
+#### 5.2.1 详细步骤（最小可跑版）
+
+1. 安装三个 CLI：Claude Code、Codex CLI、Gemini CLI。
+2. 配置 API 与认证（优先图形化管理，避免手工环境变量错误）。
+3. 先从 `Command` 模式启动：分析 → 生成 → 审查。
+4. 任务稳定后升级到 `Skill` 模式（保存中间结果与重试机制）。
+5. 长周期协作用 `MCP` 打通上下文，再按需引入 Subagent 与 Hooks。
+
+#### 5.2.2 五种编排方式对照
+
+| 方式 | 适用 | 风险 |
+|---|---|---|
+| Command | 快速、一次性任务 | 复用差、可观测性弱 |
+| Skill | 多步骤稳定流程 | 初期配置成本较高 |
+| MCP | 长会话与系统互联 | 服务器与权限管理复杂 |
+| Subagent | 并行提速 | token 成本上升 |
+| Hooks | 自动质检 | 误触发与调试复杂 |
+
+#### 5.2.3 常见坑提醒
+
+- CLI 订阅/授权失效；
+- 代理/网络导致认证失败；
+- sandbox 权限不足导致写入失败；
+- 多模型切换后输出格式漂移。
+
+#### 5.2.4 文章细节补充（三CLI联动最小命令）
+
+```bash
+# 1) 安装
+npm i -g @anthropic-ai/claude-code
+npm i -g @openai/codex
+npm i -g @google/gemini-cli
+
+# 2) 鉴权（示意，按各自官方流程）
+gemini auth login
+codex auth login
+
+# 3) 在 Claude 内先跑 Command 模式
+/ai-team "实现一个最小登录接口并附测试"
+```
+
+#### 5.2.5 五编排方式的选型建议（更细）
+
+- 30 分钟内一次性任务：`Command`
+- 反复执行的标准流程：`Skill`
+- 需要跨系统持久上下文：`MCP`
+- 模块可并行且预算允许：`Subagent`
+- 固定时机自动质检：`Hooks`

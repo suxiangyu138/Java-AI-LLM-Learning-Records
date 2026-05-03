@@ -1,0 +1,82 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const skills = [
+  {
+    name: 'Elicit Workflow',
+    type: 'Research Skill',
+    description: '自动化文献检索与综述整理，快速构建 Related Work Map。',
+    command: 'skill run elicit-research',
+    icon: '🔍',
+  },
+  {
+    name: 'Claim Builder',
+    type: 'Writing Skill',
+    description: '将问题定义、假设与证据路径组织成可验证 claim。',
+    command: 'skill run claim-builder',
+    icon: '🧠',
+  },
+  {
+    name: 'Experiment Planner',
+    type: 'Execution Skill',
+    description: '自动生成主实验、消融和压力测试计划模板。',
+    command: 'skill run exp-plan',
+    icon: '🧪',
+  },
+  {
+    name: 'Figure Assistant',
+    type: 'Figure Skill',
+    description: '根据章节内容推荐图表类型并生成初版结构图。',
+    command: 'skill run figure-assistant',
+    icon: '📈',
+  },
+  {
+    name: 'Review Loop',
+    type: 'Review Skill',
+    description: '多轮审稿意见归类与 TODO 驱动修改流程。',
+    command: 'skill run review-loop',
+    icon: '📋',
+  },
+  {
+    name: 'Rebuttal Draft',
+    type: 'Response Skill',
+    description: '按质疑类型输出结构化 rebuttal 回应草稿。',
+    command: 'skill run rebuttal-draft',
+    icon: '🛡️',
+  },
+];
+---
+
+<Layout title="Skills - Vibe Research">
+  <div class="pt-32 pb-24 px-6 max-w-7xl mx-auto">
+    <div class="text-center mb-16">
+      <div class="inline-flex items-center gap-2 px-3 py-1 bg-slate-900/5 border border-slate-900/10 rounded-full text-sm text-accent mb-6">
+        <span>✨</span>
+        <span>Research Skills</span>
+      </div>
+      <h1 class="text-4xl md:text-5xl font-bold mb-6">Agent Skills 库</h1>
+      <p class="text-slate-600 max-w-2xl mx-auto text-lg">
+        这里收录的是 AI 科研工作流的技能模块。<br />
+        覆盖调研、实验、写作、审稿与 rebuttal 的关键场景。
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {skills.map((skill) => (
+        <div class="bg-secondary border border-slate-900/10 rounded-xl p-6 hover:border-accent/50 transition-all duration-300 group">
+          <div class="flex justify-between items-start mb-4">
+            <div class="text-3xl bg-slate-900/5 p-3 rounded-lg group-hover:bg-accent/10 transition-colors">{skill.icon}</div>
+            <span class="px-2 py-1 bg-slate-900/5 rounded text-xs font-mono text-slate-500 border border-slate-900/10">{skill.type}</span>
+          </div>
+
+          <h3 class="text-xl font-bold mb-2 text-slate-900">{skill.name}</h3>
+          <p class="text-slate-600 text-sm mb-6 leading-relaxed h-10">{skill.description}</p>
+
+          <div class="bg-slate-900/5 rounded-lg p-3 border border-slate-900/10 group-hover:border-accent/20 transition-colors">
+            <code class="text-xs font-mono text-accent break-all">{skill.command}</code>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</Layout>

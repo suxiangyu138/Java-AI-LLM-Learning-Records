@@ -1,0 +1,130 @@
+---
+import questionsData from '../../data/questions.json';
+import QuestionCard from '../../components/questions/QuestionCard.astro';
+import { applyQuestionFilters } from '../../components/filters/FilterBar';
+import Layout from '../../layouts/Layout.astro';
+import { withBase } from '../../lib/path';
+
+interface QuestionItem {
+  id: string;
+  title: string;
+  frequency: number;
+  categoryKey: string;
+  categoryName: string;
+  companies: string[];
+  variants: string[];
+  isHighFrequency: boolean;
+}
+
+const allQuestions = (questionsData as QuestionItem[]).slice().sort((a, b) => b.frequency - a.frequency);
+const hotQuestions = applyQuestionFilters(allQuestions, { minFrequency: 5 }).slice(0, 1200);
+const companyOptions = Array.from(new Set(hotQuestions.flatMap((item) => item.companies))).sort((a, b) =>
+  a.localeCompare(b, 'zh-CN'),
+);
+const categoryOptions = Array.from(new Map(hotQuestions.map((item) => [item.categoryKey, item.categoryName])).entries())
+  .map(([key, name]) => ({ key, name }))
+  .sort((a, b) => a.name.localeCompare(b.name, 'zh-CN'));
+---
+
+<Layout title="高频优先 | InterviewGuide" description="按出现频次优先刷题">
+  <section class="py-12 px-6">
+    <div class="max-w-6xl mx-auto">
+      <div class="flex items-center justify-between gap-4 flex-wrap mb-6">
+        <div>
+          <h1 class="text-3xl md:text-4xl font-bold">高频优先刷题</h1>
+          <p class="text-slate-600 mt-2">按出现频次排序，默认展示高频题前 1200 条。</p>
+        </div>
+        <a href={withBase('/companies')} class="text-sm text-indigo-600 hover:underline">返回公司定向</a>
+      </div>
+
+      <div class="mb-6 grid gap-3 md:grid-cols-3">
+        <input
+          id="hot-keyword-search"
+          type="search"
+          placeholder="关键词筛选"
+          class="w-full rounded-xl border border-slate-900/10 bg-secondary px-4 py-3 text-sm"
+        />
+        <select
+          id="hot-company-filter"
+          class="w-full rounded-xl border border-slate-900/10 bg-secondary px-4 py-3 text-sm"
+        >
+          <option value="">全部公司</option>
+          {companyOptions.map((company) => (
+            <option value={company}>{company}</option>
+          ))}
+        </select>
+        <select
+          id="hot-category-filter"
+          class="w-full rounded-xl border border-slate-900/10 bg-secondary px-4 py-3 text-sm"
+        >
+          <option value="">全部知识点</option>
+          {categoryOptions.map((category) => (
+            <option value={category.key}>{category.name}</option>
+          ))}
+        </select>
+      </div>
+
+      <div id="hot-list" class="grid gap-3">
+        {hotQuestions.map((question) => (
+          <div
+            class="hot-item"
+            data-title={question.title.toLowerCase()}
+            data-companies={question.companies.join('||')}
+            data-category={question.categoryKey}
+          >
+            <QuestionCard
+              id={question.id}
+              title={question.title}
+              frequency={question.frequency}
+              categoryName={question.categoryName}
+              companies={question.companies}
+            />
+          </div>
+        ))}
+      </div>
+      <p id="hot-empty" class="text-sm text-slate-500 mt-4 hidden">当前筛选条件下没有题目。</p>
+    </div>
+  </section>
+
+  <script is:inline>
+    (() => {
+      const keywordInput = document.getElementById('hot-keyword-search');
+      const companySelect = document.getElementById('hot-company-filter');
+      const categorySelect = document.getElementById('hot-category-filter');
+      const emptyTip = document.getElementById('hot-empty');
+      const items = document.querySelectorAll('.hot-item');
+      if (!(keywordInput instanceof HTMLInputElement)) return;
+      if (!(companySelect instanceof HTMLSelectElement)) return;
+      if (!(categorySelect instanceof HTMLSelectElement)) return;
+
+      const applyFilters = () => {
+        const keyword = keywordInput.value.trim().toLowerCase();
+        const company = companySelect.value;
+        const category = categorySelect.value;
+
+        let visibleCount = 0;
+        for (const item of items) {
+          if (!(item instanceof HTMLElement)) continue;
+          const title = item.dataset.title || '';
+          const itemCategory = item.dataset.category || '';
+          const itemCompanies = (item.dataset.companies || '').split('||').filter(Boolean);
+
+          const keywordMatched = !keyword || title.includes(keyword);
+          const companyMatched = !company || itemCompanies.includes(company);
+          const categoryMatched = !category || itemCategory === category;
+          const visible = keywordMatched && companyMatched && categoryMatched;
+          item.style.display = visible ? '' : 'none';
+          if (visible) visibleCount += 1;
+        }
+
+        if (emptyTip instanceof HTMLElement) {
+          emptyTip.classList.toggle('hidden', visibleCount > 0);
+        }
+      };
+
+      keywordInput.addEventListener('input', applyFilters);
+      companySelect.addEventListener('change', applyFilters);
+      categorySelect.addEventListener('change', applyFilters);
+    })();
+  </script>
+</Layout>

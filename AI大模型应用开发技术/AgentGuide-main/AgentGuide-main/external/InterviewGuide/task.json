@@ -1,0 +1,198 @@
+{
+  "project": "InterviewGuide",
+  "description": "AI interview learning site with persistent workflow tracking",
+  "updated_at": "2026-02-26",
+  "tasks": [
+    {
+      "id": "T01",
+      "title": "建立测试与脚本基础设施",
+      "description": "引入 Vitest 并建立 smoke 测试基线",
+      "steps": [
+        "新增 test/test:watch scripts",
+        "新增 vitest.config.ts",
+        "新增 smoke test 并验证通过"
+      ],
+      "status": "done",
+      "acceptance": [
+        "npm run test 可以运行",
+        "smoke 测试通过"
+      ],
+      "commit": "427e7d4"
+    },
+    {
+      "id": "T02",
+      "title": "建立持久化流程文件",
+      "description": "新增 AGENT.MD/task.json/progress.txt 与 schema 测试",
+      "steps": [
+        "新增 workflow schema 测试",
+        "新增 AGENT.MD",
+        "新增 task.json",
+        "新增 progress.txt"
+      ],
+      "status": "done",
+      "acceptance": [
+        "task schema 测试通过",
+        "流程文件已写入仓库"
+      ],
+      "commit": "42e7c57"
+    },
+    {
+      "id": "T03",
+      "title": "数据解析脚本",
+      "description": "从知识点与公司 markdown 解析结构化题目数据",
+      "steps": [
+        "实现 parse_knowledge",
+        "实现 parse_company",
+        "补 fixture 与解析测试"
+      ],
+      "status": "done",
+      "acceptance": [
+        "解析测试通过"
+      ],
+      "commit": "439fc36"
+    },
+    {
+      "id": "T04",
+      "title": "AI 范围过滤与数据产物生成",
+      "description": "过滤 AI 核心范围并生成 src/data JSON",
+      "steps": [
+        "实现白名单分类过滤",
+        "实现 AI 系统设计关键词过滤",
+        "生成 questions/companies/categories/stats/search-index"
+      ],
+      "status": "done",
+      "acceptance": [
+        "过滤测试通过",
+        "src/data JSON 生成成功"
+      ],
+      "commit": "45ecd05"
+    },
+    {
+      "id": "T05",
+      "title": "公司定向主链路",
+      "description": "默认入口公司定向，支持公司列表与公司题目页",
+      "steps": [
+        "新增 companies 路由",
+        "首页默认 CTA 指向公司定向",
+        "公司详情支持搜索和排序"
+      ],
+      "status": "done",
+      "acceptance": [
+        "公司路由可访问"
+      ],
+      "commit": "9fbbeb5"
+    },
+    {
+      "id": "T06",
+      "title": "高频与知识点链路",
+      "description": "新增 hot/categories 学习入口",
+      "steps": [
+        "新增 hot 路由",
+        "新增 categories 路由",
+        "复用筛选组件"
+      ],
+      "status": "done",
+      "acceptance": [
+        "路由可访问",
+        "筛选有效"
+      ],
+      "commit": ""
+    },
+    {
+      "id": "T07",
+      "title": "题目详情与进度看板",
+      "description": "实现收藏/完成和进度统计",
+      "steps": [
+        "新增 question detail",
+        "新增 progress 页面",
+        "实现 localStorage 封装"
+      ],
+      "status": "done",
+      "acceptance": [
+        "进度存储测试通过"
+      ],
+      "commit": ""
+    },
+    {
+      "id": "T08",
+      "title": "管理员更新入口",
+      "description": "实现弱门禁管理页与结构化提交 payload",
+      "steps": [
+        "新增 admin 页面",
+        "新增门禁和提交表单",
+        "新增 issue 模板"
+      ],
+      "status": "done",
+      "acceptance": [
+        "payload 测试通过",
+        "admin 表单可用"
+      ],
+      "commit": ""
+    },
+    {
+      "id": "T09",
+      "title": "独立部署流程",
+      "description": "配置 GitHub Pages 独立部署",
+      "steps": [
+        "新增 deploy workflow",
+        "更新 astro base/site",
+        "补 README 部署说明"
+      ],
+      "status": "done",
+      "acceptance": [
+        "npm run build 通过"
+      ],
+      "commit": ""
+    },
+    {
+      "id": "T10",
+      "title": "子路径路由修复与刷题筛选增强",
+      "description": "修复 GitHub Pages 子路径详情页 404，并增强高频/公司页筛选能力",
+      "steps": [
+        "修复 withBase 的目录路由尾斜杠策略，避免公司/知识点详情 404",
+        "高频页新增关键词 + 公司 + 知识点联合筛选",
+        "公司详情页新增关键词 + 知识点联合筛选"
+      ],
+      "status": "done",
+      "acceptance": [
+        "公司定向与知识点详情链接在静态产物中为目录尾斜杠 URL",
+        "高频页可按公司和知识点筛选",
+        "npm run test 与 npm run build 通过"
+      ],
+      "commit": "95d8a46"
+    },
+    {
+      "id": "T11",
+      "title": "公司数据清洗与英文 URL 路由",
+      "description": "归并“等N家公司”噪声公司，并将公司详情路由改为英文 slug",
+      "steps": [
+        "实现公司名标准化（去除“等N家公司”后缀）并接入解析流程",
+        "重建 src/data 产物，确认公司聚合去噪",
+        "实现公司中文名到英文 slug 的映射，路由不再出现中文"
+      ],
+      "status": "done",
+      "acceptance": [
+        "companies.json 不再出现“等N家公司”条目",
+        "公司详情 URL 为英文 slug（如 /companies/bytedance/）",
+        "npm run test 与 npm run build 通过"
+      ],
+      "commit": "aee9f3b"
+    },
+    {
+      "id": "T12",
+      "title": "知识点详情英文 URL 路由修复",
+      "description": "将知识点详情路由切换为英文 ASCII slug，修复中文路径在部分环境 404",
+      "steps": [
+        "为知识点补齐中文名到英文 slug 映射",
+        "保留 fallback，确保 slug 始终为 ASCII",
+        "补充 slug 映射测试并回归构建"
+      ],
+      "status": "done",
+      "acceptance": [
+        "知识点详情 URL 为英文 slug（如 /categories/project-behavior/）",
+        "npm run test 与 npm run build 通过"
+      ],
+      "commit": ""
+    }
+  ]
+}

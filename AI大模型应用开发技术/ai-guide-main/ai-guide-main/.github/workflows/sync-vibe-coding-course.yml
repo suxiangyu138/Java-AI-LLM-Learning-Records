@@ -1,0 +1,77 @@
+name: 同步 Vibe 教程变动内容到 AI 导航后端服务
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  send-file-list:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 获取分类变更文件列表并 POST
+        env:
+          POST_URL: ${{ secrets.SYNC_AI_GUIDE_URL }}
+          AUTH_TOKEN: ${{ secrets.SYNC_AI_COURSE_TOKEN }}
+        run: |
+          # 关闭 Git 路径转义，防止中文乱码
+          git config --global core.quotepath false
+
+          # 1. 基础校验
+          if [ -z "$POST_URL" ]; then
+            echo "Error: SYNC_AI_GUIDE_URL is not set."
+            exit 1
+          fi
+
+          # 2. 确定对比范围
+          BEFORE_SHA=${{ github.event.before }}
+          CURRENT_SHA=${{ github.sha }}
+
+          # 如果是新分支或首次推送，对比当前提交与父提交；如果没有父提交，对比空树
+          if [ "$BEFORE_SHA" = "0000000000000000000000000000000000000000" ]; then
+            # 4b825dc... 是 git 的空树 SHA 
+            BEFORE_SHA=$(git rev-parse $CURRENT_SHA^ 2>/dev/null || echo "4b825dc642cb6eb9a060e54bf8d69288fbee4904")
+          fi
+
+          # 3. 定义函数：根据过滤器获取 JSON 数组
+          # A: 新增, M: 修改, D: 删除
+          get_json_list() {
+            local filter=$1
+            local files=$(git diff --no-renames --name-only --diff-filter=$filter $BEFORE_SHA $CURRENT_SHA)
+            if [ -z "$files" ]; then
+              echo "[]"
+            else
+              echo "$files" | jq -R . | jq -s -c .
+            fi
+          }
+
+          ADDED_JSON=$(get_json_list A)
+          MODIFIED_JSON=$(get_json_list M)
+          DELETED_JSON=$(get_json_list D)
+
+          echo "Added: $ADDED_JSON"
+          echo "Modified: $MODIFIED_JSON"
+          echo "Deleted: $DELETED_JSON"
+
+          # 4. 构造最终的 JSON Payload
+          # 使用 jq 构造可以自动处理所有的转义问题，防止 curl 报错
+          PAYLOAD=$(jq -n \
+            --arg repo "${{ github.repository }}" \
+            --argjson addedFileList "$ADDED_JSON" \
+            --argjson modifiedFileList "$MODIFIED_JSON" \
+            --argjson deletedFileList "$DELETED_JSON" \
+            '{repository: $repo, addedFileList: $addedFileList, modifiedFileList: $modifiedFileList, deletedFileList: $deletedFileList}')
+
+          # 5. 发送 POST 请求
+          # 注意："$POST_URL" 必须加双引号
+          curl -X POST "$POST_URL" \
+            -H "Content-Type: application/json" \
+            -H "Authorization: Bearer $AUTH_TOKEN" \
+            -d "$PAYLOAD" \
+            --fail-with-body

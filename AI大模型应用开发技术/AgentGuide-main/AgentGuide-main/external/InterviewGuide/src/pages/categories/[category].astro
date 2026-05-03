@@ -1,0 +1,81 @@
+---
+import categoriesData from '../../data/categories.json';
+import questionsData from '../../data/questions.json';
+import QuestionCard from '../../components/questions/QuestionCard.astro';
+import { applyQuestionFilters } from '../../components/filters/FilterBar';
+import Layout from '../../layouts/Layout.astro';
+import { fromCategorySlug, toCategorySlug, withBase } from '../../lib/path';
+
+interface CategoryStat {
+  key: string;
+  name: string;
+  questionCount: number;
+  highFrequencyCount: number;
+  questionIds: string[];
+}
+
+interface QuestionItem {
+  id: string;
+  title: string;
+  frequency: number;
+  categoryKey: string;
+  categoryName: string;
+  companies: string[];
+}
+
+export async function getStaticPaths() {
+  const categories = categoriesData as CategoryStat[];
+  const questions = questionsData as QuestionItem[];
+  const byId = new Map(questions.map((q) => [q.id, q]));
+
+  return categories.map((category) => {
+    const categoryQuestions = category.questionIds
+      .map((id) => byId.get(id))
+      .filter((item): item is QuestionItem => Boolean(item))
+      .sort((a, b) => b.frequency - a.frequency);
+
+    return {
+      params: {
+        category: toCategorySlug(category.key),
+      },
+      props: {
+        category,
+        categoryQuestions,
+      },
+    };
+  });
+}
+
+const { category, categoryQuestions } = Astro.props as {
+  category: CategoryStat;
+  categoryQuestions: QuestionItem[];
+};
+
+const visibleQuestions = applyQuestionFilters(categoryQuestions, { minFrequency: 1 });
+const decodedName = fromCategorySlug(Astro.params.category ?? category.name);
+---
+
+<Layout title={`${category.name} | InterviewGuide`} description={`${category.name} 分类题库`}>
+  <section class="py-12 px-6">
+    <div class="max-w-6xl mx-auto">
+      <a href={withBase('/categories')} class="text-sm text-indigo-600 hover:underline">← 返回分类列表</a>
+
+      <div class="mt-4 mb-8">
+        <h1 class="text-3xl md:text-4xl font-bold">{decodedName}</h1>
+        <p class="text-slate-600 mt-2">题目 {category.questionCount} · 高频 {category.highFrequencyCount}</p>
+      </div>
+
+      <div id="category-list" class="grid gap-3">
+        {visibleQuestions.map((question) => (
+          <QuestionCard
+            id={question.id}
+            title={question.title}
+            frequency={question.frequency}
+            categoryName={question.categoryName}
+            companies={question.companies}
+          />
+        ))}
+      </div>
+    </div>
+  </section>
+</Layout>

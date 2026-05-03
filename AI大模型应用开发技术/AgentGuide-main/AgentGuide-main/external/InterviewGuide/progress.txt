@@ -1,0 +1,280 @@
+# InterviewGuide Progress
+
+## 2026-02-26 - Bootstrap and Planning
+
+### What was done
+- 初始化 `InterviewGuide` 本地仓库并切换到 `main`。
+- 提交设计文档：`plans/2026-02-26-interviewguide-v1-design.md`。
+- 提交实现计划：`plans/2026-02-26-interviewguide-v1-implementation-plan.md`。
+
+### Verification
+- `git log --oneline` 显示设计与计划提交存在。
+
+### Notes
+- 后续按任务小步提交，保证每个任务均有可追溯提交记录。
+
+---
+
+## 2026-02-26 - Task T01: 建立测试与脚本基础设施
+
+### What was done
+- 在 `package.json` 增加 `test` / `test:watch` 脚本。
+- 新增 `vitest.config.ts`。
+- 新增 `tests/smoke/basic.test.ts` 和 `tests/fixtures/.gitkeep`。
+- 生成并提交 `package-lock.json`。
+
+### Verification
+- `npm run test` 通过（1 test passed）。
+- 提交: `427e7d4 chore: add test runner baseline`。
+
+### Notes
+- 测试基线可作为后续 TDD 任务入口。
+
+---
+
+## 2026-02-26 - Task T02: 建立持久化流程文件
+
+### What was done
+- 新增 `tests/workflow/task_schema.test.ts`（先失败后修复）。
+- 新增 `AGENT.MD`。
+- 新增 `task.json`，记录当前任务状态。
+- 新增 `progress.txt` 持续日志。
+
+### Verification
+- RED: `npm run test -- tests/workflow/task_schema.test.ts` 因缺失 `task.json` 失败。
+- GREEN: 创建流程文件后再次执行同命令应通过。
+
+### Notes
+- 从本任务开始，严格执行“单任务、单提交、可验证”流程。
+
+---
+
+## 2026-02-26 - Task T03: 数据解析脚本
+
+### What was done
+- 新增 `tests/fixtures/knowledge_sample.md` 与 `tests/fixtures/company_sample.md`。
+- 新增 `tests/data/parse_knowledge.test.ts`，先验证缺失解析器时失败。
+- 新增 `scripts/lib/types.ts`。
+- 新增 `scripts/lib/parse_knowledge.ts`（分类、题目、出现次数、公司、变体解析）。
+- 新增 `scripts/lib/parse_company.ts`（公司、题目、出现次数解析）。
+- 新增 `scripts/build-data.ts` 生成原始 JSON 产物（`src/data/*.raw.json`）。
+
+### Verification
+- RED: `npm run test -- tests/data/parse_knowledge.test.ts`，因缺失 `parse_knowledge` 失败。
+- GREEN: 同命令通过（1 test passed）。
+- 回归: `npm run test` 通过（3 test passed）。
+
+### Notes
+- 解析器先满足最小结构化抽取，后续在 T04 增加 AI 范围过滤与正式产物。
+
+---
+
+## 2026-02-26 - Task T04: AI 范围过滤与 JSON 产物生成
+
+### What was done
+- 新增 `tests/data/filter_ai_scope.test.ts`，先验证缺失过滤器时失败。
+- 新增 `scripts/lib/keywords.ts`（AI 核心分类与系统设计关键词）。
+- 新增 `scripts/lib/filter_ai_scope.ts`（白名单分类保留 + AI 系统设计关键词筛）。
+- 更新 `scripts/build-data.ts`，生成正式产物：
+  - `src/data/questions.json`
+  - `src/data/companies.json`
+  - `src/data/categories.json`
+  - `src/data/stats.json`
+  - `src/data/search-index.json`
+- 使用 `vite-node` 执行构建脚本，产出 12,960 条 AI 范围题目。
+
+### Verification
+- RED: `npm run test -- tests/data/filter_ai_scope.test.ts`，缺失模块失败。
+- GREEN: 同命令通过（1 test passed）。
+- 数据生成: `./node_modules/.bin/vite-node scripts/build-data.ts` 输出：
+  - `knowledge rows: 22019`
+  - `scoped rows: 12960`
+  - `company rows: 26456`
+- 回归: `npm run test` 通过（4 test passed）。
+
+### Notes
+- 脚本通过 `--knowledge` 和 `--company` 参数可切换输入源，默认读取 `../result/output`。
+
+---
+
+## 2026-02-26 - Task T05: 公司定向主链路
+
+### What was done
+- 新增 `tests/routes/companies_routes.test.ts`，先验证缺失路由失败。
+- 新增 `src/pages/companies/index.astro`（公司列表页）。
+- 新增 `src/pages/companies/[company].astro`（公司题目详情页，按频次排序并支持前端关键词搜索）。
+- 新增 `src/components/questions/QuestionCard.astro`。
+- 新增 `src/components/filters/SearchBox.ts` 和 `src/lib/path.ts`。
+- 重写 `src/pages/index.astro`，默认入口切换到公司定向。
+- 更新 `src/layouts/Layout.astro` 导航，突出公司定向入口。
+
+### Verification
+- RED: `npm run test -- tests/routes/companies_routes.test.ts` 失败（路由文件不存在）。
+- GREEN: 同命令通过（1 test passed）。
+- 回归: `npm run test` 通过（5 test passed）。
+- 构建: `npm run build` 通过，生成 `companies` 相关静态路由。
+
+### Notes
+- 当前公司维度里有少量“等N家公司”噪声实体，后续可在数据清洗阶段去除。
+
+---
+
+## 2026-02-26 - Task T06: 高频与知识点链路
+
+### What was done
+- 新增 `tests/routes/study_routes.test.ts`，先验证缺失路由失败。
+- 新增 `src/pages/hot/index.astro`（高频优先页面，按频次展示）。
+- 新增 `src/pages/categories/index.astro`（知识点目录页）。
+- 新增 `src/pages/categories/[category].astro`（分类详情页）。
+- 新增 `src/components/filters/FilterBar.ts`（通用题目过滤函数）。
+- 更新 `src/lib/path.ts`，增加分类 slug 工具。
+
+### Verification
+- RED: `npm run test -- tests/routes/study_routes.test.ts` 失败（路由不存在）。
+- GREEN: 同命令通过（1 test passed）。
+- 回归: `npm run test` 通过（6 test passed）。
+- 构建: `npm run build` 通过，`/hot` 与 `/categories/*` 静态路由生成成功。
+
+### Notes
+- 高频页目前默认展示前 1200 条高频题，可后续增加分页/虚拟列表。
+
+---
+
+## 2026-02-26 - Task T07: 题目详情与进度看板
+
+### What was done
+- 新增 `tests/progress/storage.test.ts`，先约束 localStorage 封装行为（默认值、toggle、异常 JSON 容错、去重清洗）。
+- 新增 `tests/routes/detail_progress_routes.test.ts`，先约束题目详情路由与进度路由文件存在。
+- 新增 `src/lib/progress.ts`，提供进度状态读取/保存、收藏切换、完成切换、统计汇总。
+- 新增 `src/pages/questions/[id].astro`，实现题目详情页与“收藏/完成”交互。
+- 新增 `src/pages/progress/index.astro`，实现进度看板（已完成/已收藏/完成率与已跟进题目列表）。
+- 更新 `src/components/questions/QuestionCard.astro`，添加题目详情入口。
+- 更新 `src/lib/path.ts`，补充题目 slug 编解码工具。
+
+### Verification
+- RED: `npm run test -- tests/progress/storage.test.ts tests/routes/detail_progress_routes.test.ts` 失败（缺失 `src/lib/progress.ts` 与新路由文件）。
+- GREEN: 实现后同命令通过（2 files, 5 tests passed）。
+- 回归: `npm run test` 通过（8 files, 11 tests passed）。
+- 构建: `npm run build` 通过，新增 `/progress` 和 `/questions/*` 静态路由（总计 13048 pages）。
+
+### Notes
+- 题目详情页使用浏览器本地存储维护收藏/完成状态，进度页实时读取同一存储键进行汇总展示。
+
+---
+
+## 2026-02-26 - Task T08: 管理员更新入口
+
+### What was done
+- 新增 `tests/admin/payload.test.ts`，先约束结构化 payload 的归一化、默认值与 query 序列化。
+- 新增 `tests/routes/admin_routes.test.ts`，先约束 `admin` 页面与 issue 模板文件存在。
+- 新增 `src/lib/admin_payload.ts`，实现管理员提交 payload 构建与 Issue query 生成。
+- 新增 `src/pages/admin/index.astro`，实现弱门禁（本地口令）+ 管理表单 + payload 预览 + GitHub Issue 跳转。
+- 新增 `.github/ISSUE_TEMPLATE/admin-update.yml`，提供管理员更新 issue 模板。
+
+### Verification
+- RED: `npm run test -- tests/admin/payload.test.ts tests/routes/admin_routes.test.ts` 失败（缺失 `src/lib/admin_payload.ts` 与 `admin` 页面/模板）。
+- GREEN: 实现后同命令通过（2 files, 4 tests passed）。
+- 回归: `npm run test` 通过（10 files, 15 tests passed）。
+- 构建: `npm run build` 通过，新增 `/admin` 静态路由（总计 13049 pages）。
+
+### Notes
+- 当前门禁为弱门禁，口令默认值在前端明文，仅用于防误操作，不用于安全隔离。
+
+---
+
+## 2026-02-26 - Task T09: 独立部署流程
+
+### What was done
+- 新增 `tests/deploy/pages_deploy.test.ts`，先约束 deploy workflow、Astro Pages 配置与 README 部署说明。
+- 新增 `.github/workflows/deploy.yml`，配置 GitHub Pages 构建与发布流水线（build + deploy jobs）。
+- 更新 `astro.config.mjs`，支持按 `GITHUB_ACTIONS` 与 `GITHUB_REPOSITORY` 自动推导 `site/base`。
+- 新增 `README.md`，补充本地运行、测试构建与 GitHub Pages 部署说明。
+
+### Verification
+- RED: `npm run test -- tests/deploy/pages_deploy.test.ts` 失败（缺失 `deploy.yml`、`README.md`，配置不含 `GITHUB_ACTIONS`）。
+- GREEN: 实现后同命令通过（1 file, 3 tests passed）。
+- 回归: `npm run test` 通过（11 files, 18 tests passed）。
+- 构建: `npm run build` 通过，静态构建完成（总计 13049 pages）。
+
+### Notes
+- 本地默认 `base=/`，GitHub Actions 构建默认 `base=/{repo}`，可通过 `BASE_PATH` 与 `SITE_URL` 覆盖。
+
+---
+
+## 2026-02-26 - Task T10: 子路径路由修复与刷题筛选增强
+
+### What was done
+- 新增 `tests/lib/path_base.test.ts`，约束子路径拼接时目录路由必须带尾斜杠、资源路径不追加斜杠。
+- 新增 `tests/filters/question_filters.test.ts`，约束题目筛选支持 `company + categoryKey` 联合过滤。
+- 新增 `tests/routes/filter_ui_routes.test.ts`，约束高频页与公司页筛选控件存在。
+- 更新 `src/lib/path.ts`，新增 `withBaseFrom` 并统一目录路由输出为尾斜杠 URL（如 `/companies/xxx/`）。
+- 更新 `src/components/filters/FilterBar.ts`，新增 `categoryKey` 筛选条件。
+- 更新 `src/pages/hot/index.astro`，新增关键词/公司/知识点三维筛选与空结果提示。
+- 更新 `src/pages/companies/[company].astro`，新增公司详情页知识点筛选并与关键词搜索联合生效。
+
+### Verification
+- RED: `npm run test -- tests/lib/path_base.test.ts tests/filters/question_filters.test.ts tests/routes/filter_ui_routes.test.ts` 失败（`withBaseFrom` 缺失、筛选逻辑缺失、筛选控件缺失）。
+- GREEN: 同命令通过（3 files, 6 tests passed）。
+- 回归: `npm run test` 通过（14 files, 24 tests passed）。
+- 构建: `npm run build` 通过（13049 pages）。
+- 链接检查: `sed -n '1,80p' dist/companies/index.html | grep -o 'href=\"[^\"]*\"' | sed -n '1,20p'` 输出包含：
+  - `/companies/`
+  - `/categories/`
+  - `/companies/%E5%AD%97%E8%8A%82%E8%B7%B3%E5%8A%A8/`
+
+### Notes
+- 该修复直接针对 GitHub Pages 子路径目录路由场景，避免无尾斜杠 URL 在详情页触发 404。
+
+---
+
+## 2026-02-26 - Task T11: 公司数据清洗与英文 URL 路由
+
+### What was done
+- 新增 `tests/data/company_normalization.test.ts`，先约束“等N家公司”归并与去重行为。
+- 新增 `tests/lib/company_slug.test.ts`，先约束公司 URL slug 使用英文并兼容“等N家公司”输入。
+- 新增 `scripts/lib/company_normalizer.ts`，实现公司名标准化与列表去重。
+- 更新 `scripts/lib/parse_knowledge.ts`，对题目公司列表应用标准化与去重。
+- 更新 `scripts/lib/parse_company.ts`，对公司标题应用标准化。
+- 更新 `src/lib/path.ts`，新增公司英文 slug 映射与后缀归并逻辑，生成 ASCII 路由。
+- 重新生成数据产物：`src/data/questions.json`、`src/data/companies.json`、`src/data/search-index.json`、`src/data/stats.json`。
+
+### Verification
+- RED: `npm run test -- tests/data/company_normalization.test.ts tests/lib/company_slug.test.ts` 失败（缺少 `company_normalizer`、slug 仍为中文编码）。
+- GREEN: 同命令通过（2 files, 5 tests passed）。
+- 数据构建: `./node_modules/.bin/vite-node scripts/build-data.ts` 输出：
+  - `knowledge rows: 22019`
+  - `scoped rows: 12960`
+  - `company rows: 26456`
+- 回归: `npm run test` 通过（16 files, 29 tests passed）。
+- 构建: `npm run build` 通过，静态路由中公司详情为英文 slug，例如：
+  - `/companies/bytedance/`
+  - `/companies/meituan/`
+  - `/companies/alibaba/`
+
+### Notes
+- 清洗后公司聚合从 74 项降为 28 项，已移除“等N家公司”噪声条目。
+
+---
+
+## 2026-02-26 - Task T12: 知识点详情英文 URL 路由修复
+
+### What was done
+- 新增 `tests/lib/category_slug.test.ts`，先约束知识点 slug 必须为英文 ASCII，且可反解到中文分类名。
+- 更新 `src/lib/path.ts`：
+  - 新增知识点中文名到英文 slug 映射（如 `项目与行为面试 -> project-behavior`）。
+  - 新增通用 ASCII slug fallback，避免出现中文/百分号路径。
+  - `fromCategorySlug` 优先通过映射反解，未知 slug 仍兼容 `decodeURIComponent`。
+- 验证静态产物中知识点详情链接已切换为英文路径（`/categories/project-behavior/` 等）。
+
+### Verification
+- RED: `npm run test -- tests/lib/category_slug.test.ts` 失败（3 tests failed，旧实现返回 `%E...` 中文编码路径）。
+- GREEN: 同命令通过（1 file, 3 tests passed）。
+- 回归: `npm run test` 通过（17 files, 32 tests passed）。
+- 构建: `npm run build` 通过（13003 pages）。
+- 链接检查: `sed -n '1,220p' dist/categories/index.html | grep -o 'href=\"[^\"]*\"'` 输出包含：
+  - `/categories/project-behavior/`
+  - `/categories/nlp-llm/`
+  - `/categories/ml-fundamentals/`
+
+### Notes
+- 该修复将知识点详情路由改为英文 ASCII slug，规避中文编码 URL 在部分静态托管环境中的 404 风险。

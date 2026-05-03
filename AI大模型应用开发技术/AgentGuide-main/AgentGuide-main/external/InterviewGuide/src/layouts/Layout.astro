@@ -1,0 +1,126 @@
+---
+import '@fontsource/inter';
+import '@fontsource/inter/500.css';
+import '@fontsource/inter/600.css';
+import '@fontsource/inter/700.css';
+import '@fontsource/jetbrains-mono';
+import '../styles/global.css';
+import { withBase } from '../lib/path';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = 'InterviewGuide - AI 面经刷题网站',
+  description = '精选 AI 面试题库，助你高效备战技术面试',
+} = Astro.props;
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+---
+
+<!doctype html>
+<html lang="zh-CN" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content={description} />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    <link rel="icon" type="image/svg+xml" href={withBase('/favicon.svg')} />
+    <link rel="canonical" href={canonicalURL} />
+    <script is:inline>
+      (() => {
+        const key = 'ig-theme';
+        try {
+          const saved = localStorage.getItem(key);
+          const theme = saved === 'dark' || saved === 'light' ? saved : 'light';
+          document.documentElement.dataset.theme = theme;
+        } catch {
+          document.documentElement.dataset.theme = 'light';
+        }
+      })();
+    </script>
+    <title>{title}</title>
+  </head>
+  <body class="bg-primary text-slate-900 min-h-screen flex flex-col font-sans selection:bg-indigo-500/25">
+    <header class="fixed top-0 left-0 right-0 bg-primary/80 backdrop-blur-md border-b border-slate-900/10 z-50">
+      <nav class="max-w-7xl mx-auto px-6 h-[70px] flex justify-between items-center">
+        <a href={withBase('/')} class="text-xl font-bold">
+          <span class="gradient-text">InterviewGuide</span>
+        </a>
+
+        <div class="flex items-center gap-3">
+          <button
+            type="button"
+            data-theme-toggle
+            class="theme-toggle-btn"
+            aria-label="切换主题"
+            title="切换浅色/深色"
+          >
+            <span data-theme-icon>🌙</span>
+            <span data-theme-label>深色</span>
+          </button>
+
+          <ul class="hidden md:flex gap-6 items-center">
+            <li><a href={withBase('/')} class="text-slate-500 hover:text-slate-900 transition-colors text-sm font-medium">首页</a></li>
+            <li><a href={withBase('/companies')} class="text-slate-500 hover:text-slate-900 transition-colors text-sm font-medium">公司定向</a></li>
+            <li><a href={withBase('/hot')} class="text-slate-500 hover:text-slate-900 transition-colors text-sm font-medium">高频优先</a></li>
+            <li><a href={withBase('/categories')} class="text-slate-500 hover:text-slate-900 transition-colors text-sm font-medium">知识点</a></li>
+            <li><a href={withBase('/progress')} class="text-slate-500 hover:text-slate-900 transition-colors text-sm font-medium">进度</a></li>
+          </ul>
+        </div>
+      </nav>
+    </header>
+
+    <main class="flex-1 pt-[70px]">
+      <slot />
+    </main>
+
+    <footer class="bg-secondary border-t border-slate-900/10 py-6 mt-auto">
+      <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4">
+        <p class="text-slate-500 text-sm">&copy; {new Date().getFullYear()} InterviewGuide. Built with Astro + Tailwind.</p>
+        <div class="flex gap-6">
+          <a href="https://github.com/yiweinanzi/InterviewGuide" target="_blank" rel="noopener" class="text-slate-500 hover:text-indigo-500 transition-colors text-sm">GitHub</a>
+          <a href={withBase('/companies')} class="text-slate-500 hover:text-indigo-500 transition-colors text-sm">开始刷题</a>
+        </div>
+      </div>
+    </footer>
+
+    <script is:inline>
+      (() => {
+        const key = 'ig-theme';
+        const root = document.documentElement;
+        const iconNodes = () => document.querySelectorAll('[data-theme-icon]');
+        const labelNodes = () => document.querySelectorAll('[data-theme-label]');
+
+        const currentTheme = () => (root.dataset.theme === 'dark' ? 'dark' : 'light');
+
+        const syncThemeUI = () => {
+          const isDark = currentTheme() === 'dark';
+          for (const node of iconNodes()) node.textContent = isDark ? '☀️' : '🌙';
+          for (const node of labelNodes()) node.textContent = isDark ? '浅色' : '深色';
+        };
+
+        const setTheme = (theme) => {
+          root.dataset.theme = theme === 'dark' ? 'dark' : 'light';
+          try {
+            localStorage.setItem(key, root.dataset.theme);
+          } catch {}
+          syncThemeUI();
+        };
+
+        document.addEventListener('click', (event) => {
+          const target = event.target;
+          if (!(target instanceof Element)) return;
+          const button = target.closest('[data-theme-toggle]');
+          if (!button) return;
+          setTheme(currentTheme() === 'dark' ? 'light' : 'dark');
+        });
+
+        document.addEventListener('astro:after-swap', syncThemeUI);
+        syncThemeUI();
+      })();
+    </script>
+  </body>
+</html>
