@@ -1,104 +1,368 @@
-03.17 19:36
-Java集合知识点完整版（面试+实战）
-Java集合是Java开发中用于存储、管理一组数据的核心工具，核心作用是替代数组（解决数组固定长度、类型单一的弊端），分为两大体系：Collection接口（存储单个元素）和Map接口（存储键值对），以下从核心体系、常用类、核心特性、面试高频考点四个维度，全面梳理，兼顾基础与实战。
-一、Java集合核心体系（顶层架构）
-Java集合的顶层接口为 Collection 和 Map，二者无继承关系，共同构成Java集合的核心骨架，体系结构如下（重点记忆）：
-1. Collection接口（存储单个元素，核心子接口2个）
-List接口：有序、可重复、有索引，支持随机访问，核心实现类：ArrayList、LinkedList、Vector；
-Set接口：无序、不可重复（底层依赖equals()和hashCode()），核心实现类：HashSet、LinkedHashSet、TreeSet；
-补充：Queue接口（队列，子接口，遵循FIFO先进先出），实现类：LinkedList（兼作队列）、PriorityQueue（优先级队列）。
-2. Map接口（存储键值对，key唯一，value可重复）
-核心实现类：HashMap、LinkedHashMap、TreeMap、Hashtable，无继承Collection接口，独立存在。
-3. 核心注意点
-集合只能存储引用类型（如String、Integer），不能存储基本类型（int、char等），需用包装类（Integer、Character）；
-所有集合类都位于 java.util包下，使用时需导入；
-集合的“有序/无序”：有序指元素的存储顺序与遍历顺序一致，并非排序（如ArrayList有序，HashSet无序）。
-二、Collection体系核心实现类（重点掌握）
-重点掌握List和Set的核心实现类，明确各自的底层结构、优缺点及适用场景，是面试高频考点。
-（一）List接口核心实现类
-共性：有序、可重复、有索引，支持add()、remove()、get()、set()等方法，区别在于底层结构不同。
-1. ArrayList（最常用）
-底层结构：动态数组（数组扩容机制），初始容量10，扩容时默认扩大为原来的1.5倍；
-核心特性：查询快（通过索引直接访问，时间复杂度O(1)），增删慢（需移动数组元素，时间复杂度O(n)）；
-线程安全：非线程安全（多线程环境下需手动加锁，或使用Collections.synchronizedList()）；
-适用场景：查询频繁、增删较少的场景（如展示列表、数据查询）。
-2. LinkedList
-底层结构：双向链表（每个节点存储前后节点引用）；
-核心特性：查询慢（需遍历链表，时间复杂度O(n)），增删快（只需修改节点引用，时间复杂度O(1)）；
-线程安全：非线程安全；
-适用场景：增删频繁、查询较少的场景（如队列、栈、消息队列）。
-3. Vector（过时，了解即可）
-底层结构：动态数组，与ArrayList类似；
-核心特性：线程安全（所有方法加了synchronized锁），但效率极低；
-注意：现在已被ArrayList替代，多线程场景优先用ConcurrentArrayList（java.util.concurrent包），而非Vector。
-（二）Set接口核心实现类
-共性：无序、不可重复，不支持索引（无get()方法），判断元素是否重复依赖 equals() 和 hashCode() 方法。
-1. HashSet（最常用）
-底层结构：哈希表（数组+链表/红黑树，JDK 8后优化）；
-核心特性：无序（存储顺序≠遍历顺序）、不可重复，查询/增删效率高（时间复杂度O(1)）；
-去重原理：先通过hashCode()计算元素哈希值，哈希值不同则元素不同；哈希值相同，再通过equals()判断是否为同一元素；
-线程安全：非线程安全；
-适用场景：无需保证顺序、需去重的场景（如存储唯一标识、去重数据）。
-2. LinkedHashSet
-底层结构：哈希表+双向链表（继承HashSet，额外维护链表保证顺序）；
-核心特性：有序（存储顺序=遍历顺序）、不可重复，效率略低于HashSet；
-适用场景：需去重且保证存储顺序的场景。
-3. TreeSet
-底层结构：红黑树（平衡二叉树，自动排序）；
-核心特性：无序（存储顺序≠遍历顺序）、不可重复，自动排序（默认自然排序，如Integer升序、String字典序）；
-排序方式：可自定义排序（实现Comparator接口）；
-适用场景：需去重且需要排序的场景（如排行榜、有序去重数据）。
-三、Map体系核心实现类（重点掌握）
-Map存储键值对（key-value），key唯一（重复会覆盖），value可重复，核心方法：put(key,value)、get(key)、remove(key)、containsKey(key)等。
-1. HashMap（最常用）
-底层结构：哈希表（数组+链表/红黑树，JDK 8优化）；
-核心特性：key无序、唯一，value可重复，查询/增删效率高（O(1)）；
-关键细节： - 初始容量16，扩容因子0.75（当元素数量达到容量×0.75时，扩容为原来的2倍）； - key可为null（仅允许一个null key），value可为null； - 去重原理：与HashSet一致（依赖key的hashCode()和equals()）；
-线程安全：非线程安全；
-适用场景：绝大多数键值对存储场景（如配置信息、缓存）。
-2. LinkedHashMap
-底层结构：哈希表+双向链表（继承HashMap，额外维护链表保证顺序）；
-核心特性：key有序（存储顺序=遍历顺序）、唯一，value可重复，效率略低于HashMap；
-适用场景：需保证键值对存储顺序的场景（如LRU缓存的底层实现）。
-3. TreeMap
-底层结构：红黑树（自动排序）；
-核心特性：key有序（自动排序，默认自然排序，可自定义Comparator）、唯一，value可重复；
-注意：key不能为null；
-适用场景：需排序的键值对场景（如有序映射、排行榜）。
-4. Hashtable（过时，了解即可）
-底层结构：哈希表，与HashMap类似；
-核心特性：线程安全（所有方法加synchronized锁），效率低；key和value都不能为null；
-替代方案：多线程场景用ConcurrentHashMap（效率高于Hashtable）。
-四、Java集合核心特性与注意事项（实战避坑）
-线程安全问题： - 非线程安全集合（常用）：ArrayList、LinkedList、HashSet、LinkedHashSet、HashMap、LinkedHashMap、TreeMap； - 线程安全集合：Vector、Hashtable（效率低）、ConcurrentArrayList、ConcurrentHashMap（推荐，JUC包下）；
-集合遍历方式： - List：for循环（索引）、增强for循环、迭代器（Iterator）； - Set：增强for循环、迭代器（无索引，不能用普通for循环）； - Map：keySet()（遍历key）、entrySet()（遍历key-value，推荐）、values()（遍历value）；
-去重与排序注意： - Set/Map去重：必须重写元素（key）的equals()和hashCode()方法（二者要一致，hashCode相同，equals必须相同）； - TreeSet/TreeMap排序：元素（key）需实现Comparable接口，或创建时传入Comparator；
-空指针避坑：避免用null作为集合元素（尤其是TreeMap、TreeSet），避免用集合的get()方法直接赋值（需先判断是否存在）；
-集合与数组转换： - 集合转数组：list.toArray()； - 数组转集合：Arrays.asList(数组)（注意：返回的集合不可修改，需重新new ArrayList<>()包装）。
-五、面试高频考点（必背）
-1. ArrayList和LinkedList的区别？
-底层结构：ArrayList是动态数组，LinkedList是双向链表；
-效率：ArrayList查询快（O(1)）、增删慢（O(n)）；LinkedList查询慢（O(n)）、增删快（O(1)）；
-内存占用：ArrayList占用连续内存，LinkedList每个节点需存储前后引用，内存占用更高；
-线程安全：均为非线程安全。
-2. HashMap和Hashtable的区别？
-线程安全：HashMap非线程安全，Hashtable线程安全（效率低）；
-null值：HashMap允许key和value为null（key仅一个），Hashtable不允许；
-底层优化：JDK 8后HashMap引入红黑树，Hashtable无；
-扩容机制：HashMap初始容量16，扩容2倍；Hashtable初始容量11，扩容2倍+1。
-3. HashSet的去重原理？
-底层依赖HashMap实现（HashSet的value是一个固定对象），去重逻辑：
-调用元素的hashCode()方法，计算哈希值，确定元素在哈希表中的位置；
-若该位置无元素，直接存入；
-若该位置有元素，调用equals()方法比较两个元素，相等则去重（不存入），不相等则存入（链表/红黑树）。
-4. HashMap的底层实现（JDK 8）？
-底层是“数组+链表+红黑树”的组合结构：
-数组：存储哈希值对应的桶（bucket），初始容量16；
-链表：当多个元素哈希值相同（哈希冲突），用链表存储；
-红黑树：当链表长度超过8，且数组容量≥64时，链表转为红黑树（提升查询效率，从O(n)变为O(logn)）；当链表长度≤6时，红黑树转回链表。
-六、总结
-1. 集合核心体系：Collection（单元素）和Map（键值对），重点掌握List、Set、Map的常用实现类；
-2. 选型原则：查询多⽤ArrayList，增删多⽤LinkedList；去重⽤HashSet，有序去重⽤LinkedHashSet，排序去重⽤TreeSet；键值对存储⽤HashMap，有序键值对⽤LinkedHashMap，排序键值对⽤TreeMap；
-3. 面试重点：常用类的底层结构、区别、去重原理、HashMap底层实现，需结合实战场景记忆；
-4. 实战避坑：注意线程安全、空指针、集合与数组转换的细节，避免踩坑。
+# Java 集合知识点完整版（面试 + 实战）
 
+> **文档定位**：Java 后端企业级技术文档 | Java 集合框架  
+> **核心包**：`java.util`、`java.util.concurrent`  
+> **前置基础**：Java 基础语法、泛型、数据结构基础
+
+---
+
+## 一、核心概念
+
+### 1.1 Java 集合框架概述
+
+Java 集合是存储、管理一组数据的核心工具，核心作用是 **替代数组**（解决数组固定长度、类型单一的弊端）。顶层接口分为两大体系：
+
+```
+Collection（存储单个元素）
+├── List    —— 有序、可重复、有索引
+├── Set     —— 无序、不可重复
+└── Queue   —— 队列（FIFO）
+
+Map（存储键值对，key 唯一，value 可重复）
+├── HashMap
+├── LinkedHashMap
+├── TreeMap
+└── Hashtable（过时）
+```
+
+> Collection 和 Map 二者 **无继承关系**，共同构成 Java 集合的核心骨架。
+
+### 1.2 核心注意点
+
+| 注意点 | 说明 |
+|--------|------|
+| 只能存储引用类型 | 不能直接存 `int`、`char`，必须使用包装类 `Integer`、`Character` |
+| 位于 `java.util` 包 | 使用时需 `import java.util.*` |
+| "有序/无序" 的定义 | 有序指存储顺序 = 遍历顺序（非自动排序）；无序指存储顺序 ≠ 遍历顺序 |
+
+---
+
+## 二、底层原理
+
+### 2.1 ArrayList 底层结构
+
+- **数据结构**：动态数组（`Object[]`）
+- **初始容量**：10
+- **扩容机制**：容量不足时扩容为原来的 **1.5 倍**（`oldCapacity + (oldCapacity >> 1)`）
+- **查询复杂度**：O(1)（通过索引直接访问）
+- **增删复杂度**：O(n)（需要 System.arraycopy 移动元素）
+
+### 2.2 LinkedList 底层结构
+
+- **数据结构**：双向链表（每个节点持有 prev/next 引用）
+- **查询复杂度**：O(n)（需遍历链表）
+- **增删复杂度**：O(1)（仅修改节点引用）
+
+### 2.3 HashMap 底层结构（JDK 8+）
+
+```
+HashMap = 数组（Bucket） + 链表 + 红黑树
+
+  Bucket[0] → Node → Node → ...    （链表，解决哈希冲突）
+  Bucket[1] → TreeNode ↔ TreeNode  （红黑树，链表长度 ≥ 8 且数组容量 ≥ 64 时转换）
+  ...
+  Bucket[n]
+
+核心参数：
+  初始容量：16
+  负载因子：0.75（元素数量达到 容量 × 0.75 时触发扩容）
+  扩容倍数：原容量的 2 倍
+  树化阈值：链表长度 ≥ 8 且数组长度 ≥ 64
+  退化阈值：树节点 ≤ 6 时转回链表
+```
+
+### 2.4 HashSet 去重原理
+
+HashSet 底层依赖 **HashMap** 实现（HashSet 的 value 是一个固定的 `PRESENT` 对象）：
+
+1. 调用元素的 `hashCode()` 计算哈希值，定位桶位置
+2. 若该位置无元素，直接存入
+3. 若该位置有元素，调用 `equals()` 比较——相等则去重（不存入），不等则链表/红黑树存储
+
+> **关键规则**：`hashCode()` 相同 → 不一定相同，需 `equals()` 判断；`equals()` 相同 → `hashCode()` 必须相同
+
+### 2.5 TreeSet / TreeMap 排序原理
+
+- **数据结构**：红黑树（自平衡二叉搜索树）
+- **排序方式**：元素必须实现 `Comparable` 接口（自然排序），或构造时传入 `Comparator`（自定义排序）
+- **key 不能为 null**（TreeMap/TreeSet）
+
+---
+
+## 三、代码实现
+
+### 3.1 List 接口核心实现类
+
+#### ArrayList（最常用）
+
+```java
+/**
+ * ArrayList 使用示例 —— 底层动态数组，查询快 O(1)，增删慢 O(n)。
+ */
+List<String> list = new ArrayList<>();
+list.add("Java");
+list.add("Spring");
+list.add("MyBatis");
+String item = list.get(0);          // "Java"（索引访问）
+list.remove(1);                      // 删除 "Spring"（需移动后续元素）
+list.set(0, "Kotlin");              // 修改元素
+```
+
+#### LinkedList
+
+```java
+/**
+ * LinkedList 使用示例 —— 底层双向链表，查询慢 O(n)，增删快 O(1)。
+ * 同时实现了 List 和 Deque 接口，可作队列/栈使用。
+ */
+LinkedList<String> linkedList = new LinkedList<>();
+linkedList.add("A");
+linkedList.addFirst("First");       // 头部添加
+linkedList.addLast("Last");         // 尾部添加
+String first = linkedList.getFirst(); // 获取头部
+linkedList.removeFirst();           // 移除头部
+```
+
+### 3.2 Set 接口核心实现类
+
+#### HashSet（最常用）
+
+```java
+/**
+ * HashSet 使用示例 —— 无序、不可重复，查询/增删 O(1)。
+ * 存储自定义对象必须重写 equals() 和 hashCode()。
+ */
+Set<String> hashSet = new HashSet<>();
+hashSet.add("apple");
+hashSet.add("banana");
+hashSet.add("apple");  // 重复，不会存入
+System.out.println(hashSet.size()); // 2
+```
+
+#### LinkedHashSet
+
+```java
+// 有序（存储顺序 = 遍历顺序）、不可重复，效率略低于 HashSet
+Set<String> linkedSet = new LinkedHashSet<>();
+linkedSet.add("C");
+linkedSet.add("A");
+linkedSet.add("B");
+System.out.println(linkedSet); // [C, A, B]（保持插入顺序）
+```
+
+#### TreeSet
+
+```java
+// 自动排序（默认自然排序）、不可重复
+Set<Integer> treeSet = new TreeSet<>();
+treeSet.add(5);
+treeSet.add(1);
+treeSet.add(3);
+System.out.println(treeSet); // [1, 3, 5]（自动升序排列）
+
+// 自定义排序
+Set<Integer> descSet = new TreeSet<>(Comparator.reverseOrder());
+```
+
+### 3.3 Map 接口核心实现类
+
+#### HashMap（最常用）
+
+```java
+/**
+ * HashMap 使用示例 —— key 无序、唯一，value 可重复，查询/增删 O(1)。
+ * 允许一个 null key，允许多个 null value。
+ */
+Map<Integer, String> hashMap = new HashMap<>();
+hashMap.put(1, "One");
+hashMap.put(2, "Two");
+hashMap.put(1, "New One");  // key 重复，覆盖旧值
+String value = hashMap.get(1);  // "New One"
+hashMap.containsKey(2);         // true
+hashMap.remove(2);
+```
+
+#### LinkedHashMap
+
+```java
+// key 有序（存储顺序 = 遍历顺序），适合 LRU 缓存
+Map<String, Integer> linkedMap = new LinkedHashMap<>();
+linkedMap.put("C", 3);
+linkedMap.put("A", 1);
+linkedMap.put("B", 2);
+// 遍历顺序：C → A → B
+```
+
+#### TreeMap
+
+```java
+// key 自动排序，key 不能为 null
+Map<String, Integer> treeMap = new TreeMap<>();
+treeMap.put("banana", 2);
+treeMap.put("apple", 1);
+treeMap.put("cherry", 3);
+// 按 key 字典序排列：apple → banana → cherry
+```
+
+### 3.4 集合遍历方式
+
+```java
+// List 遍历（三种方式）
+List<String> list = Arrays.asList("A", "B", "C");
+// 方式1：普通 for（有索引时推荐）
+for (int i = 0; i < list.size(); i++) {
+    System.out.println(list.get(i));
+}
+// 方式2：增强 for
+for (String item : list) {
+    System.out.println(item);
+}
+// 方式3：迭代器（Iterator）
+Iterator<String> it = list.iterator();
+while (it.hasNext()) {
+    System.out.println(it.next());
+}
+
+// Map 遍历（推荐 entrySet()）
+Map<String, Integer> map = new HashMap<>();
+map.put("A", 1);
+map.put("B", 2);
+// 推荐：entrySet() 一次获取 key + value
+for (Map.Entry<String, Integer> entry : map.entrySet()) {
+    System.out.println(entry.getKey() + " = " + entry.getValue());
+}
+// keySet()：遍历 key（需额外 get 获取 value，效率低）
+// values()：仅遍历 value
+```
+
+### 3.5 集合与数组转换
+
+```java
+// 集合 → 数组
+List<String> list = new ArrayList<>();
+String[] array = list.toArray(new String[0]);
+
+// 数组 → 集合（注意：Arrays.asList 返回的集合不可修改！）
+String[] arr = {"A", "B", "C"};
+List<String> fixedList = Arrays.asList(arr);
+// fixedList.add("D"); // ❌ UnsupportedOperationException
+// 正确：使用 new ArrayList<>() 包装
+List<String> modifiableList = new ArrayList<>(Arrays.asList(arr));
+modifiableList.add("D"); // ✅
+```
+
+---
+
+## 四、实战要点
+
+### 4.1 集合选型决策表
+
+| 场景 | 推荐集合 | 原因 |
+|------|----------|------|
+| 查询频繁、增删少 | `ArrayList` | 索引直接访问 O(1) |
+| 增删频繁、查询少 | `LinkedList` | 修改节点引用 O(1) |
+| 需去重、不看顺序 | `HashSet` | 哈希表去重 O(1) |
+| 需去重、保持顺序 | `LinkedHashSet` | 哈希表 + 链表维护顺序 |
+| 需去重、需要排序 | `TreeSet` | 红黑树自动排序 |
+| 键值对存储（通用） | `HashMap` | O(1) 增删改查 |
+| 键值对、需有序 | `LinkedHashMap` | 维护插入顺序 |
+| 键值对、需排序 | `TreeMap` | key 自动排序 |
+| 多线程环境 | `ConcurrentHashMap` | 分段锁，并发安全 |
+| 多线程 List | `CopyOnWriteArrayList` | 写时复制，读多写少场景 |
+
+### 4.2 选型原则速记
+
+- **查询多** → `ArrayList`
+- **增删多** → `LinkedList`
+- **去重** → `HashSet`
+- **有序去重** → `LinkedHashSet`
+- **排序去重** → `TreeSet`
+- **键值对** → `HashMap`
+- **有序键值对** → `LinkedHashMap`
+- **排序键值对** → `TreeMap`
+
+---
+
+## 五、避坑总结
+
+### 5.1 线程安全陷阱
+
+| 集合 | 线程安全 | 替代方案 |
+|------|----------|----------|
+| `ArrayList` | ❌ 非线程安全 | `CopyOnWriteArrayList` 或 `Collections.synchronizedList()` |
+| `LinkedList` | ❌ 非线程安全 | `ConcurrentLinkedQueue` |
+| `HashSet` | ❌ 非线程安全 | `ConcurrentHashMap.newKeySet()` |
+| `HashMap` | ❌ 非线程安全 | `ConcurrentHashMap`（推荐） |
+| `Vector` | ✅ 线程安全 | 已过时，性能低 |
+| `Hashtable` | ✅ 线程安全 | 已过时，换 `ConcurrentHashMap` |
+
+### 5.2 去重与排序注意事项
+
+- `HashSet`/`HashMap` 去重：存储自定义对象必须 **同时重写** `equals()` 和 `hashCode()`
+- 两个方法必须一致：`hashCode` 相同则 `equals` 必须相同
+- `TreeSet`/`TreeMap` 排序：元素必须实现 `Comparable` 接口，或构造时传入 `Comparator`
+- `TreeMap`/`TreeSet` 的 key **不能为 null**
+
+### 5.3 面试高频考点
+
+#### ArrayList vs LinkedList
+
+| 维度 | ArrayList | LinkedList |
+|------|-----------|------------|
+| 底层结构 | 动态数组 | 双向链表 |
+| 查询 | O(1) 快 | O(n) 慢 |
+| 增删 | O(n) 慢（需移动元素） | O(1) 快（改引用） |
+| 内存 | 连续内存 | 每个节点存前后引用，占用更高 |
+| 线程安全 | 否 | 否 |
+
+#### HashMap vs Hashtable
+
+| 维度 | HashMap | Hashtable |
+|------|---------|-----------|
+| 线程安全 | 否 | 是（效率低） |
+| null key/value | 允许（key 仅一个 null） | 均不允许 |
+| 初始容量 | 16 | 11 |
+| 扩容倍数 | 2 倍 | 2 倍 + 1 |
+| JDK 8 红黑树优化 | 有 | 无 |
+
+#### HashMap 底层实现（JDK 8）
+
+1. 底层是"**数组 + 链表 + 红黑树**"的组合结构
+2. 哈希冲突时使用链表存储
+3. 链表长度 ≥ 8 且数组容量 ≥ 64 时，链表转为红黑树（查询从 O(n) → O(log n)）
+4. 树节点数 ≤ 6 时，红黑树退化为链表
+
+#### HashSet 去重原理
+
+1. 底层依赖 `HashMap`（value 是固定 Object 常量）
+2. 调用 `hashCode()` 定位桶
+3. 调用 `equals()` 判断是否相同
+4. 相同则拒绝存入，不同则链表/红黑树存储
+
+---
+
+## 六、企业级最佳实践
+
+### 6.1 开发规范
+
+| 规范 | 说明 |
+|------|------|
+| **指定初始容量** | 预估数据量大时，`new HashMap<>(expectedSize / 0.75 + 1)` 避免频繁扩容 |
+| **使用接口声明** | `List<String> list = new ArrayList<>()` 而非 `ArrayList<String> list = new ArrayList<>()` |
+| **线程安全选型** | 多线程环境优先用 `ConcurrentHashMap`，不用 `Hashtable` 或 `Vector` |
+| **空集合返回** | 方法返回集合时，空值用 `Collections.emptyList()` 而非 `null` |
+| **避免原始类型** | 不使用无泛型的 `List`/`Map`（失去编译期类型检查） |
+
+### 6.2 性能优化
+
+- **大循环内避免 ArrayList 中间插入**：使用 LinkedList 或尾部追加
+- **批量操作**：`addAll()` 优于逐个 `add()`
+- **遍历 HashMap** 用 `entrySet()` 而非 `keySet() + get()`（后者额外一次哈希查找）
+- **预估容量**：避免频繁的扩容开销
+
+### 6.3 本章小结
+
+1. 集合核心体系：Collection（单元素）和 Map（键值对），无继承关系
+2. 重点掌握 List（有序可重复）、Set（无序不重复）、Map（键值对）的常用实现类
+3. 面试重点：底层结构、实现区别、去重原理、HashMap 底层实现
+4. 实战避坑：线程安全选型、自定义对象去重需重写 `equals()`/`hashCode()`、数组转集合不可修改
