@@ -1,89 +1,112 @@
-03.21 13:27
-MyBatis动态SQL详解
-一、动态SQL概述
-1.1 什么是动态SQL
-动态SQL是MyBatis的核心特性之一，它允许在SQL语句中根据传入的参数条件，动态拼接、调整SQL的结构（如条件判断、循环拼接、分支选择等），避免了手动拼接SQL带来的繁琐操作和SQL注入风险，适配多条件查询、动态新增/修改等常见业务场景。
-简单来说，动态SQL就是“根据参数动态生成符合需求的SQL语句”，例如：多条件查询时，用户可能输入用户名、年龄、邮箱等任意组合的条件，动态SQL可自动判断哪些条件不为空，只拼接有效的查询条件。
-动态SQL依赖MyBatis提供的标签实现，所有动态标签均嵌套在SQL映射文件的<select>、<insert>、<update>、<delete>标签内部，或嵌套在<sql>标签（SQL片段）中。
-1.2 动态SQL的核心作用
-简化多条件查询开发：无需手动判断参数是否为空，自动拼接有效条件；
-避免SQL注入：动态标签会自动对参数进行转义处理（结合#{}），比手动拼接SQL更安全；
-提升SQL复用性：可通过<sql>标签抽取公共SQL片段，减少重复代码；
-适配灵活业务场景：支持动态新增（只插入非空字段）、动态修改（只更新非空字段）等场景。
-1.3 核心动态SQL标签
-MyBatis提供6个常用动态标签，覆盖大部分业务场景，重点掌握前5个：
-标签
-作用
-适用场景
+# MyBatis 动态 SQL 详解（XML + 注解方式）
 
-条件判断，满足条件则拼接标签内的SQL
-多条件查询、动态新增/修改
+> **文档定位**：Java 后端企业级技术文档 | MyBatis 动态 SQL  
+> **核心特性**：根据参数条件动态拼接 SQL，避免手动拼接  
+> **前置基础**：MyBatis 基础用法、Mapper 接口、XML 映射文件
 
-自动处理WHERE关键字，避免拼接时出现多余的AND/OR
-多条件查询（配合使用）
+---
 
-自动处理SET关键字，避免拼接时出现多余的逗号
-动态修改（只更新非空字段）
+## 一、核心概念
 
-循环遍历集合/数组，拼接SQL片段（如IN关键字、批量操作）
-批量查询、批量新增/删除
-/
-抽取公共SQL片段，引用片段
-重复SQL片段复用（如查询字段、表名）
-//
-分支选择，类似Java的switch-case，只执行一个满足条件的分支
-多条件互斥的查询/操作
-二、核心动态SQL标签实战（结合前文项目）
-本文延续前文的项目结构（com.example包下的pojo、mapper），以user表、emp表为基础，结合实际业务场景，逐个讲解动态标签的用法，所有代码可直接复用前文项目。
-2.1 <if>标签（基础条件判断）
-场景说明
-多条件查询用户：根据用户名（username）、年龄（age）、邮箱（email）查询用户，参数可能为空（如用户只输入用户名，不输入年龄），只拼接非空的条件。
-代码实现（UserMapper.xml）
+### 1.1 什么是动态 SQL
+
+动态 SQL 是 MyBatis 的核心特性之一，允许在 SQL 语句中根据传入的参数条件，**动态拼接、调整 SQL 的结构**（条件判断、循环拼接、分支选择等），避免手动拼接 SQL 带来的繁琐操作和 SQL 注入风险。
+
+> 例如：多条件查询时，用户可能输入用户名、年龄、邮箱的任意组合，动态 SQL 自动判断哪些条件不为空，只拼接有效条件。
+
+### 1.2 核心作用
+
+| 作用 | 说明 |
+|------|------|
+| **简化多条件查询** | 无需手动判断参数是否为空 |
+| **避免 SQL 注入** | 动态标签自动对参数转义（结合 `#{}`） |
+| **提升 SQL 复用性** | 通过 `<sql>` 标签抽取公共片段 |
+| **适配灵活业务** | 支持动态新增（只插非空字段）、动态修改（只更新非空字段） |
+
+### 1.3 六大核心动态标签
+
+| 标签 | 作用 | 适用场景 |
+|------|------|----------|
+| `<if>` | 条件判断，满足则拼接 | 多条件查询、动态新增/修改 |
+| `<where>` | 自动处理 WHERE + 剔除多余 AND/OR | 替代 `WHERE 1=1` |
+| `<set>` | 自动处理 SET + 剔除多余逗号 | 动态修改（只更新非空字段） |
+| `<foreach>` | 循环遍历集合/数组 | 批量查询、批量新增/删除（IN 子句） |
+| `<sql>` / `<include>` | 抽取/引用公共 SQL 片段 | 重复字段列表、公用条件 |
+| `<choose>/<when>/<otherwise>` | 分支选择（类似 switch-case） | 多条件互斥查询 |
+
+---
+
+## 二、底层原理
+
+### 2.1 动态 SQL 解析机制
+
+1. MyBatis 解析 XML 映射文件，将动态标签构建为 **SqlNode 树**（OGNL 表达式节点）
+2. 运行时根据传入参数计算 OGNL 表达式（`test` 属性），决定是否拼接对应 SQL 片段
+3. `<where>` / `<set>` / `<trim>` 等标签在拼接后自动修正语法（去除多余 AND/OR/逗号）
+4. 最终生成完整的 SQL → 参数绑定（`#{}` 预编译）→ 执行
+
+### 2.2 `#{}` vs `${}` 安全对比
+
+| 方式 | 安全性 | 说明 |
+|------|--------|------|
+| `#{}` | ✅ 安全 | 预编译占位符，自动转义防注入 |
+| `${}` | ❌ 危险 | 直接拼接字符串，存在 SQL 注入风险 |
+
+---
+
+## 三、代码实现
+
+### 3.1 `<if>` + `<where>` 标签（多条件查询）
+
+```xml
+<!-- UserMapper.xml -->
 <mapper namespace="com.example.mapper.UserMapper">
-    <!-- 1. 多条件查询用户：使用<if>标签 -->
-    </mapper>
-接口与测试
-// UserMapper接口添加方法
+
+    <!-- 多条件查询用户：<where> + <if> -->
+    <select id="findUserByCondition" resultType="com.example.pojo.User">
+        SELECT * FROM user
+        <where>
+            <if test="username != null and username != ''">
+                AND username LIKE CONCAT('%', #{username}, '%')
+            </if>
+            <if test="age != null">
+                AND age = #{age}
+            </if>
+            <if test="email != null and email != ''">
+                AND email = #{email}
+            </if>
+        </where>
+    </select>
+
+</mapper>
+```
+
+```java
+/** Mapper 接口 */
 public interface UserMapper {
-    // 多条件查询用户
     List<User> findUserByCondition(User user);
 }
-// 测试方法
+
+/** 测试方法 */
 @Test
-public void testFindUserByCondition() throws IOException {
-    InputStream inputStream = Resources.getResourceAsStream("mybatis-config.xml");
-    SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
-    try (SqlSession sqlSession = sqlSessionFactory.openSession()) {
-        UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
-        // 模拟参数：只输入用户名，年龄和邮箱为空
-        User condition = new User();
-        condition.setUsername("zhangsan");
-        // 执行查询，SQL会自动拼接：SELECT * FROM user WHERE 1=1 AND username LIKE CONCAT('%', 'zhangsan', '%')
-        List<User> userList = userMapper.findUserByCondition(condition);
-        userList.forEach(System.out::println);
-    }
+public void testFindUserByCondition() {
+    User condition = new User();
+    condition.setUsername("zhangsan"); // 只输入用户名
+    List<User> users = userMapper.findUserByCondition(condition);
 }
-注意事项
-WHERE 1=1的作用：当所有<if>条件都不满足时，SQL会变成“SELECT * FROM user WHERE”，出现语法错误；添加WHERE 1=1后，即使没有条件，SQL也会变成“SELECT * FROM user WHERE 1=1”，语法正确（后续可通过<where>标签替代）。
-2.2 <where>标签（优化WHERE条件拼接）
-场景说明
-优化上文的多条件查询，使用<where>标签替代“WHERE 1=1”，自动处理多余的AND/OR关键字，简化SQL编写。
-代码实现（UserMapper.xml）
-<!-- 2. 优化多条件查询：使用<where>+<if> -->
-核心特点
-1. 当<where>标签内有满足条件的<if>时，自动添加WHERE关键字；
-2. 自动剔除条件前多余的AND/OR（如第一个条件前有AND，会自动删除）；
-3. 当所有<if>条件都不满足时，<where>标签会自动不生成，SQL变为“SELECT * FROM user”，语法正确。
-2.3 <set>标签（动态修改）
-场景说明
-动态修改用户信息：只更新传入的非空字段（如用户只修改用户名，不修改年龄和邮箱，SQL只拼接用户名的更新语句）。
-代码实现（UserMapper.xml）
-<!-- 3. 动态修改用户：使用<set>+<if> -->
+```
+
+> `<where>` 自动处理：有满足条件时自动添加 WHERE 并剔除前缀 AND/OR；全部为空时 WHERE 不生成。
+
+### 3.2 `<set>` 标签（动态修改）
+
+```xml
+<!-- 动态修改用户：只更新传入的非空字段 -->
 <update id="updateUserDynamic">
     UPDATE user
     <set>
         <if test="username != null and username != ''">
-            username = #{username}, <!-- 逗号可保留，<set>会自动剔除多余逗号 -->
+            username = #{username},
         </if>
         <if test="password != null and password != ''">
             password = #{password},
@@ -95,121 +118,133 @@ WHERE 1=1的作用：当所有<if>条件都不满足时，SQL会变成“SELECT 
             email = #{email}
         </if>
     </set>
-    WHERE id = #{id} <!-- 必须有WHERE条件，避免批量更新 -->
+    WHERE id = #{id}
 </update>
-接口与测试
-// UserMapper接口添加方法
-public interface UserMapper {
-    // 动态修改用户
-    int updateUserDynamic(User user);
-}
-// 测试方法
-@Test
-public void testUpdateUserDynamic() throws IOException {
-    InputStream inputStream = Resources.getResourceAsStream("mybatis-config.xml");
-    SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
-    try (SqlSession sqlSession = sqlSessionFactory.openSession(true)) {
-        UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
-        // 模拟参数：只修改用户名和邮箱，密码、年龄为空
-        User user = new User();
-        user.setId(1);
-        user.setUsername("lisi");
-        user.setEmail("lisi@163.com");
-        // 执行修改，SQL自动拼接：UPDATE user SET username = 'lisi', email = 'lisi@163.com' WHERE id = 1
-        int rows = userMapper.updateUserDynamic(user);
-        System.out.println("修改成功，受影响行数：" + rows);
-    }
-}
-2.4 <foreach>标签（循环拼接）
-场景说明
-<foreach>标签用于循环遍历集合或数组，常见两个场景：
-1. 批量查询：根据多个id查询用户（IN关键字）；
-2. 批量新增：一次性插入多条用户数据。
-场景1：批量查询（IN关键字）
-<!-- 4. 批量查询用户：根据多个id查询（IN关键字） -->
-场景2：批量新增
-<!-- 5. 批量新增用户 -->
-<insert id="addUserBatch" useGeneratedKeys="true" keyProperty="id">
-    INSERT INTO user (username, password, age, email)
-    VALUES
+```
+
+> `<set>` 自动剔除尾部多余的逗号；必须有 WHERE 条件避免批量误更新。
+
+### 3.3 `<foreach>` 标签（批量操作）
+
+```xml
+<!-- 批量查询：IN 子句 -->
+<select id="findByIds" resultType="User">
+    SELECT * FROM user
+    WHERE id IN
+    <foreach collection="idList" item="id" open="(" separator="," close=")">
+        #{id}
+    </foreach>
+</select>
+
+<!-- 批量新增 -->
+<insert id="batchInsert">
+    INSERT INTO user (username, password, age) VALUES
     <foreach collection="userList" item="user" separator=",">
-        (#{user.username}, #{user.password}, #{user.age}, #{user.email})
+        (#{user.username}, #{user.password}, #{user.age})
     </foreach>
 </insert>
-foreach核心属性说明
-collection：要遍历的集合/数组名称（与接口方法的参数名一致，若参数用@Param指定，需与@Param的值一致）；
-item：遍历过程中，集合/数组的每个元素的别名（如遍历ids集合，item="id"，则可用#{id}获取元素）；
-open：循环拼接的SQL片段开头（如IN查询需开头加"("）；
-close：循环拼接的SQL片段结尾（如IN查询需结尾加")"）；
-separator：每个元素之间的分隔符（如IN查询用","，批量新增用","）。
-接口与测试
-// UserMapper接口添加方法
-public interface UserMapper {
-    // 批量查询用户
-    List<User> findUserByIds(@Param("ids") List<Integer> ids);
-    // 批量新增用户
-    int addUserBatch(@Param("userList") List<User> userList);
-}
-// 测试方法
-@Test
-public void testFindUserByIds() throws IOException {
-    InputStream inputStream = Resources.getResourceAsStream("mybatis-config.xml");
-    SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
-    try (SqlSession sqlSession = sqlSessionFactory.openSession()) {
-        UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
-        // 模拟参数：查询id为1、2、3的用户
-        List<Integer> ids = Arrays.asList(1, 2, 3);
-        List<User> userList = userMapper.findUserByIds(ids);
-        userList.forEach(System.out::println);
-    }
-}
-@Test
-public void testAddUserBatch() throws IOException {
-    InputStream inputStream = Resources.getResourceAsStream("mybatis-config.xml");
-    SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
-    try (SqlSession sqlSession = sqlSessionFactory.openSession(true)) {
-        UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
-        // 模拟批量新增数据
-        List<User> userList = Arrays.asList(
-            new User("wangwu", "123456", 23, "wangwu@163.com"),
-            new User("zhaoliu", "654321", 25, "zhaoliu@163.com")
-        );
-        int rows = userMapper.addUserBatch(userList);
-        System.out.println("批量新增成功，受影响行数：" + rows);
-    }
-}
-2.5 <sql>/<include>标签（SQL片段复用）
-场景说明
-当多个SQL语句需要使用相同的片段（如查询字段、表名、条件）时，用<sql>标签抽取公共片段，再用<include>标签引用，减少重复代码，便于维护。
-代码实现（UserMapper.xml）
-<!-- 6. 抽取公共SQL片段：查询user表的所有字段 -->
-<sql id="userColumns">
-    id, username, password, age, email
-</sql><!-- 引用公共片段：查询所有用户 -->
-<!-- 引用公共片段：多条件查询 -->
-核心特点
-1. <sql>标签的id属性是片段唯一标识，<include>通过refid引用对应id的片段；
-2. 公共片段可嵌套<if>等动态标签，实现动态复用；
-3. 适合抽取查询字段、固定条件、表名等重复出现的SQL片段。
-2.6 <choose>/<when>/<otherwise>标签（分支选择）
-场景说明
-多条件互斥查询：例如查询用户时，优先根据id查询，若id为空则根据用户名查询，若用户名也为空则查询所有用户（类似Java的switch-case，只执行一个分支）。
-代码实现（UserMapper.xml）
-<!-- 7. 分支选择查询：choose+when+otherwise -->
-核心特点
-1. <choose>标签内只能有一个<when>标签被执行（满足条件的第一个<when>）；
-2. 若所有<when>条件都不满足，执行<otherwise>标签内的内容（可选）；
-3. 适合“多条件互斥”的场景，与<if>标签（多条件同时满足）区分开。
-三、动态SQL常见问题与注意事项
-参数判断错误原因：<if>标签的test属性中，参数判断逻辑错误（如判断字符串为空用“== null”，未判断空字符串）；解决：字符串判断需同时判断“!= null”和“!= ''”；数值类型（如age）只需判断“!= null”；集合判断需判断“!= null and !isEmpty()”。
-SQL语法错误（多余逗号/AND）原因：未使用<where>/<set>标签，手动拼接时出现多余的AND/OR或逗号；解决：多条件查询用<where>替代“WHERE 1=1”，动态修改用<set>标签，自动处理多余符号。
-foreach标签的collection属性错误原因：collection的值与接口方法的参数名不一致，或未用@Param指定集合参数名；解决：若接口方法参数是集合，且未用@Param，collection默认值为“list”（数组默认“array”）；建议用@Param明确指定参数名，避免出错。
-批量操作失败原因：MySQL默认关闭批量操作支持，或SQL语句拼接错误；解决：在mybatis-config.xml的数据源配置中，添加允许批量操作的参数（<property name="allowMultiQueries" value="true"/>）。
-SQL注入风险原因：动态SQL中使用${}拼接SQL（如排序字段），未做参数过滤；解决：优先使用#{}；若必须用${}（如排序字段），需手动过滤参数（如限制只能是“id”“username”等合法字段）。
-四、动态SQL总结
-动态SQL是MyBatis实战中最常用的特性，核心是“根据参数动态调整SQL结构”，关键要点如下：
-核心标签：<if>（条件判断）、<where>（优化WHERE）、<set>（优化SET）、<foreach>（循环）、<sql>/<include>（复用）；
-核心原则：优先使用<where>/<set>避免语法错误，用#{}避免SQL注入，用<foreach>处理批量操作；
-实战技巧：抽取公共SQL片段提升复用性，根据业务场景选择合适的动态标签（多条件同时满足用<if>，互斥用<choose>）。
-动态SQL可灵活适配各种复杂业务场景，结合前文的关联映射，可实现多表动态查询、动态关联等高级功能，是MyBatis进阶的核心基础。
+```
 
+```java
+/** 对应接口 */
+public interface UserMapper {
+    List<User> findByIds(@Param("idList") List<Integer> idList);
+    int batchInsert(@Param("userList") List<User> userList);
+}
+```
+
+| `foreach` 属性 | 说明 |
+|----------------|------|
+| `collection` | 集合参数名 |
+| `item` | 每次迭代的元素别名 |
+| `open` | 前缀字符串 |
+| `separator` | 分隔符 |
+| `close` | 后缀字符串 |
+
+### 3.4 `<sql>` + `<include>` 标签（SQL 片段复用）
+
+```xml
+<!-- 抽取公共字段列表 -->
+<sql id="userColumns">
+    id, username, password, age, email, create_time
+</sql>
+
+<!-- 引用公共字段 -->
+<select id="findAllUsers" resultType="User">
+    SELECT <include refid="userColumns"/> FROM user
+</select>
+```
+
+### 3.5 `<choose>/<when>/<otherwise>` 标签（分支选择）
+
+```xml
+<!-- 多条件互斥查询：用户只输入一个条件时用 -->
+<select id="findUserBySingleCondition" resultType="User">
+    SELECT * FROM user WHERE 1=1
+    <choose>
+        <when test="username != null and username != ''">
+            AND username = #{username}
+        </when>
+        <when test="age != null">
+            AND age = #{age}
+        </when>
+        <otherwise>
+            AND id = 1
+        </otherwise>
+    </choose>
+</select>
+```
+
+---
+
+## 四、实战要点
+
+### 4.1 标签选择速查
+
+| 需求 | 推荐标签 |
+|------|----------|
+| 多条件查询（条件可组合） | `<where>` + `<if>` |
+| 多条件互斥查询 | `<choose>/<when>/<otherwise>` |
+| 动态更新非空字段 | `<set>` + `<if>` |
+| 批量操作（IN 子句/批量插入） | `<foreach>` |
+| 重复 SQL 片段 | `<sql>` + `<include>` |
+| 去掉 WHERE 1=1 | 用 `<where>` 替代 |
+
+### 4.2 注意事项
+
+- `<where>` 标签仅剔除 **前缀** AND/OR，`a = 1 AND b = 2` 中间的不剔除
+- `<set>` 标签仅剔除 **尾部** 多余逗号
+- `<foreach>` 的 `collection` 如果是 `List`，默认参数名是 `list`；建议用 `@Param` 指定
+
+---
+
+## 五、避坑总结
+
+| 坑点 | 原因 | 解决方案 |
+|------|------|----------|
+| **WHERE 1=1 不规范** | 所有 `<if>` 不满足时语法错误 | 用 `<where>` 标签替代 |
+| **动态修改忘记 WHERE** | `<set>` 没有 WHERE 条件 | 必须加 `WHERE id = #{id}` |
+| **OGNL 表达式错误** | `test="username != ''"` | 应写 `test="username != null and username != ''"` |
+| **逗号残留** | `<set>` 中逗号放错位置 | 逗号统一放在每条语句末尾 |
+| **`${}` SQL 注入** | 用 `${}` 拼接用户输入 | 必须用 `#{}` 预编译参数 |
+
+---
+
+## 六、企业级最佳实践
+
+### 6.1 核心原则
+
+| 原则 | 说明 |
+|------|------|
+| **动态标签 + `#{}`** | 所有用户输入都通过 `#{}` 预编译，严禁 `${}` 拼接 |
+| **`<sql>` 抽取复用** | 超过 2 处使用的字段列表或条件片段，抽取到 `<sql>` |
+| **`@Param` 明确参数名** | 多参数场景统一用 `@Param` 指定名称 |
+| **批量操作限制** | 单次 `foreach` 不超过 1000 条，大数据量分批处理 |
+
+### 6.2 代码审查 Checklist
+
+- [ ] 所有用户输入使用 `#{}` 而非 `${}`
+- [ ] `<set>` 有对应的 WHERE 条件
+- [ ] `<foreach>` 的 `collection` 参数名与 `@Param` 一致
+- [ ] `<if test>` 同时判断 `null` 和空字符串
+- [ ] 公共 SQL 片段已抽取到 `<sql>`

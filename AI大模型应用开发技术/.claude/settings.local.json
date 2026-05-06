@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mv \"Python/CLI与GUI.md\" \"code/python-basics/\")",
+      "Bash(mv \"Python/学生.py\" \"code/python-oop/\")",
+      "Bash(mv \"Python/学生类.py\" \"code/python-oop/\")",
+      "Bash(mv \"Python/封装.py\" \"code/python-oop/\")",
+      "Bash(mv \"Python/多态 + 三种方法.py\" \"code/python-oop/\")",
+      "Bash(rmdir \"Python/排序算法\")",
+      "Bash(rmdir \"Python\" \"AI大模型应用开发学习\" \"大模型应用开发实战相关\" \"大模型应用开发理论相关\" \"数据分析 爬虫相关\")"
+    ]
+  }
+}

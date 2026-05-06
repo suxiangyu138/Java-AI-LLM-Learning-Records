@@ -1,96 +1,155 @@
-04.28 10:51
-JWT 核心知识点
-一、JWT 是什么
-JWT（JSON Web Token） 是一种轻量级、无状态的身份验证与信息交换规范，用于在客户端与服务端之间安全传递用户身份信息。
-- 核心特点：无状态、跨域友好、轻量化、自包含
-- 核心用途：登录鉴权、单点登录、跨域认证、接口防篡改
- 
-二、JWT 结构（三部分用  .  分隔）
- Header.Payload.Signature 
-1. Header（头部）
-- 作用：声明加密算法与令牌类型
-- 格式：JSON 后 Base64Url 编码
-json
+# JWT 核心知识点（Java 后端企业级实战版）
+
+> **文档定位**：Java 后端企业级技术文档 | JWT（JSON Web Token）  
+> **核心特点**：无状态、跨域友好、轻量化、自包含  
+> **核心用途**：登录鉴权、单点登录（SSO）、跨域认证、接口防篡改
+
+---
+
+## 一、核心概念
+
+### 1.1 JWT 是什么
+
+JWT（JSON Web Token）是一种轻量级、无状态的身份验证与信息交换规范，用于在客户端与服务端之间安全传递用户身份信息。
+
+### 1.2 JWT vs Session
+
+| 维度 | Session | JWT |
+|------|---------|-----|
+| **存储位置** | 服务端存储 | **客户端存储** |
+| **状态** | 有状态 | **无状态** |
+| **扩展性** | 需 Session 共享（Redis） | 天然支持分布式 |
+| **跨域** | 需要额外配置 | **天然支持跨域** |
+| **适用场景** | 单体项目 | 前后端分离、微服务、分布式 |
+
+---
+
+## 二、底层原理
+
+### 2.1 JWT 结构（三段 Base64Url，用 `.` 分隔）
+
+```
+Header.Payload.Signature
+```
+
+#### Header（头部）
+
+```json
 {
   "alg": "HS256",
   "typ": "JWT"
 }
- 
--  alg ：加密算法，常用  HS256 、 RS256 
-2. Payload（载荷）
-核心数据存储区，分为 3 类：
-1. 注册声明（标准字段）
--  iss ：签发人
--  exp ：过期时间（Unix 时间戳）
--  sub ：主题/用户ID
--  aud ：接收方
--  iat ：签发时间
--  nbf ：生效时间
-2. 公共声明：自定义业务字段（用户名、角色、权限）
-3. 私有声明：业务双方约定的字段
-- 注意：Payload 仅 Base64 编码，不加密，禁止存放敏感信息
-3. Signature（签名）
-- 作用：防止 Token 被篡改
-- 生成规则：
-1. 对 Header、Payload 分别做 Base64Url 编码
-2. 拼接成  Header.Payload 
-3. 使用指定算法 + 密钥加密生成签名
-- 验证逻辑：服务端用相同密钥重新计算签名，对比客户端 Token 签名，一致则未被篡改
- 
-三、JWT 工作流程
-1. 用户登录，账号密码校验通过
-2. 服务端生成 JWT 令牌返回给客户端
-3. 客户端将 Token 存储在 LocalStorage / Cookie
-4. 后续请求在请求头携带 Token： Authorization: Bearer <token> 
-5. 服务端解析、验证签名与过期时间，合法则放行
- 
-四、两种常用签名算法
-1. HS256（对称加密）
-- 同一密钥：签发与验证使用同一个密钥
-- 优点：实现简单、速度快
-- 缺点：密钥泄露则 Token 完全失控，适合单体服务
-2. RS256（非对称加密）
-- 私钥签发 Token，公钥验证 Token
-- 优点：安全性更高，适合分布式、微服务、第三方授权
-- 缺点：性能略低于对称加密
- 
-五、JWT 优缺点
-优点
-1. 无状态：服务端无需存储 Session，降低服务器压力
-2. 跨域友好：天然支持跨域认证，适合前后端分离、微服务
-3. 轻量化：体积小，传输效率高
-4. 防篡改：签名机制保证数据不可篡改
-5. 自包含：携带用户信息，减少数据库查询
-缺点
-1. 无法主动失效：签发后直到过期前一直有效，无法手动注销
-2. Payload 不加密：敏感信息不能直接存放
-3. 令牌体积较大：相比 Session ID，传输数据更多
-4. 续签困难：需重新签发新 Token
- 
-六、核心面试高频问题
-1. JWT 和 Session 的区别
-- Session：服务端存储，状态化，适合单体项目，可控性强
-- JWT：客户端存储，无状态，适合前后端分离、分布式、跨域场景
-2. 如何解决 JWT 无法主动注销？
-- 引入 Redis 黑名单，记录已失效 Token
-- 缩短过期时间，搭配 RefreshToken 刷新机制
-- 业务层维护版本号，版本不匹配则拒绝访问
-3. RefreshToken 作用
-- AccessToken：短期有效，用于接口鉴权
-- RefreshToken：长期有效，用于刷新 AccessToken，避免频繁登录
-4. 为什么 Payload 不能存敏感信息？
-Payload 仅 Base64 编码，可直接解码，无加密保护，密码、手机号等敏感数据会泄露。
-5. JWT 为什么安全？
-签名机制保证数据不可篡改，过期时间限制有效期，配合 HTTPS 传输保证安全。
- 
-七、Java 常用工具库
--  jjwt ：Java 最主流 JWT 工具包
--  com.auth0:java-jwt ：轻量易用的实现
- 
-八、使用注意事项
-1. 必须使用 HTTPS 传输，防止 Token 被窃取
-2. 密钥复杂度要高，定期轮换密钥
-3. 合理设置过期时间，避免过长有效期
-4. 敏感信息禁止放入 Payload
-5. 微服务优先使用 RS256 非对称加密
+```
 
+- `alg`：签名算法（HS256 / RS256）
+- `typ`：令牌类型（JWT）
+
+#### Payload（载荷）
+
+| 类型 | 字段 | 说明 |
+|------|------|------|
+| 注册声明 | `iss` / `sub` / `exp` / `iat` / `nbf` / `aud` | 签发人/主题/过期/签发/生效/接收方 |
+| 公共声明 | 自定义 | 用户名、角色、权限等 |
+| 私有声明 | 自定义 | 业务约定字段 |
+
+> Payload 仅 Base64Url **编码**，不加密，禁止存放密码、手机号等敏感信息。
+
+#### Signature（签名）
+
+```
+签名 = HMACSHA256(Base64Url(Header) + "." + Base64Url(Payload), secret)
+```
+
+服务端用相同密钥重新计算签名，与客户端 Token 签名对比，一致则未被篡改。
+
+### 2.2 工作流程
+
+```
+1. 用户登录 → 账号密码校验通过
+2. 服务端生成 JWT → 返回给客户端
+3. 客户端存储 Token（LocalStorage / Cookie）
+4. 后续请求携带 Token：Authorization: Bearer <token>
+5. 服务端解析、验签、校期 → 合法则放行
+```
+
+### 2.3 HS256 vs RS256
+
+| 维度 | HS256（对称） | RS256（非对称） |
+|------|-------------|----------------|
+| 密钥 | 同一密钥签发+验证 | 私钥签发、公钥验证 |
+| 优点 | 实现简单、速度快 | **安全性更高** |
+| 缺点 | 密钥泄露则完全失控 | 性能略低 |
+| 适用 | 单体服务 | **分布式、微服务**（推荐） |
+
+---
+
+## 三、代码实现
+
+### 3.1 Java 常用工具库
+
+- **jjwt**（`io.jsonwebtoken:jjwt`）：Java 最主流 JWT 工具包
+- **com.auth0:java-jwt**：轻量易用的实现
+
+### 3.2 Java 生成/验证 JWT 示例
+
+```java
+// 生成 JWT（HS256）
+String jwt = Jwts.builder()
+    .setSubject("10001")                       // 用户 ID
+    .claim("username", "zhangsan")             // 自定义字段
+    .setIssuedAt(new Date())                   // 签发时间
+    .setExpiration(new Date(System.currentTimeMillis() + 3600000)) // 1小时过期
+    .signWith(SignatureAlgorithm.HS256, secretKey)
+    .compact();
+
+// 验证 JWT
+Claims claims = Jwts.parser()
+    .setSigningKey(secretKey)
+    .parseClaimsJws(jwt)
+    .getBody();
+String userId = claims.getSubject();
+```
+
+---
+
+## 四、实战要点
+
+| 要点 | 说明 |
+|------|------|
+| **AccessToken + RefreshToken** | AccessToken 短期（15min），RefreshToken 长期（7d），减少频繁登录 |
+| **HTTPS 强制** | Token 在 HTTP 头明文传输，必须 HTTPS 防窃取 |
+| **密钥管理** | 密钥复杂度高、定期轮换，生产环境用环境变量/KMS |
+| **Payload 最小化** | 仅存用户 ID 和必要字段，敏感信息禁入 |
+
+---
+
+## 五、避坑总结
+
+### 5.1 常见问题
+
+| 问题 | 解决方案 |
+|------|----------|
+| **JWT 无法主动注销** | Redis 黑名单记录失效 Token；缩短过期 + RefreshToken |
+| **Token 泄露** | HTTPS 传输 + 短过期时间 + 设备指纹绑定 |
+| **续签困难** | RefreshToken 机制：AccessToken 过期后用 RefreshToken 换新 |
+| **Payload 存敏感信息** | 仅存用户 ID，其余敏感数据从服务端查 |
+
+### 5.2 核心面试题
+
+1. **JWT vs Session** → JWT 无状态、分布式友好；Session 可控性强
+2. **RefreshToken 作用** → AccessToken 短期鉴权，RefreshToken 长期刷新，避免频繁登录
+3. **JWT 为什么安全** → 签名防篡改 + 过期时间限制 + HTTPS 传输
+4. **Payload 为什么不能存敏感信息** → 仅 Base64 编码，可直接解码，无加密保护
+
+---
+
+## 六、企业级最佳实践
+
+| 规范 | 说明 |
+|------|------|
+| **HTTPS 必须** | 防止 Token 在传输中被窃取 |
+| **密钥高复杂度** | 定期轮换，使用 KMS 管理 |
+| **合理过期时间** | AccessToken 15 分钟，RefreshToken 7 天 |
+| **微服务用 RS256** | 非对称加密，私钥签发，公钥验证 |
+| **Payload 最小化** | 仅 userId，禁止存放密码/手机号 |
+| **Redis 黑名单** | 解决无法主动注销问题 |
