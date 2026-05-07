@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python 09_jd_scraper.py --no-playwright)",
+      "Bash(python *)"
+    ]
+  }
+}
