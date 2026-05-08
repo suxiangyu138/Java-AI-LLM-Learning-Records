@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git -C \"D:/Desktop/MyLoacalReposity/Java-AI-LLM-Learning-Records\" log --oneline -5 --all)",
+      "Bash(java *)",
+      "Bash(javac -encoding UTF-8 -d out -sourcepath src src/com/qqchat/server/QQServer.java src/com/qqchat/client/QQClient.java)"
+    ]
+  }
+}
