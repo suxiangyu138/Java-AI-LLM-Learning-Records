@@ -4,6 +4,7 @@ import java.util.Scanner;
  * 控制台输入输出示例
  * 功能：读取用户输入的姓名、年龄、成绩，并格式化输出
  */
+
 public class ConsoleIO {
     public static void main(String[] args) {
         // 1. 创建Scanner对象，读取控制台输入
