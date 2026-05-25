@@ -1,2 +1,46 @@
-Springboot-Notebook-master/ 
-Springboot-Notebook-master/ 
+# Build artifacts
+**/out/
+**/target/
+**/__pycache__/
+*.class
+*.pyc
+
+# IDE
+.idea/
+*.iml
+.vscode/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+build/
+
+# OS
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Temp
+.daily_commit.tmp
+*.tmp
+
+# Logs
+logs/
+*.log
+
+# Maven
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+
+# Gradle
+.gradle/
+build/
+
+# Node
+node_modules/

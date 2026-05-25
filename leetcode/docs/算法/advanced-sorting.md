@@ -1,5 +1,7 @@
 # 九大经典排序算法（Java语言描述）
+
 ## 一、简单排序 O(n²)
+
 ### 1. 冒泡排序
 ```java
 public static void bubbleSort(int[] arr) {
@@ -65,6 +67,7 @@ public static void insertionSort(int[] arr) {
 ---
 
 ## 二、优化平方级排序
+
 ### 4. 希尔排序
 ```java
 public static void shellSort(int[] arr) {
@@ -89,6 +92,7 @@ public static void shellSort(int[] arr) {
 ---
 
 ## 三、高效对数级排序 O(n log n)
+
 ### 5. 快速排序
 ```java
 public static void quickSort(int[] arr) {
@@ -197,6 +201,7 @@ private static void swap(int[] arr, int a, int b) {
 ---
 
 ## 四、非比较排序
+
 ### 8. 计数排序
 ```java
 public static void countSort(int[] arr) {

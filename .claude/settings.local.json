@@ -107,7 +107,21 @@
       "Bash(mv \"code-practice\" \"代码练习\")",
       "Bash(mv \"daily-notes\" \"每日笔记\")",
       "Bash(mv \"projects\" \"项目实战\")",
-      "Bash(mv \"thinking\" \"思考总结\")"
+      "Bash(mv \"thinking\" \"思考总结\")",
+      "Bash(New-Item *)",
+      "Bash(Get-ChildItem -Path \"D:\\\\Desktop\\\\MyLoacalReposity\\\\Java-AI-LLM-Learning-Records\\\\docs\" -Recurse -Filter \"*.md\")",
+      "Bash(Measure-Object)",
+      "Bash(Select-Object -ExpandProperty Count)",
+      "Bash(Get-ChildItem -Path \"d:\\\\Desktop\\\\MyLoacalReposity\\\\Java-AI-LLM-Learning-Records\\\\项目实战\" -Recurse -Depth 3)",
+      "Bash(Format-Table -AutoSize)",
+      "PowerShell(Get-ChildItem *)",
+      "Bash(git checkout *)",
+      "Bash(python \"d:\\\\Desktop\\\\MyLoacalReposity\\\\Java-AI-LLM-Learning-Records\\\\_fix_md.py\")",
+      "Bash(sed -i 's/^``java$/```java/g' \"IntelliJ IDEA 新建项目技术栈全面解析（详细剖析版）.md\")",
+      "Bash(sed -i 's/^``$/```/g' \"IntelliJ IDEA 新建项目技术栈全面解析（详细剖析版）.md\")",
+      "Bash(git *)",
+      "Bash(python -c ' *)",
+      "PowerShell(Get-ChildItem -Recurse -Depth 3 -File | Where-Object { $_.FullName -notmatch '\\\\.git' -and $_.FullName -notmatch '\\\\.claude' -and $_.FullName -notmatch 'node_modules' } | Select-Object FullName, Length | Format-Table -AutoSize -Wrap)"
     ]
   }
 }
