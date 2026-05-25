@@ -1,10 +1,13 @@
 # Java后端开发 完整学习路线
+
 ## 一、筑基阶段
+
 ### 1. Java 核心基础
 - 语法基础：变量、数据类型、运算符、流程控制、数组
 - 面向对象：类与对象、封装/继承/多态、接口、抽象类、内部类
 - 核心API：String、集合（List/Set/Map）、异常、IO流、泛型
 - 高级基础：多线程、反射、注解、JVM基础、枚举、Lambda&Stream
+
 ### 2. 计算机基础
 - 计算机网络：HTTP/HTTPS、TCP/IP、三次握手四次挥手、请求响应流程
 - 操作系统：进程/线程、内存、IO模型基础
@@ -13,12 +16,15 @@
 ---
 
 ## 二、Web 开发核心
+
 ### 1. 前端基础（后端必备最小集）
 HTML、CSS、JavaScript 基础，了解Vue/React基础使用即可
+
 ### 2. Java Web 原生
 - Servlet、Filter、Listener
 - Cookie、Session、会话管理
 - Tomcat 服务器、请求转发/重定向
+
 ### 3. 数据库核心
 - MySQL：DDL/DML/DQL、多表查询、联合查询、子查询
 - 数据库设计：三大范式、索引、事务、MVCC、锁机制
@@ -27,9 +33,11 @@ HTML、CSS、JavaScript 基础，了解Vue/React基础使用即可
 ---
 
 ## 三、主流框架栈（企业开发标配）
+
 ### 1. 持久层框架
 - MyBatis：动态SQL、映射文件、关联查询、一级/二级缓存
 - MyBatis-Plus：CRUD封装、条件构造器、分页、逻辑删除
+
 ### 2. 核心框架
 - Spring：IOC、AOP、Bean生命周期、依赖注入、事务管理
 - Spring MVC：MVC架构、请求映射、参数绑定、拦截器、全局异常
@@ -38,13 +46,17 @@ HTML、CSS、JavaScript 基础，了解Vue/React基础使用即可
 ---
 
 ## 四、进阶中间件 & 技术栈（实习/校招加分核心）
+
 ### 1. 缓存技术
 - Redis：五种数据结构、持久化、过期策略、缓存击穿/穿透/雪崩、分布式锁
+
 ### 2. 消息队列
 - RabbitMQ：交换机、队列、死信队列、消息可靠投递、异步解耦
+
 ### 3. 微服务基础
 - Spring Cloud 核心组件：Nacos、Gateway、Feign、Sentinel、Seata
 - 服务注册发现、网关路由、熔断降级、分布式事务
+
 ### 4. 搜索引擎
 - ElasticSearch：倒排索引、分词、DSL查询、海量数据检索
 
@@ -88,4 +100,3 @@ HTML、CSS、JavaScript 基础，了解Vue/React基础使用即可
 2. 框架阶段：2个月（SpringBoot + MyBatis 全家桶）
 3. 中间件阶段：1.5个月（Redis + MQ + 微服务入门）
 4. 项目+算法+面试：长期同步推进
-
