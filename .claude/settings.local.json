@@ -121,7 +121,18 @@
       "Bash(sed -i 's/^``$/```/g' \"IntelliJ IDEA 新建项目技术栈全面解析（详细剖析版）.md\")",
       "Bash(git *)",
       "Bash(python -c ' *)",
-      "PowerShell(Get-ChildItem -Recurse -Depth 3 -File | Where-Object { $_.FullName -notmatch '\\\\.git' -and $_.FullName -notmatch '\\\\.claude' -and $_.FullName -notmatch 'node_modules' } | Select-Object FullName, Length | Format-Table -AutoSize -Wrap)"
+      "PowerShell(Get-ChildItem -Recurse -Depth 3 -File | Where-Object { $_.FullName -notmatch '\\\\.git' -and $_.FullName -notmatch '\\\\.claude' -and $_.FullName -notmatch 'node_modules' } | Select-Object FullName, Length | Format-Table -AutoSize -Wrap)",
+      "Bash(Get-ChildItem -Recurse -File \"D:\\\\Desktop\\\\MyLoacalReposity\\\\Java-AI-LLM-Learning-Records\\\\04-工程化与运维\\\\Linux与Shell\")",
+      "Bash(Select-Object FullName, Length)",
+      "Bash(Get-ChildItem -Path \"D:\\\\Desktop\\\\MyLoacalReposity\\\\Java-AI-LLM-Learning-Records\" -Depth 2 -Directory)",
+      "Bash(Select-Object FullName)",
+      "Bash(Get-ChildItem -Path \"D:\\\\Desktop\\\\MyLoacalReposity\\\\Java-AI-LLM-Learning-Records\" -Directory -Depth 1)",
+      "Bash(Select-Object -ExpandProperty FullName)",
+      "Bash(Get-ChildItem -Recurse -Name \"*.md\" -Path \"05-计算机基础\")",
+      "Bash(Sort-Object)",
+      "PowerShell(Get-ChildItem \"D:\\\\Desktop\\\\MyLoacalReposity\\\\Java-AI-LLM-Learning-Records\\\\04-工程化与运维\\\\Linux与Shell\" -File | Select-Object Name | Sort-Object Name | ForEach-Object { Write-Output $_.Name })",
+      "PowerShell(Get-ChildItem \"D:\\\\Desktop\\\\MyLoacalReposity\\\\Java-AI-LLM-Learning-Records\\\\04-工程化与运维\\\\Linux与Shell\" -File | Sort-Object Name | ForEach-Object { Write-Output $_.Name })",
+      "PowerShell(& \"D:\\\\Desktop\\\\MyLoacalReposity\\\\Java-AI-LLM-Learning-Records\\\\rename_all.ps1\")"
     ]
   }
 }
