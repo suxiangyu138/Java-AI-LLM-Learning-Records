@@ -1,6 +1,10 @@
 Java国际化（i18n）全流程实战与注意事项
+
+
 国际化（Internationalization，简称i18n），指的是程序不修改核心业务代码的前提下，能够根据不同地区、语言环境，自动切换展示对应的文本、日期、时间、数字、货币等内容，适配多语言用户使用。Java从基础JDK到Spring生态，都提供了完善的国际化支持，核心是通过语言环境匹配和资源文件绑定实现动态文本切换，同时配套处理各类区域化格式问题。
 本文会从JDK原生国际化API讲起，覆盖核心组件、标准开发流程、实战代码、常见坑，再延伸到企业常用的Spring Boot国际化简化方案，全程贴合实际项目落地场景，标注关键注意事项，确保上下文流畅、可直接复用。
+
+
 一、Java国际化核心基础概念
 1. 核心术语
     i18n：Internationalization的缩写，中间18个字母，代表国际化，是程序支持多语言的基础能力。
@@ -10,8 +14,11 @@ Java国际化（i18n）全流程实战与注意事项
     资源文件：存储多语言键值对的properties文件，命名必须遵循固定规范，确保程序能精准匹配。
 2. 核心设计原则
     业务代码与语言文本彻底分离：所有界面提示、按钮文字、报错信息等可变文本，绝不硬编码在Java代码中，全部抽离到独立资源文件，通过key读取value，实现一处修改、全局生效，切换语言只需更换资源文件，无需改动代码。
-    二、JDK原生国际化API（核心基础）
-    1. 核心依赖与类
+
+
+
+二、JDK原生国际化API（核心基础）
+1. 核心依赖与类
     原生国际化无需额外引入依赖，JDK自带核心类，全部位于java.util和java.text包下：
     java.util.Locale：定义语言环境，指定语言+地区，决定加载哪套资源。
     java.util.ResourceBundle：抽象类，用于加载国际化资源文件，常用子类PropertyResourceBundle读取properties文件。
@@ -87,7 +94,10 @@ Java国际化（i18n）全流程实战与注意事项
     中文用户信息：用户名：张三，年龄：25
     英文用户信息：User Name: Tom, Age: 25
     日文环境默认文本：Welcome
-    三、Java国际化核心注意事项（避坑必看）
+
+
+
+三、Java国际化核心注意事项（避坑必看）
     资源文件编码问题：JDK原生properties默认编码是ISO-8859-1，直接写中文会乱码，解决方案：一是用native2ascii工具转Unicode，二是IDEA中设置File Encodings为GBK或UTF-8，开启自动转码，三是Spring Boot项目可直接配置UTF-8编码，规避乱码。
     Locale创建方式：推荐用new Locale(language, country)，或Locale自带常量（Locale.CHINA、Locale.US），避免只传语言不传国家，导致匹配不准确。
     占位符规范：带参数文本用{0}、{1}数字占位，参数顺序要和业务逻辑一致，MessageFormat替换时参数个数必须和占位符数量匹配，否则抛出IllegalArgumentException。
@@ -95,7 +105,9 @@ Java国际化（i18n）全流程实战与注意事项
     线程安全：ResourceBundle和Locale本身是线程安全的，可在多线程环境共享，但MessageFormat非线程安全，多线程下需每次创建新实例，不要定义为静态常量。
     区域化格式处理：国际化不仅是文本切换，日期、时间、货币、数字也要适配区域，比如中国货币是¥，美国是$，日期格式中国是yyyy-MM-dd，美国是MM/dd/yyyy，需用DateFormat、NumberFormat处理。
     默认Locale设置：系统默认Locale是JVM所在环境的语言，可通过Locale.setDefault()全局设置，但不建议随意修改，避免影响其他业务。
-    四、Spring Boot国际化（企业级简化方案）
+
+
+四、Spring Boot国际化（企业级简化方案）
     实际企业开发中，几乎不会用原生JDK API，Spring Boot对国际化做了全自动封装，无需手动加载ResourceBundle，通过配置即可实现，支持动态切换Locale、会话级语言、请求头传递语言参数，适配Web项目多语言需求。
     1. Spring Boot核心配置
     application.yml配置
@@ -116,12 +128,12 @@ Java国际化（i18n）全流程实战与注意事项
     # Locale解析策略：请求参数、会话、请求头
     locale-resolver: parameter
 注意：将资源文件放在resources/i18n目录下，basename对应路径+基础名，编码直接设为UTF-8，彻底解决中文乱码问题。
-2. Web项目动态切换语言
+    2. Web项目动态切换语言
     Spring Boot提供LocaleResolver接口，常用实现类：
     AcceptHeaderLocaleResolver：通过请求头Accept-Language解析（浏览器默认语言）。
     SessionLocaleResolver：会话级解析，切换后整个会话生效。
     CookieLocaleResolver：Cookie级解析，持久化语言偏好。
-3. 页面/接口获取国际化文本
+    3. 页面/接口获取国际化文本
     Controller中注入MessageSource，调用getMessage方法获取文本。
     Thymeleaf页面直接用#{key}表达式读取，无需额外代码。
     全局异常处理中，通过MessageSource返回多语言报错信息。
@@ -147,5 +159,8 @@ Java国际化（i18n）全流程实战与注意事项
         System.out.println("美元：" + currencyUS.format(1000));
     }
     }
-    六、总结
+
+
+
+六、总结
     Java国际化的核心是文本与代码分离、Locale精准匹配、资源规范命名，原生API适合基础桌面应用，Spring Boot方案是Web项目的首选，简化了配置、解决了乱码、支持动态切换。落地时务必遵守资源文件命名、编码、key统一三大规范，同时做好格式本地化和异常处理，确保多语言环境下程序稳定运行，用户体验一致。

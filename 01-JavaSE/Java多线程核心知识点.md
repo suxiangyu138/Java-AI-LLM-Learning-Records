@@ -1,4 +1,4 @@
-# Java 多线程核心知识点（Java 后端企业级实战版）
+# Java 多线程核心知识点
 
 > **文档定位**：Java 后端企业级技术文档 | Java 多线程编程  
 > **核心包**：`java.lang.Thread`、`java.util.concurrent`  
