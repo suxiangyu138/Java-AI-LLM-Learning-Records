@@ -18,11 +18,11 @@ Java-AI-LLM-Learning-Records/
 │
 ├── 02-JavaWeb与中间件/             # Web基础 + 数据库 + 中间件
 │   ├── JavaWeb与HTTP/             #   Servlet、JSP、HTTP/HTTPS、TCP/IP、Tomcat、前端基础
-│   ├── MySQL/                     #   基本操作、索引、事务、优化、设计
+│   ├── MySQL/                     #   基本操作、索引、事务、优化、设计、实战
 │   ├── MyBatis/                   #   XML/注解、动态SQL、缓存、Spring集成
-│   ├── Redis/                     #   数据结构、持久化、集群、缓存设计
-│   ├── ElasticSearch/             #   全文搜索引擎
-│   ├── MongoDB/                   #   文档数据库
+│   ├── Redis/                     #   数据结构、持久化、集群、缓存设计、Lua脚本
+│   ├── ElasticSearch/             #   核心概念、倒排索引、分词器、DSL查询、聚合、Java整合、集群、性能优化、实战
+│   ├── MongoDB/                   #   核心概念、CRUD、索引、聚合管道、副本集、分片、安全备份、Java整合、实战
 │   ├── Nginx/                     #   反向代理、负载均衡
 │   └── 消息队列/                   #   RabbitMQ 全面解析
 │
@@ -38,10 +38,10 @@ Java-AI-LLM-Learning-Records/
 │   ├── 并发编程/                   #   线程、锁、JUC、高并发设计
 │   ├── JVM/                       #   内存模型、GC、类加载、调优
 │   ├── Docker/                    #   镜像、容器、Compose、Swarm
-│   ├── Linux与Shell/              #   系统管理 + Shell脚本
+│   ├── Linux与Shell/              #   系统管理、Shell脚本、命令行速查(CMD/PowerShell/Bash)、Git速查、场景实战
 │   ├── Git与GitHub/               #   版本控制、分支管理、协作
 │   ├── Maven与Gradle/             #   依赖管理、构建、多模块
-│   └── 软件工程与项目管理/          #   架构驱动、CI/CD
+│   └── 软件工程与项目管理/          #   架构驱动、CI/CD、Agent Harness(安全沙箱/可观测/测试CI)
 │
 ├── 05-计算机基础/                   # 计算机科学核心理论
 │   └── 计算机基础理论/             #   操作系统/网络/组成/编译/数据结构/算法/数学
@@ -52,7 +52,13 @@ Java-AI-LLM-Learning-Records/
 │   ├── Embedding与向量数据库/       #   Embedding原理、ChromaDB、Milvus
 │   ├── RAG技术/                    #   RAG流程、检索优化、企业级引擎
 │   ├── Agent与MCP/                 #   AI Agent架构、MCP协议
-│   ├── LangChain与框架/            #   LangChain核心组件
+│   │   ├── Agent/                  #     核心概念、规划推理(ReAct/CoT/ToT)、记忆系统、
+│   │   │                           #     工具设计、安全对齐、评估监控、多Agent协作、
+│   │   │                           #     框架对比(LangGraph/CrewAI/AutoGen/Dify)、
+│   │   │                           #     Java/SpringBoot实战、企业级落地全流程、
+│   │   │                           #     Skill设计开发、设计模式、测试策略、成本优化
+│   │   └── MCP/                    #     MCP协议详解、JSON-RPC、三大原语
+│   ├── LangChain与框架/            #   LangChain核心组件、Chain/Agent/Tool
 │   ├── Ollama与本地部署/            #   模型服务化、Ollama
 │   └── 模型微调/                   #   PEFT参数高效微调
 │
@@ -62,6 +68,12 @@ Java-AI-LLM-Learning-Records/
 │
 ├── 08-AI开发工具与产品/             # AI工具 + 产品 + 参考资料
 │   ├── AI开发工具/                 #   Cursor、Claude Code、LLM API
+│   │   ├── ClaudeCode/            #     核心概念、安装配置、工具系统、
+│   │   │                          #     Hook自动化、记忆系统、MCP集成、
+│   │   │                          #     Skill系统、实战技巧、竞品对比
+│   │   ├── AI编码/                 #     快速学会AI Coding、Copilot详解
+│   │   ├── LLM-API/               #     LLM API 调用实战
+│   │   └── 平台/                  #     Claude、HuggingFace、OpenClaw（部署+安全）等平台
 │   ├── AI产品与商业/               #   AI产品思维、运维、容灾
 │   └── AI参考资料/                 #   推荐书籍与学习资料
 │
@@ -123,7 +135,9 @@ Java-AI-LLM-Learning-Records/
 
 ### 阶段六：AI大模型开发
 ```
-06-AI与大模型/AI大模型基础 → Prompt工程 → Embedding与向量数据库 → RAG技术 → Agent与MCP → LangChain与框架 → Ollama与本地部署 → 03-Spring生态/Spring-AI
+06-AI与大模型/AI大模型基础 → Prompt工程 → Embedding与向量数据库 → RAG技术
+→ Agent与MCP/Agent（核心概念 → 规划推理 → 记忆系统 → 工具设计 → 多Agent协作 → 安全评估 → 框架对比 → Java实战 → 企业落地）
+→ Agent与MCP/MCP → LangChain与框架 → Ollama与本地部署 → 03-Spring生态/Spring-AI
 ```
 Python基础安排在 `07-Python与数据处理/Python语言`，可穿插学习。
 
@@ -139,18 +153,22 @@ Python基础安排在 `07-Python与数据处理/Python语言`，可穿插学习�
 
 ### 单篇笔记模板
 ```md
-# 标题
-## 1. 核心概念
-## 2. 原理分析
-## 3. 常见面试题
-## 4. 实战应用
-## 5. 易错点
-## 6. 总结
+# 标题（Java 后端企业级实战版）
+> 文档定位、版本、核心场景
+
+## 一、核心概念（是什么）
+## 二、原理分析（为什么）
+## 三、实战操作（怎么用）
+## 四、常见面试题（面试要点）
+## 五、易错点/注意事项
+## 六、极简总结（背诵版）
 ```
 
 ### 输出要求
 - 以 Markdown 为主，保证可直接用于 GitHub 展示
 - 每篇笔记回答"是什么、为什么、怎么用、有哪些坑"
+- 一知识点一文件，保持粒度一致
+- 表格优先（对比、速查），代码示例直接可运行
 - 理论与实践分目录整理，代码就近放置
 - 每学完一个专题输出一份总结文档
 
@@ -166,12 +184,14 @@ Python基础安排在 `07-Python与数据处理/Python语言`，可穿插学习�
 - 类QQ即时通讯平台（已实现，见 `项目实战/java/QQ聊天平台/`）
 
 ### AI大模型项目
-- RAG知识库问答系统
-- 企业文档智能助手
-- 基于 Ollama 的本地 AI 助手
-- 多 Agent 协作任务系统
+- RAG 知识库问答系统（向量检索 + LLM 生成）
+- 企业文档智能助手（RAG + Agent 混合架构）
+- 基于 Ollama 的本地 AI 助手（完全离线部署）
+- 多 Agent 协作任务系统（角色分工 + 工具编排）
+- MCP Server 工具生态（微服务标准化暴露为 AI 工具）
 - Java + Python 混合架构的大模型应用平台
 - ChromaDB / Milvus 向量数据库实战
+- Agent 评估与监控平台（LLM-as-Judge + 链路追踪）
 
 ---
 
