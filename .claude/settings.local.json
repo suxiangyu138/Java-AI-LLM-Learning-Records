@@ -134,7 +134,9 @@
       "PowerShell(Get-ChildItem \"D:\\\\Desktop\\\\MyLoacalReposity\\\\Java-AI-LLM-Learning-Records\\\\04-工程化与运维\\\\Linux与Shell\" -File | Sort-Object Name | ForEach-Object { Write-Output $_.Name })",
       "PowerShell(& \"D:\\\\Desktop\\\\MyLoacalReposity\\\\Java-AI-LLM-Learning-Records\\\\rename_all.ps1\")",
       "Bash(Select-Object -First 80)",
-      "WebSearch"
+      "WebSearch",
+      "Bash(Get-ChildItem -Path \"D:\\\\Desktop\\\\MyLoacalReposity\\\\Java-AI-LLM-Learning-Records\" -Directory -Depth 2)",
+      "PowerShell(New-Item *)"
     ]
   }
 }
