@@ -136,7 +136,8 @@
       "Bash(Select-Object -First 80)",
       "WebSearch",
       "Bash(Get-ChildItem -Path \"D:\\\\Desktop\\\\MyLoacalReposity\\\\Java-AI-LLM-Learning-Records\" -Directory -Depth 2)",
-      "PowerShell(New-Item *)"
+      "PowerShell(New-Item *)",
+      "PowerShell(Get-ChildItem -Recurse -Directory | ForEach-Object { $_.FullName.Replace\\(\"$PWD\\\\\", \"\"\\) })"
     ]
   }
 }
