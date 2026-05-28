@@ -1,6 +1,6 @@
 # Java后端开发 + AI大模型应用开发 学习笔记
 
-> 面向 **Java后端开发工程师** 与 **AI大模型应用开发工程师** 的系统化学习仓库，按学习路径组织，聚焦核心知识、实战项目、源码沉淀与面试准备。
+> 面向 **Java后端开发工程师** 与 **AI大模型应用开发工程师** 的系统化学习仓库，按两大方向组织，聚焦核心知识、实战项目、源码沉淀与面试准备。
 
 ---
 
@@ -9,143 +9,130 @@
 ```
 Java-AI-LLM-Learning-Records/
 │
-├── README.md                      # 本文件
-├── LICENSE
+├── Java后端/                          # ====== Java后端开发（企业标准6层架构）======
+│   ├── 01-基础核心层/                   # 必须100%掌握，面试80%问这里
+│   │   ├── JavaSE/                    #   集合框架、异常、IO、反射、注解、泛型
+│   │   ├── Java并发/                   #   Thread、synchronized、AQS、线程池、volatile、CAS
+│   │   ├── JVM/                       #   内存模型、GC、类加载、JVM调优
+│   │   ├── MySQL/                     #   SQL、索引、事务、锁、执行计划、MVCC
+│   │   └── 设计模式/                   #   GoF 23种 + UML + 设计原则
+│   ├── 02-开发框架层/                   # 工作最常用，写项目必须会
+│   │   ├── Spring-Framework/          #   IoC、AOP、事务管理
+│   │   ├── SpringMVC/                 #   请求处理、拦截器、数据校验
+│   │   ├── SpringBoot/                #   自动配置、Web开发、监控
+│   │   ├── MyBatis/                   #   ORM映射、动态SQL、分页
+│   │   ├── JavaWeb与HTTP/             #   Servlet、HTTP/HTTPS、Tomcat、前端基础
+│   │   └── Spring扩展：Security/ Swagger/ Data/ AMQP/ Lombok/ ES/ AI-Ext/
+│   ├── 03-中间件与缓存/                 # 高并发必备，大厂必考
+│   │   ├── Redis/                     #   数据结构、持久化、分布式锁、缓存穿透/击穿/雪崩
+│   │   ├── RabbitMQ/                   #   异步、解耦、削峰
+│   │   ├── ElasticSearch/             #   倒排索引、DSL查询、聚合、集群
+│   │   └── MongoDB/                   #   CRUD、索引、聚合管道、副本集
+│   ├── 04-分布式与微服务/               # 中高级后端，进阶必备
+│   │   ├── Spring-Cloud/              #   Nacos、OpenFeign、Sentinel、Gateway
+│   │   └── Spring-AI/                 #   Spring AI 集成大模型
+│   ├── 05-运维与部署/                   # 必须会用，独立上线
+│   │   ├── Linux与Shell/ Git与GitHub/ Maven与Gradle/
+│   │   ├── Docker/ Nginx/
+│   │   └── 测试工具/ 代码质量/ 软件工程与项目管理/
+│   ├── 06-高并发与性能优化/              # 拔高加分，拿高薪必问
+│   │   └── 接口优化、数据库优化、JVM调优、池化技术、异步编程、流量削峰
+│   ├── 代码练习/                        # Java小型练习：IO、Stream、集合、泛型、排序算法等
+│   ├── 项目实战/                        # Java完整项目：QQ聊天平台、博客系统、五子棋等
+│   └── Java面试/                       # Java八股文、面试高频考点
 │
-├── 00-学习路线与必做项目/           # 学习路线图 + 各技术栈必做项目清单
+├── AI大模型应用开发/                    # ====== AI大模型应用开发（纯AI 6层架构）======
+│   ├── 01-基础概念与理论/                # 必掌握：大模型基础 + Prompt + Embedding
+│   │   ├── 大模型原理/ 数学基础/ ML基础/ NLP/  #   LLM架构/Transformer/BERT/GPT、模型选型
+│   │   ├── Prompt工程/                 #   角色设定、Few-shot、CoT、上下文管理
+│   │   ├── Embedding/                 #   文本向量化、相似度计算、主流嵌入模型
+│   │   └── AI学习方法论/               #   系统化学习AI的方法论
+│   ├── 02-核心落地技术/                 # 企业主流：RAG + Agent + Function Calling
+│   │   ├── RAG技术/                    #   文档加载→分块→向量化→检索→生成 全流程
+│   │   ├── Agent/                     #   任务拆解、多轮执行、记忆管理、反思纠错
+│   │   ├── MCP/                       #   MCP协议、JSON-RPC、三大原语
+│   │   └── LangChain与框架/            #   LangChain核心组件、Chain/Agent/Tool
+│   ├── 03-存储与检索组件/               # 向量数据库 + 混合检索
+│   │   ├── 向量数据库/                  #   Milvus、PgVector、Chroma
+│   │   └── Embedding代码/              #   Embedding实战代码
+│   ├── 04-模型运行方式/                 # 云端API + 本地私有化部署
+│   │   ├── LLM-API/                   #   阿里云通义、DeepSeek、OpenAI接口调用
+│   │   ├── Ollama与本地部署/            #   一键部署、Docker容器化、模型量化
+│   │   └── 模型推理与部署/              #   推理加速、显存优化、服务化
+│   ├── 05-AI工程化与调优/               # 性能优化 + 成本控制 + 可观测
+│   │   ├── 部署工具/ 平台/ 容灾/ 运维/
+│   │   └── AI产品与商业/               #   AI产品思维、企业级工程化
+│   ├── 06-进阶拓展/                    # 拔高加分
+│   │   ├── 模型微调/                   #   LoRA轻量微调、数据集制作、模型部署
+│   │   └── 多模态大模型/               #   图文理解、多模态检索与问答
+│   ├── 07-Python与数据处理/             # Python + 数据（AI配套语言技能）
+│   │   ├── Python语言/ Python基础/
+│   │   └── 数据分析与爬虫/ 面向对象基础/ 爬虫基础/ 数据分析/
+│   ├── AI开发工具/                     # ClaudeCode、IDE、AI编码、参考资料
+│   ├── 代码练习/                        # Python练习：算法
+│   ├── 项目实战/                        # Python项目：爬虫、数据分析、机器学习、AI示例
+│   └── AI面试/                         # AI面试准备
 │
-├── 01-JavaSE/                     # Java基础 → 高级：OOP、集合、IO、泛型、反射、多线程、JVM、新特性
-│
-├── 02-JavaWeb与中间件/             # Web基础 + 数据库 + 中间件
-│   ├── JavaWeb与HTTP/             #   Servlet、JSP、HTTP/HTTPS、TCP/IP、Tomcat、前端基础
-│   ├── MySQL/                     #   基本操作、索引、事务、优化、设计、实战
-│   ├── MyBatis/                   #   XML/注解、动态SQL、缓存、Spring集成
-│   ├── Redis/                     #   数据结构、持久化、集群、缓存设计、Lua脚本
-│   ├── ElasticSearch/             #   核心概念、倒排索引、分词器、DSL查询、聚合、Java整合、集群、性能优化、实战
-│   ├── MongoDB/                   #   核心概念、CRUD、索引、聚合管道、副本集、分片、安全备份、Java整合、实战
-│   ├── Nginx/                     #   反向代理、负载均衡
-│   └── 消息队列/                   #   RabbitMQ 全面解析
-│
-├── 03-Spring生态/                  # Spring 全家桶
-│   ├── Spring-Framework/          #   IoC、AOP、Bean装配、注解开发
-│   ├── SpringMVC/                 #   请求处理、拦截器、文件上传、数据校验
-│   ├── SpringBoot/                #   自动配置、Web开发、数据访问、监控
-│   ├── Spring-Cloud/              #   微服务治理、Nacos、Sentinel、Gateway
-│   ├── Spring-Extensions/         #   Security、Data、AMQP
-│   └── Spring-AI/                 #   Spring AI 集成大模型
-│
-├── 04-工程化与运维/                 # 进阶 + DevOps
-│   ├── 并发编程/                   #   线程、锁、JUC、高并发设计
-│   ├── JVM/                       #   内存模型、GC、类加载、调优
-│   ├── Docker/                    #   镜像、容器、Compose、Swarm
-│   ├── Linux与Shell/              #   系统管理、Shell脚本、命令行速查(CMD/PowerShell/Bash)、Git速查、场景实战
-│   ├── Git与GitHub/               #   版本控制、分支管理、协作
-│   ├── Maven与Gradle/             #   依赖管理、构建、多模块
-│   └── 软件工程与项目管理/          #   架构驱动、CI/CD、Agent Harness(安全沙箱/可观测/测试CI)
-│
-├── 05-计算机基础/                   # 计算机科学核心理论
-│   └── 计算机基础理论/             #   操作系统/网络/组成/编译/数据结构/算法/数学
-│
-├── 06-AI与大模型/                   # AI 核心技术栈
-│   ├── AI大模型基础/               #   Transformer/BERT/GPT、LLM架构、ML/DL、NLP
-│   ├── Prompt工程/                 #   Prompt设计、优化技巧
-│   ├── Embedding与向量数据库/       #   Embedding原理、ChromaDB、Milvus
-│   ├── RAG技术/                    #   RAG流程、检索优化、企业级引擎
-│   ├── Agent与MCP/                 #   AI Agent架构、MCP协议
-│   │   ├── Agent/                  #     核心概念、规划推理(ReAct/CoT/ToT)、记忆系统、
-│   │   │                           #     工具设计、安全对齐、评估监控、多Agent协作、
-│   │   │                           #     框架对比(LangGraph/CrewAI/AutoGen/Dify)、
-│   │   │                           #     Java/SpringBoot实战、企业级落地全流程、
-│   │   │                           #     Skill设计开发、设计模式、测试策略、成本优化
-│   │   └── MCP/                    #     MCP协议详解、JSON-RPC、三大原语
-│   ├── LangChain与框架/            #   LangChain核心组件、Chain/Agent/Tool
-│   ├── Ollama与本地部署/            #   模型服务化、Ollama
-│   └── 模型微调/                   #   PEFT参数高效微调
-│
-├── 07-Python与数据处理/             # Python + 数据
-│   ├── Python语言/                 #   Python基础到高级、OOP、异步、PyTorch
-│   └── 数据分析与爬虫/              #   NumPy/Pandas + 爬虫
-│
-├── 08-AI开发工具与产品/             # AI工具 + 产品 + 参考资料
-│   ├── AI开发工具/                 #   Cursor、Claude Code、LLM API
-│   │   ├── ClaudeCode/            #     核心概念、安装配置、工具系统、
-│   │   │                          #     Hook自动化、记忆系统、MCP集成、
-│   │   │                          #     Skill系统、实战技巧、竞品对比
-│   │   ├── AI编码/                 #     快速学会AI Coding、Copilot详解
-│   │   ├── LLM-API/               #     LLM API 调用实战
-│   │   └── 平台/                  #     Claude、HuggingFace、OpenClaw（部署+安全）等平台
-│   ├── AI产品与商业/               #   AI产品思维、运维、容灾
-│   └── AI参考资料/                 #   推荐书籍与学习资料
-│
-├── 09-面试与职业/                   # 面试准备 + 职业规划
-│   ├── 面试准备/                   #   Java八股文、AI面试
-│   └── 职业规划与发展/              #   职业路径、学习方法
-│
-├── 10-设计模式/                     # GoF 23种设计模式 + UML + 设计原则
-│
-├── 项目实战/                        # 完整多文件项目
-│   ├── java/                      #   QQ聊天平台、博客系统、五子棋、TCP/UDP聊天等
-│   └── python/                    #   AI Demo、爬虫、数据分析、机器学习
-│
-├── 代码练习/                        # 小型独立练习
-│   ├── java/                      #   IO、Stream、集合、泛型、排序算法等
-│   └── python/                    #   排序算法合集
-│
-├── leetcode/                      # LeetCode刷题（数组/DP/回溯/图/树/链表）
-│
-├── 个人发展/                        # 个人成长与管理
-│   ├── 学期规划/                   #   学习/身体/财务规划
-│   ├── 知识体系/                   #   个人修养/身体素质/英语
-│   ├── 每日笔记/                   #   AI学习/Java后端/工具/学习方法/作业
-│   └── 思考总结/                   #   Java核心/AI工具/面试/成长/计算机理论
-│
-├── 参考速查/                        # 核心知识速查手册
-└── images/                        # 文档配图和截图
+├── 学习路线与必做项目/                   # 学习路线图 + 各技术栈必做项目清单
+├── 计算机基础/                          # 计算机科学核心理论：操作系统/网络/组成/数据结构/算法/数学…
+├── 职业规划/                           # 职业规划、学习方法、能力提升
+├── 个人发展/                           # 个人成长：笔记、总结、知识体系、学期规划
+├── leetcode/                          # LeetCode刷题：数据结构/算法（含Java源码）
+├── 参考速查/                           # 核心知识速查手册
+└── README.md
 ```
 
 ---
 
 ## 推荐学习路线
 
-### 阶段一：Java基础
+### Java后端路线（企业标准5阶段）
 ```
-01-JavaSE → 10-设计模式
-```
-配合 `代码练习/java/` 动手练习。
+阶段一：基础核心
+  Java后端/01-基础核心层/JavaSE → Java并发 → JVM → MySQL → 设计模式
+  配合 Java后端/代码练习/ 动手练习
 
-### 阶段二：数据库与中间件
-```
-02-JavaWeb与中间件/MySQL → MyBatis → Redis → 消息队列 → Nginx
-```
+阶段二：开发框架
+  Java后端/02-开发框架层/Spring-Framework → SpringMVC → SpringBoot → MyBatis → JavaWeb与HTTP
 
-### 阶段三：JavaWeb与框架
-```
-02-JavaWeb与中间件/JavaWeb与HTTP → 03-Spring生态/Spring-Framework → SpringMVC → SpringBoot → Spring-Cloud
-```
+阶段三：中间件与缓存
+  Java后端/03-中间件与缓存/Redis → RabbitMQ → ElasticSearch → MongoDB
 
-### 阶段四：Java进阶
-```
-04-工程化与运维/并发编程 → JVM → 05-计算机基础
+阶段四：分布式与微服务
+  Java后端/04-分布式与微服务/Spring-Cloud → Spring-AI
+
+阶段五：运维部署与高并发优化
+  Java后端/05-运维与部署/ + 06-高并发与性能优化/
 ```
 
-### 阶段五：DevOps与工具
+> **基础决定你能不能上岗，框架决定你能不能干活，中间件决定你能不能做高并发，微服务决定你能不能进大厂，运维部署决定你能不能独立上线，优化决定你能拿多少钱。**
+
+### AI大模型应用开发路线（按学习优先级）
 ```
-04-工程化与运维/Docker → Linux与Shell → Git与GitHub → Maven与Gradle → 软件工程与项目管理
+阶段一：入门（基础概念）
+  AI大模型应用开发/01-基础概念与理论/大模型原理 → 数学基础 → ML基础 → NLP → Prompt工程 → Embedding
+
+阶段二：核心（企业落地关键）
+  AI大模型应用开发/02-核心落地技术/RAG技术（全流程） → 03-存储与检索组件/向量数据库
+
+阶段三：进阶（Agent + 模型部署）
+  AI大模型应用开发/02-核心落地技术/Agent → MCP → LangChain与框架
+  → 04-模型运行方式/Ollama与本地部署 → LLM-API
+
+阶段四：工程化（生产级）
+  AI大模型应用开发/05-AI工程化与调优/ → AI开发工具/
+
+阶段五：拔高（前沿拓展）
+  AI大模型应用开发/06-进阶拓展/模型微调 → 多模态大模型
+
+配套技能（穿插学习）
+  07-Python与数据处理/ + AI大模型应用开发/代码练习/ + 项目实战/
 ```
 
-### 阶段六：AI大模型开发
+### 共享基础（两条路线通用）
 ```
-06-AI与大模型/AI大模型基础 → Prompt工程 → Embedding与向量数据库 → RAG技术
-→ Agent与MCP/Agent（核心概念 → 规划推理 → 记忆系统 → 工具设计 → 多Agent协作 → 安全评估 → 框架对比 → Java实战 → 企业落地）
-→ Agent与MCP/MCP → LangChain与框架 → Ollama与本地部署 → 03-Spring生态/Spring-AI
+学习路线与必做项目/ → 计算机基础/ → leetcode/ → 职业规划/
 ```
-Python基础安排在 `07-Python与数据处理/Python语言`，可穿插学习。
-
-### 阶段七：面试冲刺
-```
-09-面试与职业/面试准备 → 职业规划与发展
-```
-配合 `00-学习路线与必做项目/` 中的必做项目清单。
 
 ---
 
@@ -181,7 +168,7 @@ Python基础安排在 `07-Python与数据处理/Python语言`，可穿插学习�
 - 文件上传下载系统：本地存储 / OSS、断点续传、文件校验
 - 秒杀系统：Redis + MQ + 限流 + 异步削峰
 - 订单系统：分库分表、分布式事务、幂等控制
-- 类QQ即时通讯平台（已实现，见 `项目实战/java/QQ聊天平台/`）
+- 类QQ即时通讯平台（已实现，见 `Java后端/项目实战/QQ聊天平台/`）
 
 ### AI大模型项目
 - RAG 知识库问答系统（向量检索 + LLM 生成）

@@ -1,9 +1,0 @@
-2026-01-22 06:29:30 | INFO  | c.e.ExceptionAssertLogExperience | Scanner资源已释放
-2026-01-22 06:29:30 | INFO  | c.e.ExceptionAssertLogExperience | 文件test.txt写入成功，内容：测试内容
-2026-01-22 06:29:30 | DEBUG | c.e.ExceptionAssertLogExperience | 用户名校验通过：admin
-2026-01-22 06:29:30 | DEBUG | c.e.ExceptionAssertLogExperience | DEBUG级别：调试信息（开发/测试）
-2026-01-22 06:29:30 | INFO  | c.e.ExceptionAssertLogExperience | INFO级别：关键业务流程（生产环境）
-2026-01-22 06:29:30 | WARN  | c.e.ExceptionAssertLogExperience | WARN级别：警告（非错误，但需关注）
-2026-01-22 06:29:30 | ERROR | c.e.ExceptionAssertLogExperience | ERROR级别：错误（影响业务，必须处理）
-2026-01-22 06:29:30 | INFO  | c.e.ExceptionAssertLogExperience | 用户U123456完成支付，金额：99.99元
-2026-01-22 06:29:30 | INFO  | c.e.ExceptionAssertLogExperience | 日志打印（有级别/可配置/异步）
