@@ -1,8 +1,11 @@
-# AI Agent 规划与推理模式详解（Java 后端 + AI 全栈实战版）
+# AI Agent 规划与推理模式详解
 
-> **文档定位**：AI Agent 核心技术文档 | 推理与规划模式深度解析
-> **前置阅读**：AI Agent核心知识点.md
-> **核心问题**：Agent 如何思考？如何拆解任务？如何自我修正？
+> **核心摘要**：Agent 的推理能力决定了其任务完成的准确性和效率。本文深度解析 CoT（思维链）、ReAct（推理+行动）、ToT（思维树）、Plan-and-Execute（先计划后执行）和 Reflexion（反思机制）五大核心推理模式，涵盖原理、实战示例和选型指南。
+
+## 前置阅读
+
+- [[AI Agent核心知识点]]
+- [[AI-Agent-ReAct与FunctionCalling]]
 
 ---
 
@@ -36,7 +39,7 @@ Agent 推理模式
 
 ### 2.1 原理
 
-让 LLM 在输出最终答案前**显式输出推理步骤**，提升复杂推理题的正确率。
+让 LLM 在输出最终答案前**显式输出推理步骤**，显著提升复杂推理题的正确率。
 
 ```
 ❌ 直接输出："答案是 15"
@@ -49,7 +52,7 @@ Agent 推理模式
    最终答案：15
 ```
 
-### 2.2 CoT Prompt 模板
+### 2.2 Prompt 模板
 
 ```
 请一步步思考，先列出推理步骤，再给出最终答案。
@@ -59,7 +62,7 @@ Agent 推理模式
 
 ---
 
-## 三、ReAct（Reasoning + Acting）—— 最主流模式
+## 三、ReAct（Reasoning + Acting）
 
 ### 3.1 核心循环
 
@@ -79,7 +82,7 @@ Agent 推理模式
 | **循环** | 根据观察再次 Thought | "25 度晴天，适合出游" |
 | **Final Answer** | 认为任务完成，输出 | "北京今天 25°C，晴天，适合出行" |
 
-### 3.2 ReAct 完整示例
+### 3.2 完整示例
 
 ```
 用户问题：今天的北京和上海哪个更适合户外活动？
@@ -97,26 +100,13 @@ Final Answer: 今天北京更适合户外活动。
 原因：北京晴天 25°C AQI 优，上海有雷阵雨不建议户外。
 ```
 
-### 3.3 ReAct Prompt 模板
-
-```
-你是一个具备工具调用能力的 AI 助手。请按以下格式回复：
-
-Thought: 你的推理过程
-Action: tool_name(tool_input)
-Observation: 工具返回结果
-... (可重复多次)
-Thought: 最终推理
-Final Answer: 给用户的最终回答
-```
-
 ---
 
 ## 四、ToT（思维树）
 
 ### 4.1 原理
 
-CoT 的问题是只有**一条推理链**，ToT 会**同时探索多条推理路径**：
+CoT 只有一条推理链，而 **ToT（Tree of Thoughts）** 同时探索多条推理路径：
 
 ```
                     问题
@@ -130,13 +120,11 @@ CoT 的问题是只有**一条推理链**，ToT 会**同时探索多条推理路
 
 ### 4.2 实战步骤
 
-```
-1. 生成（Generate）：对于当前节点，生成 N 个候选"下一步"
-2. 评估（Evaluate）：对每个候选打分
-3. 扩展（Expand）：选择高分的继续探索
-4. 回溯（Backtrack）：低分路径回退
-5. 选择（Select）：所有路径中选最优
-```
+1. **生成（Generate）**：对当前节点生成 N 个候选"下一步"
+2. **评估（Evaluate）**：对每个候选打分
+3. **扩展（Expand）**：选择高分的继续探索
+4. **回溯（Backtrack）**：低分路径回退
+5. **选择（Select）**：所有路径中选最优
 
 **适用场景**：写作、博弈、数学证明、策略规划
 
@@ -144,12 +132,11 @@ CoT 的问题是只有**一条推理链**，ToT 会**同时探索多条推理路
 
 ## 五、Plan-and-Execute（先计划再执行）
 
-### 5.1 模式
+### 5.1 模式说明
+
+ReAct 的问题是走一步想一步，思路可能不连贯。**Plan-and-Execute** 先全局规划，再逐步执行：
 
 ```
-ReAct 的问题：走一步想一步，思路可能不连贯
-Plan-and-Execute：先全局规划，再逐步执行
-
 阶段 1（Plan）：LLM 先制定完整计划
 阶段 2（Execute）：按计划逐步执行，每步可调用工具
 ```
@@ -179,14 +166,14 @@ Step 5: 整合生成报告
 
 ### 6.1 核心思想
 
-Agent 执行后**自我评估**，如果不满意就**带着教训重试**：
+Agent 执行后**自我评估**，如果不满意就带着教训重试：
 
 ```
 Attempt 1 → 失败 → 反思原因 → 记录教训
     ↓
 Attempt 2 → 改进 → 可能仍失败 → 再次反思
     ↓
-Attempt N → 成功 ✅
+Attempt N → 成功
 ```
 
 ### 6.2 反思 Prompt 模板
@@ -211,67 +198,60 @@ Attempt N → 成功 ✅
 | 场景 | 推荐模式 | 原因 |
 |---|---|---|
 | 简单事实问答 | Direct | 无需推理链 |
-| 数学/逻辑推理 | CoT | 逐步思考 |
+| 数学 / 逻辑推理 | CoT | 逐步思考 |
 | 需要外部工具 | **ReAct** | 思考-行动-观察循环 |
-| 复杂规划+执行 | **Plan-and-Execute** | 全局观 |
+| 复杂规划 + 执行 | **Plan-and-Execute** | 全局观 |
 | 多方案选择 | ToT | 探索多条路径 |
 | 成功率要求高 | **Reflexion** | 失败后自我改进 |
 | 多步非工具任务 | CoT + Self-Consistency | 多次推理投票 |
 
 ---
 
-## 八、实战：伪代码实现 ReAct 循环
+## 八、ReAct 循环伪代码实现
 
 ```python
 def react_loop(user_query: str, tools: list, max_iterations: int = 10):
     messages = [{"role": "user", "content": user_query}]
     trajectory = []
-    
+
     for i in range(max_iterations):
-        # 1. LLM 生成 Thought + Action
         response = llm.chat(messages, tools=tools)
-        
+
         if response.has_final_answer():
             return response.final_answer, trajectory
-        
-        # 2. 执行 Action
+
         tool_name = response.tool_name
         tool_args = response.tool_args
         observation = execute_tool(tool_name, tool_args)
-        
-        # 3. 记录轨迹
+
         trajectory.append({
             "thought": response.thought,
             "action": f"{tool_name}({tool_args})",
             "observation": observation
         })
-        
-        # 4. 将 Observation 加入上下文继续循环
+
         messages.append({"role": "assistant", "content": response.raw})
         messages.append({"role": "tool", "content": str(observation)})
-    
+
     raise Exception("Agent 达到最大迭代次数仍未完成任务")
 ```
 
 ---
 
-## 九、面试核心要点
+## 核心要点回顾
 
-1. **ReAct 的三个步骤？** Thought → Action → Observation，循环到给出 Final Answer
-2. **CoT 和 ReAct 区别？** CoT 输出推理链但不调用工具，ReAct 在推理中嵌入工具调用
-3. **Plan-and-Execute 比 ReAct 好在哪？** 先全局规划再执行，思路更连贯，减少无效步骤
-4. **Reflexion 机制的核心？** 失败后反思原因生成教训(lesson)，下次带着教训重试
-5. **ToT 和 CoT 的区别？** CoT 单链推理，ToT 多路径同时探索+评估+剪枝
+- CoT = 显式推理步骤，不调工具，适合逻辑题
+- ReAct = Thought → Action → Observation 循环，主流 Agent 模式
+- ToT = 多路径探索 + 评估剪枝，适合写作/策略
+- Plan-and-Execute = 先做计划再执行，长任务更连贯
+- Reflexion = 失败后反思改进，提高最终成功率
+- 选型原则：要调工具用 ReAct，长任务用 Plan-and-Execute，要准确用 Reflexion
 
 ---
 
-## 十、极简总结
+## 参考资料
 
-```
-CoT = 显式推理步骤，不调工具，适合逻辑题
-ReAct = Thought → Action → Observation 循环，主流 Agent 模式
-ToT = 多路径探索 + 评估剪枝，适合写作/策略
-Plan-and-Execute = 先做计划再执行，长任务更连贯
-Reflexion = 失败后反思改进，提高最终成功率
-选择 = 要调工具用 ReAct，长任务用 Plan-and-Execute，要准确用 Reflexion
-```
+1. Wei et al. Chain-of-Thought Prompting Elicits Reasoning in Large Language Models
+2. Yao et al. ReAct: Synergizing Reasoning and Acting in Language Models
+3. Yao et al. Tree of Thoughts: Deliberate Problem Solving with Large Language Models
+4. Shinn et al. Reflexion: Language Agents with Verbal Reinforcement Learning

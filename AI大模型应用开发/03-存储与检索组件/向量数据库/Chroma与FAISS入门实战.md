@@ -1,25 +1,30 @@
-# Chroma 与 FAISS 入门实战
+# 🗄️ Chroma 与 FAISS 入门实战
 
-> **核心认知**：向量数据库是 RAG 系统的"记忆引擎"。Chroma 适合原型开发（零配置），FAISS 适合生产环境（高性能）。
-> **前期知识**：需理解 Embedding 概念，见 `快速吃透 Embedding.md`
+> **核心摘要**：向量数据库是 RAG 系统的"记忆引擎"。本文从零开始实战 Chroma（零配置原型）与 FAISS（高性能生产）两大向量检索方案，涵盖安装部署、核心操作、完整 RAG 检索器封装，以及性能优化与选型指南。
 
 ---
 
-## 1. 为什么需要向量数据库？
+## 一、为什么需要向量数据库
 
 ```
 用户问题 → Embedding → [0.1, 0.3, -0.2, ...] → 向量数据库查询
-                                                      ↓
-                                          Top-K 最相似的文档片段
-                                                      ↓
-                                          注入 Prompt → LLM 生成答案
+                                                     ↓
+                                         Top-K 最相似的文档片段
+                                                     ↓
+                                         注入 Prompt → LLM 生成答案
 ```
 
-**关键数字**：在 100 万条向量中做 Top-K 近似检索，Chroma 约 50ms，FAISS 约 10ms，全量遍历约 2000ms。
+> **关键数字**：在 100 万条向量中做 Top-K 近似检索，Chroma 约 50ms，FAISS 约 10ms，全量遍历约 2000ms。
+
+### 前置阅读
+
+- [[快速吃透 Embedding]] — Embedding 概念基础
+- [[快速学会 主流向量数据库「全覆盖」]] — 向量数据库全景概览
+- [[向量数据库选型与实践：Chroma与FAISS]] — 深入选型对比
 
 ---
 
-## 2. Chroma：零配置向量数据库
+## 二、Chroma：零配置向量数据库
 
 ### 2.1 安装与启动
 
@@ -144,7 +149,7 @@ class ChromaRAG:
 
 ---
 
-## 3. FAISS：高性能向量检索
+## 三、FAISS：高性能向量检索
 
 ### 3.1 安装与基础使用
 
@@ -180,15 +185,15 @@ def search(index: faiss.Index, query: str, embed_fn, k: int = 5):
     return distances[0], indices[0]  # 相似度 + 文档索引
 ```
 
-### 3.2 FAISS 索引类型选择
+### 3.2 索引类型选择
 
 ```python
 # IndexFlatIP — 精确检索，适合 < 10w 向量
 index = faiss.IndexFlatIP(768)
 
 # IndexIVFFlat — 倒排索引，适合 10w-1000w 向量，速度提升 10-100x
-quantizer = faiss.IndexFlatIP(768)  # 聚类中心索引
-index = faiss.IndexIVFFlat(quantizer, 768, nlist=100)  # nlist=聚类数
+quantizer = faiss.IndexFlatIP(768)
+index = faiss.IndexIVFFlat(quantizer, 768, nlist=100)
 index.train(vectors)  # 必须先训练！
 index.add(vectors)
 
@@ -246,29 +251,31 @@ class FAISSRAG:
             results.append({
                 "content": self.documents[idx],
                 "metadata": self.metadatas[idx],
-                "score": float(dist)  # 内积相似度，越高越相似
+                "score": float(dist)
             })
         return results
 ```
 
+> **注意**：FAISS 是纯向量检索库，不提供元数据过滤功能。若需在 FAISS 上层实现元数据过滤，需自行维护倒排索引或二次过滤逻辑。
+
 ---
 
-## 4. Chroma vs FAISS 选型指南
+## 四、Chroma vs FAISS 选型指南
 
 | 维度 | Chroma | FAISS |
-|------|--------|-------|
-| 部署复杂度 | 零配置，pip install 即可 | 简单，但需自己管理 Embedding |
+|---|---|---|
+| 部署复杂度 | 零配置，`pip install` 即可 | 简单，但需自己管理 Embedding |
 | 查询速度 | 中等（10w 向量 ~50ms） | 极快（10w 向量 ~10ms） |
 | 元数据管理 | 内置，支持过滤 | 需自行维护映射关系 |
 | 持久化 | 内置 | 需手动 save/load |
 | 适用阶段 | 原型验证、小规模应用 | 生产环境、大规模检索 |
 | 社区生态 | 与 LangChain 深度集成 | Meta 出品，学术引用广 |
 
-**推荐策略**：原型阶段用 Chroma → 确认方案可行 → 数据量 > 10w 或性能敏感时迁移到 FAISS/Milvus。
+> **推荐策略**：原型阶段用 Chroma → 确认方案可行 → 数据量 > 10w 或性能敏感时迁移到 FAISS / Milvus。
 
 ---
 
-## 5. 实战：文档分块 + Chroma 索引完整链路
+## 五、实战：文档分块 + Chroma 索引完整链路
 
 ```python
 from langchain.text_splitter import RecursiveCharacterTextSplitter
@@ -321,19 +328,39 @@ def build_rag_index(markdown_files: list[str]) -> chromadb.Collection:
 
 ---
 
-## 6. 性能优化要点
+## 六、性能优化要点
 
 1. **批量插入**：一次 `add()` 1000 条比 1000 次 `add()` 1 条快 50+ 倍
 2. **向量缓存**：对已索引的文档做 Embedding，避免重复计算
 3. **维度压缩**：用 PCA 将 768 维降到 256 维，速度翻倍，精度损失 < 2%
-4. **索引预热**：FAISS 首次查询慢（冷启动），先跑一个 dummy query
+4. **索引预热**：FAISS 首次查询慢（冷启动），先执行一次 dummy query
+
+> **重点**：对于 Java 后端项目，若需集成向量检索，推荐使用 Milvus（提供原生 Java SDK），而非 Chroma/FAISS，后者缺乏成熟的 Java 生态支持。
 
 ---
 
 ## 快速调试检查清单
 
-- [ ] Embedding 模型是否正确加载？测试 `model.encode(["test"])` 返回 (1, dim) 的数组
+- [ ] Embedding 模型是否正确加载？测试 `model.encode(["test"])` 返回 `(1, dim)` 的数组
 - [ ] 插入和查询用的是否是**同一个** Embedding 函数/模型？
 - [ ] 向量是否做了**归一化**？（余弦相似度需要归一化）
 - [ ] FAISS 查询前是否调用了 `np.float32` 类型转换？
 - [ ] Chroma `query_texts` 参数是 `list[str]`，不要只传 `str`
+
+---
+
+## 核心要点回顾
+
+- Chroma 零配置即可使用，内置持久化和元数据过滤，适合原型验证与学习
+- FAISS 性能极佳（10w 向量 ~10ms），但需自行管理 Embedding、持久化和元数据
+- 选型推荐：原型用 Chroma，生产大规模用 FAISS/Milvus
+- 文档分块 + 向量索引是 RAG 系统的标准实践
+- 性能优化关键：批量插入、向量缓存、维度压缩、索引预热
+
+## 参考资料
+
+1. Chroma 官方文档：https://docs.trychroma.com
+2. FAISS GitHub 仓库：https://github.com/facebookresearch/faiss
+3. FAISS 索引选择指南：https://github.com/facebookresearch/faiss/wiki/Guidelines-to-choose-an-index
+4. SentenceTransformers 模型库：https://www.sbert.net/docs/pretrained_models.html
+5. LangChain Text Splitters：https://python.langchain.com/docs/modules/data_connection/document_transformers/

@@ -1,5 +1,18 @@
 # 从Java后端开发角度深度剖析计算机网络（自顶向下：计算机网络与因特网）
 
+## 📑 目录
+
+- [引言](#引言)
+- [第一章：自顶向下体系结构总览（Java后端视角）](#第一章自顶向下体系结构总览java后端视角)
+- [第二章：应用层——Java后端的"业务通信入口"](#第二章应用层java后端的业务通信入口)
+- [第三章：传输层——Java后端的"可靠通信保障"](#第三章传输层java后端的可靠通信保障)
+- [第四章：网络层——Java后端的"部署通信基石"](#第四章网络层java后端的部署通信基石)
+- [第五章：数据链路层与物理层（简要认知）](#第五章数据链路层与物理层简要认知)
+- [第六章：端到端通信全流程（完整示例）](#第六章端到端通信全流程完整示例)
+- [第七章：Java后端网络优化总结](#第七章java后端网络优化总结)
+
+---
+
 ## 引言
 
 计算机网络是Java后端开发的核心基础设施，后端服务的通信、数据传输、高可用部署，均依赖计算机网络的底层支撑。本文严格遵循"自顶向下"的体系结构（应用层→传输层→网络层→数据链路层→物理层），聚焦Java后端开发场景，拆解各层核心理论，结合接口调用、服务部署、性能优化等实战场景，帮助开发者理解"网络如何支撑后端服务"，以及"如何通过网络优化提升后端系统性能与稳定性"。
@@ -57,31 +70,26 @@
 
 #### HTTP/HTTPS接口开发与优化
 
-**实战开发示例（Spring Boot）：**
-
 ```java
 @RestController
 @RequestMapping("/api/v1/products")
 public class ProductController {
-    
+
     @Autowired
     private ProductService productService;
-    
-    // GET查询（幂等、可缓存）
+
     @GetMapping("/{id}")
     public ResponseEntity<ProductDTO> getProduct(@PathVariable Long id) {
         ProductDTO product = productService.getById(id);
         return ResponseEntity.ok(product);
     }
-    
-    // POST创建（非幂等、不可缓存）
+
     @PostMapping
     public ResponseEntity<ProductDTO> createProduct(@RequestBody @Valid ProductCreateDTO dto) {
         ProductDTO product = productService.create(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(product);
     }
-    
-    // 配置缓存（提升性能）
+
     @GetMapping("/hot/{id}")
     @Cacheable(value = "products", key = "#id")
     public ProductDTO getHotProduct(@PathVariable Long id) {
@@ -93,7 +101,6 @@ public class ProductController {
 **HTTPS配置（生产环境必选）：**
 
 ```yaml
-# application.yml
 server:
   port: 443
   ssl:
@@ -113,22 +120,19 @@ server:
 
 #### RPC服务开发与部署（微服务场景）
 
-**Dubbo示例（服务提供者）：**
+**服务提供者：**
 
 ```java
-// 定义接口
 public interface UserRpcService {
     UserDTO getUserById(Long id);
 }
 
-// 服务实现
 @DubboService(interfaceClass = UserRpcService.class, version = "1.0.0")
 @Service
 public class UserRpcServiceImpl implements UserRpcService {
-    
     @Autowired
     private UserMapper userMapper;
-    
+
     @Override
     public UserDTO getUserById(Long id) {
         return userMapper.selectById(id);
@@ -136,18 +140,16 @@ public class UserRpcServiceImpl implements UserRpcService {
 }
 ```
 
-**Dubbo示例（服务消费者）：**
+**服务消费者：**
 
 ```java
 @RestController
 public class OrderController {
-    
     @DubboReference(version = "1.0.0")
     private UserRpcService userRpcService;
-    
+
     @GetMapping("/order/{orderId}/user")
     public UserDTO getOrderUser(@PathVariable Long orderId) {
-        // 像调用本地方法一样调用远程服务
         return userRpcService.getUserById(orderId);
     }
 }
@@ -171,7 +173,6 @@ public class OrderController {
 | **性能瓶颈** | 接口请求频繁 | HTTP缓存 + 本地/分布式缓存 |
 
 ```java
-// CORS配置示例
 @Configuration
 public class CorsConfig implements WebMvcConfigurer {
     @Override
@@ -206,7 +207,6 @@ public class CorsConfig implements WebMvcConfigurer {
 sequenceDiagram
     participant Client as 客户端
     participant Server as 服务端
-    
     Client->>Server: ① SYN (seq=x)<br/>请求建立连接
     Server->>Client: ② SYN+ACK (seq=y, ack=x+1)<br/>确认请求
     Client->>Server: ③ ACK (ack=y+1)<br/>确认收到
@@ -219,7 +219,6 @@ sequenceDiagram
 sequenceDiagram
     participant Client as 客户端
     participant Server as 服务端
-    
     Client->>Server: ① FIN<br/>请求关闭连接
     Server->>Client: ② ACK<br/>确认收到
     Server->>Client: ③ FIN<br/>准备关闭
@@ -249,12 +248,11 @@ sequenceDiagram
 #### TCP参数优化（提升后端通信性能）
 
 ```yaml
-# Spring Boot配置
 server:
   tomcat:
-    connection-timeout: 3000ms    # TCP连接超时
-    max-connections: 10000        # 最大TCP连接数
-    accept-count: 1000            # 等待队列大小
+    connection-timeout: 3000ms
+    max-connections: 10000
+    accept-count: 1000
 ```
 
 **系统级TCP参数优化（Linux `/etc/sysctl.conf`）：**
@@ -262,7 +260,7 @@ server:
 ```bash
 # 开启TCP端口复用（解决TIME_WAIT过多）
 net.ipv4.tcp_tw_reuse = 1
-net.ipv4.tcp_tw_recycle = 0      # 不建议开启（NAT环境有问题）
+net.ipv4.tcp_tw_recycle = 0
 
 # 增大滑动窗口（提升大文件传输效率）
 net.ipv4.tcp_window_scaling = 1
@@ -277,18 +275,17 @@ net.ipv4.tcp_fin_timeout = 30
 #### 连接池配置（复用TCP连接）
 
 ```java
-// Apache HttpClient连接池配置
 @Bean
 public HttpClient httpClient() {
     PoolingHttpClientConnectionManager cm = new PoolingHttpClientConnectionManager();
-    cm.setMaxTotal(200);              // 最大连接数
-    cm.setDefaultMaxPerRoute(50);     // 单路由最大连接数
-    
+    cm.setMaxTotal(200);
+    cm.setDefaultMaxPerRoute(50);
+
     RequestConfig config = RequestConfig.custom()
-            .setConnectTimeout(3000)   // TCP连接超时
-            .setSocketTimeout(5000)    // Socket读取超时
+            .setConnectTimeout(3000)
+            .setSocketTimeout(5000)
             .build();
-    
+
     return HttpClientBuilder.create()
             .setConnectionManager(cm)
             .setDefaultRequestConfig(config)
@@ -298,29 +295,21 @@ public HttpClient httpClient() {
 
 #### 基于Java Socket的TCP通信实战
 
-**TCP服务器（模拟后端服务）：**
-
 ```java
 public class TcpServer {
     public static void main(String[] args) throws IOException {
         ServerSocket serverSocket = new ServerSocket(8888);
         System.out.println("TCP服务器启动，监听端口8888...");
-        
         while (true) {
             Socket socket = serverSocket.accept();
-            // 每连接一线程处理
             new Thread(() -> {
                 try (BufferedReader br = new BufferedReader(
                         new InputStreamReader(socket.getInputStream()));
                      PrintWriter pw = new PrintWriter(socket.getOutputStream(), true)) {
-                    
                     String request = br.readLine();
                     System.out.println("收到请求：" + request);
-                    
-                    // 业务处理
                     String response = "已处理：" + request;
                     pw.println(response);
-                    
                 } catch (IOException e) {
                     e.printStackTrace();
                 } finally {
@@ -332,8 +321,6 @@ public class TcpServer {
 }
 ```
 
-**TCP客户端（模拟其他服务）：**
-
 ```java
 public class TcpClient {
     public static void main(String[] args) throws IOException {
@@ -341,7 +328,6 @@ public class TcpClient {
              PrintWriter pw = new PrintWriter(socket.getOutputStream(), true);
              BufferedReader br = new BufferedReader(
                      new InputStreamReader(socket.getInputStream()))) {
-            
             pw.println("Hello, TCP Server!");
             String response = br.readLine();
             System.out.println("服务端响应：" + response);
@@ -414,32 +400,19 @@ IPv4地址示例：192.168.1.100/24
 | `traceroute` | 追踪路由路径 | `traceroute www.baidu.com` |
 | `netstat` | 查看端口状态 | `netstat -an \| grep 8080` |
 
-#### 分布式部署中的网络配置
-
-**场景1：同子网微服务集群**
-
-```
-子网：192.168.1.0/24
-├── 网关：192.168.1.1
-├── 服务器A：192.168.1.100:8080 (订单服务)
-├── 服务器B：192.168.1.101:8080 (用户服务)
-├── 服务器C：192.168.1.102:8080 (商品服务)
-└── Nacos：192.168.1.50:8848 (注册中心)
-```
-
-**场景2：Nginx负载均衡配置**
+#### Nginx负载均衡配置
 
 ```nginx
 upstream backend_servers {
-    server 192.168.1.100:8080 weight=3;   # 权重3
-    server 192.168.1.101:8080 weight=2;   # 权重2
-    server 192.168.1.102:8080 weight=1;   # 权重1
+    server 192.168.1.100:8080 weight=3;
+    server 192.168.1.101:8080 weight=2;
+    server 192.168.1.102:8080 weight=1;
 }
 
 server {
     listen 80;
     server_name api.example.com;
-    
+
     location / {
         proxy_pass http://backend_servers;
         proxy_set_header Host $host;
@@ -471,7 +444,7 @@ server {
 | 核心协议 | 以太网协议、PPP协议 |
 | 常用设备 | 交换机（同一子网内帧转发） |
 
-**Java后端关联**：几乎无需直接操作，但需了解MTU（最大传输单元）概念——默认1500字节，IP数据报超过MTU时会分片，影响大包传输效率。
+> **Java后端关联**：几乎无需直接操作，但需了解MTU（最大传输单元）概念——默认1500字节，IP数据报超过MTU时会分片，影响大包传输效率。
 
 ### 5.2 物理层
 
@@ -480,7 +453,7 @@ server {
 | 物理介质 | 网线、光纤、无线信号 |
 | 传输速率 | 100Mbps、1000Mbps、10Gbps |
 
-**Java后端关联**：服务器突然无法通信时，排除软件配置后需排查物理层问题（网线松动、交换机故障）。
+> **Java后端关联**：服务器突然无法通信时，排除软件配置后需排查物理层问题（网线松动、交换机故障）。
 
 ---
 
@@ -493,20 +466,16 @@ flowchart TD
     subgraph 前端
         A[HTTP请求]
     end
-    
     subgraph 负载均衡器
         B[接收请求<br/>路由转发]
     end
-    
     subgraph 商品服务
         C[处理商品逻辑]
         D[调用用户服务]
     end
-    
     subgraph 用户服务
         E[返回用户信息]
     end
-    
     A -->|① 应用层: HTTP| B
     B -->|② 网络层: IP路由| C
     C -->|③ RPC/Dubbo| D
@@ -547,19 +516,15 @@ flowchart TD
     A[通信异常] --> B{应用层正常？}
     B -->|否| C[检查协议/接口/跨域]
     C --> D[验证通过]
-    
     B -->|是| E{传输层正常？}
     E -->|否| F[检查端口/TCP参数/连接池]
     F --> D
-    
     E -->|是| G{网络层正常？}
     G -->|否| H[检查IP/路由/防火墙]
     H --> D
-    
     G -->|是| I{物理层正常？}
     I -->|否| J[检查网线/交换机]
     J --> D
-    
     D --> K[问题解决]
 ```
 
@@ -580,3 +545,14 @@ flowchart TD
 | **排查层面** | 掌握ping、telnet、traceroute，从应用层→传输层→网络层逐层排查 |
 | **安全层面** | 生产环境必须HTTPS，配置安全组/防火墙，敏感数据额外加密 |
 | **性能层面** | 减少不必要通信（缓存优化），优化数据格式（protobuf），合理设置TCP参数 |
+
+---
+
+## 📖 相关阅读
+
+- [计算机网络-（理论+实战）](./计算机网络-（理论+实战）.md)
+- [计算机网络-运输层](./计算机网络-运输层.md)
+- [计算机网络-网络层·数据平面](./计算机网络-网络层·数据平面.md)
+- [计算机网络-网络层·控制平面](./计算机网络-网络层·控制平面.md)
+- [计算机网络-总览](./计算机网络-总览.md)
+- [计算机网络系统学习指南](./计算机网络系统学习指南.md)

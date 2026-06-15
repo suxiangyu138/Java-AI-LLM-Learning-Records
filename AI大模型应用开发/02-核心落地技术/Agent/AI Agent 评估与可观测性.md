@@ -1,25 +1,30 @@
-# AI Agent 评估与可观测性（Java 后端 + AI 全栈实战版）
+# AI Agent 评估与可观测性
 
-> **文档定位**：AI Agent 核心技术文档 | 评估体系与监控方案
-> **核心问题**：如何判断 Agent 做得好不好？如何追踪 Agent 的每一步决策？Agent 出错了怎么定位？
+> **核心摘要**：Agent 的非确定性输出使得传统测试方法难以适用，需要建立专门的评估体系和可观测性方案。本文系统讲解 Agent 评估框架（结果评估、过程评估、工具调用评估、效率评估、安全评估）、LLM-as-Judge 方法论、全链路追踪技术和生产监控面板的设计。
 
----
+## 前置阅读
 
-## 一、为什么 Agent 评估这么难
-
-```
-传统软件测试：输入 → 确定输出 → 对比即可 ✅
-Agent 测试：输入 → 中间推理（不可控） → 可能多种正确输出 → 难以机械对比 ❌
-```
-
-**Agent 评估的特殊挑战**：
-- 输出是**非确定性**的（同样问题，每次回答可能不同）
-- 中间过程**不可见**（除非主动记录）
-- "正确"标准**模糊**（答案是"好"还是"合格"）
+- [[AI Agent核心知识点]]
+- [[AI Agent 测试策略]]
 
 ---
 
-## 二、Agent 评估框架
+## 一、Agent 评估的特殊挑战
+
+```
+传统软件测试：输入 → 确定输出 → 对比即可
+Agent 测试：输入 → 中间推理（不可控） → 可能多种正确输出 → 难以机械对比
+```
+
+| 挑战 | 说明 |
+|---|---|
+| **非确定性** | 同样问题，每次回答可能不同 |
+| **过程不可见** | 中间推理步骤默认不记录 |
+| **标准模糊** | "正确"难以精确定义 |
+
+---
+
+## 二、评估框架
 
 ```
 Agent 评估
@@ -40,7 +45,7 @@ Agent 评估
 |---|---|---|
 | **任务完成率** | 是否完成了用户任务 | 人工评分 / LLM-as-Judge |
 | **单次成功率** | 不需要重试就成功 | 成功数 / 总任务数 |
-| **工具选择准确率** | 是否选了正确的工具 | 正确选工具的任务 / 总任务 |
+| **工具选择准确率** | 是否选择了正确的工具 | 正确选工具的任务 / 总任务 |
 | **平均步数** | 完成任务用了多少步 | 总步数 / 总任务 |
 | **平均耗时** | 完成任务用了多长时间 | 总耗时 / 总任务 |
 | **Token 消耗** | 每个任务消耗多少 Token | 总 Token / 总任务 |
@@ -60,7 +65,7 @@ Agent 失败原因分类：
 
 ---
 
-## 四、LLM-as-Judge（用 LLM 评判 Agent）
+## 四、LLM-as-Judge
 
 ### 4.1 原理
 
@@ -103,8 +108,7 @@ eval_dataset = [
         "query": "帮我写一封请假邮件",
         "expected_tools": [],
         "expected_info": ["邮件格式", "请假原因", "日期"],
-        "must_not_contain": [],
-        "max_steps": 1  # 不需要工具，直接生成
+        "max_steps": 1
     }
 ]
 ```
@@ -113,7 +117,7 @@ eval_dataset = [
 
 ## 五、可观测性（Observability）
 
-### 5.1 Traces（链路追踪）
+### 5.1 链路追踪（Traces）
 
 ```
 一次 Agent 调用的完整 Trace：
@@ -132,10 +136,9 @@ Trace ID: trace_abc123
     └── Cost: $0.008
 ```
 
-### 5.2 使用 LangSmith / Phoenix 追踪
+### 5.2 使用 LangSmith 追踪
 
 ```python
-# LangSmith 自动追踪
 from langsmith import traceable
 
 @traceable(run_type="tool", name="get_weather")
@@ -145,10 +148,10 @@ def get_weather(city: str):
 @traceable(run_type="chain", name="react_loop")
 def run_agent(user_query: str):
     # LangSmith 自动记录每次调用
-    ...
+    pass
 ```
 
-### 5.3 自定义 Trace（OpenTelemetry）
+### 5.3 自定义 OpenTelemetry 追踪
 
 ```python
 from opentelemetry import trace
@@ -174,10 +177,9 @@ def execute_tool_with_trace(tool_name: str, args: dict):
 
 ## 六、Agent 调试技术
 
-### 6.1 回放模式（Replay）
+### 6.1 回放模式
 
 ```python
-# 记录每一步的输入输出
 trajectory = [
     {"step": 1, "llm_input": {...}, "llm_output": {...}, "action": "get_weather"},
     {"step": 2, "llm_input": {...}, "llm_output": {...}, "action": "final_answer"}
@@ -195,15 +197,11 @@ for step in trajectory:
 ```python
 def debug_agent(user_query):
     messages = [{"role": "user", "content": user_query}]
-    
     while True:
         response = llm.chat(messages, tools=tools)
-        
-        # 🔴 断点：检查 LLM 输出
         print(f"[DEBUG] Thought: {response.thought}")
         print(f"[DEBUG] Next Action: {response.action}")
         input("按 Enter 继续执行 (输入 'abort' 停止) ...")
-        
         if response.is_final():
             return response
         result = execute(response.action)
@@ -214,7 +212,7 @@ def debug_agent(user_query):
 
 ## 七、生产监控面板
 
-```yaml
+```
 Agent 监控 Dashboard（Grafana / Datadog 指标）：
 
 关键指标：
@@ -236,22 +234,19 @@ Agent 监控 Dashboard（Grafana / Datadog 指标）：
 
 ---
 
-## 八、面试核心要点
+## 核心要点回顾
 
-1. **Agent 评估为什么比传统测试难？** 非确定性输出 + 中间过程不可见 + "正确"标准模糊
-2. **LLM-as-Judge 是什么？** 用更强的 LLM 作为裁判模型自动评估 Agent 输出质量
-3. **可观测性三大支柱？** Traces（链路）、Metrics（指标）、Logs（日志）
-4. **Agent 最常见的失败原因？** 工具选择错误（30%）、参数错误（20%）
-5. **怎么调试 Agent？** 回放轨迹、插入断点、Trace 分析
+- 评估 = LLM-as-Judge + 人工评分 + 基准数据集
+- 核心指标：成功率 + 步数 + 耗时 + Token + 安全
+- 可观测三大支柱：Traces（链路）、Metrics（指标）、Logs（日志）
+- Agent 最常见失败原因：工具选择错误（30%）和参数错误（20%）
+- 调试三法：回放轨迹 + 插入断点 + Trace 分析
 
 ---
 
-## 九、极简总结
+## 参考资料
 
-```
-评估 = LLM-as-Judge + 人工评分 + 基准数据集
-指标 = 成功率 + 步数 + 耗时 + Token + 安全
-可观测 = LangSmith / OpenTelemetry 全链路追踪
-调试 = 回放轨迹 + 断点 + Trace 可视化
-监控 = Dashboard（QPS + 延迟 + 成功率 + 告警）
-```
+1. LangSmith 官方文档. Agent 追踪与评估
+2. OpenTelemetry 官方文档. 分布式链路追踪标准
+3. Grafana 官方文档. 监控面板配置指南
+4. Datadog 官方文档. APM 与日志管理

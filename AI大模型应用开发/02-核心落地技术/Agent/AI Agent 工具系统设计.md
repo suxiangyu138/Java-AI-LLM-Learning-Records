@@ -1,7 +1,11 @@
-# AI Agent 工具系统设计（Java 后端 + AI 全栈实战版）
+# AI Agent 工具系统设计
 
-> **文档定位**：AI Agent 核心技术文档 | 工具系统设计最佳实践
-> **核心问题**：如何设计 Agent 的工具？如何管理工具调用？如何处理错误？
+> **核心摘要**：工具系统是 Agent 与环境交互的桥梁，涵盖工具定义规范、注册中心、执行引擎、错误处理和组合模式。本文从架构设计到代码实现，系统讲解如何构建一套健壮的企业级 Agent 工具系统。
+
+## 前置阅读
+
+- [[AI Agent核心知识点]]
+- [[AI Skill 设计与开发指南]]
 
 ---
 
@@ -49,7 +53,7 @@ class ToolDefinition:
     max_retries: int = 1               # 失败重试次数
 ```
 
-### 2.2 示例：搜索工具
+### 2.2 搜索工具示例
 
 ```python
 search_tool = ToolDefinition(
@@ -75,7 +79,7 @@ search_tool = ToolDefinition(
 )
 ```
 
-### 2.3 危险的写操作工具
+### 2.3 危险操作工具
 
 ```python
 delete_user_tool = ToolDefinition(
@@ -93,7 +97,7 @@ delete_user_tool = ToolDefinition(
         "required": ["user_id", "confirmation"]
     },
     handler=lambda user_id, confirmation: delete_user(user_id),
-    dangerous=True,          # 标记危险
+    dangerous=True,
 )
 ```
 
@@ -105,17 +109,14 @@ delete_user_tool = ToolDefinition(
 class ToolRegistry:
     def __init__(self):
         self._tools: dict[str, ToolDefinition] = {}
-    
+
     def register(self, tool: ToolDefinition):
-        """注册工具"""
         self._tools[tool.name] = tool
-    
+
     def get(self, name: str) -> Optional[ToolDefinition]:
-        """获取工具定义"""
         return self._tools.get(name)
-    
+
     def get_all_schemas(self) -> list[dict]:
-        """生成 LLM 的 tools 参数列表"""
         return [
             {
                 "type": "function",
@@ -127,9 +128,8 @@ class ToolRegistry:
             }
             for t in self._tools.values()
         ]
-    
+
     def get_tools_for_context(self) -> str:
-        """生成人类可读的工具说明（注入 Prompt）"""
         lines = ["可用工具列表："]
         for t in self._tools.values():
             danger_tag = "⚠️ 危险操作 " if t.dangerous else ""
@@ -143,29 +143,28 @@ class ToolRegistry:
 
 ```python
 import asyncio
-import signal
 
 class ToolExecutor:
     def __init__(self, registry: ToolRegistry):
         self.registry = registry
-    
-    async def execute(self, name: str, args: dict, 
+
+    async def execute(self, name: str, args: dict,
                       confirm_callback=None) -> dict:
         tool = self.registry.get(name)
         if not tool:
             return {"error": f"未知工具: {name}"}
-        
+
         # 1. 危险操作确认
         if tool.dangerous and confirm_callback:
             confirmed = await confirm_callback(tool, args)
             if not confirmed:
                 return {"error": "用户取消了该危险操作"}
-        
+
         # 2. 参数校验
         validated = self._validate_args(tool, args)
         if "error" in validated:
             return validated
-        
+
         # 3. 执行（带超时）
         try:
             result = await asyncio.wait_for(
@@ -173,13 +172,11 @@ class ToolExecutor:
                 timeout=tool.timeout
             )
             return {"success": True, "result": result}
-        
         except asyncio.TimeoutError:
             return {"error": f"工具 {name} 执行超时（{tool.timeout}s）"}
-        
         except Exception as e:
             return {"error": f"工具 {name} 执行失败: {str(e)}"}
-    
+
     async def _run_with_retry(self, tool, args):
         last_error = None
         for attempt in range(tool.max_retries + 1):
@@ -188,11 +185,11 @@ class ToolExecutor:
             except Exception as e:
                 last_error = e
                 if attempt < tool.max_retries:
-                    await asyncio.sleep(1)  # 重试前等待
+                    await asyncio.sleep(1)
         raise last_error
-    
+
     def _validate_args(self, tool, args):
-        # JSON Schema 校验
+        import jsonschema
         try:
             jsonschema.validate(args, tool.parameters)
             return {"args": args}
@@ -207,15 +204,15 @@ class ToolExecutor:
 | 原则 | 说明 | 坏例 | 好例 |
 |---|---|---|---|
 | **单一职责** | 一个工具只做一件事 | `do_everything()` | `get_weather(city)` |
-| **好描述** | LLM 靠描述判断何时用 | `查询` | `搜索互联网获取最新信息` |
+| **好描述** | LLM 靠描述判断何时用 | "查询" | "搜索互联网获取最新信息" |
 | **明确参数** | 参数含义清晰、类型严格 | `data: string` | `city: string, limit: int` |
-| **可重试** | 失败可安全重试 | 非幂等写入 | 查询/搜索 |
-| **返回结构化** | 返回 JSON 而非纯文本 | `"找到了 xxx"` | `{"items": [...], "total": 10}` |
+| **可重试** | 失败可安全重试 | 非幂等写入 | 查询 / 搜索 |
+| **返回结构化** | 返回 JSON 而非纯文本 | "找到了 xxx" | `{"items": [...], "total": 10}` |
 
-### 5.1 返回格式最佳实践
+### 返回格式最佳实践
 
 ```python
-# ✅ 结构化返回（LLM 能理解）
+# 结构化返回（LLM 能理解）
 def search_products(query, min_price=None, max_price=None):
     results = db.search(query, min_price, max_price)
     return {
@@ -227,7 +224,7 @@ def search_products(query, min_price=None, max_price=None):
         "query": query
     }
 
-# ❌ 纯文本返回（LLM 难解析）
+# 纯文本返回（LLM 难解析）
 def search_products(query, **kwargs):
     results = db.search(query, **kwargs)
     return f"找到了 {len(results)} 个产品：" + ", ".join(r.name for r in results)
@@ -235,7 +232,7 @@ def search_products(query, **kwargs):
 
 ---
 
-## 六、工具错误处理体系
+## 六、错误处理体系
 
 ```python
 # 标准化错误响应
@@ -252,9 +249,9 @@ def tool_error(code: str, message: str, retryable: bool = False) -> dict:
 # 错误码定义
 class ErrorCode:
     TIMEOUT = "TIMEOUT"         # 超时，可重试
-    RATE_LIMITED = "RATE_LIMIT"  # 限流，等一会可重试
+    RATE_LIMITED = "RATE_LIMIT"  # 限流，稍后可重试
     UNAUTHORIZED = "AUTH"       # 未授权，不可重试
-    INVALID_PARAMS = "INVALID"  # 参数错误，调参数后重试
+    INVALID_PARAMS = "INVALID"  # 参数错误，调参后重试
     INTERNAL = "INTERNAL"       # 内部错误，可能重试
 ```
 
@@ -262,38 +259,28 @@ class ErrorCode:
 
 ## 七、工具组合模式
 
-```
-1. 流水线（Pipeline）：A → B → C
-   get_user_id(email) → get_user_orders(user_id) → format_report(orders)
-
-2. 并行（Parallel）：[A, B, C] 同时执行
-   [get_weather("北京"), get_weather("上海"), get_weather("广州")]
-
-3. 条件（Conditional）：if A → B else → C
-   查库存 → 有货 → 创建订单
-          → 缺货 → 通知补货
-
-4. 回退（Fallback）：A → 失败 → B
-   查 Redis 缓存 → Miss → 查 MySQL
-```
+| 模式 | 说明 | 示例 |
+|---|---|---|
+| **流水线（Pipeline）** | A → B → C 顺序执行 | `get_user_id(email) → get_user_orders(user_id) → format_report(orders)` |
+| **并行（Parallel）** | [A, B, C] 同时执行 | `[get_weather("北京"), get_weather("上海"), get_weather("广州")]` |
+| **条件（Conditional）** | if A → B else → C | 查库存 → 有货则创建订单，缺货则通知补货 |
+| **回退（Fallback）** | A → 失败 → B | 查 Redis 缓存 → Miss → 查 MySQL |
 
 ---
 
-## 八、面试核心要点
+## 核心要点回顾
 
-1. **工具定义包含什么？** name + description + parameters(JSON Schema) + handler
-2. **工具描述为什么重要？** LLM 靠描述判断何时调用这个工具
-3. **危险操作怎么处理？** `dangerous=true` 标记 + 用户确认回调 + 二次确认参数
-4. **工具执行失败怎么办？** 返回结构化错误（code + message + retryable），LLM 根据错误重试或换方案
-5. **为什么返回要结构化？** LLM 解析 JSON 比解析自然语言准确得多
+- Tool 定义要素：name + description + JSON Schema parameters + handler
+- 工具描述至关重要：LLM 靠它判断何时调用该工具
+- 危险操作处理：dangerous=true 标记 + 用户确认回调 + 二次确认参数
+- 错误返回：标准化结构（code + message + retryable），LLM 据此重试或换方案
+- 结构化返回：LLM 解析 JSON 比解析自然语言准确得多
 
 ---
 
-## 九、极简总结
+## 参考资料
 
-```
-Tool = name + description + JSON Schema + handler
-Registry = 工具注册中心，生成 LLM tools 参数
-Executor = 参数校验 + 权限检查 + 超时控制 + 错误处理
-好工具 = 单一职责 + 描述清晰 + 结构化返回 + 幂等可重试
-```
+1. OpenAI 官方文档. Function Calling 与 Tool Use 指南
+2. LangChain 官方文档. 自定义 Tools 开发指南
+3. JSON Schema 官方文档. 参数校验标准规范
+4. Anthropic 官方文档. Tool Use 最佳实践

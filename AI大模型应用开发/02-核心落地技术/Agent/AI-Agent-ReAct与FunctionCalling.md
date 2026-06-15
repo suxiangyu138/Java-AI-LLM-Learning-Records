@@ -1,26 +1,29 @@
-# LangChain Agent：ReAct 模式与 Function Calling
+# AI-Agent-ReAct 与 Function Calling
 
-> **所属阶段**：阶段三 — Agent 智能体开发
-> **前置知识**：Python、LLM API 调用、LangChain 基础
-> **核心目标**：让 AI 自主调用工具、规划任务、迭代解决问题
+> **核心摘要**：ReAct 模式和 Function Calling 是 Agent 实现自主工具调用的两大基础范式。ReAct 通过 Prompt 驱动"思考-行动-观察"循环，Function Calling 通过 API 原生支持结构化工具调用。本文从原理到代码实现详细讲解两种模式，并对比其适用场景。
+
+## 前置阅读
+
+- [[AI Agent核心知识点]]
+- [[AI-Agent-快速吃透]]
 
 ---
 
-## 1. Agent 核心概念
+## 一、Agent 核心概念
 
-### 什么是 Agent
+### 1.1 什么是 Agent
 
-Agent（智能体）是一个能用 LLM 作为"大脑"，自主选择和使用工具来完成任务的系统。
+**Agent（智能体）** 是一个以 LLM 为"大脑"，自主选择和使用工具来完成任务的系统。
 
 ```
 传统 LLM：输入 → 输出（一次调用）
 Agent：任务 → 思考 → 行动 → 观察 → 思考 → 行动 → ... → 完成
 ```
 
-### Agent vs 普通 LLM
+### 1.2 Agent vs 普通 LLM
 
 | 特性 | 普通 LLM | Agent |
-|------|----------|-------|
+|---|---|---|
 | 知识来源 | 训练数据 | 训练数据 + 实时工具 |
 | 行动能力 | 只能输出文本 | 可调用 API、执行代码、搜索 |
 | 推理深度 | 单次推理 | 多步推理循环 |
@@ -28,11 +31,11 @@ Agent：任务 → 思考 → 行动 → 观察 → 思考 → 行动 → ... �
 
 ---
 
-## 2. ReAct 模式（Reasoning + Acting）
+## 二、ReAct 模式（Reasoning + Acting）
 
 ### 2.1 核心思想
 
-ReAct 将**推理**（Reasoning）和**行动**（Acting）交替进行：
+**ReAct** 将推理（Reasoning）和行动（Acting）交替进行，形成循环：
 
 ```
 Thought: 我需要查询今天天气
@@ -54,7 +57,6 @@ from langchain_core.prompts import PromptTemplate
 @tool
 def search_knowledge(query: str) -> str:
     """搜索 Java 技术知识库"""
-    # 实际可接入搜索引擎或向量数据库
     kb = {
         "并发": "使用 synchronized、ReentrantLock、Atomic 类...",
         "集合": "ArrayList 非线程安全，Vector 线程安全..."
@@ -64,7 +66,6 @@ def search_knowledge(query: str) -> str:
 @tool
 def execute_sql(sql: str) -> str:
     """执行 SQL 查询（模拟）"""
-    # 生产环境需安全校验
     return f"[模拟] 执行: {sql}\n结果: 3 rows returned"
 
 @tool
@@ -117,11 +118,11 @@ print(result["output"])
 
 ---
 
-## 3. Function Calling（函数调用）
+## 三、Function Calling（函数调用）
 
 ### 3.1 原理
 
-Function Calling 是 LLM 原生支持的标准化工具调用协议，比 ReAct Prompt 更稳定。
+**Function Calling** 是 LLM 原生支持的标准化工具调用协议，比 ReAct Prompt 更稳定。LLM 返回结构化 JSON 参数，框架负责执行工具调用。
 
 ```python
 from openai import OpenAI
@@ -155,40 +156,30 @@ tools = [{
 # 2. 对话循环：LLM 决定何时调用工具
 def run_agent(user_input):
     messages = [{"role": "user", "content": user_input}]
-
-    for _ in range(5):  # 最多 5 轮
+    for _ in range(5):
         response = client.chat.completions.create(
             model="deepseek-chat",
             messages=messages,
             tools=tools
         )
-
         msg = response.choices[0].message
-
-        # 如果 LLM 要调用工具
         if msg.tool_calls:
             messages.append(msg)
             for tool_call in msg.tool_calls:
                 func_name = tool_call.function.name
                 args = json.loads(tool_call.function.arguments)
-
-                # 执行工具
                 result = execute_tool(func_name, args)
-
-                # 将结果反馈给 LLM
                 messages.append({
                     "role": "tool",
                     "tool_call_id": tool_call.id,
                     "content": result
                 })
         else:
-            # 最终回复
             return msg.content
-
     return "达到最大轮次，任务未完成"
 ```
 
-### 3.2 LangChain Tool 定义
+### 3.2 LangChain Tool 定义方式
 
 ```python
 from langchain_core.tools import tool
@@ -198,7 +189,6 @@ from pydantic import BaseModel, Field
 @tool
 def search_stackoverflow(query: str) -> str:
     """搜索 StackOverflow 解决技术问题"""
-    # 接入搜索 API
     return f"搜索结果: {query} 的解决方案..."
 
 # 方式二：结构化输入
@@ -217,7 +207,6 @@ from langchain_core.tools import BaseTool
 class LogAnalyzer(BaseTool):
     name = "LogAnalyzer"
     description = "分析服务器日志，提取异常信息"
-
     def _run(self, log_content: str) -> str:
         import re
         errors = re.findall(r'ERROR.*', log_content)
@@ -226,7 +215,7 @@ class LogAnalyzer(BaseTool):
 
 ---
 
-## 4. Agent 类型选择
+## 四、Agent 类型选择
 
 ```python
 from langchain.agents import create_openai_functions_agent
@@ -244,7 +233,7 @@ agent = create_structured_chat_agent(llm, tools, prompt)
 
 ---
 
-## 5. 实战：最简单的 Agent
+## 五、完整实战示例
 
 ```python
 from langchain.agents import AgentExecutor, create_openai_functions_agent
@@ -284,11 +273,29 @@ executor.invoke({"input": "现在几点了？然后算一下(100+200)*3"})
 
 ---
 
-## 6. 安全与限制
+## 六、安全与限制
 
-| 关注点 | 实践 |
-|--------|------|
+| 关注点 | 实践建议 |
+|---|---|
 | 工具权限 | 敏感操作（删库、执行命令）需人工确认 |
 | 成本控制 | 设置 max_iterations 防止无限循环 |
 | 输入校验 | 工具内部校验参数，防止注入 |
-| 日志追踪 | 记录每一步 Thought/Action/Observation |
+| 日志追踪 | 记录每一步 Thought / Action / Observation |
+
+---
+
+## 核心要点回顾
+
+- ReAct 模式通过 Prompt 驱动 Thought → Action → Observation 循环，适合需要自由推理的多步任务
+- Function Calling 是 LLM 原生支持的标准化工具调用协议，结构化输出更可靠
+- LangChain 提供多种 Agent 创建方式：Function Calling Agent、ReAct Agent、Structured Chat Agent
+- 工具定义有三种方式：装饰器、结构化输入模型、自定义工具类
+- 生产环境需关注工具权限、成本控制、输入校验和日志追踪
+
+---
+
+## 参考资料
+
+1. LangChain 官方文档. Agent 模块与工具定义
+2. OpenAI 官方文档. Function Calling 指南
+3. DeepSeek 官方文档. 兼容 OpenAI 的 API 工具调用

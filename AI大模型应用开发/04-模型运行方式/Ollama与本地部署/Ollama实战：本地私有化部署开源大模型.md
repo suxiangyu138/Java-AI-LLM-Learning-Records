@@ -1,14 +1,26 @@
-# Ollama 实战：本地私有化部署开源大模型
+# 🚀 Ollama 实战：本地私有化部署开源大模型
 
-> **所属阶段**：阶段四 — 大模型微调与部署
-> **前置知识**：命令行基础
-> **核心目标**：一键部署本地大模型，实现数据不出域
+> **核心摘要**：Ollama 是最简单的本地大模型部署工具，封装了模型下载、量化、推理、API 服务全流程。本文覆盖安装部署、模型管理、REST API/OpenAI 兼容接口、Modelfile 自定义模型、量化选型与生产环境 Docker Compose 部署。
+
+> **前置阅读**：[[Ollama本地部署与量化模型实战]]、[[Ollama + Java Client 核心知识点]]
 
 ---
 
-## 1. 什么是 Ollama
+## 目录
 
-Ollama 是最简单的本地大模型部署工具，封装了模型下载、量化、推理、API 服务。
+1. [Ollama 是什么](#1-ollama-是什么)
+2. [安装与快速开始](#2-安装与快速开始)
+3. [API 服务](#3-api-服务)
+4. [自定义模型](#4-自定义模型)
+5. [量化格式理解](#5-量化格式理解)
+6. [生产环境部署](#6-生产环境部署)
+7. [选型决策](#7-选型决策)
+
+---
+
+## 1. Ollama 是什么
+
+**Ollama** 是最简单的本地大模型部署工具，封装了模型下载、量化、推理、API 服务的全流程。
 
 ```
 一行命令启动一个本地大模型：
@@ -17,6 +29,14 @@ ollama run qwen2.5:7b
 等价于手动完成：
 下载模型 → 量化加载 → 启动推理 → 暴露 API 接口
 ```
+
+### 核心优势
+
+- **一键部署**：无需手动处理模型文件和环境配置
+- **数据安全**：所有推理在本地完成，数据不出域
+- **OpenAI 兼容**：提供 `/v1` 兼容接口，方便代码切换
+- **量化支持**：内置 GGUF 量化格式，降低硬件门槛
+- **Java 生态**：通过 HTTP API 可被任何语言调用
 
 ---
 
@@ -40,7 +60,7 @@ docker run -d -v ollama:/root/.ollama -p 11434:11434 \
 
 ```bash
 # 拉取模型
-ollama pull qwen2.5:7b          # 通义千问 7B (推荐中文)
+ollama pull qwen2.5:7b          # 通义千问 7B（推荐中文）
 ollama pull qwen2.5:1.5b        # 轻量版
 ollama pull llama3.2:3b         # Meta Llama
 ollama pull deepseek-r1:8b      # DeepSeek 推理模型
@@ -58,12 +78,8 @@ ollama list
 # 设置上下文窗口（默认 2048）
 ollama run qwen2.5:7b
 >>> /set parameter num_ctx 4096
-
-# 设置温度
 >>> /set parameter temperature 0.7
-
-# 查看当前参数
->>> /set parameter
+>>> /set parameter  # 查看当前参数
 ```
 
 ---
@@ -124,7 +140,7 @@ vector = resp.json()["embedding"]
 print(f"向量维度: {len(vector)}")
 ```
 
-### 3.4 用 OpenAI SDK 调用
+### 3.4 OpenAI SDK 调用
 
 ```python
 from openai import OpenAI
@@ -140,13 +156,15 @@ response = client.chat.completions.create(
 )
 ```
 
+> **重点**：Ollama 的 OpenAI 兼容模式使得同一套代码可在本地模型和云端 API 之间无缝切换，只需修改 `base_url` 即可。
+
 ---
 
 ## 4. 自定义模型
 
 ### 4.1 Modelfile
 
-```bash
+```dockerfile
 # Modelfile
 FROM qwen2.5:7b
 
@@ -193,17 +211,17 @@ TEMPLATE """<|im_start|>system
 
 ## 5. 量化格式理解
 
-| 格式 | 精度 | 显存 (7B) | 质量损失 | 适用场景 |
-|------|------|-----------|----------|----------|
+| 格式 | 精度 | 显存（7B） | 质量损失 | 适用场景 |
+|---|---|---|---|---|
 | FP16 | 16-bit | ~14 GB | 无 | 服务器部署 |
 | Q8_0 | 8-bit | ~7 GB | 极小 | 高性能本地推理 |
-| Q4_K_M | 4-bit | ~4 GB | 小 | 消费级 GPU / Mac |
+| **Q4_K_M** | **4-bit** | **~4 GB** | **小** | **消费级 GPU / Mac** |
 | Q2_K | 2-bit | ~2.5 GB | 中等 | CPU 推理 / 低配设备 |
 | GGUF | 可调 | 可变 | — | Ollama 默认格式 |
 
 ```bash
 # 拉取指定量化版本
-ollama pull qwen2.5:7b-q4_K_M   # 4-bit 量化
+ollama pull qwen2.5:7b-q4_K_M   # 4-bit 量化（推荐）
 ollama pull qwen2.5:7b-q8_0     # 8-bit 量化
 ```
 
@@ -211,7 +229,7 @@ ollama pull qwen2.5:7b-q8_0     # 8-bit 量化
 
 ## 6. 生产环境部署
 
-### 6.1 Docker Compose
+### 6.1 Docker Compose（含 Open WebUI）
 
 ```yaml
 # docker-compose.yml
@@ -257,10 +275,12 @@ export OLLAMA_NUM_PARALLEL=4
 # 设置最大加载模型数
 export OLLAMA_MAX_LOADED_MODELS=2
 
-# GPU 层数（控制 GPU 卸载量）
+# GPU 层数控制
 ollama run qwen2.5:7b
->>> /set parameter num_gpu 32  # 层数越大，GPU 利用率越高
+>>> /set parameter num_gpu 32
 ```
+
+> **注意**：生产环境建议使用 Docker Compose 部署并开启 GPU 加速，配合 Open WebUI 提供可视化交互界面。
 
 ---
 
@@ -274,3 +294,20 @@ ollama run qwen2.5:7b
 │   └── 纯 CPU → Qwen2.5:1.5b
 └── 否 → 使用 DeepSeek API（成本低，效果好）
 ```
+
+---
+
+## 核心要点回顾
+
+- Ollama 一行命令即可部署本地大模型，内置模型下载、量化、推理、API 全流程
+- 提供 REST API 和 OpenAI 兼容接口，支持对话、流式输出、Embedding
+- 量化选型推荐 `Q4_K_M`，7B 模型仅需 ~4GB 显存
+- Modelfile 支持基于基础模型自定义系统提示词和参数
+- Docker Compose + GPU 加速实现生产化部署
+
+## 参考资料
+
+1. Ollama 官方文档：https://ollama.com/docs
+2. Ollama GitHub：https://github.com/ollama/ollama
+3. Open WebUI：https://github.com/open-webui/open-webui
+4. Ollama API 文档：https://github.com/ollama/ollama/blob/main/docs/api.md

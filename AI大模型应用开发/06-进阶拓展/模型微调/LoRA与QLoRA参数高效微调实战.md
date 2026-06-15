@@ -1,24 +1,22 @@
 # LoRA 与 QLoRA 参数高效微调实战
 
-> **核心认知**：全量微调 7B 模型需要 ~56GB 显存（一般人跑不起），LoRA 只需要 ~12GB，QLoRA 更只需 ~6GB——让个人开发者也能微调大模型。
-> **前置阅读**：`大模型参数高效微调（PEFT）核心知识点.md`
+> **核心摘要**：全量微调 7B 模型需要 ~56GB 显存（一般人跑不起），LoRA 只需要 ~12GB，QLoRA 更只需 ~6GB——让个人开发者也能微调大模型。本文从零开始带你完成 LoRA/QLoRA 微调的完整流程。
+
+> 前置阅读：[[大模型参数高效微调（PEFT）核心知识点]]
 
 ---
 
-## 1. 为什么你需要 PEFT（参数高效微调）？
+## 一、为什么你需要 PEFT？
 
-```
-                    全量微调                    LoRA/QLoRA
-显存需求（7B模型）     ~56 GB                    ~6-12 GB
-训练速度              慢                        快（可训练参数减少 99.5%）
-灾难性遗忘            高（容易忘记预训练知识）     低（原始权重冻结）
-可合并/切换           需保存完整模型              adapter 只有几十 MB
-适用人群              GPU 集群用户               个人开发者
-```
+| 对比维度 | 全量微调 | LoRA/QLoRA |
+|---------|---------|------------|
+| 显存需求（7B 模型） | ~56 GB | ~6-12 GB |
+| 训练速度 | 慢 | 快（可训练参数减少 99.5%） |
+| 灾难性遗忘 | 高（容易忘记预训练知识） | 低（原始权重冻结） |
+| 可合并/切换 | 需保存完整模型 | adapter 只有几十 MB |
+| 适用人群 | GPU 集群用户 | 个人开发者 |
 
----
-
-## 2. LoRA 原理速通
+## 二、LoRA 原理速通
 
 ### 2.1 一句话理解
 
@@ -35,13 +33,11 @@ LoRA 在原始权重旁加一条"旁路"（两个小矩阵 A × B），只训练
 | 参数 | 含义 | 推荐值 |
 |------|------|--------|
 | `r` (rank) | 低秩矩阵的秩，越大表达能力越强 | 8-64（一般 8 或 16） |
-| `lora_alpha` | 缩放系数 | 通常 = r 或 2×r |
+| `lora_alpha` | 缩放系数 | 通常 = r 或 2r |
 | `target_modules` | 在哪些层插入 LoRA | Qwen 用 `["q_proj", "v_proj"]` |
 | `lora_dropout` | Dropout 比例 | 0.05-0.1 |
 
----
-
-## 3. LoRA 微调实战
+## 三、LoRA 微调实战
 
 ### 3.1 环境准备
 
@@ -53,9 +49,6 @@ pip install torch  # 建议用 conda 安装 CUDA 版本
 ### 3.2 数据集准备
 
 ```python
-# 准备 Java 代码审查数据
-# 格式：instruction-input-output 三元组
-
 code_review_data = [
     {
         "instruction": "审查以下 Java 代码，找出潜在问题",
@@ -69,20 +62,14 @@ public void transfer(Account from, Account to, BigDecimal amount) {
 问题1：缺少事务管理，如果第二步失败会导致资金丢失
 问题2：from.getBalance() 可能返回 null，需做空值判断
 问题3：应使用 compareTo 而非 subtract 来判断余额是否足够
-修复建议：添加 @Transactional 注解，使用 Optional 处理 null，
-在扣款前检查余额是否充足。
+修复建议：添加 @Transactional 注解，使用 Optional 处理 null，在扣款前检查余额是否充足。
 """
     },
-    # ... 更多数据
 ]
 
-# 转换为 HuggingFace Dataset
 from datasets import Dataset
-
 dataset = Dataset.from_list(code_review_data)
 dataset = dataset.train_test_split(test_size=0.1)
-
-# 查看数据
 print(dataset["train"][0])
 ```
 
@@ -90,51 +77,33 @@ print(dataset["train"][0])
 
 ```python
 import torch
-from transformers import (
-    AutoTokenizer,
-    AutoModelForCausalLM,
-    TrainingArguments,
-    Trainer,
-    DataCollatorForSeq2Seq,
-)
+from transformers import AutoTokenizer, AutoModelForCausalLM, TrainingArguments, Trainer, DataCollatorForSeq2Seq
 from peft import LoraConfig, get_peft_model, TaskType
-
 
 def train_lora():
     # ========== 1. 加载模型 ==========
     model_name = "Qwen/Qwen2-7B-Instruct"  # 可换成 Qwen2-1.5B 先练手
-    tokenizer = AutoTokenizer.from_pretrained(
-        model_name,
-        trust_remote_code=True,
-        padding_side="right"
-    )
+    tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True, padding_side="right")
     if tokenizer.pad_token is None:
         tokenizer.pad_token = tokenizer.eos_token
 
     model = AutoModelForCausalLM.from_pretrained(
-        model_name,
-        torch_dtype=torch.float16,      # 半精度节省显存
-        device_map="auto",               # 自动分配 GPU
-        trust_remote_code=True
+        model_name, torch_dtype=torch.float16, device_map="auto", trust_remote_code=True
     )
 
     # ========== 2. 配置 LoRA ==========
     lora_config = LoraConfig(
         task_type=TaskType.CAUSAL_LM,
-        r=8,                              # 秩
-        lora_alpha=16,                    # 缩放系数
-        lora_dropout=0.05,
-        target_modules=["q_proj", "k_proj", "v_proj", "o_proj"],  # Qwen 的注意力层
+        r=8, lora_alpha=16, lora_dropout=0.05,
+        target_modules=["q_proj", "k_proj", "v_proj", "o_proj"],
         bias="none",
     )
-
     model = get_peft_model(model, lora_config)
     model.print_trainable_parameters()
     # 输出：trainable params: 4,194,304 || all params: 7,073,013,760 || trainable%: 0.0593
 
     # ========== 3. 数据预处理 ==========
     def format_prompt(example):
-        """将数据格式化为 Qwen 的 ChatML 格式"""
         return {
             "text": f"""<|im_start|>system
 你是一个Java代码审查专家。<|im_end|>
@@ -149,12 +118,7 @@ def train_lora():
         }
 
     def tokenize(example):
-        result = tokenizer(
-            example["text"],
-            truncation=True,
-            max_length=1024,
-            padding=False
-        )
+        result = tokenizer(example["text"], truncation=True, max_length=1024, padding=False)
         result["labels"] = result["input_ids"].copy()
         return result
 
@@ -165,9 +129,9 @@ def train_lora():
     training_args = TrainingArguments(
         output_dir="./lora-code-reviewer",
         num_train_epochs=3,
-        per_device_train_batch_size=4,     # 根据显存调整
+        per_device_train_batch_size=4,
         per_device_eval_batch_size=4,
-        gradient_accumulation_steps=4,      # 等效 batch_size = 4 × 4 = 16
+        gradient_accumulation_steps=4,
         learning_rate=2e-4,
         warmup_ratio=0.1,
         logging_steps=10,
@@ -176,19 +140,16 @@ def train_lora():
         save_strategy="steps",
         save_steps=50,
         load_best_model_at_end=True,
-        fp16=True,                          # 混合精度训练
+        fp16=True,
         report_to="none",
     )
 
     # ========== 5. 开始训练 ==========
     trainer = Trainer(
-        model=model,
-        args=training_args,
-        train_dataset=train_dataset,
-        eval_dataset=eval_dataset,
+        model=model, args=training_args,
+        train_dataset=train_dataset, eval_dataset=eval_dataset,
         data_collator=DataCollatorForSeq2Seq(tokenizer, padding=True),
     )
-
     trainer.train()
 
     # ========== 6. 保存 adapter ==========
@@ -202,15 +163,11 @@ def train_lora():
 ```python
 from peft import PeftModel
 
-# 加载基础模型 + LoRA adapter
 base_model = AutoModelForCausalLM.from_pretrained(
-    "Qwen/Qwen2-7B-Instruct",
-    torch_dtype=torch.float16,
-    device_map="auto"
+    "Qwen/Qwen2-7B-Instruct", torch_dtype=torch.float16, device_map="auto"
 )
 model = PeftModel.from_pretrained(base_model, "./lora-adapter-code-reviewer")
 
-# 推理
 prompt = """<|im_start|>system
 你是一个Java代码审查专家。<|im_end|>
 <|im_start|>user
@@ -220,7 +177,6 @@ String sql = "SELECT * FROM users WHERE id = " + userId;
 ```<|im_end|>
 <|im_start|>assistant
 """
-
 inputs = tokenizer(prompt, return_tensors="pt").to("cuda")
 outputs = model.generate(**inputs, max_new_tokens=256, temperature=0.7)
 print(tokenizer.decode(outputs[0], skip_special_tokens=True))
@@ -229,14 +185,11 @@ print(tokenizer.decode(outputs[0], skip_special_tokens=True))
 ### 3.5 合并 Adapter 到基础模型（可选）
 
 ```python
-# 合并后可以像普通模型一样用，推理更快
 merged_model = model.merge_and_unload()
 merged_model.save_pretrained("./merged-code-reviewer")
 ```
 
----
-
-## 4. QLoRA —— 更低显存的方案
+## 四、QLoRA —— 更低显存的方案
 
 ### 4.1 原理
 
@@ -247,12 +200,11 @@ QLoRA = LoRA + 4-bit 量化，将原始权重压缩到 4-bit，释放大量显�
 ```python
 from transformers import BitsAndBytesConfig
 
-# 4-bit 量化配置
 bnb_config = BitsAndBytesConfig(
     load_in_4bit=True,
-    bnb_4bit_quant_type="nf4",           # 量化类型（nf4 效果最好）
-    bnb_4bit_compute_dtype=torch.float16,  # 计算精度
-    bnb_4bit_use_double_quant=True,       # 双重量化（再省 0.4 bit）
+    bnb_4bit_quant_type="nf4",
+    bnb_4bit_compute_dtype=torch.float16,
+    bnb_4bit_use_double_quant=True,
 )
 
 model = AutoModelForCausalLM.from_pretrained(
@@ -262,13 +214,13 @@ model = AutoModelForCausalLM.from_pretrained(
     trust_remote_code=True
 )
 
-# 其余代码和 LoRA 完全一样！
+# 其余代码和 LoRA 完全一样
 lora_config = LoraConfig(r=8, lora_alpha=16, ...)
 model = get_peft_model(model, lora_config)
-# ... Trainer 训练 ...
 ```
 
 **显存对比**：
+
 | 方案 | Qwen2-7B 显存 |
 |------|---------------|
 | 全量微调 | ~56 GB |
@@ -276,34 +228,20 @@ model = get_peft_model(model, lora_config)
 | QLoRA (4bit) | ~6 GB |
 | QLoRA (4bit + 1.5B 模型) | ~3 GB |
 
----
-
-## 5. 实战技巧
+## 五、实战技巧
 
 ### 5.1 数据质量优先于数据量
 
-```
-原则：200 条高质量数据 > 2000 条低质量数据
-
-高质量数据特征：
-- 格式统一（都用 ChatML / ShareGPT 格式）
-- 指令明确（任务描述清楚）
-- 输出质量高（人工审核过的标准答案）
-- 覆盖边缘情况（不仅正常流，还有异常/错误情况）
-```
+> **重点**：200 条高质量数据 > 2000 条低质量数据。高质量数据特征：格式统一（都用 ChatML 格式）、指令明确、输出质量高（人工审核过的标准答案）、覆盖边缘情况。
 
 ### 5.2 训练过程监控
 
 ```python
-# 用 TensorBoard 监控
 training_args = TrainingArguments(
-    ...
     report_to="tensorboard",
     logging_dir="./logs",
 )
-
 # 启动：tensorboard --logdir ./logs
-# 关注指标：loss 下降趋势、eval_loss 是否反弹（过拟合）
 ```
 
 ### 5.3 避免常见陷阱
@@ -320,20 +258,14 @@ training_args = TrainingArguments(
 ```bash
 # 1. 先用小模型在 CPU 上跑通流程（验证代码正确）
 model_name = "Qwen/Qwen2-0.5B"  # 0.5B 参数，CPU 也能跑
-
 # 2. 用 100 条数据训练 1 epoch（验证 loss 能下降）
-
 # 3. 确认流程正确后，换 7B 模型 + 完整数据 + GPU 训练
 ```
 
----
-
-## 6. 模型格式转换
+## 六、模型格式转换
 
 ```python
 # HuggingFace 模型 → GGUF（Ollama 格式）
-# 需要 llama.cpp 工具
-# 命令行：
 # python convert_hf_to_gguf.py ./merged-model --outtype q4_k_m --outfile model.gguf
 
 # 创建 Ollama Modelfile
@@ -347,12 +279,17 @@ TEMPLATE \"\"\"<|im_start|>system
 \"\"\"
 SYSTEM \"你是一个Java代码审查专家。\"
 """
-
 # ollama create java-reviewer -f Modelfile
 # ollama run java-reviewer
 ```
 
----
+## 核心要点回顾
+
+- LoRA 在 Attention 层插入低秩矩阵 A×B，训练旁路冻结原权重，参数量仅为 0.1%
+- QLoRA = LoRA + 4-bit 量化，显存需求从 56GB 降至 6GB
+- 数据质量 > 数据数量，格式一致性直接影响训练效果
+- 先用小模型跑通流程，再换大模型正式训练
+- 合并 Adapter 后可导出为 GGUF 格式通过 Ollama 部署
 
 ## 快速调试检查清单
 
@@ -362,3 +299,10 @@ SYSTEM \"你是一个Java代码审查专家。\"
 - [ ] `pad_token` 是否设置？未设置会导致 padding 错误
 - [ ] 显存不够时是否先尝试了 `batch_size=1` + `gradient_accumulation_steps=8`？
 - [ ] 微调后测试过通用对话能力是否退化？
+
+## 参考资料
+
+1. Hugging Face PEFT 文档 - LoRA 与 QLoRA 实现
+2. Hu et al. "LoRA: Low-Rank Adaptation of Large Language Models" - ICLR 2022
+3. Dettmers et al. "QLoRA: Efficient Finetuning of Quantized Language Models" - NeurIPS 2023
+4. Ollama 官方文档 - Modelfile 格式说明
