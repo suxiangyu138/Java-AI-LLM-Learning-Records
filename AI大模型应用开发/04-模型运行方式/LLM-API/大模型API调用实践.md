@@ -1,13 +1,26 @@
-# 大模型 API 调用实践
+# 🚀 大模型 API 调用实践
 
-> **目标**：掌握 OpenAI 兼容 API 的调用方式，支持 DeepSeek / 通义千问 / 智谱 AI 等主流平台
-> **核心技能**：HTTP POST 请求、流式输出、多轮对话、错误处理与重试
+> **核心摘要**：掌握 OpenAI 兼容 API 的标准化调用方式，覆盖 DeepSeek、通义千问、智谱 AI 等主流平台。本文从 HTTP 协议基础到生产级封装（重试、流式输出、Key 安全、Java 后端集成），提供可直接复用的完整代码。
+
+> **前置阅读**：[[快速精通GPT]]、[[快速精通Gemini]]
 
 ---
 
-## 1. OpenAI 兼容 API 协议
+## 目录
 
-主流国产大模型（DeepSeek、通义千问、智谱 GLM、Moonshot）均兼容 OpenAI SDK 的接口格式，意味着你用**同一套代码**可以切换不同模型。
+1. [OpenAI 兼容 API 协议](#一openai-兼容-api-协议)
+2. [OpenAI SDK 调用](#二openai-sdk-调用)
+3. [原生 HTTP 调用](#三原生-http-调用)
+4. [生产级错误处理与重试](#四生产级错误处理与重试)
+5. [API Key 安全管理](#五api-key-安全管理)
+6. [Java 后端集成](#六java-后端集成)
+7. [完整项目骨架](#七完整项目骨架)
+
+---
+
+## 一、OpenAI 兼容 API 协议
+
+主流国产大模型（DeepSeek、通义千问、智谱 GLM、Moonshot）均兼容 OpenAI SDK 的接口格式，**同一套代码可切换不同模型**。
 
 ### 通用消息格式
 
@@ -29,7 +42,7 @@
 ### 各平台 API 地址速查
 
 | 平台 | API Base URL | 模型示例 |
-|------|-------------|----------|
+|---|---|---|
 | DeepSeek | `https://api.deepseek.com/v1` | `deepseek-chat` |
 | 通义千问 | `https://dashscope.aliyuncs.com/compatible-mode/v1` | `qwen-plus` |
 | 智谱 AI | `https://open.bigmodel.cn/api/paas/v4` | `glm-4-flash` |
@@ -38,7 +51,7 @@
 
 ---
 
-## 2. OpenAI SDK 调用（推荐）
+## 二、OpenAI SDK 调用
 
 ### 2.1 安装与配置
 
@@ -141,9 +154,9 @@ def chat_stream(prompt: str) -> str:
 
 ---
 
-## 3. 原生 HTTP 调用（无 SDK 依赖）
+## 三、原生 HTTP 调用
 
-当环境受限（无法安装 openai 包）或需要精细控制时：
+当环境受限（无法安装 `openai` 包）或需要精细控制时，可直接使用 HTTP 请求：
 
 ```python
 import requests
@@ -166,7 +179,7 @@ def call_deepseek_direct(prompt: str, api_key: str) -> str:
         },
         timeout=30
     )
-    response.raise_for_status()  # 非 2xx 抛异常
+    response.raise_for_status()
     data = response.json()
     return data["choices"][0]["message"]["content"]
 
@@ -203,7 +216,7 @@ def call_with_stream_direct(prompt: str, api_key: str):
 
 ---
 
-## 4. 生产环境必备：错误处理与重试
+## 四、生产级错误处理与重试
 
 ```python
 import time
@@ -269,7 +282,7 @@ class LLMService:
                     content = chunk.choices[0].delta.content or ""
                     if content:
                         yield content
-                return  # 成功完成
+                return
 
             except Exception:
                 if attempt == max_retries - 1:
@@ -277,9 +290,11 @@ class LLMService:
                 time.sleep(2 ** attempt)
 ```
 
+> **重点**：重试策略应区分"可重试错误"（超时、限流、5xx）和"不可重试错误"（认证失败、请求格式错误），避免无效重试浪费资源。
+
 ---
 
-## 5. API Key 安全管理
+## 五、API Key 安全管理
 
 ```python
 # ❌ 永远不要把 Key 硬编码在代码里
@@ -306,9 +321,11 @@ client = OpenAI(api_key=api_key, base_url=base_url)
 # echo ".env" >> .gitignore
 ```
 
+> **注意**：对于 Java 后端项目，API Key 应配置在 `application.yml` 或环境变量中，避免提交到版本控制。
+
 ---
 
-## 6. Java 后端调用大模型（Spring Boot 集成）
+## 六、Java 后端集成
 
 ```java
 // RestTemplate 方式
@@ -351,7 +368,7 @@ public class LLMService {
         return (String) ((Map) choice.get("message")).get("content");
     }
 
-    // 流式调用
+    // 流式调用（WebFlux）
     public Flux<String> chatStream(String prompt) {
         WebClient webClient = WebClient.builder()
             .defaultHeader("Authorization", "Bearer " + apiKey)
@@ -369,14 +386,14 @@ public class LLMService {
             .retrieve()
             .bodyToFlux(String.class)
             .filter(line -> line.startsWith("data: ") && !line.contains("[DONE]"))
-            .map(line -> /* 解析 JSON 提取 content */ ...);
+            .map(line -> { /* 解析 JSON 提取 content */ return ""; });
     }
 }
 ```
 
 ---
 
-## 7. 阶段一项目：智能聊天机器人完整骨架
+## 七、完整项目骨架
 
 ```python
 # chatbot.py — 可直接运行的聊天机器人
@@ -434,3 +451,21 @@ if __name__ == "__main__":
 - [ ] 网络是否能访问 API 域名？（国内服务器可能需代理）
 - [ ] `stream=True` 时是否用了 `iter_lines()` 而非 `.json()`？
 - [ ] `.env` 文件是否在 `.gitignore` 中？
+
+---
+
+## 核心要点回顾
+
+- 主流大模型 API 均兼容 OpenAI 协议格式，同一套代码可切换不同模型
+- OpenAI SDK 提供最简洁的调用方式；原生 HTTP 调用适用于受限环境
+- 生产环境必须实现错误分类、指数退避重试和流式输出
+- API Key 应通过环境变量或 .env 文件管理，严禁硬编码
+- Java 后端可通过 RestTemplate / WebClient（流式）集成大模型 API
+
+## 参考资料
+
+1. OpenAI API 文档：https://platform.openai.com/docs/api-reference
+2. DeepSeek API 文档：https://platform.deepseek.com/api-docs
+3. 通义千问 API 文档：https://help.aliyun.com/zh/dashscope/
+4. 智谱 AI API 文档：https://open.bigmodel.cn/dev/api
+5. Spring WebClient 文档：https://docs.spring.io/spring-framework/reference/web/webflux-webclient.html

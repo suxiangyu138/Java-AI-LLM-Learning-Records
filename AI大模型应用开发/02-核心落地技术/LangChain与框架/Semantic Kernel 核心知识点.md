@@ -1,41 +1,36 @@
-# Semantic Kernel (Java) 核心知识点
+# ⛓️ Semantic Kernel (Java) 核心知识点
+
+> **核心摘要**：Semantic Kernel（SK）是微软开源的轻量级 AI 编排框架，Java 版本保持了与 .NET/Python 版本一致的设计理念。核心特点是轻量级、多模态支持和与 Azure AI 服务的深度集成，适合跨语言协同和多模态场景。
+
+**前置阅读**：[[LangChain4j 核心知识点]] | [[Genkit Java 核心知识点]]
+
+---
 
 ## 一、概述
 
-Semantic Kernel（SK）是微软开源的轻量级 AI 编排框架，Java 版本保持了与 .NET/Python 版本一致的设计理念。其核心特点是 **轻量级** 和 **多模态支持**，与 Azure AI 服务深度集成。
-
-**核心定位：** 微软生态的轻量级 AI 编排框架，适合跨语言协同和多模态场景。
-
-**GitHub：** https://github.com/microsoft/semantic-kernel
+**Semantic Kernel（SK）** 是微软开源的轻量级 AI 编排框架。核心定位：微软生态的轻量级 AI 编排框架，适合跨语言协同和多模态场景。
 
 ## 二、核心概念
 
 ### 2.1 架构
 
 ```
-┌──────────────────────────────────────────────┐
-│           Semantic Kernel (Java)             │
-├──────────────────────────────────────────────┤
-│  ┌──────────┬──────────┬──────────────────┐  │
-│  │ Kernel   │ Plugins  │  Planner         │  │
-│  │ (内核)    │ (插件)    │  (规划器)         │  │
-│  └──────────┴──────────┴──────────────────┘  │
-├──────────────────────────────────────────────┤
-│  ┌──────────┬──────────┬──────────────────┐  │
-│  │ Memories │ Connectors│ Functions       │  │
-│  │ (记忆)    │ (连接器)   │ (函数)           │  │
-│  └──────────┴──────────┴──────────────────┘  │
-└──────────────────────────────────────────────┘
+Kernel（内核）
+├── Plugins（插件）
+├── Planner（规划器）
+├── Memories（记忆）
+├── Connectors（连接器）
+└── Functions（函数）
 ```
 
 ### 2.2 核心组件
 
 | 组件 | 说明 |
 |------|------|
-| **Kernel** | 核心调度器，管理所有插件和 AI 服务的注册与调用 |
-| **Plugin** | 可复用的 AI/业务功能单元，可嵌套组合 |
+| **Kernel** | 核心调度器，管理插件和 AI 服务的注册与调用 |
+| **Plugin** | 可复用的 AI/业务功能单元 |
 | **Planner** | 自动编排多个 Plugin 实现复杂目标 |
-| **Function** | Plugin 中的最小执行单元（Semantic Function / Native Function） |
+| **Function** | Plugin 中的最小执行单元（Semantic / Native Function） |
 | **Memory** | 向量化记忆存储，支持语义检索 |
 
 ## 三、快速上手
@@ -58,7 +53,6 @@ Semantic Kernel（SK）是微软开源的轻量级 AI 编排框架，Java 版本
 ### 3.2 基础使用
 
 ```java
-// 构建 Kernel
 Kernel kernel = Kernel.builder()
     .withAIService(ChatCompletion.class,
         OpenAIChatCompletion.builder()
@@ -67,23 +61,14 @@ Kernel kernel = Kernel.builder()
             .build())
     .build();
 
-// 定义 Plugin
 public class TimePlugin {
     @KernelFunction("获取当前日期")
     public String getDate() {
         return LocalDate.now().toString();
     }
-
-    @KernelFunction("获取当前时间")
-    public String getTime() {
-        return LocalTime.now().toString();
-    }
 }
 
-// 注册 Plugin
 kernel.importPluginFromObject(new TimePlugin(), "TimePlugin");
-
-// 执行
 String result = kernel.invokePrompt("现在是 {{TimePlugin.getDate}}，几点了？")
     .getResult();
 ```
@@ -91,13 +76,9 @@ String result = kernel.invokePrompt("现在是 {{TimePlugin.getDate}}，几点�
 ### 3.3 Planner 自动编排
 
 ```java
-// 注册多个插件
 kernel.importPluginFromObject(new FilePlugin(), "FilePlugin");
 kernel.importPluginFromObject(new EmailPlugin(), "EmailPlugin");
-kernel.importPluginFromObject(new TimePlugin(), "TimePlugin");
 
-// Planner 自动规划执行步骤
-// 用户输入："帮我读取上周的会议纪要，用邮件发给团队"
 Planner planner = new SequentialPlanner(kernel);
 Plan plan = planner.createPlanAsync(userRequest);
 String result = plan.invokeAsync(kernel);
@@ -118,32 +99,28 @@ String result = plan.invokeAsync(kernel);
 
 | 连接器 | 用途 |
 |--------|------|
-| **OpenAI** | GPT-4 / GPT-4o |
-| **Azure OpenAI** | Azure 托管的 GPT 服务 |
-| **HuggingFace** | 开源模型 |
-| **Google Gemini** | Google AI 服务 |
-| **Ollama** | 本地开源模型 |
-| **Qdrant / Pinecone / Redis** | 向量存储 |
+| OpenAI | GPT-4 / GPT-4o |
+| Azure OpenAI | Azure 托管的 GPT 服务 |
+| HuggingFace | 开源模型 |
+| Google Gemini | Google AI 服务 |
+| Ollama | 本地开源模型 |
+| Qdrant / Pinecone / Redis | 向量存储 |
 
 ### 4.3 Memory 语义记忆
 
 ```java
-// 创建语义记忆
 var memory = new VolatileMemoryStore();
 var semanticTextMemory = new SemanticTextMemory(memory,
-    OpenAITextEmbedding.builder()
-        .withApiKey(key).build());
+    OpenAITextEmbedding.builder().withApiKey(key).build());
 
-// 保存记忆
 semanticTextMemory.saveInformation("collection1",
     "用户偏好：代码审查要求检查线程安全", "user-pref-01");
 
-// 语义检索
 var results = semanticTextMemory.search("collection1",
     "并发问题检查", 5, 0.7);
 ```
 
-## 五、与其他框架对比
+## 五、框架对比
 
 | 维度 | Semantic Kernel | LangChain4j | Spring AI |
 |------|----------------|-------------|-----------|
@@ -161,6 +138,17 @@ var results = semanticTextMemory.search("collection1",
 - **轻量级集成**：不想引入重框架，只需简单的 LLM 调用编排
 - **多模态应用**：需要文本、代码、图像混合处理的场景
 
-## 七、总结
+---
 
-Semantic Kernel 的差异化优势在于 **微软/Azure 生态原生集成**、**跨语言统一架构** 和 **真正的多模态支持**。对于 Azure 云用户或跨语言团队，SK 提供了最一致的开发体验。
+## 核心要点回顾
+
+- Semantic Kernel 的核心优势：微软/Azure 生态原生集成、跨语言统一架构、多模态支持
+- 四大组件：Kernel（调度器）+ Plugin（功能单元）+ Planner（编排）+ Memory（记忆）
+- 与 LangChain4j 对比：SK 更轻量、多模态更强；LangChain4j Agent 更灵活
+- 最适合：Azure 云用户和跨语言团队
+
+## 参考资料
+
+1. [[LangChain4j 核心知识点]]
+2. [[Genkit Java 核心知识点]]
+3. [[快速吃透 LangChain]]

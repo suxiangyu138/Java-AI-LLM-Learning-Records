@@ -1,8 +1,12 @@
-# AI Agent Java 后端实战（Java 后端 + AI 全栈实战版）
+# AI Agent Java 后端实战
 
-> **文档定位**：AI Agent 核心技术文档 | Java/SpringBoot 集成 Agent 全方案
-> **版本**：SpringBoot 3.x | Spring AI | LangChain4j
-> **核心场景**：用 Java 构建 Agent，调用 LLM，暴露业务工具
+> **核心摘要**：本文系统讲解 Java / SpringBoot 集成 Agent 的三种技术方案——Spring AI（官方推荐）、LangChain4j（社区版 Java LangChain）和 HTTP API 调用，涵盖最简 Agent 实现、Tool 定义、会话管理、数据库接入和 MCP Server 配置。
+
+## 前置阅读
+
+- [[AI Agent核心知识点]]
+- [[AI Agent 工具系统设计]]
+- [[AI Agent 主流框架深度对比]]
 
 ---
 
@@ -66,7 +70,7 @@ public class SimpleAgentController {
                 你是一个智能助手，可以调用以下工具来回答问题。
                 如果不知道答案，调用工具查询，不要编造信息。
                 """)
-            .tools(new WeatherTool(), new SearchTool())   // 注册工具
+            .tools(new WeatherTool(), new SearchTool())
             .user(query)
             .call()
             .content();
@@ -85,8 +89,7 @@ public class WeatherTool {
     @Tool(description = "获取指定城市的天气信息")
     public String getWeather(
         @ToolParam(description = "城市名，如 北京、上海") String city) {
-        
-        // 实际调用天气 API
+
         Map<String, String> weather = Map.of(
             "北京", "25°C，晴，AQI 45",
             "上海", "28°C，阵雨，AQI 85",
@@ -106,7 +109,7 @@ public class OrderTool {
     public List<Order> queryOrders(
         @ToolParam(description = "用户ID") String userId,
         @ToolParam(description = "最近N条") int limit) {
-        
+
         return orderService.getRecentOrders(userId, limit);
     }
 }
@@ -124,22 +127,19 @@ public class StatefulAgentService {
     private final Map<String, List<Message>> sessionStore = new ConcurrentHashMap<>();
 
     public String chat(String sessionId, String userMessage) {
-        // 获取或创建会话历史
         List<Message> history = sessionStore
             .computeIfAbsent(sessionId, k -> new ArrayList<>());
 
-        // 构建完整 Prompt（含历史）
         Prompt prompt = new Prompt(
             userMessage,
-            ChatClient.DEFAULT_SYSTEM_PROMPT,   // System Prompt
-            history,                              // 历史消息
-            List.of(new WeatherTool(), new OrderTool())  // 工具
+            ChatClient.DEFAULT_SYSTEM_PROMPT,
+            history,
+            List.of(new WeatherTool(), new OrderTool())
         );
 
         ChatResponse response = chatClient.call(prompt);
         String answer = response.getResult().getOutput().getContent();
 
-        // 更新会话历史
         history.add(new UserMessage(userMessage));
         history.add(new AssistantMessage(answer));
 
@@ -159,10 +159,7 @@ public class DatabaseTool {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    @Tool(description = """
-        执行 SQL 查询数据库。只支持 SELECT 语句。
-        适用场景：查询用户信息、订单数据、统计数据等。
-        """)
+    @Tool(description = "执行 SQL 查询数据库。只支持 SELECT 语句。")
     public List<Map<String, Object>> queryDatabase(
         @ToolParam(description = "SELECT 查询语句") String sql) {
 
@@ -186,7 +183,7 @@ public class DatabaseTool {
 
 ---
 
-## 六、MCP Server —— 把 Java 微服务暴露为工具
+## 六、MCP Server——将 Java 微服务暴露为工具
 
 ```java
 @Configuration
@@ -202,32 +199,25 @@ public class McpServerConfig {
                 .tools(true)
                 .resources(true)
                 .build())
-
-            // 用户工具
             .tool("get_user_info", "查询用户详情", args -> {
                 String userId = (String) args.get("user_id");
                 return userService.getById(userId);
             })
-
-            // 订单工具
             .tool("query_orders", "查询用户订单", args -> {
                 String userId = (String) args.get("user_id");
                 int page = (int) args.getOrDefault("page", 1);
                 return orderService.queryByUser(userId, page);
             })
-
-            // 报表资源
             .resource("report://monthly/{month}", uri -> {
                 String month = uri.variables().get("month");
                 return new McpResource(reportService.getMonthlyReport(month));
             })
-
             .build();
     }
 }
 ```
 
-Client 端自动发现并调用这些工具（任何支持 MCP 的 Agent 都能用）。
+> **重点**：Client 端可以自动发现并调用这些工具，任何支持 MCP 的 Agent 都能使用。
 
 ---
 
@@ -247,7 +237,6 @@ Client 端自动发现并调用这些工具（任何支持 MCP 的 Agent 都能�
 ```
 
 ```java
-// LangChain4j 风格 Agent
 public class LangChain4jAgent {
 
     public String run(String query) {
@@ -256,17 +245,14 @@ public class LangChain4jAgent {
             .modelName("gpt-4o")
             .build();
 
-        // 定义工具
         Tool weatherTool = Tool.from(
-            "getWeather",
-            "获取指定城市的天气",
+            "getWeather", "获取指定城市的天气",
             (city) -> {
                 String cityStr = (String) city;
                 return "北京今天 25°C，晴天";
             }
         );
 
-        // 构建 Agent
         AiServices<Assistant> aiService = AiServices.builder(Assistant.class)
             .chatLanguageModel(model)
             .tools(weatherTool)
@@ -332,23 +318,20 @@ public class DifyAgentProxy {
 
 ---
 
-## 九、面试核心要点
+## 核心要点回顾
 
-1. **Java 怎么接入 LLM？** Spring AI / LangChain4j / HTTP 直调
-2. **Spring AI 怎么定义 Tool？** `@Tool` + `@ToolParam` 注解
-3. **MCP Server 给 Java 带来什么？** 用标准协议把微服务暴露为 Agent 可用的工具
-4. **多轮对话怎么实现？** 维护会话历史 List<Message>，每次注入 Prompt
-5. **Dify + Java 什么关系？** Dify 做 AI 编排，Java 做业务逻辑 + 通过 HTTP API 调用
+- Java 接入 LLM 的三种方式：Spring AI / LangChain4j / HTTP 直调
+- Spring AI 定义 Tool：使用 `@Tool` + `@ToolParam` 注解
+- MCP Server：用标准协议将微服务暴露为 Agent 可用的工具
+- 多轮对话实现：维护会话历史 `List<Message>`，每次注入 Prompt
+- Dify + Java 分工：Dify 做 AI 编排，Java 做业务逻辑 + 通过 HTTP API 调用
 
 ---
 
-## 十、极简总结
+## 参考资料
 
-```
-Spring AI = 原生 SpringBoot AI 方案，2026 年首选
-LangChain4j = LangChain 的 Java 移植版，社区活跃
-MCP Server = 把 Java 微服务暴露为标准 MCP 工具
-Dify API = Dify 编排 Agent，Java 通过 HTTP 调用
-Simple Agent = ChatClient + @Tool 注解 + 多轮历史
-关键词 = 用 Java 的 Spring 生态来构建/调用 Agent
-```
+1. Spring AI 官方文档. ChatClient 与 Tool 使用指南
+2. LangChain4j 官方文档. Java Agent 开发手册
+3. MCP 协议官方文档. Java Server/Client 实现
+4. Dify 官方文档. API 调用与集成
+5. Spring Boot 官方文档. REST API 开发

@@ -19,26 +19,9 @@ for /f "delims=" %%i in ('git rev-parse --abbrev-ref HEAD') do set BRANCH=%%i
 echo Current branch: !BRANCH!
 echo.
 
-REM Count and remove previous consecutive "daily contribution" commits from HEAD
-echo Checking for previous contribution commits...
-set COUNT=0
-for /f "delims=" %%i in ('git log --oneline -30') do (
-    echo %%i | findstr /c:"daily contribution" >nul
-    if !errorlevel! equ 0 (
-        set /a COUNT+=1
-    ) else (
-        goto :do_reset
-    )
-)
-
-:do_reset
-if !COUNT! gtr 0 (
-    echo Found !COUNT! previous contribution commits, removing...
-    git reset --soft HEAD~!COUNT!
-    echo Done. Changes preserved, old commits removed.
-) else (
-    echo No previous contribution commits found.
-)
+echo Clearing old contributions.txt content...
+echo. > contributions.txt
+echo Done. Old content cleared, generating new commits...
 echo.
 
 echo Generating 10 commits...

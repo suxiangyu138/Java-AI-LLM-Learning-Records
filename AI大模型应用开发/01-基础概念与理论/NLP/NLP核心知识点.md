@@ -1,107 +1,159 @@
-NLP 的核心，可以按「任务」「流程」「关键模型」这三块来记，比按算法罗列更利于你之后做大模型 / RAG 项目。 [blog.csdn](https://blog.csdn.net/weixin_44986037/article/details/130259034)
+# NLP 核心知识点：任务、流程与关键模型
 
-下面我按你 CS 本科+Java/LLM 方向的视角，给一份结构化“知识框架图”。
+> **核心摘要**：NLP（自然语言处理）研究如何让计算机理解和生成人类语言。本文按"任务-流程-关键模型"三条主线组织 NLP 知识体系，覆盖 NLU/NLG 两大核心任务、文本预处理流程、传统与深度学习方法，以及预训练模型时代的关键技术。
 
-***
+> **前置阅读**：[[模式识别与NLP（自然语言处理）详细知识点]]、[[ML-深度学习与机器学习]]
 
-## 1. NLP 是什么 & 两大核心任务
+---
 
-- NLP（Natural Language Processing）研究如何让计算机**理解**和**生成**人类语言，是 CS × AI × 语言学的交叉领域。 [sap](https://www.sap.cn/resources/what-is-natural-language-processing)
-- 几乎所有技术都可归到两大任务：自然语言理解（NLU）和自然语言生成（NLG）。 [easyai](https://easyai.tech/ai-definition/nlp/)
+## 目录
 
-**两大任务：**
+1. [NLP 是什么与两大核心任务](#1-nlp-是什么与两大核心任务)
+2. [核心处理流程](#2-核心处理流程)
+3. [传统 NLP 关键模型与算法](#3-传统-nlp-关键模型与算法)
+4. [深度学习 NLP 到 Transformer/LLM](#4-深度学习-nlp-到-transformerllm)
+5. [典型应用任务一览](#5-典型应用任务一览)
+6. [学习骨架大纲](#6-学习骨架大纲)
+7. [核心要点回顾](#7-核心要点回顾)
+8. [参考资料](#8-参考资料)
 
-- 自然语言理解 NLU：  
-  - 文本分类（垃圾短信、情感分类）  
-  - 情感分析（好评 / 差评、中立）  
-  - 命名实体识别 NER（人名、地名、机构名等）  
-  - 语法分析、依存分析、指代消解、意图识别等。 [cnblogs](https://www.cnblogs.com/auguse/articles/19111241)
-- 自然语言生成 NLG：  
-  - 机器翻译  
-  - 文本摘要、写作辅助  
-  - 对话生成、报告生成等。 [cloud.tencent](https://cloud.tencent.com/developer/article/2023321)
+---
 
-***
+## 1. NLP 是什么与两大核心任务
 
-## 2. 核心处理流程（从原始文本到下游任务）
+**自然语言处理（NLP）** 是计算机科学、人工智能与语言学的交叉领域，研究如何让计算机理解和生成人类语言。几乎所有 NLP 技术都可归到两大任务：
 
-可以记成一条管线：**文本 → 预处理 → 表示（向量）→ 模型 → 任务输出**。 [blog.csdn](https://blog.csdn.net/weixin_44986037/article/details/130259034)
+### 1.1 自然语言理解（NLU）
+
+- **文本分类**：垃圾短信识别、情感分类
+- **情感分析**：好评/差评判断、中立态度识别
+- **命名实体识别（NER）**：识别人名、地名、机构名等
+- **语法分析**：依存分析、指代消解、意图识别
+
+### 1.2 自然语言生成（NLG）
+
+- **机器翻译**：跨语言文本转换
+- **文本摘要**：长文档核心内容提炼
+- **对话生成**：智能客服、聊天机器人
+- **报告生成**：自动化数据解读与报告撰写
+
+---
+
+## 2. 核心处理流程
 
 ### 2.1 文本预处理
 
-- 分词 / Tokenization：英文按空格和符号，中文要用分词器（结巴、HanLP 等）。 [easyai](https://easyai.tech/ai-definition/nlp/)
-- 规范化：小写化、去噪、去停用词、表情处理等。 [blog.csdn](https://blog.csdn.net/weixin_44986037/article/details/130259034)
-- 词形处理：  
-  - Stemming：词干提取，如 running→run。  
-  - Lemmatization：词形还原，结合词性还原标准词形。 [easyai](https://easyai.tech/ai-definition/nlp/)
+原始文本需经预处理才能用于模型训练：
+
+| 步骤 | 操作 | 说明 |
+|------|------|------|
+| **分词** | Tokenization | 英文按空格和符号，中文需用分词器（Jieba、HanLP） |
+| **规范化** | Normalization | 小写化、去噪、去停用词、表情处理 |
+| **词形处理** | Stemming / Lemmatization | 词干提取（running -> run）；词形还原（结合词性还原标准词形） |
 
 ### 2.2 特征表示（从词到向量）
 
-- 传统表示：  
-  - One-hot、Bag-of-Words（BOW）、TF-IDF 向量，用于传统 ML 分类等。 [cloud.tencent](https://cloud.tencent.com/developer/article/2023321)
-- 分布式词向量：  
-  - Word2Vec、GloVe，解决 one-hot 稀疏且不含语义的问题。 [learn.lianglianglee](https://learn.lianglianglee.com/%E4%B8%93%E6%A0%8F/PyTorch%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%AE%9E%E6%88%98/21%20NLP%E5%9F%BA%E7%A1%80%EF%BC%88%E4%B8%8A%EF%BC%89%EF%BC%9A%E8%AF%A6%E8%A7%A3%E8%87%AA%E7%84%B6%E8%AF%AD%E8%A8%80%E5%A4%84%E7%90%86%E5%8E%9F%E7%90%86%E4%B8%8E%E5%B8%B8%E7%94%A8%E7%AE%97%E6%B3%95.md)
-  - 缺点是词向量固定，无法处理多义词语境差异。 [blog.csdn](https://blog.csdn.net/weixin_44986037/article/details/130259034)
-- 语境化表示：  
-  - ELMo、BERT、GPT 系列，用上下文动态生成词/句向量，是现代 NLP 的主流。 [learn.lianglianglee](https://learn.lianglianglee.com/%E4%B8%93%E6%A0%8F/PyTorch%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%AE%9E%E6%88%98/21%20NLP%E5%9F%BA%E7%A1%80%EF%BC%88%E4%B8%8A%EF%BC%89%EF%BC%9A%E8%AF%A6%E8%A7%A3%E8%87%AA%E7%84%B6%E8%AF%AD%E8%A8%80%E5%A4%84%E7%90%86%E5%8E%9F%E7%90%86%E4%B8%8E%E5%B8%B8%E7%94%A8%E7%AE%97%E6%B3%95.md)
+| 阶段 | 方法 | 特点 | 局限 |
+|------|------|------|------|
+| **传统表示** | One-hot、BoW、TF-IDF | 简单直观 | 稀疏且不含语义 |
+| **分布式词向量** | Word2Vec、GloVe | 低维稠密，含语义 | 词向量固定，无法处理多义词 |
+| **语境化表示** | ELMo、BERT、GPT | 动态生成上下文相关向量 | 计算成本较高，但效果最好 |
 
-***
+### 2.3 处理管线
+
+完整的 NLP 处理流程可概括为：
+
+```
+原始文本 → 预处理（分词、清洗）→ 特征表示（向量化）→ 模型处理 → 任务输出
+```
+
+---
 
 ## 3. 传统 NLP 关键模型与算法
 
-在大模型前时代，NLP 主要靠统计与序列模型，现在仍然是打基础、理解 LLM 内部结构的关键。 [learn.lianglianglee](https://learn.lianglianglee.com/%E4%B8%93%E6%A0%8F/PyTorch%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%AE%9E%E6%88%98/21%20NLP%E5%9F%BA%E7%A1%80%EF%BC%88%E4%B8%8A%EF%BC%89%EF%BC%9A%E8%AF%A6%E8%A7%A3%E8%87%AA%E7%84%B6%E8%AF%AD%E8%A8%80%E5%A4%84%E7%90%86%E5%8E%9F%E7%90%86%E4%B8%8E%E5%B8%B8%E7%94%A8%E7%AE%97%E6%B3%95.md)
+### 3.1 语言模型
 
-- 语言模型（LM）：给一个句子 \(w_1,\dots,w_n\) 计算概率 \(P(w_1,\dots,w_n)\)，常用 n-gram+马尔可夫假设来简化。 [easyai](https://easyai.tech/ai-definition/nlp/)
-- 经典序列模型：  
-  - HMM（隐马尔可夫）：做分词、词性标注、简单 NER。 [cloud.tencent](https://cloud.tencent.com/developer/article/2023321)
-  - CRF（条件随机场）：在整个序列上建模标注，广泛用于分词、NER 等结构化预测任务。 [cloud.tencent](https://cloud.tencent.com/developer/article/2023321)
-- 传统机器学习：  
-  - 逻辑回归、SVM、朴素贝叶斯、决策树等，用 TF-IDF / n-gram 特征做文本分类、垃圾邮件检测等。 [blog.csdn](https://blog.csdn.net/weixin_44986037/article/details/130259034)
+统计语言模型计算句子出现的概率，常用 **n-gram + 马尔可夫假设** 简化计算。
 
-***
+### 3.2 经典序列模型
 
-## 4. 深度学习 NLP（到 Transformer / LLM）
+| 模型 | 用途 | 特点 |
+|------|------|------|
+| **HMM（隐马尔可夫）** | 分词、词性标注、简单 NER | 基于状态转移和观测概率 |
+| **CRF（条件随机场）** | 分词、NER 等结构化预测 | 在整个序列上建模标注，效果优于 HMM |
 
-现代 NLP 基本都是深度学习范式，时间线可以粗记为：RNN → LSTM → CNN → Attention/Transformer → 预训练大模型。 [learn.lianglianglee](https://learn.lianglianglee.com/%E4%B8%93%E6%A0%8F/PyTorch%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%AE%9E%E6%88%98/21%20NLP%E5%9F%BA%E7%A1%80%EF%BC%88%E4%B8%8A%EF%BC%89%EF%BC%9A%E8%AF%A6%E8%A7%A3%E8%87%AA%E7%84%B6%E8%AF%AD%E8%A8%80%E5%A4%84%E7%90%86%E5%8E%9F%E7%90%86%E4%B8%8E%E5%B8%B8%E7%94%A8%E7%AE%97%E6%B3%95.md)
+### 3.3 传统机器学习方法
 
-- RNN/LSTM/GRU：解决序列建模，适合短序列翻译、情感分析，但难并行、长依赖问题明显。 [learn.lianglianglee](https://learn.lianglianglee.com/%E4%B8%93%E6%A0%8F/PyTorch%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%AE%9E%E6%88%98/21%20NLP%E5%9F%BA%E7%A1%80%EF%BC%88%E4%B8%8A%EF%BC%89%EF%BC%9A%E8%AF%A6%E8%A7%A3%E8%87%AA%E7%84%B6%E8%AF%AD%E8%A8%80%E5%A4%84%E7%90%86%E5%8E%9F%E7%90%86%E4%B8%8E%E5%B8%B8%E7%94%A8%E7%AE%97%E6%B3%95.md)
-- CNN（TextCNN）：局部 n-gram 卷积+池化做文本分类，训练速度快、效果不错。 [cloud.tencent](https://cloud.tencent.com/developer/article/2023321)
-- Attention 与 Transformer：  
-  - Self-Attention 捕捉序列中任意两位置关系，可并行，是 BERT、GPT 的基础。 [learn.lianglianglee](https://learn.lianglianglee.com/%E4%B8%93%E6%A0%8F/PyTorch%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%AE%9E%E6%88%98/21%20NLP%E5%9F%BA%E7%A1%80%EF%BC%88%E4%B8%8A%EF%BC%89%EF%BC%9A%E8%AF%A6%E8%A7%A3%E8%87%AA%E7%84%B6%E8%AF%AD%E8%A8%80%E5%A4%84%E7%90%86%E5%8E%9F%E7%90%86%E4%B8%8E%E5%B8%B8%E7%94%A8%E7%AE%97%E6%B3%95.md)
-  - Transformer encoder：理解型任务（BERT 及变体）。  
-  - Transformer decoder：生成型任务（GPT 系列）。 [cloud.tencent](https://cloud.tencent.com/developer/article/2023321)
-- 预训练+微调范式：  
-  - 先在海量无标注文本上预训练（语言建模/填空），再在具体任务上微调，显著降低标注数据需求，这是 BERT/GPT 成功的关键之一。 [learn.lianglianglee](https://learn.lianglianglee.com/%E4%B8%93%E6%A0%8F/PyTorch%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%AE%9E%E6%88%98/21%20NLP%E5%9F%BA%E7%A1%80%EF%BC%88%E4%B8%8A%EF%BC%89%EF%BC%9A%E8%AF%A6%E8%A7%A3%E8%87%AA%E7%84%B6%E8%AF%AD%E8%A8%80%E5%A4%84%E7%90%86%E5%8E%9F%E7%90%86%E4%B8%8E%E5%B8%B8%E7%94%A8%E7%AE%97%E6%B3%95.md)
+逻辑回归、SVM、朴素贝叶斯、决策树等算法，配合 TF-IDF 或 n-gram 特征，可用于文本分类和垃圾邮件检测。
 
-***
+---
 
-## 5. 典型应用任务一览（面向工程实践）
+## 4. 深度学习 NLP 到 Transformer/LLM
 
-你做 Java+LLM 应用时，会经常遇到这些任务，它们原本是“单点 NLP 任务”，现在大多被一个通用大模型统一搞定。 [cnblogs](https://www.cnblogs.com/auguse/articles/19111241)
+### 4.1 发展时间线
 
-- 文本分类：垃圾短信识别、舆情情感分析、话题分类等。 [cnblogs](https://www.cnblogs.com/auguse/articles/19111241)
-- 序列标注：  
-  - 分词、词性标注 POS  
-  - 命名实体识别 NER（人名、地名、组织、时间、金额等）。 [cnblogs](https://www.cnblogs.com/auguse/articles/19111241)
-- 句法/依存分析：抽出句子中的主谓宾、修饰关系，支撑信息抽取、问答等。 [cnblogs](https://www.cnblogs.com/auguse/articles/19111241)
-- 信息抽取与知识图谱：从文本中抽实体、关系、事件，构建结构化知识，用于搜索、推荐等。 [cloud.tencent](https://cloud.tencent.com/developer/article/2023321)
-- 机器翻译：从规则→统计→神经→大模型，是 NLP 工程落地的标志性方向。 [easyai](https://easyai.tech/ai-definition/nlp/)
-- 文本摘要 / 改写 / 生成：新闻摘要、产品描述生成、学术摘要等。 [easyai](https://easyai.tech/ai-definition/nlp/)
-- 问答与对话系统：检索式 QA、生成式 QA、任务型对话（如客服）、开放式聊天等。 [cnblogs](https://www.cnblogs.com/auguse/articles/19111241)
+```
+RNN → LSTM/GRU → CNN(TextCNN) → Attention/Transformer → 预训练大模型
+```
 
-***
+### 4.2 各阶段模型特点
 
-## 6. 给你的一份学习“骨架大纲”
+| 模型 | 特点 | 局限 |
+|------|------|------|
+| **RNN/LSTM/GRU** | 序列建模，适合翻译和情感分析 | 难并行，长依赖问题明显 |
+| **CNN（TextCNN）** | 局部 n-gram 卷积+池化，训练快 | 无法捕捉长距离依赖 |
+| **Attention/Transformer** | 自注意力捕捉任意位置关系，可并行 | 计算复杂度高 |
+| **预训练+微调** | 海量文本预训练 + 下游任务微调 | 需要大量算力预训练 |
 
-结合你路线（Java 后端 + 大模型应用 + RAG），建议你按这几块系统化掌握，每块都可以配一个小练手项目：
+### 4.3 Transformer 两大流派
 
-1. **概念与任务图谱**  
-   - 能清楚说出：NLP 是什么，两大核心任务（NLU/NLG），常见子任务有哪些。  
-2. **文本表示方法**  
-   - 从 BOW/TF-IDF → Word2Vec → BERT/GPT 级向量，理解它们的优缺点和适用场景。  
-3. **经典模型和评估指标**  
-   - HMM、CRF、RNN/LSTM、Attention/Transformer 的基本思想，文本分类/序列标注常见指标（accuracy、precision/recall/F1）。  
-4. **预训练模型与微调 / 提示工程**  
-   - BERT/GPT 的基本结构，微调思路；在工程上如何通过 prompt 或 RAG 来“用”而不是“训”。  
-5. **典型工程场景**  
-   - 做一个“文档问答系统”：文本预处理+向量化+检索+LLM 生成，这是你后面 RAG 项目的基石。
+- **Encoder-only（BERT）**：擅长理解类任务（分类、NER、QA）
+- **Decoder-only（GPT）**：擅长生成类任务（文本生成、对话、翻译）
+
+---
+
+## 5. 典型应用任务一览
+
+| 任务类别 | 具体任务 | 说明 |
+|----------|----------|------|
+| **文本分类** | 垃圾短信、舆情分析、话题分类 | 最常见的 NLP 任务 |
+| **序列标注** | 分词、词性标注、命名实体识别 | 信息抽取的基础 |
+| **句法/依存分析** | 主谓宾分析、依存关系抽取 | 支撑语义理解 |
+| **信息抽取** | 实体、关系、事件抽取 | 构建知识图谱 |
+| **机器翻译** | 文本跨语言转换 | NLP 的标志性任务 |
+| **文本生成** | 摘要、改写、创作 | 内容生产自动化 |
+| **问答与对话** | 检索 QA、生成式 QA、任务型对话 | 智能客服核心 |
+
+---
+
+## 6. 学习骨架大纲
+
+结合 Java 后端 + 大模型应用 + RAG 的学习路线，建议按以下模块系统掌握：
+
+1. **概念与任务图谱**：NLP 是什么，两大核心任务（NLU/NLG），常见子任务
+2. **文本表示方法**：从 BoW/TF-IDF -> Word2Vec -> BERT/GPT 级向量，理解优缺点和适用场景
+3. **经典模型和评估指标**：HMM、CRF、RNN/LSTM、Attention/Transformer 的基本思想，Accuracy、Precision/Recall/F1 等指标
+4. **预训练模型与微调/提示工程**：BERT/GPT 的基本结构，微调思路，Prompt 和 RAG 的工程应用
+5. **典型工程场景**：文档问答系统（文本预处理 + 向量化 + 检索 + LLM 生成），这是 RAG 项目的基石
+
+---
+
+## 7. 核心要点回顾
+
+- NLP 的两大核心任务是自然语言理解（NLU）和自然语言生成（NLG）
+- 处理流程为：文本 -> 预处理 -> 特征表示（向量化）-> 模型 -> 任务输出
+- 传统方法以统计模型（HMM、CRF）和机器学习（SVM、朴素贝叶斯）为主
+- 深度学习时代经历了 RNN -> LSTM -> CNN -> Transformer 的演进
+- 预训练+微调范式（BERT、GPT）显著降低了标注数据需求
+- 当前大模型（LLM）可统一处理大多数传统 NLP 任务
+
+---
+
+## 8. 参考资料
+
+1. Jurafsky, Martin.《Speech and Language Processing》. Stanford University
+2. 李航.《统计学习方法》. 清华大学出版社
+3. 宗成庆.《自然语言处理》. 清华大学出版社
+4. BERT 论文：Devlin et al. "BERT: Pre-training of Deep Bidirectional Transformers"
+5. GPT 论文：Radford et al. "Improving Language Understanding by Generative Pre-Training"
+6. Transformer 论文：Vaswani et al. "Attention Is All You Need"

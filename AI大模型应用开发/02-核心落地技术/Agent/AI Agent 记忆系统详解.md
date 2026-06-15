@@ -1,11 +1,15 @@
-# AI Agent 记忆系统详解（Java 后端 + AI 全栈实战版）
+# AI Agent 记忆系统详解
 
-> **文档定位**：AI Agent 核心技术文档 | 记忆系统设计深度解析
-> **核心问题**：Agent 如何记住上下文？如何跨会话持久化？如何动态检索知识？
+> **核心摘要**：Agent 的记忆系统分为工作记忆（单次推理状态）、短期记忆（当前会话上下文）和长期记忆（跨会话持久化）三层。本文深入讲解各层记忆的实现原理、代码示例和混合检索策略，帮助开发者为 Agent 设计高效的记忆管理方案。
+
+## 前置阅读
+
+- [[AI Agent核心知识点]]
+- [[AI-Agent-快速吃透]]
 
 ---
 
-## 一、Agent 记忆分层模型
+## 一、记忆分层模型
 
 ```
 Agent 记忆系统
@@ -29,28 +33,27 @@ Agent 记忆系统
 |---|---|---|---|
 | **存储位置** | LLM 上下文窗口 | 会话缓存（Redis/内存） | 向量库 + 结构化 DB |
 | **生命周期** | 单次推理周期 | 单次会话 | 跨会话持久化 |
-| **容量** | KB~MB 级 | 几十条消息 | GB~TB 级 |
+| **容量** | KB ~ MB 级 | 几十条消息 | GB ~ TB 级 |
 | **检索方式** | 直接注入 Prompt | 滑动窗口取最近 N 条 | 向量相似度检索 |
-| **技术** | Prompt 变量 | 内存/Redis List | Vector DB + RAG |
+| **技术** | Prompt 变量 | 内存 / Redis List | Vector DB + RAG |
 
 ---
 
 ## 三、短期记忆实现
 
-### 3.1 滑动窗口（最简单）
+### 3.1 滑动窗口
 
 ```python
 class ShortTermMemory:
     def __init__(self, max_size: int = 20):
         self.messages = []
         self.max_size = max_size
-    
+
     def add(self, role: str, content: str):
         self.messages.append({"role": role, "content": content})
-        # 超过窗口大小，丢弃最早的
         if len(self.messages) > self.max_size:
             self.messages = self.messages[-self.max_size:]
-    
+
     def get_context(self) -> list:
         return self.messages
 ```
@@ -58,18 +61,16 @@ class ShortTermMemory:
 ### 3.2 摘要压缩
 
 ```
-原始消息（50 条）→ LLM 生成摘要(500 tokens) → 旧消息可丢弃
-
-技巧：
-- 保留最近 N 条原始消息（保证细节）
-- 更早的消息压缩为摘要（节省 Token）
+原始消息（50 条）→ LLM 生成摘要（500 tokens）→ 旧消息可丢弃
 ```
+
+> **技巧**：保留最近 N 条原始消息（保证细节），更早的消息压缩为摘要（节省 Token）。
 
 ```python
 def compress_history(messages, keep_last=10):
     old = messages[:-keep_last]
     recent = messages[-keep_last:]
-    
+
     if old:
         summary_prompt = "请将以下对话历史压缩为 200 字以内的摘要：\n"
         summary_prompt += "\n".join([m["content"] for m in old])
@@ -88,15 +89,15 @@ class TokenAwareMemory:
         self.messages = []
         self.max_tokens = max_tokens
         self.encoder = tiktoken.get_encoding("cl100k_base")
-    
+
     def add(self, role, content):
         self.messages.append({"role": role, "content": content})
         self._trim()
-    
+
     def _trim(self):
         while self._total_tokens() > self.max_tokens:
-            self.messages.pop(0)  # 丢掉最早的
-    
+            self.messages.pop(0)
+
     def _total_tokens(self):
         return sum(len(self.encoder.encode(m["content"])) for m in self.messages)
 ```
@@ -124,12 +125,9 @@ class LongTermMemory:
     def __init__(self, vector_db, embedding_client):
         self.vector_db = vector_db      # Milvus / Pinecone / pgvector
         self.embedder = embedding_client
-    
+
     def store(self, content: str, metadata: dict, memory_type: str):
-        # 1. 生成向量
         vector = self.embedder.embed(content)
-        
-        # 2. 存入向量库
         self.vector_db.insert(
             collection=f"memory_{memory_type}",
             vector=vector,
@@ -139,14 +137,14 @@ class LongTermMemory:
                 **metadata
             }
         )
-    
+
     def store_user_preference(self, user_id: str, preference: str):
         self.store(
             content=preference,
             metadata={"user_id": user_id},
             memory_type="user_profile"
         )
-    
+
     def store_experience(self, task: str, result: str, success: bool):
         self.store(
             content=f"Task: {task}\nResult: {result}",
@@ -160,32 +158,27 @@ class LongTermMemory:
 ```python
 def retrieve(self, query: str, user_id: str = None, top_k: int = 5):
     query_vector = self.embedder.embed(query)
-    
     results = self.vector_db.search(
         collection="memory_user_profile",
         vector=query_vector,
         filter={"user_id": user_id} if user_id else None,
         top_k=top_k
     )
-    
     memories = [r["metadata"]["content"] for r in results]
     return memories
 
-# 注入 Prompt
 def build_prompt_with_memory(user_query, user_id):
     relevant_memories = retrieve(user_query, user_id)
-    
     prompt = "以下是与该用户相关的历史记忆：\n"
     for i, m in enumerate(relevant_memories):
         prompt += f"{i+1}. {m}\n"
     prompt += f"\n用户当前问题：{user_query}\n"
-    
     return prompt
 ```
 
 ---
 
-## 五、记忆混合检索（Hybrid Search）
+## 五、混合检索策略
 
 ```python
 def hybrid_retrieve(query: str, user_id: str, alpha=0.7):
@@ -193,18 +186,16 @@ def hybrid_retrieve(query: str, user_id: str, alpha=0.7):
     alpha=0.7: 70% 语义相关 + 30% 时间衰减
     """
     query_vector = embedder.embed(query)
-    
     results = vector_db.search(query_vector, top_k=20)
-    
+
     scored = []
     for r in results:
-        semantic_score = r["score"]                          # 语义相似度
+        semantic_score = r["score"]
         age_days = (now - r["timestamp"]).days
-        time_score = 1.0 / (1.0 + age_days / 30)             # 时间衰减
-        
+        time_score = 1.0 / (1.0 + age_days / 30)
         final_score = alpha * semantic_score + (1 - alpha) * time_score
         scored.append((r, final_score))
-    
+
     scored.sort(key=lambda x: x[1], reverse=True)
     return [s[0] for s in scored[:5]]
 ```
@@ -223,55 +214,52 @@ def hybrid_retrieve(query: str, user_id: str, alpha=0.7):
 
 ---
 
-## 七、实战模板：Agent Memory 完整类
+## 七、完整 AgentMemory 类
 
 ```python
 class AgentMemory:
     def __init__(self):
-        self.short_term = ShortTermMemory(max_messages=20)    # 会话上下文
-        self.long_term = LongTermMemory()                     # 向量长期存储
-        self.working = {}                                     # 当前任务临时变量
-    
+        self.short_term = ShortTermMemory(max_messages=20)
+        self.long_term = LongTermMemory()
+        self.working = {}
+
     def build_context(self, user_query: str, user_id: str) -> str:
         """构建注入 LLM 的完整上下文"""
         parts = []
-        
+
         # 1. 长期记忆（从向量库检索）
         memories = self.long_term.retrieve(user_query, user_id)
         if memories:
             parts.append("【相关历史信息】\n" + "\n".join(f"- {m}" for m in memories))
-        
+
         # 2. 短期记忆（当前会话）
         dialog = self.short_term.get_context()
         if dialog:
             parts.append("【当前会话】\n" + "\n".join(f"{m['role']}: {m['content']}" for m in dialog))
-        
+
         # 3. 工作记忆（当前任务状态）
         if self.working:
             parts.append("【当前任务状态】\n" + json.dumps(self.working, ensure_ascii=False))
-        
+
         parts.append(f"\n【用户最新消息】\n{user_query}")
         return "\n\n".join(parts)
 ```
 
 ---
 
-## 八、面试核心要点
+## 核心要点回顾
 
-1. **Agent 三层记忆分别是什么？** 工作记忆（推理中）、短期记忆（当前会话）、长期记忆（跨会话）
-2. **短期记忆怎么管理 Token？** 滑动窗口 + 摘要压缩 + Token 计数
-3. **长期记忆怎么检索？** 向量相似度搜索 + 混合检索（语义 + 时间衰减）
-4. **什么时候写长期记忆？** 任务成功时保存经验、用户明示偏好时保存画像
-5. **RAG 和 Agent 记忆什么关系？** RAG 是外部只读知识库，记忆是 Agent 自己积累的经验和用户画像
+- 三层记忆：工作记忆（推理中）、短期记忆（当前会话）、长期记忆（跨会话）
+- 短期记忆管理：滑动窗口 + 摘要压缩 + Token 计数
+- 长期记忆检索：向量相似度搜索 + 混合检索（语义 + 时间衰减）
+- 记忆写入时机：任务成功时保存经验、用户明示偏好时保存画像
+- RAG 是外部只读知识库，记忆是 Agent 自身积累的经验和用户画像
 
 ---
 
-## 九、极简总结
+## 参考资料
 
-```
-短期记忆 = 当前对话的滑动窗口（内存/Redis）
-长期记忆 = 向量库存储（相似度检索）
-工作记忆 = 当前任务临时变量（Prompt 注入）
-管理 = Token 计数 + 摘要压缩 + 时间衰减 + 定期清理
-关键 = Agent 能"记住"用户 + 能从"过去"学习
-```
+1. LangChain 官方文档. Memory 模块使用指南
+2. Pinecone 官方文档. 向量数据库与混合检索
+3. Anthropic 官方文档. 长上下文与记忆管理最佳实践
+4. Milvus 官方文档. 向量检索技术白皮书

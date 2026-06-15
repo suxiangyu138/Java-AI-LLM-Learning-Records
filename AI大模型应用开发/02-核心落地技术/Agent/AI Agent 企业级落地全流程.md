@@ -1,11 +1,17 @@
-# AI Agent 企业级落地全流程（Java 后端 + AI 全栈实战版）
+# AI Agent 企业级落地全流程
 
-> **文档定位**：AI Agent 核心技术文档 | 从原型到生产的全链路指南
-> **核心问题**：Agent 项目怎么推进？生产环境要注意什么？什么场景适合上 Agent？
+> **核心摘要**：将 Agent 从原型推进到生产环境需要经过六个阶段：需求评估、原型验证、架构设计、开发集成、测试评估和上线运维。本文提供完整的落地方法论、架构设计模板、性能基线和持续优化策略。
+
+## 前置阅读
+
+- [[AI Agent核心知识点]]
+- [[快速搭建AI智能体]]
+- [[AI Agent 测试策略]]
+- [[AI Agent 评估与可观测性]]
 
 ---
 
-## 一、Agent 落地六阶段
+## 一、落地六阶段概览
 
 ```
 Phase 1: 需求评估    → 这个场景适合用 Agent 吗？
@@ -40,14 +46,14 @@ Phase 6: 上线运维    → 监控、告警、持续优化
 
 ### 2.2 场景评分表
 
-| 场景 | Agent 适用度 | 建议 |
+| 场景 | 适用度 | 建议 |
 |---|---|---|
-| 智能客服（多系统查询） | ⭐⭐⭐⭐⭐ | 首选 |
-| 自动化测试报告分析 | ⭐⭐⭐⭐ | 很适合 |
-| 代码审查 + 修复建议 | ⭐⭐⭐⭐ | 辅助人工 |
-| 数据分析日报生成 | ⭐⭐⭐⭐ | 自动化 |
-| 审批流程自动化 | ⭐⭐ | 不适合 |
-| 财务对账 | ⭐ | 不适合 |
+| 智能客服（多系统查询） | 非常适用 | 首选场景 |
+| 自动化测试报告分析 | 很适合 | 辅助人工 |
+| 代码审查 + 修复建议 | 很适合 | 提高效率 |
+| 数据分析日报生成 | 很适合 | 自动化 |
+| 审批流程自动化 | 一般 | 不适合 |
+| 财务对账 | 不适用 | 不适合 |
 
 ---
 
@@ -61,21 +67,18 @@ Phase 6: 上线运维    → 监控、告警、持续优化
 2. 配置 LLM（用 DeepSeek/GLM 便宜模型先跑通）
 3. 接入 2-3 个关键工具（HTTP API 连 Java 微服务）
 4. 跑 10-20 个典型场景
-5. 如果通过率 > 70% → 继续
-   如果通过率 < 50% → 重新评估场景
+5. 如果通过率 > 70% → 继续；< 50% → 重新评估场景
 ```
 
 ### 3.2 验证指标
 
 ```python
-# 原型验证阶段的评估
 prototype_metrics = {
     "测试用例数": 20,
-    "完全正确": 8,       # 一步到位
-    "方向对但不完美": 6,  # 需要微调
-    "失败": 6,           # 完全跑偏
-    
-    "通过率": "70%",     # 完全正确 + 方向对
+    "完全正确": 8,
+    "方向对但不完美": 6,
+    "失败": 6,
+    "通过率": "70%",
     "核心问题": [
         "工具描述不够清晰 → LLM 选错工具",
         "参数格式不统一 → 调用失败",
@@ -105,7 +108,6 @@ prototype_metrics = {
 │         Agent 引擎（Engine）              │
 │  ┌─────────┬──────────┬──────────────┐  │
 │  │ Planning│  Memory  │ Tool Executor│  │
-│  │ 规划模块│  记忆模块 │  工具执行器   │  │
 │  └─────────┴──────────┴──────────────┘  │
 └──────────────────┬──────────────────────┘
         ↓           ↓           ↓
@@ -131,7 +133,7 @@ prototype_metrics = {
 ```
 src/main/java/com/company/agent/
 ├── gateway/
-│   └── AgentController.java          # REST API入口
+│   └── AgentController.java          # REST API 入口
 ├── core/
 │   ├── AgentEngine.java              # Agent 主循环
 │   ├── Planner.java                  # 规划模块
@@ -158,7 +160,7 @@ src/main/java/com/company/agent/
 | Agent 单次任务 P95 延迟 | < 15s |
 | 内存占用 | < 1GB |
 | 并发会话数 | > 100 |
-| Token 消耗/任务 | < 3000 |
+| Token 消耗 / 任务 | < 3000 |
 | 工具调用成功率 | > 99% |
 | LLM API 可用性 | > 99.9% |
 
@@ -166,40 +168,24 @@ src/main/java/com/company/agent/
 
 ## 六、Phase 5：测试评估
 
-### 6.1 测试金字塔
-
-```
-              /\
-             /人工\
-            / 评估 \
-           /────────\
-          /  自动化   \
-         /  Eval 集   \
-        /──────────────\
-       /  单元测试(工具)  \
-      /──────────────────\
-```
-
-### 6.2 评估 Dataset 构建
+### 6.1 评估 Dataset 构建
 
 ```python
-# 每条测试用例包含
 test_case = {
     "id": "TC001",
-    "type": "客服查询",            # 场景分类
-    "difficulty": "easy",         # easy / medium / hard
+    "type": "客服查询",
+    "difficulty": "easy",
     "user_query": "我最近三个订单的状态是什么？",
     "user_id": "user_123",
-    "expected_tools": ["query_orders"],      # 期望调用的工具
-    "expected_info": ["订单号", "状态", "时间"], # 期望包含的信息
-    "forbidden_actions": ["delete", "modify"]  # 绝对不能做的事
+    "expected_tools": ["query_orders"],
+    "expected_info": ["订单号", "状态", "时间"],
+    "forbidden_actions": ["delete", "modify"]
 }
 ```
 
-### 6.3 CI/CD 自动评估
+### 6.2 CI/CD 自动评估
 
 ```yaml
-# GitHub Actions
 name: Agent Eval
 on: [push, pull_request]
 
@@ -210,7 +196,7 @@ jobs:
       - run: python eval/run_agent_eval.py
         env:
           EVAL_DATASET: eval/dataset.jsonl
-          PASS_THRESHOLD: 0.80     # < 80% 通过率 CI 失败
+          PASS_THRESHOLD: 0.80
 ```
 
 ---
@@ -251,12 +237,12 @@ alerts:
   - name: 成功率低于 80%
     condition: success_rate < 0.8 for 5m
     level: P1
-    action: 钉钉+电话
+    action: 钉钉 + 电话
 
   - name: 安全违规
     condition: security_violation > 0
     level: P1
-    action: 钉钉+电话+自动暂停 Agent
+    action: 钉钉 + 电话 + 自动暂停 Agent
 
   - name: LLM API 不可用
     condition: llm_error_rate > 0.5 for 1m
@@ -277,32 +263,29 @@ alerts:
 运行 → 收集数据 → 分析 bad case → 改进 → 回归测试 → 上线
 
 改进方向（按优先级）：
-1. 优化工具描述（让 LLM 选对工具） —— 见效最快
+1. 优化工具描述（让 LLM 选对工具）—— 见效最快
 2. 优化 System Prompt（明确边界和规范）
 3. 增加工具（覆盖更多场景）
-4. 切换/微调模型（解决特定的失败模式）
+4. 切换 / 微调模型（解决特定失败模式）
 5. 增加记忆（提升个性化）
 ```
 
 ---
 
-## 九、面试核心要点
+## 核心要点回顾
 
-1. **Agent 落地分几个阶段？** 需求评估 → 原型 → 架构 → 开发 → 测试 → 上线
-2. **什么场景不适合 Agent？** 金融交易、确定性规则流程、简单一问一答
-3. **灰度怎么放？** 5% → 20% → 50% → 100%，每阶段观察指标
-4. **Agent 监控什么？** 请求量、成功率、平均步数、延迟、Token、安全违规
-5. **上线后怎么优化？** 分析 bad case → 改工具描述 → 改 System Prompt → 加工具 → 换模型
+- 落地六步：评估 → 原型 → 设计 → 开发 → 测试 → 上线
+- 原型阶段：Dify 1 天出 MVP，通过率 > 70% 继续推进
+- 生产架构：SpringBoot + MCP + Prometheus + Grafana
+- 灰度策略：5% → 20% → 50% → 100%，观察指标自动回滚
+- 优化优先级：工具描述 > System Prompt > 追加工具 > 换模型
 
 ---
 
-## 十、极简总结
+## 参考资料
 
-```
-落地六步 = 评估 → 原型 → 设计 → 开发 → 测试 → 上线
-原型 = Dify 1 天出 MVP，通过率 > 70% 继续
-生产 = SpringBoot + MCP + Prometheus + Grafana
-测试 = 自动 Eval（LLM-as-Judge）+ 基准数据集 + CI 门禁
-上线 = 灰度 5%→20%→50%→100%，监控异常自动回滚
-优化 = 工具描述 > System Prompt > 追加工具 > 换模型
-```
+1. Dify 官方文档. 生产部署与运维指南
+2. Spring AI 官方文档. 企业级 Agent 开发
+3. MCP 协议官方文档. 工具接入标准
+4. Prometheus 官方文档. 监控与告警配置
+5. Grafana 官方文档. 可视化面板设计

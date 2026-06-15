@@ -1,110 +1,159 @@
-AI Agent 的核心可以抽象成一句话：**“LLM 大脑 + 规划 + 记忆 + 工具 + 行动闭环”**。 [ibm](https://www.ibm.com/cn-zh/think/topics/ai-agents)
+# AI Agent 核心知识点
 
-下面我按「体系化知识点」帮你梳理，适配你 Java 后端 + 大模型应用开发的技术路线。
+> **核心摘要**：AI Agent 的本质是"LLM 大脑 + 规划 + 记忆 + 工具 + 行动闭环"，将大模型的推理能力与外部工具执行能力相结合，形成从感知到决策再到执行的自主循环。本文系统梳理 Agent 的六大核心能力模块、典型技术模式以及从知识到实战的工程落地链路，适合 Java 后端与 AI 全栈开发方向的技术参考。
 
-***
+## 前置阅读
 
-## 1. 概念与整体框架
+- [[AI-Agent-快速吃透]]
+- [[ReAct模式与Function-Calling实战]]
 
-- **AI Agent 定义**：把大模型和一组工具、记忆、规划逻辑组合在一起，让它能感知环境、自主决策并执行任务的智能程序。 [developer.volcengine](https://developer.volcengine.com/articles/7534567993976897574)
-- 与普通 LLM 区别：LLM 只会“聊天 + 生成文本”，Agent 能主动调用 API、读写文件、操作系统、访问业务系统，形成从理解到执行的闭环。 [ibm](https://www.ibm.com/cn-zh/think/topics/ai-agents)
-- 常用抽象公式：  
-  - AI Agent = LLM（大脑） + 规划(Planning) + 记忆(Memory) + 工具使用(Tools) + 行动执行(Action)。 [damodev.csdn](https://damodev.csdn.net/692d0cbe2087ae0db79de14f.html)
+---
 
-***
+## 一、概念与整体框架
 
-## 2. 核心能力模块
+### 1.1 AI Agent 定义
 
-多数文章会把 Agent 拆成 4–6 个核心模块，本质是一致的：感知 → 决策 → 行动 → 学习。 [betteryeah](https://www.betteryeah.com/blog/ai-agent-core-components-architecture-guide)
+**AI Agent（智能体）** 是将大模型与一组工具、记忆、规划逻辑组合在一起，使其能够感知环境、自主决策并执行任务的智能程序。
 
-1. **感知（Perception）**  
-   - 输入形态：文本、语音、图片、传感器/业务数据等。 [cloud.tencent](https://cloud.tencent.com/developer/ask/2186787)
-   - 技术重点：多模态模型、ASR（语音转文本）、OCR、业务系统数据接入等。 [damodev.csdn](https://damodev.csdn.net/692d0cbe2087ae0db79de14f.html)
+### 1.2 与普通 LLM 的区别
 
-2. **决策 / 规划（Reasoning & Planning）**  
-   - LLM 负责理解用户意图、拆解任务、决定调用哪些工具、何时结束。 [juejin](https://juejin.cn/post/7626005571403137078)
-   - 常见模式：  
-     - 任务分解（Task Decomposition）：把复杂目标拆成子任务。 [developer.volcengine](https://developer.volcengine.com/articles/7534567993976897574)
-     - ReAct：Thought → Action → Observation → Final Answer 循环。 [developer.volcengine](https://developer.volcengine.com/articles/7534567993976897574)
+| 维度 | 普通 LLM | AI Agent |
+|---|---|---|
+| 能力范围 | 仅聊天 + 文本生成 | 主动调用 API、读写文件、访问业务系统 |
+| 执行方式 | 单次问答 | 从理解到执行的完整闭环 |
+| 自主性 | 被动回答 | 自主规划与决策 |
 
-3. **工具调用（Tool Use / Function Calling）**  
-   - 通过函数调用、HTTP API、数据库查询等让 Agent 能“改变环境”。 [ibm](https://www.ibm.com/cn-zh/think/topics/ai-agents)
-   - 大模型生成结构化调用参数（比如 JSON），Agent 框架负责真正执行，对接你 Java 的服务、微服务、脚本等。 [juejin](https://juejin.cn/post/7626005571403137078)
+### 1.3 通用公式
 
-4. **记忆系统（Memory）**  
-   - 短期记忆：当前会话上下文、任务状态。 [cloud.tencent](https://cloud.tencent.com/developer/ask/2186787)
-   - 长期记忆：用户画像、历史任务、知识库（向量库/RAG）。 [betteryeah](https://www.betteryeah.com/blog/ai-agent-core-components-architecture-guide)
-   - 作用：跨轮对话、个性化推荐、长任务持续执行。 [betteryeah](https://www.betteryeah.com/blog/ai-agent-core-components-architecture-guide)
+```
+AI Agent = LLM（大脑） + 规划（Planning） + 记忆（Memory） + 工具使用（Tools） + 行动执行（Action）
+```
 
-5. **行动执行（Action / Actuator）**  
-   - 执行外部操作：调用第三方 API、调度工作流、写文件、发邮件、改业务状态等。 [betteryeah](https://www.betteryeah.com/blog/ai-agent-core-components-architecture-guide)
-   - 对于你：就是在 Agent 层统一管理对 Java 微服务的调用和状态追踪。  
+---
 
-6. **学习与自进化（Learning）**  
-   - 通过反馈数据调整策略、更新提示词、更新知识库，或进一步做微调。 [damodev.csdn](https://damodev.csdn.net/692d0cbe2087ae0db79de14f.html)
-   - 企业里多是“软学习”：规则迭代、提示工程更新，而不是频繁全量微调。 [damodev.csdn](https://damodev.csdn.net/692d0cbe2087ae0db79de14f.html)
+## 二、核心能力模块
 
-***
+Agent 的核心流程可抽象为：**感知 → 决策 → 行动 → 学习**，拆分为以下六大模块。
 
-## 3. 大模型在 Agent 中的角色
+### 2.1 感知（Perception）
 
-- 大模型是 Agent 的“核心大脑”，承担**理解 + 推理 +生成**三件事： [juejin](https://juejin.cn/post/7626005571403137078)
-  - 理解：解析用户意图、解析工具返回结果、识别是否完成任务。 [juejin](https://juejin.cn/post/7626005571403137078)
-  - 推理：决定下一步行动、是否继续调用工具、如何调整计划。 [developer.volcengine](https://developer.volcengine.com/articles/7534567993976897574)
-  - 生成：输出自然语言回复，或输出结构化结果（如 JSON 工具参数、步骤列表）。 [juejin](https://juejin.cn/post/7626005571403137078)
-- Agent 其他模块的作用：弥补大模型的局限（时效性、上下文长度、计算能力、执行能力）。 [ibm](https://www.ibm.com/cn-zh/think/topics/ai-agents)
+| 维度 | 说明 |
+|---|---|
+| 输入形态 | 文本、语音、图片、传感器/业务数据等 |
+| 技术重点 | 多模态模型、ASR（语音转文本）、OCR、业务系统数据接入 |
 
-***
+### 2.2 决策与规划（Reasoning & Planning）
 
-## 4. 典型技术模式与协议
+LLM 负责理解用户意图、拆解任务、决定调用哪些工具以及何时结束。常见模式包括：
 
-1. **ReAct/CoT 流程**  
-   - Thought：模型内部思考，确定下一步。 [developer.volcengine](https://developer.volcengine.com/articles/7534567993976897574)
-   - Action：发出工具调用指令。 [developer.volcengine](https://developer.volcengine.com/articles/7534567993976897574)
-   - Observation：拿到工具结果，再次思考。 [developer.volcengine](https://developer.volcengine.com/articles/7534567993976897574)
-   - Final Answer：认为任务完成，输出最终答案。 [developer.volcengine](https://developer.volcengine.com/articles/7534567993976897574)
+- **任务分解（Task Decomposition）**：将复杂目标拆分为子任务
+- **ReAct**：Thought → Action → Observation → Final Answer 循环
 
-2. **RAG 与记忆/知识接入**  
-   - 用向量检索把外部文档、业务知识接到 Agent 里，提升专业性与时效性。 [woshipm](https://www.woshipm.com/ai/6237707.html)
-   - 在 Agent 场景中，RAG 常和长期记忆/知识库模块合并考虑。 [woshipm](https://www.woshipm.com/ai/6237707.html)
+### 2.3 工具调用（Tool Use / Function Calling）
 
-3. **多 Agent 协作 / MAS**  
-   - 多个具有不同角色的 Agent 协同完成复杂任务（如“规划 Agent + 执行 Agent + 质检 Agent”）。 [woshipm](https://www.woshipm.com/ai/6237707.html)
-   - 需要协议（如 A2A 协议）来管理 Agent 间的通信和任务分配。 [woshipm](https://www.woshipm.com/ai/6237707.html)
+通过函数调用、HTTP API、数据库查询等机制让 Agent 能够"改变环境"。大模型生成结构化调用参数（如 JSON），Agent 框架负责实际执行，对接 Java 微服务、数据库等后端系统。
 
-4. **函数调用、工具协议、MCP 等**  
-   - 函数调用：通过模型原生 function calling 或 tool calling API，把 Java 后端、脚本等暴露为工具。 [woshipm](https://www.woshipm.com/ai/6237707.html)
-   - MCP（Model Context Protocol）等协议：统一工具、数据源和模型之间的连接方式，提高可扩展性。 [woshipm](https://www.woshipm.com/ai/6237707.html)
+### 2.4 记忆系统（Memory）
 
-***
+| 类型 | 说明 | 技术实现 |
+|---|---|---|
+| 短期记忆 | 当前会话上下文、任务状态 | 上下文窗口、滑动窗口 |
+| 长期记忆 | 用户画像、历史任务、知识库 | 向量数据库 / RAG |
 
-## 5. 从知识到实战的落地链路（偏工程视角）
+### 2.5 行动执行（Action / Actuator）
 
-结合你“Java 后端 + AI Agent”的路线，一个 Agent 应用的核心链路可以抽象成： [damodev.csdn](https://damodev.csdn.net/692d0cbe2087ae0db79de14f.html)
+执行外部操作，包括调用第三方 API、调度工作流、写文件、发邮件、修改业务状态等。在 Java 后端场景中，核心是在 Agent 层统一管理对微服务的调用和状态追踪。
 
-1. 输入与感知：HTTP/WS 接口接收用户请求，可叠加语音、前端 Web UI。  
-2. 调度 LLM：调用大模型（本地/云端）作为 Agent 大脑。  
-3. 规划与循环：实现 ReAct/工作流，控制「思考–工具–观察–迭代」。 [damodev.csdn](https://damodev.csdn.net/692d0cbe2087ae0db79de14f.html)
-4. 工具接入：  
-   - Java 微服务 API（Spring Boot）、数据库（MySQL）、Redis、文件系统等暴露为工具。 [damodev.csdn](https://damodev.csdn.net/692d0cbe2087ae0db79de14f.html)
-5. 记忆与 RAG：  
-   - 短期：会话上下文；长期：向量库（如 Milvus/Faiss/pgvector）+ 你的业务知识。 [betteryeah](https://www.betteryeah.com/blog/ai-agent-core-components-architecture-guide)
-6. 监控与反馈：  
-   - 日志、指标、用户评分，用于不断优化提示、工具设计和工作流。 [damodev.csdn](https://damodev.csdn.net/692d0cbe2087ae0db79de14f.html)
+### 2.6 学习与自进化（Learning）
 
-***
+通过反馈数据调整策略、更新提示词、更新知识库或进行微调。在企业环境中，通常采用"软学习"方式：规则迭代、提示工程更新，而非频繁全量微调。
 
-## 6. 常见八大/六大核心知识点速记版
+---
 
-部分中文资料喜欢列清单，你可以按下面这组当“复盘 Checklist”来记： [betteryeah](https://www.betteryeah.com/blog/ai-agent-core-components-architecture-guide)
+## 三、大模型在 Agent 中的角色
 
-- 智能体/Agent 的定义与目标驱动。  
-- 大模型能力：理解、推理、生成。  
-- 感知模块：多模态输入、业务数据接入。  
-- 规划与决策：任务分解、ReAct、工作流编排。  
-- 工具调用：函数调用、API 集成、系统操作。  
-- 记忆系统：短期上下文、长期向量库/RAG。  
-- 行动执行与任务闭环：从计划到真正改变环境。  
-- 多 Agent 与协议：MAS、MCP、A2A 等协作机制。  
+大模型是 Agent 的"核心大脑"，承担三项核心职责：
 
-***
+| 职责 | 说明 |
+|---|---|
+| **理解** | 解析用户意图、解析工具返回结果、识别任务是否完成 |
+| **推理** | 决定下一步行动、是否继续调用工具、如何调整计划 |
+| **生成** | 输出自然语言回复，或输出结构化结果（如 JSON 工具参数、步骤列表） |
+
+Agent 的其他模块主要用于弥补大模型的局限：时效性、上下文长度、计算能力和执行能力。
+
+---
+
+## 四、典型技术模式与协议
+
+### 4.1 ReAct / CoT 流程
+
+```
+Thought（思考） → Action（行动） → Observation（观察） → 循环 → Final Answer（最终答案）
+```
+
+### 4.2 RAG 与记忆/知识接入
+
+通过向量检索将外部文档和业务知识接入 Agent，提升专业性与时效性。在 Agent 场景中，RAG 常与长期记忆/知识库模块合并使用。
+
+### 4.3 多 Agent 协作（MAS）
+
+多个具有不同角色的 Agent 协同完成复杂任务，如"规划 Agent + 执行 Agent + 质检 Agent"。需要 A2A 等协议来管理 Agent 间的通信和任务分配。
+
+### 4.4 函数调用与工具协议
+
+- **Function Calling**：通过模型原生 function calling 或 tool calling API，将 Java 后端、脚本等暴露为工具
+- **MCP（Model Context Protocol）**：统一工具、数据源和模型之间的连接方式，提高可扩展性
+
+---
+
+## 五、工程视角：Agent 落地核心链路
+
+结合 Java 后端与 AI Agent 的技术路线，Agent 应用的核心链路如下：
+
+1. **输入与感知**：HTTP/WS 接口接收用户请求，可叠加语音、前端 Web UI
+2. **调度 LLM**：调用大模型（本地/云端）作为 Agent 大脑
+3. **规划与循环**：实现 ReAct / 工作流，控制"思考-工具-观察-迭代"循环
+4. **工具接入**：
+   - Java 微服务 API（Spring Boot）
+   - 数据库（MySQL、Redis）
+   - 文件系统等
+5. **记忆与 RAG**：
+   - 短期：会话上下文
+   - 长期：向量库（Milvus / Faiss / pgvector）与业务知识
+6. **监控与反馈**：日志、指标、用户评分，用于持续优化提示词、工具设计和工作流
+
+---
+
+## 六、核心知识点速记清单
+
+- Agent 的定义与目标驱动
+- 大模型能力：理解、推理、生成
+- 感知模块：多模态输入、业务数据接入
+- 规划与决策：任务分解、ReAct、工作流编排
+- 工具调用：函数调用、API 集成、系统操作
+- 记忆系统：短期上下文、长期向量库 / RAG
+- 行动执行与任务闭环：从计划到真正改变环境
+- 多 Agent 与协议：MAS、MCP、A2A 等协作机制
+
+---
+
+## 核心要点回顾
+
+- AI Agent = LLM 大脑 + 规划 + 记忆 + 工具 + 行动闭环
+- 六大核心模块：感知、决策规划、工具调用、记忆、行动执行、学习进化
+- 大模型承担理解、推理、生成三大职责，其他模块弥补其局限
+- 典型技术模式包括 ReAct、RAG、多 Agent 协作、Function Calling 与 MCP 协议
+- 工程落地的关键链路涵盖输入感知、LLM 调度、规划循环、工具接入、记忆管理和监控反馈
+
+---
+
+## 参考资料
+
+1. IBM. AI Agent 概念与技术解析
+2. 火山引擎开发者. AI Agent 核心架构与实践
+3. 大模型开发社区. AI Agent 设计模式与工程实践
+4. 架构师笔记. AI Agent 核心组件与架构指南
+5. 腾讯云开发者. Agent 感知与决策技术
+6. 掘金. AI Agent 开发实战系列
+7. 人人都是产品经理. AI Agent 应用场景与落地
