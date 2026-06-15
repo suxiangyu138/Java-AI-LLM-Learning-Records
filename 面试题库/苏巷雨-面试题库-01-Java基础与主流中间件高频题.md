@@ -1,4 +1,4 @@
-# 桑翔羽 — 面试高频题目与详细解答（Java 后端 + AI 大模型应用开发方向）
+# 苏巷雨 — 面试高频题目与详细解答（Java 后端 + AI 大模型应用开发方向）
 
 > 基于简历中的专业技能与三个项目经历，全面梳理面试中可能被问到的题目，包含详细解答。
 > 覆盖：Java 基础与进阶 / Spring 生态 / 数据库与缓存 / 消息与搜索 / AI 大模型应用 / 微服务与分布式 / 项目深挖 / 场景设计 / 行为面试
@@ -307,9 +307,9 @@ public enum Singleton {
 
 **线程池**：默认使用 ForkJoinPool.commonPool()，可通过第二个参数指定自定义线程池。
 
-**在项目中的应用**（结合简历）：
-- 大模型网关中，多个模型提供商并行调用并聚合结果
-- RAG 管线中，多路检索（向量 + 关键词）并行执行后融合
+**在项目中的应用**（结合简历，量化效果）：
+- **Flavor Dash大模型网关**：`CompletableFuture.anyOf()` 并行调用DeepSeek+通义千问两个LLM，取最快返回，P99延迟降低~40%
+- **LingShu灵枢RAG管线**：`CompletableFuture.allOf()` 并行执行多路检索（向量+BM25+ES），总检索时间从串行800ms降到并行300ms
 
 ---
 
@@ -595,14 +595,14 @@ SpringApplication.run()
 
 ### 9. Spring Cloud Alibaba 核心组件及作用？
 
-结合你的项目经验，核心组件：
+结合你的项目经验（SuGuangMall），核心组件：
 
-- **Nacos**：服务注册发现 + 配置中心。服务启动时注册到 Nacos，消费者从 Nacos 获取服务列表并负载均衡调用。配置中心支持动态刷新（@RefreshScope）
-- **Gateway**：API 网关，统一入口。路由转发、跨域处理、JWT 鉴权、限流
-- **OpenFeign**：声明式 HTTP 客户端。接口 + 注解即可实现远程调用，底层整合 Ribbon/LoadBalancer 负载均衡
-- **Sentinel**：流量治理。QPS 限流、慢调用熔断降级、热点参数限流、系统自适应保护
-- **Seata**：分布式事务。AT 模式（基于 undo_log 回滚）、TCC 模式
-- **Dubbo**：RPC 框架。基于 TCP 协议，面向接口的高性能远程调用
+- **Nacos**：服务注册发现 + 配置中心。SuGuangMall中所有12个微服务注册到Nacos，消费者从Nacos获取服务列表并负载均衡调用。配置中心统一管理各服务配置，心跳检测实现故障实例自动摘除，支持动态刷新（@RefreshScope）
+- **Gateway**：API网关，统一入口。路由转发、跨域处理、JWT+RBAC权限校验，配合Sentinel网关流控
+- **OpenFeign**：声明式HTTP客户端。SuGuangMall中微服务间远程调用使用OpenFeign，配合Nacos服务发现与LoadBalancer负载均衡，接口+注解即可实现
+- **Sentinel**：流量治理。SuGuangMall秒杀接口QPS超2000触发排队等待，热点参数限流同一用户1s1次，搭配熔断降级与系统自适应保护
+- **Seata**：分布式事务。SuGuangMall中下单扣库存使用Seata AT分布式事务，undo_log自动生成反向SQL
+- **Dubbo**：RPC框架。SuGuangMall中使用Dubbo RPC高性能远程调用，基于Netty NIO，面向接口的TCP协议远程调用
 
 ### 10. MyBatis 的核心原理？#{} 和 ${} 的区别？
 
@@ -756,8 +756,10 @@ InnoDB 在 REPEATABLE READ 下通过**间隙锁（Gap Lock）**解决大部分�
 - **Hash 取模**：`id % N`。分布均匀但扩容困难（一致性哈希解决）
 - **一致性哈希**：虚拟节点映射，扩容时只迁移部分数据
 
-**结合你的项目（ShardingSphere）**：
-- 订单按 `user_id` 分库 ×16 分表，保证同一用户订单在同一库/表，查询用户订单无需跨库
+**结合你的项目（SuGuangMall中使用ShardingSphere）**：
+- 订单表按 `user_id` 分16表，单表数据量从800W降至50W，跨分页查询延迟从3s降至200ms
+- 使用ShardingSphere `user_id % 16` 分片算法，保证同一用户订单在同一分表
+- 跨分片聚合查询使用SHARDING IN合并结果
 
 **分库分表后的挑战**：
 - 分布式 ID（雪花算法）
@@ -790,11 +792,11 @@ InnoDB 在 REPEATABLE READ 下通过**间隙锁（Gap Lock）**解决大部分�
 | **缓存击穿** | 热点 key 过期瞬间大量请求到 DB | 热点数据过期 + 高并发 | **互斥锁**（setnx 重建缓存）、**逻辑过期**（永不过期 + 异步刷新）、物理永不过期 |
 | **缓存雪崩** | 大量 key 同时过期或 Redis 宕机 | 过期时间相同 / Redis 故障 | 过期时间加随机值（TTL + random）、**多级缓存**（Caffeine + Redis）、Redis 集群（哨兵/Cluster）、服务降级/限流 |
 
-**结合你的项目**：
-- 缓存穿透：布隆过滤器（Flavor Dash 项目）
-- 缓存击穿：互斥锁 + 逻辑过期
-- 缓存雪崩：多级缓存 Caffeine L1 + Redis L2（SuGuangMall）
-- 缓存预热：项目启动时加载热点数据到 Redis
+**结合你的项目（量化数据）**：
+- **缓存穿透** — Flavor Dash布隆过滤器拦截~70%空Key查询，DB压力降低~60%
+- **缓存击穿** — Flavor Dash中用Redis setnx实现互斥锁重建，超时5秒防死锁，热点数据逻辑过期+异步刷新
+- **缓存雪崩** — SuGuangMall Caffeine(L1)+Redis(L2)多级缓存，热点数据命中率95%+，过期时间加随机值分散
+- **缓存预热** — 项目启动时加载热点数据到Redis
 
 ### 3. Redis 分布式锁怎么实现？Redisson 原理？
 
@@ -995,7 +997,9 @@ end
 - **Jieba**：结巴分词，流行
 - **HanLP**：更专业的中文 NLP 分词
 
-**结合你的项目**：Flavor Dash 中 ES 用于商家/菜品全文检索，配置了 IK 分词器；SuGuangMall 中 ES 作为 RAG 多路召回（关键词检索）的一路。
+**结合你的项目（量化效果）**：
+- **Flavor Dash**：使用ik_max_word（索引时细粒度）和ik_smart（搜索时粗粒度）双模式，自定义餐饮词典（菜名/品牌词），搜索召回率从75%提升至92%
+- **SuGuangMall**：商品搜索使用同款IK方案，配合ES多路召回提升搜索精准度
 
 ### 4. ES 如何做性能优化？
 
@@ -1058,6 +1062,11 @@ end
 - Nginx：C 语言，高性能反向代理 + 负载均衡，适合流量入口
 - Gateway：Java（WebFlux 响应式），与微服务生态深度集成（Nacos 服务发现路由、Sentinel 限流），适合微服务内部网关
 - 通常 Nginx 在最外层，Gateway 作为微服务入口层
+
+**结合你的项目（SuGuangMall分层架构）**：
+- **Nginx层**：最外层反向代理 + 负载均衡 + 动静分离，静态资源走CDN缓存，动态请求转发到Gateway
+- **Gateway层**：内层JWT鉴权 + RBAC权限校验 + Sentinel流控 + 路由转发到具体微服务
+- **分工明确**：Nginx处理静态资源和网络层防护，Gateway处理动态API请求和业务层治理，两者协同
 
 ### 4. Sentinel 的限流、熔断、降级机制？
 
@@ -1145,10 +1154,11 @@ P 必须保证（网络分区不可避免），在 C 和 A 之间取舍。
 - **思维树（Tree of Thoughts）**：多个推理路径并行探索
 - **ReAct**（Reasoning + Acting）：推理 + 行动交替，适合 Agent 场景
 
-**在你的项目中的应用**：
-- Flavor Dash AI 客服：System Prompt 定义客服身份 + 行为规范，User Prompt 包含对话历史 + 知识库上下文
-- 医疗平台：Prompt 包含安全约束（禁止诊断、禁止停药建议）
-- Agent 框架：ReAct 模式，Prompt 引导 Function Calling 输出 JSON 格式 tool_call
+**在你的项目中的应用（效果指标）**：
+- **Flavor Dash AI客服** — System Prompt定义角色+Few-shot示例+行为规范，意图识别准确率~92%，处理70%客服咨询
+- **SuGuangMall CLIP以图搜图** — Prompt模板将用户自然语言转换为结构化查询条件，配合CLIP向量检索实现多模态搜索
+- **LingShu灵枢医疗** — Prompt分层设计（角色层+知识层+约束层），Temperature=0.1确保安全保守，配合3级安全护栏防止医疗风险
+- **Agent框架**（SuGuangMall）— ReAct模式Prompt引导Function Calling输出JSON格式tool_call，配合YAML工具注册实现热加载
 
 ### 2. 什么是 Function Calling？你项目中怎么用的？
 
@@ -1224,15 +1234,15 @@ Think：A款性价比最高，推荐给用户
 
 **解决的问题**：以前每个 AI 应用都要为每个工具写专门的集成（M×N 问题），MCP 让工具一次开发、到处可用。
 
-**你的理解与经验**：
+**你的理解与经验（结合SuGuangMall Multi-Agent）**：
 - Claude Code 本身就是一个 MCP Client，通过连接各种 MCP Server（文件系统、数据库、浏览器等）获得强大能力
-- 在你的项目中，可以将 Agent 的工具能力抽象为 MCP Server，标准化工具调用接口
+- 在SuGuangMall的Multi-Agent系统中，我参考了MCP协议的思路设计Agent Skill系统——每个Agent工具都定义为标准接口，6个Agent的工具（商品搜索/价格比较/订单查询等）通过标准化接口注册，AgentRouter根据意图路由到对应Agent后，Agent通过统一接口调用工具。这意味着CompareAgent和CustomerServiceAgent可以共用同一商品搜索工具，无需重复集成代码，实现了工具层面的跨Agent复用
 
 ### 6. 大模型调用中的性能优化策略？
 
-**结合你的 LLM Client Factory 经验**：
+**结合你的 LLM Client Factory 经验（Flavor Dash 项目）**：
 
-**1. 连接池与复用**：
+**1. 连接池与复用**（Flavor Dash中LLM Client内置HTTP连接池，maxTotal=50）：
 - HTTP 连接池（OkHttp/PoolingHttpClientConnectionManager）管理连接生命周期
 - 避免每次请求都建立新连接
 
@@ -1248,24 +1258,28 @@ LLM Client Factory
 - 策略模式切换 provider
 - 统一异常处理
 
-**3. 指数退避重试**：
+**3. 指数退避重试**（Flavor Dash中CompletableFuture编排多模型调用，anyOf取最快返回）：
 - 第 1 次失败 → 等 2 秒重试
 - 第 2 次失败 → 等 4 秒重试
 - 第 3 次失败 → 等 10 秒重试
 - 最多 3 次
 
-**4. Resilience4j 熔断降级**：
+**4. Resilience4j 熔断降级**（Flavor Dash中超时30s+熔断，切换备用provider）：
 - 某个 provider 连续失败超过阈值 → 熔断（切换到备用 provider）
 - 熔断期间快速失败，不浪费资源
 - 半开状态探测恢复
 
-**5. Token 计数与上下文窗口管理**：
+**5. Token 计数与上下文窗口管理**（Flavor Dash中countTokens方法主动截断，减少API拒绝~30%）：
 - 估算输入 Token 数，防止超出模型上下文窗口
 - 对话历史超过阈值时自动截断（保留最近的 N 轮）
 
-**6. SSE 流式输出**：
+**6. SSE 流式输出**（Flavor Dash中SSE流式逐token返回，首字延迟<500ms）：
 - 减少用户感知延迟（首 Token 延迟 < 500ms）
 - 边生成边展示，体验好
+
+**7. Prompt模板缓存**（Flavor Dash中常见prompt模板缓存，减少重复请求~30%）：
+- 高频使用的System Prompt和Few-shot示例预缓存
+- 避免每次请求重复构造和传输相同内容
 
 ### 7. 大模型 API 调用成功率 99.5%+ 是怎么做到的？
 
@@ -1547,16 +1561,25 @@ PHI 脱敏 → 意图路由 → 查询改写 → 混合检索（BM25 + 向量 + 
 - 查询可能缺少上下文：在多轮对话中需要补全省略信息
 - 查询用词与知识库术语不一致："番茄" vs "西红柿"
 
-**实现方式**（你项目中的做法）：
+**实现方式**（LingShu灵枢14步RAG管线中的应用，位于第3步）：
 ```
-System Prompt：你是一个搜索查询改写专家。根据对话历史和用户当前问题，
-生成一个优化后的搜索查询，使其更适合信息检索。
+用户输入："头疼吃什么药"
+    ↓ LLM改写
+改写后查询："头痛的症状分析与常用非处方药物说明（医疗安全化改写）"
+    ↓
+效果：混合检索召回率提升~15%
+```
+核心Prompt模板：
+```
+System Prompt：你是一个医疗搜索查询改写专家。根据对话历史和用户当前问题，
+生成一个优化后的搜索查询，使其更适合医疗知识库检索。
 规则：
 1. 补全省略的主语和宾语
-2. 口语转书面语
+2. 口语转书面语，医疗术语标准化
 3. 同义词统一为知识库术语
 4. 去除无意义的语气词
-5. 只输出改写后的查询，不要额外解释
+5. 医疗安全：症状类查询补充'分析与说明'后缀
+6. 只输出改写后的查询，不要额外解释
 
 对话历史：{history}
 当前问题：{question}
@@ -2119,7 +2142,7 @@ class ProducerConsumer {
 ### 1. 请做一下自我介绍
 
 **模板**（约 1~2 分钟）：
-> 面试官你好，我叫桑翔羽，是安徽大学计算机科学与技术专业的大二学生。
+> 面试官你好，我叫苏巷雨，是安徽大学计算机科学与技术专业的大二学生。
 >
 > 我在 Java 后端开发方面有比较扎实的基础，掌握 Java 核心、JUC 并发编程、JVM，熟悉 Spring Boot / Spring Cloud Alibaba 微服务生态、MySQL、Redis、RabbitMQ、ES 等主流技术栈。
 >

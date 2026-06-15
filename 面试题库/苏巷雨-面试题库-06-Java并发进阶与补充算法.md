@@ -1,4 +1,4 @@
-# 桑翔羽 — 面试题库 06：Java 进阶难点 + JDK 新特性 + Python + 补充算法
+# 苏巷雨 — 面试题库 06：Java 进阶难点 + JDK 新特性 + Python + 补充算法
 
 > 考察技术深度和广度，区分普通和优秀的候选人的关键
 
@@ -64,6 +64,10 @@ tryRelease(int arg) {
 - 公平锁：`tryAcquire()` 前先检查 CLH 队列中是否有前驱等待者
 - 非公平锁：直接 CAS 抢锁，不管队列（吞吐量更高，但可能饥饿）
 
+📌 **项目实践**：
+- **Flavor Dash**：Redis 分布式锁（Redisson 的 RLock）底层基于类似 AQS 的语义实现，通过 Lua 脚本+CAS 保证原子性，WatchDog 机制类比 AQS 的 CLH 队列等待唤醒。
+- **SuGuangMall**：秒杀扣减库存使用 CAS 语义（compareAndSet → 重试/失败），与 AQS 的 CAS 修改 state 异曲同工。
+
 ### 2. CountDownLatch 和 CyclicBarrier 的区别？
 
 | | CountDownLatch | CyclicBarrier |
@@ -95,6 +99,10 @@ for (int i = 0; i < 3; i++) {
     }).start();
 }
 ```
+
+📌 **项目实践**：
+- **LingShu**：`CompletableFuture.allOf(taskA, taskB, taskC)` 等待多模型并行返回后合并排序，语义等价于 CountDownLatch（N 个任务完成后触发主线程继续）。
+- **SuGuangMall**：异步编排中多个子任务（库存扣减→订单创建→支付链接生成）并行执行，`allOf().join()` 等待全部完成后统一返回前端。
 
 ### 3. Semaphore 的使用场景？
 
@@ -133,6 +141,9 @@ class ConnectionPool {
 - 线程池控制**线程数量**（并发执行者数量）
 - Semaphore 控制**访问资源数量**（被访问的资源数）
 
+📌 **项目实践**：
+- **Flavor Dash**：LLM Client Factory 中使用 Semaphore 控制多模型 provider 的并发调用数（如 GPT-4o 最多 5 路并发，Claude 最多 3 路），`tryAcquire(timeout)` 超时降级返回兜底结果，防止 API 限流被打满。
+
 ### 4. ThreadLocal 内存泄漏详解
 
 ```
@@ -168,6 +179,10 @@ try {
 // 2. 声明为 static final（防止 ThreadLocal 本身被回收）
 private static final ThreadLocal<User> userHolder = new ThreadLocal<>();
 ```
+
+📌 **项目实践**：
+- **SuGuangMall**：Dubbo RPC 调用链中通过 ThreadLocal 透传 traceId 和用户上下文（`RpcContext` 底层基于 ThreadLocal），Filter 拦截器在 finally 块中 `remove()` 防止内存泄漏。
+- **Flavor Dash**：WebSocket 会话上下文管理，每个连接对应一个 ThreadLocal 存储 Session 元数据，连接断开时在 finally 中清理。
 
 ### 5. CompletableFuture 高级用法
 
@@ -215,8 +230,8 @@ CompletableFuture.supplyAsync(() -> callLLMAPI(), ioExecutor);
 ```
 
 **你项目的应用**：
-- 多模型 provider 并行调用（哪个快先用哪个 → anyOf）
-- RAG 多路检索并行（向量 + BM25 + ES）→ allOf 合并 → RRF 融合
+- **LingShu（灵枢模型网关）**：多模型 Provider 并行调用，`allOf()` 合并所有结果后 RRF 融合排序，`anyOf()` 实现"谁快用谁"的快速响应模式。RAG 多路检索（向量 + BM25 + ES）同样使用 `allOf` 并行。
+- **SuGuangMall**：商品详情页异步编排，`CompletableFuture.supplyAsync(() -> skuInfo(), ioExecutor).thenCombineAsync(futurePrice, ...)` 并行查询基础信息、价格、库存、优惠券，`allOf().join()` 汇总后响应。
 
 ### 6. Java 中的四种引用类型实战
 
@@ -248,6 +263,10 @@ PhantomReference<Object> phantom = new PhantomReference<>(new Object(), queue);
 // 用途：对象回收时收到通知（NIO DirectByteBuffer 清理堆外内存）
 ```
 
+📌 **项目实践**：
+- **SuGuangMall**：多级缓存体系中，Caffeine（L1）配合 Redis（L2），软引用（`SoftReference`）作为 JVM 堆内缓存的补充兜底——内存充足时缓存命中，内存紧张时 GC 自动回收，防止 OOM。
+- **LingShu**：双层会话存储（Caffeine L1 + Redis L2），弱引用（`WeakReference`）用于会话元数据的临时缓存，会话过期后 GC 自然回收。
+
 ---
 
 ## 二、JDK 8~21 核心新特性
@@ -270,6 +289,10 @@ Consumer<String> printer = System.out::println;         // 实例方法引用
 Function<String, Integer> len = String::length;          // 对象方法引用
 Supplier<User> factory = User::new;                      // 构造器引用
 ```
+
+📌 **项目实践**：
+- **SuGuangMall**：订单列表处理使用 `orders.stream().filter(...).map(OrderDTO::new).collect(toList())`，Lambda + 方法引用简化集合转换；`groupingBy` 中配合 `Collectors.summingInt` 实现按城市/品类聚合。
+- **Flavor Dash**：LLM Client Factory 中使用函数式回调 `Consumer<Response>` 处理流式输出，`Function<Prompt, Response>` 做 provider 适配转换。
 
 ### 8. Stream 流的高级操作
 
@@ -304,6 +327,9 @@ Stream.of(1, 2, 3, 4, 0, 1).takeWhile(n -> n > 0) // [1,2,3,4]
 // dropWhile: 条件满足则丢弃，遇到第一个不满足的开始取
 Stream.of(1, 2, 3, 4, 0, 1).dropWhile(n -> n < 4) // [4,0,1]
 ```
+
+📌 **项目实践**：
+- **SuGuangMall**：`flatMap` 打平订单-订单项一对多关系；`groupingBy` 按城市/品类聚合统计销量；`reducing` 计算金额汇总；`partitioningBy` 区分有效/无效订单——全部通过 Stream 链式处理，代码简洁无副作用。
 
 ### 9. JDK 9~21 重大新特性
 
@@ -372,6 +398,11 @@ HttpRequest request = HttpRequest.newBuilder()
 HttpResponse<String> response = client.send(request, BodyHandlers.ofString());
 ```
 
+📌 **项目实践**：
+- **Virtual Threads**：Flavor Dash/LingShu 的 LLM API 调用为 IO 密集型（发送请求 → 等待响应），适合使用虚拟线程替代传统线程池，`Executors.newVirtualThreadPerTaskExecutor()` 简化并发，无需调优线程池参数。
+- **Records**：任意项目的 DTO 简化——`record LLMResponse(String content, int tokens, long latency)` 替代传统 POJO，自动生成构造器/equals/hashCode。
+- **Text Blocks**：Flavor Dash 中构建 LLM API 的 JSON 请求体，""" 多行字符串直接嵌入 prompt 模板，无需转义和拼接。
+
 ---
 
 ## 三、NIO 与 Netty
@@ -420,6 +451,10 @@ while (true) {
     keys.clear();
 }
 ```
+
+📌 **项目实践**：
+- **Flavor Dash**：Spring Boot 3.4 内嵌 Tomcat NIO 处理 Web 请求（一个线程处理多个连接），WebSocket 基于 NIO 长连接实现实时推送，无需为每个连接分配独立线程。
+- **SuGuangMall**：Dubbo RPC 默认基于 Netty（NIO 框架）进行网络通信，一个 Boss 线程 accept 连接，多个 Worker 线程处理读写事件，支撑秒杀场景的高吞吐。
 
 ### 11. Netty 相比原生 NIO 的优势？
 
@@ -619,6 +654,10 @@ class BoundedBuffer {
 }
 // 面试加分：说出 BlockingQueue 内部就是用 Lock + Condition 实现的
 ```
+
+📌 **项目实践**：
+- **Flavor Dash**：RabbitMQ 消息队列本质是架构层面的生产者-消费者模式——LLM 调用请求作为消息生产到队列，消费者从队列拉取并调用 API，实现异步削峰和解耦。
+- **SuGuangMall**：秒杀订单异步落库，订单创建后通过消息队列异步写入数据库，生产者（Controller）快速响应前端，消费者（Listener）批量落盘，提升 TPS。
 
 ### 18. 用栈实现队列（两个栈）
 
