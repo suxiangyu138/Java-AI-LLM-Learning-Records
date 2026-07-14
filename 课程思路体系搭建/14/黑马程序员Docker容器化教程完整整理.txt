@@ -1,0 +1,52 @@
+07.14 15:21
+黑马程序员Docker容器化教程完整整理
+黑马程序员Docker容器化教程完整整理
+一、视频基础信息
+UP主
+黑马程序员
+粉丝：482.2万 | 视频总数：557个
+封面标语：0基础 学IT；0基础 学IT 月薪过万 就来黑马程序员
+视频标题
+黑马程序员Docker容器化技术，从零学会Docker教程
+BV号：BV1CJ411T7BK
+声明：未经作者授权禁止转载
+数据信息
+播放：57万 | 弹幕：3836 | 发布时间：2019年09月27日 11:12
+在线观看：27人
+简介
+Docker是一个开源的应用容器引擎，让开发者可以打包他们的应用以及依赖包到一个可移植的容器中，然后发布到任何流行的Linux机器上，也可以实现虚拟化，容器是完全使用沙箱机制，相互之间不会有任何接口。
+标签
+黑马程序员、java、docker
+互动数据
+点赞：6063 | 投币：4825 | 收藏：2.4万 | 转发：2254
+二、完整28集分集目录
+1. 01-今日内容
+2. 02-初识docker-docker概述
+3. 03-初识docker-安装docker
+4. 04-初识docker-docker架构
+5. 05-初识docker-配置镜像加速器
+6. 06-docker命令-服务相关命令
+7. 07-docker命令-镜像相关命令
+8. 08-docker命令-容器相关命令1
+9. 09-docker命令-容器相关命令2
+10-docker容器数据卷-数据卷概念及作用
+11-docker容器数据卷-配置数据卷
+12-docker容器数据卷-配置数据卷2
+13-docker容器数据卷-数据卷容器
+14-docker应用部署-部署mysql
+15-docker应用部署-部署tomcat
+16-docker应用部署-部署nginx
+17-docker应用部署-部署redis
+18-dockerfile-镜像原理
+19-dockerfile-容器转为镜像
+20-dockerfile-dockerfile概述及关键字
+21-dockerfile-案例-部署springboot项目
+21-dockerfile-案例-自定义centos
+22-docker compose-概述
+23-docker compose-安装使用
+24-docker私有仓库-搭建
+25-docker私有仓库-上传镜像
+26-docker私有仓库-拉取镜像
+27-docker和虚拟机比较
+28.（末集无标题，总集数28
+

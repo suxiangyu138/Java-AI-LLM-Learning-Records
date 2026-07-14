@@ -1,0 +1,124 @@
+07.14 15:22
+B站98集AI大模型全课程完整目录
+B站98集AI大模型全课程完整目录
+视频标题：翻遍整个B站，这绝对是2026讲的最好的提示词工程(Prompt Engineering)教程，全程干货无废话！让你少走99%的弯路！AI大模型|LLM
+UP主：AIAgent开发
+视频BV号：BV1VEA8zYE6f
+总集数：98集
+第一部分：提示词工程（1-8集）
+1. 什么是提示工程(PromptEngineering)
+2. Prompt的典型构成
+3. 进阶技巧
+4. 防止Prompt攻击
+5. 内容审核：Moderation API
+6. OpenAI API的几个重要参数
+7. 用GPTs帮我们写prompt
+8. 课程总结
+第二部分：基础篇 大模型入门（9-11集）
+9. 认识大模型
+10. 大模型的应用场景
+11. Gradio快速入门
+第三部分：进阶篇 RAG检索增强生成（12-30集）
+12. RAG技术与应用
+13. RAG的核心原理与流程
+14. NativeRAG
+15. NotebookLM的使用
+16. Embedding模型选择
+17. CASE: DeepSeek+Faiss搭建本地知识库
+18. RAG常见问题-如何提升RAG质量
+19. RAG技术树
+20. RAFT方法
+21. CASE DeepSeek + Faiss搭建本地知识库检索
+22. GraphRAG
+23. 搭建RAG--使用Qwen-Agent
+24. 打造私有领域知识库
+25. 打造私有领域知识库
+26. 零代码快速搭建RAG应用
+27. 检索进阶 Re-ranker
+28. 进阶-PDF表格预处理
+29. 进阶-加载历史对话记忆(1)
+30. 进阶-加载历史对话记忆(2)-集成到原项目中
+第四部分：进阶篇 LangChain框架（31-38集）
+31. LangChain课程介绍
+32. LangChain的核心组件
+33. LangChain的输入、输出封装
+34. LangChain的数据连接封装
+35. 对话历史管理
+36. LangChain Expression Language (LCEL)
+37. 智能体架构：Agent
+38. LangServe和LangChain.js
+第五部分：进阶篇 AI Agent智能体（39-65集）
+39. 总体概述
+40. 啥是Agent以及核心架构
+41. 多Agent协作模式
+42. 实战：销售场景分析
+43. 实战：用户分析与销售策略落地
+44. Agent多行业落地场景分享
+45. Agent概念、组成与决策
+46. Agent决策应用场景分析
+47. Agent规划子任务拆解_COT与TOT_
+48. 思维树24点拓展与react框架
+49. Agent记忆(memory)
+50. Agent工具使用介绍
+51. Agent认知框架之Plan-and-Execute
+52. self-Ask
+53. Thinking and Self-Reflection
+54. ReAct框架案例实现
+55. ReAct RAG Agent
+56. Agent数字人项目实战①
+57. Agent数字人项目实战②
+58. 使用CrewAI+FastAPI打造多Agent
+59. 技术研究员智能体案例，Agent支持调用外部工具
+60. 健康档案助手智能体案例
+61. 多个Agent协作完成高效软件编码,CrewAI
+62. 让任务以JSON数据格式并最终任务以JSON格式输出
+63. 在任务执行中做HumanFeedback(人类反馈)
+64. 快速搭建AI Agent工作流，硬核干货源码共享
+65. 快速搭建AI Agent复杂工作流，硬核干货源码共享
+第六部分：进阶篇 LangGraph多智能体框架（66-74集）
+66. LangGraph-课程介绍
+67. 快速了解LangGraph
+68. 使用LangGraph构建Agent智能体-上
+69. 使用LangGraph构建Agent智能体-下
+70. LangGraph接入MCP
+71. 深入理解Graph-上
+72. 深入理解Graph-下
+73. 使用LangGraph构建多智能体工作流
+74. 零帧起手，实现多智能体工作流
+第七部分：实战篇 大模型微调训练（75-98集）
+75. 模型微调课程介绍
+76. 模型训练利器 HuggingFace
+77. 什么是模型
+78. 什么是模型训练
+79. 求解器
+80. 一些常用的损失函数
+81. 复习总结
+82. 什么是训练预训练微调轻量化微调
+83. Transformer结构简介
+84. 轻量化微调
+85. 实战
+86. 数据准备与处理
+87. 项目6-项目介绍
+88. 项目6-项目的准备工作
+89. 项目6-文本分类的任务介绍
+90. 项目6-prompt的设计
+91. 项目6-实现该项目的硬件配置
+92. 项目6-print包的介绍
+93. 项目6-console包介绍
+94. 项目6-automodel,autotokenizer...
+95. 项目6-导包项目必要的包
+96. 项目6-构建init_prompts函数
+97. 项目6-构造main函数
+98. 项目6-模型训练
+ 
+课程开篇介绍（第1集幻灯片文字）
+Prompt Engineering，提示工程
+ 这节课会带给你
+1. 了解提示工程的跨时代意义
+2. 掌握提示工程的核心方法论
+3. 掌握提示调优的基本方法，了解它在实际生产中的应用
+4. 掌握防止prompt注入的方法，AI更安全
+开始上课！
+今天呢我们来学习叫做prompt engineering
+提示工程也叫「指令工程」
+

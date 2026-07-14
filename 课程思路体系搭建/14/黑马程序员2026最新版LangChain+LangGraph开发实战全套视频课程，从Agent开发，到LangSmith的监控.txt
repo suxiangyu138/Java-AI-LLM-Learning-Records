@@ -1,0 +1,64 @@
+07.14 15:22
+黑马程序员2026最新版LangChain+LangGraph开发实战全套视频课程，从Agent开发，到LangSmith的监控
+一、视频简介文字、调试、评估一套搞定
+发布账号
+黑马程序员
+粉丝：482.2万粉丝 557视频
+视频标题
+黑马程序员2026最新版LangChain+LangGraph开发实战全套视频课程，从Agent开发，到LangSmith的监控、调试、评估一套搞定
+基础数据
+播放：131.9万 弹幕：4045 发布时间：2026年3月20日 09:00 在线人数：407人正在看
+BV号：BV178w1z7EHQ 未经作者授权禁止转载
+配套资料领取
+本套视频教程所有配套资料领取方式如下：
+关注黑马程序员公众号，回复关键词：260320
+2026黑马程序员AI智能应用开发学习路线图
+https://www.bilibili.com/opus/1156896913511940102
+如何下载资料
+https://www.bilibili.com/read/cv7881295/
+学习+球球群625260577，告别孤单，共同进步！
+【AI智能应用开发学习路线图】(依次向下顺序学习即可)
+1. Java+AI：BV1TJxCzSEEZ
+2. Python+AI：BV1sHU9BmEne
+3. Javaweb+AI：BV1yGydYEE3H
+4. 苍穹外卖：BV1TP411v7v6
+5. AI天机学堂：BV1MFokBkEzC
+6. AI+若依框架：BV1pf421B71v
+7. 微服务全套：BV1S142197x7
+8. 学成在线项目：BV1j8411N7Bm
+9. 黑马头条项目：BV1Qs4y1v7x4
+10. 23年Java大厂面试：BV1yT411H7YK
+学完以上技术，足以支撑找一份好的java开发工作。
+如想工作后再提升，还可以点击下面的技术点项目详细学习：
+- MySQL：BV1Kr4y1i7ru
+- JVM：BV1r94y1b7eS
+二、课程分集列表（共28集）
+00-课程介绍
+01-AI通识与基础-认识人工智能
+02-AI通识与基础-神经网络原理
+03.AI通识与基础-大语言模型
+04-AI通识-大模型应用
+05-AI通识-大模型服务
+06-AI通识-大模型服务-注册DeepSeek
+07-AI通识-大模型服务-注册阿里云百炼
+08-AI通识-大模型服务-Ollama
+09-AI通识-大模型API-接口规范
+10-AI通识-大模型API-会话记忆
+11-AI通识-大模型API-开发环境
+12-AI通识-大模型API-编程调用大模型
+13-LangChain入门-认识LangChain
+14-LangChain入门-快速入门和Agent原理
+15-LangChain入门-初始化模型
+16-LangChain入门-模型-调用模型
+17-LangChain入门-消息(Message)
+18-LangChain入门-提示词工程
+19-LangChain入门-工具(Tools)
+20-LangChain入门-预定义工具Tavily
+21-LangChain入门-短期记忆
+22-LangChain入门-短期记忆-持久存储
+23-LangChain入门-记忆管理策略
+24-LangChain入门-实战-需求分析与功能验证
+25-LangChain入门-实战-对接LangSmith
+26-LangChain入门-实战-搭建服务端并对接OSS
+27-LangChain入门-AI私厨-完成Agent开发
+

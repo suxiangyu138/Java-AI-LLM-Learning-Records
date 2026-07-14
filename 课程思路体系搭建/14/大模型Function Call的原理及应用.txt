@@ -1,0 +1,51 @@
+07.14 09:41
+大模型Function Call的原理及应用
+一、视频页面顶部课件文字
+大模型Function Call的原理及应用
+1. 认识Function Call
+1.1 Function Call的基本概念
+- 核心：赋予大语言模型调用外部API的能力
+流程图逻辑：
+开始 → 大语言模型 → 判断是否调用外部API
+1. 否：直接结束输出
+2. 是：执行三步
+1. 匹配外部函数
+2. 选择合适的外部API
+3. 根据API生成回复
+将工具返回结果传回模型，最终输出答案
+1.2 Function Call的功能
+模型 → 补齐信息实时性 → 获取最新的新闻、实时股价等外部实时数据
+二、B站视频基础信息
+标题
+【Function calling技术详解】B站强推！整整13集保姆级讲解，从理论到实战，纯自学带你彻底搞定Function calling！
+基础数据
+播放：5891 | 弹幕：619 | 发布时间：2024年11月12日 16:29 | 1人正在观看
+BV号：BV1SJm8YtETd
+简介
+Function calling技术详解，从理论到实战，纯自学带你彻底搞定Function calling！
+视频课件及源代码见“评论区”
+标签
+人工智能、科技、知识、Function calling、深度学习、计算机技术、OpenAI、大模型、Agent、LLM
+互动数据
+点赞：41 | 投币：35 | 收藏：191 | 转发：25
+UP主信息
+大模型博士-先知
+粉丝：4610 | 投稿视频：32
+三、13集完整分集目录
+1. function call的基本概念
+2. 单一函数获取实时天气
+3. 单一函数准备tools和message
+4. 单一函数对话Function call融合信息
+5. 单一函数message信息追加
+6. 单一函数调用
+7. 多函数的第一次调用
+8. 多函数的数据准备
+9. 多函数的第二次调用
+10. 多函数的第三次调用
+11. function_call调用mysql_准备函数
+12. function_call调用mysql
+13. function calling及自动发邮件案例
+四、页面其他推荐视频标题
+1. 【全13集】(允许白嫖)这可能是目前B站最系统的LlamaIndex入门教程，手把手…
+2. 【coze接入deepseek全套教程】整整9集
+

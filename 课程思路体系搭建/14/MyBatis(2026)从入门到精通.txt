@@ -1,0 +1,99 @@
+07.14 09:29
+MyBatis(2026)从入门到精通
+B站视频基础信息
+视频标题
+MyBatis(2026)从入门到精通
+UP主信息
+老杜带你学编程
+
+极课未来 极致课程，精耗点滴
+老杜带你学编程
+PPT小节1.1 框架的理解
+1. framework翻译为框架
+2. Java常用框架
+- SSM三大框架：Spring + SpringMVC + MyBatis
+- SpringBoot
+- SpringCloud
+框架本质：通用代码封装，提供接口/类，项目引入后直接开发，大幅提升开发效率
+框架载体：jar包（内含class文件、各类配置文件）
+SSM推荐学习顺序：MyBatis、Spring、SpringMVC
+
+1. MyBatis概述
+1.1 框架的理解
+1.2 三层架构
+1.3 JDBC不足
+2. MyBatis简介
+3. MyBatis入门程序
+4. 使用MyBatis完成CRUD
+5. MyBatis核心配置文件详解
+6. 在WEB中应用MyBatis（使用三层架构）
+7. MyBatis中接口代理机制及使用
+8. MyBatis的缓存
+9. MyBatis参数处理
+10. MyBatis查询语句专题
+11. 动态SQL
+12. MyBatis的高级映射及延迟加载
+13. MyBatis分页
+14. MyBatis的逆向工程
+15. MyBatis使用PageHelper
+16. MyBatis的注解式开发
+
+完整分集目录（共57集）
+001-MyBatis的简介
+002-对ORM的理解
+003-第一个mybatis程序的准备工作
+004-编写mybatis的配置文件
+005-完成第一个mybatis程序
+006-最终版本的第一个mybatis程序
+007-mybatis集成junit单元测试
+008-开启mybatis的标准日志
+009-封装SqlSessionUtil
+010-idea配置文件模板
+011-基于Map实现保存
+012-基于entity实现保存
+013-基于entity实现保存
+014-根据id删除数据
+015-根据id修改数据
+016-查询一条记录
+017-查询多条记录
+018-SqlMapper中namespace的作用
+019-MyBatis核心配置文件中的environment
+020-核心配置文件中的事务管理器
+021-核心配置文件中的数据源配置
+022-核心配置文件中连接池的属性配置
+023-核心配置文件引入外部属性配置文件
+024-核心配置文件中mapper的配置
+025-将账户转账的案例升级为mybatis版本
+026-添加ThreadLocal保证事务
+027-MyBatis使用动态代理生成接口实现
+028-SQL语句的传值和拼接SQL
+029-mybatis的模糊查询两种方式
+030-mybatis中的起别名
+031-mybatis中的mapper的终极写法
+032-插入数据时自动获取生成的主键值
+033-mybatis对单个简单类型参数的默认处理
+034-mybatis多参数处理及命名参数
+035-mybatis查询语句专题
+036-resultMap标签的使用
+037-开启下划线转驼峰自动映射
+038-查询总记录条数
+039-动态SQL之if标签
+040-动态SQL之where标签
+041-动态SQL之trim标签
+042-动态SQL之set标签
+043-动态SQL之choose when otherwise
+044-动态SQL之foreach
+045-sql片段声明与包含
+046-高级映射-多对一-级联属性
+047-高级映射-多对一-association
+048-高级映射-多对一-分步查询-延迟加载
+049-高级映射-一对多-collection方式
+050-高级映射-一对多-分步查询-延迟加载
+051-缓存概述
+052-mybatis的一级缓存
+053-mybatis的二级缓存
+054-使用逆向工程插件
+055-mybatis实现最基本的分页查询
+056-使用pagehelper分页插件
+057-mybatis的注解式开发
+
