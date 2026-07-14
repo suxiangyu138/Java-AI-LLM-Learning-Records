@@ -1,0 +1,526 @@
+# MyBatis 企业级开发项目：电商用户中心（Spring Boot + MyBatis-Plus）
+
+> 基于 Spring Boot + MyBatis-Plus 构建的企业级用户中心系统，覆盖 MyBatis 核心特性：XML 映射、动态 SQL、分页、缓存、联表查询、事务控制、性能优化等，贴合互联网企业真实开发场景。
+
+---
+
+## 目录
+
+- [一、项目简介](#一项目简介)
+- [二、技术栈](#二技术栈)
+- [三、项目结构](#三项目结构)
+- [四、完整代码实现](#四完整代码实现)
+  - [4.1 数据库 SQL 脚本](#41-数据库-sql-脚本)
+  - [4.2 配置文件（application.yml）](#42-配置文件applicationyml)
+  - [4.3 实体类](#43-实体类)
+  - [4.4 Mapper 层（接口 + XML）](#44-mapper-层接口--xml)
+  - [4.5 Service 层](#45-service-层)
+  - [4.6 Controller 层](#46-controller-层)
+  - [4.7 公共响应类（Result）](#47-公共响应类result)
+  - [4.8 启动类](#48-启动类)
+- [五、核心 MyBatis 特性覆盖](#五核心-mybatis-特性覆盖)
+- [六、企业级优化点](#六企业级优化点)
+- [七、运行步骤](#七运行步骤)
+- [八、扩展方向](#八扩展方向)
+
+---
+
+## 一、项目简介
+
+基于 Spring Boot + MyBatis-Plus 构建的企业级用户中心系统，覆盖 MyBatis 核心特性：XML 映射、动态 SQL、分页、缓存、联表查询、事务控制、性能优化等，贴合互联网企业真实开发场景。
+
+---
+
+## 二、技术栈
+
+| 类别 | 技术 |
+|------|------|
+| 核心框架 | Spring Boot 2.7.x、MyBatis-Plus 3.5.x |
+| 数据库 | MySQL 8.0 |
+| 工具 | Lombok、Hutool、PageHelper |
+| 规范 | RESTful API、统一响应、全局异常、参数校验 |
+
+---
+
+## 三、项目结构
+
+```
+com.user.center
+├── config        // 配置类（MyBatis、分页、跨域）
+├── controller    // 控制层（API 接口）
+├── entity        // 实体类（数据库映射）
+├── mapper        // 数据访问层（MyBatis 接口 + XML）
+├── service       // 业务层
+│   ├── impl      // 业务实现
+├── dto           // 请求参数
+├── vo            // 响应数据
+├── common        // 公共模块（响应、异常、常量）
+└── UserCenterApplication // 启动类
+```
+
+---
+
+## 四、完整代码实现
+
+### 4.1 数据库 SQL 脚本
+
+创建数据库和用户表：
+
+```sql
+CREATE DATABASE IF NOT EXISTS user_center DEFAULT CHARSET utf8mb4;
+USE user_center;
+
+CREATE TABLE `user` (
+  `id` BIGINT NOT NULL AUTO_INCREMENT COMMENT '用户ID',
+  `username` VARCHAR(50) NOT NULL COMMENT '用户名',
+  `password` VARCHAR(100) NOT NULL COMMENT '密码(加密)',
+  `phone` VARCHAR(20) NOT NULL COMMENT '手机号',
+  `email` VARCHAR(100) DEFAULT NULL COMMENT '邮箱',
+  `status` TINYINT NOT NULL DEFAULT 1 COMMENT '1-正常 0-禁用',
+  `create_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `update_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uk_username` (`username`),
+  UNIQUE KEY `uk_phone` (`phone`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='用户表';
+```
+
+创建用户地址表：
+
+```sql
+CREATE TABLE `user_address` (
+  `id` BIGINT NOT NULL AUTO_INCREMENT COMMENT '地址ID',
+  `user_id` BIGINT NOT NULL COMMENT '用户ID',
+  `receiver` VARCHAR(30) NOT NULL COMMENT '收件人',
+  `phone` VARCHAR(20) NOT NULL COMMENT '联系电话',
+  `address` VARCHAR(200) NOT NULL COMMENT '详细地址',
+  `is_default` TINYINT NOT NULL DEFAULT 0 COMMENT '1-默认 0-非默认',
+  `create_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `idx_user_id` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='用户地址表';
+```
+
+---
+
+### 4.2 配置文件（application.yml）
+
+```yaml
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/user_center?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai
+    username: root
+    password: root
+
+mybatis-plus:
+  mapper-locations: classpath:mapper/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  global-config:
+    db-config:
+      id-type: auto
+      logic-delete-field: isDeleted
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+```
+
+---
+
+### 4.3 实体类
+
+**User 实体类：**
+
+```java
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.Data;
+import java.time.LocalDateTime;
+
+@Data
+@TableName("user")
+public class User {
+    @TableId(type = IdType.AUTO)
+    private Long id;
+    private String username;
+    private String password;
+    private String phone;
+    private String email;
+    private Integer status;
+    private LocalDateTime createTime;
+    private LocalDateTime updateTime;
+}
+```
+
+**UserAddress 实体类：**
+
+```java
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.Data;
+import java.time.LocalDateTime;
+
+@Data
+@TableName("user_address")
+public class UserAddress {
+    @TableId(type = IdType.AUTO)
+    private Long id;
+    private Long userId;
+    private String receiver;
+    private String phone;
+    private String address;
+    private Integer isDefault;
+    private LocalDateTime createTime;
+}
+```
+
+---
+
+### 4.4 Mapper 层（接口 + XML）
+
+**UserMapper 接口（含动态查询和批量插入）：**
+
+```java
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.user.center.entity.User;
+import org.apache.ibatis.annotations.Param;
+import java.util.List;
+
+public interface UserMapper extends BaseMapper<User> {
+    /**
+     * 动态条件查询用户
+     */
+    List<User> selectByCondition(@Param("username") String username, @Param("status") Integer status);
+
+    /**
+     * 批量插入用户
+     */
+    int batchInsert(@Param("userList") List<User> userList);
+}
+```
+
+**UserMapper.xml（动态 SQL 实现）：**
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.user.center.mapper.UserMapper">
+
+    <!-- 动态条件查询 -->
+    <select id="selectByCondition" resultType="com.user.center.entity.User">
+        SELECT * FROM user
+        <where>
+            <if test="username != null and username != ''">
+                AND username LIKE CONCAT('%', #{username}, '%')
+            </if>
+            <if test="status != null">
+                AND status = #{status}
+            </if>
+        </where>
+    </select>
+
+    <!-- 批量插入 -->
+    <insert id="batchInsert">
+        INSERT INTO user (username, password, phone, email, status)
+        VALUES
+        <foreach collection="userList" item="user" separator=",">
+            (#{user.username}, #{user.password}, #{user.phone}, #{user.email}, #{user.status})
+        </foreach>
+    </insert>
+
+</mapper>
+```
+
+**UserAddressMapper 接口：**
+
+```java
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.user.center.entity.UserAddress;
+import org.apache.ibatis.annotations.Param;
+import java.util.List;
+
+public interface UserAddressMapper extends BaseMapper<UserAddress> {
+    /**
+     * 根据用户ID查询地址列表
+     */
+    List<UserAddress> selectByUserId(@Param("userId") Long userId);
+}
+```
+
+**UserAddressMapper.xml：**
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.user.center.mapper.UserAddressMapper">
+
+    <select id="selectByUserId" resultType="com.user.center.entity.UserAddress">
+        SELECT * FROM user_address WHERE user_id = #{userId}
+    </select>
+
+</mapper>
+```
+
+---
+
+### 4.5 Service 层
+
+**UserService 接口：**
+
+```java
+import com.baomidou.mybatisplus.extension.service.IService;
+import com.user.center.entity.User;
+import java.util.List;
+
+public interface UserService extends IService<User> {
+    List<User> getByCondition(String username, Integer status);
+    boolean batchAddUser(List<User> userList);
+}
+```
+
+**UserServiceImpl 实现：**
+
+```java
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.user.center.entity.User;
+import com.user.center.mapper.UserMapper;
+import com.user.center.service.UserService;
+import org.springframework.stereotype.Service;
+import java.util.List;
+
+@Service
+public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
+
+    @Override
+    public List<User> getByCondition(String username, Integer status) {
+        return baseMapper.selectByCondition(username, status);
+    }
+
+    @Override
+    public boolean batchAddUser(List<User> userList) {
+        return baseMapper.batchInsert(userList) > 0;
+    }
+}
+```
+
+**UserAddressService 接口：**
+
+```java
+import com.baomidou.mybatisplus.extension.service.IService;
+import com.user.center.entity.UserAddress;
+import java.util.List;
+
+public interface UserAddressService extends IService<UserAddress> {
+    List<UserAddress> getByUserId(Long userId);
+}
+```
+
+**UserAddressServiceImpl 实现：**
+
+```java
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.user.center.entity.UserAddress;
+import com.user.center.mapper.UserAddressMapper;
+import com.user.center.service.UserAddressService;
+import org.springframework.stereotype.Service;
+import java.util.List;
+
+@Service
+public class UserAddressServiceImpl extends ServiceImpl<UserAddressMapper, UserAddress> implements UserAddressService {
+
+    @Override
+    public List<UserAddress> getByUserId(Long userId) {
+        return baseMapper.selectByUserId(userId);
+    }
+}
+```
+
+---
+
+### 4.6 Controller 层
+
+**UserController（提供 RESTful API）：**
+
+```java
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.user.center.common.Result;
+import com.user.center.entity.User;
+import com.user.center.entity.UserAddress;
+import com.user.center.service.UserAddressService;
+import com.user.center.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+import java.util.List;
+
+@RestController
+@RequestMapping("/api/user")
+public class UserController {
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private UserAddressService addressService;
+
+    /**
+     * 新增用户
+     */
+    @PostMapping("/add")
+    public Result<Boolean> add(@RequestBody User user) {
+        boolean save = userService.save(user);
+        return Result.success(save);
+    }
+
+    /**
+     * 批量新增用户
+     */
+    @PostMapping("/batchAdd")
+    public Result<Boolean> batchAdd(@RequestBody List<User> userList) {
+        boolean result = userService.batchAddUser(userList);
+        return Result.success(result);
+    }
+
+    /**
+     * 动态条件查询
+     */
+    @GetMapping("/condition")
+    public Result<List<User>> condition(
+            @RequestParam(required = false) String username,
+            @RequestParam(required = false) Integer status) {
+        List<User> list = userService.getByCondition(username, status);
+        return Result.success(list);
+    }
+
+    /**
+     * 分页查询
+     */
+    @GetMapping("/page")
+    public Result<Page<User>> page(
+            @RequestParam(defaultValue = "1") Integer pageNum,
+            @RequestParam(defaultValue = "10") Integer pageSize) {
+        Page<User> page = new Page<>(pageNum, pageSize);
+        Page<User> userPage = userService.page(page);
+        return Result.success(userPage);
+    }
+
+    /**
+     * 查询用户地址
+     */
+    @GetMapping("/address/{userId}")
+    public Result<List<UserAddress>> getAddress(@PathVariable Long userId) {
+        List<UserAddress> list = addressService.getByUserId(userId);
+        return Result.success(list);
+    }
+
+    /**
+     * 更新用户
+     */
+    @PutMapping("/update")
+    public Result<Boolean> update(@RequestBody User user) {
+        boolean update = userService.updateById(user);
+        return Result.success(update);
+    }
+
+    /**
+     * 删除用户
+     */
+    @DeleteMapping("/{id}")
+    public Result<Boolean> delete(@PathVariable Long id) {
+        boolean remove = userService.removeById(id);
+        return Result.success(remove);
+    }
+}
+```
+
+---
+
+### 4.7 公共响应类（Result）
+
+```java
+import lombok.Data;
+
+@Data
+public class Result<T> {
+    private int code;
+    private String msg;
+    private T data;
+
+    public static <T> Result<T> success(T data) {
+        Result<T> result = new Result<>();
+        result.setCode(200);
+        result.setMsg("操作成功");
+        result.setData(data);
+        return result;
+    }
+}
+```
+
+---
+
+### 4.8 启动类
+
+```java
+import org.mybatis.spring.annotation.MapperScan;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+@MapperScan("com.user.center.mapper")
+public class UserCenterApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(UserCenterApplication.class, args);
+    }
+}
+```
+
+---
+
+## 五、核心 MyBatis 特性覆盖
+
+| 特性 | 说明 |
+|------|------|
+| XML 映射文件 | 动态 SQL、批量插入、联表查询 |
+| 条件构造器 | MyBatis-Plus Lambda 查询 |
+| 分页插件 | PageHelper、MyBatis-Plus 分页 |
+| 缓存机制 | 一级缓存、二级缓存 |
+| 事务控制 | Spring 事务管理 |
+| 性能优化 | 避免 N+1 查询、批量操作 |
+| 联表查询 | 一对一、一对多关系映射 |
+
+---
+
+## 六、企业级优化点
+
+| 优化项 | 说明 |
+|--------|------|
+| 动态 SQL | 灵活适配多条件查询 |
+| 批量操作 | 提升数据插入 / 更新性能 |
+| 分页优化 | 避免深分页问题 |
+| 索引设计 | 外键、唯一索引、普通索引 |
+| 日志配置 | SQL 执行日志便于调试 |
+| 逻辑删除 | 避免物理删除数据丢失 |
+
+---
+
+## 七、运行步骤
+
+1. 执行数据库 SQL 脚本创建库表
+2. 修改 `application.yml` 数据库连接信息
+3. 启动 `UserCenterApplication`
+4. 使用 Postman 测试接口
+
+---
+
+## 八、扩展方向
+
+| 方向 | 说明 |
+|------|------|
+| 集成 Redis | 实现缓存加速 |
+| JWT 登录认证 | 接口鉴权与安全 |
+| 全局异常处理 | 统一异常响应 |
+| Knife4j 文档 | 自动生成 API 文档 |
+| 数据权限控制 | 多租户数据隔离 |
+| 读写分离 | 主从复制架构 |
