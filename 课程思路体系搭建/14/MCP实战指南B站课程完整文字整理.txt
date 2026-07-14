@@ -1,0 +1,52 @@
+07.14 15:22
+MCP实战指南B站课程完整文字整理
+
+
+一、视频基础信息
+UP主信息
+尚硅谷
+粉丝：177.1万 | 投稿视频：485个 | 直播中
+视频标题
+MCP实战指南，mcp视频教程，2小时学透mcp
+视频数据
+播放：38.3万 | 弹幕：682 | 发布时间：2025年4月23日 10:00 | 25人正在观看
+BV号：BV1eK5DzHEWu
+
+课程简介
+对于程序员，MCP必知必学，Java+SpringAI / LangChain / LangChain4J+MCP，一旦掌握AI智能落地项目，会大大增加在就业市场的竞争力！
+标签
+AI、LangChain4J、A2A、智能体、MCP、java、Java、Agent、尚硅谷、Tools
+互动数据
+点赞：2989 | 投币：2505 | 收藏：8717 | 转发：804
+封面标语
+智能体是AI应用最主流的形态，即将迎来爆发点
+字幕原文：智能体即将迎来它的爆发点
+英文：We think That AI agent is applications. One is trial application.
+
+二、合集信息
+合集名称：AI应用&智能体
+全集共47集，总播放5308.6万次
+
+三、完整47集分集目录
+1. 01-MCP课程概述
+2. 02-MCP能干什么
+3. 03-MCP是什么&推广时间线
+4. 04-哪些平台支持MCP查询
+5. 05-MCP应用场景&通信机制
+6. 06-uvx和npx指令对应环境的安装
+7. 07-Cursor中使用MCP案例：准备工作和案例需求
+8. 08-Cursor中使用MCP案例：配置MCP Servers
+9. 09-Cursor中使用MCP案例：运行与测试
+10. 10-Cline中使用MCP案例：配置MCP Servers
+11. 11-Cline中使用MCP案例：运行与测试
+12. 12-MCP的5个核心要素的说明
+13. 13-MCP的工作流程
+14. 14-手动开发MCP项目：项目说明
+15. 15-手动开发MCP项目：Client.py的剖析
+16. 16-手动开发MCP项目：Server.py的剖析
+17. 17-手动开发MCP项目：项目测试
+18. 18-CherryStudio中使用MCP的准备工作
+19. 19-CherryStudio中配置MCP并测试
+20. 20-热门MCP Servers推荐
+21. 21-A2A协议的理解和举例
+

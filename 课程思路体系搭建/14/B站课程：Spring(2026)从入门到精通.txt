@@ -1,0 +1,174 @@
+07.14 09:25
+B站课程：Spring(2026)从入门到精通
+B站课程：Spring(2026)从入门到精通
+UP主：老杜带你学编程
+视频信息：4万播放 / 86弹幕 / 发布2026年3月17日
+BV号：BV1G5w9z8EjW
+简介：
+①关注【老杜带你学编程】自动领资料。
+②主页封面上有编号，按照编号顺序系统学习。它就是学习路线。
+③明年正月十六开三期班，现在支持免费预约。
+④一二期全套录播支持购买，价格优惠。
+标签：程序员、编程、java、spring、Spring、springboot
+全套103集完整目录
+001~036
+001-OCP开闭原则
+002-DIP依赖倒置原则
+003-初步理解控制反转IoC
+004-控制反转思想的实现方式
+005-OOD的五大原则SOLID
+006-Spring框架简介
+007-Spring的7大模块
+008-初步理解响应式流背压
+009-web同步与web异步的理解
+010-Spring框架特点
+011-Spring框架的常用jar包
+012-第一个Spring程序
+013-第一个Spring程序的注意事项
+014-Spring框架集成logback日志框架
+015-IoC和DI分别是什么-什么关系
+016-DI中的set注入实现方式
+017-属性名是如何计算出来的
+018-DI中的构造注入实现方式
+019-DI中的构造注入的注意事项
+020-set注入的实现原理
+021-构造注入的实现原理
+022-set注入专题-内部Bean
+023-set注入专题-注入简单类型
+024-给数据源连接池注入连接池属性
+025-级联属性赋值
+026-注入数组
+027-注入List集合
+028-注入Set集合
+029-注入Map集合
+030-注入Properties
+031-注入空字符串和null
+032-注入的内容中含有特殊符号
+033-p命名空间注入
+034-util命名空间简化配置
+035-c命名空间注入
+036-根据名称自动装配-XML方式
+037~070
+037-根据类型自动装配-XML方式
+038-引入外部独立的属性配置文件
+039-Bean的作用域
+040-23种设计模式
+041-简单工厂模式
+042-工厂方法模式
+043-Spring通过简单工厂模式实例化bean
+044-Spring通过工厂方法模式实例化bean
+045-通过FactoryBean接口实例化bean对象
+046-使用FactoryBean注入自定义的Date
+047-Bean的生命周期之5步
+048-bean生命周期之7步
+049-bean生命周期之10步
+050-bean生命周期的源码
+051-bean的作用域不同管理方式不同
+052-将自己new的对象纳入IoC容器的管理
+053-声明bean的注解
+054-Spring注解的使用
+055-扫描多个包
+056-选择性实例化bean
+057-@Value注解
+058-@Autowired与@Qualifier注解
+059-引入一下lombok
+060-@Resource注解
+061-全注解式开发
+062-对代理模式的初步理解
+063-静态代理模式
+064-动态代理技术概述
+065-JDK动态代理的初步实现
+066-JDK动态代理工具类的封装
+067-JDK动态代理动态织入事务
+068-CGLIB实现动态代理
+069-初步理解AOP
+070-AOP的七大术语
+071~103
+071-切点表达式的语法
+072-Spring中实现AOP的方式
+073-AspectJ的初体验
+074-AspectJ的全注解开发
+075-通知类型
+076-切面优先级
+077-优化使用切点表达式
+078-使用AOP控制事务
+079-AOP实现安全日志
+080-Spring框架集成MyBatis
+081-Spring框架集成MyBatis
+082-Spring框架中提供的事务管理器
+083-事务的传播行为
+084-事务传播行为的测试
+085-事务的隔离级别
+086-设置事务的超时时间
+087-只读事务
+088-异常回滚策略
+089-什么是循环依赖以及Spring Scope的策略
+090-set注入和双singleton模式下的循环依赖
+091-set注入和双prototype模式下的循环依赖
+092-set注入和单prototype模式下的循环依赖
+093-构造注入下的循环依赖
+094-三级缓存每个缓存存储什么以及作用
+095-只有一个公共缓存为什么不行
+096-三级缓存的执行原理
+097-两个缓存不行吗为什么需要三个
+098-面试题-spring如何解决循环依赖
+099-面试题-为什么需要三个缓存两个不行吗
+100-Spring框架中的八大模式
+101-Spring框架中的八大模式-代理与装饰动机不同
+102-Spring框架中的八大模式-策略模式和模板方法模式
+103-Spring框架中的八大模式-观察者模式
+课程开篇示例代码
+java
+package com.jkweilai.oa.controller;
+import com.jkweilai.oa.service.UserService;
+import com.jkweilai.oa.service.impl.UserServiceImpl;
+public class UserController {
+    private UserService userService = new UserServiceImpl();
+    public void login(){
+        String username = "admin";
+        String password = "123456";
+        boolean success = userService.login(username, password);
+        if (success) {
+            // 登录成功
+        } else {
+            // 登录失败
+        }
+    }
+}
+ 
+配套文档大纲
+1. 软件开发原则
+1.1 OCP开闭原则
+1.2 依赖倒置原则DIP
+1.3 控制反转IoC
+1.4 SOLID原则
+2. Spring概述
+3. Spring的入门程序
+4. Spring IoC的实现
+5. Bean的作用域
+6. Bean的工厂模式
+7. Bean的实例化方式
+8. Bean的生命周期
+9. Bean的循环依赖问题
+10. Spring IoC注解式开发
+11. GoF之代理模式
+12. 面向切面编程AOP
+13. Spring集成MyBatis
+14. Spring对事务的支持
+15. Spring中的八大模式
+页面顶部标语文案
+代码没写完，哪有脸睡觉
+运营的走开，不要和我说需求
+看见需求我的内心是奔溃的
+KPI完成没？PBC写了没？
+要大气，要简洁
+通宵可以建立最稳固的同事友谊
+吃了夜宵你好意思不通宵？
+体验，体验，注意用户体验！
+产品经理默默站在后面是非常不道德的
+不吃饭不睡觉不回家，任务没完成别走
+来瓶红牛，决战到天亮
+我要裸着写代码，这样很放松！
+牢记
+下班要打卡
+

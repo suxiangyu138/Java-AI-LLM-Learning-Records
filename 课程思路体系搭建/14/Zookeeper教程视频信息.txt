@@ -1,0 +1,54 @@
+07.14 01:18
+Zookeeper教程视频信息
+基础信息
+UP主：黑马程序员
+粉丝：482.2万 视频总数：557
+视频标题：黑马程序员Zookeeper视频教程，快速入门zookeeper技术
+播放：34万 弹幕：2763 发布时间：2020年2月15日 10:18
+在线观看人数：1人
+BV号：BV1M741137qY
+版权：未经作者授权禁止转载
+页面标题标语
+0基础 学IT 月薪过万
+课程大纲（简介）
+1. zookeeper简介
+2. zookeeper数据模型
+3. zookeeper单机安装
+4. zookeeper常用shell命令
+5. zookeeper的Acl权限控制
+6. zookeeper的javaApi
+标签
+视频教程、学习、公开课
+互动数据
+点赞：3376 投币：2810 收藏：1.5万 转发：910
+页面弹幕文字
+Fate—0
+小马哥冲啊
+黑马程序员
+坤坤学Zoo
+完整分集目录（共24集）
+1. 01-今日内容zookeeper
+2. 02-Zookeeper概念
+3. 03-Zookeeper安装
+4. 04-Zookeeper命令操作-数据模型
+5. 05-Zookeeper命令操作-服务端命令
+6. 06-Zookeeper命令操作-客户端命令-1基本CRUD
+7. 07-Zookeeper命令操作-客户端命令-2创建临时循序节点
+8. 08-Zookeeper JavaAPI操作-Curator介绍
+9. 09-Zookeeper JavaAPI操作-建立连接
+10. 10-Zookeeper JavaAPI操作-创建节点
+11. 11-Zookeeper JavaAPI操作-查询节点
+12. 12-Zookeeper JavaAPI操作-修改节点
+13. 13-Zookeeper JavaAPI操作-删除节点
+14. 14-Zookeeper JavaAPI操作-Watch监听概述
+15. 15-Zookeeper JavaAPI操作-Watch监听-NodeCache
+16. 16-Zookeeper JavaAPI操作-Watch监听-PathChildrenCache
+17. 17-Zookeeper JavaAPI操作-Watch监听-TreeCache
+18. 18-Zookeeper分布式锁-概念
+19. 19-Zookeeper分布式锁-Zookeeper分布式锁原理
+20. 20-Zookeeper分布式锁-模拟12306售票案例
+21. 21-Zookeeper集群-介绍
+22. 22-Zookeeper集群-搭建
+23. 23-Zookeeper集群-故障测试
+24. 24-Zookeeper集群-角色
+

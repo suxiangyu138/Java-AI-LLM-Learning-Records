@@ -1,0 +1,81 @@
+07.14 15:22
+FastAPI 2026新版B站教程完整文字整理
+FastAPI 2026新版B站教程完整文字整理
+一、视频基础信息
+UP主信息
+蔡蔡小趴菜
+粉丝：6.4万 | 投稿视频：453个
+视频标题
+【2026最新版】FastAPI框架入门教程，从0到1，快速上手，涵盖路由、依赖注入、Pydantic、异步编程、ORM、项目拆分、模型训练、部署、接口测试
+视频数据
+播放：494 | 弹幕：1 | 发布时间：2026年7月13日 17:16 | 1人正在观看
+BV号：BV1gVN16fEpi
+版权标注：未经作者授权禁止转载
+简介
+FastAPI适用于构建各种规模的Web后端服务，特别是那些需要高性能、清晰的API设计以及快速迭代的项目，由于其出色的性能和易用性，FastAPI成为了现代API开发的一个热门选择。本课程将以深入浅出的方式全面讲解FastAPI的核心特性，从基础语法到项目实战、从数据库到AI模型服务化一网打尽。同时课程内容幽默风趣、案例丰富，涵盖路由、依赖注入、Pydantic、异步编程、ORM、项目拆分、模型部署、接口测试等关键知识点，让小伙伴们在轻松的学习氛围中掌握扎实能力，真正做到“学得会、用得上、做得出”。
+标签
+学习、计算机、编程语言、编程、FastAPI、FastAPI框架、Python、大模型、Python学习
+互动数据
+点赞：13 | 投币：4 | 收藏：35 | 转发：3
+二、课件核心：FastAPI介绍
+FastAPI简介
+FastAPI是一个现代、高性能的Python Web框架，用于构建API。它基于Starlette（异步Web框架）和Pydantic（数据验证库），结合了异步编程和类型提示，兼顾开发效率与运行性能。
+官方文档：
+https://fastapi.tiangolo.com
+https://fastapi.tiangolo.com/
+开源源码：https://github.com/tiangolo/fastapi
+FastAPI核心优势：高性能
+1. 基于异步I/O，性能接近Node.js和Go
+2. 默认使用Uvicorn（ASGI服务器），支持高并发请求
+3. 基准性能对比（TechEmpower测试）
+- FastAPI：约3000请求/秒（异步、轻量）
+- Flask：约1000请求/秒（同步，WSGI限制）
+三、全47集完整分集目录
+1. 01_FastAPI介绍
+2. 02_FastAPI环境搭建
+3. 03_FastAPI第一个程序与启动项目
+4. 04_用AI生成API接口
+5. 05_FastAPI路径参数
+6. 06_FastAPI查询参数
+7. 07_FastAPI请求体
+8. 08_FastAPI请求参数类型验证
+9. 09_FastAPI请求参数验证_Query方式
+10. 10_FastAPI请求参数验证_Path方式
+11. 11_FastAPI请求参数验证_Field方式
+12. 12_FastAPI表单数据
+13. 13_FastAPI异步处理
+14. 14_FastAPI文件上传1
+15. 15_FastAPI文件上传2
+16. 16_FastAPI请求对象Request
+17. 17_FastAPI响应类型_JSON格式
+18. 18_FastAPI响应类型_列表格式
+19. 19_FastAPI响应类型_数据过滤与分页
+20. 20_FastAPI响应类型_分页列表封装
+21. 21_FastAPI响应类型_文件格式
+22. 22_FastAPI响应类型_其它格式
+23. 23_FastAPI的ORM生态
+24. 24_ORM_tortoise的配置
+25. 25_ORM_迁移工具
+26. 26_ORM_模型定义
+27. 27_ORM_模型定义实战
+28. 28_ORM_增加数据_脚本模式
+29. 29_ORM_增加数据_接口模式
+30. 30_ORM_更新与删除数据
+31. 31_ORM_查询数据
+32. 32_ORM_了解关联关系
+33. 33_ORM_1对1关系实现
+34. 34_ORM_1对多关系实现
+35. 35_ORM_多对多关系实现
+36. 36_ORM_关联关系增加数据
+37. 37_ORM_关联关系更新数据
+38. 38_ORM_关联关系查询与删除数据
+39. 39_FastAPI中间件
+40. 40_FastAPI中间件2
+41. 41_FastAPI跨域资源共享
+42. 42_FastAPI跨域资源共享_实现
+43. 43_FastAPI业务划分
+44. 44_FastAPI项目结构
+45. 45_FastAPI整合技能
+46. 46_FastAPI创建工程目录
+47. 47_FastAPI划分代码功能
+

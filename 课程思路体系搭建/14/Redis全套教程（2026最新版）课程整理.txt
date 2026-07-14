@@ -1,0 +1,58 @@
+07.14 01:09
+Redis全套教程（2026最新版）课程整理
+一、视频基础信息
+1. UP主：程序员宋小猪
+2. 视频标题：Redis全套教程(2026最新版)零基础入门到实战 | Redis缓存 | 五大数据类型 | 持久化 | 主从复制 | 哨兵模式 | Redis集群 | SpringBoot整合Redis
+3. BV号：BV1noMg6WESx
+4. 发布时间：2026年7月8日
+5. 播放/互动数据：播放312，点赞6，收藏19，弹幕0
+6. 视频标签：哨兵、教程、RED、数据、集群、实战、模式、Java、缓存、Redis
+二、课程大纲（PPT核心内容）
+课程总目录
+1. Redis简介
+2. 使用Redis作为缓存工具时流程
+3. Redis单机版安装
+4. Redis数据类型
+5. Redis持久化策略
+6. Redis主从复制
+7. Jedis
+8. Spring Boot 整合 Spring Data Redis
+9. 缓存穿透
+10. 缓存击穿
+11. 缓存雪崩
+学习目标
+知识点：Redis简介 | 掌握
+三、完整23集分集目录
+1. 01_尚学堂_Redis_NoSQL简介
+2. 02_尚学堂_Redis_Redis简介
+3. 03_尚学堂_Redis_Redis当做缓存工具时流程
+4. 04_尚学堂_Redis_基于Docker安装Redis
+5. 05_尚学堂_Redis_数据类型_Key
+6. 06_尚学堂_Redis_数据类型_String
+7. 07_尚学堂_Redis_数据类型_Hash
+8. 08_尚学堂_Redis_数据类型_List
+9. 09_尚学堂_Redis_数据类型_Set
+10. 10_尚学堂_Redis_数据类型_Sorted Set
+11. 11_尚学堂_Redis_持久化策略
+12. 12_尚学堂_Redis_主从复制的优点
+13. 13_尚学堂_Redis_主从复制实现
+14. 14_尚学堂_Redis_哨兵_Redis脑裂及解决方案
+15. 15_尚学堂_Redis_搭建Redis高可用集群
+16. 16_尚学堂_Redis_Spring Data简介
+17. 17_尚学堂_Redis_Spring Boot整合Spring Data常用API演示
+18. 18_尚学堂_Redis_Spring Data Redis支持的序列化器类型
+19. 19_尚学堂_Redis_缓存穿透
+20. 20_尚学堂_Redis_缓存击穿
+21. 21_尚学堂_Redis_重入锁代码演示
+22. 22_尚学堂_Redis_缓存雪崩
+23. 23_尚学堂_Redis_缓存淘汰策略
+四、课程核心覆盖技术点
+- NoSQL基础概念、Redis定位与基础介绍
+- Docker一键部署Redis单机环境
+- Redis 5大基础数据类型全详解：Key、String、Hash、List、Set、SortedSet
+- Redis持久化：RDB、AOF持久化机制
+- Redis高可用架构：主从复制、哨兵模式、集群搭建、脑裂问题解决
+- Java客户端：Jedis、Spring Data Redis、RedisTemplate、StringRedisTemplate、序列化方案
+- 缓存三大经典问题：缓存穿透、缓存击穿、缓存雪崩，配套解决方案与代码
+- Redis缓存淘汰策略、分布式锁（重入锁）实战代码
+

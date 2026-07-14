@@ -1,0 +1,122 @@
+07.14 15:18
+B站AI Agent智能体开发全套教程（共91集）
+视频基础信息
+1. UP主：AI大模型全栈（94.8万粉丝，980个视频）
+2. 视频标题：【2026最新】B站讲得最透的AI Agent智能体开发教程！从0搭建Agent，MCP、工具调用、工作流、项目实战一次讲清
+3. BV号：BV1YWNQ6jEFh
+4. 发布时间：2026年7月14日 11:01
+5. 播放数据：262播放、0弹幕、4点赞、4收藏
+6. 配套资源：后台私信UP主，发送暗号【11】领取课件/代码笔记
+7. 标签：原理、AI、计算机、人工智能、编程、Agent Skills、MCP、大模型、Agent、面试真题
+8. 简介文案
+本套AI大模型系统教程专为零基础用户打造，全方位覆盖从LLM底层原理到Prompt提示词工程、以及2026热门AI Agent智能体构建的实战全流程，不仅包含DeepSeek、Claude、OpenClaw等前沿模型的高效使用技巧，更深度解析了私有化部署、知识库搭建及工作流自动化的落地场景，旨在带你从零入门到精通，手把手教你如何利用AI大模型构建专属数字智能体。
+完整91集分集目录
+第0章：课程开篇与大模型基础（2节）
+0.0 课程简介
+0.1 认识大模型
+第1章：大模型应用与提示词入门（4节）
+1.1：模型的应用方向
+1.2 gradio
+1.3.提示词工程
+1.4-提示词视频，图片生成实战
+第2章：AI智能体基础认知（8节）
+2-1 什么是智能体？常见的AI智能体能力展示
+2-2 主流智能体产品介绍和效果对比(DeepResearch、Manus…)
+2-3 智能体的核心特性：自主性、适应性、交互性
+2-4 智能体和大模型的区别
+2-5 智能体5级分层及商业应用
+2-6 智能体技术架构讲解——Langgraph+LLM+Tools+MCP…
+2-7 本章知识总结和回顾
+第3章：Python环境、本地/云端大模型调用（9节）
+3-1 python多版本管理工具anaconda使用方法
+3-2 python项目管理工具uv安装和应用
+3-3 智能体开发流程&Ollama本地大模型部署
+3-4 使用langchain-ollama库调用本地大模型
+3-5 ollama大模型的流式调用
+3-6 阿里云百炼平台大模型调用
+3-7 百炼平台推理大模型调用
+3-8 LangChain框架基本特性和概念介绍
+3-9 本章重点内容回顾和复习
+第4章：LangChain提示词模板与自定义工具（9节）
+4-1 langchain_openai实例化qwen大模型+pydantic Se…
+4-2 提示词模板之文本提示词PromptTemplate
+4-3 对话提示词模板ChatPromptTemplate用法
+4-4 ChatPromptTemplate+ChatMessagePromptTemplate…
+4-5 FewShotPromptTemplate 通过提示词实现大模型少样本学习
+4-6 提示词模板对比及场景分析+链式调用大模型
+4-7 大模型调用自定义工具全流程开发
+4-8 tool装饰器注册工具+args_schema精确控制工具参数
+4-9 本章重点内容回顾和复习
+第5章：输出解析器、企业级工具实战（8节）
+5-1 使用langchain.agents库快速完成智能体创建和调用
+5-2 应用JsonOutputParser规范智能体返回值
+5-3 PythonPerl基本用法介绍
+5-4 利用PythonPerlTool自动编写企业官网
+5-5 智能体企业官网提示词修改和优化
+5-6 langchain基础解析器讲解——精准控制大模型响应格式
+5-7 langchain DateOutputParser实现日期自动格式化
+5-8 本章重点内容回顾和复习
+第6章：MCP协议原理、高德地图MCP实战（8节）
+6-1 本章内容概览——走近MCP
+6-2 彻底搞懂MCP的原理和发展现状
+6-3 高德MCP服务接入原理讲解
+6-4 使用langchain_mcp_adatpers创建MCP客户端
+6-5 结合高德MCP使智能体具备位置服务能力
+6-6 基于高德MCP的复杂路径规划+可视化展示
+6-7 MCP通讯协议之stdio——实现本地MCP服务端+客户端
+6-8 本章重点内容回顾和复习
+第7章：Playwright/Github/高德MCP、Cursor集成实战（10节）
+7-1 本章内容概览+Node环境搭建
+7-2 LangChain+MCP读取Playwright工具
+7-3 LangGraph+create_react_agent创建智能体运行Pipeline
+7-4 Cursor下载、安装并接入Playwright MCP服务
+7-4 Playwright工具执行流程分析+日志结构化输出
+7-5 Cursor+Github MCP服务集成
+7-6 Cursor+高德MCP服务制定旅行计划
+7-7 Cursor+Github MCP服务集成
+7-8 小项目：Cursor+Github MCP二次开发vue-element-admin项目
+7-9 LangGraph agent接入Github MCP服务
+7-10 本章重点内容回顾和复习
+第8章：多轮对话、LangChain Runnables组件（11节）
+8-1 项目目标及整体架构设计
+8-2 多轮对话能力原理介绍
+8-3 多轮对话LCLE创建
+8-4 使用对话历史类ChatMessageHistory解决历史上下文存储
+8-5 基于RunnableWithMessageHistory构建多轮对话Runnable链路
+8-6 多轮对话交互实现
+8-7 使用FileChatMessageHistory实现本地会话持久化
+8-8 将agent集成到多轮对话
+8-9 LangChain核心组件Runnables介绍
+8-10 Runnables组件核心功能演示
+8-11 本章重点内容回顾和复习
+第9章：Agent记忆持久化（Redis/MongoDB/文件）（12节）
+9-1 本章内容概览+Agent内存记忆能力实现
+9-2 Windows&MacOS Redis环境搭建
+9-3 运用RedisSaver实现Agent会话持久化
+9-4 MongoDB环境搭建&MongoDB持久化实现
+9-5 文件持久化原理讲解+手写FileSaver实例化
+9-6 文件持久化FileSaver存储方法put实现
+9-7 文件持久化FileSaver恢复方法get_tuple实现
+9-8 基于FileSaver的agent多轮对话能力实现
+9-9（加餐）使用Docker安装redis服务
+9-10（加餐）使用Docker安装mongodb服务
+9-11（加餐）mongosh命令行工具安装和使用
+9-12 本章重点内容回顾和复习
+第10章：终端Shell/PowerShell MCP工具开发（10节）
+10-1 本章内容概览+subprocess run方法讲解
+10-2 subprocess Popen方法实战
+10-3 mcp工具封装+agent集成shell mcp工具
+10-4 智能体流失输出+输出结果视觉优化
+10-5 MacOS终端工具原理介绍+关闭终端工具开发
+10-6 终端新增工具开发
+10-7 实现向终端输入脚本命令+获取终端全部信息
+10-8 使用Cursor封装终端mcp工具
+10-9 windows利用psutil+pyautogui开发powershell控制工具
+10-10 本章重点内容回顾和复习
+课程核心标语
+1. Agent开发才是当下大模型领域的核心
+2. 现在AI岗位早升级了，只会基础应用根本不够
+3. Agent能自己规划调用工具，才是真的核心竞争力
+4. Agent开发四大价值：规划调用工具、闭环解决复杂任务、求职涨薪项目变现、搭建智能产品
+5. 不管是求职涨薪、接项目变现都能落地
+
