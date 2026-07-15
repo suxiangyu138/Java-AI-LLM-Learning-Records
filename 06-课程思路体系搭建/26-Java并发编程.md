@@ -1,0 +1,329 @@
+# Java并发编程
+
+> 从零到一系统掌握Java多线程、并发编程核心知识体系，涵盖线程基础、锁机制、JUC工具类、线程池及并发容器等全方位内容。
+
+### 第一章 课程概览
+
+- `001` 为什么学习并发
+- `002` 课程组织和特色
+- `003` 预备知识
+
+### 第二章 进程与线程基础概念
+
+- `001` 本章内容
+- `002` 进程线程概念
+- `003` 并行并发概念
+- `004` 线程应用-异步调用
+- `005` 线程应用-提升效率
+- `006` 线程应用-提升效率-验证
+- `007` 线程应用-提升效率-小结
+
+### 第三章 Java线程基础
+
+- `001` 创建线程-方法1（继承Thread）
+- `002` 创建线程-方法2（实现Runnable）
+- `003` 创建线程-lambda简化
+- `004` 创建线程-方法1,2-原理
+- `005` 创建线程-方法3（Callable+Future）
+- `006` 线程运行-现象
+- `007` 线程运行-查看和杀死-windows
+- `008` 线程运行-查看和杀死-linux
+- `009` 线程运行-jconsole监控工具
+- `010` 线程运行原理-栈帧debug
+- `011` 线程运行原理-栈帧图解
+- `012` 线程运行原理-多线程
+- `013` 线程运行原理-上下文切换
+- `014` 线程常见方法-概述
+- `015` 常见方法-start vs run
+- `016` 常见方法-sleep与线程状态
+- `017` 常见方法-sleep打断
+- `018` 常见方法-sleep可读性
+- `019` 常见方法-yield vs sleep
+- `020` 常见方法-线程优先级
+- `021` 常见方法-sleep应用场景
+- `022` 常见方法-join线程等待
+- `023` 常见方法-join同步应用
+- `024` 常见方法-join限时同步
+- `025` 常见方法-interrupt打断阻塞线程
+- `026` 常见方法-interrupt打断正常运行线程
+- `027` 设计模式-两阶段终止-interrupt
+- `028` 设计模式-两阶段终止-interrupt分析
+- `029` 设计模式-两阶段终止-interrupt实现
+- `030` 设计模式-两阶段终止-interrupt细节
+- `031` 常见方法-interrupt打断park
+- `032` 常见方法-过时方法（stop/suspend/resume）
+- `033` 常见方法-守护线程
+- `034` 线程状态-五种宏观状态
+- `035` 线程状态-六种操作系统细分状态
+- `036` 线程状态-六种状态演示
+- `037` 习题-应用之统筹-分析
+- `038` 习题-应用之统筹-实现
+- `039` 第三章小结
+
+### 第四章 共享资源与synchronized锁、等待通知机制
+
+- `001` 本章内容
+- `002` 小故事-线程安全问题
+- `003` 上下文切换-分析
+- `004` 临界区与竞态条件
+- `005` 上下文切换-synchronized-解决竞争
+- `006` 上下文切换-synchronized-理解
+- `007` 上下文切换-synchronized-理解补充
+- `008` 上下文切换-synchronized-思考
+- `009` 锁对象面向对象改进
+- `010` synchronized-加在普通方法上
+- `011` synchronized-加在方法上-习题1~2
+- `012` synchronized-加在方法上-习题3~4
+- `013` synchronized-加在方法上-习题5~8
+- `014` 线程安全分析总述
+- `015` 线程安全分析-局部变量
+- `016` 线程安全分析-局部变量引用
+- `017` 线程安全分析-局部变量暴露引用
+- `018` 线程安全分析-常见类组合调用
+- `019` 线程安全分析-不可变类
+- `020` 线程安全分析-实例分析1~3
+- `021` 线程安全分析-实例分析4~7
+- `022` 习题-卖票-读题
+- `023` 习题-卖票-测试方法
+- `024` 习题-卖票-解题
+- `025` 习题-转账业务
+- `026` Monitor监视器-对象头
+- `027` Monitor-工作原理
+- `028` Monitor-工作原理-字节码角度
+- `029` synchronized锁优化原理-小故事
+- `030` synchronized锁优化原理-轻量级锁
+- `031` synchronized锁优化原理-锁膨胀
+- `032` synchronized锁优化原理-自旋优化
+- `033` synchronized锁优化原理-偏向锁
+- `034` synchronized锁优化原理-偏向锁状态
+- `035` synchronized锁优化原理-偏向锁撤销
+- `036` synchronized锁优化原理-偏向锁-批量重偏向
+- `037` synchronized锁优化原理-偏向锁-批量撤销
+- `038` synchronized锁优化原理-锁消除
+- `039` 小故事-wait与notify
+- `040` wait与notify-工作原理
+- `041` wait与notify-api-1
+- `042` wait与notify-api-2
+- `043` wait vs sleep 核心区别
+- `044` wait与notify-正确姿势-step1
+- `045` wait与notify-正确姿势-step2
+- `046` wait与notify-正确姿势-step3~4
+- `047` wait与notify-正确姿势-step5
+- `048` 设计模式-保护性暂停-定义
+- `049` 设计模式-保护性暂停-实现
+- `050` 设计模式-保护性暂停-扩展-增加超时
+- `051` 设计模式-保护性暂停-扩展-增加超时-测试
+- `052` 设计模式-join底层原理
+- `053` 设计模式-保护性暂停-扩展-解耦等待和生产-分析
+- `054` 设计模式-保护性暂停-扩展-解耦等待和生产-实现
+- `055` 设计模式-保护性暂停-扩展-解耦等待和生产-测试
+- `056` 设计模式-生产者消费者模式-定义
+- `057` 设计模式-生产者消费者模式-实现
+- `058` 设计模式-生产者消费者模式-测试
+- `059` LockSupport的park&unpark-基本使用
+- `060` park&unpark底层原理
+- `061` 线程状态转换-1
+- `062` 线程状态转换-2
+- `063` 线程状态转换-3~4
+- `064` 线程状态转换总览
+- `065` 多把锁场景
+- `066` 活跃性问题-死锁现象
+- `067` 活跃性问题-定位死锁
+- `068` 活跃性问题-死锁案例哲学家就餐
+- `069` 活跃性问题-活锁
+- `070` 活跃性问题-饥饿
+- `071` ReentrantLock可重入锁-简介
+- `072` ReentrantLock-可重入特性
+- `073` ReentrantLock-可打断
+- `074` ReentrantLock-锁超时
+- `075` ReentrantLock-锁超时-解决哲学家就餐死锁
+- `076` ReentrantLock-公平锁
+- `077` ReentrantLock-条件变量Condition-简介
+- `078` ReentrantLock-条件变量使用例子
+- `079` 设计模式-固定运行顺序-wait notify
+- `080` 设计模式-固定运行顺序-park unpark
+- `081` 设计模式-交替输出-wait notify
+- `082` 设计模式-交替输出-await signal
+- `083` 设计模式-交替输出-park unpark
+- `084` 第四章小结
+
+### 第五章 可见性、有序性、volatile
+
+- `001` 本章内容
+- `002` 可见性-问题现象
+- `003` 可见性-解决方案
+- `004` 可见性vs原子性区分
+- `005` 设计模式-两阶段终止-volatile实现
+- `006` 设计模式-犹豫模式（Balking）
+- `007` 设计模式-犹豫模式-应用场景
+- `008` 有序性-指令重排
+- `009` 有序性-指令重排原理-指令并行优化
+- `010` 有序性-指令重排带来的并发问题
+- `011` 有序性-指令重排问题验证
+- `012` 有序性-指令重排-volatile禁用重排
+- `013` volatile-原理-保证可见性
+- `014` volatile-原理-保证有序性
+- `015` volatile-原理-DCL双重检查锁-简介
+- `016` volatile-原理-DCL-问题分析
+- `017` volatile-原理-DCL-问题纠正思路
+- `018` volatile-原理-DCL-问题最终解决
+- `019` happens-before八大规则
+- `020` 习题-balking犹豫模式代码练习
+- `021` 习题-线程安全单例1
+- `022` 习题-线程安全单例2~4
+- `023` 习题-线程安全单例5
+- `024` 第五章小结
+
+### 第六章 无锁并发、CAS与原子类
+
+- `001` 本章内容
+- `002` 保护共享资源-加锁实现（悲观锁）
+- `003` 保护共享资源-无锁实现（乐观锁CAS）
+- `004` CAS工作方式
+- `005` CAS慢动作底层分析
+- `006` CAS与volatile配合
+- `007` CAS效率分析
+- `008` CAS特点与优缺点
+- `009` 原子整数-AtomicInteger基础使用
+- `010` 原子整数-AtomicInteger-updateAndGet
+- `011` 原子整数-AtomicInteger-updateAndGet底层原理
+- `012` 原子引用-AtomicReference
+- `013` 原子引用-ABA问题现象
+- `014` 原子引用-AtomicStampedReference（带版本号解决ABA）
+- `015` 原子引用-AtomicMarkableReference（标记版）
+- `016` 原子数组
+- `017` 原子数组示例
+- `018` 原子更新器
+- `019` 原子累加器LongAdder
+- `020` LongAdder原理-CAS分段锁
+- `021` LongAdder原理-缓存行伪共享
+- `022` LongAdder源码-add方法
+- `023` LongAdder源码-longAccumulate-cells未创建
+- `024` LongAdder源码-longAccumulate-cell无竞争
+- `025` LongAdder源码-longAccumulate-cell竞争扩容
+- `026` LongAdder源码-sum求和逻辑
+- `027` Unsafe对象-获取
+- `028` Unsafe对象-CAS相关底层方法
+- `029` Unsafe对象-模拟实现原子整数
+- `030` 第六章小结
+
+### 第七章 不可变、享元模式、final底层
+
+- `001` 本章内容
+- `002` 不可变对象-使用场景
+- `003` 不可变对象-设计规范
+- `004` 享元模式-定义和体现
+- `005` 享元模式-不可变线程安全辨析
+- `006` 享元模式-自定义数据库连接池-分析
+- `007` 享元模式-自定义数据库连接池-实现
+- `008` 享元模式-自定义数据库连接池-测试
+- `009` 享元模式-自定义数据库连接池-总结
+- `010` final关键字底层原理
+- `011` 第七章小结
+
+### 第八章 JUC工具类、线程池、并发容器
+
+- `001` 本章内容
+- `002` 自定义线程池-阻塞队列基础
+- `003` 自定义线程池-阻塞队列-poll超时增强
+- `004` 自定义线程池-线程池基础框架实现
+- `005` 自定义线程池-任务提交&Worker工作线程实现
+- `006` 自定义线程池-take阻塞等待&poll超时
+- `007` 自定义线程池-当任务队列已满策略
+- `008` 自定义线程池-阻塞队列-offer增强
+- `009` 自定义线程池-拒绝策略设计
+- `010` 自定义线程池-拒绝策略演示
+- `011` ThreadPoolExecutor-线程池五种状态
+- `012` ThreadPoolExecutor-构造方法参数详解
+- `013` ThreadPoolExecutor-构造方法完整解析
+- `014` Executors工具类-固定大小线程池newFixedThreadPool
+- `015` Executors工具类-带缓冲线程池newCachedThreadPool
+- `016` Executors工具类-单线程线程池newSingleThreadExecutor
+- `017` ThreadPoolExecutor-submit提交有返回值任务
+- `018` ThreadPoolExecutor-invokeAll批量执行任务
+- `019` ThreadPoolExecutor-invokeAny任一任务完成返回
+- `020` ThreadPoolExecutor-停止shutdown/shutdownNow
+- `021` ThreadPoolExecutor-停止方法演示
+- `022` 设计模式-工作线程Worker模式-定义
+- `023` 设计模式-工作线程Worker模式-饥饿现象
+- `024` 设计模式-工作线程Worker模式-饥饿解决
+- `025` 设计模式-工作线程-合理池大小设置
+- `026` Timer定时任务的缺点
+- `027` ScheduledThreadPoolExecutor-延时执行任务
+- `028` ScheduledThreadPoolExecutor-定时周期执行任务
+- `029` 正确处理线程池内部任务异常
+- `030` 线程池应用-定时任务业务场景
+- `031` 线程池应用-定时任务-测试
+- `032` Tomcat内置线程池
+- `033` Tomcat线程池核心配置
+- `034` Fork/Join分治框架-概念
+- `035` Fork/Join分治框架-基础使用
+- `036` Fork/Join分治框架-任务拆分优化
+- `037` AQS抽象队列同步器-概述
+- `038` AQS抽象队列同步器-自定义锁实现
+- `039` AQS抽象队列同步器-自定义锁测试
+- `040` ReentrantLock加锁成功完整流程
+- `041` ReentrantLock加锁失败入队流程
+- `042` ReentrantLock解锁竞争成功流程
+- `043` ReentrantLock解锁竞争失败流程
+- `044` ReentrantLock可重入底层原理
+- `045` ReentrantLock可打断底层原理
+- `046` ReentrantLock公平锁底层原理
+- `047` ReentrantLock条件变量Condition-await等待
+- `048` ReentrantLock条件变量Condition-signal唤醒
+- `049` ReentrantReadWriteLock读写锁-基础使用
+- `050` ReentrantReadWriteLock读写锁-注意事项
+- `051` ReentrantReadWriteLock读写锁-应用之缓存
+- `052` ReentrantReadWriteLock读写锁-应用缓存-问题分析
+- `053` ReentrantReadWriteLock读写锁-应用缓存-代码实现
+- `054` ReentrantReadWriteLock读写锁-应用缓存-补充优化
+- `055` ReentrantReadWriteLock读写锁底层原理-t1写锁加锁
+- `056` ReentrantReadWriteLock读写锁底层原理-t2读锁加锁
+- `057` ReentrantReadWriteLock读写锁底层原理-t3读锁排队
+- `058` ReentrantReadWriteLock读写锁底层原理-t1写锁释放
+- `059` ReentrantReadWriteLock读写锁底层原理-t1写锁释放细节
+- `060` ReentrantReadWriteLock读写锁底层原理-t2读锁释放
+- `061` StampedLock乐观读锁-作用
+- `062` StampedLock乐观读锁-代码演示
+- `063` Semaphore信号量-作用
+- `064` Semaphore信号量-代码演示
+- `065` Semaphore信号量应用-改进数据库连接池
+- `066` Semaphore信号量底层原理-acquire获取许可
+- `067` Semaphore信号量底层原理-release释放许可
+- `068` CountDownLatch门闩锁-简介
+- `069` CountDownLatch门闩锁-改进用法
+- `070` CountDownLatch门闩锁应用-等待多线程准备完毕
+- `071` CountDownLatch门闩锁应用-等待多个远程调用结束
+- `072` Future异步任务应用-等待多个远程调用结束
+- `073` CyclicBarrier循环栅栏-解决问题场景
+- `074` CyclicBarrier循环栅栏-使用演示
+- `075` CyclicBarrier循环栅栏-注意事项
+- `076` 线程安全集合类-总概述
+- `077` ConcurrentHashMap错误使用案例
+- `078` ConcurrentHashMap-computeIfAbsent方法
+- `079` ConcurrentHashMap原理前置-HashMap回顾
+- `080` ConcurrentHashMap原理-HashMap扩容死链问题
+- `081` ConcurrentHashMap原理-HashMap死链补充1
+- `082` ConcurrentHashMap原理-HashMap死链补充2
+- `083` ConcurrentHashMap JDK8版本原理-属性&内部类&方法
+- `084` ConcurrentHashMap JDK8版本原理-构造初始化
+- `085` ConcurrentHashMap JDK8版本原理-get取值流程
+- `086` ConcurrentHashMap JDK8版本原理-put存入流程
+- `087` ConcurrentHashMap JDK8版本原理-put流程细节
+- `088` ConcurrentHashMap JDK8版本原理-initTable初始化
+- `089` ConcurrentHashMap JDK8版本原理-addCount计数
+- `090` ConcurrentHashMap JDK8版本原理-size总大小统计
+- `091` ConcurrentHashMap JDK8版本原理-transfer扩容迁移
+- `092` ConcurrentHashMap JDK7版本原理-分段锁Segment结构
+- `093` ConcurrentHashMap JDK7版本原理-定位segment分段
+- `094` ConcurrentHashMap JDK7版本原理-put存入数据
+- `095` ConcurrentHashMap JDK7版本原理-rehash扩容
+- `096` ConcurrentHashMap JDK7版本原理-rehash补充细节
+- `097` ConcurrentHashMap JDK7版本原理-get取值
+- `098` ConcurrentHashMap JDK7版本原理-size统计
+- `099` LinkedBlockingQueue阻塞队列原理-入队出队
+- `100` LinkedBlockingQueue阻塞队列原理-线程安全分析
+- `101` LinkedBlockingQueue阻塞队列原理-put阻塞逻辑
+- `102` LinkedBlockingQueue vs ArrayBlockingQueue对比
+- `103` ConcurrentLinkedQueue无锁并发队列
+- `104` CopyOnWriteArrayList写时复制数组列表

@@ -48,12 +48,20 @@ Java-AI-LLM-Learning-Records/
 │   ├── 03-LingShu-医疗AI问答平台/      # 14步RAG管线 + ReAct Agent + 多层安全护栏
 │   └── 04-必做项目清单/                # 40+技术栈练习项目清单（入门→进阶→企业级）
 │
-└── 05-综合输出-面试冲刺/               # 面试冲刺：题库 + 手写代码 + 简历 + 速查
-    ├── 01-面试题库/                    # 152题全量题库（含标准答案 + PDF版本）
-    ├── 02-手写代码题库/                # HashMap/线程池/分布式锁/SSE/RAG/Agent手写
-    ├── 03-简历与职业发展/              # 多版本简历 + 个人发展笔记 + 职业规划
-    ├── 04-参考速查/                    # 核心知识点速查手册 + AI/数学名词图谱
-    └── 05-学习路线与能力图谱/          # Java后端分级能力图谱 + AI大模型学习路线
+├── 05-综合输出-面试冲刺/               # 面试冲刺：题库 + 手写代码 + 简历 + 速查
+│   ├── 01-面试题库/                    # 152题全量题库（含标准答案 + PDF版本）
+│   ├── 02-手写代码题库/                # HashMap/线程池/分布式锁/SSE/RAG/Agent手写
+│   ├── 03-简历与职业发展/              # 多版本简历 + 个人发展笔记 + 职业规划
+│   ├── 04-参考速查/                    # 核心知识点速查手册 + AI/数学名词图谱
+│   └── 05-学习路线与能力图谱/          # Java后端分级能力图谱 + AI大模型学习路线
+│
+└── 06-课程思路体系搭建/                # B站全套技术课程索引（84门标准化课程文档）
+    ├── Java后端体系(26门)/             # JavaWeb→JDBC→MyBatis→Spring→SpringBoot→SpringCloud→JVM→并发→分布式
+    ├── 中间件(16门)/                   # Redis→RabbitMQ→RocketMQ→ES→Nginx→MongoDB→ZK→Dubbo→Netty
+    ├── AI大模型(23门)/                 # LLM→Prompt→RAG→Agent→LangChain→SpringAI→MCP→Milvus→Ollama
+    ├── 工具与运维(12门)/               # Git→Maven→Linux→Docker→Jenkins→ClaudeCode→Cursor
+    ├── 前端与语言(11门)/               # Vue3→React→微信小程序→Python→FastAPI→Node.js
+    └── README.md                       # 完整课程索引（含五大分类链接表）
 ```
 
 ---
