@@ -1,0 +1,144 @@
+# 尚硅谷2026版LangChain全套
+
+> LangChain全套学习，零基础入门，覆盖三大综合项目实战，共120集
+
+### 第一部分：课程基础 & 环境搭建 & 大模型调用（01-32）
+
+- 01 课程介绍
+- 02 为什么需要LangChain
+- 03 大模型相关岗位介绍
+- 04 LangChain是什么
+- 05 LangChain的主要模块和API文档
+- 06 LangChain家族四大支柱
+- 07 conda的安装及虚拟环境的配置
+- 08 大模型应用场景1：Agent开发
+- 09 大模型的应用场景2：Agent开发
+- 10 大模型开发的4个递进场景
+- 11 模型调用前的准备工作
+- 12 调用DeepSeek官网的DeepSeek模型
+- 13 调用智谱和阿里云百炼平台的大模型
+- 14 ChatOpenAI兼容用法
+- 15 使用OpenRouter和CloseAI中转平台调用模型
+- 16 LangChain1.x中init_chat_model方式
+- 17 模型初始化常用的参数
+- 18 Ollama的安装与本地模型的调用
+- 19 测试invoke传递三种不同的参数类型
+- 20 invoke的返回值的详细说明
+- 21 流式调用、批量调用与异步调用
+- 22 profile属性、初始化model_kwargs与extra_body
+- 23 LangSmith的介绍与基本使用
+- 24 LangSmith的主要功能介绍
+- 25 认识消息与消息的两种格式
+- 26 4种消息对象中字段的说明
+- 27 对话历史的管理和优化
+- 28 案例：多轮对话聊天机器人
+- 29 content和content_blocks的使用
+- 30 ChatPromptTemplate的两种实例化方式和三种调用方式
+- 31 ChatPromptTemplate初始化的6种参数类型
+- 32 部分变量预填充、消息占位符等的使用
+
+### 第二部分：工具调用 & 结构化输出（33-50）
+
+- 33 工具的调用方式与整体执行流程分析
+- 34 不使用@tool方式定义工具
+- 35 使用@tool装饰器定义工具：description和name
+- 36 使用@tool装饰器定义工具：args_schema
+- 37 案例1和2：使用args_schema和docstring
+- 38 案例3-4：多工具的调用
+- 39 tool_choice参数的使用
+- 40 工具使用的实践经验总结
+- 41 结构化输出的理解
+- 42 Pydantic的基本使用
+- 43 Pydantic高级特性：可选字段、默认值、枚举类型
+- 44 Pydantic高级特性：列表提取、嵌套、限制条件
+- 45 Pydantic模式的工作流程图解
+- 46 TypedDict格式的使用
+- 47 JSON Schema格式的使用
+- 48 @dataclass格式的使用
+- 49 四种不同模式的类型校验情况
+- 50 两种获取结构化结果的方式
+
+### 第三部分：Agent智能体全详解（51-63）
+
+- 51 Agent的概述
+- 52 Agent实例化中模型的两种传入方式
+- 53 Agent通过invoke()方式调用
+- 54 Agent绑定工具并调用
+- 55 工具调用流程分析、常见问题分析
+- 56 设置agent的name和system_prompt
+- 57 agent结构化输出的4种策略
+- 58 ToolStrategy的schema设置结构化输出-Pydantic类型
+- 59 ToolStrategy的schema设置结构化输出-其它几种方式
+- 60 ToolStrategy的tool_message_content参数
+- 61 Agent的高级用法：错误处理机制
+- 62 设置Agent的流式输出策略
+- 63 Agent的实战：多功能智能助手
+
+### 第四部分：中间件 Middleware（64-78）
+
+- 64 为什么需要中间件、中间件的分类
+- 65 SummarizationMiddleware中间件的使用
+- 66 HumanInTheLoopMiddleware中间件的使用
+- 67 PIIMiddleware中间件的使用
+- 68 TodoListMiddleware中间件的使用
+- 69 ModelCallLimitMiddleware中间件的使用
+- 70 ToolCallLimitMiddleware中间件的使用
+- 71 ModelFallbackMiddleware中间件的使用
+- 72 LLMToolSelectorMiddleware中间件的使用
+- 73 ToolRetryMiddleware中间件的使用
+- 74 ModelRetryMiddleware中间件的使用
+- 75 LLMToolEmulator中间件的使用
+- 76 ContextEditingMiddleware中间件的使用
+- 77 FilesystemFileSearchMiddleware中间件的使用
+- 78 多个中间件组合及执行顺序
+
+### 第五部分：Hook钩子函数（79-85）
+
+- 79 hook函数的理解
+- 80 基于装饰器定义Node-style的钩子函数
+- 81 基于类定义Node-style的钩子函数
+- 82 装饰器参数can_jump_to的使用
+- 83 wrap_model_call的实现和使用场景
+- 84 wrap_tool_call的实现和使用场景
+- 85 装饰器和类方式的选择、hook函数执行顺序
+
+### 第六部分：记忆 Memory 长短记忆持久化（86-101）
+
+- 86 记忆的概念和记忆的分类
+- 87 短期记忆之基于内存的持久化器的实现
+- 88 基于内存存储的工作原理和常见问题
+- 89 腾讯云部署Linux服务器
+- 90 PostgreSQL数据库的安装
+- 91 远程服务器连接额外操作
+- 92 短期记忆之PostgreSQL实现持久化存储
+- 93 对比两种方式的不同
+- 94 消息裁剪的治理策略
+- 95 消息删除、摘要的治理策略
+- 96 长期记忆的介绍和存储架构
+- 97 put()和get()操作的演示
+- 98 search()操作的演示
+- 99 在工具中访问长期记忆（基于InMemoryStore）
+- 100 在工具中访问长期记忆（基于PostgresStore）
+- 101 在中间件中访问长期记忆
+
+### 第七部分：RAG检索增强生成完整体系（102-120 项目实战）
+
+- 102 RAG模块的必要性
+- 103 RAG工作流程和环境准备
+- 104 TextLoader和CSVLoader的使用
+- 105 JSONLoader加载JSON文件
+- 106 PyPDFLoader和MinerU加载pdf文件
+- 107 其它格式文件的加载器
+- 108 切分策略及TextSplitter中的三个核心方法
+- 109 CharacterTextSplitter的使用
+- 110 RecursiveCharacterTextSplitter的使用
+- 111 其它多种TextSplitter的使用演示
+- 112 嵌入模型的初始化及文档向量化举例
+- 113 向量数据库介绍、docker的安装和设置
+- 114 Milvus的安装和数据模型说明
+- 115 Milvus数据库的DDL操作
+- 116 Milvus数据库的DML和DQL操作
+- 117 项目Assistant客服知识库之全局配置、初始化Milvus
+- 118 项目Assistant客服知识库之文档切分、向量化并写入
+- 119 项目Assistant客服知识库之初始化Agent、检索函数
+- 120 项目Assistant客服知识库之生产与回答生成

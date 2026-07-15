@@ -1,0 +1,410 @@
+# C 盘 系统环境说明书
+
+> **更新日期**：2026-06-24
+
+---
+
+## C 盘概览
+
+| 维度 | 说明 |
+|------|------|
+| 角色 | 系统盘 + 全局配置 + AI Agent 配置文件 |
+| 核心 | Windows 系统 / WSL / Claude Code / OpenClaw / Volta |
+
+---
+
+## 一、操作系统
+
+| 属性 | 值 |
+|------|-----|
+| OS | Windows 11 Home China |
+| 版本 | 10.0.26200 |
+| PowerShell | 5.1.26100.8655 |
+
+---
+
+## 二、WSL 子系统
+
+### 已安装发行版
+
+| 发行版 | 状态 | 说明 |
+|--------|------|------|
+| Ubuntu-22.04 | 已停止 | 默认 |
+| Ubuntu | — | 备用 |
+| docker-desktop | — | Docker Desktop WSL 集成 |
+
+### 管理命令
+
+```powershell
+wsl --list --verbose       # 查看状态
+wsl -d Ubuntu-22.04        # 启动指定发行版
+wsl --shutdown             # 关闭所有 WSL
+wsl --terminate Ubuntu     # 终止指定发行版
+```
+
+### WSL 内访问 Windows 文件
+
+| 路径 | 映射 |
+|------|------|
+| `/mnt/c/` | C盘 |
+| `/mnt/d/` | D盘 |
+
+**WSL 内 Java**：`export JAVA_HOME="/d/JDK25"`（配在 `~/.bashrc`）
+
+---
+
+## 三、Claude Code 配置（核心）
+
+### 基本信息
+
+| 属性 | 值 |
+|------|-----|
+| 安装版本 | 2.1.158 |
+| 配置目录 | `C:\Users\13686\.claude\` |
+
+### 关键文件
+
+| 文件 | 大小 | 说明 |
+|------|------|------|
+| `settings.json` | 9250B | 主配置文件 |
+| `settings.local.json` | 5901B | 本地配置 |
+| `config.json` | — | 基础配置 |
+| `history.jsonl` | 784KB | 对话历史 |
+| `CLAUDE.md` | — | 用户全量记忆档案 |
+
+### settings.json 关键配置
+
+#### env 块（环境变量注入）
+
+| 变量 | 值 |
+|------|-----|
+| `ANTHROPIC_API_KEY` | DeepSeek API Key |
+| `ANTHROPIC_BASE_URL` | `https://api.deepseek.com/anthropic` |
+| `ANTHROPIC_MODEL` | `deepseek-v4-pro[1m]` |
+| `ANTHROPIC_DEFAULT_OPUS_MODEL` | `deepseek-v4-pro[1m]` |
+| `ANTHROPIC_DEFAULT_SONNET_MODEL` | `deepseek-v4-pro[1m]` |
+| `ANTHROPIC_DEFAULT_HAIKU_MODEL` | `deepseek-v4-flash` |
+| `CLAUDE_CODE_SUBAGENT_MODEL` | `deepseek-v4-flash` |
+| `CLAUDE_CODE_EFFORT_LEVEL` | `max` |
+| `ENABLE_TOOL_SEARCH` | `true` |
+
+#### 权限
+
+| 类型 | 内容 |
+|------|------|
+| ✅ 允许 | Git 操作 / npm / npx / node / python / pip / ls / cat / echo |
+| ❌ 禁止 | `rm -rf` / `sudo` / `curl \| sh` / `wget \| sh` |
+
+#### 插件（已启用 22 个）
+
+`code-review` · `code-simplifier` · `feature-dev` · `frontend-design` · `github` · `playwright` · `mcp-server-dev` · `plugin-dev` · `pr-review-toolkit` · `security-guidance` · `session-report` · `skill-creator` · `commit-commands` · `agent-sdk-dev` · `claude-md-management` · `claude-code-setup` · `code-modernization` · `mcp-tunnels` · `serena`
+
+#### MCP 服务器
+
+`filesystem` · `sequential-thinking` · `memory` · `fetch` · `git`
+
+#### Hooks（Clawd on Desk 集成）
+
+| Hook 事件 |
+|-----------|
+| `SessionStart` / `SessionEnd` / `PreToolUse` / `PostToolUse` |
+| `UserPromptSubmit` / `Notification` / `PreCompact` / `PostCompact` |
+| `SubagentStart` / `SubagentStop` / `Stop` / `PermissionRequest` |
+
+### CLAUDE.md
+
+| 属性 | 值 |
+|------|-----|
+| 路径 | `C:\Users\13686\CLAUDE.md` |
+| 内容 | 用户画像 · 技术栈 · 代码风格规则 · 沟通规则 · 禁则 |
+
+### 记忆系统
+
+| 属性 | 值 |
+|------|-----|
+| 路径 | `C:\Users\13686\.claude\projects\C--Users-13686\memory\` |
+| 功能 | 自动记录跨会话信息 |
+
+---
+
+## 四、Clawd on Desk（桌面 AI 助手）
+
+| 属性 | 值 |
+|------|-----|
+| 路径 | `C:\Users\13686\AppData\Local\Programs\Clawd on Desk\` |
+| Hook 脚本 | `...\resources\app.asar.unpacked\hooks\clawd-hook.js` |
+| 权限服务 | `http://127.0.0.1:23333/permission` |
+| 关联 | OpenClaw 互操作 |
+
+---
+
+## 五、OpenClaw 配置
+
+### 基本信息
+
+| 属性 | 值 |
+|------|-----|
+| 配置目录 | `C:\Users\13686\.openclaw\` |
+
+### 关键文件
+
+| 文件/目录 | 说明 |
+|-----------|------|
+| `openclaw.json` | 主配置（模型 / 频道 / 插件） |
+| `gateway.cmd` | 网关启动脚本 |
+| `agents\main\` | 主 Agent 配置 |
+| `workspace\` | 工作区（含 `SOUL.md` / `USER.md`） |
+
+### Gateway
+
+| 属性 | 值 |
+|------|-----|
+| 端口 | 18789 |
+| 模式 | local / loopback |
+| Dashboard | `http://127.0.0.1:18789/` |
+
+### 频道
+
+| 频道 | 状态 |
+|------|------|
+| `openclaw-weixin` | 微信（已启用） |
+| `deepseek` | DeepSeek 提供商 |
+
+**模型**：`deepseek-v4-pro`（默认）
+
+---
+
+## 六、PowerShell 环境
+
+### Profile 路径
+
+```
+C:\Users\13686\Documents\WindowsPowerShell\Microsoft.PowerShell_profile.ps1
+```
+
+### Profile 加载的环境变量
+
+| 变量 | 值 |
+|------|-----|
+| `COPILOT_PROVIDER_TYPE` | `anthropic` |
+| `COPILOT_PROVIDER_BASE_URL` | `https://api.deepseek.com/anthropic` |
+| `COPILOT_PROVIDER_API_KEY` | `sk-f9f5ad...` |
+| `COPILOT_MODEL` | `deepseek-v4-pro` |
+| `COPILOT_PROVIDER_MAX_PROMPT_TOKENS` | `840000` |
+| `COPILOT_PROVIDER_MAX_OUTPUT_TOKENS` | `128000` |
+| `DEEPSEEK_API_KEY` | `sk-f9f5ad...` |
+| `ANTHROPIC_API_KEY` | `sk-f9f5ad...` |
+| `ANTHROPIC_BASE_URL` | `https://api.deepseek.com/anthropic` |
+| `CLAUDE_CODE_GIT_BASH_PATH` | `D:\Git\bin\bash.exe` |
+
+### PATH 扩展
+
+| 路径 | 用途 |
+|------|------|
+| `C:\Users\13686\.local\bin` | uv 工具（nanobot / astrbot） |
+| `C:\Users\13686\.bun\bin` | Bun 运行时（Oh My Pi 依赖） |
+
+### 系统级 PATH 关键条目
+
+| 路径 | 工具 |
+|------|------|
+| `D:\JDK25\bin` | Java |
+| `D:\maven\bin` | Maven |
+| `D:\MySQL\MySQL Server 8.0\bin` | MySQL |
+| `D:\Git\cmd` | Git |
+| `D:\Python314\` | Python 3.14 |
+| `C:\Program Files\Volta\` | Volta（Node.js） |
+| `C:\Program Files\Docker\Docker\` | Docker CLI |
+| `C:\Program Files\GitHub CLI\` | GitHub CLI |
+
+---
+
+## 七、Shell 与终端
+
+### Windows PowerShell 5.1
+
+| 属性 | 值 |
+|------|-----|
+| Profile | `Documents\WindowsPowerShell\Microsoft.PowerShell_profile.ps1` |
+
+### Git Bash
+
+| 属性 | 值 |
+|------|-----|
+| Git 路径 | `D:\Git\bin\bash.exe` |
+| .bashrc | `C:\Users\13686\.bashrc`（Java 路径配置） |
+
+### Volta（Node.js 版本管理器）
+
+| 属性 | 值 |
+|------|-----|
+| 路径 | `C:\Program Files\Volta\` |
+| 数据 | `C:\Users\13686\AppData\Local\Volta\` |
+| 当前 Node | 22.23.1 |
+
+### nvm-windows（备用 Node 管理器）
+
+| 属性 | 值 |
+|------|-----|
+| 路径 | `C:\nvm4w\nodejs\` |
+| 数据 | `C:\Users\13686\AppData\Local\nvm\` |
+
+---
+
+## 八、npm 全局包（关键）
+
+### Volta 管理
+
+> 路径：`D:\Volta\tools\image\packages\`
+
+| 包名 | 说明 |
+|------|------|
+| `@charmland/crush` | Crush AI Agent |
+| `@mariozechner/pi-coding-agent` | Pi Agent |
+| `langcli-com` | Langcli（Claude Code 封装） |
+| `openclaw` | OpenClaw AI 助手 |
+
+### 全局 npm
+
+> 路径：`C:\Users\13686\AppData\Roaming\npm\`
+
+| 包名 | 说明 |
+|------|------|
+| `@github/copilot` | GitHub Copilot CLI |
+| `@kilocode/cli` | Kilo Code CLI |
+
+---
+
+## 九、Python 环境
+
+| Python 版本 | 路径 |
+|-------------|------|
+| Python 3.12 | `C:\Users\13686\AppData\Local\Programs\Python\Python312\` |
+| Python 3.14（当前默认） | `D:\Python314\` |
+
+**uv 版本**：0.11.23（包管理器）
+
+**uv 安装的工具**：
+
+| 工具 | 说明 |
+|------|------|
+| `astrbot` | AstrBot Agent 框架 |
+| `nanobot-ai` | nanobot AI Agent |
+
+---
+
+## 十、AI 工具配置文件汇总（均在 C 盘）
+
+| 工具 | 配置文件路径 |
+|------|-------------|
+| Claude Code | `C:\Users\13686\.claude\settings.json` |
+| OpenClaw | `C:\Users\13686\.openclaw\openclaw.json` |
+| CodeBuddy | `C:\Users\13686\.codebuddy\models.json` |
+| Oh My Pi | `C:\Users\13686\.omp\agent\models.yml` |
+| Pi | `C:\Users\13686\.pi\agent\models.json` |
+| nanobot | `C:\Users\13686\.nanobot\config.json` |
+| Crush | `C:\Users\13686\.config\crush\crush.json` |
+| Reasonix | `C:\Users\13686\.reasonix\config.json` |
+| AstrBot | `D:\Git\mnt\c\Users\13686\astrbot\data\cmd_config.json` |
+| CLAUDE.md | `C:\Users\13686\CLAUDE.md` |
+| 记忆系统 | `C:\Users\13686\.claude\projects\C--Users-13686\memory\` |
+
+---
+
+## 十一、图形界面工具
+
+### Lenovo 相关
+
+- LenovoSoftstore — 联想软件商店
+- Lenovo（`C:\Program Files`）— 联想驱动管理
+
+### Microsoft
+
+- Microsoft Office — 办公套件
+- Microsoft 365 Copilot — Office AI 助手
+
+### 开发辅助
+
+- GitHub Desktop — Git GUI 客户端
+- Docker Desktop — Docker GUI
+
+### 通信
+
+- WeChat (Weixin) — 微信
+- QQ — 手机QQ管理（D盘）
+- TencentMeeting — 腾讯会议
+
+### 工具
+
+| 工具 | 用途 |
+|------|------|
+| PowerToys | Windows 工具集 |
+| Ditto | 剪贴板管理 |
+| Snipaste | 截图工具 |
+| BandiView | 图片查看 |
+| 7-Zip | 压缩解压 |
+
+---
+
+## 十二、常用系统命令
+
+### 环境变量刷新（PowerShell）
+
+```powershell
+refreshenv     # 需 Chocolatey
+# 或重启终端
+```
+
+### 查看端口占用
+
+```powershell
+netstat -ano | findstr :端口号
+```
+
+### 杀进程
+
+```powershell
+taskkill /PID 进程ID /F
+```
+
+### Windows 服务管理
+
+```powershell
+services.msc                         # 打开服务面板
+Get-Service -Name MySQL80            # 查看服务状态
+Start-Service -Name MySQL80          # 启动服务
+Stop-Service -Name MySQL80           # 停止服务
+```
+
+### 查看系统信息
+
+```powershell
+msinfo32                             # 系统信息
+dxdiag                               # DirectX 诊断
+```
+
+### 清理临时文件
+
+```powershell
+cleanmgr                             # 磁盘清理
+del /q %TEMP%\*                      # 清理临时文件夹
+```
+
+---
+
+## 十三、关键环境变量来源优先级
+
+```
+系统环境变量（注册表） > Claude settings.json env > PowerShell Profile
+```
+
+### 注意事项
+
+- `settings.json` 和 Profile 同时设同名变量可能导致冲突
+- 修改注册表环境变量后需重启终端生效
+- Volta 管理的工具 PATH 优先级高于系统 PATH
+- Claude Code 启动时合并 `settings.json` `env` 到进程环境
+
+---
+
+> **更新日期**：2026-06-24

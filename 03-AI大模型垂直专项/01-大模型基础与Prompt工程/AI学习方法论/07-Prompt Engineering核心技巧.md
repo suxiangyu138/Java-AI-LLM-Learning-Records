@@ -1,13 +1,128 @@
-The document has been rewritten and saved to:
+# Prompt Engineering 核心技巧
 
-`D:\本地学习项目\Java-AI-LLM-Learning-Records\AI大模型应用开发\01-基础概念与理论\AI学习方法论\07-Prompt Engineering核心技巧.md`
+> **核心公式**：AI 输出质量 = 角色设定 × 任务清晰度 × 约束条件 × 示例质量。四个因子任一项为 0，输出质量归零。
 
-Key improvements made:
+---
 
-1. **Structure**: Added category emoji prefix (🎯), core summary blockquote, 前置阅读 section, numbered TOC with anchor links, 核心要点回顾, and numbered 参考资料 section — all following the prescribed order.
+## 目录
 
-2. **Formatting**: All code blocks now use ` ```text ` language markers; tables have aligned header separators; key insights use `> **重点**` and warnings use `> **注意**` (consistent callout styling); first occurrences of technical terms like **AI 的输出质量**, **模式匹配器**, **迭代追问** are bolded; cross-references use [[filename]] syntax.
+1. [角色设定法](#1-角色设定法)
+2. [分步追问法](#2-分步追问法)
+3. [示例驱动法](#3-示例驱动法)
+4. [约束收敛法](#4-约束收敛法)
+5. [角色库速查](#5-角色库速查)
+6. [常见错误](#6-常见错误)
 
-3. **Content Quality**: All substantive technical content preserved (the formula, all four techniques with examples, role library, questioning signals, error table). Added expanded explanations for each technique's rationale. Removed redundant section dividers (`---`). Kept content concise with no filler text.
+---
 
-4. **Enhancements**: Added a multiplication-factor insight (any zero factor nullifies the output), a note about error stacking in the common-mistakes section, and a reference to Few-shot Prompting and Chain-of-Thought Prompting in the references.
+## 1. 角色设定法
+
+> 给 AI 一个明确的"人设"，输出的专业度和风格会显著提升。
+
+**对比效果**：
+
+| Prompt | 输出质量 |
+|--------|:-------:|
+| "解释 Spring IoC" | ⭐⭐ 泛泛而谈 |
+| "你是一位有 10 年经验的 Java 架构师，请用通俗语言解释 Spring IoC，并给出一个新手能跑通的 Demo" | ⭐⭐⭐⭐⭐ |
+
+**模板**：
+
+```text
+你是一位 [角色]，拥有 [年限] 年经验，擅长 [领域]。
+请 [任务描述]，要求 [约束条件]，输出格式为 [格式]。
+```
+
+---
+
+## 2. 分步追问法
+
+> 复杂问题不要一次问完，拆成多轮递进式对话。
+
+```text
+第 1 轮：宏观理解 → "用 3 句话概括 X 是什么"
+第 2 轮：核心流程 → "X 的核心步骤是什么？每步画一个 ASCII 流程图"
+第 3 轮：追问原因 → "为什么第 N 步要这样设计？有什么 trade-off？"
+第 4 轮：代码验证 → "给我一个能跑通的 Demo，验证刚才讲的流程"
+第 5 轮：边界测试 → "如果输入异常参数，这个流程会怎样？"
+```
+
+| 追问信号 | 何时追问 |
+|----------|----------|
+| AI 说了"通常"、"一般" | 追问边界 case |
+| AI 给了代码 | 追问"如果输入 X 会怎样" |
+| AI 说"这样效率更高" | 追问"高多少？为什么？" |
+
+---
+
+## 3. 示例驱动法
+
+> Few-shot：给 AI 看 2-3 个你期望的输出格式，让它模仿。
+
+```text
+请按照以下格式输出：
+
+【示例 1】
+输入：HashMap 和 TreeMap 的区别
+输出：
+- 数据结构：HashMap 数组+链表/红黑树，TreeMap 红黑树
+- 时间复杂度：HashMap O(1)，TreeMap O(log n)
+- 排序：HashMap 无序，TreeMap 按 key 排序
+
+【示例 2】
+输入：ArrayList 和 LinkedList 的区别
+输出：
+- 数据结构：...
+- 时间复杂度：...
+- 适用场景：...
+
+请用同样格式输出：
+输入：HashSet 和 TreeSet 的区别
+```
+
+---
+
+## 4. 约束收敛法
+
+> 不加约束的 AI 回答像"百科全书"，加了约束才能精准命中。
+
+| 约束类型 | 示例 |
+|----------|------|
+| **长度** | "用 50 字以内回答" |
+| **格式** | "用 Markdown 表格输出" |
+| **视角** | "从 Java 新手角度解释" |
+| **排除** | "不要使用专业术语" |
+| **验证** | "给出一个可运行的 JUnit 测试" |
+
+---
+
+## 5. 角色库速查
+
+| 场景 | 角色 Prompt |
+|------|------------|
+| 学习新技术 | "你是一位有 15 年经验的 Java 技术导师，擅长用类比和 Demo 教学" |
+| 代码审查 | "你是一位严格的代码审查员，关注安全漏洞、性能瓶颈和代码坏味道" |
+| 面试模拟 | "你是某大厂 Java 面试官，请针对 X 知识点对我进行 10 分钟技术面试" |
+| Debug | "你是一位资深 SRE 工程师，擅长根据日志和堆栈跟踪定位根因" |
+| 架构设计 | "你是一位系统架构师，擅长在一致性、可用性和成本之间做权衡" |
+
+---
+
+## 6. 常见错误
+
+| 错误 | 后果 | 正确做法 |
+|------|------|----------|
+| 问题太宽泛 | 回答空泛无用 | 加角色 + 具体约束 |
+| 一次问太多 | AI 遗漏关键点 | 拆成多轮递进追问 |
+| 不加示例 | 输出格式不可控 | 给 2-3 个期望输出示例 |
+| 不追问"为什么" | 停留在"是什么"层面 | 连续追问 3 次"为什么" |
+| 信任 AI 输出不验证 | 引入幻觉错误 | 代码必须跑通，结论必须用实验验证 |
+
+---
+
+## 核心要点回顾
+
+- 输出质量 = 角色 × 清晰度 × 约束 × 示例，四因子缺一不可
+- 分步追问法：宏观→流程→原因→代码→边界，层层递进
+- 约束收敛法：长度/格式/视角/排除/验证 五种约束精准控制输出
+- 角色库提升效率：不同场景用不同人设，输出专业度和风格差异显著
