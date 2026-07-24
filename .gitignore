@@ -33,6 +33,7 @@
 # Claude Code (user-specific, do not commit)
 # ============================================================
 **/.claude/settings.local.json
+**/.claude/worktrees/
 
 # ============================================================
 # Python
@@ -130,6 +131,9 @@ yarn-error.log*
 *.doc
 *.pptx
 *.xlsx
+*.zip
+*.7z
+*.rar
 
 # ============================================================
 # Generated Data Output (crawlers, data analysis)
