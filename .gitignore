@@ -142,6 +142,7 @@ contribute_*.bat
 contributions.txt
 git-auto-commit.bat
 DEV-ENVIRONMENT.md
+.claude/memory/
 
 # ============================================================
 # Generated Data Output (crawlers, data analysis)
