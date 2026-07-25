@@ -136,6 +136,13 @@ yarn-error.log*
 *.rar
 
 # ============================================================
+# Personal Automation Scripts
+# ============================================================
+contribute_*.bat
+contributions.txt
+git-auto-commit.bat
+
+# ============================================================
 # Generated Data Output (crawlers, data analysis)
 # ============================================================
 **/baidu_output/
