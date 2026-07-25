@@ -141,6 +141,7 @@ yarn-error.log*
 contribute_*.bat
 contributions.txt
 git-auto-commit.bat
+DEV-ENVIRONMENT.md
 
 # ============================================================
 # Generated Data Output (crawlers, data analysis)
