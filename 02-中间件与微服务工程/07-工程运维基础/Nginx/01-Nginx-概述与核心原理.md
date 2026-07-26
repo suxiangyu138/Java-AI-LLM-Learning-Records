@@ -1,4 +1,19 @@
-# Nginx 概述与核心原理
+# 01 - Nginx 概述与核心原理
+
+> 🎯 Nginx 是高性能 HTTP 服务器与反向代理，Master-Worker 进程模型+事件驱动架构，单机 10 万+并发 — 理解其底层原理是用好 Nginx 的前提
+
+---
+
+## 目录
+
+1. [Nginx 是什么](#一nginx-是什么)
+2. [核心用途（Java 后端视角）](#二核心用途java-后端视角)
+3. [进程模型：Master-Worker](#三进程模型master-worker)
+4. [事件驱动与 IO 多路复用](#四事件驱动与-io-多路复用)
+5. [正向代理 vs 反向代理](#五正向代理-vs-反向代理)
+6. [Nginx vs Apache vs Tomcat](#六nginx-vs-apache-vs-tomcat)
+
+---
 
 ## 一、Nginx 是什么
 

@@ -1,4 +1,18 @@
-# Nginx 在 Kubernetes 与微服务中的应用
+# 09 - Nginx Kubernetes 与微服务
+
+> 🎯 在云原生架构中，Nginx 的角色从传统反向代理升级为 K8s Ingress Controller — 统一入口、灰度发布、TLS 终结，微服务网关的最佳拍档
+
+---
+
+## 目录
+
+1. [Nginx 在 K8s 中的角色](#一nginx-在-k8s-中的角色)
+2. [Nginx 容器化部署](#二nginx-容器化部署)
+3. [Ingress 配置实战](#三ingress-配置实战)
+4. [灰度发布与金丝雀部署](#四灰度发布与金丝雀部署)
+5. [微服务流量治理](#五微服务流量治理)
+
+---
 
 ## 一、Nginx 在 K8s 中的角色
 

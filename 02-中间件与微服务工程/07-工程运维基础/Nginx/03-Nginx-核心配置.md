@@ -1,4 +1,19 @@
-# Nginx 核心配置
+# 03 - Nginx 核心配置
+
+> 🎯 理解 Nginx 配置的层级结构（全局→events→http→server→location）是写对配置的前提 — 本节系统拆解每一层的关键指令
+
+---
+
+## 目录
+
+1. [配置块层级](#一配置块层级)
+2. [全局块与 events 块](#二全局块与-events-块)
+3. [http 块（全局 HTTP 配置）](#三http-块全局-http-配置)
+4. [server 块（虚拟主机）](#四server-块虚拟主机)
+5. [location 匹配规则（核心）](#五location-匹配规则核心)
+6. [Nginx 变量体系](#六nginx-变量体系)
+
+---
 
 ## 一、配置块层级
 
