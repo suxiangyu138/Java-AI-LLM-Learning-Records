@@ -135,6 +135,94 @@ CI/CD → SonarQube 扫描 → 质量阀判定
 | **SpotBugs** | 字节码级别的缺陷检测 | Maven/Gradle 插件 |
 | **PMD** | 源码静态分析 | Maven/Gradle 插件 |
 
-## 七、总结
+## 七、IntelliJ IDEA 深度集成
 
-SonarLint 的价值在于 **"左移"质量问题**——在 IDE 中实时发现并修复问题，而非等 CI/CD 阶段才发现。2026 年结合 AI 能力，SonarLint 的误报率持续降低，建议所有 Java 开发者安装。推荐配置 Connected Mode 对接团队 SonarQube，保持规则一致性。
+### 7.1 安装与配置
+
+```
+File → Settings → Plugins → 搜索 "SonarLint" → Install → Restart IDE
+
+首次使用：
+1. View → Tool Windows → SonarLint → 打开面板
+2. 自动扫描当前打开的文件
+3. 可在 Project Errors 标签查看全项目所有问题
+```
+
+### 7.2 关键操作
+
+| 操作 | 快捷键/方式 | 说明 |
+|------|-----------|------|
+| 查看问题详情 | 点击行号右侧标记 | 弹出规则说明+修复建议 |
+| 分析当前文件 | SonarLint面板 → Analyze Current File | 手动触发分析 |
+| 分析所有文件 | SonarLint面板 → Analyze All Files | 全项目扫描 |
+| 清理已修复问题 | SonarLint面板 → Clean Console | 清理已处理的问题 |
+| 规则配置 | File → Settings → Tools → SonarLint → Rules | 启用/禁用特定规则 |
+
+### 7.3 Connected Mode 配置详解
+
+```text
+步骤：
+1. SonarQube管理员 → My Account → Security → Generate Token
+2. IDE → Settings → Tools → SonarLint → Connected Mode
+3. Add Connection → SonarQube → 输入URL和Token
+4. Bind Project → 选择SonarQube上的对应项目
+
+同步效果：
+✅ 本地IDE自动使用SonarQube的Quality Profile（规则集）
+✅ 本地排除的规则与服务器一致
+✅ 可看到服务器标记为"Won't Fix"/"False Positive"的问题
+✅ 新代码周期内的问题着重高亮
+```
+
+## 八、常见问题与排查
+
+| 问题 | 原因 | 解决 |
+|------|------|------|
+| 安装后没有扫描 | 文件未被分析 | 手动Analyze Current File |
+| 误报太多 | 默认规则集不适合项目 | 进入Rules设置禁用不适用的规则 |
+| Connected Mode连接失败 | Token过期/URL错误 | 重新生成Token检查URL |
+| 分析速度慢 | 大项目全量扫描 | 使用Analyze All Files仅在需要时 |
+| 与本地Checkstyle规则冲突 | 两套规则不一致 | 以SonarQube服务器规则为准 |
+
+## 九、SonarLint 规则深度解读
+
+### 9.1 Java关键规则Top 10
+
+| 规则ID | 规则名 | 严重度 | 说明 | 修复示例 |
+|--------|--------|--------|------|----------|
+| `S1141` | try-catch不以为空 | Blocker | 空的catch块隐藏异常 | 至少加日志记录 |
+| `S2077` | SQL查询硬拼接 | Blocker | 格式化字符串拼SQL → 注入风险 | 使用PreparedStatement |
+| `S2111` | `new BigDecimal(double)` | Critical | double精度丢失 | 用`new BigDecimal("0.1")` |
+| `S2221` | catch Exception | Critical | 捕获过于宽泛 | 捕获具体异常类型 |
+| `S3516` | 返回null不返回Optional | Major | null增加NPE风险 | `return Optional.ofNullable(x)` |
+| `S1181` | catch Throwable | Blocker | 捕获Throwable捕获了Error | 只catch Exception |
+| `S1319` | 用ArrayList声明而非List | Minor | 违背面向接口编程 | `List<String> list = new ArrayList<>()` |
+| `S1068` | 未使用的private字段 | Major | 死代码 | 删除未使用的字段 |
+| `S1854` | 无用的赋值 | Major | 赋值后未使用 | 删除无用赋值 |
+| `S3457` | `String.format`用于日志 | Minor | 性能+可读性问题 | 用`log.info("{}", value)` |
+
+### 9.2 自定义规则抑制
+
+```java
+// 单行抑制（不推荐滥用）
+@SuppressWarnings("java:S1068")
+private String legacyField; // 遗留字段，历史原因保留
+
+// 方法级抑制
+@SuppressWarnings({"java:S1141", "java:S2221"})
+public void legacyMethod() { ... }
+
+// 连接SonarQube后，在服务器端标记 "Won't Fix" 或 "False Positive"
+// 这些标记会同步到本地SonarLint，更推荐这种方式
+```
+
+## 十、总结
+
+> 🎯 SonarLint 的价值在于 **"左移"质量问题**——在 IDE 中实时发现并修复问题，而非等 CI/CD 阶段才发现。
+
+**使用建议：**
+- **必装**：所有Java开发者必备IDE插件
+- **必连**：Connected Mode对接团队SonarQube，保持规则一致性
+- **纪律**：提交代码前确保0 Blocker + 0 Critical
+- **不盲目**：理解每条规则的含义，不为了消除告警而乱改代码
+- **长期主义**：SonarLint + SonarQube + CI/CD 构成完整的代码质量保障体系
