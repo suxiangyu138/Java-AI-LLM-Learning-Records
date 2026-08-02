@@ -1,33 +1,33 @@
 # Java 后端 + AI 大模型 系统化学习仓库
 
 > 面向 **Java 后端开发工程师** 与 **AI 大模型应用开发工程师** 的全栈知识体系。
-> **1,460+ 篇标准化 Markdown 技术文档**，按 6 层金字塔组织，覆盖从底层基础到面试冲刺的完整学习路径。
+> **2,370+ 篇标准化 Markdown 技术文档**，按 6 层金字塔组织，覆盖从底层基础到面试冲刺的完整学习路径。
 
 ---
 
 ## 📐 六层金字塔知识体系
 
 ```
-Java-AI-LLM-Learning-Records/  (1,460+ .md 文件)
+Java-AI-LLM-Learning-Records/  (2,370+ .md 文件)
 │
-├── 🏗️ 01-底层根基-Java核心底座/       213 篇  地基：Java核心+JUC+JVM+DSA+计算机基础+工具(Vim/文件后缀)
+├── 🏗️ 01-底层根基-Java核心底座/       669 篇  地基：Java核心+JUC+JVM+DSA+计算机基础+工具(Vim/文件后缀)
 │
-├── 🔧 02-后端中间件&微服务工程/        460 篇  骨架：MySQL+Redis+MQ+ES+Spring全家桶+DevOps+知识体系搭建
+├── 🔧 02-后端中间件&微服务工程/        604 篇  骨架：MySQL+Redis+MQ+ES+Spring全家桶+DevOps+知识体系搭建
 │
-├── 🤖 03-AI大模型应用开发/            411 篇  差异：DeepSeek+RAG+Agent+Embedding+LangChain4j+Spring AI
+├── 🤖 03-AI大模型应用开发/            696 篇  差异：DeepSeek+RAG+Agent+Harness+Vibe Coding+Python虚拟环境
 │
 ├── 🎯 04-实战项目综合落地/             45 篇  证明：FlavorDash+SuGuangMall+LingShu 三大项目深度复盘
 │
-├── 📝 05-综合输出-面试冲刺/            162 篇  输出：152题题库+手写代码+简历模板+速查手册+能力图谱
+├── 📝 05-综合输出-面试冲刺/            185 篇  输出：152题题库+手写代码+简历模板+速查手册+能力图谱
 │
-└── 📚 06-课程思路体系搭建/            169 篇  索引：84+门B站课程标准化大纲，五大分类完整索引
+└── 📚 06-课程思路体系搭建/            176 篇  索引：84+门B站课程标准化大纲，五大分类完整索引
 ```
 
 ---
 
 ## 📂 各层详解
 
-### 🏗️ 01-底层根基 — Java 核心底座（213 篇）
+### 🏗️ 01-底层根基 — Java 核心底座（669 篇）
 
 | 子模块 | 内容 |
 |--------|------|
@@ -41,7 +41,7 @@ Java-AI-LLM-Learning-Records/  (1,460+ .md 文件)
 | **🆕 Vim** | 基础编辑 → 进阶文本对象/宏/寄存器 → 插件与 IDE 化 |
 | **🆕 不同文件的后缀名** | 文本/源码/配置/归档/系统/多媒体格式全解析 |
 
-### 🔧 02-后端中间件 & 微服务工程（460 篇）
+### 🔧 02-后端中间件 & 微服务工程（604 篇）
 
 | 子模块 | 内容 |
 |--------|------|
@@ -59,10 +59,15 @@ Java-AI-LLM-Learning-Records/  (1,460+ .md 文件)
 | **🆕 CentOS** | dnf/rpm→SELinux 排障→firewalld 防火墙→生产部署实战 |
 | **🆕 项目全流程** | 需求→方案→编码→测试→CI/CD→上线→运维监控 |
 
-### 🤖 03-AI 大模型应用开发（411 篇）
+### 🤖 03-AI 大模型应用开发（696 篇）
 
 | 子模块 | 内容 |
 |--------|------|
+| **🆕 Agent 开发** | 12 篇完整体系：P-A-M-E 架构→设计模式(ReAct/H-V-R)→框架选型→记忆/工具/MCP→多Agent→评估/安全/生产→实战案例 |
+| **🆕 Vibe Coding** | 10 篇完整体系：范式革命→工具选型→五步工作流→提示词与上下文→工程规范→多Agent协作→风险与趋势 |
+| **🆕 Harness Engineering** | 8 篇完整体系：Agent=Model+Harness→运行管控体系→安全纵深防御→治理合规→测试评估→企业落地 |
+| **🆕 AI时代职业发展** | 9 篇双主线：AI 赋能产业全景+行业模式，程序员冲击数据+转型路线+新岗位+个人策略 |
+| **🆕 Python 虚拟环境** | 7 篇完整体系：PEP 405 原理→venv/conda/uv 选型→锁文件→CI/Docker→迁移路径 |
 | **🆕 DeepSeek (V4 Pro)** | 10 篇完整体系：概览→MoE+MLA→V3训练→R1推理→Coder→多模态→API→生态对比→V4/V4-Pro |
 | 大模型基础与 Prompt 工程 | Token/上下文、CoT、Few-shot、Function Calling、NL2SQL |
 | RAG 检索增强生成 | 数据预处理→切片→Embedding→Milvus→多路召回→重排序 |
@@ -70,7 +75,7 @@ Java-AI-LLM-Learning-Records/  (1,460+ .md 文件)
 | 向量数据库与 Embedding | Milvus、Chroma、FAISS、Embedding 模型选型 |
 | 模型部署与工程化 | LLM API、Ollama 本地部署、容灾降级、Sentinel 限流 |
 | 开发框架 | LangChain4j、Spring AI、LlamaIndex |
-| Python 与数据处理 | Python 基础、爬虫、NumPy/Pandas 数据分析 |
+| Python 与数据处理 | Python 基础、爬虫、NumPy/Pandas 数据分析、Python 虚拟环境 |
 | 模型微调与多模态 | LoRA/QLoRA、PEFT、多模态大模型 |
 | AI 开发工具与面试 | Claude Code、Cursor、AI Coding、AI 面试指南 |
 
@@ -82,7 +87,7 @@ Java-AI-LLM-Learning-Records/  (1,460+ .md 文件)
 | SuGuangMall AI 微服务电商 | SpringCloud Alibaba + Multi-Agent + 秒杀零超卖 | 微服务架构 + AI Agent |
 | LingShu 医疗 AI 问答平台 | 14步RAG管线 + ReAct Agent + 多层安全护栏 | 医疗垂直场景 |
 
-### 📝 05-综合输出 — 面试冲刺（162 篇）
+### 📝 05-综合输出 — 面试冲刺（185 篇）
 
 | 子模块 | 内容 |
 |--------|------|
@@ -92,7 +97,7 @@ Java-AI-LLM-Learning-Records/  (1,460+ .md 文件)
 | 参考速查 | 核心知识点速查手册 + AI/数学名词图谱 |
 | 学习路线与能力图谱 | Java 后端分级能力图谱 + AI 大模型学习路线 |
 
-### 📚 06-课程思路体系搭建（169 篇）
+### 📚 06-课程思路体系搭建（176 篇）
 
 | 分类 | 课程数 | 覆盖 |
 |------|:-----:|------|
@@ -104,25 +109,20 @@ Java-AI-LLM-Learning-Records/  (1,460+ .md 文件)
 
 ---
 
-## 🆕 本次更新（2026年7月）
+## 🆕 本次更新（2026年8月）
 
 ```text
-新增 64 篇、17,452 行高质量技术文档，覆盖 9 个新知识体系：
+新增 46 篇高质量技术文档，覆盖 5 个新知识体系（AI 前沿方向）：
 
   03-AI大模型应用开发/
-    └── DeepSeek (V4 Pro)      10篇   从V2到V4 Pro的完整技术演进
+    ├── Agent开发               12篇   P-A-M-E架构→设计模式→框架→记忆/工具/MCP→多Agent→评估/安全/生产→实战
+    ├── Vibe Coding             10篇   范式革命→工具选型→五步工作流→上下文工程→工程规范→风险与趋势
+    ├── AI时代如何用AI赋能各行各业  9篇   AI赋能产业全景+程序员冲击/转型/新岗位+个人策略+社会影响
+    ├── Harness Engineering      8篇   Agent=Model+Harness→七层管控→安全纵深→治理合规→评估→落地
+    └── Python虚拟环境            7篇   PEP 405原理→venv/conda/uv选型→锁文件→CI/Docker→迁移
 
-  02-后端中间件/
-    ├── Java 后端名词剖析       11篇   300+核心名词覆盖10大领域
-    ├── Postman                 8篇   API测试全流程
-    ├── JMeter                   8篇   性能测试从入门到CI/CD
-    ├── Ubuntu                  7篇   Java开发者Ubuntu实战
-    ├── CentOS                  5篇   生产级SELinux+firewalld+部署
-    └── 项目全流程              6篇   需求→方案→编码→测试→上线
-
-  01-底层根基/
-    ├── Vim                     4篇   从生存到IDE化
-    └── 不同文件的后缀名         5篇   100+后缀名全解析
+结构性调整：Spring 全家桶文档整理归入 06-Spring全家桶/Spring全家桶/ 子目录；
+新增 ActiveMQ、PostgreSQL、SQL Server 中间件知识目录。
 ```
 
 ---
@@ -171,4 +171,4 @@ Java-AI-LLM-Learning-Records/  (1,460+ .md 文件)
 
 ---
 
-*最后更新：2026年7月 | 1,460+ 篇 Markdown 文档*
+*最后更新：2026年8月 | 2,370+ 篇 Markdown 文档*

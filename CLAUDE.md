@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Repository Purpose
 
-Personal Java backend + AI learning knowledge base. **1,460+ markdown technical documents** organized as a **6-layer pyramid**. All content is documentation (not runnable code). The primary task is creating and maintaining high-quality modular knowledge systems.
+Personal Java backend + AI learning knowledge base. **2,370+ markdown technical documents** organized as a **6-layer pyramid**. All content is documentation (not runnable code). The primary task is creating and maintaining high-quality modular knowledge systems.
 
 ---
 
@@ -21,10 +21,15 @@ Personal Java backend + AI learning knowledge base. **1,460+ markdown technical 
 06-课程思路体系搭建/                    # Curriculum: 84+ B站 course outlines organized by topic
 ```
 
-### Active Knowledge Systems (2026.07)
+### Active Knowledge Systems (2026.08)
 
 | System | Location | Files | Focus |
 |--------|---------|:---:|------|
+| Agent开发 | `03-AI.../Agent开发/` | 12 | P-A-M-E→patterns→framework→MCP→eval→prod |
+| Vibe Coding | `03-AI.../Vibe Coding/` | 10 | Paradigm→tools→workflow→context→risk |
+| AI赋能+程序员转型 | `03-AI.../AI时代如何用AI赋能各行各业 程序员何去何从/` | 9 | Industry AI + dev career transformation |
+| Harness Engineering | `03-AI.../Harness Engineering/` | 8 | Agent=Model+Harness→security→governance |
+| Python虚拟环境 | `03-AI.../Python虚拟环境/` | 7 | PEP 405→venv/conda/uv→lock→CI/Docker |
 | DeepSeek (V4 Pro) | `03-AI.../DeepSeek/` | 10 | Full evolution V2→V4 Pro |
 | Java 后端名词剖析 | `02-.../Java后端开发名词剖析/` | 11 | 300+ concepts, 10 domains |
 | Postman | `02-.../Postman/` | 8 | API testing full workflow |
