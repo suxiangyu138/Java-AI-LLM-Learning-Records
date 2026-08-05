@@ -35,6 +35,7 @@ Personal Java backend + AI learning knowledge base. **2,370+ markdown technical 
 | SQLite | `02-.../01-关系型数据库/SQLite/` | 10 | 架构→类型→SQL优化→WAL事务→JSONB→FTS5→向量搜索→生产实践→Java集成 |
 | Memcached | `02-.../02-非关系型数据库/Memcached/` | 9 | 定位→slab内存→协议→一致性哈希→多线程→高可用→Java→选型vs Redis |
 | Neo4j | `02-.../02-非关系型数据库/Neo4j/` | 9 | 图模型→Cypher→索引→存储事务→图算法→向量GraphRAG→Java→部署选型 |
+| Pulsar | `02-.../03-消息队列/Pulsar/` | 9 | 三层架构→订阅模式→多租户→跨地域复制→分层存储→Functions→Java→选型 |
 | 装箱拆箱与泛型擦除 | `01-.../01-Java基础语法与核心特性/装箱拆箱 泛型擦除/` | 10 | 装箱字节码→缓存陷阱→擦除深潜→TypeToken→集合交汇→Valhalla(JEP 401) |
 | SDK | `01-.../SDK/` | 8 | 概念辨析→JDK解剖→JPMS/jlink→集成→自研设计 |
 | Spring框架核心 | `02-.../Spring框架核心/` | 11 | 容器→DI→生命周期→AOP→事务→事件→配置（7.0） |
