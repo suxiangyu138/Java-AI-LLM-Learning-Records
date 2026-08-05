@@ -134,3 +134,78 @@ CMD ["python", "/app/server.py"]
 - GPU：nvidia-container-toolkit + `--gpus all`
 - Compose：一行编排 LLM + Milvus + Redis
 - 镜像瘦身：多阶段构建 + Alpine + 无缓存
+
+---
+
+## 5. GPU 模型部署速查
+
+**NVIDIA 容器部署三件套**（LLM 部署必配）：
+
+```text
+① NVIDIA Container Toolkit（nvidia-container-toolkit）
+   → Docker 访问 GPU 的运行时（宿主机安装）
+② Dockerfile 基础镜像：nvidia/cuda:12.x-base 或官方推理镜像
+   → vLLM 官方镜像：vllm/vllm-openai
+   → Ollama 镜像：ollama/ollama
+③ 运行参数：--gpus all / --runtime=nvidia
+
+示例（vLLM 部署）：
+docker run --gpus all -p 8000:8000 \
+  -v ~/.cache/huggingface:/root/.cache/huggingface \
+  vllm/vllm-openai:latest \
+  --model Qwen/Qwen2.5-7B-Instruct --max-model-len 8192
+```
+
+**镜像瘦身要点**（LLM 镜像通常很大）：
+
+| 手段 | 说明 |
+|------|------|
+| 多阶段构建 | 构建层（编译）与运行层分离 |
+| 最小基础镜像 | CUDA runtime 而非完整 dev |
+| 模型不打包进镜像 | 挂载/下载（镜像几百 MB，模型几 GB） |
+| 缓存挂载 | HF 缓存目录挂载（避免重复下载） |
+
+> 🎯 **核心要点**：GPU 容器 = "**toolkit（运行时）+ 官方镜像 + --gpus all**"三件套——**模型永远不打包进镜像**（挂载外部存储），这是 LLM 镜像的黄金法则。
+
+---
+
+## 6. Docker 常用命令速查
+
+**LLM 部署高频命令**：
+
+```bash
+# 构建与运行
+docker build -t llm-service:v1 .              # 构建镜像
+docker run --gpus all -p 8000:8000 llm-service:v1   # 运行（GPU）
+docker ps                                     # 查看运行中容器
+docker logs -f <container_id>                 # 查看日志
+
+# 镜像管理
+docker images                                 # 本地镜像
+docker rmi <image_id>                         # 删除镜像
+docker system prune                           # 清理（悬空镜像/缓存）
+
+# 调试
+docker exec -it <container_id> bash           # 进入容器
+docker inspect <container_id> | grep -i gpu   # 验证 GPU 传递
+```
+
+**GPU 传递验证**：
+
+```bash
+# 容器内验证 GPU 可用
+docker run --gpus all nvidia/cuda:12.2.0-base nvidia-smi
+# 输出 GPU 信息 = 传递成功
+# 常见失败：toolkit 未装 / --gpus 参数缺失 / 驱动版本不匹配
+```
+
+**常见坑速查**：
+
+| 坑 | 表现 | 解法 |
+|----|------|------|
+| 无 GPU 权限 | 容器内 nvidia-smi 报错 | 装 toolkit + --gpus all |
+| 镜像过大 | 几 GB+ | 多阶段构建 + 模型不打包 |
+| 时区/编码 | 中文乱码 | ENV LANG=C.UTF-8 |
+| 端口冲突 | 启动失败 | 显式 -p 映射 |
+
+> 🎯 **核心要点**：Docker GPU 命令 = "**--gpus all + 容器内 nvidia-smi 验证**"两条核心——镜像瘦身（多阶段 + 模型挂载）与 GPU 传递是 LLM 容器部署的两大主题。
