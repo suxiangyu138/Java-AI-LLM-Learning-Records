@@ -1,7 +1,7 @@
 # Java 后端 + AI 大模型 系统化学习仓库
 
 > 面向 **Java 后端开发工程师** 与 **AI 大模型应用开发工程师** 的全栈知识体系。
-> **2,905 篇标准化 Markdown 技术文档**，按 5 层金字塔组织，覆盖从底层基础到面试冲刺的完整学习路径。
+> **2,914 篇标准化 Markdown 技术文档**，按 5 层金字塔组织，覆盖从底层基础到面试冲刺的完整学习路径。
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
@@ -10,11 +10,11 @@
 ## 📐 五层金字塔知识体系
 
 ```
-Java-AI-LLM-Learning-Records/  (2,905 篇 .md 文件)
+Java-AI-LLM-Learning-Records/  (2,914 篇 .md 文件)
 │
 ├── 🏗️ 01-底层根基-Java核心底座/        1023 篇  地基：Java核心+JUC+JVM+DSA+计算机基础(四大件+数学体系)+工具(Vim/文件后缀/SDK)
 │
-├── 🔧 02-后端核心技术 微服务 分布式 云原生/ 680 篇  骨架：MySQL+Redis+MQ+ES+Spring全家桶+MyBatisPlus+DevOps
+├── 🔧 02-后端核心技术 微服务 分布式 云原生/ 689 篇  骨架：MySQL+Redis+MQ+ES+Spring全家桶+MyBatisPlus+DevOps
 │
 ├── 🤖 03-AI大模型应用开发/             735 篇  差异：DeepSeek+RAG+Agent+MCP+Milvus+部署工程化+Python
 │
@@ -45,7 +45,7 @@ Java-AI-LLM-Learning-Records/  (2,905 篇 .md 文件)
 | 高并发与性能优化 | 高并发设计、池化技术、异步编程 |
 | 工具 | Vim、文件后缀名、SSH、JSON、快捷键、命令行 |
 
-### 🔧 02-后端核心技术 微服务 分布式 云原生（680 篇）
+### 🔧 02-后端核心技术 微服务 分布式 云原生（689 篇）
 
 | 子模块 | 内容 |
 |--------|------|
@@ -129,15 +129,16 @@ Java-AI-LLM-Learning-Records/  (2,905 篇 .md 文件)
 | **🆕 JMM** | 01-.../03-JVM完整底层/JMM/ | 8 | 三大保证→Happens-Before→volatile/锁语义→CAS→JEP 491（JDK 24） |
 | **🆕 消息队列理论与实战** | 02-.../03-消息队列/消息队列理论与实战/ | 9 | 可靠性→顺序→消费→延迟死信→高可用→分布式事务→选型（Kafka 4.0/RocketMQ 5.x） |
 | **🆕 SQLite** | 02-.../01-关系型数据库/SQLite/ | 10 | JSONB→FTS5→向量搜索（sqlite-vec）→WAL→Java 集成（3.53） |
+| **🆕 Memcached** | 02-.../02-非关系型数据库/Memcached/ | 9 | slab 内存→一致性哈希→多线程→缓存三问题→Java→vs Redis 选型 |
 
 ---
 
 ## 🆕 本次更新（2026-08-06）
 
 ```text
-新增 96 篇技术文档，覆盖 12 个知识体系（计算机组成原理四大件 + 数学基础四套 + JMM + MQ 理论 + SQLite + 存量修正）：
+新增 105 篇技术文档，覆盖 13 个知识体系（计算机组成原理四大件 + 数学基础四套 + JMM + MQ 理论 + SQLite + Memcached + 存量修正）：
 
-🆕 新建（96 篇）：
+🆕 新建（105 篇）：
   01-.../计算机组成原理/CPU/         8篇   组成/流水线/超标量/实例/封装/评测/AI演进
   01-.../计算机组成原理/GPU/         8篇   SIMT/存储/调度/CUDA/NVIDIA-AMD/AI时代
   01-.../计算机组成原理/缓存与Cache/  8篇   结构/替换算法/一致性/侧信道/前沿
@@ -149,6 +150,7 @@ Java-AI-LLM-Learning-Records/  (2,905 篇 .md 文件)
   01-.../03-JVM完整底层/JMM/         8篇   三大保证/Happens-Before/volatile-锁语义/CAS/JEP 491
   02-.../03-消息队列/消息队列理论与实战/ 9篇  可靠性/顺序/消费/延迟死信/高可用/事务/选型
   02-.../01-关系型数据库/SQLite/     10篇  架构/类型/WAL事务/JSONB/FTS5/向量搜索/Java集成
+  02-.../02-非关系型数据库/Memcached/ 9篇  slab内存/协议/一致性哈希/多线程/三问题/选型
 
 🔄 修正（13 篇存量）：
   01-.../数学基础/计算机数学基础/    13篇  编号错乱/失效链接/数学公式错误全面修正
@@ -159,6 +161,7 @@ Java-AI-LLM-Learning-Records/  (2,905 篇 .md 文件)
   JEP 491（JDK 24）synchronized 不再 pinning 虚拟线程
   Kafka 4.0 KRaft/KIP-848/KIP-932 · RocketMQ 5.x 存算分离 · RabbitMQ 4.0 Quorum
   SQLite 3.53（JSONB/ALTER 约束）· sqlite-vec 向量搜索 · FTS5 混合检索
+  Memcached 1.6.x（多线程 150 万 ops/s）· Redis 双许可与 Valkey
 ```
 
 ---
@@ -249,4 +252,4 @@ Java-AI-LLM-Learning-Records/  (2,905 篇 .md 文件)
 
 ---
 
-*最后更新：2026-08-06 | 2,905 篇 Markdown 文档 | 5 层金字塔 + 26 个活跃知识体系*
+*最后更新：2026-08-06 | 2,914 篇 Markdown 文档 | 5 层金字塔 + 27 个活跃知识体系*
