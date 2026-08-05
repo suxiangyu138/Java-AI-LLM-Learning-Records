@@ -29,6 +29,8 @@ Personal Java backend + AI learning knowledge base. **2,370+ markdown technical 
 | Java集合框架 | `01-.../Java集合框架/` | 10 | Collection→List/Set/Queue/Map→并发集合→选型 |
 | Java异常体系 | `01-.../Java异常体系/` | 10 | 层级→受检之争→try-finally→TWR→错误码→并发 |
 | Java多线程 | `01-.../Java多线程/` | 9 | 线程本质→API→三要素→synchronized→死锁→性能 |
+| 虚拟线程 | `01-.../02-JUC高并发编程/虚拟线程/` | 10 | 线程模型演进→调度器→pinning(JEP 491)→池迁移→结构化并发(JEP 525)→ScopedValue(JEP 506)→生产实践 |
+| 装箱拆箱与泛型擦除 | `01-.../01-Java基础语法与核心特性/装箱拆箱 泛型擦除/` | 10 | 装箱字节码→缓存陷阱→擦除深潜→TypeToken→集合交汇→Valhalla(JEP 401) |
 | SDK | `01-.../SDK/` | 8 | 概念辨析→JDK解剖→JPMS/jlink→集成→自研设计 |
 | Spring框架核心 | `02-.../Spring框架核心/` | 11 | 容器→DI→生命周期→AOP→事务→事件→配置（7.0） |
 | MyBatisPlus | `02-.../MyBatisPlus/` | 10 | 映射→CRUD→Wrapper→插件→生成器→生产（3.5.17） |
@@ -52,6 +54,15 @@ Personal Java backend + AI learning knowledge base. **2,370+ markdown technical 
 | 项目全流程 | `02-.../项目从开始开发到上线全流程/` | 6 | Requirements→Launch→Ops |
 | Vim | `01-.../Vim/` | 4 | Basic→Advanced→Plugins |
 | 文件后缀名 | `01-.../不同文件的后缀名/` | 5 | 100+ file formats |
+| CPU | `01-.../计算机组成原理/CPU/` | 8 | 组成→流水线→超标量→实例→封装→评测→AI演进 |
+| GPU | `01-.../计算机组成原理/GPU/` | 8 | SIMT→存储→调度→CUDA→NVIDIA演进→AMD→AI时代 |
+| 缓存与Cache | `01-.../计算机组成原理/缓存与Cache/` | 8 | 原理→结构→替换→多级→一致性→安全→前沿 |
+| 寄存器 | `01-.../计算机组成原理/寄存器/` | 9 | 本质→ISA→系统寄存器→ABI→重命名→切换→分配→前沿 |
+| 离散数学 | `01-.../数学基础/离散数学/` | 9 | 逻辑→集合→图论→组合→代数→数论→AI应用→Java实战 |
+| 初等数论 | `01-.../数学基础/初等数论/` | 9 | 整除素数→同余→欧几里得→CRT→原根→互反律→反演→后量子 |
+| 信息论 | `01-.../数学基础/信息论/` | 9 | 熵→互信息KL→信道容量→压缩→纠错→率失真→ML→6G语义 |
+| 密码学 | `01-.../数学基础/密码学/` | 9 | 基础→AES→流密码→哈希→RSA/ECC→PKI→协议→后量子迁移 |
+| 计算机数学基础 | `01-.../数学基础/计算机数学基础/` | 13 | 线代/微积分/概率/离散/数值/数论/信息论/优化速查体系 |
 
 ---
 
