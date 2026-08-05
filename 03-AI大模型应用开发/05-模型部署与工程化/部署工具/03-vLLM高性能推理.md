@@ -131,3 +131,82 @@ HttpResponse<String> response = client.send(request, BodyHandlers.ofString());
 - 连续批处理 = 动态拼 batch → QPS 10×
 - OpenAI 兼容 API → 零迁移成本
 - 生产参数：`gpu_memory_utilization=0.9, max_num_seqs=256`
+
+---
+
+## 6. vLLM 的 2026 现状
+
+**最新状态（2026-08 检索核实）**：
+
+```text
+版本：v0.7.3（2026-03）→ v0.21.0（05）→ v0.22.x V1（06）
+  → V1 引擎自 v0.7.0 起为默认（架构重写）
+份额：~45% 部署量（GPU 生产默认首选）
+采用：Anyscale/IBM/Databricks/Cloudflare 等大厂
+硬件：NVIDIA/AMD ROCm/CPU/TPU/Ascend（最广）
+```
+
+**V1 引擎的新能力**：
+
+```text
+① Hopper 自动 FP8 权重校准（v0.7.3）
+② 长上下文（>64k tokens）内存效率 +12%
+③ 与 SGLang 的竞争主线（2026 年）：前缀缓存效率 SGLang 更优
+```
+
+**生产调优速查**（2026 实践）：
+
+```text
+--max-model-len：上下文长度（按业务定，越长显存越大）
+--gpu-memory-utilization：0.9（KV Cache 分配）
+--tensor-parallel-size：多卡张量并行（70B 需 2-4 卡）
+--enable-prefix-caching：前缀缓存（RAG 系统提示共享场景）
+--quantization fp8：FP8 量化（吞吐↑显存↓，H100 最优）
+环境：VLLM_USE_V1=1（V1 引擎开关）
+```
+
+> 🎯 **核心要点**：vLLM 2026 = "**生产默认首选（45% 份额）**"——V1 引擎默认、FP8 支持、硬件最广；**调优四参数（max-len/显存利用率/张量并行/前缀缓存）**是生产标准动作。
+
+---
+
+## 7. 部署与调用速查
+
+**vLLM 启动与验证**：
+
+```bash
+# 启动 OpenAI 兼容服务
+vllm serve Qwen/Qwen2.5-7B-Instruct \
+  --port 8000 \
+  --gpu-memory-utilization 0.9 \
+  --max-model-len 8192
+
+# 验证
+curl http://localhost:8000/v1/chat/completions \
+  -H "Content-Type: application/json" \
+  -d '{"model": "Qwen/Qwen2.5-7B-Instruct",
+       "messages": [{"role": "user", "content": "你好"}]}'
+
+# 指标
+curl http://localhost:8000/metrics    # Prometheus 指标
+```
+
+**Java 调用速查**（Spring AI / OpenAI SDK）：
+
+```java
+// OpenAI 兼容：Java 端直接用 OpenAI SDK 指向 vLLM
+OpenAiApi api = new OpenAiApi("http://localhost:8000/v1", "EMPTY");
+// Spring AI：spring.ai.openai.base-url=http://localhost:8000/v1
+// 或 langchain4j：OpenAiChatModel.builder().baseUrl("http://localhost:8000/v1")
+```
+
+**常见启动参数速查**：
+
+| 参数 | 说明 |
+|------|------|
+| --tensor-parallel-size N | 张量并行卡数（70B 需 2-4） |
+| --quantization fp8 | FP8 量化（H100 最优） |
+| --enable-prefix-caching | 前缀缓存（RAG 共享提示词） |
+| --max-num-seqs | 并发批大小（显存换吞吐） |
+| --dtype bfloat16 | 精度（默认） |
+
+> 🎯 **核心要点**：vLLM 使用 = "**一条命令启动 + OpenAI 兼容调用 + 三参数调优（显存利用率/张量并行/前缀缓存）**"——Java 端零特殊适配（OpenAI SDK 直连）；/metrics 端点开箱即用。

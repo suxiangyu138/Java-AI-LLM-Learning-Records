@@ -149,3 +149,75 @@ helm install llm vllm/vllm \
 - HPA：基于 CPU/内存自动扩缩，LLM 建议基于 GPU 利用率
 - 滚动更新：`maxSurge=1, maxUnavailable=0` 保证零停机
 - Helm：一键部署 LLM 服务栈
+
+---
+
+## 6. GPU 调度与 LLM 部署速查
+
+**K8s GPU 调度三件套**：
+
+```text
+① nvidia-device-plugin：节点 GPU 资源上报（nvidia.com/gpu）
+   → 部署为 DaemonSet，让 K8s 能调度 GPU
+② Pod 声明：resources.limits: nvidia.com/gpu: 1
+③ 多卡：requests/limits 设 2/4/8（配合 vLLM 张量并行）
+
+示例：
+resources:
+  limits:
+    nvidia.com/gpu: 1      # 声明需要 1 张 GPU
+    memory: 32Gi
+```
+
+**LLM 服务的 K8s 部署要点**：
+
+| 要点 | 说明 |
+|------|------|
+| HPA 扩容 | **GPU 场景 HPA 需谨慎**（模型加载耗时，扩缩容滞后）——按 QPS 而非 CPU |
+| 滚动更新 | 模型版本更新走滚动（recreate 策略避免双份显存） |
+| 显存亲和 | 大模型单卡放不下 → 张量并行（多卡同 Pod 的 NDM 机制） |
+| 模型存储 | PV 挂载模型（避免每次启动下载） |
+| 节点选择 | nodeSelector: gpu-type（A100/H100 分池） |
+
+> 🎯 **核心要点**：K8s GPU 部署 = "**device-plugin（资源上报）+ limits 声明 + PV 挂模型**"三件套——**GPU 场景的 HPA 别按 CPU 配**（模型加载慢，弹性滞后），滚动更新用 recreate 防显存双份。
+
+---
+
+## 7. Helm 与运维速查
+
+**Helm 部署 LLM 服务的要点**：
+
+```yaml
+# values.yaml 关键配置
+resources:
+  limits:
+    nvidia.com/gpu: 1      # GPU 声明
+    memory: 64Gi
+persistence:
+  enabled: true            # 模型 PV 挂载
+  size: 50Gi
+autoscaling:
+  enabled: false           # GPU 场景默认关 HPA（模型加载慢）
+```
+
+**运维常用命令**：
+
+```bash
+# 部署与更新
+kubectl apply -f deployment.yaml          # 部署
+kubectl rollout status deployment/llm     # 查看滚动状态
+kubectl rollout undo deployment/llm       # 回滚
+
+# 排查
+kubectl get pods -o wide                  # 查看 Pod 与节点
+kubectl describe pod <pod>                # 事件（含 GPU 调度失败原因）
+kubectl logs <pod>                        # 日志
+kubectl top nodes                         # 资源使用（GPU 需额外插件）
+
+# 常见 GPU 调度失败排查
+# ① 无可用 GPU 节点 → nodeSelector 检查
+# ② 显存不足 → 同节点多 Pod 竞争（显存是硬限制）
+# ③ device-plugin 未部署 → DaemonSet 检查
+```
+
+> 🎯 **核心要点**：K8s LLM 运维 = "**GPU 声明（limits）+ PV 挂模型 + 调度失败三查**"——**GPU 显存是硬限制**（不像 CPU 可超卖），调度失败排查三件套（节点/显存/插件）是标配。

@@ -25,9 +25,22 @@ Personal Java backend + AI learning knowledge base. **2,370+ markdown technical 
 
 | System | Location | Files | Focus |
 |--------|---------|:---:|------|
+| Java面向对象 | `01-.../Java面向对象/` | 11 | 三大特性→接口→内部类→record/sealed→SOLID |
+| Java集合框架 | `01-.../Java集合框架/` | 10 | Collection→List/Set/Queue/Map→并发集合→选型 |
+| Java异常体系 | `01-.../Java异常体系/` | 10 | 层级→受检之争→try-finally→TWR→错误码→并发 |
+| Java多线程 | `01-.../Java多线程/` | 9 | 线程本质→API→三要素→synchronized→死锁→性能 |
+| SDK | `01-.../SDK/` | 8 | 概念辨析→JDK解剖→JPMS/jlink→集成→自研设计 |
+| Spring框架核心 | `02-.../Spring框架核心/` | 11 | 容器→DI→生命周期→AOP→事务→事件→配置（7.0） |
+| MyBatisPlus | `02-.../MyBatisPlus/` | 10 | 映射→CRUD→Wrapper→插件→生成器→生产（3.5.17） |
+| RAG拓展优化深化 | `03-.../02-RAG检索增强生成/`(12-22) | 11 | 五代演进→GraphRAG→Agentic→长上下文→评估 |
+| Multi-Agent/MCP深化 | `03-.../03-Multi-Agent与MCP协议/`(12-16) | 5 | 无状态MCP→A2A→安全攻防→评估→编程Agent |
+| Milvus | `03-AI.../Milvus/` | 10 | 数据模型→部署→索引→混合检索→3.0→生态 |
+| 向量数据库 | `03-.../04-向量数据库/` | 10 | 索引原理→Chroma/Milvus/FAISS→选型（2026） |
+| 部署工具 | `03-.../部署工具/` | 12 | Docker/K8s→vLLM/Ollama/TRT→MLOps→灰度（2026） |
+| 模型推理与部署 | `03-.../模型推理与部署/` | 11 | KV Cache→投机采样→量化→压测→成本 |
+| 深度学习 | `03-.../深度学习/` | 11 | CNN/RNN/GAN→迁移→压缩→框架（LLM视角） |
 | Agent开发 | `03-AI.../Agent开发/` | 12 | P-A-M-E→patterns→framework→MCP→eval→prod |
 | Vibe Coding | `03-AI.../Vibe Coding/` | 10 | Paradigm→tools→workflow→context→risk |
-| AI赋能+程序员转型 | `03-AI.../AI时代如何用AI赋能各行各业 程序员何去何从/` | 9 | Industry AI + dev career transformation |
 | Harness Engineering | `03-AI.../Harness Engineering/` | 8 | Agent=Model+Harness→security→governance |
 | Python虚拟环境 | `03-AI.../Python虚拟环境/` | 7 | PEP 405→venv/conda/uv→lock→CI/Docker |
 | DeepSeek (V4 Pro) | `03-AI.../DeepSeek/` | 10 | Full evolution V2→V4 Pro |
