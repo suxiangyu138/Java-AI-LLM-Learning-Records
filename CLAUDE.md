@@ -30,6 +30,7 @@ Personal Java backend + AI learning knowledge base. **2,370+ markdown technical 
 | Java异常体系 | `01-.../Java异常体系/` | 10 | 层级→受检之争→try-finally→TWR→错误码→并发 |
 | Java多线程 | `01-.../Java多线程/` | 9 | 线程本质→API→三要素→synchronized→死锁→性能 |
 | 虚拟线程 | `01-.../02-JUC高并发编程/虚拟线程/` | 10 | 线程模型演进→调度器→pinning(JEP 491)→池迁移→结构化并发(JEP 525)→ScopedValue(JEP 506)→生产实践 |
+| JMM | `01-.../03-JVM完整底层/JMM/` | 8 | 三大保证→硬件模型→重排序→Happens-Before→volatile/锁语义→CAS→并发工具→JEP 491 |
 | 装箱拆箱与泛型擦除 | `01-.../01-Java基础语法与核心特性/装箱拆箱 泛型擦除/` | 10 | 装箱字节码→缓存陷阱→擦除深潜→TypeToken→集合交汇→Valhalla(JEP 401) |
 | SDK | `01-.../SDK/` | 8 | 概念辨析→JDK解剖→JPMS/jlink→集成→自研设计 |
 | Spring框架核心 | `02-.../Spring框架核心/` | 11 | 容器→DI→生命周期→AOP→事务→事件→配置（7.0） |
