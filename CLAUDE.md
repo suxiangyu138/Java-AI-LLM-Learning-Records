@@ -37,6 +37,7 @@ Personal Java backend + AI learning knowledge base. **2,370+ markdown technical 
 | Neo4j | `02-.../02-非关系型数据库/Neo4j/` | 9 | 图模型→Cypher→索引→存储事务→图算法→向量GraphRAG→Java→部署选型 |
 | Pulsar | `02-.../03-消息队列/Pulsar/` | 9 | 三层架构→订阅模式→多租户→跨地域复制→分层存储→Functions→Java→选型 |
 | 主流 Agent 范式 | `03-AI.../03-Agent与MCP协议/主流 Agent 范式/` | 10 | 工作流vs Agent→五工作流→ReAct→PnE→反思→Agentic Reasoning→多Agent→实践→框架 |
+| 雪花算法 | `02-.../08-分布式系统与架构/雪花算法/` | 10 | 原理→时钟回拨→变体→ID方案全景→UUIDv7→基准→Java→选型→生产 |
 | 装箱拆箱与泛型擦除 | `01-.../01-Java基础语法与核心特性/装箱拆箱 泛型擦除/` | 10 | 装箱字节码→缓存陷阱→擦除深潜→TypeToken→集合交汇→Valhalla(JEP 401) |
 | SDK | `01-.../SDK/` | 8 | 概念辨析→JDK解剖→JPMS/jlink→集成→自研设计 |
 | Spring框架核心 | `02-.../Spring框架核心/` | 11 | 容器→DI→生命周期→AOP→事务→事件→配置（7.0） |

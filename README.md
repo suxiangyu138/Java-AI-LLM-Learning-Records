@@ -1,7 +1,7 @@
 # Java 后端 + AI 大模型 系统化学习仓库
 
 > 面向 **Java 后端开发工程师** 与 **AI 大模型应用开发工程师** 的全栈知识体系。
-> **2,942 篇标准化 Markdown 技术文档**，按 5 层金字塔组织，覆盖从底层基础到面试冲刺的完整学习路径。
+> **2,952 篇标准化 Markdown 技术文档**，按 5 层金字塔组织，覆盖从底层基础到面试冲刺的完整学习路径。
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
@@ -10,11 +10,11 @@
 ## 📐 五层金字塔知识体系
 
 ```
-Java-AI-LLM-Learning-Records/  (2,942 篇 .md 文件)
+Java-AI-LLM-Learning-Records/  (2,952 篇 .md 文件)
 │
 ├── 🏗️ 01-底层根基-Java核心底座/        1023 篇  地基：Java核心+JUC+JVM+DSA+计算机基础(四大件+数学体系)+工具(Vim/文件后缀/SDK)
 │
-├── 🔧 02-后端核心技术 微服务 分布式 云原生/ 707 篇  骨架：MySQL+Redis+MQ+ES+Spring全家桶+MyBatisPlus+DevOps
+├── 🔧 02-后端核心技术 微服务 分布式 云原生/ 717 篇  骨架：MySQL+Redis+MQ+ES+Spring全家桶+MyBatisPlus+DevOps
 │
 ├── 🤖 03-AI大模型应用开发/             745 篇  差异：DeepSeek+RAG+Agent+MCP+Milvus+部署工程化+Python
 │
@@ -45,7 +45,7 @@ Java-AI-LLM-Learning-Records/  (2,942 篇 .md 文件)
 | 高并发与性能优化 | 高并发设计、池化技术、异步编程 |
 | 工具 | Vim、文件后缀名、SSH、JSON、快捷键、命令行 |
 
-### 🔧 02-后端核心技术 微服务 分布式 云原生（707 篇）
+### 🔧 02-后端核心技术 微服务 分布式 云原生（717 篇）
 
 | 子模块 | 内容 |
 |--------|------|
@@ -133,15 +133,16 @@ Java-AI-LLM-Learning-Records/  (2,942 篇 .md 文件)
 | **🆕 Neo4j** | 02-.../02-非关系型数据库/Neo4j/ | 9 | Cypher→图算法→原生 Vector→SEARCH→GraphRAG→Spring Data Neo4j |
 | **🆕 Pulsar** | 02-.../03-消息队列/Pulsar/ | 9 | 三层架构→多租户→跨地域复制→分层存储→Functions→vs Kafka 选型 |
 | **🆕 主流 Agent 范式** | 03-AI.../03-Agent与MCP协议/主流 Agent 范式/ | 10 | 工作流vs Agent→ReAct→PnE→反思→Agentic Reasoning→多Agent→框架 |
+| **🆕 雪花算法** | 02-.../08-分布式系统与架构/雪花算法/ | 10 | 原理→时钟回拨→变体→ID方案→UUIDv7（RFC 9562）→选型 |
 
 ---
 
 ## 🆕 本次更新（2026-08-06）
 
 ```text
-新增 133 篇技术文档，覆盖 16 个知识体系（计算机组成原理四大件 + 数学基础四套 + JMM + MQ 理论 + SQLite + Memcached + Neo4j + Pulsar + Agent 范式 + 存量修正）：
+新增 143 篇技术文档，覆盖 17 个知识体系（计算机组成原理四大件 + 数学基础四套 + JMM + MQ 理论 + SQLite + Memcached + Neo4j + Pulsar + Agent 范式 + 雪花算法 + 存量修正）：
 
-🆕 新建（133 篇）：
+🆕 新建（143 篇）：
   01-.../计算机组成原理/CPU/         8篇   组成/流水线/超标量/实例/封装/评测/AI演进
   01-.../计算机组成原理/GPU/         8篇   SIMT/存储/调度/CUDA/NVIDIA-AMD/AI时代
   01-.../计算机组成原理/缓存与Cache/  8篇   结构/替换算法/一致性/侧信道/前沿
@@ -157,6 +158,7 @@ Java-AI-LLM-Learning-Records/  (2,942 篇 .md 文件)
   02-.../02-非关系型数据库/Neo4j/      9篇  图模型/Cypher/图算法/向量GraphRAG/Java集成
   02-.../03-消息队列/Pulsar/          9篇  三层架构/多租户/跨地域复制/分层存储/Functions
   03-.../03-Agent与MCP协议/主流 Agent 范式/ 10篇 工作流vs Agent/ReAct/PnE/反思/Agentic Reasoning/框架
+  02-.../08-分布式系统与架构/雪花算法/  10篇 原理/时钟回拨/变体/UUIDv7/选型/生产
 
 🔄 修正（13 篇存量）：
   01-.../数学基础/计算机数学基础/    13篇  编号错乱/失效链接/数学公式错误全面修正
@@ -171,6 +173,7 @@ Java-AI-LLM-Learning-Records/  (2,942 篇 .md 文件)
   Neo4j 2025.10+（原生 Vector/SEARCH 语法/索引内过滤/GRAPH TYPE）
   Pulsar v4.2（V2 命名/Oxia 元数据）· 腾讯 TDMQ 百万 QPS 验证
   Agent 范式：Model-Native Harness（2026）· Anthropic 五工作流 · 推理模型内化循环
+  UUIDv7（RFC 9562）：PG 18/Java 26 原生 · 雪花 64 位场景保留
 ```
 
 ---
@@ -261,4 +264,4 @@ Java-AI-LLM-Learning-Records/  (2,942 篇 .md 文件)
 
 ---
 
-*最后更新：2026-08-06 | 2,942 篇 Markdown 文档 | 5 层金字塔 + 30 个活跃知识体系*
+*最后更新：2026-08-06 | 2,952 篇 Markdown 文档 | 5 层金字塔 + 31 个活跃知识体系*
