@@ -14,7 +14,7 @@ Personal Java backend + AI learning knowledge base. **2,370+ markdown technical 
 
 ```
 01-底层根基-Java核心底座/               # Java core, JUC, JVM, CS fundamentals, Vim
-02-后端中间件 微服务工程及相关拓展/     # Middleware: MySQL, Redis, MQ, ES, Spring, DevOps, tool systems
+02-后端核心技术 微服务 分布式 云原生/     # Middleware: MySQL, Redis, MQ, ES, Spring, DevOps, tool systems
 03-AI大模型应用开发/                    # AI: DeepSeek, RAG, Agent, Embedding, LangChain4j, Spring AI
 04-实战项目综合落地/                    # Projects: FlavorDash, SuGuangMall, LingShu
 05-综合输出-面试冲刺/                    # Interview: 152 Q&A, hand-written code, resume, cheat sheets
