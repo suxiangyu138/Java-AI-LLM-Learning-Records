@@ -14,26 +14,19 @@
 
 ## 1. 撤销命令全景图
 
-```mermaid
-graph TD
-    subgraph "工作区 Working"
-        W["git restore <file><br/>撤销工作区修改"]
-    end
-    subgraph "暂存区 Staging"
-        S["git restore --staged <file><br/>从暂存区移除"]
-    end
-    subgraph "本地仓库 Local Repo"
-        C1["git reset --soft HEAD~1<br/>撤销commit,保留暂存+工作区"]
-        C2["git reset --mixed HEAD~1<br/>撤销commit+暂存,保留工作区"]
-        C3["git reset --hard HEAD~1<br/>全部撤销(危险!)"]
-        C4["git revert <commit><br/>安全反向提交"]
-    end
-    subgraph "远程仓库 Remote"
-        R["git push --force-with-lease<br/>覆盖远程(最后手段)"]
-    end
-    W --> S --> C1
-    C1 --> C2 --> C3
-    C4 --> R
+```text
+撤销命令全景（四层区域 → 对应命令）
+
+工作区      git restore <file>          撤销工作区修改
+   │
+暂存区      git restore --staged <file> 从暂存区移除
+   │
+本地仓库    git reset --soft HEAD~1     撤销 commit，保留暂存+工作区
+            git reset --mixed HEAD~1    撤销 commit+暂存，保留工作区
+            git reset --hard HEAD~1     全部撤销（危险!）
+            git revert <commit>         安全反向提交（推荐远程）
+   │
+远程仓库    git push --force-with-lease 覆盖远程（最后手段）
 ```
 
 ---

@@ -114,16 +114,25 @@ git push --force-with-lease origin feature/login
 
 PR (GitHub) / MR (GitLab) 是协作的核心机制，不只是"请求合并代码"。
 
-```mermaid
-graph LR
-    A["1. 创建 feature 分支"] --> B["2. 开发 + commit"]
-    B --> C["3. push 到远程"]
-    C --> D["4. 创建 PR/MR"]
-    D --> E["5. CI 自动检查"]
-    E --> F{"6. Code Review"}
-    F -->|"需要修改"| B
-    F -->|"通过"| G["7. Merge"]
-    G --> H["8. 部署 + 删除分支"]
+```text
+PR/MR 工作流：
+
+1. 创建 feature 分支 → 2. 开发 + commit → 3. push 到远程
+                                              │
+                                              ▼
+                                        4. 创建 PR/MR
+                                              │
+                                              ▼
+                                        5. CI 自动检查
+                                              │
+                                              ▼
+                                        6. Code Review ──需要修改──┐
+                                              │                    │
+                                              ▼ 通过                │
+                                        7. Merge ←────────────────┘
+                                              │
+                                              ▼
+                                        8. 部署 + 删除分支
 ```
 
 ### 3.1 创建高质量 PR

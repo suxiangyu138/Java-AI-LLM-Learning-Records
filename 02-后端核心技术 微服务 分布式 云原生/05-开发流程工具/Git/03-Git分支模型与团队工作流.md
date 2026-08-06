@@ -24,35 +24,17 @@
 
 ## 2. Git Flow — 经典重型模型
 
-```mermaid
-gitGraph
-   commit id: "init"
-   branch develop
-   branch feature/A
-   checkout feature/A
-   commit id: "A-1"
-   commit id: "A-2"
-   checkout develop
-   merge feature/A
-   branch feature/B
-   checkout feature/B
-   commit id: "B-1"
-   checkout develop
-   merge feature/B
-   branch release/1.0
-   checkout release/1.0
-   commit id: "fix-rc1"
-   checkout main
-   merge release/1.0
-   checkout develop
-   merge release/1.0
-   branch hotfix/1.0.1
-   checkout hotfix/1.0.1
-   commit id: "bugfix"
-   checkout main
-   merge hotfix/1.0.1
-   checkout develop
-   merge hotfix/1.0.1
+```text
+Git Flow 分支工作流（时间从左到右）
+
+main        init ────────────────── 合并 release/1.0 ── 合并 hotfix/1.0.1
+                                    │                    │
+develop     ── 合并 A ── 合并 B ──── 合并 release ─────── 合并 hotfix
+            │          │
+feature/A   A-1 A-2 ───┘
+feature/B   B-1 ───────┘
+release/1.0            fix-rc1 ─────┘
+hotfix/1.0.1                          bugfix ────────────┘
 ```
 
 ### 分支角色
@@ -115,25 +97,12 @@ git branch -d hotfix/1.0.1
 
 ## 3. GitHub Flow — 轻量敏捷模型
 
-```mermaid
-gitGraph
-   commit id: "init"
-   branch feature/A
-   checkout feature/A
-   commit id: "A-1"
-   commit id: "A-2"
-   checkout main
-   branch feature/B
-   checkout feature/B
-   commit id: "B-1"
-   checkout feature/A
-   commit id: "A-3"
-   checkout main
-   merge feature/A tag: "deploy v1"
-   checkout feature/B
-   commit id: "B-review-fix"
-   checkout main
-   merge feature/B tag: "deploy v2"
+```text
+功能分支并行 + 部署标签（时间从左到右）
+
+main:       init ──── 合并 feature/A (deploy v1) ── 合并 feature/B (deploy v2)
+feature/A:      A-1 A-2 ── A-3 ┘
+feature/B:          B-1 ── B-review-fix ┘
 ```
 
 ### 核心原则
@@ -246,16 +215,26 @@ else:
 
 ## 6. 如何选择？
 
-```mermaid
-graph TD
-    Q1{"多久发布一次？"}
-    Q1 -->|"几周/几月<br/>移动App/桌面软件"| A1["Git Flow"]
-    Q1 -->|"每天/每几小时<br/>Web应用/SaaS"| Q2{"团队规模？"}
-    Q2 -->|"1-20人"| A2["GitHub Flow ⭐ 推荐"]
-    Q2 -->|"50+人，有专人维护CI"| Q3{"CI和测试？"}
-    Q3 -->|"完善"| A3["Trunk-Based"]
-    Q3 -->|"一般"| A2
-    Q1 -->|"需要多环境<br/>staging/production"| A4["GitLab Flow"]
+```text
+分支模型决策树
+
+                        多久发布一次？
+                       /      |        \
+        几周/几月      /       |         \ 每天/几小时
+        (移动App/桌面) │        |          \
+              Git Flow │        |        团队规模？
+                       │        |        /        \
+                       │        |    1-20人     50+人(有专人维护CI)
+                       │        |      |            |
+                       │        |  GitHub Flow     CI和测试完善吗?
+                       │        |    (推荐)        /          \
+                       │        |               完善          一般
+                       │        |                |             |
+                       │        |          Trunk-Based    GitHub Flow
+                       │        |
+                       │   需要多环境 (staging/production)?
+                       │            |
+                       │       GitLab Flow
 ```
 
 ### 决策表
