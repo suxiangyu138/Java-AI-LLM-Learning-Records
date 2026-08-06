@@ -38,6 +38,7 @@ Personal Java backend + AI learning knowledge base. **2,370+ markdown technical 
 | Pulsar | `02-.../03-消息队列/Pulsar/` | 9 | 三层架构→订阅模式→多租户→跨地域复制→分层存储→Functions→Java→选型 |
 | 主流 Agent 范式 | `03-AI.../03-Agent与MCP协议/主流 Agent 范式/` | 10 | 工作流vs Agent→五工作流→ReAct→PnE→反思→Agentic Reasoning→多Agent→实践→框架 |
 | 雪花算法 | `02-.../08-分布式系统与架构/雪花算法/` | 10 | 原理→时钟回拨→变体→ID方案全景→UUIDv7→基准→Java→选型→生产 |
+| JUnit | `02-.../07-工程运维基础/JUnit/` | 10 | 演进史(JUnit 6.1.1)→三平台架构→生命周期→参数化→扩展→Mock→Spring/Boot 4→CI→迁移 |
 | 装箱拆箱与泛型擦除 | `01-.../01-Java基础语法与核心特性/装箱拆箱 泛型擦除/` | 10 | 装箱字节码→缓存陷阱→擦除深潜→TypeToken→集合交汇→Valhalla(JEP 401) |
 | SDK | `01-.../SDK/` | 8 | 概念辨析→JDK解剖→JPMS/jlink→集成→自研设计 |
 | Spring框架核心 | `02-.../Spring框架核心/` | 11 | 容器→DI→生命周期→AOP→事务→事件→配置（7.0） |
@@ -59,6 +60,8 @@ Personal Java backend + AI learning knowledge base. **2,370+ markdown technical 
 | JMeter | `02-.../Jmeter/` | 8 | Performance testing: Sampler→CI/CD |
 | Ubuntu | `02-.../Ubuntu/` | 7 | CLI→Java env→systemd→Shell |
 | CentOS | `02-.../CentOS/` | 5 | dnf→SELinux→firewalld→Production |
+| Linux | `02-.../运维/Linux 操作系统/Linux/` | 12 | 基础→命令→系统管理→网络安全→服务→速查→服务器→权限→JVM排查→日志（Rocky 10/Ubuntu 26.04） |
+| Shell | `02-.../运维/Linux 操作系统/Shell/` | 6 | 入门→变量→流程→函数→文本处理（三剑客） |
 | 项目全流程 | `02-.../项目从开始开发到上线全流程/` | 6 | Requirements→Launch→Ops |
 | Vim | `01-.../Vim/` | 4 | Basic→Advanced→Plugins |
 | 文件后缀名 | `01-.../不同文件的后缀名/` | 5 | 100+ file formats |
@@ -68,6 +71,7 @@ Personal Java backend + AI learning knowledge base. **2,370+ markdown technical 
 | 寄存器 | `01-.../计算机组成原理/寄存器/` | 9 | 本质→ISA→系统寄存器→ABI→重命名→切换→分配→前沿 |
 | 离散数学 | `01-.../数学基础/离散数学/` | 9 | 逻辑→集合→图论→组合→代数→数论→AI应用→Java实战 |
 | 初等数论 | `01-.../数学基础/初等数论/` | 9 | 整除素数→同余→欧几里得→CRT→原根→互反律→反演→后量子 |
+| 数据结构与算法 | `01-.../06-数据结构与算法/` | 33 主题 | 四阶段路线：前置基础→基础思想→高频专题→中高级（73 目录归并） |
 | 信息论 | `01-.../数学基础/信息论/` | 9 | 熵→互信息KL→信道容量→压缩→纠错→率失真→ML→6G语义 |
 | 密码学 | `01-.../数学基础/密码学/` | 9 | 基础→AES→流密码→哈希→RSA/ECC→PKI→协议→后量子迁移 |
 | 计算机数学基础 | `01-.../数学基础/计算机数学基础/` | 13 | 线代/微积分/概率/离散/数值/数论/信息论/优化速查体系 |

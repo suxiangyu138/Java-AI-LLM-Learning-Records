@@ -134,15 +134,19 @@ Java-AI-LLM-Learning-Records/  (2,952 篇 .md 文件)
 | **🆕 Pulsar** | 02-.../03-消息队列/Pulsar/ | 9 | 三层架构→多租户→跨地域复制→分层存储→Functions→vs Kafka 选型 |
 | **🆕 主流 Agent 范式** | 03-AI.../03-Agent与MCP协议/主流 Agent 范式/ | 10 | 工作流vs Agent→ReAct→PnE→反思→Agentic Reasoning→多Agent→框架 |
 | **🆕 雪花算法** | 02-.../08-分布式系统与架构/雪花算法/ | 10 | 原理→时钟回拨→变体→ID方案→UUIDv7（RFC 9562）→选型 |
+| **🆕 JUnit** | 02-.../07-工程运维基础/JUnit/ | 10 | JUnit 6.1.1（Java 17 基线）→三平台架构→生命周期→参数化→扩展→Mock→Boot 4 集成→CI→迁移 |
+| **🆕 Linux** | 02-.../运维/Linux 操作系统/Linux/ | 12 | 基础→命令→系统管理→网络安全→服务→速查→权限深度→JVM 排查→日志（Rocky 10/Ubuntu 26.04） |
+| **🆕 Shell** | 02-.../运维/Linux 操作系统/Shell/ | 6 | 入门→变量→流程控制→函数实战→grep/sed/awk 三剑客 |
+| **🆕 数据结构与算法** | 01-.../06-数据结构与算法/ | 33 主题 | 四阶段路线（前置基础→核心思想→高频专题→中高级），73 目录归并编号 |
 
 ---
 
 ## 🆕 本次更新（2026-08-06）
 
 ```text
-新增 143 篇技术文档，覆盖 17 个知识体系（计算机组成原理四大件 + 数学基础四套 + JMM + MQ 理论 + SQLite + Memcached + Neo4j + Pulsar + Agent 范式 + 雪花算法 + 存量修正）：
+新增 153 篇技术文档，覆盖 18 个知识体系（计算机组成原理四大件 + 数学基础四套 + JMM + MQ 理论 + SQLite + Memcached + Neo4j + Pulsar + Agent 范式 + 雪花算法 + JUnit + 存量修正）：
 
-🆕 新建（143 篇）：
+🆕 新建（153 篇）：
   01-.../计算机组成原理/CPU/         8篇   组成/流水线/超标量/实例/封装/评测/AI演进
   01-.../计算机组成原理/GPU/         8篇   SIMT/存储/调度/CUDA/NVIDIA-AMD/AI时代
   01-.../计算机组成原理/缓存与Cache/  8篇   结构/替换算法/一致性/侧信道/前沿
@@ -159,6 +163,7 @@ Java-AI-LLM-Learning-Records/  (2,952 篇 .md 文件)
   02-.../03-消息队列/Pulsar/          9篇  三层架构/多租户/跨地域复制/分层存储/Functions
   03-.../03-Agent与MCP协议/主流 Agent 范式/ 10篇 工作流vs Agent/ReAct/PnE/反思/Agentic Reasoning/框架
   02-.../08-分布式系统与架构/雪花算法/  10篇 原理/时钟回拨/变体/UUIDv7/选型/生产
+  02-.../07-工程运维基础/JUnit/      10篇  演进史/JUnit 6.1.1/三平台架构/生命周期/参数化/扩展/Mock/Boot 4/CI/迁移
 
 🔄 修正（13 篇存量）：
   01-.../数学基础/计算机数学基础/    13篇  编号错乱/失效链接/数学公式错误全面修正
@@ -174,6 +179,8 @@ Java-AI-LLM-Learning-Records/  (2,952 篇 .md 文件)
   Pulsar v4.2（V2 命名/Oxia 元数据）· 腾讯 TDMQ 百万 QPS 验证
   Agent 范式：Model-Native Harness（2026）· Anthropic 五工作流 · 推理模型内化循环
   UUIDv7（RFC 9562）：PG 18/Java 26 原生 · 雪花 64 位场景保留
+  JUnit 6.1.1（2026-06）：Java 17 基线 · Vintage 弃用 · 统一版本号 · FastCSV · JFR 内置
+  Spring Boot 4：JUnit 6 默认 · @MockBean→@MockitoBean · Vintage 移除 · @ServiceConnection
 ```
 
 ---

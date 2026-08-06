@@ -20,15 +20,11 @@ git merge feature/login
 # 历史线性，不创建 merge commit
 ```
 
-```mermaid
-gitGraph
-   commit id: "A"
-   commit id: "B"
-   branch feature
-   checkout feature
-   commit id: "C"
-   checkout main
-   merge feature id: "C (FF)"
+```text
+Fast-Forward 合并（main 无新提交，feature 直接快进）
+
+main:    A ── B ── C (feature 快进，无合并提交)
+feature:      └ C ┘
 ```
 
 ### 1.2 Three-Way Merge（三方合并）
@@ -41,16 +37,11 @@ git merge feature/login
 # 产生一个 merge commit，有两个 parent
 ```
 
-```mermaid
-gitGraph
-   commit id: "A"
-   branch feature
-   checkout main
-   commit id: "B"
-   checkout feature
-   commit id: "C"
-   checkout main
-   merge feature id: "M (merge commit)"
+```text
+非快进合并（main 与 feature 分叉，产生合并提交 M）
+
+main:    A ──────── B ── M (merge commit, 两个 parent: B 和 C)
+feature:    └ C ──┘
 ```
 
 ### 1.3 --no-ff Merge（强制非快进）
@@ -100,16 +91,10 @@ Rebase 的原理（三步）：
 2. 把 feature 上独有的 commit **逐个 cherry-pick** 到 main 的最新位置
 3. 把 feature 指针移到新位置
 
-```mermaid
-graph LR
-    subgraph "Rebase 前"
-        A1["A"] --> B1["B (main)"]
-        A1 --> C1["C (feature)"]
-        B1 -.->|rebase| M[" "]
-    end
-    subgraph "Rebase 后"
-        A2["A"] --> B2["B (main)"] --> C2["C' (feature)"]
-    end
+```text
+Rebase 前:                          Rebase 后:
+main:    A ── B                     main:    A ── B ── C' (feature 重放)
+feature: A ── C (与 B 分叉)         feature:      └ C' ┘ (历史线性化)
 ```
 
 **注意**：`C'` 是全新的 commit，hash 不同了！这就是 "改写历史" 的含义。

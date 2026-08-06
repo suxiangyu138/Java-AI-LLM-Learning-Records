@@ -29,13 +29,34 @@ git cat-file -p 95d09f2b10159347eece71399a7e2e907ea3df4f
 
 ## 2. 四种 Git 对象
 
-```mermaid
-graph TD
-    Tag["Tag 对象<br/>annotated tag"] --> Commit
-    Commit["Commit 对象<br/>author/message/tree指针"] --> Tree
-    Tree["Tree 对象<br/>文件名 + 指针列表"] --> Blob1["Blob 对象<br/>文件内容快照"]
-    Tree --> Blob2["Blob 对象<br/>文件内容快照"]
-    Tree --> SubTree["Tree 对象<br/>子目录"] --> Blob3["Blob 对象"]
+```text
+                     ┌─────────────────┐
+                     │   Tag 对象       │
+                     │ (annotated tag)  │
+                     └────────┬────────┘
+                              ▼
+                    ┌───────────────────┐
+                    │  Commit 对象       │
+                    │ author / message   │
+                    │ tree 指针          │
+                    └────────┬──────────┘
+                             ▼
+                    ┌───────────────────┐
+                    │  Tree 对象         │
+                    │ 文件名 + 指针列表  │
+                    └───┬─────┬─────┬───┘
+                        │     │     │
+               ┌────────┘     │     └─────────┐
+               ▼              ▼               ▼
+        ┌─────────────┐ ┌─────────────┐ ┌─────────────┐
+        │ Blob 对象   │ │ Blob 对象   │ │ Tree 对象   │
+        │ 文件内容快照│ │ 文件内容快照│ │ 子目录      │
+        └─────────────┘ └─────────────┘ └──────┬──────┘
+                                               ▼
+                                        ┌─────────────┐
+                                        │ Blob 对象   │
+                                        │ 文件内容快照│
+                                        └─────────────┘
 ```
 
 ### 2.1 Blob（Binary Large Object）— 文件内容
@@ -176,17 +197,11 @@ echo -n "hello world" | git hash-object --stdin
 
 ## 5. Commit 链：有向无环图（DAG）
 
-```mermaid
-gitGraph
-   commit id: "A"
-   commit id: "B"
-   branch feature
-   checkout feature
-   commit id: "C"
-   checkout main
-   commit id: "D"
-   merge feature id: "E (merge commit)"
-   commit id: "F"
+```text
+main 分支:    A ── B ──────── D ── E (merge commit) ── F
+                                │
+feature 分支:          C ──────┘
+(从 B 分出，C 在 feature 上，D 在 main 上，E 合并两个分支)
 ```
 
 - 每个 commit 指向前一个 parent，形成 **链表**
