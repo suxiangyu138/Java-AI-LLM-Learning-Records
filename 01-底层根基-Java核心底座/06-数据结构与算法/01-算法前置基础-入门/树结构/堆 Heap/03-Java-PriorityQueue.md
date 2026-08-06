@@ -4,11 +4,11 @@
 
 ## 📚 目录
 
-1. [核心 API 一览](#1)
-2. [构造与比较器](#2)
-3. [对象排序的三种写法](#3)
-4. [工程最佳实践](#4)
-5. [复杂度速查表](#5)
+1. [核心 API 一览](#1-核心-api-一览)
+2. [构造与比较器](#2-构造与比较器)
+3. [对象排序的三种写法](#3-对象排序的三种写法)
+4. [工程最佳实践](#4-工程最佳实践)
+5. [复杂度速查表](#5-复杂度速查表)
 
 ## 1. 核心 API 一览
 
@@ -124,6 +124,32 @@ public int findKthLargest(int[] nums, int k) {   // 215
 | contains | O(n) | O(n) |
 | 集合构造 | O(n) | O(n)（建堆） |
 | 空间 | O(n) | O(n) |
+
+### 4.4 PriorityQueue 源码要点（面试加分）
+
+| 源码细节 | 说明 |
+|---------|------|
+| 底层数组 | `Object[] queue`，默认容量 11 |
+| 扩容 | 容量 < 64 时翻倍，否则 +50% |
+| siftUp/siftDown | 与 02 模块手写堆同构（基于 compareTo/比较器） |
+| 不允许 null | `offer(null)` 抛 NPE |
+| 非线程安全 | 并发用 `PriorityBlockingQueue`（锁）或 `ConcurrentSkipListSet`（无锁） |
+
+```java
+// 并发场景选择（面试对比）
+PriorityBlockingQueue<Task> pbq = new PriorityBlockingQueue<>();  // 锁实现
+ConcurrentSkipListMap<Integer, String> skiplist = new ConcurrentSkipListMap<>();  // 无锁有序
+// 低频更新高频读 → 跳表；写多 → 阻塞队列
+```
+
+### 4.5 常见误区清单
+
+| 误区 | 正确认知 |
+|------|---------|
+| `PriorityQueue` 是有序的 | ❌ 只有根最值有序；`toArray()` 不保证有序 |
+| 迭代器按优先级遍历 | ❌ 迭代器无序，要 `poll()` 循环才有序 |
+| `add` 与 `offer` 等价 | 基本等价（add 失败抛异常、offer 返回 false） |
+| 对象比较器写反 | 小顶堆是 `(a,b) -> a-b`；写反变「伪大顶堆」但语义错乱 |
 
 > 🎯 **核心要点**：PriorityQueue 验收——会写四种堆（默认/大顶/对象 Lambda/多字段链式）、记住「**TopK 口诀**：前 K 大装小堆」、警惕两个 O(n) 陷阱（remove/contains）与整数溢出；工程题永远优先 PriorityQueue，只有面试官说「手写」才掏 02 模块的模板。
 
