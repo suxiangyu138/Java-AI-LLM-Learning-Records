@@ -43,6 +43,7 @@ Personal Java backend + AI learning knowledge base. **2,370+ markdown technical 
 | SDK | `01-.../SDK/` | 8 | 概念辨析→JDK解剖→JPMS/jlink→集成→自研设计 |
 | Spring框架核心 | `02-.../Spring框架核心/` | 11 | 容器→DI→生命周期→AOP→事务→事件→配置（7.0） |
 | MyBatisPlus | `02-.../MyBatisPlus/` | 10 | 映射→CRUD→Wrapper→插件→生成器→生产（3.5.17） |
+| Spring Data Elasticsearch | `02-.../Spring组件汇总/Spring Data 系列【数据访问层】/Spring Data Elasticsearch/` | 9 | 总览→连接配置→映射注解→Repository→Operations→聚合滚动→向量RAG→集成避坑（6.1/ES 9.4） |
 | RAG拓展优化深化 | `03-.../02-RAG检索增强生成/`(12-22) | 11 | 五代演进→GraphRAG→Agentic→长上下文→评估 |
 | Multi-Agent/MCP深化 | `03-.../03-Multi-Agent与MCP协议/`(12-16) | 5 | 无状态MCP→A2A→安全攻防→评估→编程Agent |
 | Milvus | `03-AI.../Milvus/` | 10 | 数据模型→部署→索引→混合检索→3.0→生态 |
