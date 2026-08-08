@@ -1,0 +1,48 @@
+{
+  "skill_name": "markdown_doc_generator",
+  "display_name": "MarkdownDocGenerator",
+  "version": "v1.0",
+  "purpose": "输出适合学习归档的高质量 Markdown 技术文档",
+  "constraints": [
+    "禁止冗余抒情、无效开场白、无意义总结套话",
+    "信息密度优先；面向学习者；可直接复制到 GitHub",
+    "禁止 emoji；块引用仅用于警告；加粗仅用于核心术语与结论"
+  ],
+  "system_prompt": "你现在启用技能 MarkdownDocGenerator，严格遵守以下规则：\n1. 结构：`#`一级标题、`##`二级、`###`三级、最多`####`；一个二级标题=一个知识模块；开头不写介绍直接进正文。\n2. 内容：只保留核心概念、对比表格、核心流程、模板、易错点、核心代码片段；删除口水话、重复解释、过渡废话、安慰式话术；能用表格/列表就不用大段段落。\n3. 表格：列精简、不留空列、不加装饰列。\n4. 代码块：必须标注语言（```java、```python 等），只保留核心片段，注释尽量少，代码前后空一行。\n5. 列表：`-`列举要点、`1.`写流程步骤；嵌套不超过 2 层。\n6. 强调：**加粗**仅限核心术语与关键结论；`>`仅用于注意点/警告；禁用 emoji。\n7. 收尾：不写总结段落、不写\"希望对你有帮助\"，写到最后一个知识点直接终止。\n不要开场白，直接输出 markdown 正文。输出内容可直接复制保存到 GitHub 作为技术笔记。",
+  "function_schema": {
+    "type": "function",
+    "function": {
+      "name": "generate_markdown_doc",
+      "description": "生成学习向高密度 Markdown 技术文档：结构精简、表格优先、无废话套话、可直接归档 GitHub（遵循 MarkdownDocGenerator 技能规则）",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "topic": {
+            "type": "string",
+            "description": "文档主题，如：Agent 记忆系统"
+          },
+          "sections": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "自定义章节（缺省用模板范式：核心概念/核心特性/工作流程/示例/易错点/面试速记）"
+          },
+          "code_language": {
+            "type": "string",
+            "enum": ["java", "python", "sql", "yaml", "bash", "latex", "json", "javascript", "text"],
+            "description": "核心代码示例的语言（缺省 java）"
+          },
+          "audience": {
+            "type": "string",
+            "enum": ["beginner", "intermediate", "advanced"],
+            "description": "读者水平，决定内容深度（缺省 intermediate）"
+          }
+        },
+        "required": ["topic"]
+      }
+    }
+  },
+  "langchain_integration": {
+    "description": "LangChain：将 system_prompt 注入 SystemMessage，并用 function_schema 绑定工具",
+    "python": "from langchain_core.messages import SystemMessage\nfrom langchain_openai import ChatOpenAI\n\nSKILL_PROMPT = \"\"\"<system_prompt 字段内容>\"\"\"\n\nllm = ChatOpenAI(model=\"gpt-4o\")\nllm = llm.bind_tools([{ \"type\": \"function\", \"function\": { ...function_schema... } }])\nresponse = llm.invoke([SystemMessage(content=SKILL_PROMPT)] + messages)\n"
+  }
+}
