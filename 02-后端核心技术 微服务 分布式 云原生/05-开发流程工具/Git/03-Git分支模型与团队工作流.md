@@ -1,28 +1,79 @@
-# Git 分支模型与团队工作流
+# 03-Git 分支模型与团队工作流
+> 分支本质只是指针，几乎零成本；但**怎么用分支**决定团队开发效率和发布质量——四模型对比、命名规范、发布与热修复流程
 
-## 为什么需要分支模型？
+## 📚 目录
+1. [分支底层原理](#1-分支底层原理)
+2. [四种主流分支模型速览](#2-四种主流分支模型速览)
+3. [Git Flow — 经典重型模型](#3-git-flow--经典重型模型)
+4. [GitHub Flow — 轻量敏捷模型](#4-github-flow--轻量敏捷模型)
+5. [GitLab Flow — 环境驱动模型](#5-gitlab-flow--环境驱动模型)
+6. [Trunk-Based Development — 主干开发](#6-trunk-based-development--主干开发)
+7. [分支模型决策树](#7-分支模型决策树)
+8. [分支命名规范](#8-分支命名规范)
+9. [版本发布流程与 hotfix 双合并](#9-版本发布流程与-hotfix-双合并)
+10. [worktree：多分支并行开发](#10-worktree多分支并行开发)
+11. [核心要点](#11-核心要点)
+12. [参考来源](#12-参考来源)
 
-分支本质只是指针，几乎零成本。但**怎么用分支**决定了团队的开发效率和发布质量。
+## 1. 分支底层原理
 
-没有分支模型的团队：
-- 所有人往 main 直接提交 → 频繁冲突
-- 不知道哪些代码在生产环境 → 回滚困难
-- 紧急修复没地方放 → 慌
+```text
+分支 = 指向某个 commit 的指针（一个 40 字节的文件，内容是 40 位 SHA-1 哈希）
 
----
+创建分支 → 在 .git/refs/heads/ 下新建一个文件
+切换分支 → 移动 HEAD 指针 + 更新工作区文件
+删除分支 → 删除指针文件（commit 数据不丢失）
+```
 
-## 1. 四种主流分支模型速览
+```bash
+cat .git/refs/heads/main          # 输出 40 位 SHA-1 哈希
+git cat-file -t 8f3a2c9b1d4       # 输出: commit（确认对象类型）
+ls -la .git/refs/heads/           # 每个分支文件 = 41 字节（40 位哈希 + 换行符）
+```
+
+| HEAD 状态 | 指向 | 场景 | 风险 |
+|-----------|------|------|:---:|
+| 正常 | 某个分支引用 | 日常开发 | 无 |
+| detached HEAD | 直接指向某个 commit | `git checkout <commit>` 查看历史 | ⚠️ 此状态提交可能丢失 |
+
+```bash
+git checkout 8f3a2c9b               # 进入 detached HEAD
+git switch -c temp-branch           # 已有提交时：创建分支保住代码
+git switch main                     # 只是查看：直接切回分支
+```
+
+> 🎯 **核心要点**：分支 = 环境隔离 + 需求边界 + 版本管理 + 安全防线。没有分支模型的团队痛点：所有人往 main 直接提交 → 频繁冲突；不知道哪些代码在生产 → 回滚困难；紧急修复没地方放。
+
+## 2. 四种主流分支模型速览
 
 | 模型 | 分支数量 | 适用团队 | 发布节奏 |
 |------|---------|---------|---------|
-| **Git Flow** | 多（main+develop+feature+release+hotfix） | 传统软件，有明确版本 | 几周~几月 |
-| **GitHub Flow** | 少（main + feature） | Web 应用，SaaS | 按天/小时 |
-| **GitLab Flow** | 中（main + feature + 环境分支） | 需要多环境 | 按需 |
-| **Trunk-Based** | 极少（trunk + 短期feature） | 精英团队，大厂 | 按小时 |
+| Git Flow | 多（main+develop+feature+release+hotfix） | 传统软件，有明确版本 | 几周~几月 |
+| GitHub Flow | 少（main + feature） | Web 应用，SaaS | 按天/小时 |
+| GitLab Flow | 中（main + feature + 环境分支） | 需要多环境 | 按需 |
+| Trunk-Based | 极少（trunk + 短期 feature） | 精英团队，大厂 | 按小时 |
 
----
+| 维度 | Git Flow | GitHub Flow | GitLab Flow |
+|------|----------|-------------|-------------|
+| 长期分支 | main + develop | main | main + 环境分支 |
+| 分支数量 | 5 种 | 2 种 | 3-4 种（按环境） |
+| 发布节奏 | 固定周期（周/月） | 随时发布 | 按环境推进 |
+| 版本管理 | 每个 release 独立分支 | main 即最新 | 环境分支即版本 |
+| 复杂度 | ⚠️ 高 | ✅ 低 | ⚠️ 中 |
+| CI/CD 友好度 | ⚠️ 中 | ✅ 高 | ✅ 高 |
+| 适用团队 | 10+ 人传统企业 | 2-10 人互联网 | 中型多环境团队 |
 
-## 2. Git Flow — 经典重型模型
+## 3. Git Flow — 经典重型模型
+
+### 3.1 分支角色
+
+| 分支 | 来源 | 合并到 | 生命周期 | 命名 |
+|------|------|--------|---------|------|
+| main | — | — | 永久 | `main` |
+| develop | main | — | 永久 | `develop` |
+| feature | develop | develop | 开发完成后删除 | `feature/xxx` |
+| release | develop | main + develop | 发布完成后删除 | `release/x.y.z` |
+| hotfix | main | main + develop | 修复完成后删除 | `hotfix/x.y.z` |
 
 ```text
 Git Flow 分支工作流（时间从左到右）
@@ -37,17 +88,7 @@ release/1.0            fix-rc1 ─────┘
 hotfix/1.0.1                          bugfix ────────────┘
 ```
 
-### 分支角色
-
-| 分支 | 来源 | 合并到 | 生命周期 | 命名 |
-|------|------|--------|---------|------|
-| **main** | — | — | 永久 | `main` |
-| **develop** | main | — | 永久 | `develop` |
-| **feature** | develop | develop | 开发完成后删除 | `feature/xxx` |
-| **release** | develop | main + develop | 发布完成后删除 | `release/x.y.z` |
-| **hotfix** | main | main + develop | 修复完成后删除 | `hotfix/x.y.z` |
-
-### 操作流程
+### 3.2 操作流程
 
 ```bash
 # 1. 初始化仓库（设置 main + develop）
@@ -70,7 +111,7 @@ git checkout main
 git merge --no-ff release/1.0.0
 git tag -a v1.0.0 -m "Release v1.0.0"
 git checkout develop
-git merge --no-ff release/1.0.0       # 把release的修复合并回develop
+git merge --no-ff release/1.0.0       # release 的修复合并回 develop
 git branch -d release/1.0.0
 
 # 4. 紧急修复
@@ -81,11 +122,9 @@ git checkout main
 git merge --no-ff hotfix/1.0.1
 git tag -a v1.0.1 -m "Hotfix v1.0.1"
 git checkout develop
-git merge --no-ff hotfix/1.0.1
+git merge --no-ff hotfix/1.0.1        # hotfix 必须合并回 develop！
 git branch -d hotfix/1.0.1
 ```
-
-### 优点 vs 缺点
 
 | 优点 | 缺点 |
 |------|------|
@@ -93,42 +132,34 @@ git branch -d hotfix/1.0.1
 | 适合有明确版本周期的软件 | merge 太多，历史复杂 |
 | 发布内容可控 | 不适合频繁部署的 Web 应用 |
 
----
+> 💡 适用：Java 传统项目、金融、政务等版本发布周期长的场景。
 
-## 3. GitHub Flow — 轻量敏捷模型
+## 4. GitHub Flow — 轻量敏捷模型
 
-```text
-功能分支并行 + 部署标签（时间从左到右）
+### 4.1 核心原则（5 条）
 
-main:       init ──── 合并 feature/A (deploy v1) ── 合并 feature/B (deploy v2)
-feature/A:      A-1 A-2 ── A-3 ┘
-feature/B:          B-1 ── B-review-fix ┘
-```
-
-### 核心原则
-
-1. **main 分支永远可部署**（这是铁律）
+1. **main 分支永远可部署**（铁律）
 2. 从 main 创建 feature 分支，用描述性命名
 3. 随时推送 feature 分支（早开 PR）
 4. 通过 **Pull Request** 讨论和审查
 5. 合并到 main 后**立即部署**
 
-### 操作流程
+### 4.2 操作流程
 
 ```bash
 # 1. 从 main 拉出 feature 分支
 git checkout main && git pull origin main
 git checkout -b feature/oauth-integration
 
-# 2. 频繁提交，随时push（备份+协作可见）
+# 2. 频繁提交，随时 push（备份+协作可见）
 git commit -m "feat: add oauth redirect"
 git push origin feature/oauth-integration
 
-# 3. 在 GitHub 上创建 PR，讨论、Review、CI检查
+# 3. 在 GitHub 上创建 PR，讨论、Review、CI 检查
 
-# 4. 合并方式选择（GitHub 支持三种按钮）
+# 4. 合并方式选择（GitHub 三种按钮）
 #   - Create a merge commit  → 保留完整历史
-#   - Squash and merge       → 压缩所有commit为一个
+#   - Squash and merge       → 压缩所有 commit 为一个
 #   - Rebase and merge       → 线性历史
 
 # 5. 部署 main（合并后自动/手动触发）
@@ -137,25 +168,13 @@ git branch -d feature/oauth-integration
 git push origin --delete feature/oauth-integration
 ```
 
-### 关键实践
-
 ```bash
 # 保持 feature 分支与 main 同步
 git checkout feature/xxx
 git merge main          # 或者 git rebase main（看团队约定）
-
-# feature 分支命名规范
-# feature/add-xxx       → 新功能
-# fix/xxx               → 修复
-# refactor/xxx          → 重构
-# docs/xxx              → 文档
 ```
 
----
-
-## 4. GitLab Flow — 环境驱动模型
-
-适合有 staging/production 等多环境的场景：
+## 5. GitLab Flow — 环境驱动模型
 
 ```text
 main ──────────> pre-production ──────────> production
@@ -170,11 +189,11 @@ git checkout production && git merge pre-production
 git tag -a v2.1.0 -m "Deploy to production"
 ```
 
----
+核心概念：**环境分支 = 环境的"当前版本"**；代码流动方向 `main → test → pre → prod`；每个环境合并前自动运行对应级别的测试。
 
-## 5. Trunk-Based Development — 主干开发
+## 6. Trunk-Based Development — 主干开发
 
-大厂精英团队的最爱（Google、Facebook）：
+大厂精英团队最爱（Google、Facebook）。
 
 ```text
 trunk (main)
@@ -183,41 +202,24 @@ trunk (main)
   └── 分支切换评审（Branch by Abstraction）
 ```
 
-### 核心规则
-
-- 所有人直接往 trunk 提交（或超短分支，<24小时）
-- 通过 **Feature Flag** 隐藏未完成的功能
-- 极其频繁的集成（每天多次）
-- **必须**有强测试覆盖 + CI
-
-```bash
-# 典型的一天
-git checkout main && git pull
-# 修改一点点代码（小步提交）
-git add . && git commit -m "feat: step 1 of search rewrite"
-git pull --rebase && git push
-# ... 10分钟后 ...
-git add . && git commit -m "feat: step 2 of search rewrite"
-git pull --rebase && git push
-```
-
-### Feature Flag 示例
+| 核心规则 | 说明 |
+|----------|------|
+| 短分支 | 所有人直接往 trunk 提交（或 <24h 超短分支） |
+| Feature Flag | 用开关隐藏未完成功能 |
+| 频繁集成 | 每天多次 |
+| 强测试 | 必须有强测试覆盖 + CI |
 
 ```python
-# 用flag控制未完成的功能
+# Feature Flag 示例：用 flag 控制未完成的功能
 if feature_flag_enabled("new-search"):
     return new_search_handler()
 else:
     return old_search_handler()
 ```
 
----
-
-## 6. 如何选择？
+## 7. 分支模型决策树
 
 ```text
-分支模型决策树
-
                         多久发布一次？
                        /      |        \
         几周/几月      /       |         \ 每天/几小时
@@ -237,74 +239,144 @@ else:
                        │       GitLab Flow
 ```
 
-### 决策表
-
 | 场景 | 推荐模型 | 原因 |
 |------|---------|------|
-| 个人项目 / 小团队 | **GitHub Flow** | 简单够用，PR 足够了 |
-| 开源项目 | **GitHub Flow** + Fork | PR 是协作核心 |
-| 移动 App 开发 | **Git Flow** | 版本发布有节奏，需要 hotfix |
-| SaaS 产品 | **GitHub Flow** 或 **Trunk-Based** | 持续部署 |
-| 企业级多环境 | **GitLab Flow** | 环境分支天然匹配发布流水线 |
-| 大型基础设施 | **Trunk-Based** | 避免分支地狱 |
+| 个人项目 / 小团队 | GitHub Flow | 简单够用 |
+| 开源项目 | GitHub Flow + Fork | PR 是协作核心 |
+| 移动 App 开发 | Git Flow | 版本发布有节奏，需要 hotfix |
+| SaaS 产品 | GitHub Flow 或 Trunk-Based | 持续部署 |
+| 企业级多环境 | GitLab Flow | 环境分支匹配发布流水线 |
+| 大型基础设施 | Trunk-Based | 避免分支地狱 |
 
----
+> 💡 建议路径：先用 GitHub Flow 入门 → 团队大了考虑 GitLab Flow → 工程能力强了探索 Trunk-Based。
 
-## 7. 通用规则（不管用什么模型）
+## 8. 分支命名规范
 
-### 7.1 Commit Message 规范（Conventional Commits）
-
-```text
-<type>(<scope>): <subject>
-
-# 类型
-feat     → 新功能
-fix      → 修复bug
-refactor → 重构（不改功能）
-docs     → 文档
-style    → 代码格式（空格、分号等）
-test     → 测试相关
-chore    → 构建/工具相关
-
-# 示例
-feat(auth): add OAuth2 login support
-fix(api): handle null response from payment gateway
-refactor(db): extract connection pool to shared module
-```
-
-### 7.2 分支命名规范
+| 前缀 | 用途 | 拉取来源 | 合并目标 | 示例 |
+|------|------|----------|----------|------|
+| `feature/` | 新功能开发 | develop | develop | `feature/user-auth` |
+| `fix/` | 非生产 Bug 修复 | develop | develop | `fix/order-total` |
+| `hotfix/` | 生产紧急修复 | main | main + develop | `hotfix/pay-timeout` |
+| `release/` | 发布准备 | develop | main | `release/v2.1.0` |
+| `refactor/` | 代码重构 | develop | develop | `refactor/extract-service` |
+| `chore/` | 构建/依赖/工具 | develop | develop | `chore/upgrade-spring` |
 
 ```bash
-feature/user-login          # 新功能
-fix/header-overflow         # 修复
-hotfix/v1.2.1-payment       # 紧急修复
-release/v2.0.0              # 发布准备
-chore/update-deps           # 杂项
-docs/api-reference          # 文档
+feature/user-center-auth        # ✅ 小写+连字符
+feature/UserAuth                # ❌ 驼峰命名
+feature/user_auth               # ❌ 下划线
+feature/user-auth-and-profile   # ❌ 太长
 ```
 
-### 7.3 PR/MR 最佳实践
+> 🎯 **命名原则**：小写字母 + 连字符分隔，前缀明确意图，名称简短（≤4 个单词）。团队规范可加 JIRA 号：`feature/PROJ-123-user-login`。
 
-- 一个 PR 只做一件事（单一职责）
-- PR 描述写清楚"做了什么、为什么、怎么测试"
-- 超过 400 行的 PR 考虑拆分
-- Review 通过后由 PR 作者自己合并（默认）
-- 合并后立即删除分支
+## 9. 版本发布流程与 hotfix 双合并
+
+### 9.1 完整发布流程（Git Flow 版）
+
+```bash
+# 1. 从 develop 拉 release 分支
+git switch develop && git pull
+git switch -c release/v2.3.0
+
+# 2. 在 release 上做发布准备（更新版本号、补文档、最终测试）
+
+# 3. 合并到 main
+git switch main && git pull
+git merge --no-ff release/v2.3.0
+
+# 4. 打标签
+git tag -a v2.3.0 -m "Release v2.3.0: 新增订单导出、修复支付超时"
+
+# 5. 推送到远程
+git push origin main --tags
+
+# 6. 合并回 develop（保证 develop 有 release 上的最终修复）
+git switch develop
+git merge --no-ff release/v2.3.0
+git push origin develop
+
+# 7. 清理
+git branch -d release/v2.3.0
+```
+
+```text
+semver: MAJOR.MINOR.PATCH
+  MAJOR: 不兼容的API变更
+  MINOR: 向后兼容的新功能
+  PATCH: 向后兼容的Bug修复
+
+标签 = 版本的不可变标记
+  git tag -a v2.3.0 → 附注标签（推荐，含发布说明）
+  git tag -s v2.3.0 → GPG签名标签（安全要求高的企业）
+```
+
+### 9.2 hotfix 双合并（main + develop）
+
+```bash
+# hotfix 需要同时合并到 main 和 develop
+git switch main
+git merge --no-ff hotfix/critical-fix
+git push origin main
+
+git switch develop
+git merge --no-ff hotfix/critical-fix
+# 如果有冲突（develop 比 main 多代码）→ 手动解决
+git push origin develop
+
+git branch -d hotfix/critical-fix
+```
+
+> ⚠️ **hotfix 未合并回 develop 的后果**：下次发布重复踩坑——hotfix 修复必须在 develop 上重放（合并或 cherry-pick）。
+
+## 10. worktree：多分支并行开发
+
+```text
+传统方式：一个工作区，频繁 stash + switch
+  → 切换分支耗时、stash 容易搞混、IDE 重新索引
+
+worktree 方式：多个工作区目录，每个对应一个分支
+  → 同时打开两个 IDE 窗口、互不干扰
+```
+
+```bash
+git worktree add ../project-hotfix hotfix/critical   # 创建 worktree
+git worktree list
+# /path/to/project        a1b2c3d [main]
+# /path/to/project-hotfix d4e5f6g [hotfix/critical]
+git worktree remove ../project-hotfix
+git worktree prune                                    # 清理记录
+```
+
+```bash
+# 场景：正在 feature 分支开发，突然需要紧急 hotfix
+git worktree add ../project-hotfix main
+cd ../project-hotfix
+git switch -c hotfix/critical-payment
+# 修复、提交、合并...
+cd ../project                      # 原工作区完全没受影响，连 stash 都不需要
+git worktree remove ../project-hotfix
+```
+
+> 💡 Java 后端实战：一个 worktree 跑 `feature/user-module`，另一个跑 `feature/order-module`，两个 IDEA 窗口同时开发互不干扰。
+
+## 11. 核心要点
+
+> 🎯 **核心要点**：
+> - 分支 = 41 字节指针文件，创建近乎零成本——成本在"怎么用"；
+> - 四模型坐标：发布节奏（周/月 → 小时）× 团队规模（小 → 大）× 环境数（1 → N）；
+> - 命名规范：小写 + 连字符 + 前缀表（feature/fix/hotfix/release/refactor/chore）；
+> - 发布铁律：release 合并 main + 打 tag + 合并回 develop 三步缺一不可；
+> - hotfix 双合并（main + develop）是最高频遗漏点；
+> - 并行任务用 worktree，别用 stash 硬切。
+
+## 12. 参考来源
+
+- [Pro Git Book：分支章节](https://git-scm.com/book/zh/v2/Git-分支-分支简介)
+- [Git Flow 官方说明（nvie）](https://nvie.com/posts/a-successful-git-branching-model/)
+- [GitHub Flow 官方文档](https://docs.github.com/zh/get-started/using-github/github-flow)
+- [Trunk-Based Development 官网](https://trunkbaseddevelopment.com/)
 
 ---
 
-## 8. 核心总结
-
-| 模型 | 复杂度 | 分支数 | 发布频率 | CI/CD 要求 |
-|------|--------|--------|---------|-----------|
-| Git Flow | 高 | 5种 | 低（周~月） | 低 |
-| GitHub Flow | 低 | 2种 | 高（天） | 中 |
-| GitLab Flow | 中 | 3-4种 | 中（天~周） | 中 |
-| Trunk-Based | 极低 | 1-2种 | 极高（小时） | 极高 |
-
-**建议路径：** 先用 GitHub Flow 入门 → 团队大了考虑 GitLab Flow → 工程能力强了探索 Trunk-Based。
-
----
-
-> 上一篇：[02-Git底层原理深度剖析](02-Git底层原理深度剖析.md)
-> 下一篇：[04-Git合并与变基完全指南](04-Git合并与变基完全指南.md)
+**下一模块**：[04-Git合并与变基](04-Git合并与变基.md)　/　**返回总览**：[00-总览](00-Git知识体系总览.md)
