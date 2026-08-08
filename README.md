@@ -1,7 +1,7 @@
 # Java 后端 + AI 大模型 系统化学习仓库
 
 > 面向 **Java 后端开发工程师** 与 **AI 大模型应用开发工程师** 的全栈知识体系。
-> **2,952 篇标准化 Markdown 技术文档**，按 5 层金字塔组织，覆盖从底层基础到面试冲刺的完整学习路径。
+> **3,910 篇标准化 Markdown 技术文档**，按 5 层金字塔组织，覆盖从底层基础到面试冲刺的完整学习路径。
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
@@ -10,13 +10,13 @@
 ## 📐 五层金字塔知识体系
 
 ```
-Java-AI-LLM-Learning-Records/  (2,952 篇 .md 文件)
+Java-AI-LLM-Learning-Records/  (3,910 篇 .md 文件)
 │
-├── 🏗️ 01-底层根基-Java核心底座/        1023 篇  地基：Java核心+JUC+JVM+DSA+计算机基础(四大件+数学体系)+工具(Vim/文件后缀/SDK)
+├── 🏗️ 01-底层根基-Java核心底座/        1383 篇  地基：Java核心+JUC+JVM+DSA+计算机基础(四大件+数学体系)+工具(Vim/文件后缀/SDK)
 │
-├── 🔧 02-后端核心技术 微服务 分布式 云原生/ 717 篇  骨架：MySQL+Redis+MQ+ES+Spring全家桶+MyBatisPlus+DevOps
+├── 🔧 02-后端核心技术 微服务 分布式 云原生/ 1225 篇  骨架：MySQL+Redis+MQ+ES+Spring全家桶+MyBatisPlus+DevOps
 │
-├── 🤖 03-AI大模型应用开发/             745 篇  差异：DeepSeek+RAG+Agent+MCP+Milvus+部署工程化+Python
+├── 🤖 03-AI大模型应用开发/             835 篇  差异：DeepSeek+RAG+Agent+MCP+Milvus+部署工程化+Python+FunctionCalling+HuggingFace+LiteLLM
 │
 ├── 🎯 04-项目能力综合提升/             230 篇  证明：FlavorDash+SuGuangMall+LingShu 项目 + 84门课程索引
 │
@@ -61,11 +61,15 @@ Java-AI-LLM-Learning-Records/  (2,952 篇 .md 文件)
 | 名词剖析 | 10 大模块 300+ 名词完整体系 |
 | 工具链 | Postman、JMeter、Ubuntu、CentOS、项目全流程 |
 
-### 🤖 03-AI 大模型应用开发（745 篇）
+### 🤖 03-AI 大模型应用开发（835 篇）
 
 | 子模块 | 内容 |
 |--------|------|
 | 大模型基础与 Prompt 工程 | Token/上下文、CoT、Few-shot、Function Calling、NL2SQL |
+| **🆕 Function Calling 函数调用** | 11 篇（Agent 基石）：原理演进→协议全解（OpenAI/Anthropic/DeepSeek 对照）→循环工程→工具设计→安全校验→流式→生产成本→面试 |
+| **🆕 HuggingFace 体系** | 11 篇：Transformers 5.0（模块化/统一分词/动态加载）→Hub 生态→QLoRA 微调→Datasets→Gradio/Spaces→生产实践 |
+| **🆕 LiteLLM 多模型适配** | 11 篇：v1.94（Router Plugins/Rust 网关迁移）→SDK 统一接口→Proxy 虚拟 key→预算治理→生态集成 |
+| **🆕 Python 语言体系** | 爬虫阶段 1-6（前置→静态→存储→反爬→动态→框架，54 篇）+ Python 异步+FastAPI（11 篇）+ 高级语法/生态/虚拟环境 |
 | **🆕 深度学习** | 11 篇：概述→CNN→RNN/LSTM→GAN→迁移学习→强化学习→模型压缩→训练技巧→框架（LLM 视角） |
 | **🆕 RAG 拓展优化深化** | 11 篇（12-22）：五代演进→查询优化→重排压缩→GraphRAG→Agentic RAG→长上下文之争→多模态→评估深化→成本 |
 | **🆕 Multi-Agent 与 MCP 深化** | 5 篇（12-16）：无状态 MCP 规范→A2A 协议→安全攻防→评估可观测性→编程 Agent/端侧 |
@@ -138,10 +142,55 @@ Java-AI-LLM-Learning-Records/  (2,952 篇 .md 文件)
 | **🆕 Linux** | 02-.../运维/Linux 操作系统/Linux/ | 12 | 基础→命令→系统管理→网络安全→服务→速查→权限深度→JVM 排查→日志（Rocky 10/Ubuntu 26.04） |
 | **🆕 Shell** | 02-.../运维/Linux 操作系统/Shell/ | 6 | 入门→变量→流程控制→函数实战→grep/sed/awk 三剑客 |
 | **🆕 数据结构与算法** | 01-.../06-数据结构与算法/ | 33 主题 | 四阶段路线（前置基础→核心思想→高频专题→中高级），73 目录归并编号 |
+| **🆕 爬虫阶段6：爬虫框架** | 03-AI.../12-Python爬虫/阶段 6：爬虫框架（工程化，写大型爬虫）/ | 10 | Scrapy 2.16 异步现代化 + scrapy-playwright + scrapy-redis 分布式 + 部署监控 |
+| **🆕 Python 异步 + FastAPI** | 03-AI.../01-Python语言/Python 异步 + FastAPI/ | 11 | asyncio 事件循环（3.14）+ FastAPI 0.139 全栈（Starlette 1.0/Uvicorn 0.51） |
+| **🆕 Function Calling 函数调用** | 03-AI.../02-大模型基础与Prompt工程/Function Calling 函数调用【Agent 基石】/ | 11 | Agent 基石：协议对照 + 循环工程 + 工具安全 + prompt caching（2026-08） |
+| **🆕 HuggingFace 体系** | 03-AI.../02-大模型基础与Prompt工程/HuggingFace/ | 11 | Transformers 5.0 重构 + Hub 生态 + QLoRA 单卡微调 + Gradio/Spaces |
+| **🆕 LiteLLM 多模型适配** | 03-AI.../02-大模型基础与Prompt工程/LiteLLM 多模型适配/ | 11 | v1.94 + SDK/Proxy 双形态 + 虚拟 key 治理 + Rust 网关迁移（15 倍吞吐） |
 
 ---
 
-## 🆕 本次更新（2026-08-06）
+## 🆕 本次更新（2026-08-08）
+
+```text
+新增 54 篇技术文档（5 大知识体系，全部检索校准至 2026-08）+ 知识库目录重组：
+
+🆕 新建（54 篇）：
+  03-AI.../12-Python爬虫/阶段 6：爬虫框架（工程化，写大型爬虫）/  10篇
+    Scrapy 2.16.0（2026-05-19）/2.14 异步现代化/scrapy-playwright 0.0.48/
+    scrapy-redis 分布式（布隆去重）/scrapyd 1.6.0 部署/生产实战
+  03-AI.../01-Python语言/Python 异步 + FastAPI/                   11篇
+    FastAPI 0.139（0.130 Rust 序列化 2 倍）/Starlette 1.0（on_event 移除）/
+    Uvicorn 0.51（SIGHUP 重叠重启）/Python 3.14 asyncio（get_event_loop 变更）/
+    SQLAlchemy async 连接池/N+1 治理/压测方法论
+  03-AI.../02-大模型基础与Prompt工程/Function Calling 函数调用【Agent 基石】/ 11篇
+    OpenAI strict + 并行调用/Anthropic 显式缓存/DeepSeek V4 thinking 回传坑/
+    调用循环工程/工具安全（确认-执行/提示注入）/prompt caching 降本 50-90%
+  03-AI.../02-大模型基础与Prompt工程/HuggingFace/                  11篇
+    Transformers 5.0.0（2026-01-27 模块化重构/统一分词/动态权重加载）/
+    Hub 150 万+ 模型/hf-mirror 镜像/QLoRA 单卡微调/transformers serve/Gradio Spaces
+  03-AI.../02-大模型基础与Prompt工程/LiteLLM 多模型适配/            11篇
+    v1.94.0（2026-07-28 Router Plugins）/Rust 网关迁移（453→6782 RPS）/
+    SDK 统一接口/Proxy 虚拟 key/预算三级治理/数据面控制面分离
+
+🔄 目录重组（153 旧路径文件迁移，Git 自动识别为 rename）：
+  Python爬虫 → 03-AI.../12-Python爬虫（主体系 12 篇 + 阶段 1-7）
+  Python数据分析 → 03-AI.../11-Python数据分析
+  旧 FastAPI/深度学习/ML基础/NLP/Transformer 等 → 新编号体系（01-13）
+  URL 体系 → 01-底层根基/计算机基础/计算机网络/URL
+
+关键时效性：
+  Scrapy 2.16.0（2026-05-19）· scrapy-playwright 0.0.48（camoufox 反检测内核）
+  FastAPI 0.139 · Starlette 1.0（2026-03-22）· Uvicorn 0.51.0（2026-07-08）
+  Python 3.14（2025-10-07，asyncio 自由线程一等公民）
+  DeepSeek V4（2026-07-24 chat/reasoner 弃用，thinking 模式 FC 回传铁律）
+  Transformers 5.0.0（2026-01-27，五年首个大版本）
+  LiteLLM v1.94.0（2026-07-28）· Rust 网关 beta（sub-1ms 开销）
+```
+
+---
+
+## 🆕 历史更新（2026-08-06）
 
 ```text
 新增 153 篇技术文档，覆盖 18 个知识体系（计算机组成原理四大件 + 数学基础四套 + JMM + MQ 理论 + SQLite + Memcached + Neo4j + Pulsar + Agent 范式 + 雪花算法 + JUnit + 存量修正）：
@@ -247,7 +296,8 @@ Java-AI-LLM-Learning-Records/  (2,952 篇 .md 文件)
 | 目标 | 路径 |
 |------|------|
 | **Java 后端面试** | 01-Java面向对象 → 01-Java集合框架 → 01-Java异常体系 → 01-Java多线程 → 02-Spring框架核心 → 02-MyBatisPlus → 05-题库 |
-| **AI 大模型开发** | 03-大模型基础 → 03-RAG（基础+深化）→ 03-Multi-Agent/MCP → 03-Milvus → 03-部署工具 → 03-模型推理 |
+| **AI 大模型开发** | 03-大模型基础 → 03-RAG（基础+深化）→ 03-Function Calling → 03-Multi-Agent/MCP → 03-Milvus → 03-部署工具 → 03-模型推理 |
+| **Python + AI 工程** | 01-Python语言/爬虫阶段 1-6 → Python 异步+FastAPI → Function Calling → HuggingFace（QLoRA 微调）→ LiteLLM（多模型接入）→ 部署 |
 | **AI 架构师** | 03-RAG 深化 → 03-Agent 深化 → 03-向量数据库 → 03-深度学习 → 04-项目 → 05-题库 |
 | **全栈架构师** | 01→02→03→04→05 全路径 |
 
@@ -271,4 +321,4 @@ Java-AI-LLM-Learning-Records/  (2,952 篇 .md 文件)
 
 ---
 
-*最后更新：2026-08-06 | 2,952 篇 Markdown 文档 | 5 层金字塔 + 31 个活跃知识体系*
+*最后更新：2026-08-08 | 3,910 篇 Markdown 文档 | 5 层金字塔 + 36 个活跃知识体系*
