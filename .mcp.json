@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "time": {
+      "type": "stdio",
+      "command": "uvx",
+      "args": [
+        "mcp-server-time",
+        "--local-timezone",
+        "Asia/Shanghai"
+      ],
+      "env": {}
+    }
+  }
+}
