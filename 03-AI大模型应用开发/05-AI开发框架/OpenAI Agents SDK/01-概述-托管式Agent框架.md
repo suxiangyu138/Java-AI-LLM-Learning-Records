@@ -160,6 +160,17 @@ RAG 生产 → Haystack（检索可作 SDK 工具）
 | 自动化流程 | 工具编排 + HITL 审批 |
 | 内容工作流 | 流水线 Handoffs（需求→设计→实现） |
 
+### 学习视角（结合本仓库）
+
+```
+学 SDK 的正确姿势：
+① 原理前置：Function Calling 体系（工具循环）
+② 对照手写：每个原语找"手写版本"（03 篇对照表）
+③ 框架对比：LangGraph/AutoGen/Haystack/LlamaIndex 体系
+④ 组合思维：SDK 编排 + 检索框架工具 + MCP 生态
+核心：SDK 托管的是循环，循环的原理在 Function Calling 体系
+```
+
 ### 场景落地骨架（客服）
 
 ```
