@@ -171,6 +171,15 @@ RAG 生产 → Haystack（检索可作 SDK 工具）
 核心：SDK 托管的是循环，循环的原理在 Function Calling 体系
 ```
 
+### 一句话定位总结
+
+```
+SDK = OpenAI 生态的"少样板托管式 Agent 框架"
+与其他框架不是替代关系，是编排哲学的四种代表之一：
+托管（SDK）/ 图式（LangGraph）/ 对话（AutoGen）/ 数据（LlamaIndex）
+选型先选哲学，再选框架
+```
+
 ### 场景落地骨架（客服）
 
 ```
