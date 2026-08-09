@@ -163,6 +163,17 @@ LlamaIndex：检索优先（数据接入/解析/检索最专）
 | 结构化提取 | LlamaExtract（schema + 页面级引用） |
 | 多跳问答 | KnowledgeGraphIndex + Workflows |
 
+### 数据框架的学习视角
+
+```
+学 LlamaIndex 的正确姿势（结合本仓库）：
+① 原理前置：RAG 阶段 1-4（数据管道每个环节的原理）
+② 框架对照：每个抽象找"手写版本"（03 篇对照表）
+③ 商业资产：LlamaParse 理解"解析为什么值钱"
+④ 生态对比：LangChain/Haystack/LangGraph 体系交叉
+核心：框架是原理的封装——判断力来自原理，效率来自框架
+```
+
 ### 场景落地骨架
 
 ```
