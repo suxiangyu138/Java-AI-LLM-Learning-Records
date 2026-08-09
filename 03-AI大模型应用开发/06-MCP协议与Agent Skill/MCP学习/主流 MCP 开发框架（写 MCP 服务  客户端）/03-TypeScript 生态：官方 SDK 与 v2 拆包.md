@@ -145,7 +145,7 @@ npx @modelcontextprotocol/codemod@beta v1-to-v2 .
 | spec 类型 | 协议类型即文档 | `spec.types.2026-07-28.ts`（v2） |
 | npm 生态 | 复用一切 Node 库 | 与普通 TS 服务无异 |
 
-**调试优势**：Inspector 原生支持（参考实现的工具链最全）+ npm 调试工具（tsx/ts-node/vitest）直接可用——**TS 写 MCP 的调试体验在六生态中最好**，这是前端团队选它的隐形理由；配合 vitest 的进程内测试，TS 生态的"调试 + 测试"组合与阶段 3 的 Inspector + pytest 双件套完全对应。
+**调试优势**：Inspector 原生支持（参考实现的工具链最全）+ npm 调试工具（tsx/ts-node/vitest）直接可用——**TS 写 MCP 的调试体验在六生态中最好**，这是前端团队选它的隐形理由；配合 vitest 的进程内测试，TS 生态的"调试 + 测试"组合与阶段 3 的 Inspector + pytest 双件套完全对应；**工具链的完备是生态成熟度的直接投影**——工具好用的生态，开发者才愿意长期投入。
 
 **类型系统的工程红利**："类型即文档、编译即回归"——TS 团队的回归保障一半靠编译器、一半靠测试（Python 团队几乎全靠测试）；`outputSchema` 让工具返回结构也受类型约束。**"用类型系统管理协议版本"是 TS 生态对 MCP 工程最独特的贡献**（v2 spec 包）。
 
