@@ -149,6 +149,20 @@ sandbox client：Docker 或本地 Unix
 配置：LiteLLM provider 接入
 ```
 
+### 上线检查（综合）
+
+```
+Agent 上线前的最终检查：
+① 每个 Agent 有明确指令与工具边界
+② 交接条件可验证（HandoffCorrectness）
+③ 护栏双类型 + Tripwire 捕获
+④ max_turns 全链路设置
+⑤ Session 隔离与 TTL
+⑥ 危险操作 HITL
+⑦ 追踪接入（可回放故障）
+⑧ 成本预算（模型分层 + 护栏门控）
+```
+
 ### 组合实践
 
 ```
