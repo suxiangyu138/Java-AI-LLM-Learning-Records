@@ -155,7 +155,13 @@ List<Document> retrieve(String question) {
 
 ---
 
-**参考来源**：[Spring AI Chroma 集成 API 文档](https://docs.spring.io/spring-ai/docs/2.0.x-SNAPSHOT/api/org/springframework/ai/chroma/vectorstore/package-summary.html)、[Spring AI Chroma 自动配置](https://docs.spring.io/spring-ai/docs/2.0.x-SNAPSHOT/api/org/springframework/ai/vectorstore/chroma/autoconfigure/package-summary.html)、[Spring AI + SpringBoot + Chroma 智能客服实战](https://blog.csdn.net/zxchenpeng/article/details/159794440)、[Spring AI 向量库选择与集成](https://blog.csdn.net/qq_20236937/article/details/162204513)、[Chroma Cookbook](https://cookbook.chromadb.dev/)
+**参考来源**：
+
+- [Spring AI Chroma 集成 API 文档](https://docs.spring.io/spring-ai/docs/2.0.x-SNAPSHOT/api/org/springframework/ai/chroma/vectorstore/package-summary.html)
+- [Spring AI Chroma 自动配置](https://docs.spring.io/spring-ai/docs/2.0.x-SNAPSHOT/api/org/springframework/ai/vectorstore/chroma/autoconfigure/package-summary.html)
+- [Spring AI + SpringBoot + Chroma 智能客服实战](https://blog.csdn.net/zxchenpeng/article/details/159794440)
+- [Spring AI 向量库选择与集成](https://blog.csdn.net/qq_20236937/article/details/162204513)
+- [Chroma Cookbook](https://cookbook.chromadb.dev/)
 
 ---
 

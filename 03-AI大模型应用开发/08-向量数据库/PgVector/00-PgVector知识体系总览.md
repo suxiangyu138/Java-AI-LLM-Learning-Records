@@ -194,7 +194,13 @@ Spring AI 集成 → 选型对比 → 生产实践；用 Spring Boot + pgvector 
 
 ---
 
-**参考来源**：[pgvector 官方 GitHub（CHANGELOG）](https://github.com/pgvector/pgvector/blob/master/CHANGELOG.md)、[pgvector 0.8 新特性解读](https://www.jusdb.com/blog/pgvector-08-new-features-postgresql-vector-search)、[Hivebook: pgvector 0.8.x 详解](https://hivebook.wiki/wiki/pgvector-0-8-x-postgres-vector-similarity-extension-vector-halfvec-sparsevec-bit-types-hnsw-ivfflat-indexes-iterative-scans-0-8-0-binary-quantization-hybrid-search-with-fts-and-what-changed-in-0-6-x-0-8-x)、[Supabase HNSW 索引文档](https://supabase.com/docs/guides/ai/vector-indexes/hnsw-indexes)、[Spring AI pgvector starter](https://libraries.io/maven/org.springframework.ai:spring-ai-pgvector-store-spring-boot-starter)
+**参考来源**：
+
+- [pgvector 官方 GitHub（CHANGELOG）](https://github.com/pgvector/pgvector/blob/master/CHANGELOG.md)
+- [pgvector 0.8 新特性解读](https://www.jusdb.com/blog/pgvector-08-new-features-postgresql-vector-search)
+- [Hivebook: pgvector 0.8.x 详解](https://hivebook.wiki/wiki/pgvector-0-8-x-postgres-vector-similarity-extension-vector-halfvec-sparsevec-bit-types-hnsw-ivfflat-indexes-iterative-scans-0-8-0-binary-quantization-hybrid-search-with-fts-and-what-changed-in-0-6-x-0-8-x)
+- [Supabase HNSW 索引文档](https://supabase.com/docs/guides/ai/vector-indexes/hnsw-indexes)
+- [Spring AI pgvector starter](https://libraries.io/maven/org.springframework.ai:spring-ai-pgvector-store-spring-boot-starter)
 
 ---
 

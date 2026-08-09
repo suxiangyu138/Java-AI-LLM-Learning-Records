@@ -198,7 +198,12 @@ List<Document> hits = vectorStore.similaritySearch(
 
 ---
 
-**参考来源**：[Spring AI pgvector starter（Maven）](https://libraries.io/maven/org.springframework.ai:spring-ai-pgvector-store-spring-boot-starter)、[Spring AI pgvector 示例仓库](https://github.com/JavaAIDev/pgvector-sample)、[RAG 知识库实战（Spring Boot + Spring AI + pgvector）](https://github.com/rahul-ghadge/rag-knowledge-base)、[LangChain4j + Spring AI RAG（阿里云开发者）](https://developer.aliyun.com/article/1683341)
+**参考来源**：
+
+- [Spring AI pgvector starter（Maven）](https://libraries.io/maven/org.springframework.ai:spring-ai-pgvector-store-spring-boot-starter)
+- [Spring AI pgvector 示例仓库](https://github.com/JavaAIDev/pgvector-sample)
+- [RAG 知识库实战（Spring Boot + Spring AI + pgvector）](https://github.com/rahul-ghadge/rag-knowledge-base)
+- [LangChain4j + Spring AI RAG（阿里云开发者）](https://developer.aliyun.com/article/1683341)
 
 ---
 

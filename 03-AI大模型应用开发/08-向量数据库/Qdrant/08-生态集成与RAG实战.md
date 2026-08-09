@@ -147,7 +147,12 @@ for mode in ["dense", "sparse", "hybrid"]:。
 
 ---
 
-**参考来源**：[Qdrant Java 客户端与 LangChain4j 集成（开发技能库）](https://www.skills.sh/giuseppe-trisciuoglio/developer-kit/qdrant)、[LangChain4j 与 Spring AI RAG 对比（CSDN）](https://blog.csdn.net/badao_liumang_qizhi/article/details/160214877)、[Qdrant 官方文档](https://qdrant.tech/documentation/)、[Qdrant 集成技能库（SkillMD）](https://skillmd.ai/skills/qdrant-vector-database-integration/SKILL.md)
+**参考来源**：
+
+- [Qdrant Java 客户端与 LangChain4j 集成（开发技能库）](https://www.skills.sh/giuseppe-trisciuoglio/developer-kit/qdrant)
+- [LangChain4j 与 Spring AI RAG 对比（CSDN）](https://blog.csdn.net/badao_liumang_qizhi/article/details/160214877)
+- [Qdrant 官方文档](https://qdrant.tech/documentation/)
+- [Qdrant 集成技能库（SkillMD）](https://skillmd.ai/skills/qdrant-vector-database-integration/SKILL.md)
 
 ---
 
