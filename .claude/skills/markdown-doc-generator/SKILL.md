@@ -12,7 +12,7 @@ description: 生成学习向高密度 Markdown 技术文档——结构精简、
 
 ```yaml
 skill_name: MarkdownDocGenerator
-version: v1.3
+version: v1.4
 purpose: 输出适合学习归档的高质量 Markdown 技术文档
 constraint: 禁止冗余抒情、无效开场白、无意义总结套话；信息密度优先；面向学习者；可直接复制到 GitHub
 length: 所有技术文档统一单篇约2000中文字符（1600-2500 可接受区间，2026-08-09 用户统一标准）；知识点按模块聚合禁过度拆分
