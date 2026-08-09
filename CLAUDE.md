@@ -183,7 +183,7 @@ When user points to an empty directory (via `& 'path'`), build a comprehensive m
 ## Documentation Standards
 
 - `> 一句话定位` blockquote under `# Title`
-- **Tables preferred** for comparisons, API references, feature lists
+- **Prose-first, tables for contrast**: 机制/取舍/演进逻辑用文字论述（配代码示例）；表格仅用于对比、API 速查、检查清单等真正适合枚举的场景，禁止用表格代替论述或凑字数（2026-08-09 用户反馈表格过度）
 - **Code blocks** MUST specify language: ` ```java ` ` ```yaml ` ` ```bash ` ` ```text ` ` ```json `
 - Blockquotes: `> ⚠️` warning, `> 💡` tip, `> 🎯` summary
 - Chinese content with English technical terms
