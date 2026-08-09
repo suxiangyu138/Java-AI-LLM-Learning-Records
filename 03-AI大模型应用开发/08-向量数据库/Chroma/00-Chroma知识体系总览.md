@@ -195,7 +195,12 @@ Chroma 知识体系
 
 ---
 
-**参考来源**：[Chroma Cookbook 官方手册](https://cookbook.chromadb.dev/)、[Chroma 官方文档](https://docs.trychroma.com/)、[Chroma vs Qdrant vs Weaviate 2026](https://aifoss.dev/blog/chroma-vs-qdrant-vs-weaviate-2026/)、[Spring AI Chroma 集成 API](https://docs.spring.io/spring-ai/docs/2.0.x-SNAPSHOT/api/org/springframework/ai/chroma/vectorstore/package-summary.html)
+**参考来源**：
+
+- [Chroma Cookbook 官方手册](https://cookbook.chromadb.dev/)
+- [Chroma 官方文档](https://docs.trychroma.com/)
+- [Chroma vs Qdrant vs Weaviate 2026](https://aifoss.dev/blog/chroma-vs-qdrant-vs-weaviate-2026/)
+- [Spring AI Chroma 集成 API](https://docs.spring.io/spring-ai/docs/2.0.x-SNAPSHOT/api/org/springframework/ai/chroma/vectorstore/package-summary.html)
 
 ---
 

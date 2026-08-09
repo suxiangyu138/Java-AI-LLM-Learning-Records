@@ -132,7 +132,12 @@ Server 模式还暴露 REST 端点（`/api/v1/collections` 等），非 Python �
 
 ---
 
-**参考来源**：[Chroma 官方文档 - Quickstart](https://docs.trychroma.com/)、[Chroma Persistent 存储指南](https://ossaihub.com/code/chroma-quickstart-persistent/)、[ChromaDB 持久化与迁移问题解决记录](https://journal.matuteiglesias.link/Dev/2025-11-20_resolved-chromadb-client-configuration-and-migration-issues_de31795564cd)、[并发 upsert 损坏库 Issue #1584](https://github.com/chroma-core/chroma/issues/1584)
+**参考来源**：
+
+- [Chroma 官方文档 - Quickstart](https://docs.trychroma.com/)
+- [Chroma Persistent 存储指南](https://ossaihub.com/code/chroma-quickstart-persistent/)
+- [ChromaDB 持久化与迁移问题解决记录](https://journal.matuteiglesias.link/Dev/2025-11-20_resolved-chromadb-client-configuration-and-migration-issues_de31795564cd)
+- [并发 upsert 损坏库 Issue #1584](https://github.com/chroma-core/chroma/issues/1584)
 
 ---
 

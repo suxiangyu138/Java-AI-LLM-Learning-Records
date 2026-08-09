@@ -195,7 +195,13 @@ Qdrant 知识体系
 
 ---
 
-**参考来源**：[Qdrant 官方博客 1.19](https://qdrant.tech/blog/qdrant-1.18.x/)、[Qdrant 官方博客 1.18](https://qdrant.tech/blog/qdrant-1.18.x/)、[Qdrant 官方博客 1.17](https://qdrant.tech/blog/qdrant-1.17.x/)、[Qdrant Cloud 企业发布](https://qdrant.tech/blog/qdrant-cloud-enterprise-launch/)、[DeepWiki: qdrant 架构分析](https://deepwiki.com/qdrant/qdrant/1.1-key-concepts-and-terminology)
+**参考来源**：
+
+- [Qdrant 官方博客 1.19](https://qdrant.tech/blog/qdrant-1.18.x/)
+- [Qdrant 官方博客 1.18](https://qdrant.tech/blog/qdrant-1.18.x/)
+- [Qdrant 官方博客 1.17](https://qdrant.tech/blog/qdrant-1.17.x/)
+- [Qdrant Cloud 企业发布](https://qdrant.tech/blog/qdrant-cloud-enterprise-launch/)
+- [DeepWiki: qdrant 架构分析](https://deepwiki.com/qdrant/qdrant/1.1-key-concepts-and-terminology)
 
 ---
 
