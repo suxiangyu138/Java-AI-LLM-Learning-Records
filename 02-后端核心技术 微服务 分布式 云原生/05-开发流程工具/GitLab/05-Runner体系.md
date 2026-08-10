@@ -45,7 +45,7 @@ gpu-test:
 | Kubernetes | 每 job 一个 pod | 规模化（K8s 集群已有） |
 | SSH | 连远程机器执行 | 远程部署 |
 
-**Shell executor 的代价**：直接跑在宿主机——**job 间不隔离、宿主机被污染**；只适合开发机/简单环境——"**隔离是 CI 的默认要求，Shell 是例外**"。
+**Shell executor 的代价**：直接跑在宿主机——**job 间不隔离、宿主机被污染**；只适合开发机/简单环境——"**隔离是 CI 的默认要求，Shell 是例外**"——生产环境慎用。
 
 **选型主线**：**"默认 Docker（image 声明环境、job 间隔离）、规模化 Kubernetes（pod 动态扩缩）、特殊场景 Shell/SSH"**——**Docker executor 的三大优势**：**环境可复现**（image 锁版本 = 构建环境一致）、**job 隔离**（并行 job 互不污染）、**无状态**（每个 job 全新容器——**这也意味着 job 间文件传递必须 artifacts，03 篇**）。**executor 与 job 的匹配**：job 的 image 只在 Docker/K8s executor 下有意义——**Shell executor 忽略 image，环境靠宿主机**。
 
