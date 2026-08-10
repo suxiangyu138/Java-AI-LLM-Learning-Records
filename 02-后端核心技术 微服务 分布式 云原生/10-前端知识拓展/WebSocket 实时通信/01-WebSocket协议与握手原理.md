@@ -1,99 +1,99 @@
 # 01 - WebSocket 协议与握手原理
 
-> 🎯 HTTP 是"请求-响应"单行道，WebSocket 是"全双工"双向通道 — 理解从 HTTP Upgrade 握手到帧格式，是实时通信的基础
+> 定位：全双工实时通信的协议层——"HTTP 是'请求-响应'单行道，WebSocket 是'全双工'双向通道——从 HTTP Upgrade 握手到帧格式，2026 年 RFC 6455 仍是唯一生产就绪的双向实时标准"
 
 ---
 
-## 目录
+## 📚 目录
 
-1. [为什么需要 WebSocket](#1-为什么需要websocket)
+1. [为什么需要 WebSocket](#1-为什么需要-websocket)
 2. [握手升级过程](#2-握手升级过程)
-3. [与 HTTP 对比](#3-与-http-对比)
-4. [WebSocket vs SSE vs 轮询](#4-websocket-vs-sse-vs-轮询)
+3. [帧格式](#3-帧格式)
+4. [子协议与扩展](#4-子协议与扩展)
+5. [与 HTTP 对比](#5-与-http-对比)
+6. [WebSocket vs SSE vs 轮询](#6-websocket-vs-sse-vs-轮询)
+7. [2026 标准状态与未来](#7-2026-标准状态与未来)
+8. [练习 5 题](#8-练习-5-题)
 
 ---
 
 ## 1. 为什么需要 WebSocket
 
-```text
-HTTP 的局限：
-  Client → Request → Server → Response → Client
-  → 服务端不能主动推消息给客户端！
-
-轮询（Polling）的无奈：
-  前端每 3 秒发一次 GET /messages → 看有没有新消息
-  → 99% 的请求返回"没新消息"（浪费）
-
-WebSocket：
-  Client ↔ WebSocket 连接 ↔ Server
-  → 双向实时通信，服务端有新消息立即推
-```
-
----
+**HTTP 的局限一句话：服务端不能主动推**——"请求-响应"单行道，客户端不开口，服务端不能说话。**轮询（Polling）的无奈**：前端每 3 秒发一次 `GET /messages` 看有没有新消息——**99% 的请求返回"没新消息"，浪费带宽、延迟还高**（消息到了最多等 3 秒）。**WebSocket 的答案**：一次握手后建立**全双工**连接——**服务端有新消息立即推，客户端也能随时发，且头开销从几百字节降到 2-14 字节**。**2026 年的场景**：聊天（Slack/Discord 模式）、协作编辑（Figma/Google Docs 模式）、实时通知、游戏、**AI 时代的人机同文档协作**——"**需要'双向、低延迟、服务端主动'的场景，就是 WebSocket 的主场**"。
 
 ## 2. 握手升级过程
 
 ```text
-WebSocket 握手（HTTP Upgrade）：
-
-  浏览器                                     服务端
-    │                                          │
-    │── GET /chat HTTP/1.1 ──────────────────→│  ← 还是 HTTP 请求
-    │   Upgrade: websocket                     │
-    │   Connection: Upgrade                    │
-    │   Sec-WebSocket-Key: dGhlIHNhbXBsZQ==    │
-    │   Sec-WebSocket-Version: 13              │
-    │                                          │
-    │←─ HTTP/1.1 101 Switching Protocols ──────│  ← 切换协议！
-    │   Upgrade: websocket                     │
-    │   Connection: Upgrade                    │
-    │   Sec-WebSocket-Accept: s3pPLMBi...      │
-    │                                          │
-    │══════ WebSocket 帧（二进制/文本） ════════│  ← 之后不再是 HTTP
+浏览器                                     服务端
+  │── GET /chat HTTP/1.1 ──────────────────→│  ← 还是 HTTP 请求
+  │   Upgrade: websocket                     │
+  │   Connection: Upgrade                    │
+  │   Sec-WebSocket-Key: dGhlIHNhbXBsZQ==    │
+  │   Sec-WebSocket-Version: 13              │
+  │←─ HTTP/1.1 101 Switching Protocols ──────│  ← 切换协议！
+  │   Sec-WebSocket-Accept: s3pPLMBi...      │
+  │══════ WebSocket 帧（双向传输） ══════════│  ← 之后不再是 HTTP
 ```
 
-```text
-握手关键点：
-  1. 基于 HTTP 协议升级（复用 80/443 端口）
-  2. Sec-WebSocket-Key → 服务端用 SHA1 计算 Accept → 客户端验证
-  3. 101 状态码 = "协议切换成功"
-  4. 握手后同一 TCP 连接双向传输 WebSocket 帧
-```
+**握手四要点**：其一，**基于 HTTP 升级**（复用 80/443 端口，经过代理/防火墙无感）；其二，**Sec-WebSocket-Key 是随机密钥**——服务端把 Key 拼上固定 GUID（`258EAFA5-E914-47DA-95CA-C5AB0DC85B11`）做 **SHA1** 得 Sec-WebSocket-Accept——**客户端验证它，证明"对方真的是 WebSocket 服务端"**（防伪造升级）；其三，**101 Switching Protocols 表示协议切换成功**；其四，**握手后同一 TCP 连接双向传输帧**——"**握手是 HTTP 的最后一句话，之后是 WebSocket 的天下**"。**鉴权时机**：token 在握手头/query 里传（07 篇）——**握手是唯一能"验明正身再放行"的机会**。**版本细节**：`Sec-WebSocket-Version: 13` 是唯一标准版本（旧版 8 已淘汰）——握手版本不符直接回 426 拒绝。
 
----
+## 3. 帧格式
 
-## 3. 与 HTTP 对比
+**握手后传输的最小单元是帧（frame）**，结构精悍：**首字节**（FIN + opcode）+ **载荷长度**（7/16/64 位变长）+ **掩码**（客户端→服务端必须掩码，防代理缓存投毒）+ **载荷数据**。**opcode 决定帧类型**：
+
+| opcode | 类型 | 用途 |
+|:---:|------|------|
+| 0x1 | 文本帧 | 消息主体（UTF-8） |
+| 0x2 | 二进制帧 | 图片/音频/协议数据 |
+| 0x8 | 关闭帧 | 优雅关闭（带状态码与原因） |
+| 0x9 / 0xA | PING / PONG | 心跳保活（04 篇） |
+| 0x0 | 延续帧 | 大消息分片 |
+
+**三个工程事实**：其一，**掩码是"客户端→服务端"强制**——浏览器必须掩码（防中间层把 WS 流量当 HTTP 缓存投毒），服务端→客户端不掩码；其二，**PING/PONG 是协议级心跳**——服务端发 PING，客户端必须回 PONG（04 篇保活机制）；其三，**关闭帧是优雅告别**——主动关连接先发关闭帧（状态码 1000 正常/1001 离开/1008 违规/1011 服务器异常等），"**连接不是拔网线，是握手入场、帧对话、关闭帧退场**"。**载荷长度是变长编码**（7 位/16 位/64 位）——大消息自动扩展位宽，**2-14 字节头开销指的是小消息**（01 篇与 HTTP 对比的机制依据）。
+
+## 4. 子协议与扩展
+
+**子协议（subprotocol）**：握手时 `Sec-WebSocket-Protocol: chat, superchat`——客户端声明"我会说的语言"，服务端选一个回——**最著名的是 STOMP**（03 篇）：给裸 WS 加上"主题/队列/订阅"语义，让消息路由有结构；子协议也常被用来**承载认证协议标识**（如 `Sec-WebSocket-Protocol: bearer, v2.bearer`——"登录态版本化"，07 篇鉴权三位置之一）。**扩展（extensions）**：握手时 `Sec-WebSocket-Extensions` 协商——**permessage-deflate（RFC 7692）**：消息级压缩，文本传输量降 60-80%——**浏览器默认开启，服务端注意内存与 CPU 代价**。**2026 标准族**：RFC 6455（核心，2011-12）+ RFC 7692（压缩，2015）+ RFC 8441（HTTP/2 上引导，实验）+ RFC 9220（HTTP/3/QUIC 上引导，早期实验）——"**核心二十年不变，周边缓慢演进**"。
+
+## 5. 与 HTTP 对比
 
 | 维度 | HTTP | WebSocket |
 |------|------|-----------|
 | 通信模式 | 请求-响应（半双工） | 全双工 |
 | 服务端推送 | ❌ 不能 | ✅ 可以 |
-| 连接 | 短连接/长连接 | 长连接 |
+| 连接形态 | 短连接为主 | 长连接（常驻） |
 | 头部开销 | 每次几百字节 | 2-14 字节 |
-| 协议 | HTTP | ws:// / wss:// |
+| 协议标识 | http:// / https:// | ws:// / wss:// |
 | 心跳 | — | PING/PONG 帧 |
-| 适用 | REST API、文件传输 | 聊天/推送/实时数据 |
+| 适用 | REST API/文件传输 | 聊天/推送/协作/实时数据 |
 
----
+**选型主线**：**REST 管"查询与变更"，WebSocket 管"推送与协作"**——一个应用两者并用：接口走 HTTP、实时走 WS——"**两个协议，一个端口（靠 Upgrade 区分），各司其职**"（00 篇误区一）；**推拉模型**：REST 是拉模型（客户端主动问），WS 是推模型（服务端主动给）——**"拉模型适合低频查询，推模型适合高频变化"**。
 
-## 4. WebSocket vs SSE vs 轮询
+## 6. WebSocket vs SSE vs 轮询
 
 | 方案 | 方向 | 协议 | 自动重连 | 适用场景 |
 |------|:---:|------|:---:|------|
-| **短轮询** | 双向（模拟） | HTTP | — | 极简需求 |
-| **长轮询** | 双向（模拟） | HTTP | — | 兼容老浏览器 |
-| **SSE** | 服务端→客户端 | HTTP | ✅ 内置 | 单向推送（股票/日志） |
-| **WebSocket** | ⭐ 双向 | WebSocket | ❌ 需手写 | ⭐ 聊天/协作/游戏 |
+| 短轮询 | 双向（模拟） | HTTP | — | 极简需求/老环境 |
+| 长轮询 | 双向（模拟） | HTTP | — | 兼容性兜底 |
+| SSE | 服务端→客户端 | HTTP | ✅ 内置 | 单向推送（通知/日志/LLM 流） |
+| WebSocket | ⭐ 双向 | WS | ❌ 需手写 | ⭐ 聊天/协作/游戏 |
 
-```text
-SSE（Server-Sent Events）：
-  → 基于 HTTP，服务端 → 客户端单向推送
-  → 浏览器原生支持 EventSource API
-  → 自动重连、轻量级
+**SSE 值得多讲两句**（2026 年的 AI 主场）：**基于 HTTP、EventSource API 原生支持、自动重连（Last-Event-ID）、轻量**——**LLM 的 token 流式输出全用 SSE**（OpenAI/Anthropic/Gemini 一致）——"**AI 时代的分工：单向流式（模型说话）用 SSE，双向协作（人机同编辑）用 WebSocket**"（05 篇深度对比）。
 
-SSE 示例：
-  const source = new EventSource('/api/events');
-  source.onmessage = (e) => console.log(e.data);
-```
+## 7. 2026 标准状态与未来
 
-> 🎯 **选型**：双向实时通信 → WebSocket；服务端推送（如通知/日志） → SSE；简单状态查询 → 轮询。WebSocket 是唯一真正的双向方案。
+**2026 现状一句话：WebSocket 是唯一生产就绪的双向实时标准**——浏览器支持 99.84%、服务器/代理/CDN 全兼容、基础设施经济成熟（Socket.IO/Pusher/Ably 等）——"**二十年验证，聊天/协作/游戏的事实协议**"。**已知局限**：TCP 可靠性的队头阻塞（一个丢包卡整条流）、无内置重连（应用自己实现序号与重放）、网络切换断连（04 篇补课）。**未来：WebTransport（QUIC 原生）**——多流 + datagram（不可靠通道）、连接迁移（WiFi→蜂窝不断）、无队头阻塞——但 **2026 年浏览器 ~75%（仅 Chrome/Edge）、服务器实现极少、CDN 支持实验性**——预计 **2027 早期采用、2028 主流**——"**2026 的工程选择依然是 WebSocket；WebTransport 是 2027+ 的升级项，关注不迁移**"（05 篇选型含它）。**2026 的工程建议**：新项目直接用 WebSocket，**架构上把传输层抽象出来**（统一消息接口）——"**将来换传输层只换实现，不换业务**"。
+
+## 8. 练习 5 题
+
+1. HTTP 为什么不能服务端推送？轮询浪费在哪？
+2. 握手的四个关键头与 Accept 计算过程？
+3. 帧的 opcode 家族？掩码为什么客户端必须加？
+4. 子协议与扩展各是什么？STOMP 解决什么问题？
+5. 2026 年 WebSocket 的标准状态？WebTransport 何时可用？
+
+> 🎯 **核心要点**：WebSocket = **HTTP 升级出的全双工通道**——"握手是 HTTP 最后一句话，101 之后全是帧"；帧格式（文本/二进制/PING/关闭）与掩码机制是协议精髓；**2026 年 RFC 6455 仍是唯一生产就绪的双向标准，WebTransport 是 2027+ 的升级项**——"双向用 WS、单向用 SSE"。
+
+---
+
+**下一模块**：[02-前端WebSocket实战.md](02-前端WebSocket实战.md) / **返回总览**：[00-WebSocket总览.md](00-WebSocket总览.md)
