@@ -52,7 +52,7 @@ spec:
 
 ## 3. 配置与密钥：ConfigMap / Secret
 
-配置外置（Level2 09 篇原则）在 K8s 的两个对象里落地：**ConfigMap**——非敏感配置（数据源地址、限流阈值）以键值对或文件形式挂载进 Pod（环境变量或挂载文件）；**Secret**——敏感配置（API Key、密码）Base64 编码存储、专用对象类型。与 Nacos 的分工：**ConfigMap 管「部署层配置」（镜像内应用需要的基础配置），Nacos 管「业务运行配置」（动态可刷新的业务参数）**——Spring 应用里 `spring.config.import` 的 Nacos 地址由环境变量注入（ConfigMap 提供），业务配置仍走 Nacos 动态刷新。迁移时的坑：**Compose 的 `.env` 与 environment 全部翻译成 ConfigMap/Secret**——漏掉任何一个环境变量，应用启动即失败，「配置迁移清单」是 Compose → K8s 迁移的第一张表。
+配置外置（Level2 09 篇原则）在 K8s 的两个对象里落地：**ConfigMap**——非敏感配置（数据源地址、限流阈值）以键值对或文件形式挂载进 Pod（环境变量或挂载文件）；**Secret**——敏感配置（API Key、密码）Base64 编码存储、专用对象类型。与 Nacos 的分工：**ConfigMap 管「部署层配置」（镜像内应用需要的基础配置），Nacos 管「业务运行配置」（动态可刷新的业务参数）**——Spring 应用里 `spring.config.import` 的 Nacos 地址由环境变量注入（ConfigMap 提供），业务配置仍走 Nacos 动态刷新。迁移时的坑：**Compose 的 `.env` 与 environment 全部翻译成 ConfigMap/Secret**——漏掉任何一个环境变量，应用启动即失败，「配置迁移清单」是 Compose → K8s 迁移的第一张表（先把原 .env 逐行列出来，再对照 ConfigMap/Secret 逐项翻译，逐行打勾，不要凭记忆迁移）。
 
 ## 4. 从 Compose 迁移到 K8s
 
