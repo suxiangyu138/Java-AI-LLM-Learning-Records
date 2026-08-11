@@ -122,6 +122,7 @@ Personal Java backend + AI learning knowledge base. **2,370+ markdown technical 
 | GPU | `01-.../计算机组成原理/GPU/` | 8 | SIMT→存储→调度→CUDA→NVIDIA演进→AMD→AI时代 |
 | 缓存与Cache | `01-.../计算机组成原理/缓存与Cache/` | 8 | 原理→结构→替换→多级→一致性→安全→前沿 |
 | 寄存器 | `01-.../计算机组成原理/寄存器/` | 9 | 本质→ISA→系统寄存器→ABI→重命名→切换→分配→前沿 |
+| 量化背后硬件约束 | `01-.../计算机硬件方向系统学习清单/量化背后硬件约束/` | 11 | 总览→量化为什么能提速(带宽受限/Roofline 1 FLOP/byte)→数值格式全景(FP8/INT4/FP4/MX微缩放)→Tensor Core与矩阵指令(反量化位置)→NVIDIA量化能力全谱(Turing INT8→Hopper FP8→Blackwell NVFP4 9-18PFLOPS实测~1200)→AMD/Intel/国产(MI355X MXFP4 MFMA/Gaudi3 FP8 INC/Xeon AMX INT8/Ascend)→内存系统约束(HBM带宽容量/KV Cache量化RDKV 4.5x/近内存反量化)→权重部署格式(W4A16 GPTQ-AWQ/反量化陷阱/组缩放)→精度与硬件效率权衡(异常值/SmoothQuant/MR-GPTQ/MicroMix/W4A6)→端侧硬件约束(GGUF Q4_K_M/Apple Metal/Qualcomm QNN)→生产实践与选型决策(决策树/引擎对比/成本token/避坑)（2026-08：B200 FP4 9PF-B300 15PF/GB300 NVL72 1.08EF/FlashInfer 1132 vs vLLM 968 TFLOPS/Kimi K2.5 MXFP4 5369 tok/s） |
 | 离散数学 | `01-.../数学基础/离散数学/` | 9 | 逻辑→集合→图论→组合→代数→数论→AI应用→Java实战 |
 | 初等数论 | `01-.../数学基础/初等数论/` | 9 | 整除素数→同余→欧几里得→CRT→原根→互反律→反演→后量子 |
 | 数据结构与算法 | `01-.../06-数据结构与算法/` | 33 主题 | 四阶段路线：前置基础→基础思想→高频专题→中高级（73 目录归并） |
