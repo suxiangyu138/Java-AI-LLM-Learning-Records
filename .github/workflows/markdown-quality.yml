@@ -44,8 +44,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v5
 
+      # 镜像 rhysd/actionlint:1.7.7 的不可变 digest（供应链硬化；升级：拉新 tag 后取响应头 docker-content-digest）
       - name: Run actionlint
-        uses: docker://rhysd/actionlint:1.7.7
+        uses: docker://rhysd/actionlint@sha256:887a259a5a534f3c4f36cb02dca341673c6089431057242cdc931e9f133147e9
         with:
           args: -color
 
