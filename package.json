@@ -1,0 +1,13 @@
+{
+  "name": "java-ai-llm-learning-records",
+  "version": "1.0.0",
+  "private": true,
+  "description": "CI 门禁依赖（文档仓库，仅 markdownlint-cli2）",
+  "scripts": {
+    "lint:md": "markdownlint-cli2",
+    "check:links": "node .github/scripts/check-links.mjs"
+  },
+  "devDependencies": {
+    "markdownlint-cli2": "0.23.2"
+  }
+}
