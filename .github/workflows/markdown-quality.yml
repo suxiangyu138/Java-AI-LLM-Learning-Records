@@ -1,10 +1,10 @@
-# Markdown 质量门禁 CI
-# 触发：根文档 / 配置 / 工作流变更时
-# 范围：仅根级文档（README/CHANGELOG/CONTRIBUTING/SECURITY/CODE_OF_CONDUCT/DEVELOPMENT/CLAUDE）
-#       知识库正文（01-05 层 5,752 篇）遵循 CLAUDE.md 自有规范，不纳入 markdownlint 全量扫描
-# 校验：
-#   1. markdownlint（格式规则，配置见 .markdownlint-cli2.yaml）
-#   2. 相对链接完整性（本地文件存在性，纯离线校验，无外部网络依赖）
+# Markdown 质量门禁 CI（企业级）
+# 触发：根文档 / 配置 / 工作流 / 检查脚本 / 依赖锁定文件变更；支持 workflow_dispatch 手动全量验证
+# 校验链：
+#   1. actionlint —— 工作流自身静态检查（第一道防线：语法/表达式/事件错误在合并前拦截，防止 CI 自身挂掉）
+#   2. markdownlint —— 根文档格式规则（版本经 package-lock.json 精确锁定 + npm 缓存，杜绝 npx 在线安装抖动）
+#   3. 相对链接完整性 —— 纯离线校验（无外部网络依赖，杜绝 CI 抖动误报）
+# 范围：知识库正文（01-05 层 5,752 篇）遵循 CLAUDE.md 自有规范，不纳入 markdownlint 全量扫描
 
 name: Markdown Quality
 
@@ -15,10 +15,18 @@ on:
       - '*.md'
       - '.markdownlint-cli2.yaml'
       - '.github/workflows/**'
+      - '.github/scripts/**'
+      - 'package.json'
+      - 'package-lock.json'
   pull_request:
     paths:
       - '*.md'
       - '.markdownlint-cli2.yaml'
+      - '.github/workflows/**'
+      - '.github/scripts/**'
+      - 'package.json'
+      - 'package-lock.json'
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -28,27 +36,47 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  actionlint:
+    name: 工作流自检（actionlint）
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      # 镜像 rhysd/actionlint:1.7.7 的不可变 digest（供应链硬化；升级：拉新 tag 后取响应头 docker-content-digest）
+      - name: Run actionlint
+        uses: docker://rhysd/actionlint@sha256:887a259a5a534f3c4f36cb02dca341673c6089431057242cdc931e9f133147e9
+        with:
+          args: -color
+
   markdownlint:
     name: markdownlint 格式检查
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - name: Setup Node.js (with npm cache)
+        uses: actions/setup-node@v5
         with:
           node-version: 20
+          cache: npm
 
-      - name: Run markdownlint-cli2 (pinned v0.23.2)
-        run: npx --yes markdownlint-cli2@0.23.2
+      - name: Install dependencies (lockfile-pinned)
+        run: npm ci --no-audit --no-fund
+
+      - name: Run markdownlint-cli2
+        run: npm run lint:md
 
   link-check:
     name: 相对链接检查
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Check local relative links in root docs
         run: node .github/scripts/check-links.mjs
