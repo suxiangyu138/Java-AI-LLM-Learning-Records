@@ -1,0 +1,22 @@
+# markdownlint-cli2 配置（仅用于根文档质量门禁）
+# 文档：https://github.com/DavidAnson/markdownlint-cli2
+# 说明：知识库正文（01-05 层）遵循 CLAUDE.md 自有规范，不套用 markdownlint 规则；
+#       本配置只约束仓库根级文档（README/CHANGELOG/CONTRIBUTING/SECURITY/DEVELOPMENT/CLAUDE）
+
+config:
+  MD013: false      # 行长度——中文表格/长链接不设限
+  MD024: false      # 重复标题——同一文档内允许同名小节（如多章节「常见问题」）
+  MD025: false      # 单一 H1——文档可有多个一级标题
+  MD033: false      # 内联 HTML——徽章（shields.io）
+  MD034: false      # 裸 URL——允许直接书写链接
+  MD036: false      # 强调代替标题——允许加粗句首
+  MD041: false      # 首行必须是一级标题——允许先放徽章/引用
+
+globs:
+  - "README.md"
+  - "CHANGELOG.md"
+  - "CONTRIBUTING.md"
+  - "SECURITY.md"
+  - "CODE_OF_CONDUCT.md"
+  - "DEVELOPMENT.md"
+  - "CLAUDE.md"
