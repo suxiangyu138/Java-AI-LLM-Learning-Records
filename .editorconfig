@@ -1,0 +1,29 @@
+# EditorConfig — 跨编辑器风格统一
+# 官方文档：https://editorconfig.org
+
+root = true
+
+# 全仓库默认
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+# Markdown 文档
+[*.md]
+indent_style = space
+indent_size = 4
+trim_trailing_whitespace = false
+
+# 代码/脚本
+[*.{java,py,js,ts,xml,yaml,yml,json,sh,bat,ps1}]
+indent_style = space
+indent_size = 4
+
+[*.{yaml,yml,json}]
+indent_size = 2
+
+# 批处理脚本
+[*.bat]
+end_of_line = crlf

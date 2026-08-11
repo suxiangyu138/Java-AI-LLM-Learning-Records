@@ -1,0 +1,75 @@
+# Markdown 质量门禁 CI
+# 触发：根文档 / 配置 / 工作流变更时
+# 范围：仅根级文档（README/CHANGELOG/CONTRIBUTING/SECURITY/CODE_OF_CONDUCT/DEVELOPMENT/CLAUDE）
+#       知识库正文（01-05 层 5,752 篇）遵循 CLAUDE.md 自有规范，不纳入 markdownlint 全量扫描
+# 校验：
+#   1. markdownlint（格式规则，配置见 .markdownlint-cli2.yaml）
+#   2. 相对链接完整性（本地文件存在性，纯离线校验，无外部网络依赖）
+
+name: Markdown Quality
+
+on:
+  push:
+    branches: [main, develop]
+    paths:
+      - '*.md'
+      - '.markdownlint-cli2.yaml'
+      - '.github/workflows/**'
+  pull_request:
+    paths:
+      - '*.md'
+      - '.markdownlint-cli2.yaml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  markdownlint:
+    name: markdownlint 格式检查
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Run markdownlint-cli2 (pinned v0.23.2)
+        run: npx --yes markdownlint-cli2@0.23.2
+
+  link-check:
+    name: 相对链接检查
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Check local relative links in root docs
+        run: node -e '
+          const fs = require("fs");
+          const path = require("path");
+          const files = ["README.md","CHANGELOG.md","CONTRIBUTING.md","SECURITY.md","CODE_OF_CONDUCT.md","DEVELOPMENT.md","CLAUDE.md"];
+          const re = /\]\((\.\.?\/[^)\s]+)\)/g;
+          let missing = 0;
+          for (const file of files) {
+            const content = fs.readFileSync(file, "utf8");
+            for (const m of content.matchAll(re)) {
+              let p = m[1].split("#")[0].split("?")[0];
+              p = decodeURIComponent(p);
+              if (fs.existsSync(path.join(process.cwd(), p))) {
+                console.log("OK   " + file + " -> " + m[1]);
+              } else {
+                console.log("FAIL " + file + " -> " + m[1]);
+                missing++;
+              }
+            }
+          }
+          if (missing > 0) { console.error(missing + " broken link(s) found"); process.exit(1); }
+          console.log("All root-doc relative links OK");
+        '
