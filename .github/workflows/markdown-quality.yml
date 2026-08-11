@@ -51,25 +51,4 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Check local relative links in root docs
-        run: node -e '
-          const fs = require("fs");
-          const path = require("path");
-          const files = ["README.md","CHANGELOG.md","CONTRIBUTING.md","SECURITY.md","CODE_OF_CONDUCT.md","DEVELOPMENT.md","CLAUDE.md"];
-          const re = /\]\((\.\.?\/[^)\s]+)\)/g;
-          let missing = 0;
-          for (const file of files) {
-            const content = fs.readFileSync(file, "utf8");
-            for (const m of content.matchAll(re)) {
-              let p = m[1].split("#")[0].split("?")[0];
-              p = decodeURIComponent(p);
-              if (fs.existsSync(path.join(process.cwd(), p))) {
-                console.log("OK   " + file + " -> " + m[1]);
-              } else {
-                console.log("FAIL " + file + " -> " + m[1]);
-                missing++;
-              }
-            }
-          }
-          if (missing > 0) { console.error(missing + " broken link(s) found"); process.exit(1); }
-          console.log("All root-doc relative links OK");
-        '
+        run: node .github/scripts/check-links.mjs

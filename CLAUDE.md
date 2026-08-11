@@ -14,7 +14,7 @@ Personal Java backend + AI learning knowledge base. **5,752 markdown technical d
 
 ## Directory Structure (5-Layer Pyramid)
 
-```
+```text
 01-底层根基-Java核心底座/               # Java core, JUC, JVM, CS fundamentals, hardware topics, design thinking (DDD/MVC/SOLID)
 02-后端核心技术 微服务 分布式 云原生/     # Middleware: MySQL, Redis, MQ, ES, Spring, DevOps, Web full-stack (RESTful API...)
 03-AI大模型应用开发/                    # AI: DeepSeek, RAG (阶段1-5), Agent core, MCP, fine-tuning/multimodal, Python data analysis

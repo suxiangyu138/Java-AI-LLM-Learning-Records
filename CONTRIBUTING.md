@@ -128,7 +128,7 @@ docs: 登记 xx 知识体系到 CLAUDE.md
 
 ## 5. 分支与 PR 流程
 
-```
+```text
 main（展示，稳定）  ← 里程碑合并
 develop（集成）     ← PR 目标
 feature/xxx（开发） ← 从这里提交 PR
