@@ -6,19 +6,20 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Repository Purpose
 
-Personal Java backend + AI learning knowledge base. **2,370+ markdown technical documents** organized as a **6-layer pyramid**. All content is documentation (not runnable code). The primary task is creating and maintaining high-quality modular knowledge systems.
+Personal Java backend + AI learning knowledge base. **5,752 markdown technical documents** organized as a **5-layer pyramid**. All content is documentation (not runnable code). The primary task is creating and maintaining high-quality modular knowledge systems.
+
+> 🏁 **Phase status (2026-08-12)**: 阶段性批量开发已落幕（280 次提交收官，3,910 → 5,752 篇）。仓库进入维护模式——只做内容修正（死链/错字/过时校准），新知识体系按需创建、不再批量扩建。
 
 ---
 
-## Directory Structure (6-Layer Pyramid)
+## Directory Structure (5-Layer Pyramid)
 
 ```
-01-底层根基-Java核心底座/               # Java core, JUC, JVM, CS fundamentals, Vim
-02-后端核心技术 微服务 分布式 云原生/     # Middleware: MySQL, Redis, MQ, ES, Spring, DevOps, tool systems
-03-AI大模型应用开发/                    # AI: DeepSeek, RAG, Agent, Embedding, LangChain4j, Spring AI
-04-实战项目综合落地/                    # Projects: FlavorDash, SuGuangMall, LingShu
-05-综合输出-面试冲刺/                    # Interview: 152 Q&A, hand-written code, resume, cheat sheets
-06-课程思路体系搭建/                    # Curriculum: 84+ B站 course outlines organized by topic
+01-底层根基-Java核心底座/               # Java core, JUC, JVM, CS fundamentals, hardware topics, design thinking (DDD/MVC/SOLID)
+02-后端核心技术 微服务 分布式 云原生/     # Middleware: MySQL, Redis, MQ, ES, Spring, DevOps, Web full-stack (RESTful API...)
+03-AI大模型应用开发/                    # AI: DeepSeek, RAG (阶段1-5), Agent core, MCP, fine-tuning/multimodal, Python data analysis
+04-项目能力综合提升/                    # Java-AI/Python-LLM capability building L1-L3, projects (FlavorDash/SuGuangMall/LingShu), curriculum (84+ B站 outlines)
+05-综合输出-面试冲刺/                    # Interview: 152 Q&A, 面试四阶段, hand-written code, resume, cheat sheets
 ```
 
 ### Active Knowledge Systems (2026.08)
