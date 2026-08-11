@@ -5,10 +5,7 @@
 > 🏁 **阶段性开发已于 2026-08-12 落幕**，仓库进入维护模式。
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Stars](https://img.shields.io/github/stars/suxiangyu138/Java-AI-LLM-Learning-Records?logo=github&label=Stars)](https://github.com/suxiangyu138/Java-AI-LLM-Learning-Records)
 [![Docs](https://img.shields.io/badge/docs-5%2C752%20%E7%AF%87%20Markdown-2ea44f?style=flat)](.)
-[![Markdown Quality](https://img.shields.io/github/actions/workflow/status/suxiangyu138/Java-AI-LLM-Learning-Records/markdown-quality.yml?label=Markdown%20Quality&logo=githubactions)](https://github.com/suxiangyu138/Java-AI-LLM-Learning-Records/actions)
-[![Last Commit](https://img.shields.io/github/last-commit/suxiangyu138/Java-AI-LLM-Learning-Records?label=Last%20Commit)](https://github.com/suxiangyu138/Java-AI-LLM-Learning-Records/commits/main)
 
 ---
 
