@@ -14,7 +14,7 @@
 
 ## 📐 五层金字塔知识体系
 
-```
+```text
 Java-AI-LLM-Learning-Records/  (5,752 篇 .md 文件)
 │
 ├── 🏗️ 01-底层根基-Java核心底座/        1826 篇  地基：Java核心+JUC+JVM+DSA+计算机基础(四大件+数学体系+硬件专题)+工具+设计思想(DDD/MVC/SOLID)
