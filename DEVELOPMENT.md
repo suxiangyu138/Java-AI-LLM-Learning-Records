@@ -386,4 +386,4 @@ develop 分支保护规则：
 
 ---
 
-**相关文档**：[README.md](./README.md) | [CLAUDE.md](./CLAUDE.md) | [DEV-ENVIRONMENT.md](./DEV-ENVIRONMENT.md)
+**相关文档**：[README.md](./README.md) | [CLAUDE.md](./CLAUDE.md) | DEV-ENVIRONMENT.md（本地个人环境手册，含敏感信息不入库）
