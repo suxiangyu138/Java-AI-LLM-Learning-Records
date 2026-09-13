@@ -48,6 +48,8 @@ GitHub → 本仓库 → Security → Report a vulnerability（推荐，私有�
 ## 安全注意事项（贡献者必读）
 
 - **禁止提交**：密码、API Key、私钥（`*.pem`/`*.key`）、`.env` 文件（.gitignore 已防护，提交前自查）
+- **密钥泄露处置**：先吊销并轮换密钥，再重写 Git 历史；仅删除当前文件中的密钥，旧提交仍可恢复
+- **自动扫描**：`Secret Scan` 工作流对 push、PR 和每周定时任务执行完整 Git 历史扫描
 - **禁止外链劫持风险**：引用外链时确认域名归属，倾向引用官方文档/官方 GitHub
 - **历史泄露**：若发现历史提交中已有敏感信息，报告后评估历史重写（filter-repo）方案
 - **依赖安全**：本仓库无运行时依赖；CI 工具链（markdownlint 等）随 GitHub Actions 自动更新，不构成供应链风险

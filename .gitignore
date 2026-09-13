@@ -30,10 +30,13 @@
 .settings/
 
 # ============================================================
-# Claude Code (user-specific, do not commit)
+# AI Coding Agents (user-specific, do not commit)
 # ============================================================
 **/.claude/settings.local.json
 **/.claude/worktrees/
+**/.claude/memory/
+.agents/
+.codex/
 
 # ============================================================
 # Python
@@ -69,9 +72,20 @@ htmlcov/
 # ============================================================
 .env
 .env.local
+.env.*
 .env.*.local
+!**/.env.example
+!**/.env.sample
+!**/.env.template
 *.pem
 *.key
+*.p12
+*.pfx
+*.keystore
+*.jks
+*.ppk
+*.ovpn
+*.kdbx
 credentials.json
 secrets.yaml
 
@@ -164,14 +178,8 @@ D盘*说明书.md
 # Secrets Guard（本仓库为文档库，任何密钥都不应入库）
 # 已有的 *.pem / *.key / credentials.json / secrets.yaml 见上方
 # ============================================================
-*.p12
-*.keystore
-*.jks
 id_rsa*
 id_ed25519*
-!.env.example
-!.env.sample
-!.env.template
 
 # ============================================================
 # Generated Data Output (crawlers, data analysis)
