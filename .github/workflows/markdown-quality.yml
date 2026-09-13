@@ -1,5 +1,5 @@
-# Markdown 质量门禁 CI（企业级）
-# 触发：根文档 / 配置 / 工作流 / 检查脚本 / 依赖锁定文件变更；支持 workflow_dispatch 手动全量验证
+# Markdown 质量检查（仅手动运行）
+# 触发：仅在 GitHub Actions 页面手动执行，push / PR 不再自动触发
 # 校验链：
 #   1. actionlint —— 工作流自身静态检查（第一道防线：语法/表达式/事件错误在合并前拦截，防止 CI 自身挂掉）
 #   2. markdownlint —— 根文档格式规则（版本经 package-lock.json 精确锁定 + npm 缓存，杜绝 npx 在线安装抖动）
@@ -9,23 +9,6 @@
 name: Markdown Quality
 
 on:
-  push:
-    branches: [main, develop]
-    paths:
-      - '*.md'
-      - '.markdownlint-cli2.yaml'
-      - '.github/workflows/**'
-      - '.github/scripts/**'
-      - 'package.json'
-      - 'package-lock.json'
-  pull_request:
-    paths:
-      - '*.md'
-      - '.markdownlint-cli2.yaml'
-      - '.github/workflows/**'
-      - '.github/scripts/**'
-      - 'package.json'
-      - 'package-lock.json'
   workflow_dispatch:
 
 permissions:
