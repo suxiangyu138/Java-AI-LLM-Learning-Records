@@ -1,7 +1,7 @@
 # Markdown 质量检查（仅手动运行）
 # 触发：仅在 GitHub Actions 页面手动执行，push / PR 不再自动触发
 # 校验链：
-#   1. actionlint —— 工作流自身静态检查（第一道防线：语法/表达式/事件错误在合并前拦截，防止 CI 自身挂掉）
+#   1. actionlint —— 工作流自身静态检查（手动运行时校验语法、表达式和事件配置）
 #   2. markdownlint —— 根文档格式规则（版本经 package-lock.json 精确锁定 + npm 缓存，杜绝 npx 在线安装抖动）
 #   3. 相对链接完整性 —— 纯离线校验（无外部网络依赖，杜绝 CI 抖动误报）
 # 范围：知识库正文（01-05 层 5,752 篇）遵循 CLAUDE.md 自有规范，不纳入 markdownlint 全量扫描
