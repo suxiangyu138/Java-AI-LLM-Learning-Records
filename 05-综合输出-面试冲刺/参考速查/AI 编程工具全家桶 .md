@@ -8,7 +8,7 @@
 
 | 项目 | 值 |
 |------|-----|
-| API Key | `[REDACTED_DEEPSEEK_API_KEY]` |
+| API Key | `sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx` |
 | 环境变量 | `DEEPSEEK_API_KEY` |
 | Aider 模型 | `deepseek/deepseek-chat` |
 
@@ -51,7 +51,7 @@ claude
 |------|-----|
 | Provider | OpenAI Compatible |
 | Base URL | `https://api.deepseek.com` |
-| API Key | `[REDACTED_DEEPSEEK_API_KEY]` |
+| API Key | `sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx` |
 
 ### 3. Windsurf — Codeium 出品
 
@@ -120,12 +120,13 @@ aider --model deepseek/deepseek-reasoner
 ### 8. OpenAI Agents SDK (v0.10.5)
 
 ```python
+import os
 from openai import AsyncOpenAI
 from agents import Agent, Runner
 import agents
 
 agents.set_default_openai_client(AsyncOpenAI(
-    api_key="[REDACTED_DEEPSEEK_API_KEY]",
+    api_key=os.environ["DEEPSEEK_API_KEY"],   # 切勿硬编码密钥
     base_url="https://api.deepseek.com"
 ))
 ```
@@ -133,11 +134,12 @@ agents.set_default_openai_client(AsyncOpenAI(
 ### 9. LangChain (v1.3.11)
 
 ```python
+import os
 from langchain.chat_models import init_chat_model
 
 model = init_chat_model(
     "deepseek-chat",
-    openai_api_key="[REDACTED_DEEPSEEK_API_KEY]",
+    openai_api_key=os.environ["DEEPSEEK_API_KEY"],
     openai_api_base="https://api.deepseek.com"
 )
 ```
@@ -150,7 +152,7 @@ model = init_chat_model(
 
 ```python
 import os
-os.environ["OPENAI_API_KEY"] = "[REDACTED_DEEPSEEK_API_KEY]"
+os.environ["OPENAI_API_KEY"] = "sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 os.environ["OPENAI_API_BASE"] = "https://api.deepseek.com"
 
 # CrewAI 通过 litellm 支持 DeepSeek
@@ -160,6 +162,7 @@ os.environ["OPENAI_API_BASE"] = "https://api.deepseek.com"
 ### 12. AutoGen (v0.7.5) — 微软多 Agent 框架
 
 ```python
+import os
 import autogen_agentchat
 import autogen_core
 
@@ -167,7 +170,7 @@ from autogen_ext.models.openai import OpenAIChatCompletionClient
 
 client = OpenAIChatCompletionClient(
     model="deepseek-chat",
-    api_key="[REDACTED_DEEPSEEK_API_KEY]",
+    api_key=os.environ["DEEPSEEK_API_KEY"],
     base_url="https://api.deepseek.com"
 )
 ```
@@ -175,12 +178,13 @@ client = OpenAIChatCompletionClient(
 ### 13. Pydantic AI (v1.22.0) — 结构化 Agent
 
 ```python
+import os
 from pydantic_ai import Agent
 
 agent = Agent(
     "openai:deepseek-chat",
     base_url="https://api.deepseek.com",
-    api_key="[REDACTED_DEEPSEEK_API_KEY]"
+    api_key=os.environ["DEEPSEEK_API_KEY"]
 )
 ```
 
@@ -242,7 +246,7 @@ uv add 包名            # 添加依赖
 
 | 项目 | 值 |
 |------|-----|
-| 环境变量 | `DEEPSEEK_API_KEY=[REDACTED_DEEPSEEK_API_KEY]` |
+| 环境变量 | `DEEPSEEK_API_KEY=sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx` |
 | Base URL | `https://api.deepseek.com` |
 | 可用模型 | `deepseek-chat`（通用）/ `deepseek-reasoner`（推理） |
 

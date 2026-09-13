@@ -1,6 +1,6 @@
 # AI 终端工具全家桶 · 说明书
 
-> **统一 API**：DeepSeek V4 Pro / Flash | **Key**：`[REDACTED_DEEPSEEK_API_KEY]` | **更新日期**：2026-06-24
+> **统一 API**：DeepSeek V4 Pro / Flash | **Key**：见环境变量 `DEEPSEEK_API_KEY`（勿写入文档） | **更新日期**：2026-06-24
 
 ---
 
@@ -22,8 +22,8 @@
 
 | 变量 | 值 | 用途 |
 |------|-----|------|
-| `DEEPSEEK_API_KEY` | `sk-f9f5ad...` | 通用 |
-| `ANTHROPIC_API_KEY` | `sk-f9f5ad...` | Claude Code / Langcli |
+| `DEEPSEEK_API_KEY` | `sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx` | 通用 |
+| `ANTHROPIC_API_KEY` | `sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx` | Claude Code / Langcli |
 | `ANTHROPIC_BASE_URL` | `https://api.deepseek.com/anthropic` | DeepSeek Anthropic 兼容端点 |
 
 ---
