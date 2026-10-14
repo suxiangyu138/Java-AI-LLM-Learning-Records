@@ -155,6 +155,7 @@ yarn-error.log*
 contribute_*.bat
 contributions.txt
 git-auto-commit.bat
+.commit-msg.txt
 DEV-ENVIRONMENT.md
 .claude/memory/
 
