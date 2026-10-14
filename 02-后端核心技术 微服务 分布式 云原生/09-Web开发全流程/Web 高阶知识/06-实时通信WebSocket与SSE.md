@@ -1,7 +1,7 @@
 # 实时通信：WebSocket 与 SSE
 > 轮询→长轮询→WebSocket→SSE 的演进、握手与帧、心跳与断线重连、集群与粘滞会话——"服务端推送给浏览器"的完整选型
 
-## 📚 目录
+## 目录
 1. [实时通信方案演进](#1-实时通信方案演进)
 2. [WebSocket 机制深入](#2-websocket-机制深入)
 3. [SSE：被低估的推送方案](#3-sse被低估的推送方案)
@@ -19,12 +19,12 @@
 
 | 方案 | 实时性 | 成本 | 双向 | 现状 |
 |------|:---:|------|:---:|------|
-| 轮询 | 差（间隔决定） | 每间隔一请求 | ✅ | 简单状态同步可用 |
-| 长轮询 | 中（等待即推送） | 连接反复建 | ✅ | 兼容旧基建的降级方案 |
-| **WebSocket** | 即时 | 长连接常驻 | ✅ | 双向实时标准 |
-| **SSE** | 即时 | 长连接常驻 | ❌ 单向 | 通知/流式标准 |
+| 轮询 | 差（间隔决定） | 每间隔一请求 | ✓ | 简单状态同步可用 |
+| 长轮询 | 中（等待即推送） | 连接反复建 | ✓ | 兼容旧基建的降级方案 |
+| **WebSocket** | 即时 | 长连接常驻 | ✓ | 双向实时标准 |
+| **SSE** | 即时 | 长连接常驻 | ✗ 单向 | 通知/流式标准 |
 
-> 🎯 选型第一问：**是"通知"还是"对话"？** 只是服务端推消息（通知/进度/行情）→ SSE 够且更简单；需要双向交互（聊天/游戏/协作）→ WebSocket。80% 的业务推送场景用 SSE 就能解决。
+> 选型第一问：**是"通知"还是"对话"？** 只是服务端推消息（通知/进度/行情）→ SSE 够且更简单；需要双向交互（聊天/游戏/协作）→ WebSocket。80% 的业务推送场景用 SSE 就能解决。
 
 ## 2. WebSocket 机制深入
 
@@ -45,7 +45,7 @@ Connection: Upgrade
 Sec-WebSocket-Accept: HSmrc0sMlYUkAGmm5OPpG2HaGWk=  # Key+魔数 SHA1 结果
 ```
 
-> 💡 握手本质：**复用 HTTP 完成协商，然后协议切换为 WebSocket 帧**——这就是为什么 WebSocket 走 80/443 端口、能穿过大部分代理；`Sec-WebSocket-Accept` 是防跨站 WebSocket 劫持的校验。
+> 握手本质：**复用 HTTP 完成协商，然后协议切换为 WebSocket 帧**——这就是为什么 WebSocket 走 80/443 端口、能穿过大部分代理；`Sec-WebSocket-Accept` 是防跨站 WebSocket 劫持的校验。
 
 ### 2.2 帧与生命周期
 
@@ -73,7 +73,7 @@ Sec-WebSocket-Accept: HSmrc0sMlYUkAGmm5OPpG2HaGWk=  # Key+魔数 SHA1 结果
 | 协议 | 文本语义 | 帧流 |
 | 状态 | 无状态 | 有状态（连接即会话） |
 
-> ⚠️ **WebSocket 的代价是状态**：连接挂在某台服务器上 → 集群必须"粘滞会话"或"广播/订阅"（见 §5）。它是有状态的，与 HTTP 无状态理念相反。
+> **WebSocket 的代价是状态**：连接挂在某台服务器上 → 集群必须"粘滞会话"或"广播/订阅"（见 §5）。它是有状态的，与 HTTP 无状态理念相反。
 
 ## 3. SSE：被低估的推送方案
 
@@ -96,7 +96,7 @@ data: {"progress": 100}
 // 浏览器消费（EventSource 自动重连！）
 const es = new EventSource('/api/sse/notify');
 es.onmessage = (e) => console.log(JSON.parse(e.data));
-es.onerror = () => console.log('断线，浏览器自动重连');   // ⚠️ 自动重连是内建能力
+es.onerror = () => console.log('断线，浏览器自动重连');   // 自动重连是内建能力
 ```
 
 | SSE 特性 | 说明 |
@@ -108,7 +108,7 @@ es.onerror = () => console.log('断线，浏览器自动重连');   // ⚠️ �
 | 方向 | 服务端 → 客户端（单向） |
 | 浏览器支持 | 全部主流（IE 除外） |
 
-> 🎯 SSE 的隐藏优势：**它是 HTTP**——走 80/443、兼容 Nginx/CDN/网关、不需要粘滞会话升级、自带重连、超时自动重连。ChatGPT/DeepSeek 的流式输出（打字机效果）就是 SSE。
+> SSE 的隐藏优势：**它是 HTTP**——走 80/443、兼容 Nginx/CDN/网关、不需要粘滞会话升级、自带重连、超时自动重连。ChatGPT/DeepSeek 的流式输出（打字机效果）就是 SSE。
 
 ### 3.2 流式输出（LLM 应用）
 
@@ -131,7 +131,7 @@ public SseEmitter chatStream(@RequestParam String prompt) {
 }
 ```
 
-> 💡 关联：SSE 本质是 Servlet 异步 + 流式响应（[Servlet 异步体系](../Servlet/06-异步处理与非阻塞IO.md)）的应用形态；Boot 里用 `SseEmitter` 一行接入，详见 [SpringBoot Web 异步返回](../SpringBoot%20Web/02-DispatcherServlet请求处理链路.md) §8。
+> 关联：SSE 本质是 Servlet 异步 + 流式响应（[Servlet 异步体系](../Servlet/06-异步处理与非阻塞IO.md)）的应用形态；Boot 里用 `SseEmitter` 一行接入，详见 [SpringBoot Web 异步返回](../SpringBoot%20Web/02-DispatcherServlet请求处理链路.md) §8。
 
 ## 4. WebSocket vs SSE vs 长轮询
 
@@ -139,16 +139,16 @@ public SseEmitter chatStream(@RequestParam String prompt) {
 |------|:---:|:---:|:---:|
 | 方向 | 全双工 | 服务端→客户端 | 客户端→服务端（伪推送） |
 | 协议 | 独立帧协议（HTTP 升级） | **纯 HTTP** | HTTP |
-| 自动重连 | ❌ 手写 | ✅ 内建 | ❌ 手写 |
-| 断点续传 | ❌ | ✅（Last-Event-ID） | ❌ |
+| 自动重连 | ✗ 手写 | ✓ 内建 | ✗ 手写 |
+| 断点续传 | ✗ | ✓（Last-Event-ID） | ✗ |
 | 代理/防火墙兼容 | 需支持 Upgrade | 天然兼容 | 天然兼容 |
 | 负载均衡 | 需粘滞/广播 | 普通即可（重连会找新节点） | 普通 |
-| 二进制 | ✅ | ❌（仅文本，base64） | ✅ |
+| 二进制 | ✓ | ✗（仅文本，base64） | ✓ |
 | 浏览器兼容 | 全部主流 | 全部主流（IE 除外） | 全部 |
 | 复杂度 | 高（状态/心跳/重连） | **低** | 中 |
 | 典型场景 | 聊天/游戏/协作/实时编辑 | 通知/进度/行情/LLM 流式 | 兼容旧基建 |
 
-> 🎯 **选型决策表**：
+> **选型决策表**：
 > - 服务端单向推送（通知/进度/行情/日志/LLM 流式）→ **SSE**（简单 + 自动重连 + HTTP 兼容）
 > - 双向交互（聊天/游戏/白板/实时协作）→ **WebSocket**
 > - 无法升级/老系统 → 长轮询兜底
@@ -185,7 +185,7 @@ SSE 天然优势：
   连接状态只存各节点内存 + 心跳检测；节点宕机由重连自动漂移
 ```
 
-> ⚠️ 负载均衡配置：WebSocket 需要 Nginx 开启 `proxy_set_header Upgrade/Connection`（[Nginx WebSocket 章节](../Nginx/03-Nginx-核心配置.md)）；SSE 需要关掉代理缓冲（`proxy_buffering off`）否则推送不实时——两个都是高频生产坑。
+> 负载均衡配置：WebSocket 需要 Nginx 开启 `proxy_set_header Upgrade/Connection`（[Nginx WebSocket 章节](../Nginx/03-Nginx-核心配置.md)）；SSE 需要关掉代理缓冲（`proxy_buffering off`）否则推送不实时——两个都是高频生产坑。
 
 ## 6. Spring Boot 落地
 
@@ -220,7 +220,7 @@ public class WebSocketConfig implements WebSocketConfigurer {
 }
 ```
 
-> 🎯 综合建议：**新业务默认 SSE**（80% 场景够用且省心）；确需双向/高频实时再上 WebSocket + STOMP；别一上来就 WebSocket——连接状态、心跳、集群广播的运维复杂度是 SSE 的 3-5 倍。
+> 综合建议：**新业务默认 SSE**（80% 场景够用且省心）；确需双向/高频实时再上 WebSocket + STOMP；别一上来就 WebSocket——连接状态、心跳、集群广播的运维复杂度是 SSE 的 3-5 倍。
 
 ---
 

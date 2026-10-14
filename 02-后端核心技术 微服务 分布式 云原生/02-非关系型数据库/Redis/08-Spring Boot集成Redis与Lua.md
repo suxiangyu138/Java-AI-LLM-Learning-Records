@@ -86,7 +86,7 @@ public class RedisConfig {
 }
 ```
 
-> ⚠️ 为什么不用 JdkSerializationRedisSerializer？JDK 序列化体积大、可读性差、跨语言不兼容。
+> 为什么不用 JdkSerializationRedisSerializer？JDK 序列化体积大、可读性差、跨语言不兼容。
 
 ### 1.4 RedisTemplate vs StringRedisTemplate
 
@@ -128,7 +128,7 @@ public class LettuceConfig {
 }
 ```
 
-> 💡 Lettuce 是 Spring Boot 2.0+ 默认的 Redis 客户端，基于 Netty 异步非阻塞。相比 Jedis（BIO），Lettuce 线程安全、支持异步/响应式、连接数更少。
+> Lettuce 是 Spring Boot 2.0+ 默认的 Redis 客户端，基于 Netty 异步非阻塞。相比 Jedis（BIO），Lettuce 线程安全、支持异步/响应式、连接数更少。
 
 ---
 
@@ -370,7 +370,7 @@ public class CacheConfig extends CachingConfigurerSupport {
 | 非 public 方法 | 注解不拦截 | 改为 public |
 | 序列化问题 | 缓存对象未实现 Serializable | 实现序列化接口 |
 
-> ⚠️ 注解缓存基于 AOP 代理，类内部方法调用不走代理，注解不会生效。需要用 `@Autowired` 注入自身 Bean 再调用。
+> 注解缓存基于 AOP 代理，类内部方法调用不走代理，注解不会生效。需要用 `@Autowired` 注入自身 Bean 再调用。
 
 ---
 
@@ -443,7 +443,7 @@ lock() 或 tryLock() 不传过期时间时：
 5. 业务完成后 unlock() 取消看门狗
 ```
 
-> 💡 看门狗确保业务未完成时锁不会自动释放，防止死锁的同时提高可靠性。如果客户端崩溃，锁最长存活 30 秒后自动释放。
+> 看门狗确保业务未完成时锁不会自动释放，防止死锁的同时提高可靠性。如果客户端崩溃，锁最长存活 30 秒后自动释放。
 
 ### 4.5 可重入锁测试
 
@@ -563,7 +563,7 @@ public class RedisBaseUtil {
 
 ### 5.3 组件封装原则
 
-> 💡 封装组件时注意：抽取常量 Key 前缀、统一 TTL 配置、异常不要吞掉、Lua 脚本优先于多次网络调用。
+> 封装组件时注意：抽取常量 Key 前缀、统一 TTL 配置、异常不要吞掉、Lua 脚本优先于多次网络调用。
 
 ---
 
@@ -750,7 +750,7 @@ List<Object> results = redisTemplate.execute(new SessionCallback<List<Object>>()
 | 性能 | 高 | 中 | 高 |
 | 适用 | 批量写入 | 简单原子操作 | 复杂原子操作 |
 
-> 🎯 生产推荐：简单批量用 Pipeline，复杂原子操作用 Lua 脚本，Redis 事务使用较少。
+> 生产推荐：简单批量用 Pipeline，复杂原子操作用 Lua 脚本，Redis 事务使用较少。
 
 ---
 

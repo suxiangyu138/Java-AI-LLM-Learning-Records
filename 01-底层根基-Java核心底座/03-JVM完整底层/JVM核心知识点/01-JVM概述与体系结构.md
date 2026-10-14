@@ -49,9 +49,9 @@ JVM（Java Virtual Machine）是一台**虚拟计算机**的规范（由JSR定�
 | **运行时优化** | 解释执行保可移植性，JIT编译保热点性能 |
 | **动态链接** | 类按需加载，支持反射、动态代理 |
 
-> 💡 JVM是一个**规范**，HotSpot是最主流的**实现**。任何能编译为`.class`的语言都可跑在JVM上——不限于Java，还包括Kotlin/Scala/Groovy等。
+> JVM是一个**规范**，HotSpot是最主流的**实现**。任何能编译为`.class`的语言都可跑在JVM上——不限于Java，还包括Kotlin/Scala/Groovy等。
 
-> 🎯 **80%的线上Java性能问题都与JVM直接相关**——学会JVM是从"会用Java"走向"懂Java"的核心门槛。
+> **80%的线上Java性能问题都与JVM直接相关**——学会JVM是从"会用Java"走向"懂Java"的核心门槛。
 
 ---
 
@@ -113,15 +113,15 @@ MyClass.staticMethod();                 // 调用static方法
 // 6. 接口默认方法 (JDK 8+)
 ```
 
-> 💡 Resolution（解析）不必在Initialization之前完成——这是**动态绑定**和**延迟加载**的重要基础。
+> Resolution（解析）不必在Initialization之前完成——这是**动态绑定**和**延迟加载**的重要基础。
 
 ### 2.4 运行时数据区
 
 | 区域 | 线程 | 存储内容 | 异常风险 |
 |------|:----:|----------|:--------:|
-| **堆（Heap）** | 共享 | 对象实例、数组 | ⚠️ OOM主战场 |
-| **方法区/Metaspace** | 共享 | 类元数据、常量池、static变量、JIT代码缓存 | ⚠️ 动态类过多OOM |
-| **程序计数器** | 私有 | 当前字节码行号 | ✅ 唯一不OOM |
+| **堆（Heap）** | 共享 | 对象实例、数组 | OOM主战场 |
+| **方法区/Metaspace** | 共享 | 类元数据、常量池、static变量、JIT代码缓存 | 动态类过多OOM |
+| **程序计数器** | 私有 | 当前字节码行号 | ✓ 唯一不OOM |
 | **虚拟机栈** | 私有 | 栈帧（局部变量表/操作数栈/动态链接/返回地址） | `StackOverflow` |
 | **本地方法栈** | 私有 | Native方法调用 | `StackOverflow` |
 
@@ -151,7 +151,7 @@ MyClass.staticMethod();                 // 调用static方法
 | **JIT编译** | 热点探测→C1编译→C2深度优化→机器码缓存 | 启动后逐渐提速，峰值性能高 |
 | **AOT** | 构建时预先编译为原生可执行文件 | 毫秒级启动，但牺牲动态性 |
 
-> 💡 服务刚启动慢（解释器为主）→ 运行一段时间后变快（JIT编译热点）。**接口预热**的底层原理即提前触发JIT编译。
+> 服务刚启动慢（解释器为主）→ 运行一段时间后变快（JIT编译热点）。**接口预热**的底层原理即提前触发JIT编译。
 
 ---
 
@@ -186,11 +186,11 @@ GraalVM 架构:
 │  Graal Compiler (Java写的JIT编译器，JDK 17+可替代C2)        │
 │  + Truffle (多语言框架: JS/Python/Ruby)                     │
 │  + Native Image (AOT编译→毫秒级启动→无需JRE)               │
-│     ⚠️ 需配置反射/动态代理，不支持动态类加载                │
+│     需配置反射/动态代理，不支持动态类加载                │
 └──────────────────────────────────────────────────────────────┘
 ```
 
-> ⚠️ GraalVM Native Image启动极快、内存极省，但存在局限：反射需预配置、不支持完全动态类加载、构建时间较长。
+> GraalVM Native Image启动极快、内存极省，但存在局限：反射需预配置、不支持完全动态类加载、构建时间较长。
 
 ### 3.4 选型决策
 
@@ -227,7 +227,7 @@ Serverless/网关 → GraalVM Native Image（毫秒级启动）
 | 扩容 | 需要Full GC | 自动利用OS内存 |
 | OOM风险 | 高 | 低 |
 
-> 🎯 **Metaspace替换PermGen的核心动机**：PermGen大小固定易OOM（尤其动态类生成场景），GC回收效率低。本地内存动态扩展，大幅降低OOM概率。
+> **Metaspace替换PermGen的核心动机**：PermGen大小固定易OOM（尤其动态类生成场景），GC回收效率低。本地内存动态扩展，大幅降低OOM概率。
 
 ### 4.3 GC默认配置沿革
 
@@ -247,9 +247,9 @@ java -XX:+PrintCommandLineFlags -version  # 查看当前GC
 | 维度 | 解释执行 | JIT即时编译 | AOT提前编译 |
 |------|----------|-------------|-------------|
 | **时机** | 运行时逐行翻译 | 运行时热点编译 | 构建时预编译 |
-| **启动** | ✅ 最快 | ❌ 需要预热 | ✅ 毫秒级 |
-| **峰值性能** | ❌ 慢 | ✅ 高 | ✅ 较高（架构绑定） |
-| **动态特性** | ✅ 全支持 | ✅ 全支持 | ❌ 需配置 |
+| **启动** | ✓ 最快 | ✗ 需要预热 | ✓ 毫秒级 |
+| **峰值性能** | ✗ 慢 | ✓ 高 | ✓ 较高（架构绑定） |
+| **动态特性** | ✓ 全支持 | ✓ 全支持 | ✗ 需配置 |
 | **适用场景** | 启动阶段、非热点 | **长驻服务端** | **Serverless、CLI** |
 
 ### 5.2 JIT分层编译流水线
@@ -267,12 +267,12 @@ java -XX:+PrintCommandLineFlags -version  # 查看当前GC
 ```java
 // 逃逸分析示例
 public class EscapeAnalysisDemo {
-    // ✅ 未逃逸 — JIT做标量替换，栈上分配
+    // ✓ 未逃逸 — JIT做标量替换，栈上分配
     public long sumAges() {
         Point p = new Point(1, 2);
         return p.x + p.y;
     }
-    // ❌ 逃逸 — 堆分配
+    // ✗ 逃逸 — 堆分配
     public Point createPoint() {
         return new Point(1, 2);
     }
@@ -280,7 +280,7 @@ public class EscapeAnalysisDemo {
 }
 ```
 
-> 💡 **选型原则**：长驻微服务 → JIT（JDK 17+ Graal Compiler）；Serverless/网关 → AOT（GraalVM Native Image）。JDK 11+支持JIT+AOT混合。
+> **选型原则**：长驻微服务 → JIT（JDK 17+ Graal Compiler）；Serverless/网关 → AOT（GraalVM Native Image）。JDK 11+支持JIT+AOT混合。
 
 ---
 
@@ -297,7 +297,7 @@ java -Xms1g -Xmx2g -jar MyApp.jar
 4. 加载运行时核心类: java.lang.*, JNI方法注册
 5. 运行main线程: 加载启动类 → 执行static块 → main()
 
-⏱ 典型Spring Boot启动: 3-8秒 (类加载40% + JIT预热30% + 框架初始化30%)
+典型Spring Boot启动: 3-8秒 (类加载40% + JIT预热30% + 框架初始化30%)
 ```
 
 ```bash
@@ -311,9 +311,9 @@ java -Xlog:class+load=info,gc*=info:file=startup.log -jar app.jar  # JDK 9+
 
 | 退出方式 | 触发 | 执行Hook？ |
 |----------|------|:---------:|
-| 正常退出 | `main()`返回 / `System.exit(n)` | ✅ |
-| 外部中断 | `Ctrl+C` / `kill -TERM` (SIGTERM) | ✅ |
-| 强制终止 | `kill -9` (SIGKILL) | ❌ |
+| 正常退出 | `main()`返回 / `System.exit(n)` | ✓ |
+| 外部中断 | `Ctrl+C` / `kill -TERM` (SIGTERM) | ✓ |
+| 强制终止 | `kill -9` (SIGKILL) | ✗ |
 
 ```java
 // 用于JVM关闭前的资源清理
@@ -322,7 +322,7 @@ Runtime.getRuntime().addShutdownHook(new Thread(() -> {
 }));
 ```
 
-> ⚠️ shutdownHook限制：不保证执行顺序、执行时间有限、`kill -9`无法拦截。
+> shutdownHook限制：不保证执行顺序、执行时间有限、`kill -9`无法拦截。
 
 ---
 

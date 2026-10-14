@@ -1,7 +1,7 @@
 # 02-KMP应用与变体
 > 一句话：686 重复叠加匹配、459 重复子串、循环节判定——KMP 三变体全解，"border 整除性"是隐藏考点
 
-## 📚 目录
+## 目录
 1. [686 重复叠加字符串匹配](#1-686-重复叠加字符串匹配)
 2. [459 重复的子字符串（循环节）](#2-459-重复的子字符串循环节)
 3. [28 最短回文串（KMP 应用）](#3-28-最短回文串kmp-应用)
@@ -42,10 +42,10 @@ public int repeatedStringMatch(String a, String b) {
 // 推演 a="abcd", b="cdabcdab"：
 //   repeat = ceil(8/4) = 2 → "abcdabcd" 不含 → 叠 3 次
 //   "abcdabcdabcd" 含 "cdabcdab" ✓ → 3
-// ⚠️ 边界: b 可能跨 a 的拼接边界——最多需要 repeat+1 次
+// 边界: b 可能跨 a 的拼接边界——最多需要 repeat+1 次
 ```
 
-> 🎯 **686 的边界**："**'重复到长度够 + 最多多叠一次'——b 跨 a 边界的场景是 686 的隐藏边界**。KMP 匹配是手段、次数边界分析是考点。"
+> **686 的边界**："**'重复到长度够 + 最多多叠一次'——b 跨 a 边界的场景是 686 的隐藏边界**。KMP 匹配是手段、次数边界分析是考点。"
 
 ## 2. 459 重复的子字符串（循环节）
 
@@ -72,11 +72,11 @@ public boolean repeatedSubstringPattern(String s) {
 // 推演 "abab"：next[3] = 2 → cycle = 2 → 4%2==0 → true ✓
 //   "aba"：next[2] = 1 → cycle = 2 → 3%2≠0 → false ✓
 //   "abcabcabc"：next[8] = 6 → cycle = 3 → 9%3==0 → true ✓
-// ⚠️ 为什么: border 是"前缀=后缀"——
+// 为什么: border 是"前缀=后缀"——
 //   重复串的 border = 去掉最后一个循环节；cycle = 循环节长度
 ```
 
-> 🎯 **459 的隐藏考点**："**'len − next[len−1] = 循环节长度'是 KMP 的经典隐藏结论**——重复串的最长 border 恰是'去掉最后一个循环节'。能现场推导 border/cycle 关系，459 就是送分题。"
+> **459 的隐藏考点**："**'len − next[len−1] = 循环节长度'是 KMP 的经典隐藏结论**——重复串的最长 border 恰是'去掉最后一个循环节'。能现场推导 border/cycle 关系，459 就是送分题。"
 
 ## 3. 214 最短回文串（KMP 应用）
 
@@ -106,11 +106,11 @@ public String shortestPalindrome(String s) {
 //   combined = "aacecaaa#aaacecaa"
 //   最长 border = 7（"aacecaa" 是回文前缀）
 //   suffix = "aaacecaa"[0..0] = "a" → "a" + "aacecaaa" = "aaacecaaa" ✓
-// ⚠️ 为什么: border 的前缀 = 后缀 → 前缀是回文（s 的前缀 == rev 的后缀）
+// 为什么: border 的前缀 = 后缀 → 前缀是回文（s 的前缀 == rev 的后缀）
 //   # 分隔防止 border 跨越 s 与 rev 的边界
 ```
 
-> 💡 **KMP × 回文的组合**："**214 = '拼接 + KMP border'——s#rev 的最长 border 就是 s 的最长回文前缀**。Manacher 也能解，KMP 版展示 border 的另一种用途。"
+> **KMP × 回文的组合**："**214 = '拼接 + KMP border'——s#rev 的最长 border 就是 s 的最长回文前缀**。Manacher 也能解，KMP 版展示 border 的另一种用途。"
 
 ## 4. 循环节判定：next 的隐藏考点
 
@@ -126,10 +126,10 @@ public String shortestPalindrome(String s) {
   cycle = n − border = 3 = 循环节长度
   整除 → 可重复构成
 
-⚠️ 推论: 最小循环节长度 = n − next[n−1]
+推论: 最小循环节长度 = n − next[n−1]
   例: "abcabcabc" → 3；"abab" → 2；"aaa" → 1
 
-⚠️ 应用: 459、686 的周期判断、字符串周期性问题
+应用: 459、686 的周期判断、字符串周期性问题
 ```
 
 ### 4.2 面试表达
@@ -139,7 +139,7 @@ public String shortestPalindrome(String s) {
   n − next[n−1] 是字符串的最小循环节长度。
   459 重复子串判定 = border > 0 且 n % cycle == 0。"
 
-⚠️ 这是 KMP 面试的进阶加分点——
+这是 KMP 面试的进阶加分点——
   会匹配 + 会循环节 = 对 next 有深层理解
 ```
 
@@ -155,7 +155,7 @@ public String shortestPalindrome(String s) {
 | 459 变体（周期串） | 周期判定 | cycle = n − border |
 
 ```text
-⚠️ 家族规律:
+家族规律:
   "匹配（28）→ 周期（459）→ 回文（214）——
    KMP 的 next 数组从'匹配工具'升级为'结构分析工具'"
 ```
@@ -182,13 +182,13 @@ public String shortestPalindrome(String s) {
 ③ 循环节加分: "n − next[n−1] = 循环节长度"
 ④ 复杂度: O(n+m) 时间、O(m) 空间
 
-⚠️ 高频追问: "为什么主串指针不回退？"
+高频追问: "为什么主串指针不回退？"
   → "已匹配部分的 border 前缀已经匹配——
     j 回退到 border 长度即可继续，
     主串无需回头（i 只前进）"
 ```
 
-> 🎯 **核心要点**：KMP 应用通关——**28（主流程）+ 686（边界分析）+ 459（循环节）+ 214（回文前缀）**。四题覆盖 KMP 的"匹配 → 周期 → 结构"三层应用——"border 不只是失配跳转，更是字符串的结构指纹"。
+> **核心要点**：KMP 应用通关——**28（主流程）+ 686（边界分析）+ 459（循环节）+ 214（回文前缀）**。四题覆盖 KMP 的"匹配 → 周期 → 结构"三层应用——"border 不只是失配跳转，更是字符串的结构指纹"。
 
 ---
 

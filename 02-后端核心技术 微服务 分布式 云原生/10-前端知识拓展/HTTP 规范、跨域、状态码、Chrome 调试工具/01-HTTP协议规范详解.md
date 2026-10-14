@@ -1,6 +1,6 @@
 # 01 - HTTP 协议规范详解
 
-> 🎯 HTTP 是万维网的基石 — HTTP/1.1 的长连接、HTTP/2 的多路复用、HTTP/3 的 QUIC，理解协议演进才能写出高性能的 Web 应用
+> HTTP 是万维网的基石 — HTTP/1.1 的长连接、HTTP/2 的多路复用、HTTP/3 的 QUIC，理解协议演进才能写出高性能的 Web 应用
 
 ---
 
@@ -70,15 +70,15 @@ Set-Cookie: SESSIONID=abc123; HttpOnly; Secure
 
 | 方法 | 幂等 | 安全 | 说明 | RESTful 示例 |
 |------|:---:|:---:|------|-------------|
-| **GET** | ✅ | ✅ | 获取资源 | `GET /users/1` |
-| **POST** | ❌ | ❌ | 创建资源 | `POST /users` |
-| **PUT** | ✅ | ❌ | 全量更新 | `PUT /users/1` |
-| **PATCH** | ❌ | ❌ | 部分更新 | `PATCH /users/1` |
-| **DELETE** | ✅ | ❌ | 删除资源 | `DELETE /users/1` |
-| **HEAD** | ✅ | ✅ | 仅获取响应头 | `HEAD /users/1` |
-| **OPTIONS** | ✅ | ✅ | 查询支持的方法 | 预检请求 |
+| **GET** | ✓ | ✓ | 获取资源 | `GET /users/1` |
+| **POST** | ✗ | ✗ | 创建资源 | `POST /users` |
+| **PUT** | ✓ | ✗ | 全量更新 | `PUT /users/1` |
+| **PATCH** | ✗ | ✗ | 部分更新 | `PATCH /users/1` |
+| **DELETE** | ✓ | ✗ | 删除资源 | `DELETE /users/1` |
+| **HEAD** | ✓ | ✓ | 仅获取响应头 | `HEAD /users/1` |
+| **OPTIONS** | ✓ | ✓ | 查询支持的方法 | 预检请求 |
 
-> ⚠️ **幂等 vs 非幂等**：GET/PUT/DELETE 执行 N 次结果相同 → 可安全重试。POST/PATCH 每次可能产生不同结果 → 不可盲目重试。
+> **幂等 vs 非幂等**：GET/PUT/DELETE 执行 N 次结果相同 → 可安全重试。POST/PATCH 每次可能产生不同结果 → 不可盲目重试。
 
 ---
 
@@ -113,8 +113,8 @@ Set-Cookie: SESSIONID=abc123; HttpOnly; Secure
 
 | 属性 | 说明 | 安全建议 |
 |------|------|----------|
-| `HttpOnly` | 禁止 JS 访问（防 XSS） | ✅ 必设 |
-| `Secure` | 仅 HTTPS 传输 | ✅ 必设 |
+| `HttpOnly` | 禁止 JS 访问（防 XSS） | ✓ 必设 |
+| `Secure` | 仅 HTTPS 传输 | ✓ 必设 |
 | `SameSite` | 跨站请求控制 | `Strict` / `Lax` / `None` |
 | `Domain` | 作用域 | 限定范围 |
 | `Path` | 路径限制 | `/` |
@@ -172,4 +172,4 @@ public ResponseEntity<User> getUser(@PathVariable Long id) {
 }
 ```
 
-> 🎯 **后端口诀**：GET=幂等可缓存、POST=非幂等不可重试、HttpOnly+Secure=Cookie 标配、304=协商缓存省钱。HTTP/2 多路复用是性能标配。
+> **后端口诀**：GET=幂等可缓存、POST=非幂等不可重试、HttpOnly+Secure=Cookie 标配、304=协商缓存省钱。HTTP/2 多路复用是性能标配。

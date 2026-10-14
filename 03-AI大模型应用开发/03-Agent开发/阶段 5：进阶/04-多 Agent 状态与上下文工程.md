@@ -2,7 +2,7 @@
 
 > 定位：多 Agent 系统的"内存管理"——typed state 设计、reducer 累加、上下文传递纪律、子 Agent 隔离（2026-08 基准）
 
-## 📚 目录
+## 目录
 
 1. [多 Agent 状态的三个层次](#1-多-agent-状态的三个层次)
 2. [typed state 设计模式](#2-typed-state-设计模式)
@@ -25,7 +25,7 @@
 | 子 Agent 状态 | 子任务 | 仅该子 Agent | 子任务的对话历史 |
 | 共享存储 | 长期 | 按需注入 | 用户偏好、业务事实 |
 
-> 🎯 **核心要点**：状态分层的原则 = **"能隔离的别共享，能按需的别常驻"**。子 Agent 的中间对话绝不进主上下文；共享存储只有工具主动读才注入（阶段 4 记忆工程的多 Agent 版）。
+> **核心要点**：状态分层的原则 = **"能隔离的别共享，能按需的别常驻"**。子 Agent 的中间对话绝不进主上下文；共享存储只有工具主动读才注入（阶段 4 记忆工程的多 Agent 版）。
 
 ## 2. typed state 设计模式
 
@@ -75,14 +75,14 @@ class FanoutState(TypedDict):
 ```python
 # 错误示例：无 reducer 的收集字段
 class BadState(TypedDict):
-    results: list          # ❌ 每个节点返回都会覆盖前一个
+    results: list          # ✗ 每个节点返回都会覆盖前一个
 
 # 正确示例：
 class GoodState(TypedDict):
-    results: Annotated[list, operator.add]   # ✅ 自动累加
+    results: Annotated[list, operator.add]   # ✓ 自动累加
 ```
 
-> ⚠️ **多 Agent 最隐蔽的 bug**：Worker 并行返回结果，最后一个覆盖前面的——"为什么只有最后一个 Agent 的结果？" → 查 reducer。
+> **多 Agent 最隐蔽的 bug**：Worker 并行返回结果，最后一个覆盖前面的——"为什么只有最后一个 Agent 的结果？" → 查 reducer。
 
 ## 4. 上下文传递纪律
 
@@ -105,7 +105,7 @@ def prepare_subtask(task: str, global_constraints: list[str],
     }
 ```
 
-> 💡 与阶段 4 的联动：多 Agent 上下文 = 单 Agent 上下文工程 × 交接次数——**每一次交接都是一次"压缩 + 精选"的机会，不是复制**。
+> 与阶段 4 的联动：多 Agent 上下文 = 单 Agent 上下文工程 × 交接次数——**每一次交接都是一次"压缩 + 精选"的机会，不是复制**。
 
 ## 5. 子 Agent 隔离：上下文不串扰
 
@@ -170,9 +170,9 @@ write_agent  = create_agent(..., tools=[write_tool, team_remember, team_recall],
 | 写入审计 | 谁写的、什么时候（可追溯） |
 | 冲突策略 | 同键冲突：新覆盖旧 or 版本化（按业务） |
 
-> ⚠️ **共享记忆 = 级联幻觉放大器**：一个子 Agent 的幻觉写入共享记忆 → 全队引用 → CHARM 级联（失败模式 02 篇）。**写入前必须过验证层**。
+> **共享记忆 = 级联幻觉放大器**：一个子 Agent 的幻觉写入共享记忆 → 全队引用 → CHARM 级联（失败模式 02 篇）。**写入前必须过验证层**。
 
-> 🎯 **核心要点**：多 Agent 状态工程 = **三层分离（图状态/子状态/共享存储）+ reducer 纪律 + 交接压缩 + 子 Agent 隔离**。记忆口诀：能隔离的别共享、能按需的别常驻、能压缩的别复制、能审计的别静默。
+> **核心要点**：多 Agent 状态工程 = **三层分离（图状态/子状态/共享存储）+ reducer 纪律 + 交接压缩 + 子 Agent 隔离**。记忆口诀：能隔离的别共享、能按需的别常驻、能压缩的别复制、能审计的别静默。
 
 ---
 

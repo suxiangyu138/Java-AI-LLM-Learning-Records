@@ -1,7 +1,7 @@
 # 05-Git 撤销与历史重写
 > 撤销的第一原则：**先搞清楚你在哪里，要去哪里**——reset 三态、revert、reflog 后悔药、原子化提交与历史重写安全边界
 
-## 📚 目录
+## 目录
 1. [撤销命令全景图](#1-撤销命令全景图)
 2. [reset vs restore vs revert vs checkout](#2-reset-vs-restore-vs-revert-vs-checkout)
 3. [场景驱动的撤销指南（8 场景）](#3-场景驱动的撤销指南8-场景)
@@ -44,7 +44,7 @@
 | `git revert` | 公开的 commit | **最安全**，新增反向 commit | 所有版本 |
 | `git checkout` | 工作区 / 分支 | 旧命令，推荐用 restore/switch | 所有版本 |
 
-> 💡 Git 2.23+ 引入了 `restore`（管文件恢复）和 `switch`（管分支切换）来分担 `checkout` 的职责，语义更清晰。
+> Git 2.23+ 引入了 `restore`（管文件恢复）和 `switch`（管分支切换）来分担 `checkout` 的职责，语义更清晰。
 
 ## 3. 场景驱动的撤销指南（8 场景）
 
@@ -70,7 +70,7 @@ git restore --staged --worktree file.txt         # 撤销 add + 撤销修改（�
 git commit --amend -m "new message"              # 修改最后一条 commit message
 git add forgotten-file.txt
 git commit --amend --no-edit                     # 追加文件，不改 message
-# ⚠️ 如果已经 push，不要 amend！否则需要 force push
+# 如果已经 push，不要 amend！否则需要 force push
 ```
 
 **场景 4：commit 了，想撤销（保留修改）→ reset --soft**
@@ -89,7 +89,7 @@ git reset HEAD~1               # 等价于 git reset --mixed HEAD~1
 **场景 6：commit 了，想彻底删除 → reset --hard（危险）**
 
 ```bash
-git reset --hard HEAD~1        # ⚠️ 彻底删除最近 1 个 commit 的所有修改
+git reset --hard HEAD~1        # 彻底删除最近 1 个 commit 的所有修改
 # 别慌，还有 reflog 可以救命（见第 5 节）
 ```
 
@@ -125,9 +125,9 @@ echo "line 3" >> file.txt && git add . && git commit -m "commit 3"
 
 | 模式 | HEAD | 暂存区 | 工作区 | 命令 |
 |------|------|--------|--------|------|
-| `--soft` | 回退 ✅ | **保留** ✅ | **保留** ✅ | `git reset --soft HEAD~1` |
-| `--mixed` | 回退 ✅ | **清空** ❌ | **保留** ✅ | `git reset --mixed HEAD~1` |
-| `--hard` | 回退 ✅ | **清空** ❌ | **清空** ❌ | `git reset --hard HEAD~1` |
+| `--soft` | 回退 ✓ | **保留** ✓ | **保留** ✓ | `git reset --soft HEAD~1` |
+| `--mixed` | 回退 ✓ | **清空** ✗ | **保留** ✓ | `git reset --mixed HEAD~1` |
+| `--hard` | 回退 ✓ | **清空** ✗ | **清空** ✗ | `git reset --hard HEAD~1` |
 
 ```text
 记忆口诀：
@@ -179,8 +179,8 @@ git reset --hard HEAD@{N}        # 回来了！
 
 | 操作 | 原理 | 历史 | 远程安全 | 适用 |
 |------|------|:---:|:---:|------|
-| `git revert` | 创建反向 commit 抵消目标 commit | ✅ 保留 | ✅ 安全 | **生产回滚唯一选择** |
-| `git reset` | 移动分支指针到历史 commit | ❌ 改写 | ❌ 禁止 | 仅本地未 push 的 commit |
+| `git revert` | 创建反向 commit 抵消目标 commit | ✓ 保留 | ✓ 安全 | **生产回滚唯一选择** |
+| `git reset` | 移动分支指针到历史 commit | ✗ 改写 | ✗ 禁止 | 仅本地未 push 的 commit |
 
 ### 6.2 命令全集
 
@@ -191,7 +191,7 @@ git revert -m 1 <merge-commit>     # 回滚 merge commit（-m 指定保留哪一
 git revert <revert-commit>         # revert 的 revert：恢复被回滚的代码
 ```
 
-> 💡 `git revert` 是生产环境唯一推荐的回滚方式。它不删除历史，只是新增一个反向操作，CI/CD 历史清晰可审计。
+> `git revert` 是生产环境唯一推荐的回滚方式。它不删除历史，只是新增一个反向操作，CI/CD 历史清晰可审计。
 
 ## 7. 撤销合并与撤销远程操作
 
@@ -210,7 +210,7 @@ git revert -m 1 <merge-commit-hash>
 # -m 1: 保留 main 分支的内容
 ```
 
-> ⚠️ 已 push 的 merge commit 绝对不能用 `git reset` 撤销——那会改写公共历史，导致其他人的仓库与你不同步。
+> 已 push 的 merge commit 绝对不能用 `git reset` 撤销——那会改写公共历史，导致其他人的仓库与你不同步。
 
 ### 7.3 撤销远程操作
 
@@ -241,7 +241,7 @@ git stash clear                      # 清空所有 stash
 git stash branch new-feature stash@{0}   # 从 stash 创建分支（自动 pop）
 ```
 
-> ⚠️ **Stash 风险**：Stash 存储在本地 `.git/refs/stash`，**不随 push 推送**。重装系统或删除仓库将永久丢失。重要 WIP 建议推到分支上存储。
+> **Stash 风险**：Stash 存储在本地 `.git/refs/stash`，**不随 push 推送**。重装系统或删除仓库将永久丢失。重要 WIP 建议推到分支上存储。
 
 ## 9. 原子化提交与历史重写
 
@@ -251,29 +251,29 @@ git stash branch new-feature stash@{0}   # 从 stash 创建分支（自动 pop�
 
 | 变更类型 | 是否独立 commit | 理由 |
 |----------|:---:|------|
-| 新功能实现 | ✅ | 一个功能 = 一个 commit |
-| 重构 | ✅ | 独立于功能变更 |
-| Bug 修复 | ✅ | 可独立 cherry-pick 到 hotfix |
-| 代码格式化 | ✅ | 独立于逻辑变更 |
-| 依赖升级 | ✅ | 独立于功能变更 |
-| 修 typo | ⚠️ 可合并到上一个 | `--amend` |
-| "正在开发中" | ❌ | 开发完成后 squash |
+| 新功能实现 | ✓ | 一个功能 = 一个 commit |
+| 重构 | ✓ | 独立于功能变更 |
+| Bug 修复 | ✓ | 可独立 cherry-pick 到 hotfix |
+| 代码格式化 | ✓ | 独立于逻辑变更 |
+| 依赖升级 | ✓ | 独立于功能变更 |
+| 修 typo | 可合并到上一个 | `--amend` |
+| "正在开发中" | ✗ | 开发完成后 squash |
 
 ```text
-✅ 好的历史：
+✓ 好的历史：
   a1b2c3d feat(user): 添加用户登录接口
   d4e5f6g feat(user): 实现JWT Token签发
   g7h8i9j feat(user): 添加登录单元测试
   k3l4m5n fix(user): 修复Token过期判断逻辑
 
-❌ 坏的历史：
+✗ 坏的历史：
   a1b2c3d update
   d4e5f6g fix bug
   l6m7n8o tmp
   m8n9o0p finally working
 ```
 
-> 🎯 **Commit Message 黄金法则**：假设半年后的你（或同事）在看 `git blame`，TA 能凭 commit message 理解"为什么有这个变更"。如果 message 里写了 "and"，说明这个提交应该拆分成两个。
+> **Commit Message 黄金法则**：假设半年后的你（或同事）在看 `git blame`，TA 能凭 commit message 理解"为什么有这个变更"。如果 message 里写了 "and"，说明这个提交应该拆分成两个。
 
 ### 9.2 软回退拆提交
 
@@ -292,11 +292,11 @@ git commit -m "chore: 调整连接池配置"
 ### 9.3 历史重写安全边界
 
 ```text
-✅ 可以重写的历史（绝对安全）：
+✓ 可以重写的历史（绝对安全）：
   - 还未 push 的本地 commit
   - 个人 feature 分支（确认无人基于此工作）
 
-❌ 绝对禁止重写的历史：
+✗ 绝对禁止重写的历史：
   - 已 push 到公共仓库的 commit（main/develop/release）
   - 别人可能基于你的 commit 继续开发的任何分支
 ```
@@ -337,7 +337,7 @@ git commit -m "chore: 调整连接池配置"
 
 ## 11. 核心要点
 
-> 🎯 **核心要点**：
+> **核心要点**：
 > - 撤销四命令分工：restore（文件）、reset（本地历史）、revert（远程安全）、stash（暂存）；
 > - reset 口诀：soft 只动 HEAD、mixed 动 HEAD+暂存、hard 全动；
 > - reflog 是 90 天后悔药：被 reset/rebase 干掉的东西都能找回；

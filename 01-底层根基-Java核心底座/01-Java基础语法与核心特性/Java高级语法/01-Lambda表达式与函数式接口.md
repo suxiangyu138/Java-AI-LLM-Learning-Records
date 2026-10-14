@@ -1,6 +1,6 @@
 # 01 - Lambda 表达式与函数式接口
 
-> 🎯 Lambda 是 Java 8 最革命性的特性——让 Java 从"一切皆对象"进化到"函数也是一等公民"。Function、Predicate、Consumer、Supplier 四大函数式接口是 Stream API 和现代框架的基础
+> Lambda 是 Java 8 最革命性的特性——让 Java 从"一切皆对象"进化到"函数也是一等公民"。Function、Predicate、Consumer、Supplier 四大函数式接口是 Stream API 和现代框架的基础
 
 ---
 

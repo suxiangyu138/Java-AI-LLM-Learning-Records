@@ -1,6 +1,6 @@
 # 06 - GPT：Decoder-Only 架构
 
-> 🎯 GPT 架构定义了整个 LLM 时代——Decoder-Only + 自回归生成 + Scaling Law。理解因果注意力、自回归推理、以及为什么 Decoder-Only 最终统治了 NLP，是 LLM 工程师的必修课
+> GPT 架构定义了整个 LLM 时代——Decoder-Only + 自回归生成 + Scaling Law。理解因果注意力、自回归推理、以及为什么 Decoder-Only 最终统治了 NLP，是 LLM 工程师的必修课
 
 ---
 

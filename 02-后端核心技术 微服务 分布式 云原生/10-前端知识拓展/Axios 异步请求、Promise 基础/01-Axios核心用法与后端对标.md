@@ -1,6 +1,6 @@
 # 01 - Axios 核心用法与后端对标
 
-> 🎯 Axios 之于前端 = RestTemplate 之于 Java 后端 — 都是 HTTP 客户端，理解对标关系后端也能读懂前端请求代码
+> Axios 之于前端 = RestTemplate 之于 Java 后端 — 都是 HTTP 客户端，理解对标关系后端也能读懂前端请求代码
 
 ---
 
@@ -19,10 +19,10 @@
 |------|-------|-------------------|
 | 类型 | Promise-based HTTP 库 | 同步/异步 HTTP 客户端 |
 | 运行环境 | 浏览器 + Node.js | JVM |
-| 请求拦截 | ✅ interceptor | ✅ ClientHttpRequestInterceptor |
-| 响应拦截 | ✅ interceptor | ✅ ResponseErrorHandler |
-| 自动 JSON 解析 | ✅ 内置 | ✅ Jackson 集成 |
-| 取消请求 | ✅ AbortController | — |
+| 请求拦截 | ✓ interceptor | ✓ ClientHttpRequestInterceptor |
+| 响应拦截 | ✓ interceptor | ✓ ResponseErrorHandler |
+| 自动 JSON 解析 | ✓ 内置 | ✓ Jackson 集成 |
+| 取消请求 | ✓ AbortController | — |
 | 超时设置 | `timeout: 5000` | `setConnectTimeout` / `setReadTimeout` |
 
 ---
@@ -65,7 +65,7 @@ await axios.delete('/api/users/1');
 ## 3. 请求配置与响应结构
 
 ```javascript
-// ⭐ 全局默认配置（类似 RestTemplate 的全局设置）
+// ★ 全局默认配置（类似 RestTemplate 的全局设置）
 axios.defaults.baseURL = 'http://localhost:8080';
 axios.defaults.timeout = 10000;
 axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
@@ -93,7 +93,7 @@ console.log(res.headers);    // 响应头
 > 类似 Spring 的 `ClientHttpRequestInterceptor`
 
 ```javascript
-// ⭐ 请求拦截器 — 自动加 Token（类似 Feign RequestInterceptor）
+// ★ 请求拦截器 — 自动加 Token（类似 Feign RequestInterceptor）
 axios.interceptors.request.use(config => {
   const token = localStorage.getItem('token');
   if (token) {
@@ -103,7 +103,7 @@ axios.interceptors.request.use(config => {
   return config;
 }, error => Promise.reject(error));
 
-// ⭐ 响应拦截器 — 统一处理错误（类似 @RestControllerAdvice）
+// ★ 响应拦截器 — 统一处理错误（类似 @RestControllerAdvice）
 axios.interceptors.response.use(
   response => {
     const { code, msg, data } = response.data;
@@ -124,7 +124,7 @@ axios.interceptors.response.use(
 | `request interceptor` | `ClientHttpRequestInterceptor` / Feign `RequestInterceptor` |
 | `response interceptor` | `ResponseErrorHandler` / `@RestControllerAdvice` |
 
-### 封装实例（⭐ 推荐）
+### 封装实例（★ 推荐）
 
 ```javascript
 // api.js — 统一封装
@@ -144,4 +144,4 @@ import api from './api';
 const user = await api.get('/users/1');
 ```
 
-> 🎯 **后端对标理解**：Axios = RestTemplate、拦截器 = RequestInterceptor + @RestControllerAdvice、`axios.create()` = 定制 RestTemplate Bean、全局 `defaults` = `application.yml` 配置。
+> **后端对标理解**：Axios = RestTemplate、拦截器 = RequestInterceptor + @RestControllerAdvice、`axios.create()` = 定制 RestTemplate Bean、全局 `defaults` = `application.yml` 配置。

@@ -1,7 +1,7 @@
 # BFS进阶：多源扩散与双向搜索
 > 从"单源遍历"到"多源扩散"——BFS 五种进阶形态的深度剖析
 
-## 📚 目录
+## 目录
 1. [BFS 的进阶形态总览](#1-bfs-的进阶形态总览)
 2. [多源 BFS 详解](#2-多源-bfs-详解)
 3. [双向 BFS 详解](#3-双向-bfs-详解)
@@ -22,7 +22,7 @@
 ④ 状态 BFS：状态 = 节点，操作 = 边（隐式图）
 ⑤ 双向 BFS：两端同时扩散（平方级加速）
 
-⚠️ 识别信号：
+识别信号：
   "最短/最少/扩散" → BFS
   "多起点" → 多源
   "状态可枚举" → 状态 BFS
@@ -40,7 +40,7 @@
 | 双向 | 两端扩散 | O(2×b^(d/2)) | 127 优化 |
 
 ```
-⚠️ 面试第一问："这是什么形态的 BFS？"
+面试第一问："这是什么形态的 BFS？"
   （识别形态 → 套对应模板）
 ```
 
@@ -50,10 +50,10 @@
 BFS 按层扩散：第 k 层节点 = 距离起点 k 步
   → 第一次到达目标 = 最短距离
 
-⚠️ 前提：无权图（每条边代价相同）
+前提：无权图（每条边代价相同）
   带权 → Dijkstra（见最短路专题）
 
-⚠️ 面试必答：
+面试必答：
 "BFS 按层扩散，第一次到达目标时
  不可能有更短路径——更短的会在
  更早的层被访问。"
@@ -74,7 +74,7 @@ BFS 按层扩散：第 k 层节点 = 距离起点 k 步
   一次 BFS 解决多起点问题
   （逐个 BFS 是 O(k×mn)，多源是 O(mn)）
 
-⚠️ 实现上不需要真的建超级源点：
+实现上不需要真的建超级源点：
   所有源点同时入队（距离 0）即可
 ```
 
@@ -101,7 +101,7 @@ public int orangesRotting(int[][] grid) {
     // ② 多源 BFS 扩散
     int minutes = 0;
     int[][] dirs = {{0,1},{0,-1},{1,0},{-1,0}};
-    while (!queue.isEmpty() && fresh > 0) {      // ⚠️ fresh > 0 剪枝
+    while (!queue.isEmpty() && fresh > 0) {      // fresh > 0 剪枝
         int size = queue.size();
         for (int i = 0; i < size; i++) {
             int[] cur = queue.poll();
@@ -120,7 +120,7 @@ public int orangesRotting(int[][] grid) {
     return fresh == 0 ? minutes : -1;            // 有剩余新鲜 → -1
 }
 // 推演 [[2,1,1],[1,1,0],[0,1,1]] → 4 分钟 ✓
-// ⚠️ 面试必答：
+// 面试必答：
 //   "多源 BFS = 虚拟超级源点连所有源——
 //    一次 BFS 得到所有位置到最近源的距离。
 //    分层计时：每层 = 1 分钟。"
@@ -136,7 +136,7 @@ public int orangesRotting(int[][] grid) {
 | 286 | 墙与门 | 所有门 | 最近门距离 |
 
 ```
-⚠️ 统一模板：
+统一模板：
   所有源入队（dist 0）→ 逐层扩散 → 距离数组
 ```
 
@@ -158,7 +158,7 @@ public int orangesRotting(int[][] grid) {
   双向：2 × 8⁵ ≈ 2×32768 ≈ 65536
   → 平方级减少！（开根号效果）
 
-⚠️ 面试必答：
+面试必答：
 "双向 BFS 把状态数从 b^d 降到 2×b^(d/2)——
  平方级减少，适合分支因子大的场景。"
 ```
@@ -183,7 +183,7 @@ public int ladderLength(String beginWord, String endWord,
 
     int steps = 1;
     while (!beginSet.isEmpty() && !endSet.isEmpty()) {
-        // ⚠️ 扩散较小的一侧（性能优化）
+        // 扩散较小的一侧（性能优化）
         if (beginSet.size() > endSet.size()) {
             Set<String> temp = beginSet;
             beginSet = endSet;
@@ -215,7 +215,7 @@ public int ladderLength(String beginWord, String endWord,
     }
     return 0;
 }
-// ⚠️ 双向 BFS 三要点：
+// 双向 BFS 三要点：
 //   ① 两个 Set 分别记录两端当前层
 //   ② 每次扩散"较小"的一侧
 //   ③ 两侧集合相交 → 找到最短路径
@@ -224,15 +224,15 @@ public int ladderLength(String beginWord, String endWord,
 ### 3.3 双向 BFS 的适用条件
 
 ```
-✅ 适用：
+✓ 适用：
   起点和终点都明确
   分支因子大（层数深）
 
-❌ 不适用：
+✗ 不适用：
   终点不明确（如"访问所有节点"）
   状态空间小（单向即可）
 
-⚠️ 识别：
+识别：
   "从 A 到 B 的最少步数" + 状态多
   → 双向 BFS 候选
 ```
@@ -250,7 +250,7 @@ public int ladderLength(String beginWord, String endWord,
     转移：一次操作能到达的新状态
     目标：满足条件的状态
 
-⚠️ 隐式图：
+隐式图：
   边"按需生成"而非预先建图
   例：752 转盘锁 → 每状态生成 8 个邻居
   （显式建图 10⁴ 节点 × 8 边可行，但生成即可）
@@ -301,11 +301,11 @@ private List<String> getNeighbors(String code) {
         neighbors.add(new String(chars));
         chars[i] = (char) ((original - '0' + 9) % 10 + '0');   // -1
         neighbors.add(new String(chars));
-        chars[i] = original;        // ⚠️ 还原
+        chars[i] = original;        // 还原
     }
     return neighbors;
 }
-// ⚠️ 面试第一句：
+// 面试第一句：
 //   "状态空间 10⁴，每状态 8 转移 →
 //    O(8×10⁴) 可行（先评估再写！）"
 ```
@@ -318,7 +318,7 @@ private List<String> getNeighbors(String code) {
   127 单词接龙：n × 26L ✓
   10 位密码：10¹⁰ ✗（爆炸！）
 
-⚠️ 面试必答：
+面试必答：
 "状态数 N，每状态 k 转移 →
  总复杂度 O(N×k)。
  先评估可行性再写代码。"
@@ -335,7 +335,7 @@ Kahn 拓扑排序 = BFS + 入度：
   入度 0 入队 → 出队减入度 → 减到 0 再入队
   处理数 == n → 无环
 
-⚠️ 关系：
+关系：
   拓扑排序的队列操作 = BFS 模板
   （详见拓扑排序专题）
 ```
@@ -348,7 +348,7 @@ Kahn 拓扑排序 = BFS + 入度：
   例：778 水位上升的泳池
   （二分水位 → BFS 能否从起点到终点）
 
-⚠️ 识别：
+识别：
   "最小化最大值" + 网格 → 二分 + BFS
 ```
 
@@ -360,7 +360,7 @@ Kahn 拓扑排序 = BFS + 入度：
   状态 = (x, y, 剩余消除次数)
   → visited 三维数组
 
-⚠️ 识别：
+识别：
   "网格 + 限制条件" → 状态扩展 BFS
 ```
 
@@ -399,7 +399,7 @@ Kahn 拓扑排序 = BFS + 入度：
 | 状态数爆炸 | 超时 | 先评估 |
 | 状态还原漏 | 邻居生成错 | 还原 char[] |
 
-> 🎯 **核心要点**：BFS 进阶 = **多源**（超级源点）+ **双向**（平方级加速）+ **状态**（隐式图 + 可行性评估）。"入队即标记"是铁律；"先评估状态空间"是状态 BFS 第一句；双向 BFS 的 b^d → 2×b^(d/2) 论证是面试必答。
+> **核心要点**：BFS 进阶 = **多源**（超级源点）+ **双向**（平方级加速）+ **状态**（隐式图 + 可行性评估）。"入队即标记"是铁律；"先评估状态空间"是状态 BFS 第一句；双向 BFS 的 b^d → 2×b^(d/2) 论证是面试必答。
 
 ---
 

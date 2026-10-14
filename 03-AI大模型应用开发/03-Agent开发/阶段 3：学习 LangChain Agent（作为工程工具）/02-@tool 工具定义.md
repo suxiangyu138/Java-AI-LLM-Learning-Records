@@ -2,7 +2,7 @@
 
 > 定位：框架版工具声明——`@tool` 装饰器、docstring 铁律、schema 自动生成、与手写注册表的对照（2026-08 基准）
 
-## 📚 目录
+## 目录
 
 1. [@tool 最小示例](#1-tool-最小示例)
 2. [docstring 铁律：它是工具的"prompt"](#2-docstring-铁律它是工具的prompt)
@@ -38,11 +38,11 @@ def get_weather(city: str, unit: str = "celsius") -> str:
 | **docstring** | 工具描述（模型的"何时用"依据） | 手写 description |
 | 返回值 | 直接作为工具结果（自动转字符串） | execute_tool 的返回 |
 
-> 🎯 **核心要点**：`@tool` 的本质 = **"声明与实现同源"的产品化**（阶段 1 的 07 篇手写过 schema 自动生成）。签名 + docstring 即 schema，永远不会不一致。
+> **核心要点**：`@tool` 的本质 = **"声明与实现同源"的产品化**（阶段 1 的 07 篇手写过 schema 自动生成）。签名 + docstring 即 schema，永远不会不一致。
 
 ## 2. docstring 铁律：它是工具的"prompt"
 
-> ⚠️ **框架级铁律**：docstring 是模型判断"何时调用此工具"的唯一依据——**没写 docstring 或写得太差，模型就不调工具**（社区最高频问题："agent not calling tools"）。
+> **框架级铁律**：docstring 是模型判断"何时调用此工具"的唯一依据——**没写 docstring 或写得太差，模型就不调工具**（社区最高频问题："agent not calling tools"）。
 
 | 原则 | 好 docstring | 差 docstring |
 |------|-------------|-------------|
@@ -66,7 +66,7 @@ def search_user(user_id: int) -> str:
     """
 ```
 
-> 💡 描述公式与阶段 2 一致：**做什么 + 何时用 + 边界**。框架只是把"描述"变成了 docstring 的位置。
+> 描述公式与阶段 2 一致：**做什么 + 何时用 + 边界**。框架只是把"描述"变成了 docstring 的位置。
 
 ## 3. schema 自动生成规则
 
@@ -91,7 +91,7 @@ def get_weather(
     """..."""
 ```
 
-> 💡 **enum 用 Literal**：手写 schema 的 enum 字段，框架版用 `Literal[...]` 注解，自动生成——同源原则的又一处体现。
+> **enum 用 Literal**：手写 schema 的 enum 字段，框架版用 `Literal[...]` 注解，自动生成——同源原则的又一处体现。
 
 ## 4. 高级注入：InjectedState 与 InjectedStore
 
@@ -117,10 +117,10 @@ def save_note(content: str, store: InjectedStore) -> str:
 
 | 注入类型 | 来源 | 模型可见？ |
 |---------|------|:---:|
-| `InjectedState` | Agent 运行时状态 | ❌（不生成 schema） |
-| `InjectedStore` | 跨会话存储 | ❌ |
+| `InjectedState` | Agent 运行时状态 | ✗（不生成 schema） |
+| `InjectedStore` | 跨会话存储 | ✗ |
 
-> 💡 对应手写：就是你在 execute_tool 里"额外传入的上下文"——框架把它变成了声明式注入。
+> 对应手写：就是你在 execute_tool 里"额外传入的上下文"——框架把它变成了声明式注入。
 
 ## 5. 结构化返回与 ToolConfig
 
@@ -156,7 +156,7 @@ def get_weather_structured(city: str) -> tuple[str, WeatherResult]:
 | 优点 | 全透明、零依赖 | 少写 70% 样板、永不脱节 |
 | 缺点 | 样板多、易脱节 | 隐式行为需理解（04 篇） |
 
-> 🎯 **核心要点**：@tool 的学习重点是**"它替你做了什么"**——签名 → schema、docstring → description、异常 → 错误回传。这些你都会手写，现在只是换了位置。docstring 质量依然是工具成败的第一变量。
+> **核心要点**：@tool 的学习重点是**"它替你做了什么"**——签名 → schema、docstring → description、异常 → 错误回传。这些你都会手写，现在只是换了位置。docstring 质量依然是工具成败的第一变量。
 
 ## 7. 常见坑速查
 

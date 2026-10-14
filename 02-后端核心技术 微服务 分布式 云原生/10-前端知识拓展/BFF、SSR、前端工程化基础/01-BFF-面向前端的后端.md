@@ -1,6 +1,6 @@
 # 01 - BFF：Backend For Frontend
 
-> 🎯 BFF 不是新语言，而是一种架构模式 — 为每种前端（Web/iOS/Android）定制的 API 聚合层，解决微服务下"前端调 N 个接口"的体验问题
+> BFF 不是新语言，而是一种架构模式 — 为每种前端（Web/iOS/Android）定制的 API 聚合层，解决微服务下"前端调 N 个接口"的体验问题
 
 ---
 
@@ -59,7 +59,7 @@
 ## 3. BFF 典型职责
 
 ```javascript
-// ⭐ BFF 聚合示例（Node.js）
+// ★ BFF 聚合示例（Node.js）
 // 前端只需调 /page/order-detail → BFF 内部并行调 3 个服务
 
 app.get('/page/order-detail/:id', async (req, res) => {
@@ -93,13 +93,13 @@ app.get('/page/order-detail/:id', async (req, res) => {
 ## 4. Java 后端如何配合 BFF
 
 ```java
-// ⭐ 策略1：BFF 直接调微服务 REST API（标准做法）
+// ★ 策略1：BFF 直接调微服务 REST API（标准做法）
 // BFF 是独立的 Node.js/Java 服务，通过 Feign 或 RestTemplate 调用
 
-// ⭐ 策略2：GraphQL 充当 BFF（将聚合能力标准化）
+// ★ 策略2：GraphQL 充当 BFF（将聚合能力标准化）
 // 后端只需暴露 GraphQL Schema，前端声明需要哪些字段
 
-// ⭐ 策略3：后端提供"粗粒度"视图接口（没有独立 BFF 时的简化方案）
+// ★ 策略3：后端提供"粗粒度"视图接口（没有独立 BFF 时的简化方案）
 @RestController
 public class PageController {
 
@@ -120,4 +120,4 @@ public class PageController {
 | GraphQL | 前端需求多变的项目 | 前端声明数据需求 | 后端复杂 |
 | 微服务内聚合接口 | 小型项目 | 简单快速 | 服务职责不清晰 |
 
-> 🎯 **BFF 核心理解**：它解决了"微服务太碎、前端调不过来"的矛盾。后端提供原子 API（单服务单职责），BFF 负责聚合（按页面拼装）。后端不需要为每个前端定制接口。
+> **BFF 核心理解**：它解决了"微服务太碎、前端调不过来"的矛盾。后端提供原子 API（单服务单职责），BFF 负责聚合（按页面拼装）。后端不需要为每个前端定制接口。

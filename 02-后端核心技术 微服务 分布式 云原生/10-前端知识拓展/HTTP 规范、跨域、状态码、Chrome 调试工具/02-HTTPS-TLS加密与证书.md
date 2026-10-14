@@ -1,6 +1,6 @@
 # 02 - HTTPS / TLS 加密与证书
 
-> 🎯 HTTP 是明文裸奔、HTTPS 加了 TLS 铠甲 — 理解 TLS 握手、证书链、双向认证，是后端安全的基础设施
+> HTTP 是明文裸奔、HTTPS 加了 TLS 铠甲 — 理解 TLS 握手、证书链、双向认证，是后端安全的基础设施
 
 ---
 
@@ -135,4 +135,4 @@ public RestTemplate restTemplate() throws Exception {
 }
 ```
 
-> 🎯 **生产铁律**：HTTPS 必配、TLS 1.2+ 仅用、HttpOnly+Secure Cookie、证书过期监控（<30天告警）。双向 mTLS 是零信任架构的基础。
+> **生产铁律**：HTTPS 必配、TLS 1.2+ 仅用、HttpOnly+Secure Cookie、证书过期监控（<30天告警）。双向 mTLS 是零信任架构的基础。

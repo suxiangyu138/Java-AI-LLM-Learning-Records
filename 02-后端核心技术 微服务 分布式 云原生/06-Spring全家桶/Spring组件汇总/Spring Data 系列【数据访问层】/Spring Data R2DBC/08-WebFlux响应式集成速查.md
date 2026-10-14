@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [全链路非阻塞架构](#1-全链路非阻塞架构)
 2. [响应式三件套：Controller/Service/Repository](#2-响应式三件套controllerservicerepository)
@@ -36,7 +36,7 @@ Netty（WebFlux）──► WebClient（第三方 HTTP）──► R2DBC（数�
 | MQ | 同步生产者 | 响应式客户端（RocketMQ reactive / Pulsar reactive） |
 | 连接池 | Hikari | r2dbc-pool |
 
-> 🎯 面试必答：**"什么项目适合 WebFlux + R2DBC？"**——答：**IO 密集 + 高并发 + 链路可控**（网关/聚合服务/实时推送/数据服务）；业务逻辑重、关联复杂、团队不熟响应式的项目**不建议**（复杂度收益不匹配）；**加分句**：WebFlux + R2DBC 是"同一套非阻塞心智模型"的全栈组合，缺一不可——混 MVC + R2DBC 意义减半，混 WebFlux + JDBC 等于没换。
+> 面试必答：**"什么项目适合 WebFlux + R2DBC？"**——答：**IO 密集 + 高并发 + 链路可控**（网关/聚合服务/实时推送/数据服务）；业务逻辑重、关联复杂、团队不熟响应式的项目**不建议**（复杂度收益不匹配）；**加分句**：WebFlux + R2DBC 是"同一套非阻塞心智模型"的全栈组合，缺一不可——混 MVC + R2DBC 意义减半，混 WebFlux + JDBC 等于没换。
 
 ## 2. 响应式三件套：Controller/Service/Repository
 
@@ -50,7 +50,7 @@ public class ProductController {
     private final ProductService productService;
 
     @GetMapping("/{id}")
-    public Mono<Product> get(@PathVariable Long id) {              // ✅ 返回 Mono
+    public Mono<Product> get(@PathVariable Long id) {              // ✓ 返回 Mono
         return productService.getProduct(id);
     }
 
@@ -60,7 +60,7 @@ public class ProductController {
     }
 
     @PostMapping
-    public Mono<Product> create(@RequestBody Product p) {          // ✅ 非阻塞
+    public Mono<Product> create(@RequestBody Product p) {          // ✓ 非阻塞
         return productService.create(p);
     }
 }
@@ -109,7 +109,7 @@ public class ProductService {
 }
 ```
 
-> ⚠️ **事务边界注意**：`@Transactional(readOnly = true)` 也是事务（占用连接）——**纯读方法可以不用 @Transactional**（单查询天然原子）；事务只包"多写/跨表一致性"（[06 篇](06-响应式事务与并发控制速查.md)）。
+> **事务边界注意**：`@Transactional(readOnly = true)` 也是事务（占用连接）——**纯读方法可以不用 @Transactional**（单查询天然原子）；事务只包"多写/跨表一致性"（[06 篇](06-响应式事务与并发控制速查.md)）。
 
 ## 3. 阻塞陷阱：性能第一杀手
 
@@ -129,17 +129,17 @@ public class ProductService {
 // 反模式：在 Netty 事件循环上 block（灾难）
 @GetMapping("/{id}")
 public Mono<Product> get(@PathVariable Long id) {
-    return Mono.fromSupplier(() -> productRepository.findById(id).block())  // ❌
+    return Mono.fromSupplier(() -> productRepository.findById(id).block())  // ✗
             // 事件循环线程被占 → 所有请求排队
 }
 
 // 正解：直接返回响应式
 public Mono<Product> get(@PathVariable Long id) {
-    return productRepository.findById(id);   // ✅
+    return productRepository.findById(id);   // ✓
 }
 ```
 
-> 🎯 面试必答：**"WebFlux 里 block() 为什么是灾难？"**——WebFlux 的请求处理跑在 **Netty 事件循环线程**（数量 = CPU 核数，如 8 个）上；`.block()` 会让事件循环线程**原地等待**——8 个线程被 8 个慢请求占完，整个服务对一切请求失去响应（比线程池模型更脆，因为事件循环线程同时还要管网络收发）；**铁律：事件循环线程上永远不阻塞**。
+> 面试必答：**"WebFlux 里 block() 为什么是灾难？"**——WebFlux 的请求处理跑在 **Netty 事件循环线程**（数量 = CPU 核数，如 8 个）上；`.block()` 会让事件循环线程**原地等待**——8 个线程被 8 个慢请求占完，整个服务对一切请求失去响应（比线程池模型更脆，因为事件循环线程同时还要管网络收发）；**铁律：事件循环线程上永远不阻塞**。
 
 ### 3.2 排查方法
 
@@ -201,7 +201,7 @@ public Mono<Product> fallback(Long id, Throwable t) {
 }
 ```
 
-> 💡 与 [名词系列-容错](../../../../09-Web开发全流程/后端 分布式常用名词通俗解释/03-容错保护：熔断、降级与雪崩.md) 的联动：**超时/熔断/降级/限流在响应式下全部是"管道操作符"**（timeout/retryWhen/onErrorResume + Resilience4j 响应式适配）——概念不变，载体从"线程拦截"变成"管道包装"；**绝不能用同步熔断库**（其内部线程池阻塞会破坏非阻塞）。
+> 与 [名词系列-容错](../../../../09-Web开发全流程/后端 分布式常用名词通俗解释/03-容错保护：熔断、降级与雪崩.md) 的联动：**超时/熔断/降级/限流在响应式下全部是"管道操作符"**（timeout/retryWhen/onErrorResume + Resilience4j 响应式适配）——概念不变，载体从"线程拦截"变成"管道包装"；**绝不能用同步熔断库**（其内部线程池阻塞会破坏非阻塞）。
 
 ## 5. 响应式测试
 
@@ -243,7 +243,7 @@ class ProductRepositoryTest {
 | Testcontainers | **真库测试**（r2dbc-mysql 容器），关键 SQL 必测 |
 | `@Transactional` 测试 | 响应式测试默认**不自动回滚**（与 JPA 测试不同！）——测试后手动清理或容器隔离 |
 
-> ⚠️ 响应式测试三坑：① **没有 @DataJpaTest 等价物**（无 JPA 切片，用 @SpringBootTest + r2dbc-h2/容器）；② **事务不回滚**（响应式事务的提交在管道完成时，测试框架无法像 JPA 一样自动回滚——用容器/清理）；③ 断言必须 StepVerifier（`block()` 在测试里可用但会掩盖时序问题）。
+> 响应式测试三坑：① **没有 @DataJpaTest 等价物**（无 JPA 切片，用 @SpringBootTest + r2dbc-h2/容器）；② **事务不回滚**（响应式事务的提交在管道完成时，测试框架无法像 JPA 一样自动回滚——用容器/清理）；③ 断言必须 StepVerifier（`block()` 在测试里可用但会掩盖时序问题）。
 
 ## 6. 常见问题排错
 
@@ -257,7 +257,7 @@ class ProductRepositoryTest {
 | 返回 500 但无日志 | 错误被管道吞/未订阅 | onErrorResume 记录 + 全局错误处理器 |
 | 内存增长 | flatMap 无并发限制 | `.flatMap(..., concurrency)` / `.concatMap`（[07 篇](07-性能优化与批量速查.md) 5 节） |
 
-> 🎯 排错口诀：**"卡死查 block、丢数据查订阅、并发差查阻塞混入"**——响应式三问，覆盖 90% 的线上事故。
+> 排错口诀：**"卡死查 block、丢数据查订阅、并发差查阻塞混入"**——响应式三问，覆盖 90% 的线上事故。
 
 ---
 

@@ -1,10 +1,10 @@
 # AI IDE 三强：Cursor / Windsurf / GitHub Copilot
 
-> 🖥️ 2026 年三大 AI IDE —— Cursor Tab 补全最优、Windsurf 性价比最高、Copilot 生态最广
+> 2026 年三大 AI IDE —— Cursor Tab 补全最优、Windsurf 性价比最高、Copilot 生态最广
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [核心对比矩阵](#1-核心对比矩阵)
 2. [Cursor](#2-cursor)
@@ -19,11 +19,11 @@
 |------|:------:|:--------:|:------------:|
 | **类型** | AI IDE (VS Code Fork) | AI IDE (VS Code Fork) | IDE 插件 |
 | **价格** | $20 Pro / $60 Pro+ | $15 Pro | $10 个人 / $19 商业 / $39 企业 |
-| **免费版** | ✅ 限制版 | ✅ 限制版 | ✅ 有免费版 |
-| **代码补全** | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐⭐ |
-| **Agent 能力** | ⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐ |
+| **免费版** | ✓ 限制版 | ✓ 限制版 | ✓ 有免费版 |
+| **代码补全** | ★★★★★ | ★★★★ | ★★★★ |
+| **Agent 能力** | ★★★★ | ★★★★ | ★★★ |
 | **模型支持** | 全系Claude/GPT/Gemini | 多模型+自研SWE-1.5 | GPT-5/Claude/Gemini |
-| **自有API Key** | ✅ | ✅ | ❌ |
+| **自有API Key** | ✓ | ✓ | ✗ |
 | **IDE 覆盖** | 仅 Cursor | 仅 Windsurf | VS Code/JetBrains/VS/Xcode/Neovim |
 | **适合** | 全栈独立开发者 | 预算敏感/前端 | 企业/GitHub重度用户 |
 
@@ -73,7 +73,7 @@
 
 ---
 
-> 🎯 补全最佳→Cursor，性价比→Windsurf，企业→Copilot。三者 Agent 都不如 Claude Code。
+> 补全最佳→Cursor，性价比→Windsurf，企业→Copilot。三者 Agent 都不如 Claude Code。
 
 ---
 

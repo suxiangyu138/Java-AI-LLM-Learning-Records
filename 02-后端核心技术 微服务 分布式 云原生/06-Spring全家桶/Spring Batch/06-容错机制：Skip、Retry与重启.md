@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [容错三角与失败分类](#1-容错三角与失败分类)
 2. [Skip：跳过坏数据](#2-skip跳过坏数据)
@@ -23,7 +23,7 @@
 | 瞬时故障（可恢复） | 连接超时、锁等待、限流 429 | **Retry**（退避重试） |
 | 进程级失败 | 宕机、OOM、人工停止 | **重启/续跑**（元数据断点） |
 
-> 💡 决策口诀：**数据问题 skip，资源问题 retry，进程问题 restart**。把"数据库临时不可用"配成 skip 是生产事故的开端——它会静默丢数据。
+> 决策口诀：**数据问题 skip，资源问题 retry，进程问题 restart**。把"数据库临时不可用"配成 skip 是生产事故的开端——它会静默丢数据。
 
 ## 2. Skip：跳过坏数据
 
@@ -78,7 +78,7 @@ public class OrderSkipListener implements SkipListener<Order, Order> {
 }
 ```
 
-> 💡 生产要求：Skip 必须配监听器落审计表——"跳过了什么、为什么跳"是数据质量报告的输入；skipLimit 上限内还有"超过上限怎么办"：**超限即 Step 失败**，可重启后用不同策略继续。
+> 生产要求：Skip 必须配监听器落审计表——"跳过了什么、为什么跳"是数据质量报告的输入；skipLimit 上限内还有"超过上限怎么办"：**超限即 Step 失败**，可重启后用不同策略继续。
 
 ## 3. Retry：重试可恢复错误
 
@@ -114,7 +114,7 @@ return new StepBuilder("import", jobRepository)
 | `.noRetry(...)` | 排除子类 |
 | RetryListener | `onError(retryCount)` 回调：重试次数告警、降级开关 |
 
-> ⚠️ 重试与事务的耦合：Retry 发生在 **chunk 事务内**——重试期间 DB 连接被事务占用，长退避会拉长事务。实践：backoff 上限别超过事务超时；连接池紧张时优先"外部重试"（Job 级重启）而非 Step 内长退避。
+> 重试与事务的耦合：Retry 发生在 **chunk 事务内**——重试期间 DB 连接被事务占用，长退避会拉长事务。实践：backoff 上限别超过事务超时；连接池紧张时优先"外部重试"（Job 级重启）而非 Step 内长退避。
 
 ## 4. 重启：续跑而非重跑
 
@@ -145,7 +145,7 @@ new StepBuilder("import", jobRepository)
 
 6.0 的 `JobOperator.restart(executionId)` 用上次失败执行的参数重启；`JobOperator.recover(executionId)`（**6.0 新增**）把 FAILED 执行标记为 ABANDONED 以便重新启动——此前只能手工改库。
 
-> ⚠️ 6.0 重启兼容警告（再强调）：**5.x 遗留的 FAILED 实例不能在 6.0 直接重启**（JobParameters 序列化格式变化）——迁移前先 restart 到成功或 recover 掉。
+> 6.0 重启兼容警告（再强调）：**5.x 遗留的 FAILED 实例不能在 6.0 直接重启**（JobParameters 序列化格式变化）——迁移前先 restart 到成功或 recover 掉。
 
 ## 5. 事务与回滚语义
 
@@ -165,12 +165,12 @@ chunk 内任一环节异常（未配置容错）：
 
 | 资源 | 事务性 | 风险与对策 |
 |------|--------|-----------|
-| 数据库（JDBC/JPA） | ✅ 参与 chunk 事务 | 无 |
-| 文件写（FlatFileItemWriter） | ❌ | 回滚后文件已写半截 → 用 `shouldDeleteIfEmpty` + 重启覆盖模式，或先写临时文件再原子 rename |
-| Kafka/JMS 发送 | ❌（除非配置 broker 事务） | 已发送消息不可回收 → 消费端幂等 + 业务键去重 |
-| 外部 API 调用 | ❌ | 幂等接口 + 失败重放安全设计 |
+| 数据库（JDBC/JPA） | ✓ 参与 chunk 事务 | 无 |
+| 文件写（FlatFileItemWriter） | ✗ | 回滚后文件已写半截 → 用 `shouldDeleteIfEmpty` + 重启覆盖模式，或先写临时文件再原子 rename |
+| Kafka/JMS 发送 | ✗（除非配置 broker 事务） | 已发送消息不可回收 → 消费端幂等 + 业务键去重 |
+| 外部 API 调用 | ✗ | 幂等接口 + 失败重放安全设计 |
 
-> 🎯 结论：**Skip/Retry 只保证"数据库侧"的强一致，非事务写入必须自带幂等**——这是批处理生产事故的头号来源。
+> 结论：**Skip/Retry 只保证"数据库侧"的强一致，非事务写入必须自带幂等**——这是批处理生产事故的头号来源。
 
 ## 6. 容错组合与完整示例
 
@@ -206,6 +206,6 @@ Step importStep(JobRepository jobRepository, PlatformTransactionManager txManage
 
 ---
 
-> 🎯 **核心要点**：容错三角的选型口诀"数据 skip、资源 retry、进程 restart"；三类 skip 中写跳过代价最大（整块回滚 + 逐条重放）；6.0 的 retry 内核已迁至 Spring Framework 7；重启续跑依赖元数据 + ExecutionContext，但"数据库之外的世界没有回滚"，幂等设计是容错的另一半。
+> **核心要点**：容错三角的选型口诀"数据 skip、资源 retry、进程 restart"；三类 skip 中写跳过代价最大（整块回滚 + 逐条重放）；6.0 的 retry 内核已迁至 Spring Framework 7；重启续跑依赖元数据 + ExecutionContext，但"数据库之外的世界没有回滚"，幂等设计是容错的另一半。
 
 **下一模块**：[07-并行与分布式：多线程、分区与远程执行](07-并行与分布式：多线程、分区与远程执行.md)　|　**返回总览**：[00-Spring Batch知识体系总览](00-Spring Batch知识体系总览.md)

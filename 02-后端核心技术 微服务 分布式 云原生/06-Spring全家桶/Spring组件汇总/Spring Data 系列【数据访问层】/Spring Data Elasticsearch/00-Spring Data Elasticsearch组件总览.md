@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [组件一句话定位](#1-组件一句话定位)
 2. [版本现状（2026-08）](#2-版本现状2026-08)
@@ -55,31 +55,31 @@
 | 与 Spring 生态 | 无集成 | Repository、审计、事件、Boot 自动配置 |
 | 适合 | 复杂运维脚本、API 全量透传 | 业务 CRUD + 搜索 + 聚合的 Java 服务 |
 
-> 🎯 判断标准一句话：**"业务代码里有没有 POJO ↔ ES 文档的转换和重复查询逻辑？"**——有，用 Spring Data Elasticsearch；没有（纯脚本/运维），直接用原生客户端更轻。
+> 判断标准一句话：**"业务代码里有没有 POJO ↔ ES 文档的转换和重复查询逻辑？"**——有，用 Spring Data Elasticsearch；没有（纯脚本/运维），直接用原生客户端更轻。
 
 ### 1.2 适用与不适用场景
 
 | 场景 | 适合？ | 说明 |
 |------|:---:|------|
-| 商品/内容搜索、全文检索 | ✅ | 派生方法 + @Query 是主战场 |
-| 日志/指标聚合分析 | ✅ | SearchOperations + 聚合 API |
-| 向量检索 / RAG 知识库（2026 主流） | ✅ | dense_vector 字段 + NativeQuery kNN（5.3.1+） |
-| 需要强事务/强一致性的核心数据 | ❌ | ES 无事务、近实时（refresh 延迟），事务性数据用 MySQL |
-| 高度定制的 ES 高级 API | ⚠️ 部分 | NativeQuery 可透传，但不如原生客户端直接 |
-| 复杂地理/嵌套递归查询 | ⚠️ 部分 | Criteria 支持有限，走 NativeQuery/自定义实现 |
+| 商品/内容搜索、全文检索 | ✓ | 派生方法 + @Query 是主战场 |
+| 日志/指标聚合分析 | ✓ | SearchOperations + 聚合 API |
+| 向量检索 / RAG 知识库（2026 主流） | ✓ | dense_vector 字段 + NativeQuery kNN（5.3.1+） |
+| 需要强事务/强一致性的核心数据 | ✗ | ES 无事务、近实时（refresh 延迟），事务性数据用 MySQL |
+| 高度定制的 ES 高级 API | 部分 | NativeQuery 可透传，但不如原生客户端直接 |
+| 复杂地理/嵌套递归查询 | 部分 | Criteria 支持有限，走 NativeQuery/自定义实现 |
 
-> ⚠️ **最大认知误区**：把 ES 当"主数据库"用。ES 是搜索/分析引擎，不是事务数据库——写入近实时（默认 refresh 1s）、无 ACID、更新是"删除+重建"，业务主数据存 MySQL/PostgreSQL，ES 只做索引副本。
+> **最大认知误区**：把 ES 当"主数据库"用。ES 是搜索/分析引擎，不是事务数据库——写入近实时（默认 refresh 1s）、无 ACID、更新是"删除+重建"，业务主数据存 MySQL/PostgreSQL，ES 只做索引副本。
 
 ### 1.3 与其他 Spring Data 组件的定位差异
 
 | 组件 | 存储 | 数据模型 | 事务 | 本系列的差异点 |
 |------|------|---------|:---:|--------------|
-| Spring Data JPA | 关系型数据库 | 表/实体/关联 | ✅ | 有外键、有事务，ES 全无 |
-| Spring Data Redis | Redis | K/V、集合 | ⚠️ 有限 | 无索引、无查询 DSL |
-| Spring Data MongoDB | MongoDB | 文档 | ⚠️ | 有聚合管道，无倒排索引/向量检索（Mongo 8 起有部分） |
-| **Spring Data Elasticsearch** | **ES 9** | **文档 + 倒排索引 + 向量** | ❌ | 查询表达式是 JSON DSL，映射是动态的 |
+| Spring Data JPA | 关系型数据库 | 表/实体/关联 | ✓ | 有外键、有事务，ES 全无 |
+| Spring Data Redis | Redis | K/V、集合 | 有限 | 无索引、无查询 DSL |
+| Spring Data MongoDB | MongoDB | 文档 | | 有聚合管道，无倒排索引/向量检索（Mongo 8 起有部分） |
+| **Spring Data Elasticsearch** | **ES 9** | **文档 + 倒排索引 + 向量** | ✗ | 查询表达式是 JSON DSL，映射是动态的 |
 
-> 💡 本系列定位"查得快"——组件速查；Repository 设计哲学（派生方法、Pageable、审计）与 Spring Data JPA 同源（同级目录另有 Spring Data JPA 系列），会 JPA 的开发者上手本组件几乎零门槛。
+> 本系列定位"查得快"——组件速查；Repository 设计哲学（派生方法、Pageable、审计）与 Spring Data JPA 同源（同级目录另有 Spring Data JPA 系列），会 JPA 的开发者上手本组件几乎零门槛。
 
 ## 2. 版本现状（2026-08）
 
@@ -92,7 +92,7 @@
 | 2024.0 | 5.3.x | 8.13.4 | 6.1.x | 停止维护 |
 | 2021.2（Raj） | 4.4.x | 7.17.3 | 5.3.x | 停止维护 |
 
-> ⚠️ **版本策略（2026 起）**：ES 官方已全面转向 9.x，Spring Data 6.x 线只对接 ES 9；**存量 ES 8.x 项目停留在 5.5.x 且已停止维护**——若必须用 ES 8，考虑升级集群到 9.x 或评估 [SQLite 向量搜索](../../../../01-关系型数据库/SQLite/00-SQLite知识体系总览.md) 等替代，别在死线上再投新功能。
+> **版本策略（2026 起）**：ES 官方已全面转向 9.x，Spring Data 6.x 线只对接 ES 9；**存量 ES 8.x 项目停留在 5.5.x 且已停止维护**——若必须用 ES 8，考虑升级集群到 9.x 或评估 [SQLite 向量搜索](../../../../01-关系型数据库/SQLite/00-SQLite知识体系总览.md) 等替代，别在死线上再投新功能。
 
 ### 2.1 6.x 线关键变化（5.5.x → 6.0.x 迁移要点）
 
@@ -144,7 +144,7 @@
 | 向量嵌入生成 | Spring AI / LangChain4j / 自建 | ES 只存向量并检索，不做嵌入 |
 | 事务 / 分布式一致性 | MySQL/Seata | ES 无事务语义，本组件也不假装有 |
 
-> ⚠️ **常见归因错误**：搜索不准怪"Spring Data 不好用"——搜索质量由分词器、mapping、评分模型决定，组件只负责把查询送到引擎；排查路径应是"DSL 对不对 → 分词对不对 → 索引结构对不对"。
+> **常见归因错误**：搜索不准怪"Spring Data 不好用"——搜索质量由分词器、mapping、评分模型决定，组件只负责把查询送到引擎；排查路径应是"DSL 对不对 → 分词对不对 → 索引结构对不对"。
 
 ## 4. 与深度体系的映射
 
@@ -157,7 +157,7 @@
 | 06-聚合、滚动与批量速查 | [04-ELK-05 ES聚合分析](../../../../04-ELK/Elasticsearch/05-ES聚合分析.md) |
 | 08-集成地图与常见问题 | [04-ELK-06 ES集群高可用与性能优化](../../../../04-ELK/Elasticsearch/06-ES集群高可用与性能优化.md) |
 
-> 💡 分工约定：**速查页回答"API 怎么写"，深度页回答"引擎怎么工作"**——分词器选型、评分原理、集群参数在 04-ELK 系列；本系列所有示例的 DSL 语义都可以去 [04-ES查询DSL详解](../../../../04-ELK/Elasticsearch/04-ES查询DSL详解.md) 溯源。
+> 分工约定：**速查页回答"API 怎么写"，深度页回答"引擎怎么工作"**——分词器选型、评分原理、集群参数在 04-ELK 系列；本系列所有示例的 DSL 语义都可以去 [04-ES查询DSL详解](../../../../04-ELK/Elasticsearch/04-ES查询DSL详解.md) 溯源。
 
 ## 5. 快速上手 3 步
 
@@ -207,7 +207,7 @@ docker run -d --name es9 -p 9200:9200 -e "discovery.type=single-node" \
   -e "xpack.security.enabled=false" docker.elastic.co/elasticsearch/elasticsearch:9.4.2
 ```
 
-> 💡 ES 9 镜像默认启用安全（xpack），开发环境显式关掉安全或配置 API key 均可；生产必须启用 TLS + 认证（[08 篇常见问题](08-集成地图与常见问题.md) 有认证排错清单）。
+> ES 9 镜像默认启用安全（xpack），开发环境显式关掉安全或配置 API key 均可；生产必须启用 TLS + 认证（[08 篇常见问题](08-集成地图与常见问题.md) 有认证排错清单）。
 
 ### 5.2 三步验证集成真的通了
 
@@ -217,7 +217,7 @@ docker run -d --name es9 -p 9200:9200 -e "discovery.type=single-node" \
 | ② 写读验证 | save 一条 → findById | 返回同一文档（注意 1s refresh 延迟） |
 | ③ 控制台核对 | 用 Kibana/curl 查 `_cat/indices` | 索引存在，文档数 +1 |
 
-> 💡 排障起点：**先确认 ES 通不通（curl 9200），再查 Java 侧**——`Connection refused` 一般是集群没起或 uris 配错，不是组件问题。
+> 排障起点：**先确认 ES 通不通（curl 9200），再查 Java 侧**——`Connection refused` 一般是集群没起或 uris 配错，不是组件问题。
 
 ## 6. 速查导航
 

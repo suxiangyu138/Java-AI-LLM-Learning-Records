@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [CSRF：原理与攻击模型](#1-csrf原理与攻击模型)
 2. [Boot 4 默认开启：403 事故与正确解法](#2-boot-4-默认开启403-事故与正确解法)
@@ -33,8 +33,8 @@
 
 | 防御方式 | 机制 | Spring 支持 |
 |---------|------|:---:|
-| 同步令牌模式 | Session 绑定随机 token，请求头/表单回传 | ✅ 默认 |
-| SameSite Cookie | 浏览器限制跨站携带 Cookie | ✅ 配合 |
+| 同步令牌模式 | Session 绑定随机 token，请求头/表单回传 | ✓ 默认 |
+| SameSite Cookie | 浏览器限制跨站携带 Cookie | ✓ 配合 |
 | 双重提交 | Cookie 与请求参数各一个 token 并比对 | 可配置 |
 
 ## 2. Boot 4 默认开启：403 事故与正确解法
@@ -62,7 +62,7 @@ http.csrf(csrf -> csrf.disable());      // 无 Cookie → 无 CSRF 风险面 →
 http.csrf(csrf -> csrf.spa());          // 7.0 新 DSL：SPA 友好模式（见下节）
 ```
 
-> ⚠️ **判定准则**：CSRF 防护针对的是 **Cookie 会话**。若认证凭据不在 Cookie（JWT 在内存/请求头），CSRF 风险面不存在，可安全关闭；若用 Cookie 会话 + SPA，用 `csrf.spa()` 而非粗暴关闭。
+> **判定准则**：CSRF 防护针对的是 **Cookie 会话**。若认证凭据不在 Cookie（JWT 在内存/请求头），CSRF 风险面不存在，可安全关闭；若用 Cookie 会话 + SPA，用 `csrf.spa()` 而非粗暴关闭。
 
 ### 2.3 关闭 CSRF 前自检
 
@@ -95,7 +95,7 @@ http.csrf(csrf -> csrf.spa());
 | 保护强度 | 关 CSRF 则无 | **保持开启** |
 | 前端适配 | 自研 | 标准 `X-XSRF-TOKEN` 头 |
 
-> 🎯 **面试点**：`csrf.spa()` 是 7.0 的差异化特性——"SPA 场景不必在安全和体验之间二选一"。答"前后端分离的 CSRF 怎么做"时，这是 2026 年标准答案。
+> **面试点**：`csrf.spa()` 是 7.0 的差异化特性——"SPA 场景不必在安全和体验之间二选一"。答"前后端分离的 CSRF 怎么做"时，这是 2026 年标准答案。
 
 ## 4. CORS：跨域配置全解
 
@@ -149,14 +149,14 @@ http.headers(headers -> headers
 
 | 响应头 | 作用 | 默认值 |
 |--------|------|:---:|
-| `Cache-Control: no-store` | 禁止缓存敏感页 | ✅ |
-| `X-Content-Type-Options: nosniff` | 防 MIME 嗅探 | ✅ |
-| `X-Frame-Options: SAMEORIGIN` | 防点击劫持 | ✅ |
-| `Strict-Transport-Security` | HSTS 强制 HTTPS | ✅ |
+| `Cache-Control: no-store` | 禁止缓存敏感页 | ✓ |
+| `X-Content-Type-Options: nosniff` | 防 MIME 嗅探 | ✓ |
+| `X-Frame-Options: SAMEORIGIN` | 防点击劫持 | ✓ |
+| `Strict-Transport-Security` | HSTS 强制 HTTPS | ✓ |
 | `Content-Security-Policy` | CSP 内容安全策略 | 需显式配置 |
 | `X-XSS-Protection` | 旧式 XSS 过滤 | 现代浏览器弃用（CSP 替代） |
 
-> 💡 **HSTS 注意**：`Strict-Transport-Security` 生效后浏览器会强制 HTTPS——**HTTP 内网环境会整站打不开**，内网/测试环境需评估再开。
+> **HSTS 注意**：`Strict-Transport-Security` 生效后浏览器会强制 HTTPS——**HTTP 内网环境会整站打不开**，内网/测试环境需评估再开。
 
 ## 6. 点击劫持与 XSS 防护
 
@@ -209,7 +209,7 @@ SecurityFilterChain apiChain(HttpSecurity http) throws Exception {
 - [ ] 响应头默认集完整（nosniff/frame-options/cache-control）
 - [ ] 上传/富文本场景有 XSS 清洗
 
-> 🎯 **核心要点**：Boot 4 升级的 403 浪潮根因就是 CSRF 默认值变化——**关闭 CSRF 不是默认动作，而是有条件的决策**（无 Cookie 会话才可关）。7.0 的 `csrf.spa()` 让 SPA 保持防护；CORS 管"谁能读"、CSRF 管"不许伪造写"，两者不可混。安全头是最后一道免费防线，默认值已很完善，CSP 按需加强。
+> **核心要点**：Boot 4 升级的 403 浪潮根因就是 CSRF 默认值变化——**关闭 CSRF 不是默认动作，而是有条件的决策**（无 Cookie 会话才可关）。7.0 的 `csrf.spa()` 让 SPA 保持防护；CORS 管"谁能读"、CSRF 管"不许伪造写"，两者不可混。安全头是最后一道免费防线，默认值已很完善，CSP 按需加强。
 
 ---
 

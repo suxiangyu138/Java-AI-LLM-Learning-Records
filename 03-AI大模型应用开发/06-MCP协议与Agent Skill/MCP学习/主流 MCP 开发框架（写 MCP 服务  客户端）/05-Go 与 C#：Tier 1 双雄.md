@@ -2,7 +2,7 @@
 
 > 基础设施与 .NET 阵营的 MCP 主战场：Go 的"社区 vs 官方"双轨（mark3labs/mcp-go 与官方 go-sdk）、C# 的单一官方选择（Tier 1 成熟）——代码对照与选型。
 
-## 📚 目录
+## 目录
 
 1. [Go 生态：双轨并存](#1-go-生态双轨并存)
 2. [mark3labs/mcp-go：社区共识](#2-mark3labsmcp-go社区共识)
@@ -249,7 +249,7 @@ var result = await client.CallToolAsync("get_weather", new() { ["city"] = "北�
 4. mark3labs 中间件（ToolHandlerMiddleware）= 横切逻辑不污染工具（阶段 3 哲学）。
 5. Go 的选型规律与 Python 同构——"应用层社区、协议层官方"是跨语言通则。
 
-> 🎯 **核心要点**：Go 生态 = 双轨并存（mark3labs 社区共识做应用、官方 go-sdk Tier 1 做基础设施，2026-07-28 合规是分水岭，GitLab 案例证明迁移约 1 天有界重构）；C# 生态 = 单一官方（Tier 1 稳定，.NET 企业唯一解，工厂化客户端）。**Go 的选择题与 Python 同构：应用层选社区、协议层选官方**——记住这条规律，任何语言的 MCP 框架选型都不会迷路。
+> **核心要点**：Go 生态 = 双轨并存（mark3labs 社区共识做应用、官方 go-sdk Tier 1 做基础设施，2026-07-28 合规是分水岭，GitLab 案例证明迁移约 1 天有界重构）；C# 生态 = 单一官方（Tier 1 稳定，.NET 企业唯一解，工厂化客户端）。**Go 的选择题与 Python 同构：应用层选社区、协议层选官方**——记住这条规律，任何语言的 MCP 框架选型都不会迷路。
 
 ---
 

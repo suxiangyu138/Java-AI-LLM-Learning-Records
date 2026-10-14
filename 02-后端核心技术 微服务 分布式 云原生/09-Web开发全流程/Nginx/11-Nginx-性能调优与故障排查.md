@@ -1,6 +1,6 @@
 # 11 - Nginx 性能调优与故障排查
 
-> 🎯 Nginx 性能调优不只是改几个数字 — 从 Worker 进程到内核参数、从缓冲区到连接池，系统性地将 Nginx 调教到最佳状态，并掌握常见故障的快速定位能力
+> Nginx 性能调优不只是改几个数字 — 从 Worker 进程到内核参数、从缓冲区到连接池，系统性地将 Nginx 调教到最佳状态，并掌握常见故障的快速定位能力
 
 ---
 
@@ -106,7 +106,7 @@ server {
 }
 ```
 
-> ⚠️ **关键**：启用 upstream keepalive 必须同时设置 `proxy_http_version 1.1` + 清除 `Connection` 头，否则长连接不生效。
+> **关键**：启用 upstream keepalive 必须同时设置 `proxy_http_version 1.1` + 清除 `Connection` 头，否则长连接不生效。
 
 ---
 
@@ -363,4 +363,4 @@ ssl_session_tickets off;                # 关闭 session tickets（安全性更�
 ssl_buffer_size 8k;                     # 缩小 SSL 缓冲区（TLSv1.3）
 ```
 
-> 🎯 **排查原则**：先确认配置语法 → 再查错误日志 → 确认后端可达 → 检查系统资源 → 逐层定位根因。
+> **排查原则**：先确认配置语法 → 再查错误日志 → 确认后端可达 → 检查系统资源 → 逐层定位根因。

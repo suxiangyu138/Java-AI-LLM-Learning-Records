@@ -2,7 +2,7 @@
 
 > 两大"预览期"采用者：Gemini CLI（Google，免费档 + @ 附加 + Claude 技能转换器）、GitHub Copilot（微软，VS Code 零配置 + 多环境）——功能有限但生态入口广。
 
-## 📚 目录
+## 目录
 
 1. [Gemini CLI 支持状态](#1-gemini-cli-支持状态)
 2. [Gemini 的技能使用](#2-gemini-的技能使用)
@@ -173,7 +173,7 @@ Copilot 不支持 allowed-tools：
 
 > "Gemini CLI 和 Copilot 都是标准的预览期采用者，功能是 Claude Code 的子集：Gemini 用 @ 附加技能（有免费档 + Claude converter 转换器）、Copilot 在 VS Code 里零配置用（聊天界面，但 chat.useAgentSkills 要开）。跨平台注意：Copilot 不支持 allowed-tools（安全敏感技能会降级）。两个平台适合做'第二验证'——主平台还是功能最全的 Claude Code。"
 
-> 🎯 核心要点：Gemini CLI 预览（@ 附加/免费档/Claude converter/1M 上下文）；Copilot 预览（VS Code 零配置/chat.useAgentSkills/多环境/不支持 allowed-tools）；两者是功能子集（写技能以 Claude Code 为准）；预览期功能演进中；作为跨平台第二验证平台。
+> 核心要点：Gemini CLI 预览（@ 附加/免费档/Claude converter/1M 上下文）；Copilot 预览（VS Code 零配置/chat.useAgentSkills/多环境/不支持 allowed-tools）；两者是功能子集（写技能以 Claude Code 为准）；预览期功能演进中；作为跨平台第二验证平台。
 
 ---
 

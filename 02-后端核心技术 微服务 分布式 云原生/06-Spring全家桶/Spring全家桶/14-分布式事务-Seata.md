@@ -57,7 +57,7 @@
 | **CAP** | 一致性 (Consistency)、可用性 (Availability)、分区容错性 (Partition Tolerance) 三者不可兼得 | AP 或 CP 二选一 |
 | **BASE** | Basically Available（基本可用）、Soft State（软状态）、Eventually Consistent（最终一致性） | 弱一致性方案的基础 |
 
-> 💡 **Seata 的选择**：Seata AT 模式追求 **CP**（强一致性），通过全局锁保证隔离性；而可靠消息最终一致性方案追求 **AP**（可用性）。
+> **Seata 的选择**：Seata AT 模式追求 **CP**（强一致性），通过全局锁保证隔离性；而可靠消息最终一致性方案追求 **AP**（可用性）。
 
 ### 1.3 大纲速览
 
@@ -131,7 +131,7 @@ COMMIT;  -- 要么全部成功，要么全部回滚
 
 3PC 在 2PC 的基础上增加了 **PreCommit** 阶段和超时机制，减少阻塞时间，但依然无法完美解决数据一致性问题。
 
-> 💡 Seata 的 AT 模式本质上是 **改进版的 2PC**，但通过引入全局锁和 undo_log 解决了传统 2PC 的阻塞问题。
+> Seata 的 AT 模式本质上是 **改进版的 2PC**，但通过引入全局锁和 undo_log 解决了传统 2PC 的阻塞问题。
 
 ---
 
@@ -221,7 +221,7 @@ Seata AT 模式通过 **全局锁** 保证隔离性。在本地事务提交前�
     ↓ 申请全局锁 (pk=1, XID=200) → TC 发现 pk=1 已被 XID=100 持有 → 等待/失败
 ```
 
-> 💡 全局锁保证了在全局事务未结束时，其他全局事务不能修改同一条数据，避免了脏写。
+> 全局锁保证了在全局事务未结束时，其他全局事务不能修改同一条数据，避免了脏写。
 
 ##### (2) undo_log 表结构
 
@@ -334,7 +334,7 @@ After Image（执行后）:
 UPDATE account SET balance = 1000 WHERE id = 1   (根据 before image 恢复)
 ```
 
-> 💡 before image 和 after image 是 Seata 自动生成的，开发者无需手动处理。Seata 通过解析 SQL 的 WHERE 条件，查询影响行的数据快照。
+> before image 和 after image 是 Seata 自动生成的，开发者无需手动处理。Seata 通过解析 SQL 的 WHERE 条件，查询影响行的数据快照。
 
 #### 2.2.4 AT 模式执行流程代码级分析
 
@@ -531,7 +531,7 @@ WHERE product_id = #{productId};
 | **幂等性** | Confirm/Cancel 可能被重复调用 | 使用唯一键 + 幂等表 |
 | **业务侵入性** | TCC 要求业务表增加冻结字段 | 必须改造业务表结构 |
 
-> 💡 Seata 从 1.5.0 版本开始支持 `useTCCFence = true`，自动处理空回滚和悬挂问题。Fence 记录存储在 `tcc_fence_log` 表中。
+> Seata 从 1.5.0 版本开始支持 `useTCCFence = true`，自动处理空回滚和悬挂问题。Fence 记录存储在 `tcc_fence_log` 表中。
 
 ---
 
@@ -657,7 +657,7 @@ public class InventorySagaService {
 | **状态管理** | 通过状态机 DSL 定义流程，Seata 负责状态持久化 |
 | **适合场景** | 长业务流程、跨组织业务、对中间状态不敏感的业务 |
 
-> ⚠️ **Saga 的隔离性问题**：因为没有全局锁，其他事务可能读到中间状态。比如扣款成功但订单还在 Saga 流程中，用户可能看到账户余额已扣但订单未确认。需要通过业务设计（如状态字段「处理中」）来规避。
+> **Saga 的隔离性问题**：因为没有全局锁，其他事务可能读到中间状态。比如扣款成功但订单还在 Saga 流程中，用户可能看到账户余额已扣但订单未确认。需要通过业务设计（如状态字段「处理中」）来规避。
 
 ---
 
@@ -710,7 +710,7 @@ seata:
 | **数据库支持** | MySQL、PostgreSQL、Oracle 等 | 需支持 XA 的数据库（MySQL 5.7+、Oracle、DB2） |
 | **XA 协议** | 不依赖 | 依赖数据库 XA 实现 |
 
-> ⚠️ **MySQL XA 的陷阱**：MySQL 的 XA 实现存在一些已知问题，如 binlog 与 XA 状态不一致导致的 crash recovery 问题，建议在 MySQL 8.0+ 使用。
+> **MySQL XA 的陷阱**：MySQL 的 XA 实现存在一些已知问题，如 binlog 与 XA 状态不一致导致的 crash recovery 问题，建议在 MySQL 8.0+ 使用。
 
 ---
 
@@ -1351,7 +1351,7 @@ CREATE TABLE `idempotent_record` (
 | Seata AT | CP 强一致 | 较低（全局锁等待） | 低（无侵入） | 核心交易链路 |
 | 本地消息表 | AP 最终一致 | 高 | 中（消息表 + 定时任务） | 非核心、可异步 |
 
-> 💡 **最佳实践**：核心交易链路（下单、支付、退款）使用 Seata AT；非核心通知（积分、短信、日志）使用消息队列最终一致性。
+> **最佳实践**：核心交易链路（下单、支付、退款）使用 Seata AT；非核心通知（积分、短信、日志）使用消息队列最终一致性。
 
 ---
 
@@ -1369,7 +1369,7 @@ CREATE TABLE `idempotent_record` (
 **正确姿势：**
 
 ```java
-// ❌ 错误：捕获异常没抛出
+// ✗ 错误：捕获异常没抛出
 @GlobalTransactional
 public void createOrder(OrderDTO dto) {
     try {
@@ -1380,13 +1380,13 @@ public void createOrder(OrderDTO dto) {
     }
 }
 
-// ✅ 正确：抛出异常
+// ✓ 正确：抛出异常
 @GlobalTransactional
 public void createOrder(OrderDTO dto) {
     // 业务逻辑（异常直接抛出不拦截）
 }
 
-// ✅ 或者：自定义回滚异常
+// ✓ 或者：自定义回滚异常
 @GlobalTransactional(rollbackFor = BusinessException.class)
 public void createOrder(OrderDTO dto) {
     try {
@@ -1419,7 +1419,7 @@ seata:
 
 ```java
 // 方案 2：缩短全局事务范围，减少锁持有时间
-// ❌ 不要在一个全局事务中做太多事情
+// ✗ 不要在一个全局事务中做太多事情
 @GlobalTransactional
 public void heavyMethod() {
     step1();  // 处理 1000 行数据
@@ -1427,7 +1427,7 @@ public void heavyMethod() {
     step3();  // 复杂计算
 }
 
-// ✅ 拆分为多个全局事务，或缩小范围
+// ✓ 拆分为多个全局事务，或缩小范围
 public void heavyMethod() {
     step1();   // 独立事务
     @GlobalTransactional
@@ -1485,13 +1485,13 @@ seata:
 | **原因 2** | 多数据源场景下，Seata 只代理了主数据源 |
 
 ```java
-// ❌ 错误：自定义 DataSource 覆盖了 Seata 代理
+// ✗ 错误：自定义 DataSource 覆盖了 Seata 代理
 @Bean
 public DataSource dataSource() {
     return new DruidDataSource();  // Seata 无法代理这个 DataSource
 }
 
-// ✅ 正确：使用 Seata 的 DataSourceProxy
+// ✓ 正确：使用 Seata 的 DataSourceProxy
 @Bean
 public DataSource dataSource(DataSourceProperties properties) {
     DruidDataSource ds = new DruidDataSource();
@@ -1502,7 +1502,7 @@ public DataSource dataSource(DataSourceProperties properties) {
     return new DataSourceProxy(ds);
 }
 
-// ✅ 或者：直接让 Seata 自动代理（默认开启）
+// ✓ 或者：直接让 Seata 自动代理（默认开启）
 // 确保没有手动创建 DataSource Bean
 seata.enable-auto-data-source-proxy=true
 ```
@@ -2210,7 +2210,7 @@ curl -X POST http://localhost:8081/order/create \
 # 3. account_db.account.balance 仍然是 1000（未扣减）
 ```
 
-> 🎯 **成功标志**：Seata 的 AT 模式自动完成了二阶段回滚，所有服务的数据都恢复到了执行前的状态。
+> **成功标志**：Seata 的 AT 模式自动完成了二阶段回滚，所有服务的数据都恢复到了执行前的状态。
 
 #### 5.6.3 验证日志输出
 
@@ -2640,7 +2640,7 @@ DELETE FROM lock_table WHERE xid = 'xxx';
 | 2.0.0 | 架构重构 | gRPC 协议、云原生适配 |
 | 2.1.x | 当前稳定 | k8s 部署支持、GraalVM 兼容 |
 
-> 💡 **版本选择建议**：新项目推荐使用 Seata 2.1.x（最新稳定版），Spring Boot 2.7.x + Spring Cloud Alibaba 2021.x 兼容性最好。
+> **版本选择建议**：新项目推荐使用 Seata 2.1.x（最新稳定版），Spring Boot 2.7.x + Spring Cloud Alibaba 2021.x 兼容性最好。
 
 ### 8.7 推荐学习资源
 
@@ -2654,4 +2654,4 @@ DELETE FROM lock_table WHERE xid = 'xxx';
 
 ---
 
-> 🎯 **本章总结**：分布式事务是微服务架构中最核心的难点之一。Seata AT 模式通过"一阶段提交 + 二阶段回滚（undo_log）+ 全局锁"机制，实现了对业务几乎无侵入的分布式事务解决方案。TCC 模式适用于高并发场景，Saga 模式适用于长流程 AP 场景，XA 模式适用于强一致性要求的标准场景。在实际项目中，应该根据业务场景灵活选择 Seata 的四种模式，或结合本地消息表实现最终一致性方案，**核心链路用 AT，非核心链路用 MQ**。
+> **本章总结**：分布式事务是微服务架构中最核心的难点之一。Seata AT 模式通过"一阶段提交 + 二阶段回滚（undo_log）+ 全局锁"机制，实现了对业务几乎无侵入的分布式事务解决方案。TCC 模式适用于高并发场景，Saga 模式适用于长流程 AP 场景，XA 模式适用于强一致性要求的标准场景。在实际项目中，应该根据业务场景灵活选择 Seata 的四种模式，或结合本地消息表实现最终一致性方案，**核心链路用 AT，非核心链路用 MQ**。

@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [ORM 的本质：JDBC 封装](#1-orm-的本质jdbc-封装)
 2. [MyBatis 的 JDBC 视角](#2-mybatis-的-jdbc-视角)
@@ -40,7 +40,7 @@
 → JDBC 是"发动机"，框架是"自动挡"——原理相同
 ```
 
-> 🎯 **核心要点**：ORM 本质 = "**JDBC 的五件事自动化（连接/SQL/映射/事务/批量）**"——**"框架不是取代 JDBC 而是封装它"**是读框架源码的认知前提。
+> **核心要点**：ORM 本质 = "**JDBC 的五件事自动化（连接/SQL/映射/事务/批量）**"——**"框架不是取代 JDBC 而是封装它"**是读框架源码的认知前提。
 
 ---
 
@@ -86,7 +86,7 @@ while (rs.next()) {
   ③ BatchExecutor = JDBC 批处理（addBatch/executeBatch）
 ```
 
-> 🎯 **核心要点**：MyBatis = "**JDBC 的组件化封装**"——**"#{} 预编译、${} 拼接（风险）、BatchExecutor 批处理"三个对应**是面试深度题（与 `MyBatis/` 系统联动）。
+> **核心要点**：MyBatis = "**JDBC 的组件化封装**"——**"#{} 预编译、${} 拼接（风险）、BatchExecutor 批处理"三个对应**是面试深度题（与 `MyBatis/` 系统联动）。
 
 ---
 
@@ -115,7 +115,7 @@ while (rs.next()) {
 | 分页 | SQL 改写（LIMIT）+ COUNT |
 | 枚举处理 | getXxx 类型映射 |
 
-> 🎯 **核心要点**：MyBatisPlus = "**MyBatis 的增强（JDBC 无新机制）**"——**"saveBatch 就是 JDBC 批处理、分页就是 SQL 改写"**让 MP 的"魔法"透明化（与 `MyBatisPlus/` 系统联动）。
+> **核心要点**：MyBatisPlus = "**MyBatis 的增强（JDBC 无新机制）**"——**"saveBatch 就是 JDBC 批处理、分页就是 SQL 改写"**让 MP 的"魔法"透明化（与 `MyBatisPlus/` 系统联动）。
 
 ---
 
@@ -151,10 +151,10 @@ Integer count = jdbcTemplate.queryForObject(
 |------|:---------:|:------------:|:-------:|
 | 样板代码 | 多（七步） | 少 | 最少 |
 | 映射 | 手动 | RowMapper | 自动/XML |
-| 动态 SQL | 手拼 | 手拼 | ✅ 标签 |
+| 动态 SQL | 手拼 | 手拼 | ✓ 标签 |
 | 场景 | 教学 | 简单查询 | 复杂映射 |
 
-> 🎯 **核心要点**：JdbcTemplate = "**JDBC 的轻量封装（自动连接/预编译，RowMapper 映射）**"——**"RowMapper 就是 ResultSet → 对象的回调"**是 JDBC 视角的关键；适合简单查询，复杂映射用 MyBatis。
+> **核心要点**：JdbcTemplate = "**JDBC 的轻量封装（自动连接/预编译，RowMapper 映射）**"——**"RowMapper 就是 ResultSet → 对象的回调"**是 JDBC 视角的关键；适合简单查询，复杂映射用 MyBatis。
 
 ---
 
@@ -188,7 +188,7 @@ String countSql = "SELECT COUNT(*) FROM user";
    → 这就是"分页插件要指定 DbType"的原因
 ```
 
-> 🎯 **核心要点**：分页 = "**SQL 改写（LIMIT + COUNT）**"——**"框架分页 = 手写 LIMIT 的自动化"是本质**；深分页与方言差异（DbType）是进阶考点（`MyBatisPlus/06` 联动）。
+> **核心要点**：分页 = "**SQL 改写（LIMIT + COUNT）**"——**"框架分页 = 手写 LIMIT 的自动化"是本质**；深分页与方言差异（DbType）是进阶考点（`MyBatisPlus/06` 联动）。
 
 ---
 
@@ -224,7 +224,7 @@ String countSql = "SELECT COUNT(*) FROM user";
 | 批处理 | MyBatis BatchExecutor |
 | 分页改写 | MP PaginationInnerInterceptor |
 
-> 🎯 **核心要点**：读源码地图 = "**六个框架入口 = 本体系六个模块**"——**"带着 JDBC 知识读框架源码，每个机制都能对上"**是最高效的源码学习法（框架源码细节见 `MyBatis/09`）。
+> **核心要点**：读源码地图 = "**六个框架入口 = 本体系六个模块**"——**"带着 JDBC 知识读框架源码，每个机制都能对上"**是最高效的源码学习法（框架源码细节见 `MyBatis/09`）。
 
 ---
 

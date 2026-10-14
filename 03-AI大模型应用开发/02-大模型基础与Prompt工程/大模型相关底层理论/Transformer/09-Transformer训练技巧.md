@@ -1,6 +1,6 @@
 # 09 - Transformer 训练技巧
 
-> 🎯 训练 Transformer 不是"把数据丢进去就行"。学习率 Warmup、混合精度、梯度累积、Label Smoothing——这些技巧是高效训练和不崩的保障
+> 训练 Transformer 不是"把数据丢进去就行"。学习率 Warmup、混合精度、梯度累积、Label Smoothing——这些技巧是高效训练和不崩的保障
 
 ---
 
@@ -124,12 +124,12 @@ for batch in dataloader:
 
 为什么混合？
   FP16 的优势：
-    ✅ 显存减半
-    ✅ 速度提升 2-3x（Tensor Core）
+    ✓ 显存减半
+    ✓ 速度提升 2-3x（Tensor Core）
   
   FP16 的问题：
-    ❌ 精度不足 → 梯度下溢（太小变成 0）
-    ❌ 需要 Loss Scaling 补偿
+    ✗ 精度不足 → 梯度下溢（太小变成 0）
+    ✗ 需要 Loss Scaling 补偿
 
 解决方案：大部分计算用 FP16，权重+优化器用 FP32
   → BF16 更好（范围同 FP32），A100+ 推荐

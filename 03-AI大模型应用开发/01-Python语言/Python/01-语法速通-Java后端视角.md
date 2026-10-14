@@ -1,6 +1,6 @@
 # 01 - 语法速通：Java 后端视角
 
-> 🎯 用你会的 Java 来学 Python — 对照表 + 关键差异 + 常见陷阱。30 分钟从 Java 到 Python
+> 用你会的 Java 来学 Python — 对照表 + 关键差异 + 常见陷阱。30 分钟从 Java 到 Python
 
 ## Java → Python 速查表
 
@@ -50,8 +50,8 @@
 |------|------|--------|
 | 编译/解释 | 编译→字节码→JVM | 解释执行 |
 | 类型 | 静态强类型 | 动态强类型(鸭子类型) |
-| 多继承 | 仅接口 | ✅ 支持 |
-| 方法重载 | ✅ | ❌ (后定义覆盖) |
+| 多继承 | 仅接口 | ✓ 支持 |
+| 方法重载 | ✓ | ✗ (后定义覆盖) |
 | 访问控制 | public/private/protected | 约定(_前缀=私有) |
 | None/null | null | None |
 | 字符串 | String(不可变) | str(不可变) |
@@ -61,7 +61,7 @@
 
 ```python
 # ① 默认参数只计算一次！
-def add_item(item, lst=[]):    # ❌ 每次调用共享同一个list
+def add_item(item, lst=[]):    # ✗ 每次调用共享同一个list
     lst.append(item)
     return lst
 # 修复：
@@ -75,7 +75,7 @@ a = [1, 2, [3, 4]]
 b = a.copy()        # 浅拷贝 → b[2] 和 a[2] 是同一个对象
 b[2].append(5)      # a 也会变！
 import copy
-b = copy.deepcopy(a) # 深拷贝 ✅
+b = copy.deepcopy(a) # 深拷贝 ✓
 
 # ③ is vs ==
 a = [1, 2, 3]
@@ -85,8 +85,8 @@ a is b  # False (不同对象)
 
 # ④ 可变对象作为类属性
 class Dog:
-    tricks = []       # ❌ 类属性，所有实例共享！
+    tricks = []       # ✗ 类属性，所有实例共享！
     def __init__(self, name):
         self.name = name
-        self.tricks = []  # ✅ 实例属性
+        self.tricks = []  # ✓ 实例属性
 ```

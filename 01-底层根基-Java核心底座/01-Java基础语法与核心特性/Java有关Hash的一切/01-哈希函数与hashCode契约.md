@@ -2,7 +2,7 @@
 
 > 定位：理解哈希函数的本质特性，吃透 equals/hashCode 契约及其背后原理，掌握 String 的 31 之谜与自定义类的哈希最佳实践
 
-## 📚 目录
+## 目录
 
 1. [哈希函数基础](#1-哈希函数基础)
 2. [equals 与 hashCode 契约](#2-equals-与-hashcode-契约)
@@ -31,7 +31,7 @@ f(x) = h     x 任意长度，h 固定长度（Java 中 hashCode 返回 int，32
 | 均匀性 | 输出在值域上尽量均匀分布 | 只取低位 8 位做哈希 |
 | 雪崩效应 | 输入微变 → 输出剧烈变化 | 直接返回 `key.length()` |
 
-> 💡 **注意**：Java 对象 `hashCode()` 是**非加密哈希**（不要求不可逆、不要求抗碰撞），和 MD5/SHA 这类**加密哈希**是两回事，详见 [07-密码学哈希与安全哈希](07-密码学哈希与安全哈希.md)。
+> **注意**：Java 对象 `hashCode()` 是**非加密哈希**（不要求不可逆、不要求抗碰撞），和 MD5/SHA 这类**加密哈希**是两回事，详见 [07-密码学哈希与安全哈希](07-密码学哈希与安全哈希.md)。
 
 ### 1.2 哈希表为什么是 O(1)
 
@@ -72,7 +72,7 @@ first.hash == hash && ((k = first.key) == key || (key != null && key.equals(k)))
 若两个 equals 相等的对象 hash 不同 → 它们落在不同桶 → **HashMap 里永远找不到**。后果：
 
 ```java
-class BadHash {                          // ❌ 重写 equals 不重写 hashCode
+class BadHash {                          // ✗ 重写 equals 不重写 hashCode
     private final String id;
     BadHash(String id) { this.id = id; }
     @Override public boolean equals(Object o) {
@@ -85,7 +85,7 @@ map.put(new BadHash("a"), "v1");
 map.get(new BadHash("a"));   // null ！equals 相同但 hash 不同，找不到
 ```
 
-> 🎯 **契约的本质**：equals 定义"逻辑相等"，hashCode 定义"去哪个桶找"。两者必须协作，否则集合操作行为不可预测。
+> **契约的本质**：equals 定义"逻辑相等"，hashCode 定义"去哪个桶找"。两者必须协作，否则集合操作行为不可预测。
 
 ### 2.3 常见理解误区
 
@@ -108,7 +108,7 @@ public int hashCode() {
     if (h == 0 && value.length > 0) {
         char val[] = value;
         for (int i = 0; i < value.length; i++)
-            h = 31 * h + val[i];        // ⭐ 核心：加权多项式
+            h = 31 * h + val[i];        // ★ 核心：加权多项式
         hash = h;
     }
     return h;
@@ -130,10 +130,10 @@ public int hashCode() {
 // 推导验证：31 * h ≡ (h << 5) - h
 h = 5
 31 * 5  = 155
-(5 << 5) - 5 = 160 - 5 = 155 ✅
+(5 << 5) - 5 = 160 - 5 = 155 ✓
 ```
 
-> ⚠️ **注意溢出**：int 计算会溢出（`31 * h` 溢出是预期的），溢出反而增加了低位的随机性，属于"有意的缺陷"。两个不同字符串有极小概率碰撞（如 `"Aa"` 与 `"BB"`：`65*31+97 = 2112`，`66*31+66 = 2112`）。
+> **注意溢出**：int 计算会溢出（`31 * h` 溢出是预期的），溢出反而增加了低位的随机性，属于"有意的缺陷"。两个不同字符串有极小概率碰撞（如 `"Aa"` 与 `"BB"`：`65*31+97 = 2112`，`66*31+66 = 2112`）。
 
 ### 3.3 哈希缓存（cached hash）
 
@@ -161,7 +161,7 @@ public static int hashCode(Object a[]) {
 }
 ```
 
-> 💡 注意：`Objects.hash(a, b)` 会**装箱**（Integer 等），性能略低于手写 `31 * x + y`。热点代码可手写，普通代码用 Objects.hash 更清晰。
+> 注意：`Objects.hash(a, b)` 会**装箱**（Integer 等），性能略低于手写 `31 * x + y`。热点代码可手写，普通代码用 Objects.hash 更清晰。
 
 ### 4.2 record 自动生成 hashCode（JDK 16+）
 
@@ -227,7 +227,7 @@ private int cachedHash;                       // 默认 0
 }
 ```
 
-> ⚠️ 缓存陷阱：只有字段**不可能变化**（final / 不可变类）才能缓存。字段可变时缓存会导致哈希过期 → 元素在 HashMap 中"找不回"。
+> 缓存陷阱：只有字段**不可能变化**（final / 不可变类）才能缓存。字段可变时缓存会导致哈希过期 → 元素在 HashMap 中"找不回"。
 
 ---
 
@@ -259,7 +259,7 @@ private int cachedHash;                       // 默认 0
 
 ---
 
-> 🎯 **核心要点**：hashCode 契约是 Java 集合的基石——equals 决定"是否同一个"，hashCode 决定"去哪个桶找"。31 的选取兼顾了素数理论、JVM 优化与工程经验。
+> **核心要点**：hashCode 契约是 Java 集合的基石——equals 决定"是否同一个"，hashCode 决定"去哪个桶找"。31 的选取兼顾了素数理论、JVM 优化与工程经验。
 
 ---
 

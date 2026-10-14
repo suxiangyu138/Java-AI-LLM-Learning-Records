@@ -2,7 +2,7 @@
 
 > Level1 的转折点：从纯后端进入 AI。用两种方式（手写 HTTP 与 Spring AI）调用 DeepSeek V4 大模型，理解 OpenAI 兼容协议，跑通"Java 发请求 → 大模型回答"的第一条 AI 链路。
 
-## 📚 目录
+## 目录
 
 1. [目标与验收](#1-目标与验收)
 2. [OpenAI 兼容协议：先理解再写代码](#2-openai-兼容协议先理解再写代码)
@@ -149,7 +149,7 @@ public Flux<String> stream(@RequestParam String message) {
 4. 手写 HttpClient 理解协议，Spring AI ChatClient 理解框架，两个都写一遍。
 5. 流式是体验标配：Flux 逐 token 推流，首字延迟远小于总耗时。
 
-> 🎯 **核心要点**：本 Demo 的完成标志是**"协议与框架两层都理解"**——手写版证明你懂 AI 链路底层，框架版证明你懂工程化封装。这两层的理解叠加，是 Level2 里 RAG、Agent、工具调用一切 AI 功能的地基。
+> **核心要点**：本 Demo 的完成标志是**"协议与框架两层都理解"**——手写版证明你懂 AI 链路底层，框架版证明你懂工程化封装。这两层的理解叠加，是 Level2 里 RAG、Agent、工具调用一切 AI 功能的地基。
 
 ---
 

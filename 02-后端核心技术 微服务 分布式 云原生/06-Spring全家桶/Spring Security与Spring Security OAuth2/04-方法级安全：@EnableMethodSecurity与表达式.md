@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [方法级安全的价值与触发原理](#1-方法级安全的价值与触发原理)
 2. [@EnableMethodSecurity 开启与配置](#2-enablemethodsecurity-开启与配置)
@@ -29,7 +29,7 @@
   → AuthorizationManager 评估 → 通过则 proceed，否则 AccessDeniedException
 ```
 
-> 🎯 **要点**：方法级安全是 AOP 的典型应用——与 @Transactional 共用代理机制。**同类自调用失效**的坑在这里同样存在（`this.foo()` 绕过代理 → 注解不生效）。
+> **要点**：方法级安全是 AOP 的典型应用——与 @Transactional 共用代理机制。**同类自调用失效**的坑在这里同样存在（`this.foo()` 绕过代理 → 注解不生效）。
 
 ## 2. @EnableMethodSecurity 开启与配置
 
@@ -51,7 +51,7 @@ public class SecurityConfig { }
 @EnableMethodSecurity(securedEnabled = true, jsr250Enabled = true)
 ```
 
-> ⚠️ **7.0 注意**：`@EnableGlobalMethodSecurity` 已删除；`AuthorizationManager#check` 不再使用，方法级安全底层全部走 `authorize`。旧项目迁移只需换注解名，行为兼容。
+> **7.0 注意**：`@EnableGlobalMethodSecurity` 已删除；`AuthorizationManager#check` 不再使用，方法级安全底层全部走 `authorize`。旧项目迁移只需换注解名，行为兼容。
 
 ## 3. 核心注解全解
 
@@ -81,7 +81,7 @@ public void batchDelete(List<Order> orders) { ... }
 public List<Order> listOrders() { ... }
 ```
 
-> ⚠️ **@PostAuthorize 陷阱**：方法**已经执行完**才发现无权——副作用（写库）已发生。适合"读操作的数据级校验"；写操作请在方法内自校验或事务配合回滚。
+> **@PostAuthorize 陷阱**：方法**已经执行完**才发现无权——副作用（写库）已发生。适合"读操作的数据级校验"；写操作请在方法内自校验或事务配合回滚。
 
 ### 3.2 @Secured / @RolesAllowed
 
@@ -93,11 +93,11 @@ public List<Order> listOrders() { ... }
 
 | 注解 | 表达式能力 | 标准 |
 |------|:---:|------|
-| @PreAuthorize/@PostAuthorize | ✅ 完整 SpEL | Spring 专属 |
-| @Secured | ❌ 仅角色名 | Spring 遗留 |
-| @RolesAllowed | ❌ 仅角色名 | JSR-250 标准 |
+| @PreAuthorize/@PostAuthorize | ✓ 完整 SpEL | Spring 专属 |
+| @Secured | ✗ 仅角色名 | Spring 遗留 |
+| @RolesAllowed | ✗ 仅角色名 | JSR-250 标准 |
 
-> 💡 新代码一律 `@PreAuthorize`（表达式能力完整）；@Secured/@RolesAllowed 用于兼容存量代码。
+> 新代码一律 `@PreAuthorize`（表达式能力完整）；@Secured/@RolesAllowed 用于兼容存量代码。
 
 ## 4. SpEL 安全表达式
 
@@ -166,7 +166,7 @@ public Order updateOrder(Order order) { ... }
 public void approve(Order order) { ... }
 ```
 
-> 💡 **最佳实践**：复杂规则（跨表查询、业务状态机校验）写进自定义 Bean，注解保持一行表达式——可单测、可复用、表达式不爆炸。
+> **最佳实践**：复杂规则（跨表查询、业务状态机校验）写进自定义 Bean，注解保持一行表达式——可单测、可复用、表达式不爆炸。
 
 ### 5.2 自定义表达式解析器（高级）
 
@@ -201,9 +201,9 @@ public AsyncTaskExecutor securityAwareExecutor() {
 }
 ```
 
-> ⚠️ **事务注意**：@PreAuthorize 与 @Transactional 在同一代理上，**授权失败抛 AccessDeniedException 会触发事务回滚**（RuntimeException 语义）——这是合理的默认行为，但"先授权后写库"的时序要清楚。
+> **事务注意**：@PreAuthorize 与 @Transactional 在同一代理上，**授权失败抛 AccessDeniedException 会触发事务回滚**（RuntimeException 语义）——这是合理的默认行为，但"先授权后写库"的时序要清楚。
 
-> 🎯 **核心要点**：方法级安全 = AOP 代理 + SpEL 表达式 + AuthorizationManager。三句话：①`@PreAuthorize` 管"能不能调"，`@PostAuthorize` 管"返回值合不合规"，过滤注解管集合；②复杂规则进自定义 Bean（`@perm.xxx()`）；③异步/自调用是失效重灾区，代理语义与事务完全一致。
+> **核心要点**：方法级安全 = AOP 代理 + SpEL 表达式 + AuthorizationManager。三句话：①`@PreAuthorize` 管"能不能调"，`@PostAuthorize` 管"返回值合不合规"，过滤注解管集合；②复杂规则进自定义 Bean（`@perm.xxx()`）；③异步/自调用是失效重灾区，代理语义与事务完全一致。
 
 ---
 

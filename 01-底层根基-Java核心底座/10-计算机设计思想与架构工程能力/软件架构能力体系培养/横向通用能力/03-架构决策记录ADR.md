@@ -1,7 +1,7 @@
 # 03-架构决策记录ADR
 > 定位：ADR（Architecture Decision Record）是架构决策的「审计痕迹」——Context/Decision/Consequences 三段式记录「为什么」，让决策可追溯、可复核、可推翻；2026 年标准格式是 Nygard 模板与 MADR，配套工具链成熟。
 
-## 📚 目录
+## 目录
 1. [ADR 是什么](#1-adr-是什么)
 2. [Nygard 模板](#2-nygard-模板)
 3. [MADR 与格式演进](#3-madr-与格式演进)
@@ -109,7 +109,7 @@ ADR 的工程化落地（让它成为团队习惯而非文档负担）：**目�
 4. ADR 生命周期的四种状态与流转？
 5. 五条质量门槛与「什么决策值得记」的纪律？
 
-> 🎯 **核心要点**：ADR = 决策的审计痕迹（Context/Decision/Consequences）；MADR 的备选小节让「为什么不是它」可追溯；生命周期（Proposed→Accepted→Deprecated/Superseded）；质量五门槛（数据/可执行/备选/双侧/可读）；单向门级才记、进评审、与 C4 配合成活的文档体系。
+> **核心要点**：ADR = 决策的审计痕迹（Context/Decision/Consequences）；MADR 的备选小节让「为什么不是它」可追溯；生命周期（Proposed→Accepted→Deprecated/Superseded）；质量五门槛（数据/可执行/备选/双侧/可读）；单向门级才记、进评审、与 C4 配合成活的文档体系。
 
 ---
 

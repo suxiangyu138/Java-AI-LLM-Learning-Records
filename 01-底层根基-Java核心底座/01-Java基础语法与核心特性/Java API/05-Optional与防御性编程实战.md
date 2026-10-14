@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [为什么需要 Optional](#1-为什么需要-optional)
 2. [创建 Optional](#2-创建-optional)
@@ -45,7 +45,7 @@ String upper = name.toUpperCase();     // 如果 name == null → NPE
 
 `NullPointerException` 继承自 `RuntimeException`，编译器不会强制你处理它。这与 checked exception 不同——后者至少提醒你"这里有风险"。
 
-> 💡 如果一个错误编译器能提前发现，它就不叫"运行时异常"——但 Java 没有非空类型系统（不像 Kotlin 的 `String?` vs `String`），所以我们需要其他手段。
+> 如果一个错误编译器能提前发现，它就不叫"运行时异常"——但 Java 没有非空类型系统（不像 Kotlin 的 `String?` vs `String`），所以我们需要其他手段。
 
 ### 1.3 传统防御性手法与局限性
 
@@ -128,7 +128,7 @@ Optional 是什么
 └── 是领域驱动设计中返回值的手段 → "可能没有值"
 ```
 
-> 🎯 **核心要点**：Optional 的核心价值是 **类型层面的沟通**——`Optional<User>` 比 `User` 更能告诉 API 使用者"做好空值准备"。它不是解决 null 的银弹，而是改善 API 设计语义的工具。
+> **核心要点**：Optional 的核心价值是 **类型层面的沟通**——`Optional<User>` 比 `User` 更能告诉 API 使用者"做好空值准备"。它不是解决 null 的银弹，而是改善 API 设计语义的工具。
 
 ---
 
@@ -147,8 +147,8 @@ Optional 是什么
 Optional<String> empty = Optional.empty();
 
 // 2. Optional.of() — 参数为 null 立即抛 NPE
-Optional<String> nonNull = Optional.of("hello");   // ✅
-Optional<String> danger = Optional.of(null);       // ❌ 立即 NullPointerException
+Optional<String> nonNull = Optional.of("hello");   // ✓
+Optional<String> danger = Optional.of(null);       // ✗ 立即 NullPointerException
 
 // 3. Optional.ofNullable() — 参数 null 自动转为 empty，最常用
 Optional<String> maybe = Optional.ofNullable(getConfig("key")); // null → empty
@@ -185,13 +185,13 @@ public Optional<String> loadConfig(String path) {
 └── Optional.empty()            ← 直接返回 empty，语义清晰
 ```
 
-> ⚠️ **警告**：不要用 `Optional.ofNullable(null)` 来"手动"创建 empty——语义上告诉读者"这可能不空"，实际上却传入了 null，不如直接 `Optional.empty()`。
+> **警告**：不要用 `Optional.ofNullable(null)` 来"手动"创建 empty——语义上告诉读者"这可能不空"，实际上却传入了 null，不如直接 `Optional.empty()`。
 
 ```java
-// ❌ 反例：语义欺骗
+// ✗ 反例：语义欺骗
 return Optional.ofNullable(null);  // 读者以为"可能非空",实际上永远是空
 
-// ✅ 正例：明确意图
+// ✓ 正例：明确意图
 return Optional.empty();           // 我就是空的
 ```
 
@@ -223,7 +223,7 @@ String result = Optional.of("  hello  ")
 **map 与普通 get 的区别**：
 
 ```java
-// ❌ 反例：手动检查，手动 get，手动判断
+// ✗ 反例：手动检查，手动 get，手动判断
 if (userOpt.isPresent()) {
     User user = userOpt.get();
     String name = user.getName();
@@ -233,7 +233,7 @@ if (userOpt.isPresent()) {
 }
 return "DEFAULT";
 
-// ✅ 正例：map 将 null 安全地映射
+// ✓ 正例：map 将 null 安全地映射
 return userOpt
     .map(User::getName)        // 自动处理 name 为 null 的情况
     .map(String::toUpperCase)  // 若上一步为 empty，这一层自动跳过
@@ -251,11 +251,11 @@ return userOpt
 // user.getAddress()  → Optional<Address>
 // address.getCity()  → Optional<String>
 
-// ❌ 用 map 会嵌套
+// ✗ 用 map 会嵌套
 Optional<Optional<String>> city = userRepo.findById(42L)
     .map(User::getAddressOpt);   // 返回 Optional<Optional<Address>>
 
-// ✅ 用 flatMap 展平
+// ✓ 用 flatMap 展平
 Optional<String> city = userRepo.findById(42L)
     .flatMap(User::getAddressOpt)   // 返回 Optional<Address>
     .flatMap(Address::getCityOpt);  // 返回 Optional<String>
@@ -347,14 +347,14 @@ mapper 的返回值类型是什么？
 // 场景一：计算默认值开销大
 Optional<String> cached = getFromCache("config");
 
-// ❌ 无论 cache hit 与否，expensiveDefault() 都执行了
+// ✗ 无论 cache hit 与否，expensiveDefault() 都执行了
 String result = cached.orElse(expensiveDefault());  // expensiveDefault() 总是被调用
 
-// ✅ 只有 cache miss 时才执行 expensiveDefault()
+// ✓ 只有 cache miss 时才执行 expensiveDefault()
 String result = cached.orElseGet(() -> expensiveDefault());
 
 // 场景二：方法的副作用
-// ❌ createDefaultUser() 每次都被调用，可能创建了无用的对象或写入日志
+// ✗ createDefaultUser() 每次都被调用，可能创建了无用的对象或写入日志
 User user = optionalUser.orElse(createDefaultUser());
 ```
 
@@ -388,16 +388,16 @@ INVOKEVIRTUAL Optional.orElseGet
 | Optional 有值，默认值昂贵（DB查询） | orElse | ~45 | **每次执行昂贵操作** |
 | Optional 有值，默认值昂贵（DB查询） | orElseGet | ~310 | 仅 empty 时执行 |
 
-> 🎯 **规则**：当默认值是**简单的字面量或常量**（字符串、数字、枚举），用 `orElse`；当默认值需要**方法调用、计算、IO 操作**才能得到，用 `orElseGet`。
+> **规则**：当默认值是**简单的字面量或常量**（字符串、数字、枚举），用 `orElse`；当默认值需要**方法调用、计算、IO 操作**才能得到，用 `orElseGet`。
 
 ```java
-// ✅ 或Else：常数，用 orElse
+// ✓ 或Else：常数，用 orElse
 String name = optName.orElse("Guest");
 
-// ✅ orElseGet：需要计算或方法调用
+// ✓ orElseGet：需要计算或方法调用
 User user = optUser.orElseGet(() -> userService.createGuestUser());
 
-// ✅ orElseGet：超长字符串拼接
+// ✓ orElseGet：超长字符串拼接
 String msg = optMsg.orElseGet(() -> "Fallback message with " + data.size() + " items");
 ```
 
@@ -480,7 +480,7 @@ String result2 = a.orElseGet(() -> b.get());  // "A"
 ### 5.1 反模式一：`optional.get()` 不检查 isPresent
 
 ```java
-// ❌ 反模式：get() 不检查，跟直接调用 obj.method() 一样危险
+// ✗ 反模式：get() 不检查，跟直接调用 obj.method() 一样危险
 Optional<User> user = findUser(42);
 User u = user.get();           // 如果 empty → NoSuchElementException
 String name = u.getName();     // NPE 换了个马甲
@@ -490,12 +490,12 @@ User oldUser = findUserOld(42);
 String oldName = oldUser.getName();  // NPE
 ```
 
-> 💡 `Optional.get()` 的设计意图是：**在你已经通过 `isPresent()`、`orElse`、`orElseThrow` 等手段确保值存在之后**，从 Optional 中取出值。不要把它当成 getter 直用。
+> `Optional.get()` 的设计意图是：**在你已经通过 `isPresent()`、`orElse`、`orElseThrow` 等手段确保值存在之后**，从 Optional 中取出值。不要把它当成 getter 直用。
 
 ### 5.2 反模式二：`isPresent` + `get` → 应改为 ifPresent / 链式调用
 
 ```java
-// ❌ 反模式：ifPresent 检查 + get + 再处理
+// ✗ 反模式：ifPresent 检查 + get + 再处理
 if (optional.isPresent()) {
     String val = optional.get();
     // 对 val 做各种操作
@@ -504,7 +504,7 @@ if (optional.isPresent()) {
     metrics.record(val.length());
 }
 
-// ✅ 正例：map 链式处理，最后 ifPresent 消费
+// ✓ 正例：map 链式处理，最后 ifPresent 消费
 optional
     .map(val -> {
         System.out.println("Value: " + val);
@@ -526,7 +526,7 @@ optional.ifPresent(val -> {
 
 ```java
 // 更极端的例子：多层 isPresent+get
-// ❌ 反模式
+// ✗ 反模式
 if (userOpt.isPresent()) {
     User user = userOpt.get();
     Optional<String> email = user.getEmail();
@@ -538,7 +538,7 @@ if (userOpt.isPresent()) {
     }
 }
 
-// ✅ 正例：flatMap + filter + ifPresent
+// ✓ 正例：flatMap + filter + ifPresent
 userOpt
     .flatMap(User::getEmail)
     .filter(e -> e.endsWith("@company.com"))
@@ -550,10 +550,10 @@ userOpt
 **Brian Goetz（Java 语言架构师）明确说**：Optional 的设计意图是返回值类型，不是字段类型，也不是参数类型。
 
 ```java
-// ❌ 反模式：Optional 作为字段
+// ✗ 反模式：Optional 作为字段
 public class User {
-    private Optional<String> email = Optional.empty();  // ❌ 不推荐
-    private Optional<Address> address;                  // ❌ 不推荐
+    private Optional<String> email = Optional.empty();  // ✗ 不推荐
+    private Optional<Address> address;                  // ✗ 不推荐
 }
 
 // 问题：
@@ -561,7 +561,7 @@ public class User {
 // 2. 字段默认值语义不明确：null Optional 和 Optional.empty() 分别代表什么？
 // 3. 性能：多了一层对象包装，每个字段都变成 Optional 增加 JVM 内存压力
 
-// ✅ 正例：用 @Nullable + 空判断，或者直接用 null
+// ✓ 正例：用 @Nullable + 空判断，或者直接用 null
 public class User {
     private String email;       // null 表示未设置
     private Address address;   // null 表示无地址
@@ -569,13 +569,13 @@ public class User {
 ```
 
 ```java
-// ❌ 反模式：Optional 作为方法参数
+// ✗ 反模式：Optional 作为方法参数
 public void saveUser(String name, Optional<Integer> age, Optional<String> email) {
     // 调用方必须构造 Optional 对象：saveUser("Alice", Optional.of(30), Optional.empty())
     // 调用方痛苦，代码难看
 }
 
-// ✅ 正例：方法重载 + 清晰语义
+// ✓ 正例：方法重载 + 清晰语义
 public void saveUser(String name) {
     saveUser(name, null, null);
 }
@@ -586,7 +586,7 @@ public void saveUser(String name, Integer age, String email) {
     // 内部用 null 检查
 }
 
-// ✅ 正例：用 @Nullable 注解（工具类或内部 API 可以这样）
+// ✓ 正例：用 @Nullable 注解（工具类或内部 API 可以这样）
 public void saveUser(String name, @Nullable Integer age, @Nullable String email) {
     // 方法内对 Optional 参数做处理
 }
@@ -595,7 +595,7 @@ public void saveUser(String name, @Nullable Integer age, @Nullable String email)
 ### 5.4 反模式四：`List<Optional<T>>`
 
 ```java
-// ❌ 反模式：Optional 的集合
+// ✗ 反模式：Optional 的集合
 List<Optional<String>> names = getNames(); // List 中有些元素是 empty
 
 // 处理时变得异常复杂
@@ -603,7 +603,7 @@ for (Optional<String> name : names) {
     name.ifPresent(System.out::println);
 }
 
-// ✅ 正例：用空的集合表示"无"，或者用 filter 过滤
+// ✓ 正例：用空的集合表示"无"，或者用 filter 过滤
 List<String> names = getNonNullNames(); // 不含 null，不含 Optional
 
 // 如果上游确实可能返回 null 值，过滤掉就是
@@ -619,19 +619,19 @@ public enum Presence { ABSENT, EMPTY_STRING, PRESENT }
 ### 5.5 反模式五：`optional.orElse(null)` 自废武功
 
 ```java
-// ❌ 反模式：orElse(null) 完全违背了使用 Optional 的初衷
+// ✗ 反模式：orElse(null) 完全违背了使用 Optional 的初衷
 String value = optional.orElse(null);
 // 你又回到了 null 的世界——需要再做 null 检查
 if (value != null) { ... }
 
 // 等价于：努力半天回到原点
 
-// ✅ 正例：如果真的需要 null 去传递给遗留 API
+// ✓ 正例：如果真的需要 null 去传递给遗留 API
 String value = optional.orElse(null);
 // 这种场景仅限于：调用方是第三方库/遗留代码，它的 API 必须传 null 表示"未设置"
 // 而且这个 null 只在一个局部范围内，不传播
 
-// ✅ 更好的做法：在边界处转换
+// ✓ 更好的做法：在边界处转换
 // 在 Service 层保留 Optional，在 Controller 层转成 null 给 JSON 序列化
 // 但尽量少用
 ```
@@ -690,13 +690,13 @@ List<User> existingUsers = userIds.stream()
 // 场景：缓存模式，Optional 作为缓存值类型
 // 注意：用 null 表示"未缓存"，Optional.empty() 表示"已缓存但不存在"
 
-// ❌ 问题：直接用 Optional 作为 Map 值，遇到 Value is null 的问题
+// ✗ 问题：直接用 Optional 作为 Map 值，遇到 Value is null 的问题
 Map<String, Optional<User>> cache = new HashMap<>();
 
 // computeIfAbsent 不接受 null 作为 value，但 Optional.empty() 是可以的
 // 这里有个细节：如果 Optional 是字段值，map.computeIfAbsent 没问题
 
-// ✅ 正确用法
+// ✓ 正确用法
 public Optional<User> getUserFromCache(String id) {
     return cache.computeIfAbsent(id, this::loadUser);
 }
@@ -713,7 +713,7 @@ Spring Data JPA 从 2.x 版本开始，Repository 方法返回 `Optional` 是天
 
 ```java
 public interface UserRepository extends JpaRepository<User, Long> {
-    Optional<User> findById(Long id);  // ✅ 原生返回 Optional
+    Optional<User> findById(Long id);  // ✓ 原生返回 Optional
     // 注意：findById 返回 empty 表示数据库中无记录
 }
 
@@ -752,11 +752,11 @@ public class UserService {
 // │ 特性                │ Java Optional (java.util) │ Guava Optional             │
 // ├─────────────────────┼──────────────────────────┼────────────────────────────┤
 // │ 引入版本            │ Java 8                   │ Guava 1.0                  │
-// │ 实现 Serializable  │ ❌ 否                     │ ✅ 是 (序列化安全)          │
+// │ 实现 Serializable  │ ✗ 否                     │ ✓ 是 (序列化安全)          │
 // │ 转换方法            │ map / flatMap / filter   │ transform (仅一个)          │
 // │ Stream 互转         │ Optional::stream (Java9) │ asSet() → Set<T>           │
 // │ 兜底                │ orElse / orElseGet / or  │ or / orNull                │
-// │ 是否为 final 类     │ ✅ final                 │ abstract class              │
+// │ 是否为 final 类     │ ✓ final                 │ abstract class              │
 // │ 对 null 的容忍度    │ 明确不接受 null in of()  │ 部分方法接受  (fromNullable)│
 // └─────────────────────┴──────────────────────────┴────────────────────────────┘
 
@@ -779,10 +779,10 @@ public final class Optional<T> {
 }
 
 // 这意味着：
-// ❌ 不能作为 RPC 调用的返回值（Dubbo、gRPC 序列化会失败）
-// ❌ 不能放进 Redis / Memcached 缓存
-// ❌ 不能作为消息队列的消息体字段
-// ❌ 不能直接存在 Session 中（Tomcat Session 序列化）
+// ✗ 不能作为 RPC 调用的返回值（Dubbo、gRPC 序列化会失败）
+// ✗ 不能放进 Redis / Memcached 缓存
+// ✗ 不能作为消息队列的消息体字段
+// ✗ 不能直接存在 Session 中（Tomcat Session 序列化）
 ```
 
 ### 7.2 序列化场景下的替代方案
@@ -1218,7 +1218,7 @@ public void processPayment(Long orderId, String paymentMethod) {
 // 或者将所有异常链式组合（用 map 做 side-effect 处理不推荐，所以这种场景偏好用 orElseThrow）
 ```
 
-> 💡 **练习建议**：先自己尝试用 Optional 重写以上 5 个场景，再对比参考答案。重点不是"答案唯一"，而是体会 Optional 如何使用链式声明式的方式替代命令式的 null 检查。
+> **练习建议**：先自己尝试用 Optional 重写以上 5 个场景，再对比参考答案。重点不是"答案唯一"，而是体会 Optional 如何使用链式声明式的方式替代命令式的 null 检查。
 
 ---
 

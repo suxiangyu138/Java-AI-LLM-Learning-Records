@@ -1,6 +1,6 @@
 # 03 - Spring Boot 4 与 Spring Framework 7 新特性
 
-> 🎯 2025.11 发布的 Boot 4 / Framework 7 是 Spring "十年最大升级" — 模块化自动配置、虚拟线程默认、内置弹性、声明式 HTTP 客户端、AOT 一等公民。2026 面试必考，本文件讲透 10 大特性
+> 2025.11 发布的 Boot 4 / Framework 7 是 Spring "十年最大升级" — 模块化自动配置、虚拟线程默认、内置弹性、声明式 HTTP 客户端、AOT 一等公民。2026 面试必考，本文件讲透 10 大特性
 
 ---
 
@@ -70,9 +70,9 @@
 
 ```java
 // Boot 3 时代还能见到的旧写法（已无法编译）：
-import javax.persistence.Entity;      // ❌
+import javax.persistence.Entity;      // ✗
 // Boot 4 统一：
-import jakarta.persistence.Entity;    // ✅
+import jakarta.persistence.Entity;    // ✓
 ```
 
 **追问：** 为什么是"等了 10 年"？→ 上次 Jakarta 大迁移（EE 9/10，javax→jakarta）发生在 Boot 3（2022）；Boot 4 直接跳升到 EE 11，同时完成 Java 17 门槛 + 虚拟线程，跨度是 Boot 历史上最大的。
@@ -168,7 +168,7 @@ spring:
       strategy: path       # path / header / query / media-type
 ```
 
-> 💡 Boot 不提供默认方案 — 团队需显式选择策略并约定，这对多端（App/Web/开放平台）并存场景价值巨大。
+> Boot 不提供默认方案 — 团队需显式选择策略并约定，这对多端（App/Web/开放平台）并存场景价值巨大。
 
 ---
 
@@ -268,6 +268,6 @@ A: 三个关键词 — ① 基线换代（Java 17+ / Jakarta EE 11）② 性能�
 
 ---
 
-> 🎯 **核心要点**：Boot 4 的 10 大特性浓缩成一句话 — **"现代 Java 的一等公民体验"**：模块化让启动更快，虚拟线程让并发更高，内置弹性让代码更少，HttpServiceClient 让 Feign 退休，AOT 让云原生更近。2026 年面试聊到 Spring，谈 Boot 4 是"加分项"，能讲迁移路线是"加分到顶"。
+> **核心要点**：Boot 4 的 10 大特性浓缩成一句话 — **"现代 Java 的一等公民体验"**：模块化让启动更快，虚拟线程让并发更高，内置弹性让代码更少，HttpServiceClient 让 Feign 退休，AOT 让云原生更近。2026 年面试聊到 Spring，谈 Boot 4 是"加分项"，能讲迁移路线是"加分到顶"。
 
 **下一模块**：[04-SpringAI与AI应用生态](04-SpringAI与AI应用生态.md) / **返回总览**：[00-Spring生态知识体系总览](00-Spring生态知识体系总览.md)

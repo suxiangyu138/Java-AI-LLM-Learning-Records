@@ -1,6 +1,6 @@
 # 03 - npx 实战场景大全
 
-> 🎯 npx 的四大黄金场景：脚手架创建项目、工具链执行、临时任务、CI 集成。每个场景配 Java 后端对标，拿来即用
+> npx 的四大黄金场景：脚手架创建项目、工具链执行、临时任务、CI 集成。每个场景配 Java 后端对标，拿来即用
 
 ---
 
@@ -31,9 +31,9 @@ npx create-vite@latest my-app --template vue
 
 # 交互式创建
 npx create-vite@latest
-# ✔ Project name: my-app
-# ✔ Select a framework: › Vue
-# ✔ Select a variant: › TypeScript
+# ✓ Project name: my-app
+# ✓ Select a framework: › Vue
+# ✓ Select a variant: › TypeScript
 
 # 之后的标准流程
 cd my-app
@@ -42,9 +42,9 @@ npm run dev        # 本地开发
 npm run build      # 生产构建
 ```
 
-> ⚠️ **记得 @latest**：npx 有本地缓存，直接 `npx create-vite` 可能用到旧版模板，显式 `@latest` 保证拿到最新版本。
+> **记得 @latest**：npx 有本地缓存，直接 `npx create-vite` 可能用到旧版模板，显式 `@latest` 保证拿到最新版本。
 
-> 💡 **后端视角**：微服务仓库常含前端子模块，团队上手时一条 `npx create-vite@latest` 即可初始化前端骨架，与后端 `Spring Initializr` 流程对称。
+> **后端视角**：微服务仓库常含前端子模块，团队上手时一条 `npx create-vite@latest` 即可初始化前端骨架，与后端 `Spring Initializr` 流程对称。
 
 ---
 
@@ -84,7 +84,7 @@ npx http-server dist/ --port 8080
 npx serve -l 8080 dist/
 ```
 
-> 💡 **后端视角**：前端 `dist/` 构建产物本地预览，等价于后端 `mvn package` 后直接 `java -jar` 起服务 — 都是"产物 → 服务"的一步操作。
+> **后端视角**：前端 `dist/` 构建产物本地预览，等价于后端 `mvn package` 后直接 `java -jar` 起服务 — 都是"产物 → 服务"的一步操作。
 
 ---
 
@@ -126,7 +126,7 @@ build-frontend:
     - npm run build               # 构建
 ```
 
-> ⚠️ **CI 铁律**：CI 中 `npm ci` 后优先用 `npm run` 或直接本地二进制，**避免 npx 临时拉取未固定版本的远程包** — 每次构建结果可能不同，且新增一次供应链信任风险。
+> **CI 铁律**：CI 中 `npm ci` 后优先用 `npm run` 或直接本地二进制，**避免 npx 临时拉取未固定版本的远程包** — 每次构建结果可能不同，且新增一次供应链信任风险。
 
 ### 4.2 后端项目的场景
 
@@ -154,10 +154,10 @@ npx create-vite@latest ui --template vue
 }
 ```
 
-> 💡 **后端视角最佳实践**：把 npx 命令收敛进 `package.json` 的 scripts，团队统一入口（类似 Maven 的 `mvn verify`），避免每个人各自的 npx 版本漂移。
+> **后端视角最佳实践**：把 npx 命令收敛进 `package.json` 的 scripts，团队统一入口（类似 Maven 的 `mvn verify`），避免每个人各自的 npx 版本漂移。
 
 ---
 
-> 🎯 **核心要点**：npx 四大场景 — 脚手架（`create-vite@latest`）、工具链（prettier/eslint/http-server）、临时任务（版本验证/依赖升级）、CI 集成（锁版本 + npm ci）。后端人员记住"脚手架初始化 + 工具链执行 + CI 防漂移"三件事就够。
+> **核心要点**：npx 四大场景 — 脚手架（`create-vite@latest`）、工具链（prettier/eslint/http-server）、临时任务（版本验证/依赖升级）、CI 集成（锁版本 + npm ci）。后端人员记住"脚手架初始化 + 工具链执行 + CI 防漂移"三件事就够。
 
 **下一模块**：[04-npx运行原理与缓存机制](04-npx运行原理与缓存机制.md) / **返回总览**：[00-npx知识体系总览](00-npx知识体系总览.md)

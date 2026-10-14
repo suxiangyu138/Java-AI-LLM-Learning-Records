@@ -1,5 +1,5 @@
 # 09-SpringBoot应用K8s部署实战
-> 🎯 从Dockerfile到生产运行 — 完整的SpringBoot应用K8s部署流程：Dockerfile→Build→Push→Deployment→Service→Ingress→投产
+> 从Dockerfile到生产运行 — 完整的SpringBoot应用K8s部署流程：Dockerfile→Build→Push→Deployment→Service→Ingress→投产
 
 ---
 
@@ -246,7 +246,7 @@ kubectl rollout undo deployment/user-service --to-revision=2
 | `-XX:+ExitOnOutOfMemoryError` | OOM时退出（K8s会重启） | K8s能检测到并重启 |
 | `-XX:+HeapDumpOnOutOfMemoryError` | OOM时dump堆 | 用于事后分析 |
 
-> ⚠️ 不要在K8s中同时设置`-Xmx`和`limits.memory`！用`MaxRAMPercentage`让JVM自动适配，否则可能出现Pod的OOMKilled。
+> 不要在K8s中同时设置`-Xmx`和`limits.memory`！用`MaxRAMPercentage`让JVM自动适配，否则可能出现Pod的OOMKilled。
 
 ---
 
@@ -283,4 +283,4 @@ jobs:
 
 ---
 
-> 🎯 **K8s部署的成熟标志**：不是能跑起来，而是健康检查通过、优雅停机不丢请求、资源限制合理、CI/CD全自动。
+> **K8s部署的成熟标志**：不是能跑起来，而是健康检查通过、优雅停机不丢请求、资源限制合理、CI/CD全自动。

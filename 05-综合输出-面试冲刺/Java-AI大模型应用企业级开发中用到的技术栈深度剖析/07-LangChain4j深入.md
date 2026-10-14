@@ -2,7 +2,7 @@
 
 > 定位：@AiService 声明式编程、RAG 模块、工具调用、记忆、与 Spring AI 对比——LangChain4j 完整实践
 
-## 📚 目录
+## 目录
 
 1. [LangChain4j 定位](#1-langchain4j-定位)
 2. [@AiService 声明式接口](#2-aiservice-声明式接口)
@@ -23,7 +23,7 @@ LangChain4j = LangChain 的 Java 版（框架中立）
   30+ 向量存储（生态最广）
   @AiService 声明式接口（类 MyBatis Mapper 风格）
 
-⚠️ 面试必答：
+面试必答：
 "LangChain4j = LangChain Java 移植——
  框架中立 + 生态最广；
  亮点是 @AiService 声明式接口
@@ -37,7 +37,7 @@ LangChain4j = LangChain 的 Java 版（框架中立）
 ### 2.1 核心用法
 
 ```java
-// ⚠️ @AiService：声明式接口（AI 版 Mapper）
+// @AiService：声明式接口（AI 版 Mapper）
 @AiService
 public interface Assistant {
 
@@ -73,7 +73,7 @@ public class OrderAssistantService {
 }
 ```
 
-> 🎯 **要点**：@AiService = 声明式 AI 接口——写接口（方法签名 = 调用约定）、@SystemMessage 定义角色、@MemoryId 隔离会话、AiServices 装配。**MyBatis 风格的 AI 编程**。
+> **要点**：@AiService = 声明式 AI 接口——写接口（方法签名 = 调用约定）、@SystemMessage 定义角色、@MemoryId 隔离会话、AiServices 装配。**MyBatis 风格的 AI 编程**。
 
 ---
 
@@ -97,7 +97,7 @@ ContentRetriever contentRetriever(EmbeddingStore<TextSegment> store,
 // ② 注入 AiService（RAG 自动生效）
 Assistant assistant = AiServices.builder(Assistant.class)
         .chatLanguageModel(model)
-        .contentRetriever(contentRetriever)   // ⚠️ RAG 一行注入
+        .contentRetriever(contentRetriever)   // RAG 一行注入
         .build();
 ```
 
@@ -122,7 +122,7 @@ public void importDocuments(Path path) {
 }
 ```
 
-> 🎯 **要点**：LangChain4j RAG = ContentRetriever（检索注入）+ EmbeddingStore（向量库）——装配到 AiService 后自动检索增强。
+> **要点**：LangChain4j RAG = ContentRetriever（检索注入）+ EmbeddingStore（向量库）——装配到 AiService 后自动检索增强。
 
 ---
 
@@ -131,7 +131,7 @@ public void importDocuments(Path path) {
 ### 4.1 工具调用
 
 ```java
-// ⚠️ @Tool 注解（与 Spring AI 同风格）
+// @Tool 注解（与 Spring AI 同风格）
 public class OrderTools {
 
     @Tool("查询订单状态")
@@ -143,7 +143,7 @@ public class OrderTools {
 // 装配
 Assistant assistant = AiServices.builder(Assistant.class)
         .chatLanguageModel(model)
-        .tools(new OrderTools())            // ⚠️ 工具注入
+        .tools(new OrderTools())            // 工具注入
         .build();
 ```
 
@@ -167,7 +167,7 @@ public interface Assistant {
 }
 ```
 
-> 🎯 **要点**：LangChain4j 工具（@Tool + .tools()）与记忆（@MemoryId + ChatMemoryProvider）与 Spring AI 同理念、更简洁——**声明式是它的统一风格**。
+> **要点**：LangChain4j 工具（@Tool + .tools()）与记忆（@MemoryId + ChatMemoryProvider）与 Spring AI 同理念、更简洁——**声明式是它的统一风格**。
 
 ---
 
@@ -179,7 +179,7 @@ public interface Assistant {
 | 编程风格 | Fluent（ChatClient.prompt） | 声明式（@AiService） |
 | 模型覆盖 | 20+ | 30+（最广） |
 | 向量存储 | 15+ | 30+（最广） |
-| MCP | ✅ 最完整 | ✅ 模块 |
+| MCP | ✓ 最完整 | ✓ 模块 |
 | Spring 集成 | 自动配置/Actuator | 需手动装配 |
 | 企业背书 | VMware/Broadcom | Red Hat/Microsoft |
 
@@ -190,7 +190,7 @@ public interface Assistant {
   声明式偏好 → LangChain4j（@AiService）
   Fluent 偏好 → Spring AI（ChatClient）
 
-⚠️ 面试必答：
+面试必答：
 "Spring AI 赢在 Spring 集成（自动配置、
  MCP 完整）；LangChain4j 赢在生态广
  （30+ 模型/向量）+ 声明式接口。
@@ -199,7 +199,7 @@ public interface Assistant {
 
 ---
 
-> 🎯 **核心要点**：LangChain4j = **@AiService 声明式**（接口即 AI 服务）+ **RAG**（ContentRetriever 注入）+ **工具/记忆**（@Tool + @MemoryId）+ **生态最广**（30+ 模型/向量）。与 Spring AI 对比：Spring 集成 vs 生态广度——**Spring 团队选 Spring AI**。
+> **核心要点**：LangChain4j = **@AiService 声明式**（接口即 AI 服务）+ **RAG**（ContentRetriever 注入）+ **工具/记忆**（@Tool + @MemoryId）+ **生态最广**（30+ 模型/向量）。与 Spring AI 对比：Spring 集成 vs 生态广度——**Spring 团队选 Spring AI**。
 
 ---
 

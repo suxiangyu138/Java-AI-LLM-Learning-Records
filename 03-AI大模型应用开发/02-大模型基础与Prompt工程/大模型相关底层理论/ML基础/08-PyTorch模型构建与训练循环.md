@@ -1,6 +1,6 @@
 # 08 - PyTorch 模型构建与训练循环
 
-> 🎯 nn.Module + DataLoader + Optimizer + 训练循环 = PyTorch 四件套。这是 PyTorch 的核心编程模型，微调 LLM 就是在这套框架上操作
+> nn.Module + DataLoader + Optimizer + 训练循环 = PyTorch 四件套。这是 PyTorch 的核心编程模型，微调 LLM 就是在这套框架上操作
 
 ---
 
@@ -238,9 +238,9 @@ for epoch in range(num_epochs):
 ```text
 model.train() 和 model.eval() 控制什么？
 
-  ✅ Dropout：train 时开启（随机丢弃），eval 时关闭
-  ✅ BatchNorm：train 时用 batch 统计量，eval 时用全局统计量
-  ✅ 其他：自定义层可根据 self.training 调整行为
+  ✓ Dropout：train 时开启（随机丢弃），eval 时关闭
+  ✓ BatchNorm：train 时用 batch 统计量，eval 时用全局统计量
+  ✓ 其他：自定义层可根据 self.training 调整行为
 
 忘记 model.eval() → Dropout 在推理时仍活跃 → 输出随机 → 评估不准！
 ```

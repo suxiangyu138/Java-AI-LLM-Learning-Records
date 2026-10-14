@@ -34,10 +34,10 @@ HTTP 请求之间互相独立，服务器无法区分 "这个请求来自用户 
 
 | 技术 | 原理 | 缺陷 | 状态 |
 |------|------|------|------|
-| **URL 重写** | `url;jsessionid=xxx` 拼接在 URL 上 | 暴露 ID、书签泄漏、丑陋 | ❌ 淘汰 |
-| **隐藏表单域** | `<input type="hidden" name="token">` | 每个页面都要带、易丢失 | ❌ 淘汰 |
-| **Cookie** | 浏览器自动携带的小数据 | 大小限制、可禁用 | ✅ 主流 |
-| **Token Header** | `Authorization: Bearer xxx` | 需前端主动携带 | ✅ 主流 |
+| **URL 重写** | `url;jsessionid=xxx` 拼接在 URL 上 | 暴露 ID、书签泄漏、丑陋 | ✗ 淘汰 |
+| **隐藏表单域** | `<input type="hidden" name="token">` | 每个页面都要带、易丢失 | ✗ 淘汰 |
+| **Cookie** | 浏览器自动携带的小数据 | 大小限制、可禁用 | ✓ 主流 |
+| **Token Header** | `Authorization: Bearer xxx` | 需前端主动携带 | ✓ 主流 |
 
 ---
 
@@ -79,8 +79,8 @@ Set-Cookie: sessionId=abc123;           ← 键值对
 | **Expires** | 过期日期（HTTP-date 格式） | 与 Max-Age 二选一 |
 | **Domain** | 生效域名。不设=当前域名；设 `.example.com` = 所有子域名 | 按需 |
 | **Path** | 生效路径。`/` = 全站 | `/` |
-| **Secure** | 仅 HTTPS 发送 | ✅ 必须开启 |
-| **HttpOnly** | JavaScript 不可读写（防 XSS 窃取） | ✅ 必须开启 |
+| **Secure** | 仅 HTTPS 发送 | ✓ 必须开启 |
+| **HttpOnly** | JavaScript 不可读写（防 XSS 窃取） | ✓ 必须开启 |
 | **SameSite** | 跨站请求是否携带 | `Lax`（推荐） |
 
 ### 2.3 SameSite 详解
@@ -135,7 +135,7 @@ resp.addCookie(deleteCookie);
 | **总条数** | 约 3000 条 | 超出后旧 Cookie 被清除 |
 | **字符限制** | ASCII | 中文需 URL 编码 |
 
-> ⚠️ Cookie 不适合存大数据。需要存复杂数据时，存 Session ID 即可，实际数据放服务端。
+> Cookie 不适合存大数据。需要存复杂数据时，存 Session ID 即可，实际数据放服务端。
 
 ---
 
@@ -280,7 +280,7 @@ public class StandardSession implements HttpSession {
 4. 攻击者用同一个 JSESSIONID 访问 → 以受害者身份操作
 
 防护方案：
-// ⭐ 登录成功后立即更换 Session ID
+// ★ 登录成功后立即更换 Session ID
 req.changeSessionId();  // Servlet 3.1+ 内置方法
 
 // 或手动实现：
@@ -313,21 +313,21 @@ String currentIP = getClientIP(req);
 if (!currentIP.equals(storedIP)) {
     session.invalidate();  // IP 变化，强制重新登录
 }
-// ⚠️ IP 校验会误杀正常切换网络的用户（WiFi ↔ 4G），需权衡
+// IP 校验会误杀正常切换网络的用户（WiFi ↔ 4G），需权衡
 ```
 
 ### 5.3 安全实践清单
 
 | 措施 | 说明 |
 |------|------|
-| ✅ `HttpOnly=true` | 防止 JavaScript 读取 Cookie |
-| ✅ `Secure=true` | 仅在 HTTPS 传输 |
-| ✅ 登录后换 Session ID | 防止 Session 固定 |
-| ✅ 设置合理的超时 | 降低劫持窗口期 |
-| ✅ 敏感操作二次验证 | 修改密码、支付等 |
-| ✅ 同 IP/UA 辅助校验 | 但不要作为唯一依据 |
-| ❌ 不要将密码存 Session | 即使加密也不行 |
-| ❌ 不要用可预测的 Session ID | Tomcat 默认生成足够安全 |
+| ✓ `HttpOnly=true` | 防止 JavaScript 读取 Cookie |
+| ✓ `Secure=true` | 仅在 HTTPS 传输 |
+| ✓ 登录后换 Session ID | 防止 Session 固定 |
+| ✓ 设置合理的超时 | 降低劫持窗口期 |
+| ✓ 敏感操作二次验证 | 修改密码、支付等 |
+| ✓ 同 IP/UA 辅助校验 | 但不要作为唯一依据 |
+| ✗ 不要将密码存 Session | 即使加密也不行 |
+| ✗ 不要用可预测的 Session ID | Tomcat 默认生成足够安全 |
 
 ---
 
@@ -341,7 +341,7 @@ if (!currentIP.equals(storedIP)) {
 │  Nginx   │──请求1──>│  Tomcat-A    │ Session 在 A 上
 │ (轮询)    │        └──────────────┘
 │          │──请求2──>┌──────────────┐
-└──────────┘        │  Tomcat-B    │ ❌ 找不到 Session！
+└──────────┘        │  Tomcat-B    │ ✗ 找不到 Session！
                      └──────────────┘
 ```
 
@@ -373,7 +373,7 @@ upstream backend {
 | 应用无感 | 内存浪费（每台都存全部 Session） |
 | | 不适合大规模集群（>4 台） |
 
-#### 方案三：Redis 集中存储（⭐ 推荐）
+#### 方案三：Redis 集中存储（★ 推荐）
 
 ```java
 // Spring Session + Redis 配置
@@ -405,7 +405,7 @@ spring:
     port: 6379
 ```
 
-#### 方案四：JWT 无状态（⭐ 推荐）
+#### 方案四：JWT 无状态（★ 推荐）
 
 ```
 JWT = JSON Web Token，将用户信息编码到 Token 中
@@ -418,7 +418,7 @@ xxxxxxxx.yyyyyyyy.zzzzzzzz
 | 方案 | 存储位置 | 水平扩展 | 注销 | 适合场景 |
 |------|---------|---------|------|---------|
 | IP Hash | 服务端 | 困难 | 简单 | 小型应用 |
-| Session 复制 | 服务端 | 困难 | 简单 | ❌不推荐 |
+| Session 复制 | 服务端 | 困难 | 简单 | ✗不推荐 |
 | **Redis Session** | 外部 | 简单 | 简单 | 传统 Web 应用 |
 | **JWT** | 客户端 | 天然支持 | 需黑名单 | 前后端分离/API |
 

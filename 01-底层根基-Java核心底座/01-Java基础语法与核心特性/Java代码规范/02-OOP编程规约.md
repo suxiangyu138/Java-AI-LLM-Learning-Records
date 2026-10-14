@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [equals / hashCode / toString 契约](#1-equals--hashcode--tostring-契约)
 2. [构造器规范](#2-构造器规范)
@@ -69,7 +69,7 @@ public class User {
 | `getClass()` | 严格类型匹配 | 子类不等于父类 | 非继承体系（推荐） |
 | `instanceof` | 支持继承 | 可能违反对称性 | 需要支持子类比较 |
 
-> 🎯 **阿里手册推荐**：使用 `getClass()`，除非明确需要支持继承体系比较。
+> **阿里手册推荐**：使用 `getClass()`，除非明确需要支持继承体系比较。
 
 ### 1.4 Lombok 等价写法
 
@@ -84,7 +84,7 @@ public class User {
 }
 ```
 
-> 💡 `@Data` 自动生成 equals/hashCode/toString/getter/setter，与手写模板等价。
+> `@Data` 自动生成 equals/hashCode/toString/getter/setter，与手写模板等价。
 
 ---
 
@@ -93,14 +93,14 @@ public class User {
 ### 2.1 构造器只做初始化
 
 ```java
-// ❌ 反例：构造器里放业务逻辑
+// ✗ 反例：构造器里放业务逻辑
 public UserService(UserRepository repo) {
     this.repo = repo;
-    this.cache = loadCache();  // ❌ 业务逻辑
-    this.mq = connectMQ();     // ❌ 外部依赖
+    this.cache = loadCache();  // ✗ 业务逻辑
+    this.mq = connectMQ();     // ✗ 外部依赖
 }
 
-// ✅ 正确：构造器只做字段赋值
+// ✓ 正确：构造器只做字段赋值
 public UserService(UserRepository repo) {
     this.repo = repo;
 }
@@ -158,10 +158,10 @@ public class StringUtils {
 
 | 优势 | 构造器 | 静态工厂 |
 |------|--------|---------|
-| 有名字 | ❌ | ✅ `List.of()` 比 `new ArrayList<>()` 清晰 |
-| 可以缓存 | ❌ 每次新建 | ✅ `Integer.valueOf()` 缓存 |
-| 返回子类型 | ❌ | ✅ 可返回接口实现 |
-| 泛型推断 | ❌ | ✅ `List.of()` 自动推断 |
+| 有名字 | ✗ | ✓ `List.of()` 比 `new ArrayList<>()` 清晰 |
+| 可以缓存 | ✗ 每次新建 | ✓ `Integer.valueOf()` 缓存 |
+| 返回子类型 | ✗ | ✓ 可返回接口实现 |
+| 泛型推断 | ✗ | ✓ `List.of()` 自动推断 |
 
 ### 3.2 命名约定
 
@@ -255,7 +255,7 @@ UserDTO dto = new UserDTO();
 BeanUtils.copyProperties(userDO, dto);
 ```
 
-> ⚠️ **禁止**：DO 直接返回给前端（泄露数据库结构）、VO 直接传给 DAO 层（职责混乱）。
+> **禁止**：DO 直接返回给前端（泄露数据库结构）、VO 直接传给 DAO 层（职责混乱）。
 
 ---
 
@@ -264,16 +264,16 @@ BeanUtils.copyProperties(userDO, dto);
 ### 5.1 接口只放抽象方法和常量
 
 ```java
-// ✅ 正确
+// ✓ 正确
 public interface UserRepository {
     User findById(Long id);
     void save(User user);
 }
 
-// ❌ 错误：接口里放实现细节
+// ✗ 错误：接口里放实现细节
 public interface UserRepository {
     default User findById(Long id) {
-        // ❌ 具体实现不应该在接口里
+        // ✗ 具体实现不应该在接口里
         String sql = "SELECT * FROM user WHERE id = ?";
         // ...
     }
@@ -284,9 +284,9 @@ public interface UserRepository {
 
 | 维度 | 接口 | 抽象类 |
 |------|------|--------|
-| 多继承 | ✅ 可实现多个 | ❌ 只能单继承 |
-| 字段 | ❌ 只能常量 | ✅ 可有实例字段 |
-| 构造器 | ❌ | ✅ |
+| 多继承 | ✓ 可实现多个 | ✗ 只能单继承 |
+| 字段 | ✗ 只能常量 | ✓ 可有实例字段 |
+| 构造器 | ✗ | ✓ |
 | 方法实现 | default 方法 | 普通方法 |
 | 适用场景 | 定义能力/契约 | 代码复用/模板 |
 
@@ -311,7 +311,7 @@ public interface UserRepository {
 ### 6.1 组合优先于继承
 
 ```java
-// ❌ 继承导致脆弱基类
+// ✗ 继承导致脆弱基类
 public class ArrayListStack<E> extends ArrayList<E> {
     public void push(E e) {
         add(e);
@@ -323,7 +323,7 @@ public class ArrayListStack<E> extends ArrayList<E> {
 }
 // 问题：ArrayList 的实现变更可能影响 Stack
 
-// ✅ 组合更安全
+// ✓ 组合更安全
 public class Stack<E> {
     private final List<E> list = new ArrayList<>();
     
@@ -340,10 +340,10 @@ public class Stack<E> {
 ### 6.2 is-a 关系判断
 
 ```java
-// ✅ 正确：Dog is-a Animal
+// ✓ 正确：Dog is-a Animal
 public class Dog extends Animal { }
 
-// ❌ 错误：Stack is-not-a ArrayList
+// ✗ 错误：Stack is-not-a ArrayList
 public class Stack extends ArrayList { }  // 应该用组合
 ```
 

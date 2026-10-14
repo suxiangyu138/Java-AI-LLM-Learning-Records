@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [为什么是 JdbcClient](#1-为什么是-jdbcclient)
 2. [查询链速查](#2-查询链速查)
@@ -26,7 +26,7 @@
 | 语句级配置（7.0） | 全局 setter | **每条链可配 fetchSize/maxRows/queryTimeout** |
 | 可变参数 | 显式包装 | `params(Object...)` / `param(Object)` 逐参 |
 
-> 🎯 **核心要点**：JdbcClient 不是新引擎——**同一执行内核的语法糖升级**（内部仍走 JdbcTemplate 逻辑）；它让"查询链路"可读可测，是 6.1+ 官方推荐的数据访问入口。
+> **核心要点**：JdbcClient 不是新引擎——**同一执行内核的语法糖升级**（内部仍走 JdbcTemplate 逻辑）；它让"查询链路"可读可测，是 6.1+ 官方推荐的数据访问入口。
 
 ### 1.1 源码级：JdbcClient 如何复用 JdbcTemplate
 
@@ -47,7 +47,7 @@ JdbcClient 内部持有一个 JdbcTemplate 实例：
 | `JdbcClient` 构造器 | 显式传入自定义 JdbcTemplate（保留其全局配置） |
 | 命名参数 | 惰性构建 `NamedParameterJdbcTemplate` 做 `:name` 解析 |
 
-> 🎯 面试答"JdbcClient 有性能损失吗"：没有——它**不是代理也不是 AOP**，就是普通对象组合；多一层方法调用可忽略，SQL 执行路径与 JdbcTemplate 完全相同。
+> 面试答"JdbcClient 有性能损失吗"：没有——它**不是代理也不是 AOP**，就是普通对象组合；多一层方法调用可忽略，SQL 执行路径与 JdbcTemplate 完全相同。
 
 延伸一句：面试问"JdbcClient 能替换 JdbcTemplate 吗"——答案是可以（同一内核），但 JdbcTemplate 的 `execute(StatementCallback)` 这类底层回调 API 在 JdbcClient 里没有一一对应；极端底层操作（如拿 Statement 做数据库特有动作）仍需要 JdbcTemplate。所以两者是"互补共存"而非"完全替代"，这是最严谨的答法。反过来也一样——JdbcTemplate 没有 JdbcClient 的 optional() 语义，空结果处理要靠手工判断，这是新代码选 JdbcClient 的又一个理由。
 
@@ -120,7 +120,7 @@ public List<Order> search(String status, BigDecimal minAmount) {
 | MyBatis 动态 SQL | 条件极多、需 XML 管理 |
 | QueryDSL / jOOQ | 类型安全的复杂查询（重器） |
 
-> ⚠️ 动态拼接时**值永远走 `.params()` 占位符**——任何把参数值直接拼进 SQL 字符串的写法都禁止（值含 `'` 时既报错又可能注入）；这是动态 SQL 场景的最高红线。
+> 动态拼接时**值永远走 `.params()` 占位符**——任何把参数值直接拼进 SQL 字符串的写法都禁止（值含 `'` 时既报错又可能注入）；这是动态 SQL 场景的最高红线。
 
 ### 2.2 链式调用中的异常语义速查
 
@@ -154,7 +154,7 @@ Long id = kh.getKey().longValue();
 jdbc.sql("CREATE INDEX idx_status ON t_order(status)").update();
 ```
 
-> 💡 与 JdbcTemplate 语义对齐：`update()` 的返回与 `update(sql, args)` 相同；`KeyHolder` 回填机制完全一致（见 [02-JdbcTemplate 速查](02-JdbcTemplate速查.md) 第 5 节）。
+> 与 JdbcTemplate 语义对齐：`update()` 的返回与 `update(sql, args)` 相同；`KeyHolder` 回填机制完全一致（见 [02-JdbcTemplate 速查](02-JdbcTemplate速查.md) 第 5 节）。
 
 ### 3.1 update 返回值的使用与边界
 
@@ -175,7 +175,7 @@ if (n == 0) {
 }
 ```
 
-> 💡 注意：`UPDATE` 把值改成与原来相同，MySQL 返回"匹配行数"还是"实际修改行数"由连接参数 `useAffectedRows` 决定——依赖 `n` 做业务判断时先确认驱动行为，否则会出现"改了但 n=0"的困惑。
+> 注意：`UPDATE` 把值改成与原来相同，MySQL 返回"匹配行数"还是"实际修改行数"由连接参数 `useAffectedRows` 决定——依赖 `n` 做业务判断时先确认驱动行为，否则会出现"改了但 n=0"的困惑。
 
 ### 3.2 更新与事务的配合要点
 
@@ -197,7 +197,7 @@ public void batchUpdateStatus(List<Long> ids, String newStatus) {
 }
 ```
 
-> 💡 注意：循环 update 在事务内"连接次数"仍是 1 次——数据库往返是 N 次，但连接借还、事务提交只有 1 次；所以事务内循环 update 比无事务快很多，但仍是 N 次网络往返，数据量大了还是要走批量（见 [05-批量操作与存储过程速查](05-批量操作与存储过程速查.md)）。
+> 注意：循环 update 在事务内"连接次数"仍是 1 次——数据库往返是 N 次，但连接借还、事务提交只有 1 次；所以事务内循环 update 比无事务快很多，但仍是 N 次网络往返，数据量大了还是要走批量（见 [05-批量操作与存储过程速查](05-批量操作与存储过程速查.md)）。
 
 ## 4. 结果映射：query 四兄弟
 
@@ -226,7 +226,7 @@ jdbc.sql("SELECT * FROM t_order WHERE batch_no = :batch")
         .forEach(this::process);
 ```
 
-> ⚠️ 注意：`stream()` 返回的是**持有连接**的流——必须用 try-with-resources 或确保全量消费后关闭，否则连接泄漏；`list()` 则立即全量取回、连接即释放。
+> 注意：`stream()` 返回的是**持有连接**的流——必须用 try-with-resources 或确保全量消费后关闭，否则连接泄漏；`list()` 则立即全量取回、连接即释放。
 
 ### 4.1 自动映射的细节与边界
 
@@ -252,7 +252,7 @@ List<OrderDto> list = jdbc.sql(sql)
         .list();
 ```
 
-> 🎯 判断用不用自动映射：**列与字段一一对应、类型简单** → 自动；有任何"一字段对多列 / 需要计算 / 类型转换" → RowMapper。生产代码里 RowMapper 的使用率其实高于自动映射——自动映射是"省事"，RowMapper 是"可控"。
+> 判断用不用自动映射：**列与字段一一对应、类型简单** → 自动；有任何"一字段对多列 / 需要计算 / 类型转换" → RowMapper。生产代码里 RowMapper 的使用率其实高于自动映射——自动映射是"省事"，RowMapper 是"可控"。
 
 自动映射还有一个隐藏性能点：BeanPropertyRowMapper 会在首次映射时缓存列名→属性的映射关系（反射结果），后续行复用缓存——所以"自动映射比手写 RowMapper 慢"是不成立的，开销只在首行；真正慢的是每次 new BeanPropertyRowMapper，生产代码应复用实例。
 
@@ -265,7 +265,7 @@ List<OrderDto> list = jdbc.sql(sql)
 | `.single()` | 抛 EmptyResultDataAccessException | 有值 | 抛 IncorrectResultSizeDataAccessException |
 | `.stream()` | 空流 | 单元素流 | 全量流 |
 
-> 🎯 面试高频追问："optional 和 single 都是取一条，为什么需要两个？"——optional 表达"可能存在"，single 表达"必须存在"；用 optional 的地方如果查到多条，说明业务假设被打破，抛异常是保护机制——两者把"空"与"多"两种错误分开暴露，比裸 JDBC 的 null 判断严谨得多。
+> 面试高频追问："optional 和 single 都是取一条，为什么需要两个？"——optional 表达"可能存在"，single 表达"必须存在"；用 optional 的地方如果查到多条，说明业务假设被打破，抛异常是保护机制——两者把"空"与"多"两种错误分开暴露，比裸 JDBC 的 null 判断严谨得多。
 
 实战中还常见一个用法：`optional()` 配合自定义 RowMapper 处理"可能不存在的单行"——比如用户中心按邮箱查账号，查不到返回 empty 走注册流程，查到多条说明数据异常（此时抛异常正是期望）。把"空"与"多"都当成需要处理的业务分支，是数据层健壮性的体现。
 
@@ -288,7 +288,7 @@ List<Order> bigResult = jdbc.sql("SELECT * FROM t_order WHERE created_at >= :sin
         .list();
 ```
 
-> 🎯 **核心要点**：7.0 前 fetchSize/maxRows/queryTimeout 只能全局配置（影响所有语句）；7.0 后 JdbcClient 支持**每条语句独立配置**（#35155）——大报表语句与在线查询互不干扰，这是 JdbcClient 相对 JdbcTemplate 的"终极语法优势"。
+> **核心要点**：7.0 前 fetchSize/maxRows/queryTimeout 只能全局配置（影响所有语句）；7.0 后 JdbcClient 支持**每条语句独立配置**（#35155）——大报表语句与在线查询互不干扰，这是 JdbcClient 相对 JdbcTemplate 的"终极语法优势"。
 
 ### 5.1 语句级配置 vs 全局配置的优先级
 
@@ -321,7 +321,7 @@ public void exportDaily() {
 }
 ```
 
-> ⚠️ 大结果集 + `stream()` 必须确保流被完全消费或显式关闭（流关闭才归还连接）；数据量不大时直接 `list()` 更省心——两者按数据量权衡，不要无脑流式。
+> 大结果集 + `stream()` 必须确保流被完全消费或显式关闭（流关闭才归还连接）；数据量不大时直接 `list()` 更省心——两者按数据量权衡，不要无脑流式。
 
 ### 5.2 语句级配置的适用场景与误用
 
@@ -356,7 +356,7 @@ int n = jdbc.sql(sql).param("id", 1L).update();
 | `batchUpdate(sql, batchValues)` | `sql(sql).batchUpdate(listOfMaps)`（7.x）或 JdbcTemplate 批量 |
 | `query(sql, RowMapper, params)` | `sql(sql).params(...).query(rowMapper).list()` |
 
-> 💡 迁移原则：语义完全一致（同一执行内核）——迁移是**纯语法级**改动，不涉及事务/性能/异常行为变化；`queryForObject` 的空结果语义注意用 `optional()`/`single()` 显式表达。
+> 迁移原则：语义完全一致（同一执行内核）——迁移是**纯语法级**改动，不涉及事务/性能/异常行为变化；`queryForObject` 的空结果语义注意用 `optional()`/`single()` 显式表达。
 
 ### 6.1 迁移检查清单与面试官追问
 

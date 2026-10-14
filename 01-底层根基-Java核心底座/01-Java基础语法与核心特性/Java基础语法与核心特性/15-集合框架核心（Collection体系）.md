@@ -105,13 +105,13 @@ for (String s : list) {
     System.out.println(s);
 }
 
-// ⚠️ 迭代过程中禁止直接修改集合（会抛 ConcurrentModificationException）
+// 迭代过程中禁止直接修改集合（会抛 ConcurrentModificationException）
 // 内部通过 modCount 字段检测：每次结构性修改 modCount++，
 // 迭代器创建时保存 expectedModCount = modCount，
 // 每次 next() 检查 modCount != expectedModCount 则抛异常
 ```
 
-> 💡 **fail-fast（快速失败）** 是一种 bug 检测机制，不是线程安全保障。并发修改应使用 `ConcurrentHashMap`、`CopyOnWriteArrayList` 等并发容器。
+> **fail-fast（快速失败）** 是一种 bug 检测机制，不是线程安全保障。并发修改应使用 `ConcurrentHashMap`、`CopyOnWriteArrayList` 等并发容器。
 
 ### 2.3 ListIterator（List 专属双向迭代器）
 
@@ -142,7 +142,7 @@ li.add("Y");                                 // 插入当前元素
 
 **Vector 淘汰原因**：JDK 1.0 遗留，方法级 `synchronized` 粒度太粗。官方建议不要再使用，用 `CopyOnWriteArrayList` 或 `Collections.synchronizedList()` 替代。
 
-> 💡 **选型口诀**：读写比例高或尾部追加→`ArrayList`；频繁头部插入/删除→`LinkedList`；需要队列/栈操作→`LinkedList` 或 `ArrayDeque`。
+> **选型口诀**：读写比例高或尾部追加→`ArrayList`；频繁头部插入/删除→`LinkedList`；需要队列/栈操作→`LinkedList` 或 `ArrayDeque`。
 
 ---
 
@@ -201,12 +201,12 @@ private void ensureCapacityInternal(int minCapacity) {
 }
 
 private void ensureExplicitCapacity(int minCapacity) {
-    modCount++;  // ⚠️ 结构性修改计数 +1
+    modCount++;  // 结构性修改计数 +1
     if (minCapacity - elementData.length > 0)
         grow(minCapacity);
 }
 
-// ⭐ 扩容核心
+// ★ 扩容核心
 private void grow(int minCapacity) {
     int oldCapacity = elementData.length;
     // 扩容 1.5 倍（位运算高效计算）
@@ -219,7 +219,7 @@ private void grow(int minCapacity) {
     if (newCapacity - MAX_ARRAY_SIZE > 0)
         newCapacity = hugeCapacity(minCapacity); // 大数组处理
 
-    // ⭐ 创建新数组 + 复制旧元素（主要性能开销）
+    // ★ 创建新数组 + 复制旧元素（主要性能开销）
     elementData = Arrays.copyOf(elementData, newCapacity);
 }
 ```
@@ -234,7 +234,7 @@ private void grow(int minCapacity) {
 | 最大容量 | `Integer.MAX_VALUE - 8` |
 | 时间复杂度 | 均摊 O(1)（扩容本身 O(n)，但发生频率低） |
 
-> ⚠️ **扩容代价**：每次扩容需要 O(n) 的数组复制。预估大数据量时应指定初始容量，避免频繁扩容。例如：`new ArrayList<>(expectedSize)`。
+> **扩容代价**：每次扩容需要 O(n) 的数组复制。预估大数据量时应指定初始容量，避免频繁扩容。例如：`new ArrayList<>(expectedSize)`。
 
 ---
 
@@ -295,7 +295,7 @@ private void linkLast(E e) {
 }
 
 // ========== 按索引查找（二分优化） ==========
-// ⭐ LinkedList 的 node() 方法：根据 index 靠近头还是尾决定遍历方向
+// ★ LinkedList 的 node() 方法：根据 index 靠近头还是尾决定遍历方向
 Node<E> node(int index) {
     if (index < (size >> 1)) {
         // 前半部分 → 从头向后遍历
@@ -311,7 +311,7 @@ Node<E> node(int index) {
 }
 ```
 
-> 💡 LinkedList 的 get(index) 需要遍历链表，每次 O(n)，但 JDK 做了优化：用 `index < (size >> 1)` 判断目标靠近头部还是尾部，选择最短遍历路径。
+> LinkedList 的 get(index) 需要遍历链表，每次 O(n)，但 JDK 做了优化：用 `index < (size >> 1)` 判断目标靠近头部还是尾部，选择最短遍历路径。
 
 ---
 
@@ -371,7 +371,7 @@ public boolean add(E e) {
 3. 桶不为空 → 调用 `equals()` 逐个比较
 4. 比较相同 → 拒绝存入（返回 false），不同 → 链表/红黑树存储
 
-> ⚠️ **关键规则**：`equals()` 相同 → `hashCode()` 必须相同。重写 `equals()` 时必须重写 `hashCode()`，否则 HashSet/HashMap 无法正确去重。
+> **关键规则**：`equals()` 相同 → `hashCode()` 必须相同。重写 `equals()` 时必须重写 `hashCode()`，否则 HashSet/HashMap 无法正确去重。
 
 ---
 
@@ -419,7 +419,7 @@ String peek = deque.peek();  // 查看栈顶
 | 容量限制 | 无界（自动扩容） | 无界 |
 | 用途 | 队列/栈场景首选 | 同时需要 List + 队列/栈功能 |
 
-> 💡 **建议**：单纯用作队列或栈时，`ArrayDeque` 性能优于 `LinkedList`。需要索引操作、中间插入等 List 功能时才选 `LinkedList`。
+> **建议**：单纯用作队列或栈时，`ArrayDeque` 性能优于 `LinkedList`。需要索引操作、中间插入等 List 功能时才选 `LinkedList`。
 
 ### 7.4 PriorityQueue（优先级队列）
 
@@ -483,7 +483,7 @@ CopyOnWriteArrayList<String> cowList = new CopyOnWriteArrayList<>();
 cowList.add("A");      // 内部 synchronized + Arrays.copyOf()
 cowList.get(0);        // 无锁，直接 array[index]
 
-// ⚠️ CopyOnWriteArrayList 不适合写频繁场景（每次写 O(n) 复制整个数组）
+// CopyOnWriteArrayList 不适合写频繁场景（每次写 O(n) 复制整个数组）
 
 // 同步包装器（迭代时需外部加锁）
 List<String> syncList = Collections.synchronizedList(new ArrayList<>());
@@ -492,7 +492,7 @@ synchronized (syncList) {
 }
 ```
 
-> 🎯 **线程安全集合选型原则**：优先使用 `java.util.concurrent` 包中的专用并发集合（如 `ConcurrentHashMap`、`CopyOnWriteArrayList`），避免使用 `Hashtable`、`Vector` 等过时集合。
+> **线程安全集合选型原则**：优先使用 `java.util.concurrent` 包中的专用并发集合（如 `ConcurrentHashMap`、`CopyOnWriteArrayList`），避免使用 `Hashtable`、`Vector` 等过时集合。
 
 ---
 
@@ -509,7 +509,7 @@ synchronized (syncList) {
 | 迭代 | O(n) | O(n) | O(n) | O(n) | O(n) | O(n) |
 | 内存 | 低 | 高 | 中 | 中 | 低 | 中 |
 
-> 💡 **O(1) 均摊**：单次操作可能是 O(n)（如扩容），但平均到每次操作是 O(1)。
+> **O(1) 均摊**：单次操作可能是 O(n)（如扩容），但平均到每次操作是 O(1)。
 
 ---
 
@@ -590,7 +590,7 @@ synchronized (syncList) {
 - `ConcurrentHashMap.newKeySet()`：并发 Set 首选
 - `ConcurrentLinkedQueue`：CAS 无锁队列
 
-> 🎯 **核心总结**：集合框架的核心是掌握各实现类的底层数据结构与时间复杂度。ArrayList 的扩容机制、LinkedList 的双向链表、HashSet 基于 HashMap 的去重原理、以及如何根据场景选型，是面试和实际开发中的重中之重。
+> **核心总结**：集合框架的核心是掌握各实现类的底层数据结构与时间复杂度。ArrayList 的扩容机制、LinkedList 的双向链表、HashSet 基于 HashMap 的去重原理、以及如何根据场景选型，是面试和实际开发中的重中之重。
 
 ---
 

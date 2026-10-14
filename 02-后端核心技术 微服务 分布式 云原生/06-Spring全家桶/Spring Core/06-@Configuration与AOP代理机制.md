@@ -37,7 +37,7 @@ DefaultAopProxyFactory.createAopProxy：
 Spring Boot 默认：spring.aop.proxy-target-class=true（强制 CGLIB）
 ```
 
-> 🎯 面试必答：**「Spring Boot 为什么默认 CGLIB？」**——统一行为（不因接口有无而不同）、性能更好（调用快）、支持更多特性（如自调用代理在 CGLIB 下更完整）。
+> 面试必答：**「Spring Boot 为什么默认 CGLIB？」**——统一行为（不因接口有无而不同）、性能更好（调用快）、支持更多特性（如自调用代理在 CGLIB 下更完整）。
 
 ---
 
@@ -78,7 +78,7 @@ ConfigurationClassEnhancer 生成子类（CGLIB）：
   → 无单例保证（每次方法调用都 new）→ 用于性能敏感/无内部调用的场景
 ```
 
-> 🎯 面试必答：**「@Configuration 为什么被 CGLIB 代理？」——保证 @Bean 方法内部互调时返回容器单例**；`proxyBeanMethods=false` 可关闭（Lite 模式），但内部互调会破坏单例语义。
+> 面试必答：**「@Configuration 为什么被 CGLIB 代理？」——保证 @Bean 方法内部互调时返回容器单例**；`proxyBeanMethods=false` 可关闭（Lite 模式），但内部互调会破坏单例语义。
 
 ### 2.3 两阶段配置类（full vs lite）
 
@@ -233,7 +233,7 @@ System.out.println(AopUtils.isJdkDynamicProxy(bean));   // JDK 代理
 System.out.println(AopUtils.isCglibProxy(bean));        // CGLIB 代理
 ```
 
-> 🎯 **核心要点**：代理机制 = **两种实现（JDK 接口代理 / CGLIB 子类代理）+ 三个入口（@Configuration 单例保证、@EnableAspectJAutoProxy 的 AOP、循环依赖提前代理）+ 一条链（Advisor 责任链）**。面试四问必背：@Configuration 为什么代理（单例语义）、Boot 为什么默认 CGLIB（统一+性能）、自调用为什么失效（this 不走代理）、final/private 为什么不行（CGLIB 限制）。Spring 7.0 代理选择逻辑不变（JDK/CGLIB 规则稳定）。
+> **核心要点**：代理机制 = **两种实现（JDK 接口代理 / CGLIB 子类代理）+ 三个入口（@Configuration 单例保证、@EnableAspectJAutoProxy 的 AOP、循环依赖提前代理）+ 一条链（Advisor 责任链）**。面试四问必背：@Configuration 为什么代理（单例语义）、Boot 为什么默认 CGLIB（统一+性能）、自调用为什么失效（this 不走代理）、final/private 为什么不行（CGLIB 限制）。Spring 7.0 代理选择逻辑不变（JDK/CGLIB 规则稳定）。
 
 ---
 

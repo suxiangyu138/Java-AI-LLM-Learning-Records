@@ -2,7 +2,7 @@
 
 > javac编译、jar打包、jlink定制运行时、jshell快速验证——这些JDK自带工具比你想象的强大100倍
 
-## 📚 目录
+## 目录
 
 1. [javac — Java编译器](#1-javac--java编译器)
 2. [java — Java启动器](#2-java--java启动器)
@@ -35,7 +35,7 @@
 代码生成 (Code Generation) → .class 字节码
 ```
 
-> 💡 **理解编译流程的意义**：面试中常问的"泛型擦除"发生在语义分析阶段；"语法糖"（如 for-each、自动拆装箱）也在编译期被解糖。掌握这些有助于理解 Java 的运行机制。
+> **理解编译流程的意义**：面试中常问的"泛型擦除"发生在语义分析阶段；"语法糖"（如 for-each、自动拆装箱）也在编译期被解糖。掌握这些有助于理解 Java 的运行机制。
 
 ### 1.2 常用参数详解
 
@@ -77,7 +77,7 @@ javac -d target/classes -sourcepath src/main/java \
 ```bash
 # 错误方式（JDK 17 编译 target 8）
 javac -source 8 -target 8 MyApp.java
-# ⚠️ 问题：虽然 class 版本是 8，但编译时仍可使用 JDK 17 的 API
+# 问题：虽然 class 版本是 8，但编译时仍可使用 JDK 17 的 API
 
 # 正确方式：使用 -bootclasspath 指定目标版本的 API
 javac -source 8 -target 8 \
@@ -127,7 +127,7 @@ javac --release --help
 | 17 (61) | 61.0 | Sealed Class、Record、Pattern Matching |
 | 21 (65) | 65.0 | Virtual Threads、Pattern Matching for switch |
 
-> 🎯 **核心要点**：日常开发中，javac 最常用的参数组合是 `-d -cp -encoding -Xlint`。使用 `--release` 替代 `-source/-target` 可以避免交叉编译时的 API 兼容性问题。
+> **核心要点**：日常开发中，javac 最常用的参数组合是 `-d -cp -encoding -Xlint`。使用 `--release` 替代 `-source/-target` 可以避免交叉编译时的 API 兼容性问题。
 
 ---
 
@@ -219,7 +219,7 @@ java @options.txt
 java @jvm-options.txt @app-options.txt @debug-options.txt
 ```
 
-> 💡 **参数文件最佳实践**：CI/CD 流水线中将不同环境（dev/staging/prod）的参数配置为独立文件，通过 `@` 引用，避免在构建脚本中硬编码大量参数。
+> **参数文件最佳实践**：CI/CD 流水线中将不同环境（dev/staging/prod）的参数配置为独立文件，通过 `@` 引用，避免在构建脚本中硬编码大量参数。
 
 ### 2.5 后台运行与日志重定向
 
@@ -249,7 +249,7 @@ javaw -jar app.jar
 # javaw 不显示控制台窗口，适合 GUI 应用
 ```
 
-> 🎯 **核心要点**：`java` 命令是 JVM 的入口。生产环境中用好 `-Xms/-Xmx` 控制堆内存、`-XX:+HeapDumpOnOutOfMemoryError` 预防故障、`@argument-file` 管理复杂参数、`nohup` 或 `systemd` 保证进程持续运行。
+> **核心要点**：`java` 命令是 JVM 的入口。生产环境中用好 `-Xms/-Xmx` 控制堆内存、`-XX:+HeapDumpOnOutOfMemoryError` 预防故障、`@argument-file` 管理复杂参数、`nohup` 或 `systemd` 保证进程持续运行。
 
 ---
 
@@ -306,7 +306,7 @@ Implementation-Vendor: My Company
 | `Implementation-Title` | 应用名称 | 可选 |
 | `Implementation-Version` | 版本号 | 可选（可在代码中读取） |
 
-> ⚠️ **Class-Path 注意事项**：Manifest 中的 `Class-Path` 引用的是相对于 JAR 文件的路径。实际项目中使用 Maven/Gradle 管理依赖时，通常使用 `maven-shade-plugin` 或 `spring-boot-maven-plugin` 将依赖合并或重新定位，而非手动配置 `Class-Path`。
+> **Class-Path 注意事项**：Manifest 中的 `Class-Path` 引用的是相对于 JAR 文件的路径。实际项目中使用 Maven/Gradle 管理依赖时，通常使用 `maven-shade-plugin` 或 `spring-boot-maven-plugin` 将依赖合并或重新定位，而非手动配置 `Class-Path`。
 
 ### 3.3 可执行 JAR
 
@@ -373,7 +373,7 @@ jarsigner -keystore mykeystore -verify app.jar    # 验证签名
 jarsigner -keystore mykeystore -tsa http://timestamp.digicert.com app.jar mykey
 ```
 
-> 🎯 **核心要点**：jar 命令是 JDK 中最常用的打包工具。现代开发中以 `jar cfe` 创建可执行 JAR、`jar tf` 查看内容、结合构建工具（Maven/Gradle）管理依赖。面试中常问 MANIFEST.MF 的 `Main-Class` 和 `Class-Path` 属性。
+> **核心要点**：jar 命令是 JDK 中最常用的打包工具。现代开发中以 `jar cfe` 创建可执行 JAR、`jar tf` 查看内容、结合构建工具（Maven/Gradle）管理依赖。面试中常问 MANIFEST.MF 的 `Main-Class` 和 `Class-Path` 属性。
 
 ---
 
@@ -488,9 +488,9 @@ CMD ["/jre/bin/java", "-jar", "/app.jar"]
 | `jlink` + `--compress=2 --strip-debug` | 再减 10-20% | 生产环境推荐配置 |
 | Alpine + 定制 JRE + Spring Boot | ~90 MB (Docker 镜像) | 完整的可部署镜像 |
 
-> 💡 **jlink 的价值**：传统 Docker 镜像中携带完整 JDK（~300MB），而使用 jlink 后 Docker 镜像可缩小至 90-120MB。对于微服务架构，几十个服务的镜像体积总和从数 GB 降至几百 MB，显著加快 CI/CD 和部署速度。
+> **jlink 的价值**：传统 Docker 镜像中携带完整 JDK（~300MB），而使用 jlink 后 Docker 镜像可缩小至 90-120MB。对于微服务架构，几十个服务的镜像体积总和从数 GB 降至几百 MB，显著加快 CI/CD 和部署速度。
 
-> 🎯 **核心要点**：jlink 是 Java 9+ 最重要的运维工具之一。核心流程：`jdeps 分析依赖 → jlink 生成定制 JRE → Docker 多阶段构建 → 部署运行`。对于任何微服务应用，都建议在构建 pipeline 中加入这一步骤。
+> **核心要点**：jlink 是 Java 9+ 最重要的运维工具之一。核心流程：`jdeps 分析依赖 → jlink 生成定制 JRE → Docker 多阶段构建 → 部署运行`。对于任何微服务应用，都建议在构建 pipeline 中加入这一步骤。
 
 ---
 
@@ -562,7 +562,7 @@ jpackage --name myapp \
          --linux-shortcut
 ```
 
-> 🎯 **核心要点**：`jpackage` 的最佳实践是与 `jlink` 结合使用——先用 jlink 创建定制 JRE，再用 jpackage 将应用和 JRE 一起打包为原生安装包。最终用户无需安装 JDK/JRE即可运行。
+> **核心要点**：`jpackage` 的最佳实践是与 `jlink` 结合使用——先用 jlink 创建定制 JRE，再用 jpackage 将应用和 JRE 一起打包为原生安装包。最终用户无需安装 JDK/JRE即可运行。
 
 ---
 
@@ -709,7 +709,7 @@ public class JShellDemo {
 }
 ```
 
-> 🎯 **核心要点**：jshell 是 Java 开发者的瑞士军刀——快速验证 API 行为、测试正则表达式、尝试新语言特性、做算法题的即时代码演练。面试前用 jshell 复习 Stream/Optional/Record 等特性，比写完整的项目高效得多。
+> **核心要点**：jshell 是 Java 开发者的瑞士军刀——快速验证 API 行为、测试正则表达式、尝试新语言特性、做算法题的即时代码演练。面试前用 jshell 复习 Stream/Optional/Record 等特性，比写完整的项目高效得多。
 
 ---
 
@@ -824,7 +824,7 @@ javadoc -d docs/api \
         -author
 ```
 
-> 🎯 **核心要点**：javadoc 的质量直接影响团队协作效率。编写 API 时坚持：**所有 public 方法必须写 javadoc**，重点描述参数的约束条件、返回值范围和可能抛出的异常场景。
+> **核心要点**：javadoc 的质量直接影响团队协作效率。编写 API 时坚持：**所有 public 方法必须写 javadoc**，重点描述参数的约束条件、返回值范围和可能抛出的异常场景。
 
 ---
 
@@ -923,7 +923,7 @@ javap -c SynchronizedDemo.class
 # 代码块同步：monitorenter / monitorexit 指令
 ```
 
-> 🎯 **核心要点**：javap 是理解"Java 编译后长什么样"的最佳工具。面试前用 javap 验证泛型擦除、Lambda 实现、String 拼接优化等底层机制，比死记硬背理论更深刻。
+> **核心要点**：javap 是理解"Java 编译后长什么样"的最佳工具。面试前用 javap 验证泛型擦除、Lambda 实现、String 拼接优化等底层机制，比死记硬背理论更深刻。
 
 ---
 
@@ -1012,7 +1012,7 @@ my-app.jar -> lib/gson-2.10.1.jar
       -> lib/gson-2.10.1.jar
 ```
 
-> 🎯 **核心要点**：jdeps 的两个核心实战场景：1) 配合 jlink 生成定制 JRE（`--print-module-deps`）；2) 分析内部 API 依赖（`-jdkinternals`），评估从 classpath 迁移到 module-path 的难度。
+> **核心要点**：jdeps 的两个核心实战场景：1) 配合 jlink 生成定制 JRE（`--print-module-deps`）；2) 分析内部 API 依赖（`-jdkinternals`），评估从 classpath 迁移到 module-path 的难度。
 
 ---
 
@@ -1138,7 +1138,7 @@ keytool -genkey -alias mykey -keyalg RSA \
 └──────────────────────────────────────────────────────────────────┘
 ```
 
-> 🎯 **核心要点**：JDK 自带工具链覆盖了 Java 应用的"编译 → 运行 → 验证 → 调试 → 部署"全生命周期。掌握这些工具可以：
+> **核心要点**：JDK 自带工具链覆盖了 Java 应用的"编译 → 运行 → 验证 → 调试 → 部署"全生命周期。掌握这些工具可以：
 > 1. 脱离 IDE 独立完成 Java 开发流程
 > 2. 在服务器环境中快速排查问题
 > 3. 优化部署体积和启动性能

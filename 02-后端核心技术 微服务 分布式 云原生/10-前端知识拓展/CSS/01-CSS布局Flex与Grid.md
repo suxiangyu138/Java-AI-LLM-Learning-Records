@@ -2,7 +2,7 @@
 
 > 定位：从文档流到现代布局双雄——Flexbox（一维布局）与 Grid（二维布局）的完整体系、定位机制、响应式布局策略
 
-## 📚 目录
+## 目录
 
 1. [文档流与布局基础](#1-文档流与布局基础)
 2. [Flexbox：一维布局](#2-flexbox一维布局)
@@ -26,7 +26,7 @@
   display: inline / block / inline-block / flex / grid / none
   float（历史遗留，现代布局不用）
 
-⚠️ 面试必答：
+面试必答：
 "布局的第一步是理解文档流——
  块级占行、行内排布；现代布局
  用 Flex/Grid 替代 float/定位硬排。"
@@ -117,7 +117,7 @@
 /* ② 等分布局 */
 .row {
     display: flex;
-    gap: 16px;            /* ⚠️ gap 现代浏览器全支持 */
+    gap: 16px;            /* gap 现代浏览器全支持 */
 }
 .row > * { flex: 1; }
 
@@ -128,7 +128,7 @@
 .main { flex: 1; }
 ```
 
-> 🎯 **要点**：`gap`（2021 全支持）替代 margin 做间距；`flex: 1` 是"等分剩余空间"的最常用简写。Flex 解决"一维排列 + 对齐"的一切问题。
+> **要点**：`gap`（2021 全支持）替代 margin 做间距；`flex: 1` 是"等分剩余空间"的最常用简写。Flex 解决"一维排列 + 对齐"的一切问题。
 
 ---
 
@@ -184,11 +184,11 @@
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     gap: 16px;
-    /* ⚠️ auto-fill + minmax = 自动适应列数（免媒体查询） */
+    /* auto-fill + minmax = 自动适应列数（免媒体查询） */
 }
 ```
 
-> 🎯 **要点**：`grid-template-areas` 让布局"看得见"；`repeat(auto-fill, minmax(200px, 1fr))` 是响应式卡片网格的标准答案。
+> **要点**：`grid-template-areas` 让布局"看得见"；`repeat(auto-fill, minmax(200px, 1fr))` 是响应式卡片网格的标准答案。
 
 ---
 
@@ -243,7 +243,7 @@
 ③ 容器查询：组件级响应（见 03 现代 CSS）
 ④ Flex + wrap：流式排列
 
-⚠️ 面试必答：
+面试必答：
 "现代响应式 = 移动优先 + 断点增强；
  容器查询把'视口响应'升级为
  '容器响应'（组件自适应）。"
@@ -267,7 +267,7 @@
   页面级骨架 → Grid（areas）
   组件内细节 → Flex
 
-⚠️ 面试必答：
+面试必答：
 "'一维用 Flex、二维用 Grid'——
  Flex 管组件内部、Grid 管页面骨架，
  两者嵌套使用是常态。"
@@ -275,7 +275,7 @@
 
 ---
 
-> 🎯 **核心要点**：布局体系 = **文档流**（基础认知）+ **Flex**（一维：justify/align/gap/flex:1）+ **Grid**（二维：areas/auto-fill+minmax）+ **定位**（relative 锚点/absolute 弹层/sticky 吸顶）+ **响应式**（移动优先 + 容器查询）。现代布局的答案：**页面骨架 Grid、组件细节 Flex**。
+> **核心要点**：布局体系 = **文档流**（基础认知）+ **Flex**（一维：justify/align/gap/flex:1）+ **Grid**（二维：areas/auto-fill+minmax）+ **定位**（relative 锚点/absolute 弹层/sticky 吸顶）+ **响应式**（移动优先 + 容器查询）。现代布局的答案：**页面骨架 Grid、组件细节 Flex**。
 
 ---
 

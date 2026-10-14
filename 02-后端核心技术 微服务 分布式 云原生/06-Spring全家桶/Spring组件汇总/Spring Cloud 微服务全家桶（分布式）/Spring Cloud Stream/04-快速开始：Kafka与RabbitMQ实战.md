@@ -1,7 +1,7 @@
 # 04-快速开始：Kafka 与 RabbitMQ 实战
 > 两个完整可运行的 Demo：同一套业务代码分别对接 Kafka 与 RabbitMQ，验证"切中间件只改依赖与配置"
 
-## 📚 目录
+## 目录
 1. [环境准备](#1-环境准备)
 2. [工程骨架（Maven）](#2-工程骨架maven)
 3. [业务代码：与中间件无关](#3-业务代码与中间件无关)
@@ -74,7 +74,7 @@ docker run -d --name rabbitmq -p 5672:5672 -p 15672:15672 rabbitmq:4-management
 </dependencyManagement>
 ```
 
-> ⚠️ **版本纪律**：Stream 版本由 Spring Cloud BOM 统一管理，**不要**单独写 `spring-cloud-stream` 的 version；`2025.1.x` 列车自带 Boot 4 兼容基线。
+> **版本纪律**：Stream 版本由 Spring Cloud BOM 统一管理，**不要**单独写 `spring-cloud-stream` 的 version；`2025.1.x` 列车自带 Boot 4 兼容基线。
 
 ## 3. 业务代码：与中间件无关
 
@@ -156,7 +156,7 @@ spring:
               start-offset: latest
 ```
 
-> 💡 **Kafka 专属行为**：`order-events` Topic 首次消费时由 binder 自动创建（`auto-create-topics=true`）；生产与消费共用 topic，分区数由 producer 侧 `partition-count` 决定（默认 3）。
+> **Kafka 专属行为**：`order-events` Topic 首次消费时由 binder 自动创建（`auto-create-topics=true`）；生产与消费共用 topic，分区数由 producer 侧 `partition-count` 决定（默认 3）。
 
 ## 5. RabbitMQ Binder 接入
 
@@ -175,7 +175,7 @@ spring:
               auto-bind-dlq: true          # 自动创建 DLQ（后续章节展开）
 ```
 
-> 💡 **Rabbit 专属行为**：`order-events` 映射为 **TopicExchange**；`order-service` 消费组自动创建队列 `order-events.order-service` 并绑定（routing key `#`）；匿名消费者创建随机自动删除队列。
+> **Rabbit 专属行为**：`order-events` 映射为 **TopicExchange**；`order-service` 消费组自动创建队列 `order-events.order-service` 并绑定（routing key `#`）；匿名消费者创建随机自动删除队列。
 
 ## 6. 运行与验证
 
@@ -217,7 +217,7 @@ mvn spring-boot:run -Dserver.port=8081   # 第二个实例
 | Java 代码 | **零改动**（函数与业务逻辑不变） |
 | 物理资源 | 原中间件的 Topic/Queue 数据不会自动迁移，需双写或消费回放过渡 |
 
-> 🎯 **核心要点**：这就是 Stream 的核心价值演示——同样三个函数 + 一份公共配置，只切换 Binder 依赖与连接参数即可换中间件。若你的"切换"还要改 Java 代码，说明写法没走函数式模型。
+> **核心要点**：这就是 Stream 的核心价值演示——同样三个函数 + 一份公共配置，只切换 Binder 依赖与连接参数即可换中间件。若你的"切换"还要改 Java 代码，说明写法没走函数式模型。
 
 ## 8. 常见启动失败排查
 

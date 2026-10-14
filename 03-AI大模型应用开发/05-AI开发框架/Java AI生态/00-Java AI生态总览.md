@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [知识体系导图](#1-知识体系导图)
 2. [模块导航](#2-模块导航)
@@ -19,13 +19,13 @@
 ```text
 Java AI 生态（2026）
 │
-├── 🏗️ 核心框架层
+├── 核心框架层
 │   ├── LangChain4j 1.12.x —— 框架无关、多模型、A2A 协议、采用率 68%
 │   ├── Spring AI 1.1 → 2.0 —— Spring Boot 深度集成、MCP 全支持
 │   ├── 直接 API 调用 —— 零依赖，仅限简单场景
 │   └── 选型决策矩阵 —— 按团队技术栈/场景/模型需求选择
 │
-├── 🔌 协议与通信层
+├── 协议与通信层
 │   ├── MCP（Model Context Protocol）—— Java 实现三方案
 │   │   ├── Spring AI MCP Server（Spring Boot 原生）
 │   │   ├── 官方 Java MCP SDK（框架无关）
@@ -33,42 +33,42 @@ Java AI 生态（2026）
 │   ├── A2A（Agent-to-Agent）—— LangChain4j 原生支持
 │   └── Function Calling —— @Tool / @AiFunction 注解驱动
 │
-├── 🔍 检索增强生成（RAG）
+├── 检索增强生成（RAG）
 │   ├── 文档摄入 Pipeline —— Tika 解析 → TokenTextSplitter 切片
 │   ├── 向量存储 —— PGVector / Milvus / Qdrant / Redis / ES
 │   ├── 混合检索 —— 向量相似度 + BM25 关键词 → RRF 融合
 │   ├── PGVector sparsevec —— 2026 纯 PG 原生混合检索
 │   └── 高级模式 —— Agentic RAG + 查询重写 + 自我修正
 │
-├── 🤖 Agent 智能体层
+├── Agent 智能体层
 │   ├── LangChain4j Agent —— AiServices + @Tool + 多 Agent 编排
 │   ├── LangGraph4j —— 有状态图编排、循环图、人机交互
 │   ├── Spring AI Agent —— FunctionCallback + Advisor 链
 │   ├── AgentScope Java —— 阿里企业级 Agent 框架
 │   └── Jakarta Agentic AI —— Jakarta EE 标准 API（新兴）
 │
-├── 🗄️ 向量数据库生态
+├── 向量数据库生态
 │   ├── PGVector —— PostgreSQL 扩展，与 RDS 无缝集成
 │   ├── Elasticsearch —— 全文检索 + 向量检索
 │   ├── Milvus / Qdrant / Weaviate —— 专业向量数据库
 │   ├── Redis Stack —— 内存级向量检索
 │   └── Embedding 模型 —— bge-m3 / text-embedding-3 / nomic
 │
-├── 🌐 多模型集成
+├── 多模型集成
 │   ├── 国产模型 —— 通义千问 / 百度千帆 / DeepSeek / GLM
 │   ├── 国际模型 —— OpenAI / Anthropic / Google Gemini
 │   ├── 本地模型 —— Ollama / Llama.cpp / vLLM
 │   ├── ModelRouter —— 按复杂度自动路由（LangChain4j）
 │   └── 降级策略 —— 主模型 → 备用模型 → 规则引擎
 │
-├── 🚀 企业级部署
+├── 企业级部署
 │   ├── GraalVM 原生镜像 —— 启动 <100ms，内存 50-100MB
 │   ├── Quarkus + LangChain4j —— 云原生首选
 │   ├── Spring Boot + Spring AI —— 企业微服务体系
 │   ├── 可观测性 —— Micrometer + OpenTelemetry + Actuator
 │   └── 安全 —— OAuth2 / API Key 管理 / Prompt 注入防护
 │
-└── 🔮 新兴趋势
+└── 新兴趋势
     ├── Jakarta Agentic AI —— Jakarta EE 标准 AI API
     ├── Embeddable（Rod Johnson）—— JVM 高级 Agent 编排
     ├── Browser Use —— AI 操控浏览器自动化
@@ -95,7 +95,7 @@ Java AI 生态（2026）
 
 ## 3. 学习路线推荐
 
-### 🟢 入门路线（1-2 天）
+### 入门路线（1-2 天）
 
 ```
 01 核心框架对决 → 03 RAG 检索增强生成
@@ -103,7 +103,7 @@ Java AI 生态（2026）
 
 先搞懂 LangChain4j 和 Spring AI 的区别，知道什么时候选哪个。再动手跑通一个完整的 RAG 管道（文档摄入 → 向量化 → 混合检索 → LLM 回答）。
 
-### 🟡 进阶路线（3-5 天）
+### 进阶路线（3-5 天）
 
 ```
 01 → 02 MCP 协议 → 04 Agent 开发 → 06 多模型集成
@@ -111,7 +111,7 @@ Java AI 生态（2026）
 
 深入 MCP 协议在 Java 中的实现、构建自己的 Agent 系统、掌握多模型路由和降级——这三项是生产级 Java AI 应用的核心能力。
 
-### 🔴 深入路线（1-2 周）
+### 深入路线（1-2 周）
 
 ```
 01 → 02 → 03 → 04 → 05 → 06 → 07 → 08（全模块 + 动手实践）
@@ -167,7 +167,7 @@ Java AI 生态（2026）
     └──────────────────┴─────────┘
 ```
 
-> 🎯 **核心要点**：2026 年 Java AI 生态已从"追赶 Python"进化为"生产级首选"。LangChain4j 和 Spring AI 两大框架各有优势，无需二选一——核心交易链路用 Spring AI 保稳定，边缘 AI 服务用 LangChain4j 快速迭代，是企业级最佳实践。
+> **核心要点**：2026 年 Java AI 生态已从"追赶 Python"进化为"生产级首选"。LangChain4j 和 Spring AI 两大框架各有优势，无需二选一——核心交易链路用 Spring AI 保稳定，边缘 AI 服务用 LangChain4j 快速迭代，是企业级最佳实践。
 
 ---
 

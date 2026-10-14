@@ -1,6 +1,6 @@
 # 10 - IDE 插件生态
 
-> 🎯 好的插件 = 效率翻倍。IDEA/Cursor/VS Code 的插件生态是三大 IDE 的核心竞争力。本章推荐 Java + AI 开发的必备插件清单
+> 好的插件 = 效率翻倍。IDEA/Cursor/VS Code 的插件生态是三大 IDE 的核心竞争力。本章推荐 Java + AI 开发的必备插件清单
 
 ---
 
@@ -16,17 +16,17 @@
 
 | 插件 | 用途 | 推荐度 |
 |------|------|:---:|
-| **Lombok** | 消灭 getter/setter 样板代码 | ⭐⭐⭐⭐⭐ |
-| **MyBatisX** | MyBatis XML ↔ Java 跳转 | ⭐⭐⭐⭐⭐ |
-| **Maven Helper** | 依赖冲突分析 | ⭐⭐⭐⭐⭐ |
-| **Alibaba Java Coding Guidelines** | 实时代码规范检查 | ⭐⭐⭐⭐ |
-| **SonarLint** | 代码质量/安全扫描 | ⭐⭐⭐⭐ |
-| **GsonFormat** | JSON → Java Bean 一键生成 | ⭐⭐⭐⭐ |
-| **PlantUML** | 代码 → UML 图 | ⭐⭐⭐ |
-| **Key Promoter X** | 统计操作 → 推荐快捷键 | ⭐⭐⭐ |
-| **Rainbow Brackets** | 彩虹括号（嵌套一目了然） | ⭐⭐⭐⭐ |
-| **GitToolBox** | Git 状态增强（行内 blame） | ⭐⭐⭐⭐ |
-| **JPA Buddy** | JPA Entity 可视化编辑 | ⭐⭐⭐⭐ |
+| **Lombok** | 消灭 getter/setter 样板代码 | ★★★★★ |
+| **MyBatisX** | MyBatis XML ↔ Java 跳转 | ★★★★★ |
+| **Maven Helper** | 依赖冲突分析 | ★★★★★ |
+| **Alibaba Java Coding Guidelines** | 实时代码规范检查 | ★★★★ |
+| **SonarLint** | 代码质量/安全扫描 | ★★★★ |
+| **GsonFormat** | JSON → Java Bean 一键生成 | ★★★★ |
+| **PlantUML** | 代码 → UML 图 | ★★★ |
+| **Key Promoter X** | 统计操作 → 推荐快捷键 | ★★★ |
+| **Rainbow Brackets** | 彩虹括号（嵌套一目了然） | ★★★★ |
+| **GitToolBox** | Git 状态增强（行内 blame） | ★★★★ |
+| **JPA Buddy** | JPA Entity 可视化编辑 | ★★★★ |
 
 ```text
 AI 编程插件（IDEA）：
@@ -40,17 +40,17 @@ AI 编程插件（IDEA）：
 
 | 插件 | 用途 | 推荐度 |
 |------|------|:---:|
-| **GitHub Copilot** | AI 代码补全 | ⭐⭐⭐⭐⭐ |
-| **Cline** | AI Agent 自主编程 | ⭐⭐⭐⭐⭐ |
-| **Continue** | 本地模型编程助手 | ⭐⭐⭐⭐ |
-| **Extension Pack for Java** | Java 全家桶 | ⭐⭐⭐⭐⭐ |
-| **Spring Boot Tools** | Spring 支持 | ⭐⭐⭐⭐⭐ |
-| **Docker** | Docker 管理 | ⭐⭐⭐⭐⭐ |
-| **Remote - SSH** | 远程开发 | ⭐⭐⭐⭐⭐ |
-| **Prettier** | 代码格式化 | ⭐⭐⭐⭐ |
-| **Thunder Client** | HTTP Client (轻量 Postman) | ⭐⭐⭐⭐ |
-| **GitLens** | Git 增强 | ⭐⭐⭐⭐⭐ |
-| **Error Lens** | 行内显示错误 | ⭐⭐⭐⭐ |
+| **GitHub Copilot** | AI 代码补全 | ★★★★★ |
+| **Cline** | AI Agent 自主编程 | ★★★★★ |
+| **Continue** | 本地模型编程助手 | ★★★★ |
+| **Extension Pack for Java** | Java 全家桶 | ★★★★★ |
+| **Spring Boot Tools** | Spring 支持 | ★★★★★ |
+| **Docker** | Docker 管理 | ★★★★★ |
+| **Remote - SSH** | 远程开发 | ★★★★★ |
+| **Prettier** | 代码格式化 | ★★★★ |
+| **Thunder Client** | HTTP Client (轻量 Postman) | ★★★★ |
+| **GitLens** | Git 增强 | ★★★★★ |
+| **Error Lens** | 行内显示错误 | ★★★★ |
 
 ## 3. AI 编程插件对比
 

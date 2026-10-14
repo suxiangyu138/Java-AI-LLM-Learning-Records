@@ -35,7 +35,7 @@
 · Agent 交互层：进度/选择/流式输出需要 TUI 承接
 ```
 
-> 🎯 判断生态的关键词不是「谁 star 多」而是「**架构模式 + 渲染粒度 + 打包形态**」——见第 2、4 节。
+> 判断生态的关键词不是「谁 star 多」而是「**架构模式 + 渲染粒度 + 打包形态**」——见第 2、4 节。
 
 ---
 
@@ -71,7 +71,7 @@
 | 逐格 diff（Textual） | 每帧几十字节 | 高频动画、表格刷新 |
 | 双缓冲 diff（Ratatui） | 由绘制内容决定 | 大界面 + 高性能要求 |
 
-> 💡 经验法则：**监控类/表格类选逐格或双缓冲，列表/流程类逐行足够**。60fps 动画在逐行 diff 下也够用，无需过度优化。
+> 经验法则：**监控类/表格类选逐格或双缓冲，列表/流程类逐行足够**。60fps 动画在逐行 diff 下也够用，无需过度优化。
 
 ---
 
@@ -153,7 +153,7 @@ TamboUI 的意义：
 | 单文件分发 | Ratatui（Rust）/ Bubble Tea（Go） | 静态二进制 |
 | Java 团队 | TamboUI / JLine | 生态衔接 |
 
-> 🎯 选型口诀：**语言栈定框架、渲染粒度定性能、打包形态定分发**——别因为「Ratatui 快」就在 Python 项目里硬上 Rust。
+> 选型口诀：**语言栈定框架、渲染粒度定性能、打包形态定分发**——别因为「Ratatui 快」就在 Python 项目里硬上 Rust。
 
 ---
 
@@ -258,7 +258,7 @@ public class MinimalTui {
         }
     }
 }
-// ⚠️ 演示仅用于理解原理：真实 TUI 必须处理输入事件、resize、信号、
+// 演示仅用于理解原理：真实 TUI 必须处理输入事件、resize、信号、
 //    diff 渲染——这正是框架存在的理由
 ```
 
@@ -269,8 +269,8 @@ public class MinimalTui {
 ### 7.1 日志分离（TUI 第一工程纪律）
 
 ```java
-// ❌ 错误：println 调试直接污染 TUI 屏幕
-// ✅ 正确：日志写文件，TUI 与日志互不干扰
+// ✗ 错误：println 调试直接污染 TUI 屏幕
+// ✓ 正确：日志写文件，TUI 与日志互不干扰
 System.setProperty("org.slf4j.simpleLogger.logFile", "/tmp/app.log");
 // 或框架侧：Textual 有 dev console；TamboUI 日志走 SLF4J 文件
 ```
@@ -292,7 +292,7 @@ System.setProperty("org.slf4j.simpleLogger.logFile", "/tmp/app.log");
 | 集成 | 完整应用 | 伪终端（pty）+ 脚本驱动按键 |
 | 冒烟 | 退出恢复 | 脚本验证退出后终端干净 |
 
-> 💡 Textual 自带 `textual run --dev`（热重载 + dev console），Bubble Tea 可对 update 做纯单测——**架构模式直接决定测试难度**，这也是选框架的隐藏维度。
+> Textual 自带 `textual run --dev`（热重载 + dev console），Bubble Tea 可对 update 做纯单测——**架构模式直接决定测试难度**，这也是选框架的隐藏维度。
 
 ---
 
@@ -316,7 +316,7 @@ System.setProperty("org.slf4j.simpleLogger.logFile", "/tmp/app.log");
 原则：CLI 是地基（可脚本化），TUI 是壳（交互化），两者共存
 ```
 
-> 🎯 **核心要点**：2026 TUI 生态 = **四大框架（Textual/Bubble Tea/Ratatui/Ink）+ Java 补位（TamboUI + JLine 3 后端）**。选型看「语言栈 → 架构模式 → 渲染粒度 → 打包形态」四维，不是 star 数。工程三纪律：**日志分离（不 println）、事件循环不阻塞、退出必须恢复终端**。Java 后端进阶路径：JLine 3 增强 CLI → TamboUI 做全屏 TUI（GraalVM 原生）→ 需要时手写 ANSI 理解底层。最后记住：TUI 是「人机交互层」，永远给自动化留 CLI 后门。
+> **核心要点**：2026 TUI 生态 = **四大框架（Textual/Bubble Tea/Ratatui/Ink）+ Java 补位（TamboUI + JLine 3 后端）**。选型看「语言栈 → 架构模式 → 渲染粒度 → 打包形态」四维，不是 star 数。工程三纪律：**日志分离（不 println）、事件循环不阻塞、退出必须恢复终端**。Java 后端进阶路径：JLine 3 增强 CLI → TamboUI 做全屏 TUI（GraalVM 原生）→ 需要时手写 ANSI 理解底层。最后记住：TUI 是「人机交互层」，永远给自动化留 CLI 后门。
 
 ---
 

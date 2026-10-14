@@ -1,6 +1,6 @@
 # 05 - Modelfile 与自定义模型构建
 
-> 🎯 Modelfile 是 Ollama 的 "Dockerfile"——通过它你可以定制 System Prompt、绑定模型参数、导入 GGUF 文件、甚至从 Safetensors 创建模型，让每个项目拥有专属的 AI 助手
+> Modelfile 是 Ollama 的 "Dockerfile"——通过它你可以定制 System Prompt、绑定模型参数、导入 GGUF 文件、甚至从 Safetensors 创建模型，让每个项目拥有专属的 AI 助手
 
 > **前置阅读**：[[02-Ollama快速上手与基础操作]]、[[03-Ollama量化部署与性能优化]]
 
@@ -119,9 +119,9 @@ FROM llama3.1:8b
 SYSTEM """
 You can switch between three personas based on user needs:
 
-1. 📚 Teacher Mode — Explain concepts step by step with examples
-2. 🔧 Engineer Mode — Direct, code-first answers
-3. 🎨 Creative Mode — Brainstorming, explore multiple angles
+1. Teacher Mode — Explain concepts step by step with examples
+2. Engineer Mode — Direct, code-first answers
+3. Creative Mode — Brainstorming, explore multiple angles
 
 Default to Teacher Mode. Switch when user explicitly asks.
 Always state which mode you're in at the start of the response.

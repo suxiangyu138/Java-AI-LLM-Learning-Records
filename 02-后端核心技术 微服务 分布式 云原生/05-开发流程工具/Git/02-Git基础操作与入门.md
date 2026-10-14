@@ -1,7 +1,7 @@
 # 02-Git 基础操作与入门
 > Git 是 Java 后端工程师的第二个 IDE——安装配置、.gitignore、常用命令全流程，从第一个仓库开始
 
-## 📚 目录
+## 目录
 1. [Git 概述：分布式版本控制系统](#1-git-概述分布式版本控制系统)
 2. [安装与首次配置](#2-安装与首次配置)
 3. [.gitignore：Java 项目忽略规则](#3-gitignorejava-项目忽略规则)
@@ -26,7 +26,7 @@ Git 由 Linus Torvalds 于 2005 年为管理 Linux 内核开发而创建，是 J
 | **安全性** | 每个节点都是完整备份 | 中央服务器是单点故障 |
 | **存储方式** | 内容寻址（基于 SHA-1 的键值存储） | 增量存储（基于文件变更列表） |
 
-> 💡 核心区别一句话：SVN 是一份代码多人看，Git 是每人一份完整代码再同步。**离线可提交、分支即指针、仓库即备份**是 Git 碾压 SVN 的三个根本优势。
+> 核心区别一句话：SVN 是一份代码多人看，Git 是每人一份完整代码再同步。**离线可提交、分支即指针、仓库即备份**是 Git 碾压 SVN 的三个根本优势。
 
 ### 1.2 Git 核心优势
 
@@ -56,7 +56,7 @@ git config --global user.name "Su Xiangyu"
 git config --global user.email "xiangyu.su@example.com"
 ```
 
-> ⚠️ 务必与远程托管平台（GitHub/GitLab）的账号邮箱一致，否则提交不会被关联到账号，贡献统计无法正确显示。
+> 务必与远程托管平台（GitHub/GitLab）的账号邮箱一致，否则提交不会被关联到账号，贡献统计无法正确显示。
 
 ### 2.3 编辑器与行尾配置
 
@@ -177,7 +177,7 @@ surefire-reports/
 | `!important.log` | 排除（不忽略）该文件 | 与上一行配合 |
 | `**/logs/` | 忽略任意深度的 logs 目录 | 匹配 `a/b/logs/` |
 
-> 💡 匹配规则基于文件路径模式：`*` 匹配任意字符串（不含 `/`），`**` 匹配任意层级目录。
+> 匹配规则基于文件路径模式：`*` 匹配任意字符串（不含 `/`），`**` 匹配任意层级目录。
 
 ### 3.3 已追踪文件的忽略处理
 
@@ -187,7 +187,7 @@ git rm application-dev.yml              # 移除追踪并删除文件
 git rm -r --cached target/              # 批量移除目录追踪
 ```
 
-> ⚠️ `git rm --cached` 只移除追踪不删文件；提交后 `.gitignore` 才对新克隆生效。但**历史版本中仍存在该文件**，彻底抹除需 `git filter-branch` 或 BFG（见 [11](11-Git配置安全与最佳实践.md)）。
+> `git rm --cached` 只移除追踪不删文件；提交后 `.gitignore` 才对新克隆生效。但**历史版本中仍存在该文件**，彻底抹除需 `git filter-branch` 或 BFG（见 [11](11-Git配置安全与最佳实践.md)）。
 
 ## 4. 初始化 / 克隆 / 状态 / 提交 / 差异
 
@@ -218,7 +218,7 @@ git status -s       # 简洁状态（单行）
 | `M ` | 已暂存 | `D ` | 已删除已暂存 |
 | `MM` | 已暂存且又修改 | | |
 
-> 💡 两列含义：**第一列** = 暂存区状态（相对上次提交）；**第二列** = 工作区状态（相对暂存区）。
+> 两列含义：**第一列** = 暂存区状态（相对上次提交）；**第二列** = 工作区状态（相对暂存区）。
 
 ### 4.3 添加与提交
 
@@ -232,7 +232,7 @@ git commit -am "fix: 修复空指针异常"   # 跳过暂存区直接提交（�
 git commit --amend -m "..."           # 修改最近一次提交（未推送时）
 ```
 
-> ⚠️ `git commit --amend` 会生成新的 commit hash 替换原提交；已推送则需 `--force-with-lease`。
+> `git commit --amend` 会生成新的 commit hash 替换原提交；已推送则需 `--force-with-lease`。
 
 ### 4.4 查看差异（9 种用法）
 
@@ -271,10 +271,10 @@ git branch -D <name>       # 强制删除
 | 取消暂存（已 add） | `git restore --staged <file>`（旧版 `git reset HEAD <file>`） |
 | 撤销 commit 保留修改 | `git reset --soft HEAD~1` |
 | 撤销 commit + 暂存 | `git reset HEAD~1`（--mixed 默认） |
-| 彻底丢弃 | `git reset --hard HEAD~1`（⚠️ 危险，reflog 可救） |
+| 彻底丢弃 | `git reset --hard HEAD~1`（危险，reflog 可救） |
 | 撤销已推送的提交 | `git revert <commit>`（安全，新增反向提交） |
 
-> 🎯 **核心原则**：**未推送** → `git reset` 随意使用；**已推送到公共分支** → 必须 `git revert`；**已推送到个人分支** → 谨慎 `git reset --hard` + `git push --force-with-lease`。
+> **核心原则**：**未推送** → `git reset` 随意使用；**已推送到公共分支** → 必须 `git revert`；**已推送到个人分支** → 谨慎 `git reset --hard` + `git push --force-with-lease`。
 
 ### 5.3 远程协作简版（完整版见 [06](06-Git远程协作与托管平台.md)）
 
@@ -419,7 +419,7 @@ git show 8f4b9c1                    # 查看某次提交的具体变更
 
 ## 7. 核心要点
 
-> 🎯 **核心要点**：
+> **核心要点**：
 > - Git 三优势：离线可提交、分支即指针、仓库即备份；
 > - 三件套配置：身份（user.name/email）、行尾（core.autocrlf）、别名（st/co/lg）；
 > - .gitignore 先于开发写好，Java 模板按"构建产物/IDE/本地配置/日志/OS 文件"五类组织；

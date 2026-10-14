@@ -1,6 +1,6 @@
 # 07 - Encoder-Decoder 与 T5
 
-> 🎯 原版 Transformer 是 Encoder-Decoder 架构——Encoder 理解输入，Decoder 生成输出。T5 将一切 NLP 任务统一为 "Text-to-Text" 范式。虽然今天 Decoder-Only 统治了 LLM，但理解 Encoder-Decoder 才能理解 Transformer 的完整设计
+> 原版 Transformer 是 Encoder-Decoder 架构——Encoder 理解输入，Decoder 生成输出。T5 将一切 NLP 任务统一为 "Text-to-Text" 范式。虽然今天 Decoder-Only 统治了 LLM，但理解 Encoder-Decoder 才能理解 Transformer 的完整设计
 
 ---
 
@@ -104,9 +104,9 @@ T5 (Text-to-Text Transfer Transformer)：
 | 代表 | BERT, RoBERTa | GPT, Llama, Qwen | T5, BART |
 | 注意力 | 双向 Self-Attn | 因果 Self-Attn | 双向 + 因果 + Cross |
 | 参数效率 | 高（理解任务） | 中 | 低（两层） |
-| 理解能力 | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐⭐ |
-| 生成能力 | ❌ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ |
-| 统一能力 | ❌ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ |
+| 理解能力 | ★★★★★ | ★★★★ | ★★★★ |
+| 生成能力 | ✗ | ★★★★★ | ★★★★★ |
+| 统一能力 | ✗ | ★★★★★ | ★★★★ |
 | 当前地位 | 被 LLM 取代 | **统治** | 小众但存在 |
 
 ```text

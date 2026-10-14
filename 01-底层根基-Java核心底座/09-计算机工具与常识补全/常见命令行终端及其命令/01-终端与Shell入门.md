@@ -6,7 +6,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [基础概念辨析](#1-基础概念辨析)
 2. [终端模拟器选型](#2-终端模拟器选型)
@@ -49,7 +49,7 @@
 | **Console** | 老式终端 | 历史概念（物理终端），现在泛指命令行窗口 |
 | **命令提示符（Prompt）** | 界面提示 | `user@host:~$` 等待输入的状态 |
 
-> 🎯 **关键认知**：**终端和 Shell 是「分离」的**——同一个终端可以切换不同 Shell（`chsh`/`exec zsh`），同一个 Shell 可以在不同终端运行。排障时先分清「是终端问题还是 Shell 问题」。
+> **关键认知**：**终端和 Shell 是「分离」的**——同一个终端可以切换不同 Shell（`chsh`/`exec zsh`），同一个 Shell 可以在不同终端运行。排障时先分清「是终端问题还是 Shell 问题」。
 
 ---
 
@@ -83,7 +83,7 @@
 └── 全平台一致 → Ghostty / WezTerm
 ```
 
-> 💡 **字体与图标**：现代终端搭配 **Nerd Fonts**（图标字体）——文件类型图标、Git 状态符号在终端中显示为图形，体验提升明显。
+> **字体与图标**：现代终端搭配 **Nerd Fonts**（图标字体）——文件类型图标、Git 状态符号在终端中显示为图形，体验提升明显。
 
 ---
 
@@ -114,7 +114,7 @@ fish 的特色（2026 吸引力）
 ├── 语法高亮（内置）
 ├── 默认配置合理（免折腾）
 └── Vi 模式支持
-⚠️ fish 不兼容 bash 脚本——写脚本仍用 bash
+fish 不兼容 bash 脚本——写脚本仍用 bash
 ```
 
 ---
@@ -129,7 +129,7 @@ bash 启动流程（关键：登录 Shell vs 非登录 Shell）
 │   /etc/profile → ~/.bash_profile → ~/.bashrc
 ├── 非登录 Shell（子 Shell/新标签）：
 │   ~/.bashrc（直接）
-└── ⚠️ 常见困惑：改了 .bashrc 不生效
+└── 常见困惑：改了 .bashrc 不生效
     → 因为当前会话没重新加载：source ~/.bashrc
 
 zsh 对应文件
@@ -146,13 +146,13 @@ fish
 
 ```text
 配置文件的常见坑
-├── ⚠️ .bash_profile 与 .bashrc 职责混淆
+├── .bash_profile 与 .bashrc 职责混淆
 │   → 惯例：.bash_profile 里 source .bashrc（统一入口）
-├── ⚠️ 改配置不生效
+├── 改配置不生效
 │   → source ~/.bashrc 重新加载（或新开终端）
-├── ⚠️ 服务器 vs 本地配置差异
+├── 服务器 vs 本地配置差异
 │   → 服务器改配置前先备份（.bashrc.bak）
-└── ⚠️ 团队环境：公司别名写在 /etc/profile.d/（全局）
+└── 团队环境：公司别名写在 /etc/profile.d/（全局）
 ```
 
 ### 4.3 最小配置模板
@@ -195,7 +195,7 @@ bind '"\C-p": history-search-backward'
 
 ### 5.2 starship：2026 现代提示符
 
-> 🎯 **starship**：跨 Shell 提示符（bash/zsh/fish/PowerShell 通用）——显示 git 分支、命令耗时、Python 环境等上下文信息：
+> **starship**：跨 Shell 提示符（bash/zsh/fish/PowerShell 通用）——显示 git 分支、命令耗时、Python 环境等上下文信息：
 
 ```bash
 # 安装
@@ -248,10 +248,10 @@ starship 的价值
 
 ```text
 PATH 常见坑
-├── ⚠️ 命令找不到（command not found）→ PATH 没包含该目录
-├── ⚠️ 版本冲突：/usr/bin/java vs 自定义 java → PATH 顺序决定
-├── ⚠️ Windows 分号 vs Linux 冒号（路径列表分隔符！）
-├── ⚠️ 改 PATH 不生效：需要 source 或重开终端
+├── 命令找不到（command not found）→ PATH 没包含该目录
+├── 版本冲突：/usr/bin/java vs 自定义 java → PATH 顺序决定
+├── Windows 分号 vs Linux 冒号（路径列表分隔符！）
+├── 改 PATH 不生效：需要 source 或重开终端
 └── 排查：which java / type java（看实际使用的版本）
 
 设置示例：
@@ -279,7 +279,7 @@ export PATH="$JAVA_HOME/bin:$PATH"
 
 ## 8. 核心要点
 
-> 🎯 **核心要点**：
+> **核心要点**：
 > 1. 终端是「屏幕」、Shell 是「大脑」——排障先分清是哪层的问题
 > 2. 2026 终端选型：Windows Terminal / Kitty / Ghostty + Nerd Fonts 图标
 > 3. Shell 选择：服务器 bash、开发机 zsh、Windows PowerShell、尝鲜 fish

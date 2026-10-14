@@ -61,7 +61,7 @@ public class FutureLimitations {
 }
 ```
 
-> ⚠️ Future的get()是阻塞调用，高并发场景浪费线程资源。多个Future的依赖关系需手动编排，代码冗长。
+> Future的get()是阻塞调用，高并发场景浪费线程资源。多个Future的依赖关系需手动编排，代码冗长。
 
 ### 1.3 CompletableFuture核心优势
 
@@ -120,7 +120,7 @@ public class CreateCompletableFuture {
 | `supplyAsync(Supplier<U>)` | Supplier（有返回值） | `CompletableFuture<U>` | 需要计算结果的异步任务 |
 | `runAsync(Runnable)` | Runnable（无返回值） | `CompletableFuture<Void>` | 仅执行操作，不关心返回值 |
 
-> 💡 `completedFuture()` 常用于快速失败或默认值场景，例如缓存命中直接返回，无需异步执行。
+> `completedFuture()` 常用于快速失败或默认值场景，例如缓存命中直接返回，无需异步执行。
 
 ---
 
@@ -185,7 +185,7 @@ public class OrderPipeline {
 | `thenApplyAsync(fn)` | 默认ForkJoinPool | 耗时操作，需异步 |
 | `thenApplyAsync(fn, Executor)` | 自定义线程池 | 指定线程池执行 |
 
-> 💡 轻量操作（如简单类型转换）用同步变体，避免线程切换开销。IO或耗时计算务必用Async变体。
+> 轻量操作（如简单类型转换）用同步变体，避免线程切换开销。IO或耗时计算务必用Async变体。
 
 ---
 
@@ -198,12 +198,12 @@ public class OrderPipeline {
 ```java
 public class ThenComposeDemo {
     public static void main(String[] args) {
-        // ❌ thenApply 产生嵌套: CompletableFuture<CompletableFuture<String>>
+        // ✗ thenApply 产生嵌套: CompletableFuture<CompletableFuture<String>>
         CompletableFuture<CompletableFuture<String>> nested =
                 CompletableFuture.supplyAsync(() -> "Token-123")
                         .thenApply(token -> fetchUser(token));
 
-        // ✅ thenCompose 展平: CompletableFuture<String>
+        // ✓ thenCompose 展平: CompletableFuture<String>
         CompletableFuture<String> flat =
                 CompletableFuture.supplyAsync(() -> "Token-456")
                         .thenCompose(token -> fetchUser(token));
@@ -248,7 +248,7 @@ public class ThenCombineDemo {
 | `thenCombine` | **独立并行**：A和B同时执行 | `zip()` | 同时查用户和商品 |
 | `thenApply` | **转换**：A的结果转成B | `map()` | 用户ID转User对象 |
 
-> 💡 **口诀**："依赖用compose，独立用combine"。
+> **口诀**："依赖用compose，独立用combine"。
 
 ---
 
@@ -344,7 +344,7 @@ public class ExceptionHandlingDemo {
         }).whenComplete((result, ex) -> {
             System.out.println("whenComplete: result=" + result + ", ex="
                     + (ex != null ? ex.getMessage() : "null"));
-            // ⚠️ 不能修改返回值！
+            // 不能修改返回值！
         }).join();
     }
 }
@@ -354,9 +354,9 @@ public class ExceptionHandlingDemo {
 
 | 方法 | 参数 | 能否恢复 | 触发条件 |
 |------|------|---------|---------|
-| `exceptionally(fn)` | `Function<Throwable, T>` | ✅ 返回兜底值 | **仅**异常时 |
-| `handle(fn)` | `BiFunction<T, Throwable, T>` | ✅ 处理异常 | 总是触发 |
-| `whenComplete(c)` | `BiConsumer<T, Throwable>` | ❌ 不影响结果 | 总是触发 |
+| `exceptionally(fn)` | `Function<Throwable, T>` | ✓ 返回兜底值 | **仅**异常时 |
+| `handle(fn)` | `BiFunction<T, Throwable, T>` | ✓ 处理异常 | 总是触发 |
+| `whenComplete(c)` | `BiConsumer<T, Throwable>` | ✗ 不影响结果 | 总是触发 |
 
 ### 6.3 异常传播链
 
@@ -365,7 +365,7 @@ public class ExceptionHandlingDemo {
  * 异常沿调用链向下传播直到被处理
  * 
  * supplyAsync → thenApply → thenApply → handle
- *    ⬇ 异常     ⬇ 跳过     ⬇ 跳过     ⬇ 处理
+ *    ↓ 异常     ↓ 跳过     ↓ 跳过     ↓ 处理
  *   抛出异常    不执行      不执行     捕获恢复 → 后续链继续执行
  */
 public class ExceptionPropagation {
@@ -380,7 +380,7 @@ public class ExceptionPropagation {
 }
 ```
 
-> ⚠️ `whenComplete` 不会改变结果值。需要修改结果用 `handle`。`whenComplete` 适合做资源清理和日志记录。
+> `whenComplete` 不会改变结果值。需要修改结果用 `handle`。`whenComplete` 适合做资源清理和日志记录。
 
 ---
 
@@ -575,7 +575,7 @@ public class CustomThreadPoolConfig {
 | IO密集型 | 核心数*2 | 核心数*10 | 有界队列 |
 | 混合型 | 核心数*2 | 动态调整 | 有界队列 |
 
-> ⚠️ **禁止**使用`Executors.newCachedThreadPool()`或`Executors.newFixedThreadPool()`的默认工厂——无界队列或无限线程可能造成OOM。务必通过`ThreadPoolExecutor`手动创建。
+> **禁止**使用`Executors.newCachedThreadPool()`或`Executors.newFixedThreadPool()`的默认工厂——无界队列或无限线程可能造成OOM。务必通过`ThreadPoolExecutor`手动创建。
 
 ---
 
@@ -627,24 +627,24 @@ public class CustomThreadPoolConfig {
 
 | 方法 | 触发条件 | 能否恢复 |
 |------|---------|---------|
-| `exceptionally(fn)` | 仅异常 | ✅ 返回兜底值 |
-| `handle(fn)` | 总是 | ✅ |
-| `whenComplete(c)` | 总是 | ❌ 不影响结果 |
+| `exceptionally(fn)` | 仅异常 | ✓ 返回兜底值 |
+| `handle(fn)` | 总是 | ✓ |
+| `whenComplete(c)` | 总是 | ✗ 不影响结果 |
 
 ### 9.7 结果获取与手动控制
 
 | 方法 | 是否阻塞 | 说明 |
 |------|---------|------|
-| `get()` | ✅ 阻塞 | 获取结果，抛受检异常 |
-| `get(timeout, unit)` | ✅ 阻塞 | 超时获取结果 |
-| `join()` | ✅ 阻塞 | 获取结果，抛非受检异常（推荐） |
-| `getNow(T defaultValue)` | ❌ 不阻塞 | 未完成则返回默认值 |
-| `complete(T value)` | ❌ | 手动成功完成 |
-| `completeExceptionally(ex)` | ❌ | 手动异常完成 |
-| `cancel(mayInterrupt)` | ❌ | 取消任务 |
-| `isDone()` | ❌ | 是否完成 |
+| `get()` | ✓ 阻塞 | 获取结果，抛受检异常 |
+| `get(timeout, unit)` | ✓ 阻塞 | 超时获取结果 |
+| `join()` | ✓ 阻塞 | 获取结果，抛非受检异常（推荐） |
+| `getNow(T defaultValue)` | ✗ 不阻塞 | 未完成则返回默认值 |
+| `complete(T value)` | ✗ | 手动成功完成 |
+| `completeExceptionally(ex)` | ✗ | 手动异常完成 |
+| `cancel(mayInterrupt)` | ✗ | 取消任务 |
+| `isDone()` | ✗ | 是否完成 |
 
-> 💡 生产环境推荐用 `join()` 替代 `get()`，因为 `join()` 抛 `CompletionException`（非受检），无需方法签名声明。
+> 生产环境推荐用 `join()` 替代 `get()`，因为 `join()` 抛 `CompletionException`（非受检），无需方法签名声明。
 
 ---
 
@@ -764,7 +764,7 @@ public class ECommerceParallelDemo {
 }
 ```
 
-> 🎯 **实战要点**：电商场景是CompletableFuture最经典的应用。核心模式：**allOf并行发起微服务调用 → thenApplyAsync聚合结果**。
+> **实战要点**：电商场景是CompletableFuture最经典的应用。核心模式：**allOf并行发起微服务调用 → thenApplyAsync聚合结果**。
 
 ---
 
@@ -843,7 +843,7 @@ CompletableFuture.supplyAsync(() -> {
 });
 ```
 
-> 🎯 **面试重点**：三种回调对比、thenCompose vs thenCombine、allOf结果收集、自定义线程池必要性、异常处理机制。能手写电商并行调用demo是加分项。
+> **面试重点**：三种回调对比、thenCompose vs thenCombine、allOf结果收集、自定义线程池必要性、异常处理机制。能手写电商并行调用demo是加分项。
 
 ---
 

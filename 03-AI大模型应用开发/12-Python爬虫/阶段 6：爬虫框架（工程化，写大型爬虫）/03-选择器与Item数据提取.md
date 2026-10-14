@@ -1,7 +1,7 @@
 # 03 选择器与 Item 数据提取
 > 数据质量第一关：Selector 提取规范 + Item 三形态统一模型 + 字段级校验
 
-## 📚 目录
+## 目录
 1. [Selector：框架内置解析层](#1-selector框架内置解析层)
 2. [CSS 选择器与 Scrapy 扩展语法](#2-css-选择器与-scrapy-扩展语法)
 3. [XPath：文本定位与复杂提取](#3-xpath文本定位与复杂提取)
@@ -44,7 +44,7 @@ for sel in response.css("div.quote"):
     text = sel.css("span.text::text").get()
 ```
 
-> 💡 与 bs4 对照记忆：`.get()` ≈ `find(...).text`（但 None 安全）、`.getall()` ≈ `find_all(...)` 取全部文本、`::text` ≈ 手动遍历 `.strings`。Selector 的"**链式 + None 安全 + 正则内建**"让解析代码短一半。
+> 与 bs4 对照记忆：`.get()` ≈ `find(...).text`（但 None 安全）、`.getall()` ≈ `find_all(...)` 取全部文本、`::text` ≈ 手动遍历 `.strings`。Selector 的"**链式 + None 安全 + 正则内建**"让解析代码短一半。
 
 ## 2. CSS 选择器与 Scrapy 扩展语法
 
@@ -67,7 +67,7 @@ quote = response.css("div.quote")[0]
 }
 ```
 
-> ⚠️ 伪类注意：Scrapy 的 CSS 支持 `:nth-child`、`::first-child` 等结构伪类，但**不支持 CSS3 的 `:contains()`**——需要"按文本筛选"用 XPath 的 `contains(text(), ...)`（§3），这是新手最常见的"CSS 取不到"原因。
+> 伪类注意：Scrapy 的 CSS 支持 `:nth-child`、`::first-child` 等结构伪类，但**不支持 CSS3 的 `:contains()`**——需要"按文本筛选"用 XPath 的 `contains(text(), ...)`（§3），这是新手最常见的"CSS 取不到"原因。
 
 ## 3. XPath：文本定位与复杂提取
 
@@ -100,7 +100,7 @@ clean = sel.css("span::text").get().strip() if sel.css("span::text").get() else 
 title = response.xpath("//title/text()").get() or response.css("h1::text").get() or "UNKNOWN"
 ```
 
-> 🎯 **核心要点**：工程里 80% 的提取是 `::text` + `::attr` + `.get()` + `.getall()` 四个 API；**XPath 只在 CSS 表达不了（按文本/轴/复杂逻辑）时用**。别把 XPath 当首选，把 CSS 当首选——代码可读性差一个量级。
+> **核心要点**：工程里 80% 的提取是 `::text` + `::attr` + `.get()` + `.getall()` 四个 API；**XPath 只在 CSS 表达不了（按文本/轴/复杂逻辑）时用**。别把 XPath 当首选，把 CSS 当首选——代码可读性差一个量级。
 
 ## 4. 提取工程规范：从"能取到"到"取得好"
 
@@ -113,7 +113,7 @@ title = response.xpath("//title/text()").get() or response.css("h1::text").get()
 | 编码假设 | 直接 `.get()` 中文乱码 | 响应编码由 Downloader 处理；乱码时 05 章处理法 |
 | 空容器 | 循环取不到任何 item 无感知 | `item_scraped_count == 0` 视为异常（08 章监控） |
 
-> 💡 **与阶段 2 的分工**：阶段 2 学的是"解析原理"（bs4 练手），本阶段学"框架内提取规范"——Selector 只是工具，**真正的增量是"提取即数据契约"**：Spider 的 yield 结构 = 数据表结构，字段名统一在 items 层定义（§5），别在 parse 里随手 dict。
+> **与阶段 2 的分工**：阶段 2 学的是"解析原理"（bs4 练手），本阶段学"框架内提取规范"——Selector 只是工具，**真正的增量是"提取即数据契约"**：Spider 的 yield 结构 = 数据表结构，字段名统一在 items 层定义（§5），别在 parse 里随手 dict。
 
 ## 5. Item 三种形态与统一模型
 
@@ -147,10 +147,10 @@ yield QuoteItem(text="...", author="...")
 
 | 维度 | dict | Item+Field | dataclass |
 |------|:---:|:---:|:---:|
-| 写起来快 | ✅ | ❌ | ✅ |
-| 字段提示/IDE | ❌ | 部分 | ✅ |
-| 类型标注 | ❌ | ❌ | ✅ |
-| 序列化/入库兼容 | ✅ | ✅ | ✅（需 ItemAdapter） |
+| 写起来快 | ✓ | ✗ | ✓ |
+| 字段提示/IDE | ✗ | 部分 | ✓ |
+| 类型标注 | ✗ | ✗ | ✓ |
+| 序列化/入库兼容 | ✓ | ✓ | ✓（需 ItemAdapter） |
 | 官方推荐度（2.14+） | 可用 | 兼容 | **推荐** |
 
 ### 5.2 ItemAdapter：统一访问接口
@@ -169,7 +169,7 @@ class ValidationPipeline:
         return item
 ```
 
-> ⚠️ 三种形态混用时要小心：**dict 没有字段约束**，`item.get()` 与 `item["k"]` 行为一致；**Item 访问未定义字段会抛 KeyError**；**dataclass 构造时缺失必填字段直接 TypeError**。所以形态定了就别混——新项目定 dataclass，存量 Item 就全用 Item。
+> 三种形态混用时要小心：**dict 没有字段约束**，`item.get()` 与 `item["k"]` 行为一致；**Item 访问未定义字段会抛 KeyError**；**dataclass 构造时缺失必填字段直接 TypeError**。所以形态定了就别混——新项目定 dataclass，存量 Item 就全用 Item。
 
 ## 6. 字段校验与清洗
 
@@ -207,7 +207,7 @@ class QuoteValidationPipeline:
 | 值域 | 价格 > 0、评分 0-5 | 业务断言 |
 | 重复 | 库唯一键冲突 | 入库层去重（04 章 §4） |
 
-> 🎯 **核心要点**：校验是**数据质量的第一道闸门**——宁可 DropItem 也不把脏数据写进数据库。DropItem 的条目会计入 `item_dropped_count` 统计，是监控数据质量的硬指标（08 章）。
+> **核心要点**：校验是**数据质量的第一道闸门**——宁可 DropItem 也不把脏数据写进数据库。DropItem 的条目会计入 `item_dropped_count` 统计，是监控数据质量的硬指标（08 章）。
 
 ## 7. FEEDS 输出与落盘
 
@@ -228,7 +228,7 @@ FEEDS = {
 | csv | Excel 打开 | 用 `utf-8-sig` 防中文乱码；字段顺序用 `fields` 指定 |
 | xml | 对接遗留系统 | 少用 |
 
-> ⚠️ FEEDS 适合**交付数据**，不适合**生产入库**——增量/去重/更新策略都需要 Pipeline + 数据库配合（04 章），生产环境 FEEDS 只做备份导出。
+> FEEDS 适合**交付数据**，不适合**生产入库**——增量/去重/更新策略都需要 Pipeline + 数据库配合（04 章），生产环境 FEEDS 只做备份导出。
 
 ## 8. 核心要点
 

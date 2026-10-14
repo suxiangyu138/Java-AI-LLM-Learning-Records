@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [知识体系导图](#1-知识体系导图)
 2. [模块导航](#2-模块导航)
@@ -127,17 +127,17 @@ Java 集合框架知识体系
 
 | 类 | 底层结构 | 有序性 | 线程安全 | 复杂度（核心操作） |
 |----|---------|:------:|:-------:|-------------------|
-| ArrayList | 动态数组 | 插入序 | ❌ | get O(1)、尾插 O(1) 均摊 |
-| LinkedList | 双向链表 | 插入序 | ❌ | 头尾操作 O(1)、随机访问 O(n) |
-| HashSet | HashMap | ❌ 无序 | ❌ | 增删查 O(1) |
-| LinkedHashSet | HashMap + 链表 | 插入序 | ❌ | O(1) |
-| TreeSet | 红黑树 | 自然序/比较器序 | ❌ | O(log n) |
-| ArrayDeque | 循环数组 | 双端序 | ❌ | 双端 O(1) |
-| PriorityQueue | 二叉堆 | 优先级序 | ❌ | 入队 O(log n)、peek O(1) |
-| HashMap | 数组+链表+红黑树 | ❌ 无序 | ❌ | O(1) |
-| LinkedHashMap | HashMap + 双向链表 | 插入/访问序 | ❌ | O(1) |
-| TreeMap | 红黑树 | 键序 | ❌ | O(log n) |
-| ConcurrentHashMap | 数组+链表+红黑树（分段演进） | ❌ | ✅ | O(1) |
+| ArrayList | 动态数组 | 插入序 | ✗ | get O(1)、尾插 O(1) 均摊 |
+| LinkedList | 双向链表 | 插入序 | ✗ | 头尾操作 O(1)、随机访问 O(n) |
+| HashSet | HashMap | ✗ 无序 | ✗ | 增删查 O(1) |
+| LinkedHashSet | HashMap + 链表 | 插入序 | ✗ | O(1) |
+| TreeSet | 红黑树 | 自然序/比较器序 | ✗ | O(log n) |
+| ArrayDeque | 循环数组 | 双端序 | ✗ | 双端 O(1) |
+| PriorityQueue | 二叉堆 | 优先级序 | ✗ | 入队 O(log n)、peek O(1) |
+| HashMap | 数组+链表+红黑树 | ✗ 无序 | ✗ | O(1) |
+| LinkedHashMap | HashMap + 双向链表 | 插入/访问序 | ✗ | O(1) |
+| TreeMap | 红黑树 | 键序 | ✗ | O(log n) |
+| ConcurrentHashMap | 数组+链表+红黑树（分段演进） | ✗ | ✓ | O(1) |
 
 ### 4.3 关键机制速查
 
@@ -180,7 +180,7 @@ Collection 体系 → List → Set → Queue → Map，每个类手写增删改�
 **路线三：面试冲刺（对应模块 09 + Hash 系统）**
 背复杂度总表 → 过一遍必背考点 → 自测陷阱题；然后进入 `Java有关Hash的一切/` 啃 HashMap/CHM 源码级内容。
 
-> 🎯 **核心要点**：集合框架的"懂"分三层——会用（API 层）、懂结构（数据结构层）、明取舍（选型与并发层）。本体系把三层一次讲透，源码深挖留给 Hash 系统。
+> **核心要点**：集合框架的"懂"分三层——会用（API 层）、懂结构（数据结构层）、明取舍（选型与并发层）。本体系把三层一次讲透，源码深挖留给 Hash 系统。
 
 ---
 
@@ -197,7 +197,7 @@ Collection 体系 → List → Set → Queue → Map，每个类手写增删改�
 9. `List.of("a", "b")` 和 `Arrays.asList("a", "b")` 有什么区别？
 10. 对一个 `List<String>` 按长度排序再按字典序排序，怎么写？`TreeSet` 去重时比较器怎么判断相等？
 
-> 💡 答不出的题目对应上方模块导航中的文件，按图索骥复习即可。
+> 答不出的题目对应上方模块导航中的文件，按图索骥复习即可。
 
 ---
 

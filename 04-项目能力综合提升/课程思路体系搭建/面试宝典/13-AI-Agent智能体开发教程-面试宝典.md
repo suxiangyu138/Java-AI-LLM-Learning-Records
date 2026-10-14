@@ -25,7 +25,7 @@
 | 自主性 | 被动回答，依赖用户每一步指令 | 主动拆解任务，自主决策下一步 |
 | 上下文 | 仅当前对话 | 拥有短期 + 长期记忆系统 |
 
-> 🎯 一句话：LLM 是大脑，Agent 是完整的人（大脑 + 手脚 + 规划 + 记忆力）。
+> 一句话：LLM 是大脑，Agent 是完整的人（大脑 + 手脚 + 规划 + 记忆力）。
 
 ### 1.2 Agent 的五大核心组件是什么？
 | 组件 | 英文 | 职责 |
@@ -47,7 +47,7 @@ ReAct = **Re**asoning + **Act**ion，是业界最通用的 Agent 运行范式。
 5. Final Answer（最终答案）：整合结果返回给用户
 ```
 
-> 💡 ReAct 最早由论文 "ReAct: Synergizing Reasoning and Acting in Language Models" 提出，LangChain 的 AgentExecutor 默认采用此模式。
+> ReAct 最早由论文 "ReAct: Synergizing Reasoning and Acting in Language Models" 提出，LangChain 的 AgentExecutor 默认采用此模式。
 
 ### 1.4 LangChain Agent 的核心组件有哪些？
 | 组件 | 说明 |
@@ -116,7 +116,7 @@ def get_weather(location: str, unit: str = "celsius") -> str:
     return f"{location} 的天气是晴，温度 25{unit}"
 ```
 
-> 💡 `args_schema` 参数可以用 Pydantic 模型精细控制输入参数。
+> `args_schema` 参数可以用 Pydantic 模型精细控制输入参数。
 
 ### 1.9 什么是 PromptTemplate / ChatPromptTemplate / FewShotPromptTemplate？
 | 类型 | 说明 | 适用场景 |
@@ -225,7 +225,7 @@ from langchain_core.tools import tool
 @tool
 def run_shell_command(command: str, *args: str) -> str:
     """在本地终端执行 Shell 命令
-    ⚠️ 生产环境建议使用 shlex.split() 解析参数 + 白名单限制"""
+    生产环境建议使用 shlex.split() 解析参数 + 白名单限制"""
     import shlex
     cmd_list = shlex.split(command) + list(args)
     result = subprocess.run(cmd_list, capture_output=True, text=True)
@@ -1285,7 +1285,7 @@ LangGraph 则适合**复杂的多步骤工作流**，它用有向图建模流程
 
 ---
 
-> 🎯 **面试核心策略**：
+> **面试核心策略**：
 > 1. **原理要深**：ReAct 循环的每一步都要讲清楚数据流
 > 2. **代码要熟**：`@tool`、LCEL、LangGraph StateGraph 要能手写
 > 3. **架构要全**：分层记忆、MCP 协议、多 Agent 协作要能画架构图

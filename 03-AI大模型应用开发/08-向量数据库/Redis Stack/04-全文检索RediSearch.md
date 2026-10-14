@@ -76,7 +76,7 @@ Redis 8 内置分词器对中文的默认处理有限（按整串/简单切分�
 
 与三套向量库体系的全文能力对照（选型时的横向参考）：Chroma 的 where_document（FTS5 trigram，中文 1-2 字符失效）、PgVector 的 FTS（zhparser 方案）、Qdrant 的 payload text 索引（轻量）——**Redis 8 的 RediSearch 是四者中全文能力最强的**（BM25、同义词、聚合、成熟查询语法），但都弱于 ES；向量 + 全文的混合查询能力，Redis 8 与 Qdrant 并列第一梯队（pre-filter 进查询路径），优于 Chroma/PgVector 的 post-filter——这是"已有 Redis"场景的额外红利。
 
-> 🎯 **核心要点**：四字段类型（TEXT/TAG/NUMERIC/GEO）决定查询能力；BM25 是 8 的默认打分；FT.ALTER 在线加字段、FT.SYNUPDATE 管同义词；中文靠预分词或向量兜底；定位是"应用内搜索"而非 ES 替代。
+> **核心要点**：四字段类型（TEXT/TAG/NUMERIC/GEO）决定查询能力；BM25 是 8 的默认打分；FT.ALTER 在线加字段、FT.SYNUPDATE 管同义词；中文靠预分词或向量兜底；定位是"应用内搜索"而非 ES 替代。
 
 ---
 

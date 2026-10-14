@@ -1,6 +1,6 @@
 # 07 - Record 与密封类
 
-> 🎯 Record 和密封类是 Java 14-17 最重要的类型系统升级——Record 消灭了 DTO 的样板代码，密封类让类型层次可控。这两个特性在 AI 数据处理和 API 设计中极其实用
+> Record 和密封类是 Java 14-17 最重要的类型系统升级——Record 消灭了 DTO 的样板代码，密封类让类型层次可控。这两个特性在 AI 数据处理和 API 设计中极其实用
 
 ---
 
@@ -56,10 +56,10 @@ public record UserDTO(Long id, String name, String email) {
 }
 
 // Record 的限制：
-// ❌ 不能继承其他类（隐式继承 java.lang.Record）
-// ❌ 不能被继承（final）
-// ❌ 字段都是 final（不可变）
-// ✅ 可以实现接口
+// ✗ 不能继承其他类（隐式继承 java.lang.Record）
+// ✗ 不能被继承（final）
+// ✗ 字段都是 final（不可变）
+// ✓ 可以实现接口
 public record UserSummary(Long id, String name) implements Serializable {}
 ```
 

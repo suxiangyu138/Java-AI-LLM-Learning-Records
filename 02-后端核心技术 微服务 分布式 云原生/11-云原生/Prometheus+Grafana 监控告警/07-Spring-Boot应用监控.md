@@ -1,6 +1,6 @@
 # 07 - Spring Boot 应用监控
 
-> 🎯 Micrometer + Actuator 是 Spring Boot 接入 Prometheus 的标准路径 — 从 JVM 指标到 HTTP 延迟、从连接池到自定义业务 Metrics，构建 Java 应用完整的可观测性
+> Micrometer + Actuator 是 Spring Boot 接入 Prometheus 的标准路径 — 从 JVM 指标到 HTTP 延迟、从连接池到自定义业务 Metrics，构建 Java 应用完整的可观测性
 
 ---
 
@@ -356,4 +356,4 @@ groups:
           summary: "{{ $labels.app }} HikariCP 连接池有等待线程"
 ```
 
-> 🎯 **关键思路**：基础设施监控（Node Exporter）+ 应用监控（Spring Boot Actuator）+ 中间件监控（Redis/MySQL Exporter）= 三层可观测性。从下往上建设，逐层覆盖。
+> **关键思路**：基础设施监控（Node Exporter）+ 应用监控（Spring Boot Actuator）+ 中间件监控（Redis/MySQL Exporter）= 三层可观测性。从下往上建设，逐层覆盖。

@@ -1,5 +1,5 @@
 # 07-Spring Security认证与授权
-> 🎯 Spring Security是Java生态的事实标准安全框架 — 掌握认证授权体系、Filter Chain架构、JWT无状态认证、OAuth2集成，是后端开发P1就业必备的安全防线技能
+> Spring Security是Java生态的事实标准安全框架 — 掌握认证授权体系、Filter Chain架构、JWT无状态认证、OAuth2集成，是后端开发P1就业必备的安全防线技能
 
 ---
 
@@ -27,12 +27,12 @@
 
 - **归属**：Spring全家桶核心组件 → 层级2 P1就业必备
 - **前置依赖**：Spring MVC + Spring Boot + Servlet基础（Filter/Interceptor概念）
-- **难度等级**：⭐⭐⭐⭐（框架深度高，涉及架构设计思维）
-- **重要性**：⭐⭐⭐⭐⭐（任何Web应用必须考虑的安全防护）
+- **难度等级**：★★★★（框架深度高，涉及架构设计思维）
+- **重要性**：★★★★★（任何Web应用必须考虑的安全防护）
 
 ### 1.2 为什么需要Spring Security
 
-> 💡 安全不是功能，是基础设施。直接写在业务代码中的权限判断会导致代码耦合、难以维护、容易遗漏漏洞。
+> 安全不是功能，是基础设施。直接写在业务代码中的权限判断会导致代码耦合、难以维护、容易遗漏漏洞。
 
 | 自行实现的问题 | Spring Security的优势 |
 |---------------|---------------------|
@@ -66,7 +66,7 @@
 | **角色** | Role | 权限的集合抽象 | 管理员、普通用户、VIP |
 | **权限** | Permission | 具体的操作许可 | 读、写、删除、审批 |
 
-> 🎯 **认证解决身份问题，授权解决权限问题。认证在前，授权在后。**
+> **认证解决身份问题，授权解决权限问题。认证在前，授权在后。**
 
 ### 2.2 RBAC权限模型
 
@@ -226,11 +226,11 @@ String username = authentication.getName();
 Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
 Object principal = authentication.getPrincipal();  // 通常是 UserDetails 对象
 
-// ⚠️ 注意：在异步任务中需要手动传递上下文
+// 注意：在异步任务中需要手动传递上下文
 // 默认策略：MODE_THREADLOCAL（每个线程独立）
 ```
 
-> 💡 `SecurityContextHolder` 使用 `ThreadLocal` 存储认证信息，因此请求处理链路的任何代码都能通过 `SecurityContextHolder.getContext()` 获取当前用户。**异步处理时需手动传递上下文**，或使用 `@Async` + `SecurityContextHolder.setStrategyName(SecurityContextHolder.MODE_INHERITABLETHREADLOCAL)`。
+> `SecurityContextHolder` 使用 `ThreadLocal` 存储认证信息，因此请求处理链路的任何代码都能通过 `SecurityContextHolder.getContext()` 获取当前用户。**异步处理时需手动传递上下文**，或使用 `@Async` + `SecurityContextHolder.setStrategyName(SecurityContextHolder.MODE_INHERITABLETHREADLOCAL)`。
 
 ---
 
@@ -238,15 +238,15 @@ Object principal = authentication.getPrincipal();  // 通常是 UserDetails 对�
 
 ### 4.1 为什么不能用明文密码
 
-> ⚠️ **明文存储密码是严重的安全漏洞。** 一旦数据库泄露，所有用户的密码直接暴露。即使用户密码被Hash处理，也需要使用加盐（Salt）的慢Hash算法。
+> **明文存储密码是严重的安全漏洞。** 一旦数据库泄露，所有用户的密码直接暴露。即使用户密码被Hash处理，也需要使用加盐（Salt）的慢Hash算法。
 
 | Hash算法 | 安全性 | 说明 |
 |---------|--------|------|
-| MD5 | ❌ 不安全 | 彩虹表可秒破，需加盐但现代机器仍可暴力破解 |
-| SHA-1/SHA-256 | ⚠️ 不安全 | 设计目标是数据完整性校验，非密码存储，速度太快易被爆破 |
-| **BCrypt** | ✅ 安全 | 内置随机盐，可调工作因子(强度)，慢Hash |
-| **SCrypt** | ✅ 安全 | 内存密集型，抗GPU/ASIC攻击 |
-| **Argon2** | ✅ 最安全 | 2015年Password Hashing Competition冠军 |
+| MD5 | ✗ 不安全 | 彩虹表可秒破，需加盐但现代机器仍可暴力破解 |
+| SHA-1/SHA-256 | 不安全 | 设计目标是数据完整性校验，非密码存储，速度太快易被爆破 |
+| **BCrypt** | ✓ 安全 | 内置随机盐，可调工作因子(强度)，慢Hash |
+| **SCrypt** | ✓ 安全 | 内存密集型，抗GPU/ASIC攻击 |
+| **Argon2** | ✓ 最安全 | 2015年Password Hashing Competition冠军 |
 
 ### 4.2 BCrypt原理
 
@@ -278,7 +278,7 @@ boolean wrong = encoder.matches("wrongPassword", encoded); // false
 
 ### 4.3 DelegatingPasswordEncoder
 
-> 💡 Spring Security 5.0+ 默认使用 `DelegatingPasswordEncoder`，支持多种编码格式并存，便于密码升级。
+> Spring Security 5.0+ 默认使用 `DelegatingPasswordEncoder`，支持多种编码格式并存，便于密码升级。
 
 ```java
 // Spring Boot自动配置的默认PasswordEncoder
@@ -481,7 +481,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
 ### 6.1 什么是JWT
 
-> 💡 JWT（JSON Web Token）是一种自包含的令牌格式，将用户信息编码在令牌中，服务端无需存储Session即可完成认证。
+> JWT（JSON Web Token）是一种自包含的令牌格式，将用户信息编码在令牌中，服务端无需存储Session即可完成认证。
 
 ### 6.2 JWT结构
 
@@ -586,7 +586,7 @@ public class JwtUtil {
 }
 ```
 
-> ⚠️ **安全性警告**：JWT密钥必须足够强度，HS256需要至少256位（32字节）密钥。生产环境建议使用非对称签名RS256，将私钥保存在认证服务端，公钥交给资源服务器。
+> **安全性警告**：JWT密钥必须足够强度，HS256需要至少256位（32字节）密钥。生产环境建议使用非对称签名RS256，将私钥保存在认证服务端，公钥交给资源服务器。
 
 ### 6.4 JWT认证过滤器
 
@@ -737,7 +737,7 @@ public class AuthController {
 
 ### 7.1 OAuth2本质
 
-> 💡 OAuth2是一个**授权框架**，不是认证协议。它解决的是"第三方应用如何获取用户资源的授权"问题，而非"你是谁"的问题。**OAuth2 + JWT = 分布式的认证授权解决方案。**
+> OAuth2是一个**授权框架**，不是认证协议。它解决的是"第三方应用如何获取用户资源的授权"问题，而非"你是谁"的问题。**OAuth2 + JWT = 分布式的认证授权解决方案。**
 
 ### 7.2 四大角色
 
@@ -752,11 +752,11 @@ public class AuthController {
 
 | 授权模式 | 安全等级 | 适用场景 | 当前状态 |
 |---------|---------|---------|---------|
-| **Authorization Code** | ⭐⭐⭐⭐⭐ | 有后端的Web应用 | ✅ 推荐使用 |
-| **Authorization Code + PKCE** | ⭐⭐⭐⭐⭐ | 移动端/SPA单页应用 | ✅ 推荐使用 |
-| **Client Credentials** | ⭐⭐⭐⭐ | 服务间调用（机器对机器） | ✅ 推荐使用 |
-| **Password** | ⭐⭐ | 遗留系统/信任的第一方应用 | ❌ 已废弃（RFC 6749 → RFC 9449） |
-| **Implicit** | ⭐ | 纯前端应用（简化流程） | ❌ 已废弃（安全性差） |
+| **Authorization Code** | ★★★★★ | 有后端的Web应用 | ✓ 推荐使用 |
+| **Authorization Code + PKCE** | ★★★★★ | 移动端/SPA单页应用 | ✓ 推荐使用 |
+| **Client Credentials** | ★★★★ | 服务间调用（机器对机器） | ✓ 推荐使用 |
+| **Password** | ★★ | 遗留系统/信任的第一方应用 | ✗ 已废弃（RFC 6749 → RFC 9449） |
+| **Implicit** | ★ | 纯前端应用（简化流程） | ✗ 已废弃（安全性差） |
 
 ### 7.4 Authorization Code 授权码模式（完整流程）
 
@@ -1013,7 +1013,7 @@ public class TeamController {
 **原因**：**CORS配置必须在Spring Security的FilterChain中生效**，而不是只在Spring MVC中配置。Security的过滤器在MVC之前执行，先拦截了OPTIONS预检请求。
 
 ```java
-// ❌ 错误：只在MVC配置CORS
+// ✗ 错误：只在MVC配置CORS
 @Configuration
 public class WebMvcConfig implements WebMvcConfigurer {
     @Override
@@ -1022,7 +1022,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
     }
 }
 
-// ✅ 正确：在Security中配置CORS
+// ✓ 正确：在Security中配置CORS
 @Bean
 public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     http
@@ -1031,10 +1031,10 @@ public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         ...
 }
 
-// ✅ 或：在Security和MVC都配置（Security允许CORS通过，MVC增强）
+// ✓ 或：在Security和MVC都配置（Security允许CORS通过，MVC增强）
 ```
 
-> ⚠️ **关键提醒**：`cors()` 只是将Spring Security的过滤器链设置为允许CORS通过，你需要通过 `CorsConfigurationSource` 指定具体允许的源、方法、头。跨域且需要携带Cookie时，`allowedOrigins` 不能使用 `*`，必须明确指定。
+> **关键提醒**：`cors()` 只是将Spring Security的过滤器链设置为允许CORS通过，你需要通过 `CorsConfigurationSource` 指定具体允许的源、方法、头。跨域且需要携带Cookie时，`allowedOrigins` 不能使用 `*`，必须明确指定。
 
 ### 9.2 permitAll() 配置了但访问仍返回401
 
@@ -1043,17 +1043,17 @@ public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 **原因分析**：
 
 ```java
-// ❌ 错误1：permitAll() 配在 authenticated() 之后
+// ✗ 错误1：permitAll() 配在 authenticated() 之后
 .authorizeHttpRequests(authz -> authz
     .anyRequest().authenticated()
     .requestMatchers("/api/public/**").permitAll()  // 永远无法匹配！
 )
 
-// ❌ 错误2：路径不匹配（Ant风格路径必须完全一致）
+// ✗ 错误2：路径不匹配（Ant风格路径必须完全一致）
 .requestMatchers("/api/public/").permitAll()
 // 访问 /api/public/hello → 不匹配，走后续规则被拦截
 
-// ✅ 正确：permitAll() 必须在前，精确匹配优先
+// ✓ 正确：permitAll() 必须在前，精确匹配优先
 .authorizeHttpRequests(authz -> authz
     .requestMatchers("/api/public/**").permitAll()      // 1. 公开API
     .requestMatchers("/api/admin/**").hasRole("ADMIN")  // 2. 管理API
@@ -1061,14 +1061,14 @@ public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 )
 ```
 
-> 💡 **规则匹配顺序**：`authorizeHttpRequests` 中的规则是按书写顺序匹配的，**第一条匹配的规则生效**。因此宽松规则写在前面，严格规则写在后面。
+> **规则匹配顺序**：`authorizeHttpRequests` 中的规则是按书写顺序匹配的，**第一条匹配的规则生效**。因此宽松规则写在前面，严格规则写在后面。
 
 ### 9.3 There is no PasswordEncoder mapped for the id "null"
 
 **现象**：内存用户配置后登录报错。
 
 ```java
-// ❌ 错误：明文密码未加编码前缀
+// ✗ 错误：明文密码未加编码前缀
 @Bean
 public UserDetailsService users() {
     UserDetails user = User.withDefaultPasswordEncoder()
@@ -1079,10 +1079,10 @@ public UserDetailsService users() {
     return new InMemoryUserDetailsManager(user);
 }
 
-// ❌ 错误：使用 DelegatingPasswordEncoder 但密码没有 {前缀}
+// ✗ 错误：使用 DelegatingPasswordEncoder 但密码没有 {前缀}
 // 数据库中存储的密码：$2a$10$...（没有{bcrypt}前缀）
 
-// ✅ 正确1：使用 PasswordEncoder 编码后赋值
+// ✓ 正确1：使用 PasswordEncoder 编码后赋值
 @Bean
 public UserDetailsService users(PasswordEncoder encoder) {
     UserDetails user = User.builder()
@@ -1093,7 +1093,7 @@ public UserDetailsService users(PasswordEncoder encoder) {
     return new InMemoryUserDetailsManager(user);
 }
 
-// ✅ 正确2：使用 DelegatingPasswordEncoder 格式
+// ✓ 正确2：使用 DelegatingPasswordEncoder 格式
 // 数据库密码字段存储：{bcrypt}$2a$10$...
 // 此时 UserDetails 的 getPassword() 必须返回完整格式
 ```
@@ -1105,21 +1105,21 @@ public UserDetailsService users(PasswordEncoder encoder) {
 **原因分析**：
 
 ```java
-// ❌ 错误1：JWT过滤器中未设置SecurityContext
+// ✗ 错误1：JWT过滤器中未设置SecurityContext
 // 解析了Token，但没有调用：
 SecurityContextHolder.getContext().setAuthentication(authentication);
 
-// ❌ 错误2：异步线程中丢失上下文
+// ✗ 错误2：异步线程中丢失上下文
 @Async
 public void asyncMethod() {
     // 新线程中 SecurityContextHolder 为空！
     Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 }
 
-// ✅ 正确：设置策略为 MODE_INHERITABLETHREADLOCAL
+// ✓ 正确：设置策略为 MODE_INHERITABLETHREADLOCAL
 SecurityContextHolder.setStrategyName(SecurityContextHolder.MODE_INHERITABLETHREADLOCAL);
 
-// ✅ 或：手动传递
+// ✓ 或：手动传递
 @Async
 public void asyncMethod(Authentication authentication) {
     SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -1171,22 +1171,22 @@ public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 **现象**：GET请求正常，POST/PUT/DELETE请求返回403。
 
 ```java
-// ❌ 原因：Spring Security 默认开启 CSRF 防护
+// ✗ 原因：Spring Security 默认开启 CSRF 防护
 // 所有非GET/HEAD/TRACE/OPTIONS请求都需要CSRF Token
 
-// ✅ 解决方案1：前后端分离REST API，关闭CSRF
+// ✓ 解决方案1：前后端分离REST API，关闭CSRF
 http.csrf(csrf -> csrf.disable());
 
-// ✅ 解决方案2：传统MVC应用，使用Thymeleaf自动注入CSRF Token
+// ✓ 解决方案2：传统MVC应用，使用Thymeleaf自动注入CSRF Token
 // <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
 
-// ✅ 解决方案3：将CSRF Token通过Cookie返回，前端读取后添加到请求头
+// ✓ 解决方案3：将CSRF Token通过Cookie返回，前端读取后添加到请求头
 http.csrf(csrf -> csrf
     .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
 );
 ```
 
-> 💡 **RESTful API无状态原则**：当使用JWT无状态认证（SessionCreationPolicy.STATELESS）时，CSRF防护通常是**不需要**的，因为浏览器不会自动附加JWT到跨站请求（Token在Authorization头，不在Cookie中）。
+> **RESTful API无状态原则**：当使用JWT无状态认证（SessionCreationPolicy.STATELESS）时，CSRF防护通常是**不需要**的，因为浏览器不会自动附加JWT到跨站请求（Token在Authorization头，不在Cookie中）。
 
 ---
 
@@ -1841,7 +1841,7 @@ GET /authorize?response_type=code
 
 #### 14.1.2 授权码 + PKCE（Proof Key for Code Exchange）
 
-> 💡 PKCE（读作"pixie"）是增强版授权码模式，专为没有后端服务器的SPA和移动端设计，防止授权码拦截攻击。
+> PKCE（读作"pixie"）是增强版授权码模式，专为没有后端服务器的SPA和移动端设计，防止授权码拦截攻击。
 
 ```
 ┌──────────┐                    ┌──────────┐                    ┌──────────────┐
@@ -2118,7 +2118,7 @@ public CompletableFuture<Void> processAsync() {
 
 ### 14.5 零信任安全架构概述
 
-> 🎯 **零信任（Zero Trust）**的核心原则：**永不信任，始终验证**。不再假设内部网络是安全的，每个请求都必须经过认证和授权。
+> **零信任（Zero Trust）**的核心原则：**永不信任，始终验证**。不再假设内部网络是安全的，每个请求都必须经过认证和授权。
 
 **Spring Security 在零信任架构中的对应**：
 
@@ -2132,4 +2132,4 @@ public CompletableFuture<Void> processAsync() {
 
 ---
 
-> 🎯 **Spring Security不是一个单纯的框架，而是一套完整的安全架构思想。** 理解其Filter Chain设计模式、认证与授权分离、RBAC权限模型，比记住API用法更重要。掌握了这些底层原理，无论框架如何演进，你都能快速上手。在实际项目中，**安全设计从第一天就要开始**，而不是在功能完成后才补上。
+> **Spring Security不是一个单纯的框架，而是一套完整的安全架构思想。** 理解其Filter Chain设计模式、认证与授权分离、RBAC权限模型，比记住API用法更重要。掌握了这些底层原理，无论框架如何演进，你都能快速上手。在实际项目中，**安全设计从第一天就要开始**，而不是在功能完成后才补上。

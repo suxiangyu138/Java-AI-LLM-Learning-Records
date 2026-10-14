@@ -2,7 +2,7 @@
 
 > Lambda、Stream、Record、模式匹配、虚拟线程——Java 8 后的语法糖让Java从"啰嗦的语言"变成了"现代化的语言"
 
-## 📚 目录
+## 目录
 
 1. [Lambda 表达式 (Java 8)](#1-lambda-表达式-java-8)
 2. [Stream API (Java 8)](#2-stream-api-java-8)
@@ -80,7 +80,7 @@ public interface Comparator<T> {
 }
 ```
 
-> 💡 **可被 Lambda 赋值的接口类型**：接口有且仅有一个**抽象方法**（不计 Object 的 public 方法和 default/static 方法）。
+> **可被 Lambda 赋值的接口类型**：接口有且仅有一个**抽象方法**（不计 Object 的 public 方法和 default/static 方法）。
 
 ### 1.4 方法引用的本质
 
@@ -121,12 +121,12 @@ String prefix = "Hello: "; // effectively final（没被重新赋值）
 list.forEach(item -> System.out.println(prefix + item));
 
 // 如果尝试修改 prefix，编译报错
-// prefix = "Hi: "; // ❌ Variable used in lambda should be effectively final
+// prefix = "Hi: "; // ✗ Variable used in lambda should be effectively final
 ```
 
-> 💡 **等效原则**：被 Lambda 捕获的变量会被复制到 Lambda 的实现中（类似匿名内部类的值捕获），因此原始变量的修改无法反映到 Lambda 内——编译器索性禁止修改。
+> **等效原则**：被 Lambda 捕获的变量会被复制到 Lambda 的实现中（类似匿名内部类的值捕获），因此原始变量的修改无法反映到 Lambda 内——编译器索性禁止修改。
 
-### 🎯 核心要点
+### 核心要点
 
 - Lambda 编译为 `invokedynamic`，运行时动态生成实现，**不是**匿名内部类的语法糖
 - 方法引用是 Lambda 的进一步简化，字节码层面完全等价
@@ -171,7 +171,7 @@ list.parallelStream()
     });
 ```
 
-> ⚠️ **并行流陷阱**：
+> **并行流陷阱**：
 > 1. commonPool 默认线程数 = `Runtime.getRuntime().availableProcessors() - 1`
 > 2. I/O 密集型任务不适合并行流（会阻塞 commonPool 线程）
 > 3. 可使用自定义 ForkJoinPool 隔离并行流：`ForkJoinPool customPool = new ForkJoinPool(10); customPool.submit(() -> stream.parallel().collect(...)).get();`
@@ -201,9 +201,9 @@ list.parallelStream()
 | 复杂链式操作（filter-map-collect） | Stream | 代码可读性远胜 for 循环 |
 | 需要 break/return 提前退出 | for 循环 | Stream 短路操作有限（只有 findFirst/anyMatch 等） |
 
-> 🎯 **核心要点**：Stream 的优势在于**声明式编程 + 可读性**，而非极端性能。在集合操作逻辑复杂时优先用 Stream，在性能敏感的循环热点用 for 循环。
+> **核心要点**：Stream 的优势在于**声明式编程 + 可读性**，而非极端性能。在集合操作逻辑复杂时优先用 Stream，在性能敏感的循环热点用 for 循环。
 
-### 😡 面试官追问
+### 面试官追问
 
 **Q: Stream 的 forEach 和 Collection 的 forEach 有什么区别？**
 
@@ -240,10 +240,10 @@ findById(100L).orElseThrow(() -> new UserNotFoundException(100L));
 
 | 位置 | 推荐使用 | 原因 |
 |------|:--------:|------|
-| 方法返回值 | ✅ | 明确告知调用方"可能没有结果" |
-| 方法参数 | ❌ | 增加调用方负担，违背设计初衷 |
-| 类的字段 | ❌ | Optional 未实现 `Serializable`，序列化报错 |
-| 集合元素 | ❌ | 集合本身已经可以表达"空"，Optional 嵌套集合毫无必要 |
+| 方法返回值 | ✓ | 明确告知调用方"可能没有结果" |
+| 方法参数 | ✗ | 增加调用方负担，违背设计初衷 |
+| 类的字段 | ✗ | Optional 未实现 `Serializable`，序列化报错 |
+| 集合元素 | ✗ | 集合本身已经可以表达"空"，Optional 嵌套集合毫无必要 |
 
 ### 3.2 orElse vs orElseGet 的陷阱
 
@@ -267,14 +267,14 @@ String r2 = nonEmpty.orElseGet(() -> expensiveComputation()); // 不输出！
 // 实际对比：创建默认值有额外开销时，orElseGet 性能远优于 orElse
 ```
 
-> ⚠️ **记忆口诀**：`orElse` 当场算，`orElseGet` 空的来。
+> **记忆口诀**：`orElse` 当场算，`orElseGet` 空的来。
 
 ### 3.3 序列化问题
 
 ```java
 public class User implements Serializable {
     private Long id;
-    // ❌ Optional 没有实现 Serializable，这行会触发 NotSerializableException
+    // ✗ Optional 没有实现 Serializable，这行会触发 NotSerializableException
     private Optional<String> email = Optional.empty();
 }
 
@@ -283,14 +283,14 @@ public class User implements Serializable {
     private Long id;
     private String email; // 普通字段
 
-    // ✅ 在 getter 中返回 Optional
+    // ✓ 在 getter 中返回 Optional
     public Optional<String> getEmail() {
         return Optional.ofNullable(email);
     }
 }
 ```
 
-### 🎯 核心要点
+### 核心要点
 
 - Optional **不是**用来消除 null 检查，而是作为返回值表达"可能为空"的语义契约
 - `orElse` 每次都会计算参数（容易隐藏性能问题），`orElseGet` 惰性求值
@@ -308,11 +308,11 @@ Java 的 `var` 是**强类型、编译时推断**的关键字，与 JavaScript �
 ```java
 // Java var —— 编译时完全确定类型，运行时就是该类型
 var name = "Hello";  // 编译后等价于 String name = "Hello"
-name = 42;           // ❌ 编译错误！String 不能赋值为 int
+name = 42;           // ✗ 编译错误！String 不能赋值为 int
 
 // JavaScript var —— 动态类型，运行时可变
 // var name = "Hello";
-// name = 42; // ✅ 可以
+// name = 42; // ✓ 可以
 ```
 
 | 特性 | Java var | JavaScript var |
@@ -325,16 +325,16 @@ name = 42;           // ❌ 编译错误！String 不能赋值为 int
 ### 4.2 var 的使用原则
 
 ```java
-// ✅ 应该用 var 的场景 —— 类型一目了然
+// ✓ 应该用 var 的场景 —— 类型一目了然
 var list = new ArrayList<String>();           // 明显是 ArrayList<String>
 var map = new HashMap<String, List<User>>();  // 避免写出冗长的泛型类型
 var stream = list.stream().filter(x -> x.length() > 5); // Stream 链式操作
 
-// ❌ 不应该用 var 的场景 —— 类型不清晰
+// ✗ 不应该用 var 的场景 —— 类型不清晰
 var result = someService.complexMethod();     // 看不出来返回什么类型！
 var value = getItem();                        // 需要查方法签名才知道类型
 
-// ✅ var + 泛型的优雅写法
+// ✓ var + 泛型的优雅写法
 // 传统写法（泛型嵌套导致代码臃肿）
 Map<String, List<Map<String, Integer>>> data = new HashMap<>();
 
@@ -347,18 +347,18 @@ var data = new HashMap<String, List<Map<String, Integer>>>();
 ### 4.3 var 的限制
 
 ```java
-// ❌ 不允许
+// ✗ 不允许
 var x;                    // 必须初始化
 var y = null;             // 不能推断 null 类型
 var f = () -> "hello";    // Lambda 需要显式目标类型
 var arr = {1, 2, 3};      // 数组初始化器不能推断
 
-// ✅ 允许
+// ✓ 允许
 var arr2 = new int[]{1, 2, 3}; // 显式创建数组
 var result = (Runnable) () -> {}; // 强制类型转换后可以
 ```
 
-### 🎯 核心要点
+### 核心要点
 
 - `var` 是编译期特性，字节码中类型已固定，运行时无性能影响
 - 用 `var` 提升可读性的前提是**不牺牲类型透明度**
@@ -413,7 +413,7 @@ String result = switch (day) {
 };
 ```
 
-> ⚠️ **注意**：`yield` 是**受限关键字**——仅在 switch 表达式中有特殊含义，可以用作变量名（但不推荐）。而 `return` 永远表示退出当前方法，不能用在 switch 表达式中返回值。
+> **注意**：`yield` 是**受限关键字**——仅在 switch 表达式中有特殊含义，可以用作变量名（但不推荐）。而 `return` 永远表示退出当前方法，不能用在 switch 表达式中返回值。
 
 ### 5.3 箭头语法的 fall-through 避免
 
@@ -520,9 +520,9 @@ public double area(Shape shape) {
 }
 ```
 
-> 💡 **密封类 + 模式匹配** = 代数数据类型（ADT）风格，这是 Java 向函数式语言学习的重要成果。
+> **密封类 + 模式匹配** = 代数数据类型（ADT）风格，这是 Java 向函数式语言学习的重要成果。
 
-### 🎯 核心要点
+### 核心要点
 
 - Switch 表达式消除了 fall-through、支持直接赋值、具有完备性检查
 - `yield` 在 switch 表达式的块中返回值，`return` 退出方法，二者不能混用
@@ -653,19 +653,19 @@ public record NameCount(String name, long count) {}
 ### 6.5 Record 的局限性
 
 ```java
-// ❌ 不能继承其他类
+// ✗ 不能继承其他类
 public record Point(int x, int y) extends Entity { } // 编译错误
 
-// ❌ 不能修改字段（不可变）
+// ✗ 不能修改字段（不可变）
 Point p = new Point(1, 2);
 // p.x = 3; // 编译错误，final 字段
 
-// ❌ 不能声明实例字段（只能在参数列表中声明）
+// ✗ 不能声明实例字段（只能在参数列表中声明）
 public record Point(int x, int y) {
     private int z; // 编译错误！Record 不允许额外实例字段
 }
 
-// ✅ 可以声明静态字段和静态方法
+// ✓ 可以声明静态字段和静态方法
 public record Point(int x, int y) {
     public static Point ORIGIN = new Point(0, 0);
     
@@ -673,14 +673,14 @@ public record Point(int x, int y) {
         return new Point(x, y);
     }
     
-    // ✅ 可以添加实例方法
+    // ✓ 可以添加实例方法
     public double distance() {
         return Math.sqrt(x * x + y * y);
     }
 }
 ```
 
-### 🎯 核心要点
+### 核心要点
 
 - Record 编译为 `final class extends java.lang.Record`，自动生成构造器、accessor、equals/hashCode/toString
 - 紧凑构造器用于参数校验和归一化，语法简洁
@@ -767,9 +767,9 @@ String formatted = """
 // "left right\n"
 ```
 
-> 💡 `\` 行尾续行在大 SQL、长 URL 和拼接日志模板时非常有用。`\s` 让 IDE 的"尾部空格自动清理"不会破坏格式化。
+> `\` 行尾续行在大 SQL、长 URL 和拼接日志模板时非常有用。`\s` 让 IDE 的"尾部空格自动清理"不会破坏格式化。
 
-### 🎯 核心要点
+### 核心要点
 
 - 文本块编译后就是普通 `String`，运行时零开销
 - 缩进由闭合 `"""` 的位置决定，代码格式不影响字符串实际内容
@@ -862,7 +862,7 @@ String json = JSON."""
     """;
 ```
 
-### 🎯 核心要点
+### 核心要点
 
 - 字符串模板是 Java 21 预览特性，将来可能调整
 - `STR` 是内置处理器，支持任意表达式和文本块结合
@@ -927,7 +927,7 @@ public CompletableFuture<User> handleRequest(Request req) {
 }
 ```
 
-### 🎯 核心要点
+### 核心要点
 
 - 虚拟线程是 JVM 管理的轻量级线程，创建成本极低，适合 I/O 密集型任务
 - API 与现有代码完全兼容，只需将 `new Thread()` 替换为 `Thread.startVirtualThread()`
@@ -960,11 +960,11 @@ if (obj instanceof String s) {  // 判断 + 变量声明一步完成
 ```java
 // 模式变量 s 在条件为 true 后才能使用
 if (obj instanceof String s && s.length() > 5) {
-    // ✅ 短路与 (&&) 保证 s 非空后访问 s.length()
+    // ✓ 短路与 (&&) 保证 s 非空后访问 s.length()
     System.out.println(s);
 }
 
-// ❌ 编译错误
+// ✗ 编译错误
 // if (obj instanceof String s || s.length() > 5) { } 
 // 短路或 (||) 下 s 可能未定义
 
@@ -1004,7 +1004,7 @@ if (obj instanceof Address) {
 }
 ```
 
-### 🎯 核心要点
+### 核心要点
 
 - `if (obj instanceof Type v)` 合并类型判断 + 变量声明 + 强制转换
 - 模式变量作用域受短路运算符限制（仅在 `&&` 而非 `||` 中可用）

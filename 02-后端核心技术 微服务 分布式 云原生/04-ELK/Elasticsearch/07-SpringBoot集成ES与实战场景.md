@@ -211,7 +211,7 @@ public interface GoodsRepository extends ElasticsearchRepository<Goods, Long> {
 | `findByCategoryAndBrand` | bool must 组合 |
 | `findByBrandIn` | terms 查询 |
 
-> ⚠️ Repository 适合简单 CRUD，复杂查询（高亮、聚合、嵌套）必须使用 RestTemplate。
+> Repository 适合简单 CRUD，复杂查询（高亮、聚合、嵌套）必须使用 RestTemplate。
 
 ---
 
@@ -392,7 +392,7 @@ public class ProductSearchService {
 
 | 方案 | 实时性 | 复杂度 | 一致性 | 推荐 |
 |------|:-----:|:------:|:------:|:----:|
-| Canal 订阅 binlog | 秒级 | 中 | 最终一致 | ⭐ 推荐 |
+| Canal 订阅 binlog | 秒级 | 中 | 最终一致 | ★ 推荐 |
 | Logstash 定时同步 | 分钟级 | 低 | 最终一致 | 可接受延迟 |
 | 应用双写 | 实时 | 低 | 可能不一致 | 业务侵入 |
 | MQ 异步同步 | 秒级 | 中 | 最终一致 | 通用 |
@@ -463,7 +463,7 @@ public void saveGoods(Goods goods) {
 }
 ```
 
-> 💡 生产推荐 Canal + MQ 方案，解耦、可靠持久化、可观测。
+> 生产推荐 Canal + MQ 方案，解耦、可靠持久化、可观测。
 
 ---
 
@@ -661,12 +661,12 @@ public class IndexReindexService {
 
 | 场景 | 适合 ES？ | 原因 |
 |------|:---------:|------|
-| 商品搜索（多关键词模糊查询） | ✅ | ES 核心能力 |
-| 日志检索与监控 | ✅ | ELK 标配 |
-| 大数据量复杂聚合报表 | ✅ | 聚合性能优秀 |
-| 知识库语义搜索 | ✅ | 8.x 向量搜索 |
-| 订单列表（状态筛选+日期排序） | ❌ | MySQL 即可 |
-| 交易扣款 | ❌ | 需要事务 |
-| 后台管理简单 CRUD | ❌ | MySQL 更适合 |
+| 商品搜索（多关键词模糊查询） | ✓ | ES 核心能力 |
+| 日志检索与监控 | ✓ | ELK 标配 |
+| 大数据量复杂聚合报表 | ✓ | 聚合性能优秀 |
+| 知识库语义搜索 | ✓ | 8.x 向量搜索 |
+| 订单列表（状态筛选+日期排序） | ✗ | MySQL 即可 |
+| 交易扣款 | ✗ | 需要事务 |
+| 后台管理简单 CRUD | ✗ | MySQL 更适合 |
 
-> 🎯 **黄金法则**：MySQL 存业务数据做事务，ES 做搜索和分析——互补不替代。生产环境 3 节点起步，用好 filter 缓存，Canal 同步保数据一致性。
+> **黄金法则**：MySQL 存业务数据做事务，ES 做搜索和分析——互补不替代。生产环境 3 节点起步，用好 filter 缓存，Canal 同步保数据一致性。

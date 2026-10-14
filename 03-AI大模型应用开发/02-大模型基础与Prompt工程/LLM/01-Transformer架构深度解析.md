@@ -1,6 +1,6 @@
 # 01 - Transformer 架构深度解析
 
-> 🎯 Transformer 是当今所有 LLM 的基石——GPT、Llama、Claude、Gemini 全部基于它。理解 Self-Attention、Multi-Head、位置编码三大核心，就理解了 LLM 的底层原理
+> Transformer 是当今所有 LLM 的基石——GPT、Llama、Claude、Gemini 全部基于它。理解 Self-Attention、Multi-Head、位置编码三大核心，就理解了 LLM 的底层原理
 
 ---
 

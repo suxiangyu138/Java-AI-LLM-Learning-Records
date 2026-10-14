@@ -2,7 +2,7 @@
 
 > JSON 是 Java 后端开发的"数据"——从 REST API 到配置文件，从序列化到安全防护，每个 Java 开发者都必须精通
 
-## 📚 目录
+## 目录
 
 1. [知识体系导图](#1)
 2. [模块导航](#2)
@@ -194,7 +194,7 @@ JSON 知识体系（Java 开发者视角）
 | **@JsonProperty** | 字段-属性名映射，最常用 Jackson 注解 | 02-模块 | 自定义字段名 |
 | **@JsonIgnore** | 排除字段不参与序列化 | 02-模块 | 密码、敏感字段 |
 | **TypeToken** | Gson 泛型令牌 | 03-模块 | Gson 泛型反序列化 |
-| **@type / AutoType** | Fastjson 多态机制，安全风险入口 | 03/05-模块 | ⚠️ 安全高危 |
+| **@type / AutoType** | Fastjson 多态机制，安全风险入口 | 03/05-模块 | 安全高危 |
 | **SafeMode** | Fastjson 安全模式，禁用 @type | 03-模块 | 安全防护 |
 | **JSONPath** | JSON 查询表达式（类比 XPath） | 01-模块 | 数据提取、校验 |
 | **JSON Schema** | JSON 结构规范定义语言 | 01/05-模块 | API 契约校验 |
@@ -209,7 +209,7 @@ JSON 知识体系（Java 开发者视角）
 
 ## 5. 学习路线推荐 {#5}
 
-### 🟢 初级路线：JSON 基础入门（1-2 周）
+### 初级路线：JSON 基础入门（1-2 周）
 
 ```
 JSON 语法规范 → Jackson ObjectMapper 基本用法 → Spring Boot JSON 开发 → Gson 入门
@@ -217,7 +217,7 @@ JSON 语法规范 → Jackson ObjectMapper 基本用法 → Spring Boot JSON 开
 
 > 目标：能熟练处理 REST API 中的 JSON 请求/响应，掌握 Jackson 常用注解。
 
-### 🟡 中级路线：JSON 深度应用（3-4 周）
+### 中级路线：JSON 深度应用（3-4 周）
 
 ```
 Jackson 高级特性（泛型/流式/树模型）→ Gson/Fastjson2 对比 → JSON Schema 校验 → 自定义序列化器
@@ -225,7 +225,7 @@ Jackson 高级特性（泛型/流式/树模型）→ Gson/Fastjson2 对比 → J
 
 > 目标：能处理复杂 JSON 场景（嵌套泛型、大文件、多态），理解各库的选型依据。
 
-### 🔴 高级路线：性能优化与安全（3-4 周）
+### 高级路线：性能优化与安全（3-4 周）
 
 ```
 性能优化实战（JMH基准测试）→ 反序列化安全防护 → JSON Schema 平台化 → 数据契约治理
@@ -249,7 +249,7 @@ Jackson 高级特性（泛型/流式/树模型）→ Gson/Fastjson2 对比 → J
 │
 ├── 高并发 API 网关，序列化吞吐量第一？
 │   └── → Fastjson2（性能领先 20-30%，内存更低）
-│       ⚠️ 必须启用 SafeMode，禁用 AutoType
+│       必须启用 SafeMode，禁用 AutoType
 │
 ├── 需要处理 JSON + XML + YAML + CSV 多格式？
 │   └── → Jackson（多格式扩展最完善）
@@ -267,7 +267,7 @@ Jackson 高级特性（泛型/流式/树模型）→ Gson/Fastjson2 对比 → J
     └── → Jackson Tree Model (JsonNode) + JSON Schema Validator
 ```
 
-> 🎯 **核心结论**：Jackson 是 Java 企业开发的"默认选项"——Spring Boot 内置、生态最全、安全可靠。Gson 适合轻量场景，Fastjson2 在极致性能场景是有效补充，但需严格安全配置。
+> **核心结论**：Jackson 是 Java 企业开发的"默认选项"——Spring Boot 内置、生态最全、安全可靠。Gson 适合轻量场景，Fastjson2 在极致性能场景是有效补充，但需严格安全配置。
 
 ---
 

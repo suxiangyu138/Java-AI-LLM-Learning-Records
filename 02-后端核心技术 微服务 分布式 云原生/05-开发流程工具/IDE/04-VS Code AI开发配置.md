@@ -1,6 +1,6 @@
 # 04 - VS Code AI 开发配置
 
-> 🎯 VS Code 已成为 AI 开发的事实标准——GitHub Copilot、Cline、Continue、通义灵码，四大 AI 插件让 VS Code 从编辑器变成 AI 编程助手
+> VS Code 已成为 AI 开发的事实标准——GitHub Copilot、Cline、Continue、通义灵码，四大 AI 插件让 VS Code 从编辑器变成 AI 编程助手
 
 ---
 

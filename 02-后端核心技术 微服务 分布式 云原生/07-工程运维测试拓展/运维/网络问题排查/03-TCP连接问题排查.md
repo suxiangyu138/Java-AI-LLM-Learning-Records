@@ -1,7 +1,7 @@
 # 03-TCP 连接问题排查
 > 连接超时、拒绝、重置（RST）、TIME_WAIT、CLOSE_WAIT、SYN 队列溢出——TCP 六类高频问题的现象、根因与解决
 
-## 📚 目录
+## 目录
 1. [TCP 状态机速览](#1-tcp-状态机速览)
 2. [连接超时（Timeout）](#2-连接超时timeout)
 3. [连接拒绝（Refused）](#3-连接拒绝refused)
@@ -63,7 +63,7 @@ ss -tlnp | grep port             # ④ 服务端监听了吗？
 | 服务端负载过高 | CPU 高/GC 频繁 | 扩容/优化 |
 | 服务端内核参数 | `net.ipv4.tcp_syn_retries` 等 | 内核调优（谨慎） |
 
-> 💡 **超时 vs 拒绝的分水岭**：超时 = "包被丢了"（防火墙 drop/网络/队列满）；拒绝 = "包被回了 RST"（端口没监听/防火墙 reject）——telnet 的两种输出直接区分。
+> **超时 vs 拒绝的分水岭**：超时 = "包被丢了"（防火墙 drop/网络/队列满）；拒绝 = "包被回了 RST"（端口没监听/防火墙 reject）——telnet 的两种输出直接区分。
 
 ## 3. 连接拒绝（Refused）
 
@@ -85,7 +85,7 @@ ss -tlnp | grep 8080        # 端口监听了吗？
 | 防火墙 reject | `iptables -L` / `firewall-cmd --list-all` | 防火墙放行 |
 | 容器端口未映射 | Docker 场景（见 [07](07-容器与微服务网络排查.md)） | `-p` 映射 |
 
-> ⚠️ **经典坑**：Spring Boot 配了 `server.address=127.0.0.1`——容器/远程访问全部 refused，而"本地明明能连"。绑定地址是拒绝类问题的首要检查项。
+> **经典坑**：Spring Boot 配了 `server.address=127.0.0.1`——容器/远程访问全部 refused，而"本地明明能连"。绑定地址是拒绝类问题的首要检查项。
 
 ## 4. 连接重置（RST）
 
@@ -119,7 +119,7 @@ tcpdump -nn port 8080 'tcp[tcpflags] & tcp-rst != 0'
   请求处理中 RST ← 上游超时/应用崩溃
 ```
 
-> 💡 Java 场景：**连接池中的空闲连接被服务端（或防火墙/负载均衡）超时回收**，复用时报 RST——解决：连接池配验证（`testOnBorrow`/`validationQuery`）+ 空闲超时小于对端。
+> Java 场景：**连接池中的空闲连接被服务端（或防火墙/负载均衡）超时回收**，复用时报 RST——解决：连接池配验证（`testOnBorrow`/`validationQuery`）+ 空闲超时小于对端。
 
 ## 5. TIME_WAIT 堆积
 
@@ -141,12 +141,12 @@ ss -s                              # timewait 统计
 
 | 方案 | 说明 | 优先级 |
 |------|------|:---:|
-| **连接复用（连接池）** | 减少连接创建/关闭频率 | ✅ 首选（Java 场景天然适用） |
-| 调大本地端口范围 | `net.ipv4.ip_local_port_range` | ✅ 快速缓解 |
-| 开启 timewait reuse | `net.ipv4.tcp_tw_reuse=1`（仅客户端出站） | ⚠️ 谨慎 |
-| timewait 回收 | `tcp_tw_recycle` **已废弃且危险**（NAT 场景丢包） | ❌ 禁用 |
+| **连接复用（连接池）** | 减少连接创建/关闭频率 | ✓ 首选（Java 场景天然适用） |
+| 调大本地端口范围 | `net.ipv4.ip_local_port_range` | ✓ 快速缓解 |
+| 开启 timewait reuse | `net.ipv4.tcp_tw_reuse=1`（仅客户端出站） | 谨慎 |
+| timewait 回收 | `tcp_tw_recycle` **已废弃且危险**（NAT 场景丢包） | ✗ 禁用 |
 
-> ⚠️ **内核参数纪律**：`tcp_tw_reuse` 只影响客户端出站连接（配合时间戳）；`tcp_tw_recycle` 在 NAT 环境会造成随机丢包——**现代内核不建议开启 recycle**。优先解法永远是连接池复用。
+> **内核参数纪律**：`tcp_tw_reuse` 只影响客户端出站连接（配合时间戳）；`tcp_tw_recycle` 在 NAT 环境会造成随机丢包——**现代内核不建议开启 recycle**。优先解法永远是连接池复用。
 
 ## 6. CLOSE_WAIT 堆积（泄漏信号）
 
@@ -170,7 +170,7 @@ jstack <pid> | grep -A 5 'wait'          # 应用线程状态（Java 视角）
 | 响应体未消费完 | 未读完整响应就 close（或相反） |
 
 ```java
-// ✅ 正确姿势：try-with-resources 保证关闭
+// ✓ 正确姿势：try-with-resources 保证关闭
 try (InputStream is = response.getEntity().getContent()) {
     // 读取
 } catch (IOException e) {
@@ -178,7 +178,7 @@ try (InputStream is = response.getEntity().getContent()) {
 }
 ```
 
-> 🎯 **CLOSE_WAIT 是"应用层泄漏"的网络表现**：不是网络问题，是代码问题——数量持续增长必须查代码（连接/流未关闭），重启只能缓解。
+> **CLOSE_WAIT 是"应用层泄漏"的网络表现**：不是网络问题，是代码问题——数量持续增长必须查代码（连接/流未关闭），重启只能缓解。
 
 ## 7. SYN 队列与 Accept 队列溢出
 
@@ -211,7 +211,7 @@ ss -tn state syn-recv | wc -l
 | 调大内核队列 | `net.core.somaxconn`、`net.ipv4.tcp_max_syn_backlog` |
 | 根本优化 | 缩短握手时间（Fast Open 谨慎）、扩容实例 |
 
-> 💡 队列溢出 = "服务端忙不过来"的信号：先看应用处理能力（线程池/连接池），再调队列参数——**调队列是缓解，优化处理是根治**。
+> 队列溢出 = "服务端忙不过来"的信号：先看应用处理能力（线程池/连接池），再调队列参数——**调队列是缓解，优化处理是根治**。
 
 ## 8. 抓包分析实战
 
@@ -239,7 +239,7 @@ tshark -r /tmp/cap.pcap -q -z conv,tcp | sort -k 6 -rn | head
 
 ## 9. 核心要点
 
-> 🎯 **核心要点**：
+> **核心要点**：
 > - 六类问题定位：超时（包被丢）、拒绝（RST 回应）、RST（中断/超时回收）、TIME_WAIT（短连接多）、CLOSE_WAIT（**代码泄漏**）、队列溢出（服务端忙）；
 > - 超时 vs 拒绝：telnet 输出直接区分（drop vs reject）；
 > - TIME_WAIT：连接池复用是首选解；`tcp_tw_recycle` 禁用；

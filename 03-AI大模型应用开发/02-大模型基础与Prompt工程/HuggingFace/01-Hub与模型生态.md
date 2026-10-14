@@ -1,7 +1,7 @@
 # 01 Hub 与模型生态
 > AI 时代的 GitHub：仓库机制、模型卡、gated 权限、国内镜像与缓存治理
 
-## 📚 目录
+## 目录
 1. [Hub 全景：150 万+ 模型的分发中心](#1-hub-全景150-万-模型的分发中心)
 2. [仓库机制：模型 / 数据集 / Spaces 三种资产](#2-仓库机制模型--数据集--spaces-三种资产)
 3. [模型卡：模型的说明书](#3-模型卡模型的说明书)
@@ -36,7 +36,7 @@
         └───────────┘ └─────────┘ └──────────┘
 ```
 
-> 🎯 **核心要点**：**Hub 是"来源"，其他库是"消费方"**——模型权重只在 Hub 存一份，Transformers/PEFT/vLLM/llama.cpp 都从同一个 `model_id` 拉取。这就是"AI 时代的 GitHub"的含义。
+> **核心要点**：**Hub 是"来源"，其他库是"消费方"**——模型权重只在 Hub 存一份，Transformers/PEFT/vLLM/llama.cpp 都从同一个 `model_id` 拉取。这就是"AI 时代的 GitHub"的含义。
 
 ## 2. 仓库机制：模型 / 数据集 / Spaces 三种资产
 
@@ -74,7 +74,7 @@ Qwen/Qwen2.5-7B-Instruct/
 | generation_config.json | 生成默认值 | pipeline 自动读取 |
 | LICENSE | 使用许可 | 商用前必读（GitHub License 体系） |
 
-> 💡 **safetensors 是安全底线**：`.bin`（pickle）权重可能包含恶意代码，2026 年 HF 已默认禁用 pickle 反序列化风险面（`SAFETENSORS_FAST_GPU` 环境优化）。下载模型后检查有没有 `.bin` 格式的老仓库——有则优先换 safetensors 版本。
+> **safetensors 是安全底线**：`.bin`（pickle）权重可能包含恶意代码，2026 年 HF 已默认禁用 pickle 反序列化风险面（`SAFETENSORS_FAST_GPU` 环境优化）。下载模型后检查有没有 `.bin` 格式的老仓库——有则优先换 safetensors 版本。
 
 ## 3. 模型卡：模型的说明书
 
@@ -97,7 +97,7 @@ Qwen/Qwen2.5-7B-Instruct/
   ④ 看输入要求：对话模板/图像分辨率/上下文长度
 ```
 
-> 🎯 **核心要点**：**模型卡是"先读文档再调 API"的 AI 版**——跳过模型卡直接跑代码，等于不读文档调接口。生产选型第一步永远是读模型卡（+ 许可）。
+> **核心要点**：**模型卡是"先读文档再调 API"的 AI 版**——跳过模型卡直接跑代码，等于不读文档调接口。生产选型第一步永远是读模型卡（+ 许可）。
 
 ## 4. gated 模型与 token 认证
 
@@ -123,7 +123,7 @@ export HF_TOKEN=hf_xxx
 # 镜像站透传（hf-mirror 支持 gated 模型 token 透传）
 ```
 
-> ⚠️ token 安全：**HF_TOKEN 走环境变量/密钥系统，绝不写进代码与镜像**（token 泄漏 = 别人能用你的账号拉 gated 模型/消费你的配额）。git 仓库里出现过 token 会触发 HF 的自动告警（类 GitHub 密钥扫描）。
+> token 安全：**HF_TOKEN 走环境变量/密钥系统，绝不写进代码与镜像**（token 泄漏 = 别人能用你的账号拉 gated 模型/消费你的配额）。git 仓库里出现过 token 会触发 HF 的自动告警（类 GitHub 密钥扫描）。
 
 ## 5. 国内下载：镜像站与加速方案
 
@@ -148,7 +148,7 @@ setx HF_ENDPOINT "https://hf-mirror.com"
 ```
 
 ```python
-# ⚠️ 必须在 import 之前设置！
+# 必须在 import 之前设置！
 import os
 os.environ["HF_ENDPOINT"] = "https://hf-mirror.com"
 from transformers import AutoModel, AutoTokenizer
@@ -170,7 +170,7 @@ wget https://hf-mirror.com/hfd/hfd.sh && chmod a+x hfd.sh
 # -x 16：aria2c 16 并发；万兆可开到 32-64
 ```
 
-> 🎯 **核心要点**：**国内开发者的第一课 = 配置镜像**。`HF_ENDPOINT` 一行环境变量解决 90% 下载问题；70B+ 大模型用 hfd.sh 多线程；团队场景必须建**内网缓存**（R2/MinIO/OSS），避免全员重复公网拉取。
+> **核心要点**：**国内开发者的第一课 = 配置镜像**。`HF_ENDPOINT` 一行环境变量解决 90% 下载问题；70B+ 大模型用 hfd.sh 多线程；团队场景必须建**内网缓存**（R2/MinIO/OSS），避免全员重复公网拉取。
 
 ## 6. 缓存治理：HF_HOME 与磁盘管理
 
@@ -200,7 +200,7 @@ HF_HOME/
 | 本地目录优先 | `--local-dir` 直接落盘（跳过缓存层） |
 | 团队共享 | 缓存目录放 NAS，多机只读挂载 |
 
-> ⚠️ 磁盘杀手：**每个模型版本一份快照**，反复更新 = 磁盘膨胀。定期 `scan-cache` 清理；生产服务器给 HF_HOME 独立分区并监控占用（09 章运维清单）。
+> 磁盘杀手：**每个模型版本一份快照**，反复更新 = 磁盘膨胀。定期 `scan-cache` 清理；生产服务器给 HF_HOME 独立分区并监控占用（09 章运维清单）。
 
 ## 7. 模型上传与版本管理
 
@@ -230,7 +230,7 @@ huggingface-cli upload my-org/my-model ./model_output/
 | revision 参数 | `from_pretrained(..., revision="v1.0")` 精确拉取 |
 | 私有仓库 | 上传时 `private=True` |
 
-> 💡 微调产物的标准归宿：**push 到 Hub（私有或公开）**——比存网盘正规：可版本化、可协作、`from_pretrained` 一行加载、CI 可复用。
+> 微调产物的标准归宿：**push 到 Hub（私有或公开）**——比存网盘正规：可版本化、可协作、`from_pretrained` 一行加载、CI 可复用。
 
 ## 8. 核心要点
 

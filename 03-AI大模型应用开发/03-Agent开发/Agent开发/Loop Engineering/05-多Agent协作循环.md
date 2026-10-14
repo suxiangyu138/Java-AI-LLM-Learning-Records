@@ -1,6 +1,6 @@
 # 05 - 多 Agent 协作循环
 
-> 🎯 单 Agent 有天花板——上下文有限、视角单一。多 Agent 协作循环通过分工、辩论、投票，让多个 AI 像团队一样工作。本章覆盖四种核心协作模式和消息总线架构
+> 单 Agent 有天花板——上下文有限、视角单一。多 Agent 协作循环通过分工、辩论、投票，让多个 AI 像团队一样工作。本章覆盖四种核心协作模式和消息总线架构
 
 ---
 
@@ -75,7 +75,7 @@ class DebateLoop:
   Agent₄: Hopfield & Hinton
   Agent₅: Hopfield & Hinton
 
-  → 投票：Hopfield & Hinton (4/5) → 高置信度 ✅
+  → 投票：Hopfield & Hinton (4/5) → 高置信度 ✓
 ```
 
 ### 1.4 层级委派 (Hierarchical)

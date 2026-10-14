@@ -50,7 +50,7 @@ public final class String { private final byte[] value; private final byte coder
 | 哈希缓存 | hashCode 只计算一次，HashMap Key 性能好 |
 | 安全性 | 类路径、网络参数不可篡改 |
 
-> ⚠️ 代价：大量操作创建临时对象，增加 GC 压力。循环中必须用 StringBuilder。
+> 代价：大量操作创建临时对象，增加 GC 压力。循环中必须用 StringBuilder。
 
 ```java
 // 错误
@@ -172,7 +172,7 @@ s4.intern();                                      // 池中已有 → 返回池�
 System.out.println(s3 == s4);  // false
 ```
 
-> 💡 业务代码很少需要手动 intern()。大量重复运行时字符串（如 JSON key）才考虑，但需监控池大小。
+> 业务代码很少需要手动 intern()。大量重复运行时字符串（如 JSON key）才考虑，但需监控池大小。
 
 ---
 
@@ -203,7 +203,7 @@ System.out.println(s3 == s4);  // false
 "　abc".strip();                  // "abc"
 
 // split 正则转义
-"192.168.1.1".split("\\.");       // ✅ 必须转义 . （它是正则通配符）
+"192.168.1.1".split("\\.");       // ✓ 必须转义 . （它是正则通配符）
 // split limit 控制次数
 "a,b,c,d".split(",", 3);          // [a, b, c,d]
 
@@ -276,7 +276,7 @@ String c = a + " " + b;
 // 等效：new StringBuilder().append(a).append(" ").append(b).toString()
 ```
 
-> ⚠️ 循环中的 `+` 每次新建 StringBuilder 和 String 对象，不会复用，性能 O(n^2)。
+> 循环中的 `+` 每次新建 StringBuilder 和 String 对象，不会复用，性能 O(n^2)。
 
 ```java
 // 反编译后等价于：
@@ -328,7 +328,7 @@ JDK 9+：byte[] + coder（LATIN1=0 / UTF16=1）
 - 含中文：UTF16 编码，每字符 2 bytes
 ```
 
-> 💡 **最佳实践**：统一使用 UTF-8，避免编码问题。
+> **最佳实践**：统一使用 UTF-8，避免编码问题。
 
 ---
 
@@ -519,7 +519,7 @@ sb.append("1");                          // 触发扩容
 System.out.println(sb.capacity());       // 34 (16*2+2)
 ```
 
-> 🎯 **一句话总结**：String 不可变是安全的基础，String Pool 是性能的保障，StringBuilder 是高效的武器，编码统一是兼容的前提。
+> **一句话总结**：String 不可变是安全的基础，String Pool 是性能的保障，StringBuilder 是高效的武器，编码统一是兼容的前提。
 
 ---
 

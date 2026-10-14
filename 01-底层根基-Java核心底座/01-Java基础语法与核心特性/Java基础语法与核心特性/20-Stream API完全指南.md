@@ -29,7 +29,7 @@
 
 **操作三阶段**：`创建Stream → 0~N个中间操作 → 1个终止操作 → 最终结果`
 
-> 💡 **记忆口诀**："创建流、中间连、终止算"。
+> **记忆口诀**："创建流、中间连、终止算"。
 
 ---
 
@@ -129,7 +129,7 @@ List<String> page2 = list.stream().skip(5).limit(5).collect(Collectors.toList())
 long c = words.stream().peek(System.out::println).filter(s -> s.length() > 3).count();
 ```
 
-> ⚠️ **map vs flatMap**：`map` 是一对一，`flatMap` 是一对多——将每个元素展开为一个流再合并。当处理"流中元素本身就是集合/数组"时用 `flatMap`。
+> **map vs flatMap**：`map` 是一对一，`flatMap` 是一对多——将每个元素展开为一个流再合并。当处理"流中元素本身就是集合/数组"时用 `flatMap`。
 
 ---
 
@@ -191,7 +191,7 @@ Optional<Integer> product = numbers.stream().reduce((a, b) -> a * b); // 3628800
 int max = numbers.stream().reduce(Integer.MIN_VALUE, Integer::max);
 ```
 
-> 💡 **findFirst vs findAny**：串行流下行为相同；并行流下 `findAny` 性能更优（不要求返回第一个）。仅在需要有序结果时才用 `findFirst`。
+> **findFirst vs findAny**：串行流下行为相同；并行流下 `findAny` 性能更优（不要求返回第一个）。仅在需要有序结果时才用 `findFirst`。
 
 ---
 
@@ -272,7 +272,7 @@ Map<Boolean, Long> partCount = words.stream()
     ));
 ```
 
-> 💡 **groupingBy vs partitioningBy**：`partitioningBy` 的键固定为boolean（两组）；`groupingBy` 可多组。分支少时 `partitioningBy` 性能略优。
+> **groupingBy vs partitioningBy**：`partitioningBy` 的键固定为boolean（两组）；`groupingBy` 可多组。分支少时 `partitioningBy` 性能略优。
 
 ### 5.4 全部下游收集器速查
 
@@ -342,27 +342,27 @@ list.parallelStream().sequential();
 
 | 场景 | 是否适合 | 原因 |
 |------|----------|------|
-| 数据量大（>10000） | ✅ | 并行化收益超过开销 |
-| CPU密集型计算 | ✅ | 充分利用多核 |
-| 无状态操作 | ✅ | 元素独立，无共享状态 |
-| ArrayList/数组为源 | ✅ | O(1)随机访问，易拆分 |
-| 数据量小（<1000） | ❌ | 创建线程开销更大 |
-| IO密集型 | ❌ | CPU空闲，多线程无帮助 |
-| 有状态操作（sorted/limit） | ❌ | 需要全局协调 |
-| LinkedList为源 | ❌ | 拆分困难需遍历 |
+| 数据量大（>10000） | ✓ | 并行化收益超过开销 |
+| CPU密集型计算 | ✓ | 充分利用多核 |
+| 无状态操作 | ✓ | 元素独立，无共享状态 |
+| ArrayList/数组为源 | ✓ | O(1)随机访问，易拆分 |
+| 数据量小（<1000） | ✗ | 创建线程开销更大 |
+| IO密集型 | ✗ | CPU空闲，多线程无帮助 |
+| 有状态操作（sorted/limit） | ✗ | 需要全局协调 |
+| LinkedList为源 | ✗ | 拆分困难需遍历 |
 
 ### 7.3 线程安全问题
 
 ```java
-// ❌ 错误：并行流修改非线程安全集合
+// ✗ 错误：并行流修改非线程安全集合
 List<Integer> list = new ArrayList<>();
 IntStream.range(0, 1000).parallel().forEach(list::add);  // 结果 < 1000
 
-// ✅ 正确：使用收集器
+// ✓ 正确：使用收集器
 List<Integer> safe = IntStream.range(0, 1000).parallel()
     .boxed().collect(Collectors.toList());
 
-// ✅ 正确：无状态 reduce
+// ✓ 正确：无状态 reduce
 int sum = IntStream.range(0, 1000).parallel().sum();
 
 // 自定义ForkJoinPool（避免占用公共线程池）
@@ -371,7 +371,7 @@ pool.submit(() -> LongStream.rangeClosed(1, 10_000_000).parallel().sum()).get();
 pool.shutdown();
 ```
 
-> ⚠️ **并行流警告**：不是银弹。共享可变状态、小数据量、有状态操作时可能更慢或产生线程安全问题。务必测试验证加速比。
+> **并行流警告**：不是银弹。共享可变状态、小数据量、有状态操作时可能更慢或产生线程安全问题。务必测试验证加速比。
 
 ---
 
@@ -395,7 +395,7 @@ Stream.of("Alice", "Bob", "Charlie", "David")
 // limit(2) 已满足 → David 不会被处理
 ```
 
-> 🎯 理解垂直处理很重要：`limit`/`anyMatch` 等短路操作只需处理到满足条件即可停止，避免不必要的计算。
+> 理解垂直处理很重要：`limit`/`anyMatch` 等短路操作只需处理到满足条件即可停止，避免不必要的计算。
 
 ### 8.2 短路操作
 
@@ -428,18 +428,18 @@ List<Integer> first10 = Stream.iterate(0, n -> n + 1).limit(10)
 | 捕获异常 | 难处理 | 容易 | 用传统循环 |
 
 ```java
-// ✅ 推荐 Stream：链式过滤/转换/分组
+// ✓ 推荐 Stream：链式过滤/转换/分组
 List<String> result = list.stream()
     .filter(s -> s.startsWith("A")).map(String::toUpperCase)
     .sorted().collect(Collectors.toList());
 
-// ❌ 适合传统循环：需要 break/异常处理
+// ✗ 适合传统循环：需要 break/异常处理
 for (String s : list) {
     try { process(s); } catch (Exception e) { break; }
 }
 ```
 
-> 🎯 **一句话原则**：能用Stream清晰表达意图就用Stream；需要细粒度控制（异常处理、break/continue、多层嵌套）时用传统循环。
+> **一句话原则**：能用Stream清晰表达意图就用Stream；需要细粒度控制（异常处理、break/continue、多层嵌套）时用传统循环。
 
 ---
 
@@ -578,7 +578,7 @@ List<String> result = list.stream()
     .collect(Collectors.toList());
 ```
 
-> ⚠️ 保持可读性是第一原则。团队项目中约定统一的Stream使用规范。
+> 保持可读性是第一原则。团队项目中约定统一的Stream使用规范。
 
 ---
 
@@ -648,4 +648,4 @@ Map<Integer, String> studentMap = students.stream()
 
 ---
 
-> 🎯 **学习路径**：先掌握 `filter`/`map`/`collect` 三件套（覆盖80%场景），再学 `flatMap`/`groupingBy`/`reduce` 进阶操作。日常开发中刻意用Stream替代传统循环，逐步内化函数式编程思维。Stream + Lambda + 方法引用是Java 8+开发的"铁三角"。
+> **学习路径**：先掌握 `filter`/`map`/`collect` 三件套（覆盖80%场景），再学 `flatMap`/`groupingBy`/`reduce` 进阶操作。日常开发中刻意用Stream替代传统循环，逐步内化函数式编程思维。Stream + Lambda + 方法引用是Java 8+开发的"铁三角"。

@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [类也是对象：type 与 object](#1-类也是对象type-与-object)
 2. [属性查找链](#2-属性查找链)
@@ -66,7 +66,7 @@ C = type("C", (B,), {"show": lambda self: print(self.x)})
 C().show()                 # 1
 ```
 
-> 💡 元类的完整讲解在 [07-装饰器与元编程](./07-装饰器与元编程.md)。这里只需建立认知：**`class` 关键字本质是调用元类（默认 `type`）来创建类对象**。
+> 元类的完整讲解在 [07-装饰器与元编程](./07-装饰器与元编程.md)。这里只需建立认知：**`class` 关键字本质是调用元类（默认 `type`）来创建类对象**。
 
 ---
 
@@ -133,7 +133,7 @@ cfg = DictProxy({"host": "localhost", "port": 8080})
 print(cfg.host, cfg.port)          # localhost 8080
 ```
 
-> ⚠️ 在 `__setattr__` 里写 `self.x = v` 会无限递归。必须用 `object.__setattr__(self, 'x', v)` 或 `self.__dict__['x'] = v`。
+> 在 `__setattr__` 里写 `self.x = v` 会无限递归。必须用 `object.__setattr__(self, 'x', v)` 或 `self.__dict__['x'] = v`。
 
 ---
 
@@ -175,18 +175,18 @@ print(m.predict(1), Model.validate("a"))        # bert -> 1  False
 # 为什么类方法比硬编码类名好：继承时自动适配
 class Base:
     @classmethod
-    def create(cls): return cls()          # ✅ cls 是实际调用的类
+    def create(cls): return cls()          # ✓ cls 是实际调用的类
     @staticmethod
-    def create_bad(): return Base()        # ❌ 子类调用也返回 Base
+    def create_bad(): return Base()        # ✗ 子类调用也返回 Base
 
 class Sub(Base): pass
-print(type(Sub.create()))        # <class 'Sub'>  ✅
-print(type(Sub.create_bad()))    # <class 'Base'> ❌
+print(type(Sub.create()))        # <class 'Sub'>  ✓
+print(type(Sub.create_bad()))    # <class 'Base'> ✗
 ```
 
 对照 Java：Java 的 `static` 方法 ≈ Python 的 `@staticmethod`，但**Java 没有 `@classmethod` 的等价物**（静态方法里拿不到「实际被调用的子类」）。Python 的 `cls` 让工厂方法天然支持继承。
 
-> 💡 判断依据：**要不要用实例状态 → 用实例方法；要不要用类本身（含子类适配）→ 用类方法；两个都不要 → 用静态方法（甚至考虑挪成模块级函数）**。
+> 判断依据：**要不要用实例状态 → 用实例方法；要不要用类本身（含子类适配）→ 用类方法；两个都不要 → 用静态方法（甚至考虑挪成模块级函数）**。
 
 ---
 
@@ -245,11 +245,11 @@ L[C] = [C, A, object]
 merge([B,A,object], [C,A,object], [B,C]):
   取 B ── B 是首元素且不出现在其他列表的「尾部」 → 收下 B
   剩 merge([A,object], [C,A,object], [C])
-  取 A ── ❌ A 出现在 [C,A,object] 的尾部 → 跳过
-  取 C ── ✅ → 收下 C
+  取 A ── ✗ A 出现在 [C,A,object] 的尾部 → 跳过
+  取 C ── ✓ → 收下 C
   剩 merge([A,object], [A,object], [])
-  取 A ── ✅ → 收下 A
-  取 object ── ✅
+  取 A ── ✓ → 收下 A
+  取 object ── ✓
 结果：L[D] = [D, B, C, A, object]
 ```
 
@@ -272,7 +272,7 @@ import inspect
 print(inspect.getmro(D))
 ```
 
-> 🎯 面试高频：给一段多继承代码问 MRO。**实操技巧**：先画继承图，按「深度优先 + 子类优先 + 遇到共同父类就往后推」手推，然后一定用 `__mro__` 验证。
+> 面试高频：给一段多继承代码问 MRO。**实操技巧**：先画继承图，按「深度优先 + 子类优先 + 遇到共同父类就往后推」手推，然后一定用 `__mro__` 验证。
 
 ---
 
@@ -319,7 +319,7 @@ class B(A):
 要让多继承正常工作，**每个类都必须调用 `super()`**，形成完整链条：
 
 ```python
-# ✅ 正确：全链路调用 super，且签名用 **kwargs 兼容
+# ✓ 正确：全链路调用 super，且签名用 **kwargs 兼容
 class Base:
     def __init__(self, **kwargs):
         super().__init__(**kwargs)          # 最终到 object.__init__()
@@ -347,7 +347,7 @@ print([c.__name__ for c in Service.__mro__])
 ```
 
 ```python
-# ❌ 断链：某个类不调 super()，后面的类全部被跳过
+# ✗ 断链：某个类不调 super()，后面的类全部被跳过
 class BadMixin:
     def __init__(self, **kwargs):
         pass                    # 没有 super().__init__() → CacheMixin/Base 不会执行
@@ -362,7 +362,7 @@ class BadMixin:
 | Mixin 放在**基类之前**：`class C(Mixin1, Mixin2, Base)` | MRO 里 Mixin 优先，才能覆写 Base 行为 |
 | Mixin 只提供方法，不做深继承 | 保持扁平，避免 MRO 冲突 |
 
-> ⚠️ 常见 bug：把 Mixin 写在基类后面（`class C(Base, Mixin)`），结果 Mixin 的方法被 Base 遮蔽，「不生效」。记住 **MRO 从左到右**，想覆写就往左放。
+> 常见 bug：把 Mixin 写在基类后面（`class C(Base, Mixin)`），结果 Mixin 的方法被 Base 遮蔽，「不生效」。记住 **MRO 从左到右**，想覆写就往左放。
 
 ---
 
@@ -387,7 +387,7 @@ class Retriever(ABC):
         r = self.search(query, top_k=1)
         return r[0] if r else None
 
-# r = Retriever()   # ❌ TypeError: Can't instantiate abstract class
+# r = Retriever()   # ✗ TypeError: Can't instantiate abstract class
 
 class BM25Retriever(Retriever):
     def search(self, query, top_k=5): return ["doc1"]
@@ -424,16 +424,16 @@ class OpenAIEmbedder:                     # 不继承 Protocol！
 def build_index(e: Embedder, docs: list[str]):    # mypy 会检查
     return [e.embed(d) for d in docs]
 
-build_index(OpenAIEmbedder(), ["a"])              # ✅ 结构匹配即可
+build_index(OpenAIEmbedder(), ["a"])              # ✓ 结构匹配即可
 print(isinstance(OpenAIEmbedder(), Embedder))     # True（需 runtime_checkable）
 ```
 
 | 维度 | ABC | Protocol |
 |------|-----|----------|
-| 是否需要继承 | ✅ 必须 | ❌ 不需要 |
+| 是否需要继承 | ✓ 必须 | ✗ 不需要 |
 | 检查时机 | 运行时（实例化时） | 静态（mypy），可选运行时 |
 | 类型系统 | 名义子类型（像 Java interface） | 结构化子类型（真鸭子类型） |
-| 能否给第三方类「补接口」 | ❌ 需 `register()` | ✅ 天然支持 |
+| 能否给第三方类「补接口」 | ✗ 需 `register()` | ✓ 天然支持 |
 | 适用场景 | 自己项目内的框架骨架 | 对接外部库、松耦合边界 |
 
 ```python
@@ -445,7 +445,7 @@ Sized.register(ThirdParty)
 print(issubclass(ThirdParty, Sized))     # True
 ```
 
-> 🎯 选型建议：**框架内部的必须实现约束用 ABC**（能在实例化时立刻报错），**跨库边界、只想描述「需要什么能力」用 Protocol**。AI 项目里对接多家模型 SDK 时，Protocol 更省心。
+> 选型建议：**框架内部的必须实现约束用 ABC**（能在实例化时立刻报错），**跨库边界、只想描述「需要什么能力」用 Protocol**。AI 项目里对接多家模型 SDK 时，Protocol 更省心。
 
 ---
 
@@ -467,17 +467,17 @@ print(sys.getsizeof(p1) + sys.getsizeof(p1.__dict__))   # 56 + 104 ≈ 160 字�
 print(sys.getsizeof(p2))                                # 48 字节
 print(hasattr(p2, "__dict__"))                          # False
 
-# p2.z = 3    # ❌ AttributeError: 'PointSlots' object has no attribute 'z'
+# p2.z = 3    # ✗ AttributeError: 'PointSlots' object has no attribute 'z'
 ```
 
 | 维度 | 有 `__dict__`（默认） | 用 `__slots__` |
 |------|---------------------|---------------|
 | 内存 | 大（每实例一个 dict） | 小（约省 40-60%） |
 | 属性访问速度 | 字典查找 | 数组偏移，略快 |
-| 能否动态加属性 | ✅ | ❌ |
-| 能否被 `weakref` 引用 | ✅ | 需显式加 `"__weakref__"` |
+| 能否动态加属性 | ✓ | ✗ |
+| 能否被 `weakref` 引用 | ✓ | 需显式加 `"__weakref__"` |
 | 多继承 | 无限制 | 多个父类都有非空 slots 会冲突 |
-| 类属性同名 | 允许 | ❌ ValueError |
+| 类属性同名 | 允许 | ✗ ValueError |
 
 ```python
 # 继承时的注意点
@@ -492,7 +492,7 @@ class Leaky(Base):
 print(hasattr(Leaky(), "__dict__"))        # True
 ```
 
-> 💡 使用门槛：**只有当实例数量达到十万级以上、且属性固定时才值得用**。数据量小的业务对象用 `__slots__` 是过度优化，反而牺牲灵活性。典型适用场景：图节点、粒子系统、大批量数据记录。
+> 使用门槛：**只有当实例数量达到十万级以上、且属性固定时才值得用**。数据量小的业务对象用 `__slots__` 是过度优化，反而牺牲灵活性。典型适用场景：图节点、粒子系统、大批量数据记录。
 
 ---
 
@@ -507,7 +507,7 @@ from dataclasses import dataclass, field, asdict, replace
 class ModelConfig:
     name: str                                  # 必填
     hidden_size: int = 768                     # 有默认值
-    layers: list[int] = field(default_factory=list)   # ✅ 可变默认值的正确写法
+    layers: list[int] = field(default_factory=list)   # ✓ 可变默认值的正确写法
     _cache: dict = field(default_factory=dict, repr=False, compare=False)
 
     def __post_init__(self):                   # 校验/派生字段
@@ -543,16 +543,16 @@ class Cfg:
     debug: bool = False
 ```
 
-> ⚠️ `field(default_factory=list)` 是必须的——直接写 `layers: list = []` 会被 dataclass 拒绝（它主动帮你避开了 [04 章的可变默认值陷阱](./04-函数特性深度解析.md#4-默认参数可变陷阱)）。
+> `field(default_factory=list)` 是必须的——直接写 `layers: list = []` 会被 dataclass 拒绝（它主动帮你避开了 [04 章的可变默认值陷阱](./04-函数特性深度解析.md#4-默认参数可变陷阱)）。
 
 ### 8.1 四种「数据容器」选型
 
 | 方案 | 可变 | 类型校验 | 性能 | 适用 |
 |------|:----:|:-------:|:----:|------|
-| `dict` | ✅ | ❌ | 快 | 临时数据、JSON 直通 |
-| `NamedTuple` | ❌ | 仅注解 | 最快、最省内存 | 不可变的小记录、函数多返回值 |
+| `dict` | ✓ | ✗ | 快 | 临时数据、JSON 直通 |
+| `NamedTuple` | ✗ | 仅注解 | 最快、最省内存 | 不可变的小记录、函数多返回值 |
 | `@dataclass` | 可选 | 仅注解（不强制） | 快 | **默认选择**：业务实体、配置 |
-| `Pydantic BaseModel` | ✅ | ✅ 运行时强制 | 较慢（v2 已大幅优化） | 外部输入校验、API 边界 |
+| `Pydantic BaseModel` | ✓ | ✓ 运行时强制 | 较慢（v2 已大幅优化） | 外部输入校验、API 边界 |
 
 ```python
 from typing import NamedTuple
@@ -572,7 +572,7 @@ class Request(BaseModel):           # 运行时强校验，FastAPI 的基础
 # Request(prompt="", temperature=5)  → ValidationError（两个字段都不合法）
 ```
 
-> 🎯 决策路径：**内部数据结构用 dataclass，外部输入用 Pydantic，只读小记录用 NamedTuple**。dataclass 的注解不做运行时校验，别指望它挡住脏数据。
+> 决策路径：**内部数据结构用 dataclass，外部输入用 Pydantic，只读小记录用 NamedTuple**。dataclass 的注解不做运行时校验，别指望它挡住脏数据。
 
 ---
 

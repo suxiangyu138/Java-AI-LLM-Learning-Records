@@ -1,6 +1,6 @@
 # 10 - MyBatis 与 AI 场景结合
 
-> 🎯 AI 开发中 MyBatis 有了新角色——LLM 动态生成 SQL、数据向量化存储、RAG 数据管理。本章覆盖三个 AI+MyBatis 的实用场景
+> AI 开发中 MyBatis 有了新角色——LLM 动态生成 SQL、数据向量化存储、RAG 数据管理。本章覆盖三个 AI+MyBatis 的实用场景
 
 ---
 

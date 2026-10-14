@@ -1,6 +1,6 @@
 # 04 - HuggingFace 生态
 
-> 🎯 HuggingFace 是 AI 时代的 GitHub — 90 万+ 模型、20 万+ 数据集，开源模型的默认分发渠道。本章覆盖 Transformers / Datasets / Diffusers / Spaces / Hub 五大核心组件
+> HuggingFace 是 AI 时代的 GitHub — 90 万+ 模型、20 万+ 数据集，开源模型的默认分发渠道。本章覆盖 Transformers / Datasets / Diffusers / Spaces / Hub 五大核心组件
 
 ---
 
@@ -118,6 +118,6 @@ gr.Interface(fn=greet, inputs="text", outputs="text").launch()
 
 ---
 
-> 🎯 **核心要点**：HF 生态四大入口 — **Hub 找模型 → Transformers 跑推理 → Datasets 处理数据 → Spaces 部署 Demo**。AI 项目标准起手式：`pipeline()` 验证 → `AutoModel` 微调 → TGI/vLLM 生产部署。
+> **核心要点**：HF 生态四大入口 — **Hub 找模型 → Transformers 跑推理 → Datasets 处理数据 → Spaces 部署 Demo**。AI 项目标准起手式：`pipeline()` 验证 → `AutoModel` 微调 → TGI/vLLM 生产部署。
 
 **下一模块**：[05-Python异步编程与AI并发模式](05-Python异步编程与AI并发模式.md) / **返回总览**：[00-生态总览](00-Python生态知识体系总览.md)

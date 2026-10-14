@@ -50,7 +50,7 @@ FindBugs (2006) ──停滞于 3.0.1 (2016)──> SpotBugs (2017-) ──活�
 - **遗留系统迁移**：快速扫描旧代码库中的潜在缺陷
 - **安全审计**：检测特定安全漏洞模式（如 SQL 注入、XSS）
 
-> 💡 SpotBugs 的核心价值在于发现**编译器不会报错但运行时一定出错**的代码模式，例如空指针未经检查、集合未按泛型约束使用等。
+> SpotBugs 的核心价值在于发现**编译器不会报错但运行时一定出错**的代码模式，例如空指针未经检查、集合未按泛型约束使用等。
 
 ---
 
@@ -92,7 +92,7 @@ SpotBugs 工作在 Java 编译流水线的 **编译后阶段**：
 | **控制流分析** | 分析分支、循环结构 | `SF_SWITCH_FALLTHROUGH` |
 | **跨过程分析** | 跨方法边界追踪调用链 | `OS_OPEN_STREAM`（流未关闭） |
 
-> ⚠️ SpotBugs **不会执行代码**，因此属于静态分析而非动态分析。这意味着它可能产生误报（False Positive）和漏报（False Negative）。
+> SpotBugs **不会执行代码**，因此属于静态分析而非动态分析。这意味着它可能产生误报（False Positive）和漏报（False Negative）。
 
 ---
 
@@ -213,7 +213,7 @@ SpotBugs 将检测到的 Bug 分为以下主要类别：
 
 代码在语义上存在错误，运行时几乎一定会出现异常或错误结果。
 
-> 💡 此类别的问题应优先处理，因为它们通常对应运行时错误。
+> 此类别的问题应优先处理，因为它们通常对应运行时错误。
 
 ### 4.3 Bad Practice（不良实践）
 
@@ -297,7 +297,7 @@ public class NullParamExample {
 
     public void caller() {
         String data = getData();     // 可能返回 null
-        process(data);               // ❌ NP_NULL_PARAM_VIOLATION
+        process(data);               // ✗ NP_NULL_PARAM_VIOLATION
     }
 
     private String getData() {
@@ -312,7 +312,7 @@ public class NullParamExample {
 public void caller() {
     String data = getData();
     if (data != null) {
-        process(data);              // ✅ 增加 null 检查
+        process(data);              // ✓ 增加 null 检查
     } else {
         // 处理 null 情况
         throw new IllegalArgumentException("data must not be null");
@@ -336,11 +336,11 @@ public class DateRange {
         this.end = end;
     }
 
-    public Date getStart() {           // ❌ EI_EXPOSE_REP
+    public Date getStart() {           // ✗ EI_EXPOSE_REP
         return start;                   // 返回内部引用，调用方可修改
     }
 
-    public Date getEnd() {             // ❌ EI_EXPOSE_REP
+    public Date getEnd() {             // ✗ EI_EXPOSE_REP
         return end;
     }
 }
@@ -364,12 +364,12 @@ public class DateRange {
 
     // 方案二：返回防御性副本（如果必须用 Date）
     public Date getStart() {
-        return new Date(start.getTime());  // ✅ 返回副本
+        return new Date(start.getTime());  // ✓ 返回副本
     }
 }
 ```
 
-> 💡 使用 `LocalDate`、`LocalDateTime`、`Instant` 等不可变类替代 `Date`、`Calendar` 可从根本上避免暴露内部状态的问题。
+> 使用 `LocalDate`、`LocalDateTime`、`Instant` 等不可变类替代 `Date`、`Calendar` 可从根本上避免暴露内部状态的问题。
 
 ### 6.3 EI_EXPOSE_REP2（内部表示被外部修改）
 
@@ -382,12 +382,12 @@ public class User {
 
     public User(String name, Date birthday) {
         this.name = name;
-        this.birthday = birthday;    // ❌ EI_EXPOSE_REP2
+        this.birthday = birthday;    // ✗ EI_EXPOSE_REP2
         // 外部仍持有 birthday 的引用，可修改
     }
 
     public Date getBirthday() {
-        return birthday;              // ❌ EI_EXPOSE_REP
+        return birthday;              // ✗ EI_EXPOSE_REP
     }
 }
 ```
@@ -397,7 +397,7 @@ public class User {
 ```java
 public User(String name, Date birthday) {
     this.name = name;
-    this.birthday = new Date(birthday.getTime());  // ✅ 防御性拷贝
+    this.birthday = new Date(birthday.getTime());  // ✓ 防御性拷贝
 }
 ```
 
@@ -411,7 +411,7 @@ public User(String name, Date birthday) {
 public class FileProcessor {
 
     public void processData() {
-        // ❌ DMI_HARDCODED_ABSOLUTE_FILENAME
+        // ✗ DMI_HARDCODED_ABSOLUTE_FILENAME
         File file = new File("C:\\app\\config\\settings.properties");
         // 或
         File logDir = new File("/var/log/myapp/");
@@ -425,14 +425,14 @@ public class FileProcessor {
 public class FileProcessor {
 
     public void processData() {
-        // ✅ 使用相对路径 + 类路径加载
+        // ✓ 使用相对路径 + 类路径加载
         InputStream is = getClass().getResourceAsStream("/config/settings.properties");
 
-        // ✅ 使用系统属性获取用户目录
+        // ✓ 使用系统属性获取用户目录
         String userHome = System.getProperty("user.home");
         File config = new File(userHome, ".myapp/config.properties");
 
-        // ✅ 使用 Spring 的 ResourceLoader
+        // ✓ 使用 Spring 的 ResourceLoader
         // @Value("classpath:config/settings.properties")
         // private Resource settingsResource;
     }
@@ -449,12 +449,12 @@ public class FileProcessor {
 public class EncodingExample {
 
     public void writeContent(String content) throws IOException {
-        // ❌ DM_DEFAULT_ENCODING
+        // ✗ DM_DEFAULT_ENCODING
         FileWriter writer = new FileWriter("output.txt");
         writer.write(content);
         writer.close();
 
-        // ❌ 同样问题
+        // ✗ 同样问题
         byte[] bytes = content.getBytes();                     // 默认编码
         String text = new String(bytes);                       // 默认编码
         InputStreamReader reader = new InputStreamReader(is);  // 默认编码
@@ -469,15 +469,15 @@ public class EncodingExample {
     private static final String ENCODING = StandardCharsets.UTF_8.name();
 
     public void writeContent(String content) throws IOException {
-        // ✅ 显式指定编码
+        // ✓ 显式指定编码
         try (Writer writer = new OutputStreamWriter(
                 new FileOutputStream("output.txt"), ENCODING)) {
             writer.write(content);
         }
 
-        byte[] bytes = content.getBytes(StandardCharsets.UTF_8);    // ✅
-        String text = new String(bytes, StandardCharsets.UTF_8);    // ✅
-        Reader reader = new InputStreamReader(is, ENCODING);        // ✅
+        byte[] bytes = content.getBytes(StandardCharsets.UTF_8);    // ✓
+        String text = new String(bytes, StandardCharsets.UTF_8);    // ✓
+        Reader reader = new InputStreamReader(is, ENCODING);        // ✓
     }
 }
 ```
@@ -492,7 +492,7 @@ public class EncodingExample {
 public class UserDao {
 
     public User findUser(String tableName, Long id) {
-        // ❌ SQL_PREPARED_STATEMENT_GENERATED_FROM_NONCONSTANT_STRING
+        // ✗ SQL_PREPARED_STATEMENT_GENERATED_FROM_NONCONSTANT_STRING
         String sql = "SELECT * FROM " + tableName + " WHERE id = ?";
         // 虽然参数是通过 ? 绑定的，但 SQL 模板本身在运行时拼接
 
@@ -512,7 +512,7 @@ public class UserDao {
 
 ```java
 public class UserDao {
-    // ✅ 使用常量 SQL
+    // ✓ 使用常量 SQL
     private static final String FIND_USER_SQL = "SELECT * FROM users WHERE id = ?";
 
     public User findUser(Long id) {
@@ -547,7 +547,7 @@ public class UserSession implements Serializable {
 
     private Long userId;
     private String username;
-    private Socket connection;           // ❌ SE_BAD_FIELD
+    private Socket connection;           // ✗ SE_BAD_FIELD
     // Socket 未实现 Serializable，且非 transient
 
     // 获取序列化时会抛出 NotSerializableException
@@ -562,7 +562,7 @@ public class UserSession implements Serializable {
 
     private Long userId;
     private String username;
-    private transient Socket connection;  // ✅ transient 忽略序列化
+    private transient Socket connection;  // ✓ transient 忽略序列化
 
     // 或者自定义序列化逻辑
     private void writeObject(ObjectOutputStream out) throws IOException {
@@ -679,7 +679,7 @@ SpotBugs Report
 | `LongMessage` | 详细描述（含类名、方法名） |
 | `SourceLine` | 源码位置（行号） |
 
-> 💡 在 CI 流水线中，建议解析 XML 报告，将结果输出到流水线展示仪表板，便于团队追踪质量趋势。
+> 在 CI 流水线中，建议解析 XML 报告，将结果输出到流水线展示仪表板，便于团队追踪质量趋势。
 
 ---
 
@@ -745,7 +745,7 @@ SpotBugs Report
 </configuration>
 ```
 
-> ⚠️ 使用 exclude filter 要谨慎，不要为了"消除警告"而大量排除。每个排除项应附上注释说明理由，并在 Code Review 中审查。
+> 使用 exclude filter 要谨慎，不要为了"消除警告"而大量排除。每个排除项应附上注释说明理由，并在 Code Review 中审查。
 
 ---
 
@@ -813,7 +813,7 @@ IntelliJ IDEA 支持对 SpotBugs 警告快速修复并添加 `@SuppressFBWarning
 Alt + Enter → Suppress for method with @SuppressFBWarnings
 ```
 
-> 💡 建议仅在确实无法修复（如受 API 契约限制）时才使用 `@SuppressFBWarnings`。对于大多数误报，更好的做法是调整 filter 文件或修复代码。
+> 建议仅在确实无法修复（如受 API 契约限制）时才使用 `@SuppressFBWarnings`。对于大多数误报，更好的做法是调整 filter 文件或修复代码。
 
 ---
 
@@ -891,7 +891,7 @@ SpotBugs 还支持添加描述信息，可在 `src/site/fml/spotbugs.fml` 文件
 | 新项目绿色开发 | Error Prone（误报率低，开发体验好） |
 | 两者并用 | SpotBugs + Error Prone（互补效果最佳） |
 
-> 🎯 **最佳实践**：Error Prone 用于开发阶段快速反馈（作为编译插件），SpotBugs 用于 CI/CD 阶段做深度扫描，两者互补而非互斥。
+> **最佳实践**：Error Prone 用于开发阶段快速反馈（作为编译插件），SpotBugs 用于 CI/CD 阶段做深度扫描，两者互补而非互斥。
 
 ### 11.3 Error Prone 简要示例
 
@@ -912,10 +912,10 @@ SpotBugs 还支持添加描述信息，可在 `src/site/fml/spotbugs.fml` 文件
 
 ```java
 // Error Prone 可以检测：
-// ❌ ArrayEquals：用 equals 比较数组（应使用 Arrays.equals）
+// ✗ ArrayEquals：用 equals 比较数组（应使用 Arrays.equals）
 boolean eq = array1.equals(array2);  // Error Prone: ArrayEquals
 
-// ❌ StringSplitter：String.split 的正则陷阱
+// ✗ StringSplitter：String.split 的正则陷阱
 String[] parts = "a.b".split(".");   // 结果是空数组！应使用 "\\."
 ```
 
@@ -1152,17 +1152,17 @@ public class User implements Serializable {
 
     private String name;
 
-    // ❌ SE_BAD_FIELD: Serializable 类中的非 transient 不可序列化字段
+    // ✗ SE_BAD_FIELD: Serializable 类中的非 transient 不可序列化字段
     private Socket connection;
 
     private Date birthday;
 
-    // ❌ EI_EXPOSE_REP: 返回可变对象内部引用
+    // ✗ EI_EXPOSE_REP: 返回可变对象内部引用
     public Date getBirthday() {
         return birthday;
     }
 
-    // ❌ EI_EXPOSE_REP2: 直接赋值可变参数
+    // ✗ EI_EXPOSE_REP2: 直接赋值可变参数
     public void setBirthday(Date birthday) {
         this.birthday = birthday;
     }
@@ -1170,7 +1170,7 @@ public class User implements Serializable {
     // 构造器中也存在 EI_EXPOSE_REP2
     public User(String name, Date birthday) {
         this.name = name;
-        this.birthday = birthday;  // ❌
+        this.birthday = birthday;  // ✗
     }
 }
 ```
@@ -1188,7 +1188,7 @@ public class UserService {
     }
 
     public void exportUsers() {
-        // ❌ DM_DEFAULT_ENCODING
+        // ✗ DM_DEFAULT_ENCODING
         try (FileWriter fw = new FileWriter("users_export.csv")) {
             fw.write("ID,Name,Birthday\n");
             List<User> users = userRepository.findAll();
@@ -1196,11 +1196,11 @@ public class UserService {
                 fw.write(user.getId() + "," + user.getName() + "," + user.getBirthday() + "\n");
             }
         } catch (IOException e) {
-            // ❌ REC_CATCH_EXCEPTION: 吞掉异常
+            // ✗ REC_CATCH_EXCEPTION: 吞掉异常
         }
     }
 
-    // ❌ NP_NULL_PARAM_VIOLATION
+    // ✗ NP_NULL_PARAM_VIOLATION
     public void processUser(@Nonnull User user) {
         // ...
     }
@@ -1310,4 +1310,4 @@ mvn spotbugs:spotbugs spotbugs:check
 
 ---
 
-> 🎯 SpotBugs 是 Java 静态分析领域中字节码级别分析的标杆工具。与 Error Prone（源码级）和 PMD（源码级）配合使用，可以构建完整的多层次代码质量防护体系。核心策略是：**编译期用 Error Prone 快速反馈，CI 中用 SpotBugs 深度扫描，Code Review 中人工审查工具无法发现的逻辑问题**。
+> SpotBugs 是 Java 静态分析领域中字节码级别分析的标杆工具。与 Error Prone（源码级）和 PMD（源码级）配合使用，可以构建完整的多层次代码质量防护体系。核心策略是：**编译期用 Error Prone 快速反馈，CI 中用 SpotBugs 深度扫描，Code Review 中人工审查工具无法发现的逻辑问题**。

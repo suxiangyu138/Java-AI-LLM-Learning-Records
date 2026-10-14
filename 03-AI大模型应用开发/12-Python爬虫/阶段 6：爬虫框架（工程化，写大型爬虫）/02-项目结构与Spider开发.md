@@ -1,7 +1,7 @@
 # 02 项目结构与 Spider 开发
 > 工程化的起点：脚手架目录规范 + 四种 Spider 形态 + 请求回调链的完整写法
 
-## 📚 目录
+## 目录
 1. [项目脚手架与目录结构](#1-项目脚手架与目录结构)
 2. [Spider 基类：属性、方法、请求契约](#2-spider-基类属性方法请求契约)
 3. [Request 全参数与 meta 上下文传递](#3-request-全参数与-meta-上下文传递)
@@ -36,7 +36,7 @@ quotes/
 │   ├── middlewares.py         # 中间件工厂模板（05 章）
 │   ├── pipelines.py           # Pipeline 模板（04 章）
 │   ├── settings.py            # 全局配置（架构级，01 章 §6）
-│   ├── spiders/               # ⭐ 爬虫包
+│   ├── spiders/               # ★ 爬虫包
 │   │   ├── __init__.py
 │   │   └── quotes_spider.py
 │   └── utils/                 # （自建）工具：指纹/时间/清洗函数
@@ -46,7 +46,7 @@ quotes/
 └── jobdata/                   # （自建）JOBDIR 断点续爬目录（gitignore）
 ```
 
-> 💡 工程化建议：**Spider 只做"取数据"**（yield Request / Item），解析出的 Item 交给 Pipeline 处理——Spider 里不要写数据库连接、不要写文件、不要写业务校验。这样"换数据源"只需换 Spider，"改存储"只需改 Pipeline。
+> 工程化建议：**Spider 只做"取数据"**（yield Request / Item），解析出的 Item 交给 Pipeline 处理——Spider 里不要写数据库连接、不要写文件、不要写业务校验。这样"换数据源"只需换 Spider，"改存储"只需改 Pipeline。
 
 ### 1.3 新建项目的 5 个开箱配置
 
@@ -59,7 +59,7 @@ LOG_LEVEL = "INFO"
 FEEDS = {"data/quotes.jsonl": {"format": "jsonlines", "encoding": "utf-8"}}  # 快速落盘
 ```
 
-> ⚠️ 2.14 起官方弃用"Spider 类属性承载下载配置"的写法（如 `handle_httpstatus_list = [404]`、`retry_times` 类属性），一律收进 `custom_settings` 或 settings.py——2026 年新代码请按此规范。
+> 2.14 起官方弃用"Spider 类属性承载下载配置"的写法（如 `handle_httpstatus_list = [404]`、`retry_times` 类属性），一律收进 `custom_settings` 或 settings.py——2026 年新代码请按此规范。
 
 ## 2. Spider 基类：属性、方法、请求契约
 
@@ -105,7 +105,7 @@ class QuotesSpider(scrapy.Spider):
         self.logger.info(f"爬取结束，原因: {reason}，共 yield {self.stats.get_value('item_scraped_count')} 条")
 ```
 
-> 🎯 **核心要点**：`custom_settings` 是"一个项目多套抓取策略"的标准手段（同一工程内，A 站 4 并发免限速、B 站 1 并发限速）——比复制项目改 settings.py 干净得多。
+> **核心要点**：`custom_settings` 是"一个项目多套抓取策略"的标准手段（同一工程内，A 站 4 并发免限速、B 站 1 并发限速）——比复制项目改 settings.py 干净得多。
 
 ## 3. Request 全参数与 meta 上下文传递
 
@@ -145,7 +145,7 @@ def parse_detail(self, response):
     }
 ```
 
-> ⚠️ **meta 的两个坑**：(1) `meta` 里默认会被塞入若干框架字段（`download_timeout`、`redirect_urls` 等），覆盖它们会破坏下载行为，自定义键别用 `download_*` / `redirect_*` / `depth` 等保留名；(2) 请求被**重试**时 meta 原样带到第二次请求，若要区分首次/重试用 `meta.get("download_slot")` 或自定义 `retry_count` 计数。
+> **meta 的两个坑**：(1) `meta` 里默认会被塞入若干框架字段（`download_timeout`、`redirect_urls` 等），覆盖它们会破坏下载行为，自定义键别用 `download_*` / `redirect_*` / `depth` 等保留名；(2) 请求被**重试**时 meta 原样带到第二次请求，若要区分首次/重试用 `meta.get("download_slot")` 或自定义 `retry_count` 计数。
 
 ## 4. 回调链模式：列表页 → 详情页
 
@@ -197,7 +197,7 @@ class NewsSpider(scrapy.Spider):
 | 详情页失败 | 详情页下载失败**不会**进 parse_detail——必须配 `errback` 记录待补抓 URL（增量思想，09 章） |
 | 列表与详情并发 | 详情页优先级 `priority=10`，让详情先于后续列表页下载（01 章 §4.3） |
 
-> 🎯 **核心要点**：回调链 = **"yield 下一个请求 + 指定 callback"的接力**。框架保证"响应回来一定进你指定的回调"，但"响应永远回不来"（超时/4xx/5xx）只走 errback——**errback 是大型爬虫可靠性的分水岭**，不写 errback 的爬虫丢数据是必然的。
+> **核心要点**：回调链 = **"yield 下一个请求 + 指定 callback"的接力**。框架保证"响应回来一定进你指定的回调"，但"响应永远回不来"（超时/4xx/5xx）只走 errback——**errback 是大型爬虫可靠性的分水岭**，不写 errback 的爬虫丢数据是必然的。
 
 ## 5. 四种 Spider 类型与选型
 
@@ -236,9 +236,9 @@ class NewsCrawlSpider(CrawlSpider):
         yield {"url": response.url, "title": response.css("h1::text").get()}
 ```
 
-> ⚠️ CrawlSpider 的 `rules` 与手写回调链不能混用同一套 parse 命名：**CrawlSpider 默认 parse 是禁用的**（框架内部使用），自定义回调绝不能叫 `parse`。另外 `allow` 正则务必限定到栏目/详情前缀，否则会爬进评论区、用户页等无限角落。
+> CrawlSpider 的 `rules` 与手写回调链不能混用同一套 parse 命名：**CrawlSpider 默认 parse 是禁用的**（框架内部使用），自定义回调绝不能叫 `parse`。另外 `allow` 正则务必限定到栏目/详情前缀，否则会爬进评论区、用户页等无限角落。
 
-> 💡 **选型口诀**：站点结构规则（栏目/详情 URL 模式清晰）→ CrawlSpider；结构不规则或需要大量业务判断 → 手写 Spider；RSS/API → XMLFeedSpider。
+> **选型口诀**：站点结构规则（栏目/详情 URL 模式清晰）→ CrawlSpider；结构不规则或需要大量业务判断 → 手写 Spider；RSS/API → XMLFeedSpider。
 
 ## 6. 动态起始请求：async start_requests
 
@@ -269,7 +269,7 @@ class DbSeededSpider(scrapy.Spider):
         yield {"url": response.url}
 ```
 
-> ⚠️ 使用 async 回调时若同时依赖 Playwright 等异步库，需配置 `TWISTED_REACTOR = "twisted.internet.asyncioreactor.AsyncioSelectorReactor"`（06 章详细展开）。
+> 使用 async 回调时若同时依赖 Playwright 等异步库，需配置 `TWISTED_REACTOR = "twisted.internet.asyncioreactor.AsyncioSelectorReactor"`（06 章详细展开）。
 
 ## 7. Spider 开发常见坑
 

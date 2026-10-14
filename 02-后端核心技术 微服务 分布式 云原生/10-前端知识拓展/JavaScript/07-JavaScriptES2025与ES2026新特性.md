@@ -2,7 +2,7 @@
 
 > 定位：ES2025（2025-06 发布）与 ES2026（2026-06 预计）的最新标准特性——迭代器增强、Temporal、using、Set 集合运算等（2026-07 验证）
 
-## 📚 目录
+## 目录
 
 1. [版本背景](#1-版本背景)
 2. [ES2025：Iterator Helpers](#2-es2025iterator-helpers)
@@ -23,7 +23,7 @@
 
 趋势：将常见工程模式原生化，减少样板代码与第三方依赖
 
-⚠️ 面试必答：
+面试必答：
 "ES2025/2026 的主题是'工程模式原生化'——
  迭代器增强替代手写循环、
  using 替代 try/finally、
@@ -42,7 +42,7 @@ Iterator.from(iterable)        // 包装为增强迭代器
 
 // 方法：map/filter/take/drop/flatMap/reduce/forEach/some/every/find/toArray
 
-// ⚠️ 惰性：不调用 toArray 不执行——适合无限序列
+// 惰性：不调用 toArray 不执行——适合无限序列
 function* naturalNumbers() {
     let n = 1;
     while (true) yield n++;
@@ -60,21 +60,21 @@ naturalNumbers()
 | 维度 | 数组方法 | Iterator Helpers |
 |------|:---:|:---:|
 | 求值 | 立即（全量） | **惰性（按需）** |
-| 无限序列 | ❌ | ✅ |
+| 无限序列 | ✗ | ✓ |
 | 内存 | 全量占用 | 流式 |
 | 返回值 | 数组 | 迭代器（可继续链） |
 
 ```javascript
 // 惰性的价值：提前终止零浪费
 const first3 = naturalNumbers().filter(isPrime).take(3).toArray();
-// ⚠️ 只计算到第 3 个素数——后续永不执行
+// 只计算到第 3 个素数——后续永不执行
 
 // ES2026 候选：Iterator.concat / zip（Stage 3）
 // Iterator.concat(it1, it2)    串联迭代器
 // Iterator.zip(it1, it2)       并行配对
 ```
 
-> 🎯 **要点**：Iterator Helpers 是 ES2025 最大亮点——**惰性链式处理无限序列**。手写"取前 N 个素数/斐波那契"从笨拙循环变为优雅链。
+> **要点**：Iterator Helpers 是 ES2025 最大亮点——**惰性链式处理无限序列**。手写"取前 N 个素数/斐波那契"从笨拙循环变为优雅链。
 
 ---
 
@@ -107,8 +107,8 @@ const allowed = user.permissions.intersection(requiredPermissions);
 // 差集 = 需要补充的权限
 const missing = requiredPermissions.difference(user.permissions);
 
-// ⚠️ 参数是"类集合"（有 size/has/keys 即可）——可传 Map/自定义结构
-// ⚠️ 非变异：原 Set 不变
+// 参数是"类集合"（有 size/has/keys 即可）——可传 Map/自定义结构
+// 非变异：原 Set 不变
 ```
 
 ---
@@ -124,10 +124,10 @@ function load() {
     return fetchData();                        // 或返回 Promise
 }
 
-// ❌ 旧写法：同步异常逃出 .catch
+// ✗ 旧写法：同步异常逃出 .catch
 load().catch(err => handle(err));              // 同步 throw 不被捕获！
 
-// ✅ Promise.try：同步异常也转为 rejected
+// ✓ Promise.try：同步异常也转为 rejected
 Promise.try(load).catch(err => handle(err));   // 统一处理
 ```
 
@@ -140,7 +140,7 @@ new RegExp(pattern).test(text);                // 防注入
 
 // ② 重复命名捕获组（不同分支允许同名）
 const re = /(?<year>\d{4})|(?<year>\d{2})/;
-// ⚠️ ES2025 前：不同分支同名组报错
+// ES2025 前：不同分支同名组报错
 
 // ③ RegExp 修饰符（内联标志）
 /(?i:hello)\s+world/;      // 仅 hello 部分忽略大小写
@@ -160,7 +160,7 @@ Date 的三大问题：
 
 Temporal：不可变 + 时区感知 + ISO 8601 原生支持
 
-⚠️ 面试必答：
+面试必答：
 "Temporal 是 Date 的继任者——
  不可变（所有操作返回新对象）、
  时区一等公民、ISO 字符串原生解析。"
@@ -180,7 +180,7 @@ Temporal.Duration       // 时长
 const today = Temporal.PlainDate.from('2026-08-02');
 const now = Temporal.Now.zonedDateTimeISO();
 
-// ⚠️ 不可变操作：返回新对象
+// 不可变操作：返回新对象
 const tomorrow = today.add({ days: 1 });
 const nextWeek = today.add({ weeks: 1 });
 
@@ -201,7 +201,7 @@ const meeting = Temporal.ZonedDateTime.from(
 | 单位明确 | largestUnit/smallestUnit 参数 |
 | 精确比较 | `Temporal.Instant.compare(a, b)` |
 
-> 🎯 **要点**：Temporal 是 ES2026 最重磅特性——替代 moment.js/dayjs 的日期场景。面试表达："不可变 + 时区感知 + ISO 原生"三点即可。
+> **要点**：Temporal 是 ES2026 最重磅特性——替代 moment.js/dayjs 的日期场景。面试表达："不可变 + 时区感知 + ISO 原生"三点即可。
 
 ---
 
@@ -212,7 +212,7 @@ const meeting = Temporal.ZonedDateTime.from(
 ```javascript
 // using = 作用域退出自动清理资源（替代 try/finally）
 class Database {
-    [Symbol.dispose]() {           // ⚠️ 清理钩子（同步）
+    [Symbol.dispose]() {           // 清理钩子（同步）
         console.log('关闭连接');
     }
 }
@@ -237,7 +237,7 @@ class Stream {
 
 ```javascript
 // 替代 try/finally 模式（更简洁 + 防遗漏）
-// ❌ 旧写法
+// ✗ 旧写法
 const db = openDb();
 try {
     db.query(...);
@@ -245,17 +245,17 @@ try {
     db.close();              // 容易忘/容易乱
 }
 
-// ✅ using（自动清理，LIFO 逆序）
+// ✓ using（自动清理，LIFO 逆序）
 {
     using a = openA();
     using b = openB();       // 退出时先 b 后 a（LIFO）
 }
 
-// ⚠️ 支持：Chrome 134+、Node 24+、TypeScript 5.2+
+// 支持：Chrome 134+、Node 24+、TypeScript 5.2+
 // 用途：文件句柄、数据库连接、锁、定时器
 ```
 
-> 🎯 **要点**：`using` = "finally 的原生化"——资源类实现 `[Symbol.dispose]`，作用域退出自动清理，多个按 LIFO 逆序。面试手写资源管理类的标准答案。
+> **要点**：`using` = "finally 的原生化"——资源类实现 `[Symbol.dispose]`，作用域退出自动清理，多个按 LIFO 逆序。面试手写资源管理类的标准答案。
 
 ---
 
@@ -282,12 +282,12 @@ map.getOrInsertComputed('key', () => expensive());
 //   Pipeline Operator |>       管道操作符
 //   Pattern Matching           模式匹配
 //   Import Defer               延迟模块求值
-// ⚠️ 面试提醒：模式匹配/管道符仍为提案，勿当标准使用
+// 面试提醒：模式匹配/管道符仍为提案，勿当标准使用
 ```
 
 ---
 
-> 🎯 **核心要点**：ES2025/2026 三大明星——**Iterator Helpers**（惰性链式迭代）、**Temporal**（日期时间革命）、**using**（资源管理原生化）；配套 Set 集合运算、Promise.try、RegExp 增强、Math.sumPrecise。2026 面试加分项：能说出"标准已批准/Stage 4/仍为提案"的状态区分。
+> **核心要点**：ES2025/2026 三大明星——**Iterator Helpers**（惰性链式迭代）、**Temporal**（日期时间革命）、**using**（资源管理原生化）；配套 Set 集合运算、Promise.try、RegExp 增强、Math.sumPrecise。2026 面试加分项：能说出"标准已批准/Stage 4/仍为提案"的状态区分。
 
 ---
 

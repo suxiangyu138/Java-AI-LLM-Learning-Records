@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [三兄弟总览](#1-三兄弟总览)
 2. [Statement：静态 SQL（基本不用）](#2-statement静态-sql基本不用)
@@ -19,26 +19,26 @@
 
 | 类型 | 用途 | SQL 形式 | 是否预编译 | 场景 |
 |------|------|---------|:---------:|------|
-| Statement | 静态 SQL | 拼接字符串 | ❌ | **基本不用**（注入风险） |
-| **PreparedStatement** | 参数化 SQL | `?` 占位符 | ✅ | **首选（99%）** |
-| CallableStatement | 存储过程 | `{call proc(?,?)}` | ✅ | 存储过程调用 |
+| Statement | 静态 SQL | 拼接字符串 | ✗ | **基本不用**（注入风险） |
+| **PreparedStatement** | 参数化 SQL | `?` 占位符 | ✓ | **首选（99%）** |
+| CallableStatement | 存储过程 | `{call proc(?,?)}` | ✓ | 存储过程调用 |
 
 **三兄弟的继承关系**：`Statement ← PreparedStatement ← CallableStatement`（子类继承父类能力）。
 
-> 🎯 **核心要点**：三兄弟 = "**Statement 静态 + PreparedStatement 预编译 + CallableStatement 存储过程**"——**现代代码 99% 用 PreparedStatement**（Statement 是历史，Callable 是存储过程专用）。
+> **核心要点**：三兄弟 = "**Statement 静态 + PreparedStatement 预编译 + CallableStatement 存储过程**"——**现代代码 99% 用 PreparedStatement**（Statement 是历史，Callable 是存储过程专用）。
 
 ---
 
 ## 2. Statement：静态 SQL（基本不用）
 
 ```java
-// Statement：SQL 字符串直接拼接（⚠️ 注入风险）
+// Statement：SQL 字符串直接拼接（注入风险）
 try (Connection conn = ...;
      Statement stmt = conn.createStatement()) {
 
     // 查询
     ResultSet rs = stmt.executeQuery("SELECT * FROM user WHERE name = '" + name + "'");
-    // ⚠️ name 为 "x' OR '1'='1" → 全表返回！
+    // name 为 "x' OR '1'='1" → 全表返回！
 
     // 增删改
     int rows = stmt.executeUpdate("UPDATE user SET age = " + age + " WHERE id = " + id);
@@ -60,7 +60,7 @@ Statement 的存在意义（仅两个场景）：
 → 其余一律 PreparedStatement
 ```
 
-> 🎯 **核心要点**：Statement = "**静态拼接 SQL（注入 + 性能双输）**"——**"除无参数 DDL 与动态表名外不用 Statement"**是铁律；面试答"Statement 什么时候用"给这两个例外 = 深度分。
+> **核心要点**：Statement = "**静态拼接 SQL（注入 + 性能双输）**"——**"除无参数 DDL 与动态表名外不用 Statement"**是铁律；面试答"Statement 什么时候用"给这两个例外 = 深度分。
 
 ---
 
@@ -104,7 +104,7 @@ try (PreparedStatement ps = conn.prepareStatement(insertSql,
 | 类型安全 | setString/setInt 类型绑定（SQL 语法错误前置） |
 | 可读性 | SQL 与参数分离（? 占位符） |
 
-> 🎯 **核心要点**：PreparedStatement = "**预编译 + 参数化（防注入/性能/类型安全）**"——**"一切有参数的 SQL 用它"是 JDBC 第一铁律**；`getGeneratedKeys` 取自增主键是高频配套。
+> **核心要点**：PreparedStatement = "**预编译 + 参数化（防注入/性能/类型安全）**"——**"一切有参数的 SQL 用它"是 JDBC 第一铁律**；`getGeneratedKeys` 取自增主键是高频配套。
 
 ---
 
@@ -138,7 +138,7 @@ try (PreparedStatement ps = conn.prepareStatement(insertSql,
    → 注意：JDBC 预编译发生在驱动/服务器（useServerPrepStmts 参数）
 ```
 
-> 🎯 **核心要点**：注入原理 = "**拼接让用户输入成为 SQL 代码**"——**预编译让参数永远是"值"**（结构固定）；面试答"为什么防注入"用"SQL 结构在执行前已确定"一句话 + 恒真示例。
+> **核心要点**：注入原理 = "**拼接让用户输入成为 SQL 代码**"——**预编译让参数永远是"值"**（结构固定）；面试答"为什么防注入"用"SQL 结构在执行前已确定"一句话 + 恒真示例。
 
 ---
 
@@ -171,7 +171,7 @@ try (Connection conn = ...;
 ⑤ 2026 现状：新项目少用（逻辑放应用层更易维护），遗留系统仍见
 ```
 
-> 🎯 **核心要点**：CallableStatement = "**存储过程调用（IN/OUT 参数）**"——**"新项目少用存储过程（逻辑上移应用层）"是 2026 趋势**；面试答"Callable 何时用"给"遗留系统/数据库强逻辑"场景。
+> **核心要点**：CallableStatement = "**存储过程调用（IN/OUT 参数）**"——**"新项目少用存储过程（逻辑上移应用层）"是 2026 趋势**；面试答"Callable 何时用"给"遗留系统/数据库强逻辑"场景。
 
 ---
 
@@ -196,7 +196,7 @@ try (Connection conn = ...;
 | String | setString |
 | int/long | setInt / setLong |
 | BigDecimal | setBigDecimal |
-| 时间 | setObject(LocalDate)（JDBC 4.2 ✅）/ setTimestamp |
+| 时间 | setObject(LocalDate)（JDBC 4.2 ✓）/ setTimestamp |
 | 二进制 | setBytes |
 | null | setNull(i, Types.X) |
 | 通用 | setObject（JDBC 4.2 支持 java.time） |
@@ -211,7 +211,7 @@ Statement 三兄弟：
   参数绑定 setXxx + 时间用 setObject（JDBC 4.2）
 ```
 
-> 🎯 **核心要点**：选型 = "**默认 PreparedStatement、存储过程 Callable、例外 Statement**"——**"99% 场景 PreparedStatement"是面试结论**；setObject 支持 java.time（JDBC 4.2）是 2026 的时间参数标准姿势。
+> **核心要点**：选型 = "**默认 PreparedStatement、存储过程 Callable、例外 Statement**"——**"99% 场景 PreparedStatement"是面试结论**；setObject 支持 java.time（JDBC 4.2）是 2026 的时间参数标准姿势。
 
 ---
 

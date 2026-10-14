@@ -1,6 +1,6 @@
 # 05 - Pages 与发布能力
 
-> 🎯 Gitee 的发布侧能力：Pages 静态托管（项目文档/个人主页/前端演示）、Releases 版本发布（tag + 包 + 说明）、Wiki 项目文档。免费版 Pages 需实名认证 + 内容审核，发布链路要理解这个约束
+> Gitee 的发布侧能力：Pages 静态托管（项目文档/个人主页/前端演示）、Releases 版本发布（tag + 包 + 说明）、Wiki 项目文档。免费版 Pages 需实名认证 + 内容审核，发布链路要理解这个约束
 
 ---
 
@@ -118,6 +118,6 @@ Pages 站点出问题时的排查顺序：
 
 ---
 
-> 🎯 **核心要点**：Gitee 发布三件套 = Pages（静态站，实名+审核约束）+ Releases（tag+包+说明，SemVer）+ Wiki（深度文档）。关键约束：免费版 Pages 需实名与内容审核、自定义域名需 ICP 备案——国内平台的合规底色。自动化闭环：push → Gitee Go 构建 → Pages 部署 = 提交即发布。
+> **核心要点**：Gitee 发布三件套 = Pages（静态站，实名+审核约束）+ Releases（tag+包+说明，SemVer）+ Wiki（深度文档）。关键约束：免费版 Pages 需实名与内容审核、自定义域名需 ICP 备案——国内平台的合规底色。自动化闭环：push → Gitee Go 构建 → Pages 部署 = 提交即发布。
 
 **下一模块**：[06-GiteeGo流水线实战](06-GiteeGo流水线实战.md) / **返回总览**：[00-总览](00-Gitee知识体系总览.md)

@@ -26,7 +26,7 @@
 | 异步支持 | 原生支持 async/await | 需要额外中间件 |
 | 社区生态 | 较年轻 | 非常成熟 |
 
-> 💡 Koa 由 Express 原班人马打造，主打**轻量、优雅、现代化**。适用于纯 API 服务，Express 更适合全栈 Web 应用。
+> Koa 由 Express 原班人马打造，主打**轻量、优雅、现代化**。适用于纯 API 服务，Express 更适合全栈 Web 应用。
 
 ### 1.2 Koa 洋葱模型执行机制
 
@@ -55,7 +55,7 @@ app.use(async (ctx) => {
 // 1-in -> 2-in -> 3-handler -> 2-out -> 1-out
 ```
 
-> 🎯 洋葱模型核心优势：中间件可以在请求**前后**都执行逻辑，非常适合日志、事务、计时等场景。
+> 洋葱模型核心优势：中间件可以在请求**前后**都执行逻辑，非常适合日志、事务、计时等场景。
 
 ### 1.3 Koa 上下文对象 ctx
 
@@ -173,7 +173,7 @@ ctx.verifyParams({
 | 一对多 | 子文档数组 / 引用 | `post.comments[]` |
 | 多对多 | 引用数组 | `user.following[]`、`user.followers[]` |
 
-> 💡 MongoDB 推荐**嵌入优先**，但嵌入文档有 16MB 大小限制。对于评论、粉丝等大量数据，使用引用更为合适。
+> MongoDB 推荐**嵌入优先**，但嵌入文档有 16MB 大小限制。对于评论、粉丝等大量数据，使用引用更为合适。
 
 ### 1.9 JWT 认证集成（koa-jwt）
 
@@ -315,7 +315,7 @@ function compose(middleware) {
 }
 ```
 
-> 🎯 关键点：`next()` 返回 Promise，通过 `dispatch(i+1)` 递归调用下一个中间件。await next() 之后的代码在子中间件执行完毕后恢复执行，形成**洋葱切面**。
+> 关键点：`next()` 返回 Promise，通过 `dispatch(i+1)` 递归调用下一个中间件。await next() 之后的代码在子中间件执行完毕后恢复执行，形成**洋葱切面**。
 
 ### 2.2 Mongoose Schema 设计原则
 
@@ -377,7 +377,7 @@ const result = await Question.aggregate([
 ]);
 ```
 
-> 💡 `populate` 适合简单查询（N+1 友好），`aggregate` 适合复杂聚合统计。
+> `populate` 适合简单查询（N+1 友好），`aggregate` 适合复杂聚合统计。
 
 ### 2.4 三级嵌套评论模型设计
 

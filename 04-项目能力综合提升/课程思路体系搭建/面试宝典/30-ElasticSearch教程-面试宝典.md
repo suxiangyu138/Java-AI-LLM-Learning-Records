@@ -61,22 +61,22 @@
 - **Primary Shard（主分片）**：数据拆分的基础单元，索引创建后不可修改数量。
 - **Replica Shard（副本分片）**：主分片的拷贝，用于容灾和分担读压力。
 
-> 💡 **默认配置**：`number_of_shards: 1`（ES 7.x+）/ `number_of_replicas: 1`
+> **默认配置**：`number_of_shards: 1`（ES 7.x+）/ `number_of_replicas: 1`
 
 ### Q6 ES 为什么是"近实时"（Near Real-Time）搜索？
 ES 写入流程：
 ```
 写入 → 写 translog → 内存 buffer → refresh（每秒）→ segment 可被搜索 → flush → 磁盘持久化
 ```
-> ⚠️ **关键**：`refresh_interval` 默认 1 秒，因此在写入后最多 1 秒才能被搜索到，这就是"近实时"的含义。
+> **关键**：`refresh_interval` 默认 1 秒，因此在写入后最多 1 秒才能被搜索到，这就是"近实时"的含义。
 
 ### Q7 text 和 keyword 的区别是什么？
 | 类型 | 是否分词 | 适用场景 | 能否排序/聚合 |
 |------|----------|----------|--------------|
-| **text** | 是（经过 analyzer 分词） | 全文搜索、文章内容 | ❌ 不能直接排序/聚合 |
-| **keyword** | 否（当作一个整体） | 精确匹配、标签、枚举值 | ✅ 可以排序和聚合 |
+| **text** | 是（经过 analyzer 分词） | 全文搜索、文章内容 | ✗ 不能直接排序/聚合 |
+| **keyword** | 否（当作一个整体） | 精确匹配、标签、枚举值 | ✓ 可以排序和聚合 |
 
-> 💡 如果需要同时支持两种查询，可以使用 **multi-fields**：
+> 如果需要同时支持两种查询，可以使用 **multi-fields**：
 ```json
 {
   "title": {
@@ -122,7 +122,7 @@ PUT /my_index
 | `ik_max_word` | 最细粒度 | 中华人民共和国 / 中华人民 / 中华 / 华人 / 人民共和国 / 人民 |
 | `ik_smart` | 智能粒度 | 中华人民共和国 |
 
-> 💡 索引时用 `ik_max_word`（尽可能多的词），搜索时用 `ik_smart`（更精准）。
+> 索引时用 `ik_max_word`（尽可能多的词），搜索时用 `ik_smart`（更精准）。
 
 ### Q11 ES 中如何创建、查询、更新、删除文档？
 | 操作 | Method | Endpoint | 说明 |
@@ -139,15 +139,15 @@ PUT /my_index
 | **match** | 全文查询 | 是 | 对 text 字段做全文搜索 |
 | **term** | 精确查询 | 否 | 对 keyword 字段做精确匹配 |
 
-> ⚠️ **常见错误**：对 text 字段使用 term 查询，因为 text 字段被分词，term 匹配不到完整的原始字符串。
+> **常见错误**：对 text 字段使用 term 查询，因为 text 字段被分词，term 匹配不到完整的原始字符串。
 
 ### Q13 bool 查询的四种子句是什么？
 | 子句 | 含义 | 评分影响 |
 |------|------|----------|
-| **must** | 必须匹配（AND 逻辑） | ✅ 贡献评分 |
-| **filter** | 必须匹配（AND 逻辑） | ❌ 不贡献评分，有缓存 |
-| **should** | 应该匹配（OR 逻辑） | ✅ 贡献评分 |
-| **must_not** | 不能匹配（NOT 逻辑） | ❌ 不贡献评分 |
+| **must** | 必须匹配（AND 逻辑） | ✓ 贡献评分 |
+| **filter** | 必须匹配（AND 逻辑） | ✗ 不贡献评分，有缓存 |
+| **should** | 应该匹配（OR 逻辑） | ✓ 贡献评分 |
+| **must_not** | 不能匹配（NOT 逻辑） | ✗ 不贡献评分 |
 
 ```json
 {
@@ -191,7 +191,7 @@ PUT /my_index
 | **scroll** | 生成快照游标 | 全量导出、批量处理 | 有状态，不适合实时查询 |
 | **search_after** | 基于排序值游标 | 深分页滚动 | 需要排序，不支持随机跳页 |
 
-> ⚠️ **面试高频**：为什么 `from + size` 不适合深分页？因为 ES 需要在每个分片查询 `from + size` 条，然后在协调节点汇总排序，深度分页会导致巨大的内存消耗。
+> **面试高频**：为什么 `from + size` 不适合深分页？因为 ES 需要在每个分片查询 `from + size` 条，然后在协调节点汇总排序，深度分页会导致巨大的内存消耗。
 
 ### Q16 什么是 Highlighing（高亮）？
 > 在搜索结果中标记匹配的关键词片段。
@@ -218,7 +218,7 @@ POST /_bulk
 { "title": "Spring 实战", "price": 59 }
 ```
 
-> 💡 **最佳实践**：单次 Bulk 建议 5-15 MB，5000-10000 条文档。
+> **最佳实践**：单次 Bulk 建议 5-15 MB，5000-10000 条文档。
 
 ### Q18 什么是 refresh、flush、merge、translog？
 | 机制 | 触发时机 | 作用 |
@@ -247,7 +247,7 @@ POST /_bulk
   }
 }
 ```
-> 💡 `^3` 表示 title 字段的权重是其他字段的 3 倍。
+> `^3` 表示 title 字段的权重是其他字段的 3 倍。
 
 ---
 
@@ -274,7 +274,7 @@ shard = hash(routing) % number_of_primary_shards
 ```
 - 默认 routing = `_id`
 - 可以自定义 routing 实现相同用户的数据到同一分片
-> ⚠️ **主分片数在索引创建后不可修改**，否则路由公式会变化。
+> **主分片数在索引创建后不可修改**，否则路由公式会变化。
 
 ### Q23 什么是 Segment？为什么说它是"不可变的"？
 - **Segment** 是 Lucene 中存储倒排索引的最小单位，类似一个"小文件"。
@@ -292,7 +292,7 @@ shard = hash(routing) % number_of_primary_shards
 ```
 小 segment A, B, C → merge 线程 → 新大 segment D → 提交 → 删除 A, B, C
 ```
-> 💡 merge 时占用 IO 和 CPU，ES 通过 `_regulations` 自动限速。`forcemerge` 可强制合并已不再写入的索引（如日志索引归档前）。
+> merge 时占用 IO 和 CPU，ES 通过 `_regulations` 自动限速。`forcemerge` 可强制合并已不再写入的索引（如日志索引归档前）。
 
 ### Q26 text 字段为什么不能直接排序？
 - text 字段经过分词后产生多个词项，无法确定按哪个词排序。
@@ -322,7 +322,7 @@ Score = IDF * (tf * (k1 + 1)) / (tf + k1 * (1 - b + b * (dl / avgdl)))
 | 适用场景 | 排序、聚合、脚本 | 对 text 字段的聚合（已不推荐） |
 | 内存占用 | 低（OS 缓存管理） | 高（直接占用 JVM 堆） |
 
-> 💡 ES 从设计上推荐使用 Doc Values，**text 字段默认没有 doc_values**。
+> ES 从设计上推荐使用 Doc Values，**text 字段默认没有 doc_values**。
 
 ### Q29 什么是 _source 字段？可以关闭吗？
 - `_source` 存储原始的 JSON 文档内容。
@@ -331,7 +331,7 @@ Score = IDF * (tf * (k1 + 1)) / (tf + k1 * (1 - b + b * (dl / avgdl)))
 ```json
 { "mappings": { "_source": { "enabled": false } } }
 ```
-> 💡 **建议保留** `_source`，通过 `includes`/`excludes` 过滤不需要的字段。
+> **建议保留** `_source`，通过 `includes`/`excludes` 过滤不需要的字段。
 
 ### Q30 什么是 Translog？它的作用是什么？
 **Translog（事务日志）** 是 ES 防止数据丢失的关键机制。
@@ -726,7 +726,7 @@ Filebeat（采集）→ Kafka（缓冲）→ Logstash（清洗）→ ES（存储
                ES 滚动索引: logs-yyyy.MM.dd
                ILM 策略: hot(7天) → warm(30天) → cold(90天) → delete
 ```
-> 💡 **关键设计**：使用别名写入，按日期滚动，ILM 自动管理生命周期，对历史索引 force merge 节省空间。
+> **关键设计**：使用别名写入，按日期滚动，ILM 自动管理生命周期，对历史索引 force merge 节省空间。
 
 ### Q51 如何将 MySQL 数据同步到 ES？
 | 方案 | 优缺点 | 适用场景 |
@@ -761,12 +761,12 @@ Filebeat（采集）→ Kafka（缓冲）→ Logstash（清洗）→ ES（存储
 | IK 热更新不生效 | 新词无法识别 | 配置 IK 远程词典 |
 
 ### 最佳实践清单
-> ✅ 生产环境使用 **显式 Mapping**，禁用 `dynamic: true`
-> ✅ 日志类索引使用 **按日期滚动 + ILM**
-> ✅ 搜索类场景将 **filter 前置**，利用缓存
-> ✅ 使用 **别名（Alias）** 访问索引，方便 reindex
-> ✅ 合理设置 `number_of_shards`（单分片 20-50GB）
-> ✅ Bulk 写入时临时关闭 refresh 和副本
+> ✓ 生产环境使用 **显式 Mapping**，禁用 `dynamic: true`
+> ✓ 日志类索引使用 **按日期滚动 + ILM**
+> ✓ 搜索类场景将 **filter 前置**，利用缓存
+> ✓ 使用 **别名（Alias）** 访问索引，方便 reindex
+> ✓ 合理设置 `number_of_shards`（单分片 20-50GB）
+> ✓ Bulk 写入时临时关闭 refresh 和副本
 
 ---
 

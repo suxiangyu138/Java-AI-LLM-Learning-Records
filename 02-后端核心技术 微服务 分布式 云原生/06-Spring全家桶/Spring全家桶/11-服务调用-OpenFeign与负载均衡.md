@@ -1,6 +1,6 @@
 # 11-服务调用-OpenFeign与负载均衡
 
-> 🎯 P1 就业必备 — OpenFeign 是 Spring Cloud 微服务间声明式 HTTP 调用的核心组件,基于接口 + 注解的方式屏蔽底层 HTTP 通信细节;配合 Spring Cloud LoadBalancer 实现客户端负载均衡,是微服务同步调用链中最关键的环节。
+> P1 就业必备 — OpenFeign 是 Spring Cloud 微服务间声明式 HTTP 调用的核心组件,基于接口 + 注解的方式屏蔽底层 HTTP 通信细节;配合 Spring Cloud LoadBalancer 实现客户端负载均衡,是微服务同步调用链中最关键的环节。
 
 ---
 
@@ -41,7 +41,7 @@
 |------|------|
 | **归属** | Spring全家桶核心组件 -> 层级2 P1就业必备 -> Spring Cloud微服务生态 |
 | **前置依赖** | Spring Boot Web、Spring Cloud 基础、Nacos 服务注册与发现 |
-| **重要性** | ⭐⭐⭐⭐⭐（几乎每个微服务项目都通过 Feign 实现服务间调用） |
+| **重要性** | ★★★★★（几乎每个微服务项目都通过 Feign 实现服务间调用） |
 | **学习难度** | 中等偏低（API 声明式调用上手快,但超时/重试/Header 传递等陷阱较多） |
 
 ### 1.2 前置知识
@@ -328,7 +328,7 @@ public class FeignUserController {
 }
 ```
 
-> 💡 使用 OpenFeign 后，调用远程服务就像调用本地接口一样简单。动态代理在底层帮我们完成了：服务发现 → 负载均衡 → 序列化 → HTTP 请求 → 反序列化 的全过程。
+> 使用 OpenFeign 后，调用远程服务就像调用本地接口一样简单。动态代理在底层帮我们完成了：服务发现 → 负载均衡 → 序列化 → HTTP 请求 → 反序列化 的全过程。
 
 ### 2.3 @FeignClient 配置详解
 
@@ -493,7 +493,7 @@ List<User> users = userClient.searchUsers(new UserQueryParam() {{
 // 实际请求: GET /api/users/search?name=张三&age=25&page=1&size=10
 ```
 
-> ⚠️ 必须使用 `@SpringQueryMap`,而不是 Spring MVC 的 `@RequestParam` 或 `@ModelAttribute`。Feign 不会自动将 POJO 展开为查询参数,不加 `@SpringQueryMap` 会导致参数为 null。
+> 必须使用 `@SpringQueryMap`,而不是 Spring MVC 的 `@RequestParam` 或 `@ModelAttribute`。Feign 不会自动将 POJO 展开为查询参数,不加 `@SpringQueryMap` 会导致参数为 null。
 
 #### 2.4.3 @RequestHeader 传递请求头
 
@@ -510,7 +510,7 @@ public interface UserClient {
 User user = userClient.getUserById(1L, "Bearer eyJhbGciOi...");
 ```
 
-> 💡 如果每个方法都需要传 Token,建议用 RequestInterceptor 统一添加(见 2.8 节),而不是在每个方法参数中声明。
+> 如果每个方法都需要传 Token,建议用 RequestInterceptor 统一添加(见 2.8 节),而不是在每个方法参数中声明。
 
 #### 2.4.4 @PathVariable 和 @RequestParam 最佳实践
 
@@ -534,7 +534,7 @@ public interface UserClient {
 }
 ```
 
-> ⚠️ `@PathVariable` 在 Spring Boot 2.x+ 中**必须显式指定 value 属性**,否则编译后参数名丢失,Feign 会报错 `PathVariable annotation was empty on param 0`。
+> `@PathVariable` 在 Spring Boot 2.x+ 中**必须显式指定 value 属性**,否则编译后参数名丢失,Feign 会报错 `PathVariable annotation was empty on param 0`。
 
 ---
 
@@ -659,7 +659,7 @@ public class FeignRetryConfig {
 }
 ```
 
-> ⚠️ 重试机制需要特别注意幂等性：GET 请求可以安全重试，但 POST/PUT/DELETE 请求如果服务端已处理成功但响应丢失，重试可能导致重复操作。建议在服务端实现幂等性方案（如唯一请求号）。
+> 重试机制需要特别注意幂等性：GET 请求可以安全重试，但 POST/PUT/DELETE 请求如果服务端已处理成功但响应丢失，重试可能导致重复操作。建议在服务端实现幂等性方案（如唯一请求号）。
 
 ### 2.7 请求拦截器（RequestInterceptor）
 
@@ -749,7 +749,7 @@ spring:
               - com.example.interceptor.FeignTenantInterceptor
 ```
 
-> 🎯 **Header 丢失问题**是微服务面试必问题。根本原因是 Feign 创建新 HTTP 请求时不会自动复制上游请求的上下文信息。通过 RequestInterceptor 从 `RequestContextHolder` 获取并设置 Header 是标准解决方案。在异步线程中需要注意 `RequestContextHolder` 的线程绑定特性，可能需要手动传递上下文。
+> **Header 丢失问题**是微服务面试必问题。根本原因是 Feign 创建新 HTTP 请求时不会自动复制上游请求的上下文信息。通过 RequestInterceptor 从 `RequestContextHolder` 获取并设置 Header 是标准解决方案。在异步线程中需要注意 `RequestContextHolder` 的线程绑定特性，可能需要手动传递上下文。
 
 ### 2.8 编码器与解码器
 
@@ -1028,7 +1028,7 @@ public class LoadBalancerConfig {
 | **生态集成** | Spring Cloud 原生 | Spring 原生 | Apache Dubbo 生态 |
 | **适用场景** | Spring Cloud 微服务、对外 REST API | 简单调用、非微服务场景 | 高性能内部调用、大型微服务 |
 
-> 🎯 **选型建议**：Spring Cloud 项目首选 OpenFeign（声明式调用 + 云原生生态）；需要极致性能（如 10w+ QPS）的内部调用选 Dubbo；临时或简单的 HTTP 调用用 RestTemplate。
+> **选型建议**：Spring Cloud 项目首选 OpenFeign（声明式调用 + 云原生生态）；需要极致性能（如 10w+ QPS）的内部调用选 Dubbo；临时或简单的 HTTP 调用用 RestTemplate。
 
 ---
 
@@ -1050,7 +1050,7 @@ public class LoadBalancerConfig {
 
 Feign 每次发送请求时,默认**不会自动透传**当前请求的 Header。Feign 认为自己是一个独立的 HTTP 客户端,与当前 Web 请求上下文无关。`RequestContextHolder` 中的数据只有当前线程可以访问。
 
-> ⚠️ Feign 不是 Servlet 容器的一部分,它不会自动访问 `HttpServletRequest` 中的 Header。
+> Feign 不是 Servlet 容器的一部分,它不会自动访问 `HttpServletRequest` 中的 Header。
 
 #### 3.1.3 解决方案:RequestInterceptor
 
@@ -1085,7 +1085,7 @@ public class FeignHeaderInterceptor implements RequestInterceptor {
 **异步线程场景**:
 
 ```java
-// ❌ 错误:在异步线程中 RequestContextHolder 为空
+// ✗ 错误:在异步线程中 RequestContextHolder 为空
 @Async
 public CompletableFuture<String> asyncCallService() {
     ServletRequestAttributes attributes =
@@ -1094,7 +1094,7 @@ public CompletableFuture<String> asyncCallService() {
     return CompletableFuture.completedFuture(result);
 }
 
-// ✅ 解决方案:手动传递 RequestAttributes 到异步线程
+// ✓ 解决方案:手动传递 RequestAttributes 到异步线程
 public CompletableFuture<String> asyncCallService() {
     ServletRequestAttributes attributes =
             (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
@@ -1263,7 +1263,7 @@ server:
 #### 3.4.1 现象
 
 ```java
-// ❌ 错误:多参数 GET 请求忘记加 @RequestParam
+// ✗ 错误:多参数 GET 请求忘记加 @RequestParam
 @FeignClient(name = "user-service", path = "/api/users")
 public interface UserClient {
     @GetMapping("/search")
@@ -1271,7 +1271,7 @@ public interface UserClient {
     // 参数全为 null!Feign 不会自动绑定未注解的参数
 }
 
-// ❌ 错误:直接传 POJO 不加 @SpringQueryMap
+// ✗ 错误:直接传 POJO 不加 @SpringQueryMap
 @FeignClient(name = "user-service", path = "/api/users")
 public interface UserClient {
     @GetMapping("/search")
@@ -1287,13 +1287,13 @@ Feign 的 SpringMvcContract 只识别有注解的参数。没有注解的参数�
 #### 3.4.3 修复
 
 ```java
-// ✅ 正确方式一:每个参数标注 @RequestParam
+// ✓ 正确方式一:每个参数标注 @RequestParam
 @GetMapping("/search")
 List<User> searchUsers(@RequestParam("name") String name,
                        @RequestParam("age") Integer age,
                        @RequestParam("email") String email);
 
-// ✅ 正确方式二:POJO + @SpringQueryMap
+// ✓ 正确方式二:POJO + @SpringQueryMap
 @GetMapping("/search")
 List<User> searchUsers(@SpringQueryMap UserQueryParam param);
 ```
@@ -1333,7 +1333,7 @@ public interface UserQueryClient { ... }
 public interface UserAdminClient { ... }
 ```
 
-> 💡 `contextId` 的值就是 Bean 名称,务必保证唯一。一个常见最佳实践是 `contextId` 用接口的简单类名。
+> `contextId` 的值就是 Bean 名称,务必保证唯一。一个常见最佳实践是 `contextId` 用接口的简单类名。
 
 ### 3.6 Feign 与 LoadBalancer 集成失效
 
@@ -1386,8 +1386,8 @@ spring:
 
 ```java
 // 确保客户端只使用 name,不需要写 url
-@FeignClient(name = "user-service")  // ✅ 正确,走 LoadBalancer
-// @FeignClient(name = "user-service", url = "http://localhost:8081")  // ❌ 不走 LoadBalancer
+@FeignClient(name = "user-service")  // ✓ 正确,走 LoadBalancer
+// @FeignClient(name = "user-service", url = "http://localhost:8081")  // ✗ 不走 LoadBalancer
 public interface UserClient { ... }
 ```
 
@@ -2168,7 +2168,7 @@ Netflix Feign (2013年 Netflix 开源)         OpenFeign (社区版)         Spr
 </dependency>
 ```
 
-> 💡 日常开发中说的"Feign"通常指 Spring Cloud OpenFeign——它已经成为 Spring Cloud 微服务间调用的标准解决方案。
+> 日常开发中说的"Feign"通常指 Spring Cloud OpenFeign——它已经成为 Spring Cloud 微服务间调用的标准解决方案。
 
 ### 8.2 Feign 动态代理源码分析
 
@@ -2416,7 +2416,7 @@ public class UserFeignClientFallbackFactory
 | 禁用 404 解码 | `decode404: false` | 快速失败，便于排错 |
 | 日志级别 | 生产环境用 BASIC 或 NONE | 减少日志 IO 开销 |
 
-> 🎯 本章学习了 OpenFeign 服务调用的完整知识体系：从声明式接口的定义到动态代理原理，从超时重配到负载均衡策略，从 Header 透传到熔断降级。掌握这些知识后，你可以优雅地实现微服务间的通信，并针对不同场景进行调优。
+> 本章学习了 OpenFeign 服务调用的完整知识体系：从声明式接口的定义到动态代理原理，从超时重配到负载均衡策略，从 Header 透传到熔断降级。掌握这些知识后，你可以优雅地实现微服务间的通信，并针对不同场景进行调优。
 
 ---
 

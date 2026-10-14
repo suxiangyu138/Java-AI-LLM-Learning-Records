@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [Pandas 定位与版本](#1-pandas-定位与版本)
 2. [Series：一列](#2-series一列)
@@ -142,7 +142,7 @@ df.describe()                              # 数值列统计（阶段 1 六指�
 
 **验收动作**：① 三种创建方法各建一个表；② 打印 shape/columns/dtypes 体检；③ 新建三列（fare*2、np.log、age-mean 广播）；④ `value_counts` + `describe` 各一次——**"三法 + 整列操作 = 对象心智建立"**——**练习纪律**：每题的答案打印验证——"表的问题跑出来才算数"。
 
-> 🎯 **核心要点**：Series = 带标签的一维数组（DataFrame 的一列——运算同 NumPy）；DataFrame = 行样本 × 列特征 + 标签（`df["列"]` Series、`df[["列"]]` DataFrame——双层括号易错）；创建四法（列优先字典是标准姿势）；整列思考落地（新建列 = 列运算、np.xxx 直接吃 Series、聚合标量 vs 列两个世界）——**"Pandas 是带标签的 NumPy——标签是它存在的理由"**。
+> **核心要点**：Series = 带标签的一维数组（DataFrame 的一列——运算同 NumPy）；DataFrame = 行样本 × 列特征 + 标签（`df["列"]` Series、`df[["列"]]` DataFrame——双层括号易错）；创建四法（列优先字典是标准姿势）；整列思考落地（新建列 = 列运算、np.xxx 直接吃 Series、聚合标量 vs 列两个世界）——**"Pandas 是带标签的 NumPy——标签是它存在的理由"**。
 
 ---
 

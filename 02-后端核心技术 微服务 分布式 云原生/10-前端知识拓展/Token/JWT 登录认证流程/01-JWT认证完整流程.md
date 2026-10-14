@@ -1,6 +1,6 @@
 # 01 - JWT 登录认证完整流程
 
-> 🎯 JWT 是无状态认证的标准方案 — 理解从前端点登录按钮到后端返回 Token、前端存储到每次请求携带的完整闭环
+> JWT 是无状态认证的标准方案 — 理解从前端点登录按钮到后端返回 Token、前端存储到每次请求携带的完整闭环
 
 ---
 
@@ -74,7 +74,7 @@ export function logout() {
 ```
 
 ```javascript
-// ⭐ axios 拦截器 — 自动刷新 Token
+// ★ axios 拦截器 — 自动刷新 Token
 let isRefreshing = false;
 let refreshQueue = [];
 
@@ -187,4 +187,4 @@ public class JwtUtil {
 }
 ```
 
-> 🎯 **双Token策略**：accessToken 短时效(15min) + refreshToken 长时效(7天)。401 → 前端拦截器自动刷新 → 无缝续期。用户感知不到过期。
+> **双Token策略**：accessToken 短时效(15min) + refreshToken 长时效(7天)。401 → 前端拦截器自动刷新 → 无缝续期。用户感知不到过期。

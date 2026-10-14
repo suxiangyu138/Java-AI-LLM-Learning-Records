@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [为什么数据分析用 Jupyter](#1-为什么数据分析用-jupyter)
 2. [单元格模型](#2-单元格模型)
@@ -128,7 +128,7 @@ my-analysis/
 
 **验收动作**：把 `09-阶段实战与自测.md` 的 EDA 实战做成一个**完整的 notebook**——① 每个分析块"Markdown 问题 → 代码 → 引用结论"三段式；② `%matplotlib inline` 画出第一张图；③ 全程只用快捷键操作 10 分钟（不看鼠标）；④ `Restart & Run All` 从头跑通 + 导出 HTML——**"能跑通 + 能交付 = Jupyter 课通过"**。
 
-> 🎯 **核心要点**：Jupyter = 探索/记录/交付三位一体——单元格模型（Code + Markdown——一个单元格一个主题）；魔法命令（`%matplotlib inline` 漏了图不显示——`!` 可跑 shell）；快捷键（Esc 进命令模式 A/B/M/Y/DD）；交付（Restart & Run All 自检 + HTML 交付 + 结论解读必写）——**"内核状态是隐藏变量——能从头跑通 = notebook 可信"**。
+> **核心要点**：Jupyter = 探索/记录/交付三位一体——单元格模型（Code + Markdown——一个单元格一个主题）；魔法命令（`%matplotlib inline` 漏了图不显示——`!` 可跑 shell）；快捷键（Esc 进命令模式 A/B/M/Y/DD）；交付（Restart & Run All 自检 + HTML 交付 + 结论解读必写）——**"内核状态是隐藏变量——能从头跑通 = notebook 可信"**。
 
 ---
 

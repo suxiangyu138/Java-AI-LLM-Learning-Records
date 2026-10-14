@@ -1,6 +1,6 @@
 # 06 - LLM 开发必备 Python 技能
 
-> 🎯 Java 后端做 LLM 开发，Python 至少要会这 5 件事：调 API、写流式、做异步、算 Token、用 LangChain 最小集
+> Java 后端做 LLM 开发，Python 至少要会这 5 件事：调 API、写流式、做异步、算 Token、用 LangChain 最小集
 
 ## 1. OpenAI API 调用（同步+流式）
 

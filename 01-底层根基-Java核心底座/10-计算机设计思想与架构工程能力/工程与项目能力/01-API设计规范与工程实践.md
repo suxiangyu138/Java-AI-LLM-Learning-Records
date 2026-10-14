@@ -36,7 +36,7 @@ REST（Representational State Transfer）以资源为中心，每条 URL 代表�
 | **查询参数用于过滤/排序** | `?status=active&page=1` | `/getActiveUsers/page1` |
 | **动作转名词** | `/payments` + `POST` | `/makePayment` |
 
-> 💡 资源名一定是名词复数形式，不要用动词。动词通过 HTTP 方法表达。
+> 资源名一定是名词复数形式，不要用动词。动词通过 HTTP 方法表达。
 
 ### 1.2 HTTP 方法语义详解
 
@@ -48,7 +48,7 @@ REST（Representational State Transfer）以资源为中心，每条 URL 代表�
 | `PATCH` | 部分更新资源 | 否* | 否 | 有 | 200 |
 | `DELETE` | 删除资源 | 是 | 否 | 可选 | 204 |
 
-> ⚠️ `PATCH` 的幂等性取决于实现——如果使用 JSON Merge Patch (`{"field": "value"}`) 则是幂等的，如果使用 JSON Patch (`[{"op": "add", ...}]`) 则可能非幂等。
+> `PATCH` 的幂等性取决于实现——如果使用 JSON Merge Patch (`{"field": "value"}`) 则是幂等的，如果使用 JSON Patch (`[{"op": "add", ...}]`) 则可能非幂等。
 
 ### 1.3 状态码选择决策表
 
@@ -82,7 +82,7 @@ REST（Representational State Transfer）以资源为中心，每条 URL 代表�
             └── DELETE → 204 No Content
 ```
 
-> 🎯 关键原则：**不要在所有成功场景都用 200**。`201 Created` 和 `204 No Content` 提供额外语义，让调用方无需解析 body 即可知道结果。
+> 关键原则：**不要在所有成功场景都用 200**。`201 Created` 和 `204 No Content` 提供额外语义，让调用方无需解析 body 即可知道结果。
 
 ### 1.4 常用状态码速查表
 
@@ -107,7 +107,7 @@ REST（Representational State Transfer）以资源为中心，每条 URL 代表�
 | `503 Service Unavailable` | 服务暂不可用 | 服务正在重启、熔断开启 |
 | `504 Gateway Timeout` | 网关超时 | 上游服务响应超时 |
 
-> 💡 `422 Unprocessable Entity` 和 `400 Bad Request` 的区别：400 表示请求**格式**本身无法解析（如 JSON 语法错误），422 表示请求格式正确但**语义上**不满足业务约束（如邮箱格式非法、金额为负数）。
+> `422 Unprocessable Entity` 和 `400 Bad Request` 的区别：400 表示请求**格式**本身无法解析（如 JSON 语法错误），422 表示请求格式正确但**语义上**不满足业务约束（如邮箱格式非法、金额为负数）。
 
 ---
 
@@ -156,7 +156,7 @@ public class ApiResponse<T> {
 }
 ```
 
-> 💡 `traceId` 用于分布式链路追踪，结合 MDC（Mapped Diagnostic Context）在请求入口处生成，贯穿整个调用链。出现问题时，前端提供 traceId 即可快速定位日志。
+> `traceId` 用于分布式链路追踪，结合 MDC（Mapped Diagnostic Context）在请求入口处生成，贯穿整个调用链。出现问题时，前端提供 traceId 即可快速定位日志。
 
 ### 2.2 分页响应包装
 
@@ -270,7 +270,7 @@ Content-Type: application/vnd.myapi.v1+json
 | **向后兼容** | 新增字段（有默认值）、新增端点、放宽校验 | 删除字段、修改字段类型、修改端点 URL |
 | **向后不兼容** | 需要开新版本 | — |
 
-> ⚠️ 版本管理的最佳实践：**能不版本就不版本**。通过向后兼容的演进（仅新增字段），避免维护多套版本的成本。PayPal API 和 GitHub API 都用了这种方式。
+> 版本管理的最佳实践：**能不版本就不版本**。通过向后兼容的演进（仅新增字段），避免维护多套版本的成本。PayPal API 和 GitHub API 都用了这种方式。
 
 ---
 
@@ -316,7 +316,7 @@ GET /api/v1/messages?cursor=MTYyNzQwODAwMDAwMA&limit=20
 | 实现复杂度 | 低 | 高（需要编码/解码 cursor） |
 | 适用场景 | 后台管理、数据量 < 10w | 实时 feed、无限滚动、大数据量 |
 
-> 💡 **cursor 编码**：将 `id + 排序值` 组合 Base64 编码作为 cursor 传递，服务端解码后用 `WHERE (createdAt, id) > (?, ?)` 方式查询。
+> **cursor 编码**：将 `id + 排序值` 组合 Base64 编码作为 cursor 传递，服务端解码后用 `WHERE (createdAt, id) > (?, ?)` 方式查询。
 
 ---
 
@@ -435,7 +435,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
 | 存储方式 | Access Token 存内存/HttpOnly Cookie；Refresh Token 存 HttpOnly Cookie |
 | 关键声明 | `sub`(用户ID), `iat`(签发时间), `exp`(过期时间), `roles`(角色) |
 
-> ⚠️ JWT 不要存 `localStorage` —— XSS 攻击可窃取。推荐 HttpOnly Cookie + CSRF Token 方案。
+> JWT 不要存 `localStorage` —— XSS 攻击可窃取。推荐 HttpOnly Cookie + CSRF Token 方案。
 
 ### 6.2 请求签名校验（HMAC）
 
@@ -505,7 +505,7 @@ public class CorsConfig implements WebMvcConfigurer {
 }
 ```
 
-> ⚠️ 生产环境不要使用 `allowedOrigins("*")`，应明确指定允许的域名。
+> 生产环境不要使用 `allowedOrigins("*")`，应明确指定允许的域名。
 
 ---
 
@@ -626,7 +626,7 @@ CREATE TABLE payment (
 );
 ```
 
-> 💡 **Stripe API 的做法**：Stripe 要求每个 POST 请求携带 `Idempotency-Key` 头，同个 Key 多次请求只生效一次，返回相同结果。这是对外 API 幂等设计的最佳参考。
+> **Stripe API 的做法**：Stripe 要求每个 POST 请求携带 `Idempotency-Key` 头，同个 Key 多次请求只生效一次，返回相同结果。这是对外 API 幂等设计的最佳参考。
 
 ---
 
@@ -980,7 +980,7 @@ Authorization: bearer ghp_...
 | **限流信息在响应头** | `X-RateLimit-Limit`、`X-RateLimit-Remaining`、`X-RateLimit-Reset` |
 | **两套 API** | REST（通用）+ GraphQL（灵活），让用户按需选择 |
 
-> 🎯 **核心启示**：好的 API 设计不是功能堆砌，而是定义清晰的**契约**——让调用方在无需阅读文档的情况下，通过 HTTP 语义、状态码和响应结构就能正确使用你的 API。
+> **核心启示**：好的 API 设计不是功能堆砌，而是定义清晰的**契约**——让调用方在无需阅读文档的情况下，通过 HTTP 语义、状态码和响应结构就能正确使用你的 API。
 
 ---
 

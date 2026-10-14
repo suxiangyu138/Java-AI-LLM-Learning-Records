@@ -1,5 +1,5 @@
 # SpringMVC 必做项目清单 面试问答
-> 🎯 基于 SpringMVC 项目实战清单，涵盖面试高频问题与完美解答方案，帮助你在面试中脱颖而出。
+> 基于 SpringMVC 项目实战清单，涵盖面试高频问题与完美解答方案，帮助你在面试中脱颖而出。
 
 ## 目录
 1. [基础概念与核心原理](#1-基础概念与核心原理)
@@ -11,7 +11,7 @@
 
 ## 1. 基础概念与核心原理
 
-> 💡 面试官在这一环节考察你的基本功是否扎实
+> 面试官在这一环节考察你的基本功是否扎实
 
 ### Q1：请说一下 SpringMVC 的请求处理流程（执行原理）
 
@@ -84,7 +84,7 @@ public class DispatcherServlet extends HttpServlet {
 }
 ```
 
-> 💡 理解了这个流程，就理解了 SpringMVC 的"约定优于配置"是怎么做到的——请求来了，找谁处理、怎么适配、怎么响应，都是框架已经安排好的。
+> 理解了这个流程，就理解了 SpringMVC 的"约定优于配置"是怎么做到的——请求来了，找谁处理、怎么适配、怎么响应，都是框架已经安排好的。
 
 ---
 
@@ -139,7 +139,7 @@ public @interface RestController {
 }
 ```
 
-> 💡 一个常见的坑：在 @RestController 中 try-catch 异常后手动返回 Result，但没有使用全局异常处理，导致异常信息不一致。正确做法是**统一用 @RestControllerAdvice 处理异常**，而不是在每个方法中 try-catch。
+> 一个常见的坑：在 @RestController 中 try-catch 异常后手动返回 Result，但没有使用全局异常处理，导致异常信息不一致。正确做法是**统一用 @RestControllerAdvice 处理异常**，而不是在每个方法中 try-catch。
 
 ---
 
@@ -224,7 +224,7 @@ public class UserController {
 
 ## 2. 项目实战深度问答
 
-> 💡 面试官会深挖你的项目细节，验证你"真的做过"而不是"背过"
+> 面试官会深挖你的项目细节，验证你"真的做过"而不是"背过"
 
 ### Q4：你在用户登录注册系统中，怎么处理 Session 管理、密码加密和登录拦截的？
 
@@ -441,7 +441,7 @@ public class GlobalExceptionHandler {
 }
 ```
 
-> 💡 好的异常处理一定要**分类**：给用户看友好的提示，给排查人员看详细的日志。不要把堆栈信息抛给前端，也不要只打日志不给用户反馈。
+> 好的异常处理一定要**分类**：给用户看友好的提示，给排查人员看详细的日志。不要把堆栈信息抛给前端，也不要只打日志不给用户反馈。
 
 ---
 
@@ -623,7 +623,7 @@ public Result<Void> uploadChunk(
 
 ## 3. 进阶与系统设计
 
-> 💡 这是拉开差距的环节，考察架构思维
+> 这是拉开差距的环节，考察架构思维
 
 ### Q8：请设计一个完整的后台权限管理系统，说说表结构和拦截逻辑
 
@@ -786,13 +786,13 @@ public class LoginInterceptor implements HandlerInterceptor {
 }
 ```
 
-> 💡 总结：**跟 Servlet 请求本身相关的用 Filter，跟业务逻辑相关的用 Interceptor**。Filter 优先级更高、范围更广；Interceptor 更细粒度、更容易和 Spring 集成。
+> 总结：**跟 Servlet 请求本身相关的用 Filter，跟业务逻辑相关的用 Interceptor**。Filter 优先级更高、范围更广；Interceptor 更细粒度、更容易和 Spring 集成。
 
 ---
 
 ## 4. 场景题与故障排查
 
-> 💡 考察实际解决问题的能力
+> 考察实际解决问题的能力
 
 ### Q10：你遇到过乱码问题吗？在 SpringMVC 项目中怎么解决的？
 
@@ -870,7 +870,7 @@ public class WebConfig implements WebMvcConfigurer {
 jdbc:mysql://localhost:3306/db_name?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai
 ```
 
-> 💡 解决乱码的核心原则是保证**所有环节编码一致**：页面编码 -> 请求编码 -> 应用编码 -> 数据库编码全部统一为 UTF-8。
+> 解决乱码的核心原则是保证**所有环节编码一致**：页面编码 -> 请求编码 -> 应用编码 -> 数据库编码全部统一为 UTF-8。
 
 ---
 
@@ -1024,11 +1024,11 @@ public class LoginInterceptor implements HandlerInterceptor {
 }
 ```
 
-> 💡 最佳实践是**在 `addInterceptors` 中使用 `excludePathPatterns` 明确排除静态资源路径**，而不是在拦截器代码中硬编码判断。
+> 最佳实践是**在 `addInterceptors` 中使用 `excludePathPatterns` 明确排除静态资源路径**，而不是在拦截器代码中硬编码判断。
 
 ---
 
-## 💎 面试加分金句
+## 面试加分金句
 
 1. "理解 SpringMVC 最重要的就是理解 **DispatcherServlet 的分发逻辑**——从请求到 HandlerMapping 到 HandlerAdapter 再到 ViewResolver，每个组件各自做一件事，贯穿起来就是一个完整的请求处理链路。"
 2. "在 SSM 项目中，我最重视的是**三层架构的清晰分离**——Controller 只做参数校验和结果返回，Service 只做业务逻辑，Mapper 只做数据操作。每一层不乱入其他职责。"
@@ -1038,7 +1038,7 @@ public class LoginInterceptor implements HandlerInterceptor {
 
 ---
 
-## 📋 高频追问清单
+## 高频追问清单
 
 | 追问方向 | 应对策略 |
 |----------|----------|
@@ -1050,7 +1050,7 @@ public class LoginInterceptor implements HandlerInterceptor {
 
 ---
 
-## 🔗 关联知识点
+## 关联知识点
 
 - [Spring必做项目清单-面试问答](Spring必做项目清单-面试问答.md) — IoC/AOP 底层原理
 - [SpringBoot必做项目清单-面试问答](SpringBoot必做项目清单-面试问答.md) — SpringBoot 自动配置与项目实战

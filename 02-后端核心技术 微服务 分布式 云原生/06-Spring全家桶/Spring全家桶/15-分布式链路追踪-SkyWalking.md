@@ -1,5 +1,5 @@
 # 15-分布式链路追踪-SkyWalking
-> 🎯 SkyWalking是Apache顶级开源分布式链路追踪系统 — 掌握Trace可视化、性能监控、告警体系三大核心能力，是微服务排障与性能优化的必备技能
+> SkyWalking是Apache顶级开源分布式链路追踪系统 — 掌握Trace可视化、性能监控、告警体系三大核心能力，是微服务排障与性能优化的必备技能
 
 ---
 
@@ -20,7 +20,7 @@
 ### 1.1 知识定位
 - **归属**：Spring全家桶与微服务 → 层级2 P1就业必备 → 微服务可观测性基础设施
 - **前置依赖**：Spring Cloud微服务体系（服务注册发现、OpenFeign、Gateway）、Docker基础
-- **重要性**：⭐⭐⭐⭐⭐（生产环境微服务排障的"眼睛"，大厂面试必问）
+- **重要性**：★★★★★（生产环境微服务排障的"眼睛"，大厂面试必问）
 
 ### 1.2 三层学习目标
 
@@ -61,7 +61,7 @@ Console/Fiddler        SkyWalking/Zipkin          OpenTelemetry
 | **错误排查** | 看日志就能找到 | 日志分散在N台机器上 |
 | **调用关系** | 直接看代码 | 需要动态拓扑发现 |
 
-> 💡 **一句话**：链路追踪就是给每个请求发一个"身份证"（TraceId），让所有经过的服务都能被串联起来。
+> **一句话**：链路追踪就是给每个请求发一个"身份证"（TraceId），让所有经过的服务都能被串联起来。
 
 #### 2.1.2 核心概念
 
@@ -85,10 +85,10 @@ Trace (TraceId: abc123)
     │   │       └── Span (SpanId: E, ParentSpanId: D) ← MySQL查询
     │   └── Span (SpanId: F, ParentSpanId: A)      ← Redis缓存访问
     │
-    └── ⏱ 总耗时 = A.endTime - A.startTime
+    └── 总耗时 = A.endTime - A.startTime
 ```
 
-> 🎯 **核心洞察**：Span的树形结构还原了请求的完整调用链，每个Span记录的信息包括：操作名称、开始/结束时间、状态（成功/失败）、标签（KV键值对）和日志（关键事件）。
+> **核心洞察**：Span的树形结构还原了请求的完整调用链，每个Span记录的信息包括：操作名称、开始/结束时间、状态（成功/失败）、标签（KV键值对）和日志（关键事件）。
 
 #### 2.1.4 链路追踪数据模型
 
@@ -143,7 +143,7 @@ Span {
                         └────────────────┘
 ```
 
-> ⚠️ **架构关键点**：Agent与OAP之间是**gRPC通信**（非HTTP），OAP与UI之间是**HTTP/GraphQL通信**，存储后端对接多种数据库。
+> **架构关键点**：Agent与OAP之间是**gRPC通信**（非HTTP），OAP与UI之间是**HTTP/GraphQL通信**，存储后端对接多种数据库。
 
 #### 2.2.2 三大组件职责
 
@@ -198,7 +198,7 @@ agent.cross_thread_span=${SW_AGENT_CROSS_THREAD:true}
 agent.memory_pool_metric_threshold=${SW_AGENT_MEMORY_POOL_METRIC_THRESHOLD:1000}
 ```
 
-> 💡 **核心优势**：SkyWalking Agent采用**无侵入式接入**，与Spring Boot、Spring Cloud、Tomcat、Dubbo、gRPC、MySQL等主流框架和中间件天然兼容，开箱即用。
+> **核心优势**：SkyWalking Agent采用**无侵入式接入**，与Spring Boot、Spring Cloud、Tomcat、Dubbo、gRPC、MySQL等主流框架和中间件天然兼容，开箱即用。
 
 #### 2.3.2 Agent支持的中间件插件
 
@@ -282,7 +282,7 @@ OAP Server
 | **MySQL** | 开发/测试环境 | 部署简单、查看方便 | 大并发写入性能差、不适合生产 |
 | **H2** | 本地快速体验 | 嵌入运行、零配置 | 仅用于演示，数据不持久 |
 
-> 💡 **选型推荐**：生产环境优先选择**Elasticsearch**（社区成熟、文档丰富）；如果对资源有极致要求且能承担稳定性风险，可以考虑BanyanDB。
+> **选型推荐**：生产环境优先选择**Elasticsearch**（社区成熟、文档丰富）；如果对资源有极致要求且能承担稳定性风险，可以考虑BanyanDB。
 
 ### 2.4 Trace可视化与分析
 
@@ -327,7 +327,7 @@ Span 0: GET /api/order/detail               耗时: 2.35s   │ ─────�
 └── Span 7: Gateway路由处理                   耗时: 0.01s   │
 ```
 
-> 🎯 **定位瓶颈三板斧**：
+> **定位瓶颈三板斧**：
 > 1. 按耗时降序排列，找到耗时最长的Span
 > 2. 查看该Span的tags，确认是SQL/HTTP/Redis/业务逻辑
 > 3. 结合日志中的TraceId精准定位具体代码行
@@ -374,7 +374,7 @@ SkyWalking从三个层次提供性能指标：
                                 └──────────┘
 ```
 
-> 💡 **健康判断标准**：拓扑图上如果某个服务变为黄色，表示P99耗时超过1s；变为红色表示错误率超过10%。
+> **健康判断标准**：拓扑图上如果某个服务变为黄色，表示P99耗时超过1s；变为红色表示错误率超过10%。
 
 #### 2.5.3 服务实例热力图
 
@@ -398,7 +398,7 @@ SkyWalking从三个层次提供性能指标：
 SkyWalking的告警规则配置位于 `config/alarm-settings.yml`：
 
 ```yaml
-# ⚠️ 告警规则：基于指标阈值
+# 告警规则：基于指标阈值
 rules:
   # 规则1：端点P99耗时超过1000ms
   endpoint_p99_rule:
@@ -437,7 +437,7 @@ rules:
     silence-period: 3
     message: 实例 {name} GC次数 {value} 超过阈值 {threshold}
 
-# 🔗 Webhook回调配置（当告警触发时，SkyWalking调用此HTTP接口）
+# Webhook回调配置（当告警触发时，SkyWalking调用此HTTP接口）
 webhooks:
   # 企业微信Webhook
   - url: https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=xxx
@@ -478,20 +478,20 @@ webhooks:
 | **语言支持** | Java、.NET、Go、Node.js、Python、PHP | Java、Go、JavaScript、.NET、Python | Go、Java、Node.js、Python、C++ |
 | **协议** | gRPC + HTTP | HTTP + Kafka | gRPC + HTTP |
 | **存储后端** | Elasticsearch、BanyanDB、MySQL、H2 | Cassandra、Elasticsearch、MySQL | Elasticsearch、Kafka、Cassandra、Badger |
-| **拓扑自动发现** | ✅ 自动生成服务拓扑 | ❌ 需要额外组件 | ❌ 部分支持 |
-| **告警引擎** | ✅ 内置完整告警 | ❌ 无内置告警 | ❌ 需搭配Prometheus |
-| **方法级Profile** | ✅ 线程采样分析 | ❌ | ❌ |
-| **性能指标** | ✅ 内置JVM/服务/端点指标 | ❌ 仅Trace | ❌ 仅Trace+部分指标 |
-| **日志集成** | ✅ TraceId自动注入日志 | ⚠️ 需手动配置 | ⚠️ 需手动配置 |
-| **告警Webhook** | ✅ 内置 | ❌ | ❌ |
-| **OpenTelemetry兼容** | ✅ 支持OTLP协议 | ✅ 原生支持 | ✅ 原生支持 |
-| **UI易用性** | ⭐⭐⭐⭐⭐ 功能全面 | ⭐⭐⭐ 简洁但功能少 | ⭐⭐⭐⭐ 清晰但功能中等 |
+| **拓扑自动发现** | ✓ 自动生成服务拓扑 | ✗ 需要额外组件 | ✗ 部分支持 |
+| **告警引擎** | ✓ 内置完整告警 | ✗ 无内置告警 | ✗ 需搭配Prometheus |
+| **方法级Profile** | ✓ 线程采样分析 | ✗ | ✗ |
+| **性能指标** | ✓ 内置JVM/服务/端点指标 | ✗ 仅Trace | ✗ 仅Trace+部分指标 |
+| **日志集成** | ✓ TraceId自动注入日志 | 需手动配置 | 需手动配置 |
+| **告警Webhook** | ✓ 内置 | ✗ | ✗ |
+| **OpenTelemetry兼容** | ✓ 支持OTLP协议 | ✓ 原生支持 | ✓ 原生支持 |
+| **UI易用性** | ★★★★★ 功能全面 | ★★★ 简洁但功能少 | ★★★★ 清晰但功能中等 |
 | **性能开销** | 低（~5%性能影响） | 中（~10%性能影响） | 中（~10%性能影响） |
 | **学习成本** | 低（Agent接入） | 中（需写拦截代码） | 中（需写拦截代码） |
 | **社区活跃度** | 高（Apache顶级项目） | 中（维护期） | 高（CNCF毕业项目） |
-| **生产环境推荐** | ✅ 首选（Java强生态） | ⚠️ 配合Spring Cloud Sleuth | ⚠️ 多语言环境 |
+| **生产环境推荐** | ✓ 首选（Java强生态） | 配合Spring Cloud Sleuth | 多语言环境 |
 
-> 🎯 **选型结论**：
+> **选型结论**：
 > - **Java微服务技术栈 → SkyWalking**（Agent无侵入、功能最全、运维成本最低）
 > - **Spring Cloud + 轻量需求 → Zipkin**（配合Spring Cloud Sleuth/Micrometer Tracing快速集成）
 > - **多语言混合架构 → Jaeger**（CNCF标准、OpenTelemetry生态好）
@@ -503,25 +503,25 @@ webhooks:
 ### 3.1 Agent挂载失败
 
 ```text
-❌ 错误现象：
+✗ 错误现象：
 java.lang.reflect.MalformedParametersException: Malformed parameter list
     at ...
     at java.base/java.lang.reflect.Executable.getParameters(Executable.java:...)
 
-✅ 原因与解决方案：
+✓ 原因与解决方案：
 - 原因：Java版本不兼容（SkyWalking 8.x最高支持Java 11，9.x才支持Java 17+）
 - 解决：升级SkyWalking版本到9.x+，或者降级JDK到11
 ```
 
-> ⚠️ **兼容性检查**：SkyWalking 9.0+ 支持 Java 8-21，低于9.0不支持Java 17。在升级JDK时务必同步升级SkyWalking版本。
+> **兼容性检查**：SkyWalking 9.0+ 支持 Java 8-21，低于9.0不支持Java 17。在升级JDK时务必同步升级SkyWalking版本。
 
 ### 3.2 Agent不生效
 
 ```text
-❌ 错误现象：
+✗ 错误现象：
 接入Agent后SkyWalking UI中看不到服务数据
 
-✅ 排查步骤：
+✓ 排查步骤：
 1. 检查Agent日志：logs/skywalking-agent.log
    └── 常见错误：collector.backend_service 地址配错
 2. 确认OAP Server是否正常（11800端口连通性）
@@ -533,25 +533,25 @@ java.lang.reflect.MalformedParametersException: Malformed parameter list
 ### 3.3 采样率过高导致OAP OOM
 
 ```text
-❌ 错误现象：
+✗ 错误现象：
 OAP Server频繁Full GC或直接OOM崩溃
 
-✅ 原因与解决方案：
+✓ 原因与解决方案：
 - 原因：高并发场景下100%全量采样，Agent上报量过大
 - 解决：合理配置采样率
   agent.sample_n_per_3_secs=${SW_AGENT_SAMPLE:3}
   （每3秒采样3条，默认-1表示全量）
 ```
 
-> 💡 **生产采样建议**：日常环境3秒采样3条即可（sample_n_per_3_secs=3），问题排查时临时调高。
+> **生产采样建议**：日常环境3秒采样3条即可（sample_n_per_3_secs=3），问题排查时临时调高。
 
 ### 3.4 存储索引太大导致ES磁盘爆满
 
 ```text
-❌ 错误现象：
+✗ 错误现象：
 Elasticsearch yellow/red status，磁盘使用率超过85%
 
-✅ 解决方案：
+✓ 解决方案：
 1. SkyWalking 8.x默认索引TTL：
    - Trace数据：3天
    - Metrics数据：7天
@@ -568,10 +568,10 @@ Elasticsearch yellow/red status，磁盘使用率超过85%
 ### 3.5 TraceId与日志不关联
 
 ```text
-❌ 错误现象：
+✗ 错误现象：
 日志中有TraceId但和SkyWalking中的TraceId不一致，或日志中根本没有TraceId
 
-✅ 解决方案：
+✓ 解决方案：
 1. 检查logback-spring.xml中是否配置了%X{tid}（SkyWalking的MDC key是"tid"，不是"traceId"！）
 2. SkyWalking 8.4.0+ 通过以下配置开启TraceId注入：
    - agent.correlation.auto_tag=true
@@ -581,10 +581,10 @@ Elasticsearch yellow/red status，磁盘使用率超过85%
 ### 3.6 跨线程链路断裂
 
 ```text
-❌ 错误现象：
+✗ 错误现象：
 异步线程（@Async、CompletableFuture）中的Span没有父Span，链路在异步处断裂
 
-✅ 解决方案：
+✓ 解决方案：
 1. 对于Spring @Async，SkyWalking Agent自动处理（需开启cross_thread_span）
 2. 手动传递TraceContext：
    TracingContext.INSTANCE.capture()      → 在父线程创建快照
@@ -620,7 +620,7 @@ TraceId: (     ①      )
     │   │   └── Span: spanId=(      ④     ), parentSpanId=B, operationName="[SQL] SELECT * FROM order"  ← MySQL
 ```
 
-> 💡 答案：① `abc123`（任意全局唯一值）、② `A`、③ `B`、④ `E`
+> 答案：① `abc123`（任意全局唯一值）、② `A`、③ `B`、④ `E`
 
 ### 4.2 配置题
 
@@ -633,7 +633,7 @@ agent.sample_n_per_3_secs=-1
 agent.ignore_excluded_paths=/health,/actuator
 ```
 
-> ⚠️ **错误点**：OAP gRPC端口是`11800`，不是`12800`。`12800`是HTTP/GraphQL端口（UI连接用）。修正：`collector.backend_service=127.0.0.1:11800`。
+> **错误点**：OAP gRPC端口是`11800`，不是`12800`。`12800`是HTTP/GraphQL端口（UI连接用）。修正：`collector.backend_service=127.0.0.1:11800`。
 
 ### 4.3 连线题
 
@@ -645,13 +645,13 @@ agent.ignore_excluded_paths=/health,/actuator
 | 12800 | B. Agent与OAP(gRPC) |
 | 8080 (Webapp) | C. OAP GraphQL查询接口 |
 
-> 💡 答案：11800→B, 12800→C, 8080→A
+> 答案：11800→B, 12800→C, 8080→A
 
 ---
 
 ## 5. 章节综合实操案例
 
-> 🎯 **目标**：搭建一个完整的微服务Demo（order-service + user-service），接入SkyWalking实现链路追踪，并通过UI定位一个慢SQL查询。
+> **目标**：搭建一个完整的微服务Demo（order-service + user-service），接入SkyWalking实现链路追踪，并通过UI定位一个慢SQL查询。
 
 ### 5.1 项目结构
 
@@ -684,7 +684,7 @@ skywalking-demo/
 
 ```yaml
 # docker-compose.yml
-# ⚠️ 启动命令：docker-compose up -d
+# 启动命令：docker-compose up -d
 # 前置依赖：Docker Engine 20.10+、Docker Compose 2.x+
 
 version: '3.8'
@@ -752,7 +752,7 @@ networks:
     driver: bridge
 ```
 
-> 💡 **启动验证**：`docker-compose ps` 确认三个服务状态为"Up"。访问 `http://localhost:8080` 确认SkyWalking UI正常加载。
+> **启动验证**：`docker-compose ps` 确认三个服务状态为"Up"。访问 `http://localhost:8080` 确认SkyWalking UI正常加载。
 
 ### 5.3 微服务项目配置
 
@@ -1253,7 +1253,7 @@ java -javaagent:/path/to/agent/skywalking-agent.jar \
      -jar user-service.jar
 ```
 
-> 💡 **IDEA开发环境配置**：在IDEA的 Run Configurations → VM options 中添加：
+> **IDEA开发环境配置**：在IDEA的 Run Configurations → VM options 中添加：
 > `-javaagent:D:\path\to\agent\skywalking-agent.jar -Dskywalking.agent.service_name=order-service -Dskywalking.collector.backend_service=127.0.0.1:11800`
 
 ### 5.5 构造请求并观察Trace
@@ -1318,7 +1318,7 @@ curl http://localhost:8081/api/order/detail/9999
 
 ### 5.6 TraceId集成到日志
 
-> 🎯 **目标**：让日志打印中包含TraceId，实现"日志←→链路"双向关联。
+> **目标**：让日志打印中包含TraceId，实现"日志←→链路"双向关联。
 
 **logback-spring.xml**：
 
@@ -1331,7 +1331,7 @@ curl http://localhost:8081/api/order/detail/9999
     <!-- 控制台输出 -->
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-            <!-- 👇 核心：在pattern中加入 %tid 输出TraceId -->
+            <!-- 核心：在pattern中加入 %tid 输出TraceId -->
             <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] [%X{tid}] %-5level %logger{50} - %msg%n</pattern>
         </encoder>
     </appender>
@@ -1368,7 +1368,7 @@ curl http://localhost:8081/api/order/detail/9999
 2026-07-26 14:30:47.123 [http-nio-8081-exec-1] [abc123def456ghi] WARN  c.d.o.service.OrderService - 用户服务响应耗时较长：1680ms
 ```
 
-> ⚠️ **关键细节**：SkyWalking的MDC key是`tid`，不是`traceId`，也不是`trace_id`！在logback pattern中必须写`%X{tid}`。
+> **关键细节**：SkyWalking的MDC key是`tid`，不是`traceId`，也不是`trace_id`！在logback pattern中必须写`%X{tid}`。
 
 ### 5.7 AOP自定义Trace注解
 
@@ -1598,7 +1598,7 @@ rules:
     message: 端点 {name} P99耗时 {value}ms
 ```
 
-> ⚠️ **提示**：`op: "<"`表示小于阈值时触发告警，而我们需要的是**大于**阈值时触发。应改为 `op: ">"`。
+> **提示**：`op: "<"`表示小于阈值时触发告警，而我们需要的是**大于**阈值时触发。应改为 `op: ">"`。
 
 **题目10**：在SkyWalking UI中，如何通过Trace详情页快速判断一个请求的瓶颈在哪个环节？请写出至少3个判断维度。
 
@@ -1760,7 +1760,7 @@ public class MyCustomPlugin extends AbstractClassEnhancePluginDefine {
 my-custom-plugin=com.mycompany.plugin.MyCustomPlugin
 ```
 
-> 💡 **插件开发三要素**：① `enhanceClass()` 指定增强哪个类；② `getMethodsMatcher()` 指定增强哪个方法；③ 拦截器中创建Span。
+> **插件开发三要素**：① `enhanceClass()` 指定增强哪个类；② `getMethodsMatcher()` 指定增强哪个方法；③ 拦截器中创建Span。
 
 ### 8.2 BanyanDB原生存储
 
@@ -1834,7 +1834,7 @@ SkyWalking 9.x引入了eBPF（Extended Berkeley Packet Filter）支持，将可�
 | **Service Mesh兼容** | 与Istio/Envoy配合 | 无侵入sidecar数据采集 |
 | **TCP丢包检测** | 监控TCP重传和RTT | 网络质量监控 |
 
-> 💡 **eBPF定位**：eBPF解决的是"内核态"的可观测性，与SkyWalking Agent的"应用态"追踪互补。目前仍在快速发展中，适合对内核排障有高要求的团队。
+> **eBPF定位**：eBPF解决的是"内核态"的可观测性，与SkyWalking Agent的"应用态"追踪互补。目前仍在快速发展中，适合对内核排障有高要求的团队。
 
 ### 8.4 SkyWalking与OpenTelemetry集成
 
@@ -1880,7 +1880,7 @@ receiver:
 | **监控OAP本身** | 对OAP也部署SkyWalking Agent | 避免"谁来监控监控系统" |
 | **日志级别** | OAP生产环境用WARN，Agent用INFO | Agent日志过多影响磁盘IO |
 
-> 🎯 **终极建议**：在生产环境部署SkyWalking前，一定要先做压力测试 + 索引TTL验证，确保存储不会在高峰期打爆。
+> **终极建议**：在生产环境部署SkyWalking前，一定要先做压力测试 + 索引TTL验证，确保存储不会在高峰期打爆。
 
 ---
 

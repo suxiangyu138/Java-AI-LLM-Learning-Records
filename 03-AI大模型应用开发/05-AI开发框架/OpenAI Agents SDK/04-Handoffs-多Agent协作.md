@@ -2,7 +2,7 @@
 
 > SDK 多 Agent 的核心机制：Handoffs 是一等字段（Agent 直接声明可交接对象）、Typed Handoffs 传递结构化数据、Agents as Tools 让子 Agent 作工具——"交接是 SDK 的灵魂"。
 
-## 📚 目录
+## 目录
 
 1. [为什么交接是核心](#1-为什么交接是核心)
 2. [Handoffs 机制](#2-handoffs-机制)
@@ -287,7 +287,7 @@ Tracing 记录 HandoffSpanData：
 | "交接后父 Agent 结束" | 取决于模式（Agents as Tools 父继续） |
 | "最终答案对 = 交接对" | 要单独评估交接正确性 |
 
-> 🎯 核心要点：Handoffs = 移交控制权（一等字段）；Typed 结构化传递（免总结）；Agents as Tools = 子 Agent 作工具（父保留控制）；三种多 Agent 模式（领域交接/主管下属/流水线）；交接正确性要单独评估（≥0.90）；工程细节（历史分区/输入过滤/HandoffSpanData 追踪）；final_agent 可验证交接。
+> 核心要点：Handoffs = 移交控制权（一等字段）；Typed 结构化传递（免总结）；Agents as Tools = 子 Agent 作工具（父保留控制）；三种多 Agent 模式（领域交接/主管下属/流水线）；交接正确性要单独评估（≥0.90）；工程细节（历史分区/输入过滤/HandoffSpanData 追踪）；final_agent 可验证交接。
 
 ---
 

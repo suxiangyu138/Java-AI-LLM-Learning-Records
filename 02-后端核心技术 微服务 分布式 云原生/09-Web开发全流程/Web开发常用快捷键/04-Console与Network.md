@@ -6,7 +6,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [Console 面板快捷键](#1-console-面板快捷键)
 2. [Console 快捷引用（$0 等）](#2-console-快捷引用0-等)
@@ -220,19 +220,19 @@ Copy as cURL 的场景
 
 ```text
 Network 排查常见问题
-├── ⚠️ 请求没出现在列表 → 检查 Preserve log/录制状态
-├── ⚠️ 请求被缓存 → 勾选 Disable cache（Network 设置）
-├── ⚠️ CORS 错误 → 看 Response Headers 的 Access-Control-*
-├── ⚠️ 请求 pending 很久 → Timing 看哪段耗时
-├── ⚠️ 找不到接口 → 全局搜索 Ctrl+Shift+F 搜 URL 关键字
-└── ⚠️ 线上接口排查 → Overrides 本地覆盖 + 日志断点
+├── 请求没出现在列表 → 检查 Preserve log/录制状态
+├── 请求被缓存 → 勾选 Disable cache（Network 设置）
+├── CORS 错误 → 看 Response Headers 的 Access-Control-*
+├── 请求 pending 很久 → Timing 看哪段耗时
+├── 找不到接口 → 全局搜索 Ctrl+Shift+F 搜 URL 关键字
+└── 线上接口排查 → Overrides 本地覆盖 + 日志断点
 ```
 
 ---
 
 ## 7. 核心要点
 
-> 🎯 **核心要点**：
+> **核心要点**：
 > 1. Console 操作：Ctrl+Shift+J 直达 / Shift+Enter 多行 / Ctrl+L 清屏 / Ctrl+F 搜索
 > 2. **快捷引用**：$0（选中元素）/$_（上次结果）/$()/$$()/$x()——Console 与 Elements 联动
 > 3. 输出进阶：console.table（表格）/console.time（计时）/console.group（分组）——可读性暴增

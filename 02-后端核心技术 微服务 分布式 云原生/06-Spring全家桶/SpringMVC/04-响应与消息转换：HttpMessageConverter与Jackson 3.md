@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [消息转换器链与工作流程](#1-消息转换器链与工作流程)
 2. [Jackson 3 迁移：包名与类名重命名](#2-jackson-3-迁移包名与类名重命名)
@@ -47,7 +47,7 @@ public interface HttpMessageConverter<T> {
 | `MappingJackson2XmlHttpMessageConverter` → `JacksonXmlHttpMessageConverter` | XML（引入 jackson-xml） |
 | Protobuf 等 | 按依赖注册 |
 
-> 🎯 **核心要点**：转换器链 = 按"类型 + 媒体类型"匹配的适配器列表。**每个格式（JSON/XML/字节）是一个转换器**，自定义格式就是写一个转换器注册进链。
+> **核心要点**：转换器链 = 按"类型 + 媒体类型"匹配的适配器列表。**每个格式（JSON/XML/字节）是一个转换器**，自定义格式就是写一个转换器注册进链。
 
 ## 2. Jackson 3 迁移：包名与类名重命名
 
@@ -81,7 +81,7 @@ Jackson 3：tools.jackson.databind.JsonMapper
 | `AbstractJackson2HttpMessageConverter` | `AbstractJacksonHttpMessageConverter` |
 | `Jackson2ObjectMapperBuilder` | 无对应（用 Jackson 原生 builder） |
 
-> ⚠️ **迁移提醒**：7.0 默认支持 Jackson 3（类路径有 `tools.jackson` 时），Jackson 2 作为 fallback 仍可用但 deprecated（7.1 计划禁用自动探测、7.2 移除）。**新代码一律用 Jackson 3 类名**；升级后先跑接口回归（字段顺序、斜杠转义、日期格式三类差异最容易漏）。
+> **迁移提醒**：7.0 默认支持 Jackson 3（类路径有 `tools.jackson` 时），Jackson 2 作为 fallback 仍可用但 deprecated（7.1 计划禁用自动探测、7.2 移除）。**新代码一律用 Jackson 3 类名**；升级后先跑接口回归（字段顺序、斜杠转义、日期格式三类差异最容易漏）。
 
 ## 3. SmartHttpMessageConverter 与 hint 机制
 
@@ -128,7 +128,7 @@ public class UserController {
 | `RequestBodyAdvice.determineReadHints` | 读方向 hint 定制（7.0 新钩子） |
 | `ResponseBodyAdvice.determineWriteHints` | 写方向 hint 定制（7.0 新钩子） |
 
-> 💡 **实践**：@JsonView 是"同实体多视图输出"的标准答案（列表精简、详情完整、脱敏字段隔离），比"写两个 DTO"省一半代码。
+> **实践**：@JsonView 是"同实体多视图输出"的标准答案（列表精简、详情完整、脱敏字段隔离），比"写两个 DTO"省一半代码。
 
 ## 4. Jackson 3 配置定制
 
@@ -162,7 +162,7 @@ JsonMapperBuilderCustomizer jsonCustomizer() {
 | 驼峰/下划线互转 | `property-naming-strategy: SNAKE_CASE` |
 | 字段顺序恢复声明序 | `SORT_PROPERTIES_ALPHABETICALLY=false` |
 
-> ⚠️ **日期注意**：Jackson 3 默认 ISO-8601 字符串输出——**依赖时间戳格式（epoch）的旧客户端在升级后解析会失败**；LocalDateTime 无时区语义，跨时区接口用 `@JsonFormat(pattern, timezone)` 显式声明。
+> **日期注意**：Jackson 3 默认 ISO-8601 字符串输出——**依赖时间戳格式（epoch）的旧客户端在升级后解析会失败**；LocalDateTime 无时区语义，跨时区接口用 `@JsonFormat(pattern, timezone)` 显式声明。
 
 ## 5. 内容协商：Accept 与 produces
 
@@ -180,7 +180,7 @@ JsonMapperBuilderCustomizer jsonCustomizer() {
 | 参数协商（`?format=json`） | 可配置开启（默认关闭） |
 | 默认回退 | 无 Accept 时按 produces/首注册转换器 |
 
-> 💡 **实战**：只做 JSON 的 API 直接所有方法显式 `produces=JSON`——内容协商变成"纯 JSON"，行为完全确定，406 只在"客户端要了不该要的"时出现。
+> **实战**：只做 JSON 的 API 直接所有方法显式 `produces=JSON`——内容协商变成"纯 JSON"，行为完全确定，406 只在"客户端要了不该要的"时出现。
 
 ## 6. JSON 之外的格式：XML / Protobuf
 
@@ -206,7 +206,7 @@ public Report report() { ... }
 | Protobuf | ProtobufHttpMessageConverter | 高性能二进制（内部服务） |
 | YAML | JacksonYamlHttpMessageConverter | 配置类接口 |
 
-> 🎯 **要点**：多格式支持 = 依赖 + 转换器自动注册 + produces 声明，三步即可；**二进制格式（Protobuf）在内部高性能链路上是 JSON 的强替代**。
+> **要点**：多格式支持 = 依赖 + 转换器自动注册 + produces 声明，三步即可；**二进制格式（Protobuf）在内部高性能链路上是 JSON 的强替代**。
 
 ## 7. 常见坑与迁移清单
 
@@ -229,7 +229,7 @@ public Report report() { ... }
 - [ ] @JsonView 场景验证 hint 生效（7.0 新机制）
 - [ ] 自定义序列化器/反序列化器适配 Jackson 3 API
 
-> 🎯 **核心要点**：消息转换层 = 转换器链（类型×媒体类型匹配）+ Jackson 3（新包名/新类名/新默认行为）+ hint 机制（@JsonView 等意图传递）。升级 Boot 4 后**第一个要回归的就是接口响应**——字段顺序、斜杠转义、日期格式三个默认值变化足以让一堆客户端悄悄坏掉。
+> **核心要点**：消息转换层 = 转换器链（类型×媒体类型匹配）+ Jackson 3（新包名/新类名/新默认行为）+ hint 机制（@JsonView 等意图传递）。升级 Boot 4 后**第一个要回归的就是接口响应**——字段顺序、斜杠转义、日期格式三个默认值变化足以让一堆客户端悄悄坏掉。
 
 ---
 

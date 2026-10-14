@@ -1,10 +1,10 @@
 # Android 系统架构与演进
 
-> 🏗️ 从 Android 1.0 到 Android 16，从 Dalvik 到 ART，从 Linux Kernel 到 Framework —— 作为 Java 开发者，你必须理解的 Android 底层架构
+> 从 Android 1.0 到 Android 16，从 Dalvik 到 ART，从 Linux Kernel 到 Framework —— 作为 Java 开发者，你必须理解的 Android 底层架构
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [Android 版本演进简史](#1-android-版本演进简史)
 2. [Android 系统架构全景](#2-android-系统架构全景)
@@ -49,7 +49,7 @@ Android 独特的兼容设计：
 原则：编译用最新，minSdk 尽量低，targetSdk 保持最新
 ```
 
-> 💡 **关键认知**：Android 的版本碎片化远超 Web 前端，`minSdk` 决定了你能使用哪些 API 和 Jetpack 库。
+> **关键认知**：Android 的版本碎片化远超 Web 前端，`minSdk` 决定了你能使用哪些 API 和 Jetpack 库。
 
 ---
 
@@ -94,13 +94,13 @@ Android 独特的兼容设计：
 
 | 层级 | 技术栈 | Java 后端开发者的熟悉度 | 关键点 |
 |------|--------|:---:|------|
-| **Application** | Java/Kotlin + Android SDK | ✅ 直接写 | 业务逻辑层 |
-| **Framework** | Java 编写，提供 API | ✅ 直接调用 | Activity/Service 等即在此层 |
-| **ART + Native** | C/C++ + ART (AOT/JIT) | ⚠️ JNI 才接触 | `.java→.class→.dex→.odex` |
-| **HAL** | C/C++，厂商实现 | ❌ 不接触 | 硬件驱动接口 |
-| **Linux Kernel** | C，fork 自 Linux | ❌ 不接触 | Binder IPC、内存管理 |
+| **Application** | Java/Kotlin + Android SDK | ✓ 直接写 | 业务逻辑层 |
+| **Framework** | Java 编写，提供 API | ✓ 直接调用 | Activity/Service 等即在此层 |
+| **ART + Native** | C/C++ + ART (AOT/JIT) | JNI 才接触 | `.java→.class→.dex→.odex` |
+| **HAL** | C/C++，厂商实现 | ✗ 不接触 | 硬件驱动接口 |
+| **Linux Kernel** | C，fork 自 Linux | ✗ 不接触 | Binder IPC、内存管理 |
 
-> 🎯 **核心要点**：Android 本质上是一个 **Linux 系统** + **Java API 框架**。你写的 Android Java 代码运行在 ART 虚拟机上，ART 又运行在 Linux 内核之上。
+> **核心要点**：Android 本质上是一个 **Linux 系统** + **Java API 框架**。你写的 Android Java 代码运行在 ART 虚拟机上，ART 又运行在 Linux 内核之上。
 
 ---
 
@@ -149,16 +149,16 @@ unzip -l app-release.apk | grep ".dex"
 
 ```text
 Android 删除了标准 JDK 中的很多包：
-├── ❌ java.awt / javax.swing → 用 Android View/Compose
-├── ❌ java.rmi               → 用 Binder IPC
-├── ❌ javax.xml.ws           → 用 Retrofit
-├── ❌ javax.imageio          → 用 BitmapFactory
-├── ⚠️ java.beans             → 部分支持
-├── ⚠️ javax.crypto           → 存在但不完整（部分算法缺失）
-├── ✅ java.util              → 大部分可用（含 Stream, Optional since API 24）
-├── ✅ java.lang              → 几乎完整
-├── ✅ java.io / java.nio     → 可用
-└── ✅ java.net / java.sql    → 可用
+├── ✗ java.awt / javax.swing → 用 Android View/Compose
+├── ✗ java.rmi               → 用 Binder IPC
+├── ✗ javax.xml.ws           → 用 Retrofit
+├── ✗ javax.imageio          → 用 BitmapFactory
+├── java.beans             → 部分支持
+├── javax.crypto           → 存在但不完整（部分算法缺失）
+├── ✓ java.util              → 大部分可用（含 Stream, Optional since API 24）
+├── ✓ java.lang              → 几乎完整
+├── ✓ java.io / java.nio     → 可用
+└── ✓ java.net / java.sql    → 可用
 
 另外：
 - 反射被限制（Android 9+ 隐藏 API 灰名单/黑名单）
@@ -200,10 +200,10 @@ app-release.apk  (本质上是一个 ZIP 包)
 | 维度 | APK | AAB (App Bundle) |
 |------|:---:|:---:|
 | **发布格式** | 单一安装包 | 动态分发格式 |
-| **Google Play** | 直接上传 | ✅ **必须使用** (2021.08+) |
+| **Google Play** | 直接上传 | ✓ **必须使用** (2021.08+) |
 | **体积** | 包含所有架构的 .so | 按设备架构/语言/Dpi 切片 |
 | **下载大小** | 全量 | 减少 20-35% |
-| **动态功能** | ❌ | ✅ Dynamic Feature Modules |
+| **动态功能** | ✗ | ✓ Dynamic Feature Modules |
 
 ---
 
@@ -249,7 +249,7 @@ Android 进程优先级（从高到低）：
 5. 空进程 (Empty)             ← 缓存中，最快被杀死
 ```
 
-> 🎯 **核心要点**：Android 开发最大的思维转变 —— **你的进程随时可能被杀死**。必须通过 `onSaveInstanceState()`、ViewModel、持久化等机制保存状态。
+> **核心要点**：Android 开发最大的思维转变 —— **你的进程随时可能被杀死**。必须通过 `onSaveInstanceState()`、ViewModel、持久化等机制保存状态。
 
 ---
 

@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [Guava RateLimiter：令牌桶的 Java 表达](#1-guava-ratelimiter令牌桶的-java-表达)
 2. [SmoothBursty 与 SmoothWarmingUp](#2-smoothbursty-与-smoothwarmingup)
@@ -75,7 +75,7 @@ Sentinel 的 QPS 限流会按**拒绝策略**处理超出请求：直接拒绝�
 
 所以单机限流的适用场景是：**客户端侧防本地滥用、无状态工具类、以及作为分布式限流的本地兜底层**（[05 篇](05-分布式限流：Redis与多级限流.md) 的双层限流把单机哨兵放第一层，挡掉大部分本地流量，Redis 层只处理跨实例协调）。服务端生产限流必须走分布式方案，单机只是分布式的前奏。
 
-> 🎯 **核心要点**：Guava RateLimiter 用"storedPermits + nextFreeTicketMicros"惰性补令牌，无定时器无锁；SmoothBursty 容忍突发，SmoothWarmingUp 冷启动平滑保护；手写令牌桶的关键是时间差补充与原子扣减；Sentinel 用分槽采样实现 O(1) 内存的滑动窗口统计；单机限流各实例独立计数，服务端必须上分布式方案。
+> **核心要点**：Guava RateLimiter 用"storedPermits + nextFreeTicketMicros"惰性补令牌，无定时器无锁；SmoothBursty 容忍突发，SmoothWarmingUp 冷启动平滑保护；手写令牌桶的关键是时间差补充与原子扣减；Sentinel 用分槽采样实现 O(1) 内存的滑动窗口统计；单机限流各实例独立计数，服务端必须上分布式方案。
 
 ---
 

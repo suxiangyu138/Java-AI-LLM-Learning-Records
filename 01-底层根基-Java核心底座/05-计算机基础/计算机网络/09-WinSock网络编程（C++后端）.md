@@ -31,7 +31,7 @@ WinSock（Windows Sockets）是微软在Windows平台上对Berkeley Socket API�
 | **WinSock 2.0** | 重大升级，支持IPv4/IPv6双栈、多I/O模型、重叠I/O | ws2_32.dll |
 | **WinSock 2.2** | 当前主流版本，新增QoS、LSP等扩展能力 | ws2_32.dll |
 
-> **💡 实际开发中，所有新项目都应使用WinSock 2.2版本，链接`ws2_32.lib`并包含`<winsock2.h>`。**
+> **实际开发中，所有新项目都应使用WinSock 2.2版本，链接`ws2_32.lib`并包含`<winsock2.h>`。**
 
 ### 1.3 WinSock与BSD Sockets的核心关系
 
@@ -116,7 +116,7 @@ int main() {
 int WSACleanup(void);
 ```
 
-> **⚠️ 注意事项：**
+> **注意事项：**
 > - 必须在程序退出前调用，且必须与`WSAStartup`配对
 > - 调用前需确保所有Socket已通过`closesocket()`关闭
 > - 多次调用`WSAStartup`需要对应多次`WSACleanup`
@@ -167,7 +167,7 @@ if (ret == SOCKET_ERROR) {
 }
 ```
 
-> **💡 `INADDR_ANY`表示绑定所有本地IP地址，当服务器有多个网卡时非常有用。端口号必须用`htons()`转换为网络字节序。**
+> **`INADDR_ANY`表示绑定所有本地IP地址，当服务器有多个网卡时非常有用。端口号必须用`htons()`转换为网络字节序。**
 
 ### 3.3 listen — 设置监听
 
@@ -177,7 +177,7 @@ int listen(SOCKET s, int backlog);
 
 `backlog`：监听队列的最大长度，推荐值5-10，最大`SOMAXCONN`。
 
-> **⚠️ backlog过小会导致客户端连接被拒绝（WSAECONNREFUSED），过大则浪费系统资源。**
+> **backlog过小会导致客户端连接被拒绝（WSAECONNREFUSED），过大则浪费系统资源。**
 
 ### 3.4 accept — 接受连接
 
@@ -476,7 +476,7 @@ int main() {
 }
 ```
 
-> **💡 UDP与TCP的核心差异：UDP无连接，无需listen/accept，直接使用`recvfrom`接收数据。**
+> **UDP与TCP的核心差异：UDP无连接，无需listen/accept，直接使用`recvfrom`接收数据。**
 
 ### 5.3 TCP与UDP选择
 
@@ -568,7 +568,7 @@ if (ret == SOCKET_ERROR) {
 }
 ```
 
-> **⚠️ 非阻塞模式下，send/recv/accept等函数会立即返回。若返回SOCKET_ERROR且WSAGetLastError()返回WSAEWOULDBLOCK(10035)，表示资源暂时不可用（非真正错误）。**
+> **非阻塞模式下，send/recv/accept等函数会立即返回。若返回SOCKET_ERROR且WSAGetLastError()返回WSAEWOULDBLOCK(10035)，表示资源暂时不可用（非真正错误）。**
 
 ### 6.5 getsockopt — 获取选项值
 
@@ -612,7 +612,7 @@ Sleep(100);
 closesocket(clientSock);
 ```
 
-> **💡 建议先调用`shutdown()`再调用`closesocket()`，确保数据完整传输。**
+> **建议先调用`shutdown()`再调用`closesocket()`，确保数据完整传输。**
 
 ### 6.7 强制关闭连接
 
@@ -624,7 +624,7 @@ setsockopt(clientSock, SOL_SOCKET, SO_LINGER, (char*)&ling, sizeof(ling));
 closesocket(clientSock);
 ```
 
-> **⚠️ 强制关闭会丢失未发送完成的数据，仅用于异常场景。**
+> **强制关闭会丢失未发送完成的数据，仅用于异常场景。**
 
 ---
 
@@ -733,7 +733,7 @@ while (1) {
 }
 ```
 
-> **💡 IOCP推荐场景：万级客户端并发连接，如网游服务器、即时通信服务器、WebSocket网关。**
+> **IOCP推荐场景：万级客户端并发连接，如网游服务器、即时通信服务器、WebSocket网关。**
 
 ---
 
@@ -805,7 +805,7 @@ void cleanup_network() {
 
 ### 8.3 移植注意事项
 
-> **⚠️ 注意事项：**
+> **注意事项：**
 > - 条件编译标识使用`#ifdef _WIN32`，不要使用`_WIN64`（仅64位环境定义）
 > - 非阻塞模式必须通过条件编译区分实现
 > - 移除所有SIGPIPE信号处理代码
@@ -865,4 +865,4 @@ void cleanup_network() {
 | 事件对象 | `WSACreateEvent()`必须有对应的`WSACloseEvent()` |
 | getaddrinfo结果 | `getaddrinfo()`必须有对应的`freeaddrinfo()` |
 
-> **🎯 总结：WinSock编程的核心是"初始化 -> 使用 -> 清理"三步骤，每个API必须检查返回值，所有资源必须有对应的释放操作。掌握WinSock是实现Windows平台高性能网络服务的基石。**
+> **总结：WinSock编程的核心是"初始化 -> 使用 -> 清理"三步骤，每个API必须检查返回值，所有资源必须有对应的释放操作。掌握WinSock是实现Windows平台高性能网络服务的基石。**

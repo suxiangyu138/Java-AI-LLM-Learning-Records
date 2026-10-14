@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [Objects 工具类](#1-objects-工具类)
 2. [Arrays 工具类](#2-arrays-工具类)
@@ -52,7 +52,7 @@ int[][] nested2 = {{1}, {2}};
 Objects.deepEquals(nested1, nested2);  // true —— 多层嵌套也能正确比较
 ```
 
-> 🎯 **核心要点**：比较数组（尤其是多维数组）内容时，务必用 `deepEquals` 而非 `equals`。`equals` 对数组只比较引用地址。
+> **核心要点**：比较数组（尤其是多维数组）内容时，务必用 `deepEquals` 而非 `equals`。`equals` 对数组只比较引用地址。
 
 ### 1.3 hash / hashCode —— null 安全哈希
 
@@ -67,7 +67,7 @@ int h3 = Objects.hash(name, age, salary);
 int h4 = Objects.hash(name) * 31 + Objects.hash(age) * 31 + Objects.hash(salary);
 ```
 
-> 💡 **常见用法**：在自定义类的 `hashCode()` 中，用 `Objects.hash(field1, field2, field3)` 一行生成合规的哈希码，无需手动乘以 31。
+> **常见用法**：在自定义类的 `hashCode()` 中，用 `Objects.hash(field1, field2, field3)` 一行生成合规的哈希码，无需手动乘以 31。
 
 ### 1.4 requireNonNull —— 空检查，支持错误消息 / Supplier 延迟构造
 
@@ -111,7 +111,7 @@ Objects.checkFromIndexSize(1, 2, arr.length);  // 返回 1 （1+2=3 ≤ 3）
 Objects.checkFromIndexSize(1, 3, arr.length);  // 抛 IOOBE （1+3=4 > 3）
 ```
 
-> 💡 `RandomAccess` 场景下，`checkIndex` 配合 `subList` 实现更优雅。
+> `RandomAccess` 场景下，`checkIndex` 配合 `subList` 实现更优雅。
 
 ### 1.6 requireNonNullElse / requireNonNullElseGet（Java 9+）
 
@@ -126,10 +126,10 @@ String name = Objects.requireNonNullElseGet(input, () -> loadDefaultName());
 
 // 三目运算符的等价写法：
 String name = (input != null) ? input : "defaultName";
-// ✅ Objects 写法更语义化，"如果为 null 就用这个默认值"
+// ✓ Objects 写法更语义化，"如果为 null 就用这个默认值"
 ```
 
-> 🎯 **注意**：`requireNonNullElse` 的参数（默认值）会立即求值；如果默认值构造代价大，用 `requireNonNullElseGet` + Supplier。
+> **注意**：`requireNonNullElse` 的参数（默认值）会立即求值；如果默认值构造代价大，用 `requireNonNullElseGet` + Supplier。
 
 ### 1.7 toString —— 以及 Java 17+ toIdentityString
 
@@ -143,7 +143,7 @@ String idStr = Objects.toIdentityString(obj);
 // 输出类似：com.example.User@1a2b3c4d
 ```
 
-> 💡 `Objects.toString(obj, "N/A")` 是打印日志时最常用的防御写法。
+> `Objects.toString(obj, "N/A")` 是打印日志时最常用的防御写法。
 
 ---
 
@@ -175,7 +175,7 @@ int[] bigArr = new int[10_000_000];
 Arrays.parallelSort(bigArr);               // 充分利用多核 CPU
 ```
 
-> 🎯 **选型建议**：数据量 < 10 万用 `sort`，更大用 `parallelSort`。对象排序默认用 TimSort（稳定、自适应），基础类型用 Dual-Pivot QuickSort（更快、不稳定）。
+> **选型建议**：数据量 < 10 万用 `sort`，更大用 `parallelSort`。对象排序默认用 TimSort（稳定、自适应），基础类型用 Dual-Pivot QuickSort（更快、不稳定）。
 
 ### 2.2 binarySearch —— 二分查找（前提：已排序数组）
 
@@ -191,7 +191,7 @@ String[] names = {"Alice", "Bob", "Eve"};
 int i = Arrays.binarySearch(names, "Bob", String::compareToIgnoreCase);
 ```
 
-> ⚠️ **未排序数组上调用 binarySearch 结果是未定义的**。一定要先 `sort` 再 `binarySearch`。
+> **未排序数组上调用 binarySearch 结果是未定义的**。一定要先 `sort` 再 `binarySearch`。
 
 ### 2.3 copyOf / copyOfRange —— 数组拷贝
 
@@ -213,7 +213,7 @@ int[][] matrix = {{1}, {2}, {3}};
 int[][] shallow = matrix.clone();                 // 行引用共享，修改内层会影响原数组
 ```
 
-> 🎯 **性能对比**：`Arrays.copyOf` ≈ `System.arraycopy` (native) >> 手写 for 循环。数组扩容场景（如 ArrayList 内部）正是用 `Arrays.copyOf`。
+> **性能对比**：`Arrays.copyOf` ≈ `System.arraycopy` (native) >> 手写 for 循环。数组扩容场景（如 ArrayList 内部）正是用 `Arrays.copyOf`。
 
 ### 2.4 equals / deepEquals / compare / mismatch（Java 9+）
 
@@ -270,18 +270,18 @@ String[] arr = {"A", "B", "C"};
 // 返回 java.util.Arrays 内部 ArrayList（固定大小，不是 java.util.ArrayList）
 List<String> list = Arrays.asList(arr);
 
-list.set(1, "X");        // ✅ 可以修改元素
-list.add("D");           // ❌ 抛 UnsupportedOperationException
-list.remove(0);          // ❌ 抛 UnsupportedOperationException
+list.set(1, "X");        // ✓ 可以修改元素
+list.add("D");           // ✗ 抛 UnsupportedOperationException
+list.remove(0);          // ✗ 抛 UnsupportedOperationException
 
-// 💡 如果需要可变 List：
+// 如果需要可变 List：
 List<String> mutable = new ArrayList<>(Arrays.asList(arr));
 
-// 💡 Java 9+ 创建不可变小列表：List.of() 更优
+// Java 9+ 创建不可变小列表：List.of() 更优
 List<String> imm = List.of("A", "B", "C");
 ```
 
-> ⚠️ **高频坑**：`Arrays.asList(arr)` 返回的 List 是数组的视图，修改数组会反映到 List，反之亦然。不能 add/remove。
+> **高频坑**：`Arrays.asList(arr)` 返回的 List 是数组的视图，修改数组会反映到 List，反之亦然。不能 add/remove。
 
 ### 2.7 stream —— 数组 → Stream
 
@@ -310,14 +310,14 @@ List<String> list = Arrays.stream(strs)
 
 ```java
 int[] arr = {1, 2, 3};
-System.out.println(arr);                    // ❌ [I@1a2b3c4d （堆地址，毫无意义）
-System.out.println(Arrays.toString(arr));   // ✅ [1, 2, 3]
+System.out.println(arr);                    // ✗ [I@1a2b3c4d （堆地址，毫无意义）
+System.out.println(Arrays.toString(arr));   // ✓ [1, 2, 3]
 
 int[][] matrix = {{1, 2}, {3, 4}};
-System.out.println(Arrays.deepToString(matrix));  // ✅ [[1, 2], [3, 4]]
+System.out.println(Arrays.deepToString(matrix));  // ✓ [[1, 2], [3, 4]]
 ```
 
-> 💡 **Debug 常用**：`Arrays.toString()` 和 `Arrays.deepToString()` 是调试数组最快的方式，无需自己写循环拼接。
+> **Debug 常用**：`Arrays.toString()` 和 `Arrays.deepToString()` 是调试数组最快的方式，无需自己写循环拼接。
 
 ### 2.9 spliterator —— 数组分割迭代器
 
@@ -331,7 +331,7 @@ Spliterator.OfInt spliterator = Arrays.spliterator(arr);
 Spliterator.OfInt rangeSpliterator = Arrays.spliterator(arr, 2, 6);
 ```
 
-> 💡 `Spliterator` 是并行流的基础设施，日常编码中直接使用场景较少，但理解其存在有助于排查并行流性能问题。
+> `Spliterator` 是并行流的基础设施，日常编码中直接使用场景较少，但理解其存在有助于排查并行流性能问题。
 
 ---
 
@@ -350,11 +350,11 @@ Collections.sort(list);                         // → [Alice, Bob, Eve]
 // sort + Comparator
 Collections.sort(list, Comparator.comparingInt(String::length));
 
-// 💡 Java 8+ 更推荐的写法 —— 直接在 List 上调用
+// Java 8+ 更推荐的写法 —— 直接在 List 上调用
 list.sort(Comparator.naturalOrder());            // 等价
 ```
 
-> 🎯 **内部实现**：`Collections.sort` 底层调用 `List.sort`，JDK 8+ 中用的是 `TimSort`（稳定排序，O(n log n)）。
+> **内部实现**：`Collections.sort` 底层调用 `List.sort`，JDK 8+ 中用的是 `TimSort`（稳定排序，O(n log n)）。
 
 ### 3.2 binarySearch —— 二分查找
 
@@ -388,7 +388,7 @@ Collections.rotate(list, 2);        // → [4, 5, 1, 2, 3] （向右旋转 2 步
 Collections.swap(list, 0, 2);       // → [3, 2, 1, 4, 5]
 ```
 
-> 💡 `rotate` 常用于轮播、队列轮转场景；`shuffle` 用于洗牌、抽奖。
+> `rotate` 常用于轮播、队列轮转场景；`shuffle` 用于洗牌、抽奖。
 
 ### 3.4 min / max —— 找极值
 
@@ -447,21 +447,21 @@ List<String> mutable = new ArrayList<>(Arrays.asList("A", "B", "C"));
 
 // 包装为不可变视图
 List<String> unmod = Collections.unmodifiableList(mutable);
-unmod.add("D");          // ❌ UnsupportedOperationException
-unmod.set(0, "X");       // ❌ UnsupportedOperationException
+unmod.add("D");          // ✗ UnsupportedOperationException
+unmod.set(0, "X");       // ✗ UnsupportedOperationException
 
-// ❌ 但 mutable 的修改仍然会反映到 unmod！
+// ✗ 但 mutable 的修改仍然会反映到 unmod！
 mutable.set(0, "Changed");
 System.out.println(unmod.get(0));  // → "Changed" （"不可变"视图被穿透）
 
-// ✅ 真正不可变：先 copy 再包装
+// ✓ 真正不可变：先 copy 再包装
 List<String> trulyImmutable =
     Collections.unmodifiableList(new ArrayList<>(mutable));
 ```
 
-> ⚠️ **安全漏洞**：`Collections.unmodifiableList(list)` 只阻止通过返回的引用来修改，原始 list 的修改仍会穿透。需要先复制再包装。
+> **安全漏洞**：`Collections.unmodifiableList(list)` 只阻止通过返回的引用来修改，原始 list 的修改仍会穿透。需要先复制再包装。
 
-> 🎯 **Java 9+ 更优选择**：`List.of("A", "B", "C")`、`Set.of("A")`、`Map.of("k1", "v1", "k2", "v2")`，它们直接返回不可变集合，不存在穿透问题。
+> **Java 9+ 更优选择**：`List.of("A", "B", "C")`、`Set.of("A")`、`Map.of("k1", "v1", "k2", "v2")`，它们直接返回不可变集合，不存在穿透问题。
 
 ### 3.8 synchronized* —— 同步包装
 
@@ -471,7 +471,7 @@ List<String> raw = new ArrayList<>();
 // 包装为线程安全的 List（每个方法都加 synchronized）
 List<String> syncList = Collections.synchronizedList(raw);
 
-// ⚠️ 迭代仍需外部同步
+// 迭代仍需外部同步
 synchronized (syncList) {
     Iterator<String> it = syncList.iterator();
     while (it.hasNext()) {
@@ -480,7 +480,7 @@ synchronized (syncList) {
 }
 ```
 
-> 🎯 **性能警告**：`synchronized*` 包装使用粗粒度锁，高并发下性能极差。**首选** `CopyOnWriteArrayList`、`ConcurrentHashMap` 等 JUC 容器。
+> **性能警告**：`synchronized*` 包装使用粗粒度锁，高并发下性能极差。**首选** `CopyOnWriteArrayList`、`ConcurrentHashMap` 等 JUC 容器。
 
 ### 3.9 checked* —— 类型安全包装
 
@@ -488,15 +488,15 @@ synchronized (syncList) {
 // 以下代码能通过编译（泛型擦除），但运行时出错
 List<String> raw = new ArrayList<>();
 List untyped = raw;                       // 未检查的警告
-untyped.add(123);                         // ❌ 编译不报错，运行不报错（但集合被破坏）
+untyped.add(123);                         // ✗ 编译不报错，运行不报错（但集合被破坏）
 
 // checked 包装 —— 运行时丢 ClassCastException
 List<String> safe = Collections.checkedList(new ArrayList<>(), String.class);
 List untypedSafe = safe;
-untypedSafe.add(123);                     // ❌ ClassCastException 立即抛出
+untypedSafe.add(123);                     // ✗ ClassCastException 立即抛出
 ```
 
-> 💡 `checked*` 在遗留代码集成、泛型擦除导致类型不安全的场景下提供运行时防护。
+> `checked*` 在遗留代码集成、泛型擦除导致类型不安全的场景下提供运行时防护。
 
 ### 3.10 empty* —— 空集合单例 / singleton* —— 单元素集合 / nCopies
 
@@ -506,7 +506,7 @@ List<String> emptyList = Collections.emptyList();
 Set<String> emptySet = Collections.emptySet();
 Map<String, String> emptyMap = Collections.emptyMap();
 
-// 💡 Java 9+ 替代：List.of()、Set.of()、Map.of() 也返回不可变空集合
+// Java 9+ 替代：List.of()、Set.of()、Map.of() 也返回不可变空集合
 
 // singleton* —— 恰好包含一个元素的不可变集合（比 new ArrayList + add 省内存）
 List<String> single = Collections.singletonList("onlyOne");
@@ -523,7 +523,7 @@ List<String> tenDefaults = Collections.nCopies(10, "DEFAULT");
 List<Integer> zeros = Collections.nCopies(100, 0);   // 100 个 0
 ```
 
-> 🎯 `nCopies` 返回的 List 共享同一个对象引用，不占用额外内存，适合初始化默认值列表。
+> `nCopies` 返回的 List 共享同一个对象引用，不占用额外内存，适合初始化默认值列表。
 
 ---
 
@@ -591,7 +591,7 @@ Comparator<Employee> byNameNullSafe =
         Comparator.comparing(Employee::getName)
     );
 
-// 💡 方法引用中处理可能为 null 的属性：
+// 方法引用中处理可能为 null 的属性：
 Comparator<Employee> byNullableName =
     Comparator.nullsLast(
         Comparator.comparing(Employee::getName,
@@ -599,7 +599,7 @@ Comparator<Employee> byNullableName =
     );
 ```
 
-> 🎯 **何时用 nullsFirst vs nullsLast**：如果是"可选字段"，通常 `nullsLast` 更符合直觉（null 表示"没有值"排在末尾）。如果是"异常场景"，应在数据层面把 null 替换为默认值后再排序。
+> **何时用 nullsFirst vs nullsLast**：如果是"可选字段"，通常 `nullsLast` 更符合直觉（null 表示"没有值"排在末尾）。如果是"异常场景"，应在数据层面把 null 替换为默认值后再排序。
 
 ### 4.4 reversed —— 反转排序
 
@@ -607,7 +607,7 @@ Comparator<Employee> byNullableName =
 Comparator<Employee> byAgeDesc =
     Comparator.comparingInt(Employee::getAge).reversed();
 
-// ⚠️ reversed 的位置影响链式顺序：
+// reversed 的位置影响链式顺序：
 // 正确：先按年龄升序，再按姓名升序，整体反转
 Comparator<Employee> c1 =
     Comparator.comparingInt(Employee::getAge)
@@ -637,11 +637,11 @@ Comparator<String> desc2 = Comparator.naturalOrder().reversed();
 ### 4.6 自实现 Comparator 的注意事项
 
 ```java
-// ✅ 推荐：使用 Comparator 链式 API
+// ✓ 推荐：使用 Comparator 链式 API
 Comparator<Employee> good =
     Comparator.comparingInt(Employee::getAge);
 
-// ❌ 不推荐：匿名类实现（啰嗦、易错）
+// ✗ 不推荐：匿名类实现（啰嗦、易错）
 Comparator<Employee> bad = new Comparator<Employee>() {
     @Override
     public int compare(Employee a, Employee b) {
@@ -649,14 +649,14 @@ Comparator<Employee> bad = new Comparator<Employee>() {
     }
 };
 
-// ⚠️ 当心减法溢出陷阱：
+// 当心减法溢出陷阱：
 Comparator<Integer> dangerous = (a, b) -> a - b;  // 当 a=Integer.MAX_VALUE, b=-1 时溢出
-Comparator<Integer> safe = Integer::compare;        // ✅ 用 Integer.compare
+Comparator<Integer> safe = Integer::compare;        // ✓ 用 Integer.compare
 ```
 
-> 🎯 **equals 与 Comparator 的关系**：Comparator 的 `equals` 方法继承自 Object，通常不重写。Comparator 的契约要求 `compare(a,b) == 0` 时 `a.equals(b)` 最好也成立，但不是强制。使用时注意：**TreeSet / TreeMap 用 Comparator 判断相等性，而非 equals**。
+> **equals 与 Comparator 的关系**：Comparator 的 `equals` 方法继承自 Object，通常不重写。Comparator 的契约要求 `compare(a,b) == 0` 时 `a.equals(b)` 最好也成立，但不是强制。使用时注意：**TreeSet / TreeMap 用 Comparator 判断相等性，而非 equals**。
 
-> 🎯 **序列化注意**：若用 Lambda 表达式实现 Comparator 并放入可序列化的集合（如 TreeMap），建议确保 Comparator 是 Serializable 的：
+> **序列化注意**：若用 Lambda 表达式实现 Comparator 并放入可序列化的集合（如 TreeMap），建议确保 Comparator 是 Serializable 的：
 > ```java
 > Comparator<Employee> c =
 >     (Comparator<Employee> & Serializable)
@@ -712,7 +712,7 @@ public int nextInt() {
 }
 ```
 
-> 💡 **高并发场景**：多个线程争抢同一个 Random 实例的种子 CAS，退化为自旋等待。此时应使用 `ThreadLocalRandom`。
+> **高并发场景**：多个线程争抢同一个 Random 实例的种子 CAS，退化为自旋等待。此时应使用 `ThreadLocalRandom`。
 
 ### 5.3 ThreadLocalRandom —— 无竞争高性能
 
@@ -740,7 +740,7 @@ rnd.ints(10, 0, 100).toArray();     // 10 个 [0, 100) 的随机 int
 | 8 线程竞争 | 约 300 ns/次（CAS 重试） | 约 50 ns/次（无竞争） |
 | 16 线程竞争 | 约 600+ ns/次 | 约 50 ns/次 |
 
-> 🎯 **最佳实践**：除非有明确理由用 Random（如需要种子可复现），**并发场景一律用 `ThreadLocalRandom.current()`**。单线程场景两者性能相近，ThreadLocalRandom 也完全可用。
+> **最佳实践**：除非有明确理由用 Random（如需要种子可复现），**并发场景一律用 `ThreadLocalRandom.current()`**。单线程场景两者性能相近，ThreadLocalRandom 也完全可用。
 
 ### 5.4 Java 17+ nextInt(origin, bound) 简洁写法
 
@@ -779,7 +779,7 @@ byte[] seed = sr.generateSeed(16);
 | ThreadLocalRandom | 低（可预测） | 极快（无竞争） | 高并发随机、并行流 |
 | SecureRandom | 高（不可预测） | 慢（阻塞等待熵池） | Token、密钥、密码学 |
 
-> ⚠️ **不要在安全场景用 Random**：给定连续的 Random 输出，攻击者可反推种子，预测后续输出。
+> **不要在安全场景用 Random**：给定连续的 Random 输出，攻击者可反推种子，预测后续输出。
 
 ---
 
@@ -874,23 +874,23 @@ System.out.print("请输入年龄：");
 int age = sc.nextInt();       // 读取 25，但缓冲区还留着 '\n'
 
 System.out.print("请输入姓名：");
-String name = sc.nextLine();  // ❌ 立即返回空字符串！（读取了残留的 '\n'）
+String name = sc.nextLine();  // ✗ 立即返回空字符串！（读取了残留的 '\n'）
 
-// ✅ 解决办法 1：先用 nextLine 读一行，再解析
+// ✓ 解决办法 1：先用 nextLine 读一行，再解析
 Scanner sc2 = new Scanner(System.in);
 System.out.print("请输入年龄：");
 int age2 = Integer.parseInt(sc2.nextLine());
 System.out.print("请输入姓名：");
 String name2 = sc2.nextLine();
 
-// ✅ 解决办法 2：在 nextInt 后额外调一次 nextLine 消耗换行符
+// ✓ 解决办法 2：在 nextInt 后额外调一次 nextLine 消耗换行符
 Scanner sc3 = new Scanner(System.in);
 int age3 = sc3.nextInt();
 sc3.nextLine();               // 消耗残留换行符
 String name3 = sc3.nextLine();
 ```
 
-> 🎯 **根本原因**：`nextInt()` 不读取换行符，后续 `nextLine()` 读到残留的 `\n` 立即返回。**建议全程用 `nextLine()` + 手动解析**，避免类型转换的陷阱。
+> **根本原因**：`nextInt()` 不读取换行符，后续 `nextLine()` 读到残留的 `\n` 立即返回。**建议全程用 `nextLine()` + 手动解析**，避免类型转换的陷阱。
 
 ---
 
@@ -1031,7 +1031,7 @@ public class DbConfig {
 // 或者 @Value 注入单个属性
 @Component
 public class AppService {
-    @Value("${app.env:dev}")         // ✅ 支持默认值
+    @Value("${app.env:dev}")         // ✓ 支持默认值
     private String env;
 }
 ```
@@ -1045,7 +1045,7 @@ public class AppService {
 | 环境变量 | Docker/K8s 原生，无文件依赖 | 类型只有 String，层级不明显 |
 | 配置中心 | 动态刷新、多环境管理 | 引入外部依赖 |
 
-> 🎯 **现代 Java 项目配置建议**：基础配置用 YAML（Spring Boot 默认），敏感信息（密码、Token）从环境变量读取，多环境切换靠 Profile（`application-dev.yml` / `application-prod.yml`）。**抛弃在 Properties 中硬编码敏感信息**。
+> **现代 Java 项目配置建议**：基础配置用 YAML（Spring Boot 默认），敏感信息（密码、Token）从环境变量读取，多环境切换靠 Profile（`application-dev.yml` / `application-prod.yml`）。**抛弃在 Properties 中硬编码敏感信息**。
 
 ---
 
@@ -1195,7 +1195,7 @@ public class UserService {
 }
 ```
 
-> 💡 **提示**：用 `requireNonNull`、`requireNonNull(..., Supplier)`、`requireNonNullElse`、`deepEquals`、`Objects.hash` 等方法。
+> **提示**：用 `requireNonNull`、`requireNonNull(..., Supplier)`、`requireNonNullElse`、`deepEquals`、`Objects.hash` 等方法。
 
 ### 练习 2：数组操作实战
 

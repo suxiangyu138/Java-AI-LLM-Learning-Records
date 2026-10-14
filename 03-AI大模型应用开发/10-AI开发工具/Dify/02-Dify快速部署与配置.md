@@ -1,10 +1,10 @@
 # Dify 快速部署与配置
 
-> 🛠️ Docker Compose 一键部署、源码开发模式、200+ 模型供应商配置、环境变量调优 —— 从零到上线 Dify 的完整运维手册
+> Docker Compose 一键部署、源码开发模式、200+ 模型供应商配置、环境变量调优 —— 从零到上线 Dify 的完整运维手册
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [Docker Compose 部署](#1-docker-compose-部署)
 2. [源码部署（开发模式）](#2-源码部署开发模式)
@@ -207,7 +207,7 @@ npm run dev
 ```text
 Dify 支持 200+ 模型供应商，分类如下：
 
-🔥 国际主流：
+国际主流：
 ├── OpenAI (GPT-4o, GPT-4.1, o4-mini...)
 ├── Anthropic (Claude Opus 5, Sonnet 5, Haiku 4.5...)
 ├── Google (Gemini 2.5 Pro/Flash...)
@@ -215,7 +215,7 @@ Dify 支持 200+ 模型供应商，分类如下：
 ├── Mistral (Large, Small, Codestral...)
 └── Cohere (Command R+, Embed, Rerank...)
 
-🇨🇳 国内主流：
+国内主流：
 ├── DeepSeek (V4 Pro, V4, R1, V3)
 ├── 通义千问 (Qwen-Max, Qwen-Plus, Qwen-Turbo)
 ├── 智谱 AI (GLM-4-Plus, GLM-4-Flash)
@@ -224,7 +224,7 @@ Dify 支持 200+ 模型供应商，分类如下：
 ├── 零一万物 (Yi-Large, Yi-Vision)
 └── MiniMax (abab6.5s)
 
-🖥️ 本地/开源：
+本地/开源：
 ├── Ollama (Llama3.2, Qwen2.5, DeepSeek-R1...)
 ├── Xinference (本地模型推理平台)
 ├── LocalAI (OpenAI 兼容的本地 API)
@@ -287,7 +287,7 @@ Dify 支持 200+ 模型供应商，分类如下：
 ### 3.3 模型配置最佳实践
 
 ```text
-💡 四类模型的配置建议：
+四类模型的配置建议：
 
 ┌─────────────────────────────────────────────────────┐
 │ 功能             模型选择                    成本    │

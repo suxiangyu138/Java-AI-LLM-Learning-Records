@@ -1,7 +1,7 @@
 # 06-SonarLint与IDE集成
 > 定位：质量最便宜的位置是「写代码时」——SonarLint 在 IDE 里实时反馈，问题在诞生处被消灭；connected mode 让 IDE 与平台共享规则与门禁认知，开发与门禁不再「两个标准」。
 
-## 📚 目录
+## 目录
 1. [SonarLint 是什么](#1-sonarlint-是什么)
 2. [安装与实时分析](#2-安装与实时分析)
 3. [规则来源与配置](#3-规则来源与配置)
@@ -80,7 +80,7 @@ connected mode（连接模式）——SonarLint 与 SonarQube 建立连接，**�
 4. 三层质量防线各自的目标？
 5. 「IDE 没报 CI 挂了」的根因与解法？
 
-> 🎯 **核心要点**：SonarLint = 写代码时的实时分析，问题在诞生处消灭；connected mode 让 IDE 用平台的规则与门禁标准；三层防线（IDE 日常/CI 关卡/平台治理）互相校验；IDE 配置只是显示层，规则治理在平台 Profile。
+> **核心要点**：SonarLint = 写代码时的实时分析，问题在诞生处消灭；connected mode 让 IDE 用平台的规则与门禁标准；三层防线（IDE 日常/CI 关卡/平台治理）互相校验；IDE 配置只是显示层，规则治理在平台 Profile。
 
 ---
 

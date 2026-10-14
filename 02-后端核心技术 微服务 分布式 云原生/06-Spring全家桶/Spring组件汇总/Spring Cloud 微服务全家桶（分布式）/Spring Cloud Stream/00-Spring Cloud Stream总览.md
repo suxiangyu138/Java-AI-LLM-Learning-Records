@@ -1,7 +1,7 @@
 # Spring Cloud Stream 总览
 > 基于 Spring Cloud Function 的统一消息驱动微服务框架，用一套 API 屏蔽 Kafka / RabbitMQ / Kinesis 等消息中间件的差异
 
-## 📚 目录
+## 目录
 1. [知识体系导图](#1-知识体系导图)
 2. [模块导航](#2-模块导航)
 3. [学习路线推荐](#3-学习路线推荐)
@@ -94,7 +94,7 @@ Spring Cloud Stream（5.0.2 / Spring Cloud 2025.1 Oakwood / Boot 4.0）
 | 编程模型 | 函数式（唯一） | 4.0 起注解模型（`@EnableBinding`/`@StreamListener`）已被彻底移除 |
 | 兼容边界 | 4.2.x（Boot 3.x） | 存量 Boot 3 项目迁移时关注 4.0 Migration guide 差异点 |
 
-> ⚠️ **时效性**：本文档按 2026-08 检索到的官方资料编写。版本号、默认值与属性清单请以 [Spring Cloud Stream 官方参考文档](https://docs.spring.io/spring-cloud-stream/reference/) 为准；升级前务必查阅对应版本的 [Migration guide](https://github.com/spring-cloud/spring-cloud-stream/wiki)。
+> **时效性**：本文档按 2026-08 检索到的官方资料编写。版本号、默认值与属性清单请以 [Spring Cloud Stream 官方参考文档](https://docs.spring.io/spring-cloud-stream/reference/) 为准；升级前务必查阅对应版本的 [Migration guide](https://github.com/spring-cloud/spring-cloud-stream/wiki)。
 
 ## 6. 参考来源
 

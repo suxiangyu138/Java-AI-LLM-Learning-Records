@@ -1,10 +1,10 @@
 # macOS 终端与 Shell 全指南
 
-> ⌨️ 从 Terminal.app 到 iTerm2 再到 Warp，从 bash 到 zsh 再到 oh-my-zsh —— Java 开发者在 macOS 上必须搞懂的终端与 Shell 全栈
+> 从 Terminal.app 到 iTerm2 再到 Warp，从 bash 到 zsh 再到 oh-my-zsh —— Java 开发者在 macOS 上必须搞懂的终端与 Shell 全栈
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [终端模拟器：Terminal.app vs iTerm2 vs Warp](#1-终端模拟器terminalapp-vs-iterm2-vs-warp)
 2. [zsh：macOS 默认 Shell 深度使用](#2-zshmacos-默认-shell-深度使用)
@@ -22,15 +22,15 @@
 |------|:---:|:---:|:---:|
 | **推出** | 2001 (随 Mac OS X) | 2010 | 2022 |
 | **价格** | 系统内置 | 免费开源 | 免费 (团队版付费) |
-| **标签页** | ✅ | ✅ (更灵活) | ✅ |
-| **分屏** | ❌ | ✅ (无限分割) | ✅ |
-| **GPU 渲染** | ❌ | ✅ Metal 渲染 | ✅ 自研引擎 |
+| **标签页** | ✓ | ✓ (更灵活) | ✓ |
+| **分屏** | ✗ | ✓ (无限分割) | ✓ |
+| **GPU 渲染** | ✗ | ✓ Metal 渲染 | ✓ 自研引擎 |
 | **搜索** | 基础 | 强大（正则、大小写） | 命令块智能搜索 |
-| **AI 辅助** | ❌ | ❌ | ✅ Warp AI (集成 LLM) |
-| **Python API** | ❌ | ✅ 脚本化控制 | ❌ |
-| **Profile** | 基础 | ✅ 丰富（可自动化） | 基础 |
-| **即时重播** | ❌ | ✅ 回放终端历史 | ❌ |
-| **热键窗口** | ❌ | ✅ 全局快捷键呼出 | ❌ |
+| **AI 辅助** | ✗ | ✗ | ✓ Warp AI (集成 LLM) |
+| **Python API** | ✗ | ✓ 脚本化控制 | ✗ |
+| **Profile** | 基础 | ✓ 丰富（可自动化） | 基础 |
+| **即时重播** | ✗ | ✓ 回放终端历史 | ✗ |
+| **热键窗口** | ✗ | ✓ 全局快捷键呼出 | ✗ |
 | **推荐人群** | 临时使用 | **开发者首选** | AI 时代探索者 |
 
 ### 1.2 iTerm2 推荐配置
@@ -38,7 +38,7 @@
 ```bash
 # iTerm2 个性化设置
 Preferences:
-├── General → Closing → ✅ Quit when all windows are closed
+├── General → Closing → ✓ Quit when all windows are closed
 ├── Appearance → Theme → Minimal
 ├── Profiles → Window → Transparency → 轻微透明（10-15%）
 ├── Profiles → Keys → Key Mappings
@@ -46,7 +46,7 @@ Preferences:
 │   ├── ⌥← / ⌥→  → Send Escape b / f    (单词跳转)
 │   └── ⌫ / ⌥⌫   → Send Hex 0x7f / Escape [127;5~ (删单词)
 ├── Profiles → Terminal → Unlimited scrollback
-└── Keys → Hotkey → ✅ Show/hide with hotkey (⌃Space)
+└── Keys → Hotkey → ✓ Show/hide with hotkey (⌃Space)
 ```
 
 ### 1.3 macOS 终端字体推荐
@@ -71,17 +71,17 @@ brew install --cask font-meslo-lg-nerd-font
 |------|:---:|:---:|
 | **macOS 默认** | 旧版 3.2 (不再更新) | 5.x (2019 起为默认) |
 | **GPL 版本** | GPLv3 (新版) | MIT-like |
-| **自动补全** | 基础 | ✅ 菜单式、大小写不敏感、模糊匹配 |
-| **路径展开** | `cd /u/l/b` ❌ | `cd /u/l/b → /usr/local/bin` ✅ |
-| **Glob 通配** | 基础 | ✅ 递归 `**/*.java`、限定符 `*(.)` |
-| **拼写纠正** | ❌ | ✅ `sl → ls` |
-| **右提示符** | ❌ | ✅ `RPROMPT` |
-| **主题系统** | ❌ | ✅ 内置 prompt 主题 |
-| **浮点运算** | ❌ 需 bc | ✅ 内建支持 |
-| **关联数组** | 4.0+ | ✅ 原生 |
-| **语法高亮** | ❌ | ✅ 需要 fish-like 插件 |
+| **自动补全** | 基础 | ✓ 菜单式、大小写不敏感、模糊匹配 |
+| **路径展开** | `cd /u/l/b` ✗ | `cd /u/l/b → /usr/local/bin` ✓ |
+| **Glob 通配** | 基础 | ✓ 递归 `**/*.java`、限定符 `*(.)` |
+| **拼写纠正** | ✗ | ✓ `sl → ls` |
+| **右提示符** | ✗ | ✓ `RPROMPT` |
+| **主题系统** | ✗ | ✓ 内置 prompt 主题 |
+| **浮点运算** | ✗ 需 bc | ✓ 内建支持 |
+| **关联数组** | 4.0+ | ✓ 原生 |
+| **语法高亮** | ✗ | ✓ 需要 fish-like 插件 |
 
-> 🎯 **核心要点**：zsh 对 bash 脚本 99% 兼容，日常交互体验远胜 bash。写脚本建议用 `#!/bin/bash` 保持跨平台兼容，日常交互用 zsh。
+> **核心要点**：zsh 对 bash 脚本 99% 兼容，日常交互体验远胜 bash。写脚本建议用 `#!/bin/bash` 保持跨平台兼容，日常交互用 zsh。
 
 ### 2.2 zsh 常用快捷键
 
@@ -177,7 +177,7 @@ mkdir -p project/{src/main/java,src/main/resources,src/test/java}
 # → project/src/main/java, project/src/main/resources, project/src/test/java
 ```
 
-> 💡 **zmv 是杀手级功能**：`autoload -Uz zmv` 加载后即可批量重命名，比写循环脚本快 10 倍。
+> **zmv 是杀手级功能**：`autoload -Uz zmv` 加载后即可批量重命名，比写循环脚本快 10 倍。
 
 ---
 

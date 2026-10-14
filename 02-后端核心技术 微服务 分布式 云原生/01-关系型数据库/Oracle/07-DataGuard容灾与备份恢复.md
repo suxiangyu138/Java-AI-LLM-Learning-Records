@@ -1,6 +1,6 @@
 # 07 - Data Guard 容灾与备份恢复
 
-> 🎯 Oracle Data Guard 是企业级容灾方案——物理 Standby 实时同步，主库故障自动切换到备库（FSFO）。同时 RMAN 是 Oracle 的备份恢复利器，支持增量备份、块级恢复
+> Oracle Data Guard 是企业级容灾方案——物理 Standby 实时同步，主库故障自动切换到备库（FSFO）。同时 RMAN 是 Oracle 的备份恢复利器，支持增量备份、块级恢复
 
 ---
 
@@ -30,7 +30,7 @@ Primary (主库)                      Standby (备库)
 | 模式 | 数据丢失 | 性能影响 | 适用场景 |
 |------|:---:|:---:|------|
 | **Maximum Protection** | 零丢失 | 高 | 金融核心系统 |
-| **Maximum Availability** | 零丢失(正常时) | 中 | **推荐** ✅ |
+| **Maximum Availability** | 零丢失(正常时) | 中 | **推荐** ✓ |
 | **Maximum Performance** | 可能丢失 | 低 | 报表查询 |
 
 ```sql

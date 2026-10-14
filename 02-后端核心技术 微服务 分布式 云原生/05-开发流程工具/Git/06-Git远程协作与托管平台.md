@@ -1,7 +1,7 @@
 # 06-Git 远程协作与托管平台
 > 协作的本质：远程仓库只是"约定的同步点"——remote 管理、PR 全流程、Fork 工作流、三大托管平台对比、gh CLI 与 LFS
 
-## 📚 目录
+## 目录
 1. [远程仓库管理](#1-远程仓库管理)
 2. [Fetch vs Pull vs Push](#2-fetch-vs-pull-vs-push)
 3. [Fork + upstream 双远程模式](#3-fork--upstream-双远程模式)
@@ -56,9 +56,9 @@ git remote rename origin old-origin   # 重命名
 
 | 命令 | 方向 | 合并？ | 安全？ |
 |------|------|--------|--------|
-| `git fetch` | 远程→本地（refs） | 否 | ✅ 最安全 |
-| `git pull` | 远程→本地（工作区） | 是 | ⚠️ 可能冲突 |
-| `git push` | 本地→远程 | — | ⚠️ 可能被拒绝 |
+| `git fetch` | 远程→本地（refs） | 否 | ✓ 最安全 |
+| `git pull` | 远程→本地（工作区） | 是 | 可能冲突 |
+| `git push` | 本地→远程 | — | 可能被拒绝 |
 
 ```bash
 git fetch origin                    # 只下载不合并
@@ -78,7 +78,7 @@ git push origin --delete feature/login
 | `git pull` | fetch + merge | 是 | 可能 | 单人分支或无需线性历史 |
 | `git pull --rebase` | fetch + rebase | 是（变基合并） | 否 | 多人协作，保持历史线性 |
 
-> 💡 为什么不推荐直接用 `git pull`：① merge 产生额外 merge commit，历史图复杂；② 多人协作时 merge commit 层层嵌套，`git log --graph` 变乱麻；③ `git pull --rebase` 历史线性清晰。
+> 为什么不推荐直接用 `git pull`：① merge 产生额外 merge commit，历史图复杂；② 多人协作时 merge commit 层层嵌套，`git log --graph` 变乱麻；③ `git pull --rebase` 历史线性清晰。
 
 ## 3. Fork + upstream 双远程模式
 
@@ -156,7 +156,7 @@ git fetch origin && git merge origin/main
 git pull --rebase
 ```
 
-> 💡 最佳实践组合：`git config --global pull.rebase true` + `git config --global rebase.autoStash true`——pull 自动 rebase 并自动 stash 未提交修改。
+> 最佳实践组合：`git config --global pull.rebase true` + `git config --global rebase.autoStash true`——pull 自动 rebase 并自动 stash 未提交修改。
 
 ### 4.3 跟踪关系与 ahead/behind
 
@@ -215,15 +215,15 @@ git rebase origin/develop
 
 ```markdown
 # PR 描述模板（团队统一版）
-## 📝 变更概述
+## 变更概述
 新增用户邮箱验证功能
-## 🔗 关联Issue
+## 关联Issue
 Closes #1234
-## 🧪 测试
+## 测试
 - [x] 单元测试：验证码生成与校验
 - [x] 集成测试：注册→验证→登录完整流程
 - [x] 异常测试：过期验证码、错误验证码
-## ⚠️ 风险提示
+## 风险提示
 - 依赖邮件服务，需确认测试环境邮件配置
 ```
 
@@ -278,25 +278,25 @@ git remote set-url origin git@github.com:user/repo.git
 
 | 维度 | GitHub | GitLab | Gitee | Bitbucket |
 |------|--------|--------|-------|-----------|
-| **免费私有仓库** | ✅ 无限 | ✅ 无限 | ✅ 无限（5 人限制） | ✅ 无限（5 人限制） |
-| **内置 CI/CD** | ✅ Actions | ✅ 最强（原生内置） | ⚠️ Gitee Go | ✅ Pipelines |
-| **自托管** | ❌（仅 Enterprise） | ✅ CE/EE 均可 | ✅ 企业版 | ❌ |
-| **代码审查** | ✅ PR | ✅ MR（更细粒度） | ✅ PR | ✅ PR |
-| **中国访问速度** | ⚠️ 慢（需代理） | ⚠️ 自托管可加速 | ✅ 极快 | ⚠️ 不稳定 |
-| **开源生态** | ⭐⭐⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐ |
+| **免费私有仓库** | ✓ 无限 | ✓ 无限 | ✓ 无限（5 人限制） | ✓ 无限（5 人限制） |
+| **内置 CI/CD** | ✓ Actions | ✓ 最强（原生内置） | Gitee Go | ✓ Pipelines |
+| **自托管** | ✗（仅 Enterprise） | ✓ CE/EE 均可 | ✓ 企业版 | ✗ |
+| **代码审查** | ✓ PR | ✓ MR（更细粒度） | ✓ PR | ✓ PR |
+| **中国访问速度** | 慢（需代理） | 自托管可加速 | ✓ 极快 | 不稳定 |
+| **开源生态** | ★★★★★ | ★★★ | ★★★ | ★★ |
 | **免费 CI 额度** | 2000 分钟/月 | 400 分钟/月 | 有限 | 500 分钟/月 |
 | **最大文件限制** | 100 MB | 100 MB | 50 MB | 1 GB（有限制） |
 | **LFS 免费额度** | 1 GB | 5 GB | 500 MB | 1 GB |
 
 | 场景 | 推荐平台 | 理由 |
 |------|----------|------|
-| 🌍 开源项目 | GitHub | 最大开源社区，最高可见度 |
-| 🇨🇳 中国团队内部项目 | Gitee | 国内访问快，数据本地化 |
-| 🏢 企业私有部署 | GitLab CE | 免费自托管，权限粒度细 |
-| 🔄 Atlassian 生态 | Bitbucket | 与 Jira 原生集成 |
-| 🚀 需要最强 CI/CD | GitLab | CI 原生内置 |
-| 🔐 高安全合规要求 | GitLab EE / GitHub Enterprise | 审计日志、SAML SSO |
-| 👤 个人学习/作品集 | GitHub | 简历加分、技术社交 |
+| 开源项目 | GitHub | 最大开源社区，最高可见度 |
+| 中国团队内部项目 | Gitee | 国内访问快，数据本地化 |
+| 企业私有部署 | GitLab CE | 免费自托管，权限粒度细 |
+| Atlassian 生态 | Bitbucket | 与 Jira 原生集成 |
+| 需要最强 CI/CD | GitLab | CI 原生内置 |
+| 高安全合规要求 | GitLab EE / GitHub Enterprise | 审计日志、SAML SSO |
+| 个人学习/作品集 | GitHub | 简历加分、技术社交 |
 
 ## 9. GitHub 生态
 
@@ -413,7 +413,7 @@ deploy_prod:
 |--------|--------|--------|
 | 角色粒度 | 5 级 | 8 级 |
 | 可见性控制 | 公开/私有 | 公开/内部/私有 |
-| Group 嵌套 | ❌ | ✅ 多层 Group |
+| Group 嵌套 | ✗ | ✓ 多层 Group |
 | 审批规则 | PR Approval | MR Approval Rules（按文件/按人数） |
 | 开源 | 核心闭源 | CE 完全开源 |
 
@@ -453,7 +453,7 @@ gh search prs --review-requested=@me --state=open \
   --json title,url,repository --jq '.[] | "\(.repository.name): \(.title)"'
 ```
 
-> 💡 效率技巧：`alias gprc='gh pr create'`、`alias gprv='gh pr view --web'`、`alias gprm='gh pr merge --squash'`。
+> 效率技巧：`alias gprc='gh pr create'`、`alias gprv='gh pr view --web'`、`alias gprm='gh pr merge --squash'`。
 
 ### 11.2 多平台同步
 
@@ -505,11 +505,11 @@ git lfs migrate import --include="*.jar" --everything   # 迁移已有历史大�
 git push --force origin main   # 迁移后强制推送
 ```
 
-> ⚠️ **LFS 注意 4 条**：① 有存储和带宽限制（免费额度约 1GB/月，GitHub 超出 $5/50GB）；② LFS 文件一旦推送删除非常困难（LFS 仍保留对象）；③ review 时无法对比 LFS 文件差异（只能看指针变化）；④ 成员未装 `git-lfs` 时 clone 会下载指针文件而非实际内容。
+> **LFS 注意 4 条**：① 有存储和带宽限制（免费额度约 1GB/月，GitHub 超出 $5/50GB）；② LFS 文件一旦推送删除非常困难（LFS 仍保留对象）；③ review 时无法对比 LFS 文件差异（只能看指针变化）；④ 成员未装 `git-lfs` 时 clone 会下载指针文件而非实际内容。
 
 ## 13. 核心要点
 
-> 🎯 **核心要点**：
+> **核心要点**：
 > - 远程 = 同步点：`fetch`（只读安全）→ `pull --rebase`（线性同步）→ `push -u`（建跟踪）；
 > - Fork 工作流三远程关系：origin（自己）、upstream（上游）、PR（回上游）；
 > - PR 是协作核心机制：小而专注（200-400 行）、描述"做什么/为什么/怎么测"、合并即删分支；

@@ -2,7 +2,7 @@
 
 > 定位：过渡/动画/变换三件套、渐变与阴影、BFC 与层叠上下文、视觉设计模式——从"能布局"到"会做效果"
 
-## 📚 目录
+## 目录
 
 1. [过渡 transition](#1-过渡-transition)
 2. [动画 animation](#2-动画-animation)
@@ -46,10 +46,10 @@
 ```css
 /* 动画性能提示：只过渡 transform/opacity（GPU 合成） */
 .card { transition: transform 0.3s ease, opacity 0.3s ease; }
-/* ❌ 不要过渡 width/height/top（触发重排） */
+/* ✗ 不要过渡 width/height/top（触发重排） */
 ```
 
-> 🎯 **要点**：过渡性能三原则——只动 `transform/opacity`（GPU 层）、`will-change` 提示合成层、避免布局属性动画。这是 2026 前端性能面试必答点。
+> **要点**：过渡性能三原则——只动 `transform/opacity`（GPU 层）、`will-change` 提示合成层、避免布局属性动画。这是 2026 前端性能面试必答点。
 
 ---
 
@@ -147,7 +147,7 @@
 }
 ```
 
-> 🎯 **要点**：`transform` 不触发重排（合成器处理）——**动画性能的基石**。位移优先用 transform 而非 top/left。
+> **要点**：`transform` 不触发重排（合成器处理）——**动画性能的基石**。位移优先用 transform 而非 top/left。
 
 ---
 
@@ -207,7 +207,7 @@ BFC 解决三大经典问题：
   ② 浮动元素撑不起父容器（clearfix 的现代替代）
   ③ 文字环绕控制
 
-⚠️ 面试必答：
+面试必答：
 "BFC 三能力——防 margin 折叠、包含浮动、
  隔离内外布局；现代触发方式
  display: flow-root 最语义化。"
@@ -231,7 +231,7 @@ BFC 解决三大经典问题：
   transform / filter / will-change
   display: flex/grid 的子项 + z-index
 
-⚠️ 面试必答：
+面试必答：
 "'z-index 失效'多半是层叠上下文——
  transform/opacity 会创建上下文，
  内部 z-index 无法与外部比较。"
@@ -273,7 +273,7 @@ BFC 解决三大经典问题：
 | 骨架屏 | 渐变 + animation |
 | 流光按钮 | 伪元素 + 位移动画 |
 
-> 🎯 **核心要点**：动画视觉四件套——**transition**（状态过渡，只动 transform/opacity）、**animation**（keyframes 关键帧）、**transform**（GPU 合成）、**gradient/shadow**（视觉质感）。BFC 与层叠上下文是两个"隐形机制"——布局异常和 z-index 失效的根因都在这里。
+> **核心要点**：动画视觉四件套——**transition**（状态过渡，只动 transform/opacity）、**animation**（keyframes 关键帧）、**transform**（GPU 合成）、**gradient/shadow**（视觉质感）。BFC 与层叠上下文是两个"隐形机制"——布局异常和 z-index 失效的根因都在这里。
 
 ---
 

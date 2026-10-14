@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [两个模式的本质](#1-两个模式的本质)
 2. [Reactor 模式：就绪通知 + 事件分发](#2-reactor-模式就绪通知--事件分发)
@@ -31,7 +31,7 @@ Proactor（前摄器）：内核说"我已经读好了" → 用户态直接处�
   Proactor = "命令交给内核干完再叫醒我"
 ```
 
-> 🎯 **核心要点**：模式不是"性能之争"，而是**内核机制的用户态投影**——你在 Linux 用 epoll，天然是 Reactor 风格；用 io_uring，天然是 Proactor 风格。强行跨层（如 epoll 上模拟 AIO）得不偿失。
+> **核心要点**：模式不是"性能之争"，而是**内核机制的用户态投影**——你在 Linux 用 epoll，天然是 Reactor 风格；用 io_uring，天然是 Proactor 风格。强行跨层（如 epoll 上模拟 AIO）得不偿失。
 
 ## 2. Reactor 模式：就绪通知 + 事件分发
 
@@ -205,27 +205,27 @@ Asynchronous Operation Processor：内核异步执行器（io_uring 内核侧）
 
 ```text
 选 Reactor（epoll）：
-  ✅ Web 服务器/网关/微服务（业务逻辑是瓶颈）
-  ✅ 团队熟悉、生态成熟（Netty/Nginx/Go/Node 全部 Reactor）
-  ✅ 需要灵活的缓冲区管理
-  ✅ 2026 默认选择
+  ✓ Web 服务器/网关/微服务（业务逻辑是瓶颈）
+  ✓ 团队熟悉、生态成熟（Netty/Nginx/Go/Node 全部 Reactor）
+  ✓ 需要灵活的缓冲区管理
+  ✓ 2026 默认选择
 
 选 Proactor（io_uring）：
-  ✅ 存储/数据库引擎（磁盘 I/O 混合场景收益最大）
-  ✅ 尾时延极致敏感（交易、直播）
-  ✅ 数据面固定、可预分配缓冲（回显、转发）
-  ✅ 单核吞吐极限（SQPOLL + multishot + ZC Rx）
+  ✓ 存储/数据库引擎（磁盘 I/O 混合场景收益最大）
+  ✓ 尾时延极致敏感（交易、直播）
+  ✓ 数据面固定、可预分配缓冲（回显、转发）
+  ✓ 单核吞吐极限（SQPOLL + multishot + ZC Rx）
 
 混合（生产常见）：
   业务路径 Reactor + 文件/大流量路径 io_uring
   例：HAProxy 2.6+ 双引擎；RocksDB/MySQL 内嵌 io_uring 同时对外 Reactor
 ```
 
-> 💡 **2026 判断**：不要把"io_uring 更快"简单等同"Proactor 更好"——模式选型跟着**瓶颈与团队**走：业务瓶颈选 Reactor（生态红利），I/O 瓶颈选 Proactor（机制红利）。
+> **2026 判断**：不要把"io_uring 更快"简单等同"Proactor 更好"——模式选型跟着**瓶颈与团队**走：业务瓶颈选 Reactor（生态红利），I/O 瓶颈选 Proactor（机制红利）。
 
 ## 7. 核心要点与思考题
 
-> 🎯 **本章三句话总结**：
+> **本章三句话总结**：
 > 1. Reactor=就绪通知（epoll 投影）、Proactor=完成通知（io_uring 投影）——模式是内核机制的用户态形态；
 > 2. Reactor 三线程模型：单线程（Redis）→ 多线程（业务解耦）→ 主从（Netty：accept 与读写分离、连接亲和无锁）；
 > 3. 选型：默认 Reactor（生态成熟）；io_uring 系 Proactor 用于存储/尾时延敏感场景；生产可混合。

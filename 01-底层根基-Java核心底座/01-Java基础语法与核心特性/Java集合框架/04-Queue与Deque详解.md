@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [Queue / Deque 接口语义](#1-queue--deque-接口语义)
 2. [ArrayDeque：循环数组实现，栈队列首选](#2-arraydeque循环数组实现栈队列首选)
@@ -37,7 +37,7 @@ q.peek();                    // a，空返回 null
 q.poll();                    // a，空返回 null —— 出队推荐
 ```
 
-> 🎯 **核心要点**：**生产代码用 `offer/poll/peek` 三件套**——用返回 null/false 表达"空/满"，避免异常流程控制。`add/remove/element` 三件套语义上更"严格"，适合确定不会空/满的场合。
+> **核心要点**：**生产代码用 `offer/poll/peek` 三件套**——用返回 null/false 表达"空/满"，避免异常流程控制。`add/remove/element` 三件套语义上更"严格"，适合确定不会空/满的场合。
 
 **Deque 的双端 API**（JDK 6+，队列语义同 Queue）：
 
@@ -69,7 +69,7 @@ addLast(e)：tail 后移 →      [ d ][ b ][ c ][ e ]...   O(1)
 |------|:----------:|:----------:|
 | 底层 | 循环数组（连续内存） | 双向链表（节点分散） |
 | 内存 | 只存元素 + 2 个指针 | 每元素多 ~24B 节点开销 |
-| 缓存 | ✅ 连续内存，迭代/操作友好 | ❌ 指针跳跃 |
+| 缓存 | ✓ 连续内存，迭代/操作友好 | ✗ 指针跳跃 |
 | 双端操作 | O(1) 均摊（扩容翻倍复制） | O(1) |
 | null | **禁止 null**（poll 用 null 表达空） | 允许 |
 | 栈/队列 API | 完整 Deque | 完整 Deque |
@@ -86,7 +86,7 @@ stack.push("a"); stack.push("b");           // 栈：push = addFirst
 String top = stack.pop();                   // b，pop = pollFirst
 ```
 
-> ⚠️ 容量细节：ArrayDeque 初始容量 16，扩容 2 倍（且强制为 2 的幂）；构造时可 `new ArrayDeque<>(预计容量)` 避免扩容。**不允许 null**——因为 poll/peek 用 null 表示"空"，null 元素会破坏这个约定。
+> 容量细节：ArrayDeque 初始容量 16，扩容 2 倍（且强制为 2 的幂）；构造时可 `new ArrayDeque<>(预计容量)` 避免扩容。**不允许 null**——因为 poll/peek 用 null 表示"空"，null 元素会破坏这个约定。
 
 ---
 
@@ -136,7 +136,7 @@ PriorityQueue<Task> pq = new PriorityQueue<>(Comparator.comparing(Task::priority
 // compareTo 返回 0 的两个元素不保证互相 remove 得掉，规范上要求两者一致
 ```
 
-> 🎯 **核心要点**：PriorityQueue 是"**每次取最值**"场景的利器（TopK、定时任务、Huffman 编码、Dijkstra 算法）。迭代顺序**不是排序序**（堆只是部分有序），要全序结果需 `poll` 循环或转数组后排序——这是最常见的误解。
+> **核心要点**：PriorityQueue 是"**每次取最值**"场景的利器（TopK、定时任务、Huffman 编码、Dijkstra 算法）。迭代顺序**不是排序序**（堆只是部分有序），要全序结果需 `poll` 循环或转数组后排序——这是最常见的误解。
 
 ---
 
@@ -145,10 +145,10 @@ PriorityQueue<Task> pq = new PriorityQueue<>(Comparator.comparing(Task::priority
 JDK 官方文档对 `Stack` 的处置：**"A more complete and consistent set of LIFO stack operations is provided by the Deque interface and its implementations, which should be used in preference to this class."**（应优先使用 Deque 实现）
 
 ```java
-// ❌ 遗留写法
+// ✗ 遗留写法
 Stack<String> stack = new Stack<>();
 
-// ✅ 现代写法（语义、API 完全一致，性能更好）
+// ✓ 现代写法（语义、API 完全一致，性能更好）
 Deque<String> stack = new ArrayDeque<>();
 stack.push("a");      // push / pop / peek —— 与 Stack 同名同义
 stack.pop();
@@ -171,12 +171,12 @@ stack.pop();
 
 | 实现 | 底层 | 有界 | 特性 | 典型场景 |
 |------|------|:----:|------|---------|
-| ArrayBlockingQueue | 循环数组 + 单锁 | ✅ | 公平性可配 | 有界任务队列 |
+| ArrayBlockingQueue | 循环数组 + 单锁 | ✓ | 公平性可配 | 有界任务队列 |
 | LinkedBlockingQueue | 链表 + 双锁 | 可配（默认 Integer.MAX） | 吞吐高 | 线程池默认队列 |
-| PriorityBlockingQueue | 二叉堆 + 锁 | ❌ | 优先级出队 | 有优先级任务 |
+| PriorityBlockingQueue | 二叉堆 + 锁 | ✗ | 优先级出队 | 有优先级任务 |
 | SynchronousQueue | 无缓冲 | — | put/take 直接交接 | 传递性任务（newCachedThreadPool） |
-| DelayQueue | 堆 + 锁 | ❌ | 到期才可取 | 定时任务、延迟重试 |
-| LinkedTransferQueue | 无锁链表 | ❌ | transfer 直交 | 高性能传递 |
+| DelayQueue | 堆 + 锁 | ✗ | 到期才可取 | 定时任务、延迟重试 |
+| LinkedTransferQueue | 无锁链表 | ✗ | transfer 直交 | 高性能传递 |
 
 ```java
 // 生产-消费经典骨架（线程池内部就是 LinkedBlockingQueue）
@@ -191,7 +191,7 @@ new Thread(() -> {
 queue.put(() -> System.out.println("task"));   // 满则阻塞 —— 生产者
 ```
 
-> ⚠️ 阻塞队列的坑：`take()` 中断时抛 InterruptedException，**处理惯例是恢复中断标志**（`Thread.currentThread().interrupt()`）而不是吞掉；`put` 永不返回的特性让它天然成为线程池"拒绝策略"之外的背压机制。
+> 阻塞队列的坑：`take()` 中断时抛 InterruptedException，**处理惯例是恢复中断标志**（`Thread.currentThread().interrupt()`）而不是吞掉；`put` 永不返回的特性让它天然成为线程池"拒绝策略"之外的背压机制。
 
 ---
 
@@ -199,7 +199,7 @@ queue.put(() -> System.out.println("task"));   // 满则阻塞 —— 生产者
 
 ```text
 需要什么队列语义？
-├── 普通 FIFO 队列/栈（单线程） → ArrayDeque ✅
+├── 普通 FIFO 队列/栈（单线程） → ArrayDeque ✓
 ├── 按优先级取 → PriorityQueue
 ├── 有界阻塞队列（生产者-消费者） → ArrayBlockingQueue / LinkedBlockingQueue
 ├── 无界非阻塞并发队列 → ConcurrentLinkedQueue（见 06 模块）

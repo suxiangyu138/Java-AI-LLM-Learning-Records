@@ -1,12 +1,12 @@
 # DEVELOPMENT.md — 开发说明文档
 
-> 🚀 本仓库（Java 后端 + AI 大模型知识库，5,752 篇文档）的 Git 分支策略与开发规范。基于 **Git Flow** 适配文档维护场景：常驻 `main` + `develop`，动态 `feature/release/hotfix`
+> 本仓库（Java 后端 + AI 大模型知识库，5,752 篇文档）的 Git 分支策略与开发规范。基于 **Git Flow** 适配文档维护场景：常驻 `main` + `develop`，动态 `feature/release/hotfix`
 >
-> 📅 最后更新：2026-08-12
+> 最后更新：2026-08-12
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [分支体系总览](#1-分支体系总览)
 2. [分支职责说明](#2-分支职责说明)
@@ -45,9 +45,9 @@ develop（开发集成分支）────────────────�
 | **release/1.x** | 动态 | 临时（天） | 发布准备（review + 修正） |
 | **hotfix/xxx** | 动态 | 临时（小时/天） | 紧急修正（如文档链接断裂/错误内容） |
 
-> 🎯 **本仓库约定**：文档仓库「发布」= 内容稳定可展示。`main` 是 GitHub 默认展示分支——**日常合并完成后，main 即为最新稳定版本**。
+> **本仓库约定**：文档仓库「发布」= 内容稳定可展示。`main` 是 GitHub 默认展示分支——**日常合并完成后，main 即为最新稳定版本**。
 >
-> 🏁 **阶段落幕（2026-08-12）**：批量扩建阶段结束（5,752 篇，280 次提交收官）。仓库转入**维护模式**——只接受内容修正（死链/错字/过时校准），不再批量新建知识体系；新体系按需以 `feature` 分支创建。
+> **阶段落幕（2026-08-12）**：批量扩建阶段结束（5,752 篇，280 次提交收官）。仓库转入**维护模式**——只接受内容修正（死链/错字/过时校准），不再批量新建知识体系；新体系按需以 `feature` 分支创建。
 
 ---
 
@@ -117,7 +117,7 @@ develop（开发集成分支）────────────────�
 ├── 结构性问题（目录/索引）统一处理
 └── 触发时机：阶段性里程碑（如 5,752 篇收官、知识库结构调整）
 
-🏁 维护模式下的发布：
+维护模式下的发布：
 ├── 批量扩建阶段已落幕（2026-08-12，5,752 篇收官）
 ├── 日常维护：修正类提交直接合并 main（保持展示分支稳定）
 └── 新体系：按需创建（feature → develop → 里程碑合入 main）
@@ -273,13 +273,13 @@ docs: daily contribution #N
 ### 6.3 提交纪律
 
 ```text
-✅ 必须：
+✓ 必须：
 ├── 一个提交 = 一个逻辑单元（一个体系/一个修正）
 ├── 信息清晰（做了什么 + 为什么）
 ├── 可编译/可验证（文档可访问、无死链）
 └── 中文内容 + 英文术语（遵循仓库规范）
 
-❌ 禁止：
+✗ 禁止：
 ├── 提交半成品（未完成的体系）
 ├── 提交临时文件（.tmp/备份）
 ├── 提交敏感信息（密钥/密码）
@@ -359,19 +359,19 @@ git checkout main && git merge develop && git push origin main
 
 ## 9. GitHub 保护规则建议
 
-> ⚠️ 在 GitHub 仓库 Settings → Branches → Add rule 配置：
+> 在 GitHub 仓库 Settings → Branches → Add rule 配置：
 
 ```text
 main 分支保护规则：
-├── ✅ Require a pull request before merging
+├── ✓ Require a pull request before merging
 │   └── 禁止直接推送（必须 PR）
-├── ✅ Require status checks（若配置 CI）
+├── ✓ Require status checks（若配置 CI）
 │   └── 链接检查/格式校验通过才可合并
-├── ✅ Do not allow bypassing（管理员也遵守）
+├── ✓ Do not allow bypassing（管理员也遵守）
 └── 可选：Require conversation resolution（评审完成）
 
 develop 分支保护规则：
-├── ✅ Require a pull request before merging
+├── ✓ Require a pull request before merging
 └── （个人仓库可放宽——直接推送）
 
 个人维护建议：
@@ -382,7 +382,7 @@ develop 分支保护规则：
 
 ---
 
-> 🎯 **一句话总结**：本仓库 Git 策略 = **main（展示）+ develop（集成）+ feature/release/hotfix（动态）**——个人维护时 develop 直推、main 走里程碑合并；团队协作时全部走 PR。核心是：**main 永远稳定、develop 永远前进、动态分支用完即删**。
+> **一句话总结**：本仓库 Git 策略 = **main（展示）+ develop（集成）+ feature/release/hotfix（动态）**——个人维护时 develop 直推、main 走里程碑合并；团队协作时全部走 PR。核心是：**main 永远稳定、develop 永远前进、动态分支用完即删**。
 
 ---
 

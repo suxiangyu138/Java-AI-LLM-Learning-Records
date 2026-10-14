@@ -1,10 +1,10 @@
 # Homebrew 包管理与软件生态
 
-> 🍺 "The Missing Package Manager for macOS" —— 从 `brew install` 到 Brewfile 一键恢复，从 Formulae 到 Casks 到 MAS，macOS 上最不可或缺的开发者工具
+> "The Missing Package Manager for macOS" —— 从 `brew install` 到 Brewfile 一键恢复，从 Formulae 到 Casks 到 MAS，macOS 上最不可或缺的开发者工具
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [Homebrew 核心概念与原理](#1-homebrew-核心概念与原理)
 2. [基础命令完全指南](#2-基础命令完全指南)
@@ -148,7 +148,7 @@ brew --cellar maven               # → /opt/homebrew/Cellar/maven
 | **格式** | Ruby 脚本 | Ruby 脚本 + .app | 通过 App Store API |
 | **安装位置** | `/opt/homebrew/Cellar/` | `/Applications/` | `/Applications/` |
 | **更新方式** | `brew upgrade` | `brew upgrade --cask` | `mas upgrade` |
-| **版本管理** | ✅ 多版本共存 | ❌ 只保留最新 | ❌ 只保留最新 |
+| **版本管理** | ✓ 多版本共存 | ✗ 只保留最新 | ✗ 只保留最新 |
 | **示例** | `git`, `maven`, `node`, `python` | `google-chrome`, `intellij-idea`, `docker` | `Xcode`, `Pages`, `Keynote` |
 
 ### 3.2 Casks 使用示例
@@ -293,7 +293,7 @@ brew bundle check --file=~/Brewfile
 brew bundle cleanup --file=~/Brewfile --force
 ```
 
-> 🎯 **核心要点**：Brewfile 是 macOS 开发环境迁移的终极方案，配合 iCloud/Dropbox/Git 同步，换新 Mac 后一条命令恢复全部工作环境。
+> **核心要点**：Brewfile 是 macOS 开发环境迁移的终极方案，配合 iCloud/Dropbox/Git 同步，换新 Mac 后一条命令恢复全部工作环境。
 
 ### 5.3 维护 Brewfile 的最佳实践
 
@@ -322,40 +322,40 @@ brew bundle cleanup --force
 
 set -e
 
-echo "🍺 Step 1: 安装 Homebrew..."
+echo "Step 1: 安装 Homebrew..."
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 eval "$(/opt/homebrew/bin/brew shellenv)"
 
-echo "☕ Step 2: 安装 JDK..."
+echo "Step 2: 安装 JDK..."
 brew install openjdk@17 openjdk@21
 # 符号链接到系统 JDK 目录
 sudo ln -sfn /opt/homebrew/opt/openjdk@21/libexec/openjdk.jdk /Library/Java/JavaVirtualMachines/openjdk-21.jdk
 
-echo "📦 Step 3: 安装构建工具..."
+echo "Step 3: 安装构建工具..."
 brew install maven gradle
 
-echo "🛠️ Step 4: 安装通用开发工具..."
+echo "Step 4: 安装通用开发工具..."
 brew install git node python
 brew install --cask docker visual-studio-code postman dbeaver-community
 
-echo "🖥️ Step 5: 安装终端工具..."
+echo "Step 5: 安装终端工具..."
 brew install --cask iterm2
 brew install fzf
 $(brew --prefix)/opt/fzf/install --all
 
-echo "✍️ Step 6: 安装 IDE..."
+echo "Step 6: 安装 IDE..."
 brew install --cask intellij-idea
 
-echo "🔤 Step 7: 安装编程字体..."
+echo "Step 7: 安装编程字体..."
 brew install --cask font-fira-code-nerd-font font-jetbrains-mono-nerd-font
 
-echo "⚡ Step 8: 安装效率工具..."
+echo "Step 8: 安装效率工具..."
 brew install --cask raycast rectangle alt-tab
 
-echo "🧹 Step 9: 清理..."
+echo "Step 9: 清理..."
 brew cleanup
 
-echo "✅ 开发环境初始化完成！"
+echo "✓ 开发环境初始化完成！"
 java --version
 mvn --version
 ```

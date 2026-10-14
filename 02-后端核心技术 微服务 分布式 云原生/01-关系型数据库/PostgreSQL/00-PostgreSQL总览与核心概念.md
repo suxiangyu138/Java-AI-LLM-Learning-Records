@@ -2,7 +2,7 @@
 
 > 定位：PostgreSQL 知识体系入口——定位、版本现状（2026-07 验证）、PG 18 新特性详解、vs MySQL 深度对比、核心概念、模块导航
 
-## 📚 目录
+## 目录
 
 1. [PostgreSQL 是什么](#1-postgresql-是什么)
 2. [版本演进与 18 新特性](#2-版本演进与-18-新特性)
@@ -27,7 +27,7 @@ PostgreSQL = 高级开源关系型数据库（ORDBMS）
   ⑤ 优化器优秀（多连接算法/并行查询/CTE 优化）
   ⑥ 事务能力完整（SSI 可串行化/保存点/递归 CTE）
 
-⚠️ 面试必答：
+面试必答：
 "PG = 开源功能之王——
  SQL 标准最高、扩展最丰富（PostGIS/pgvector）、
  MVCC 无回滚段设计、优化器最强；
@@ -75,13 +75,13 @@ PostgreSQL = 高级开源关系型数据库（ORDBMS）
 ```sql
 -- PG 18 UUID v7 示例（时间有序，索引友好）
 CREATE TABLE orders (
-    id uuid DEFAULT uuidv7() PRIMARY KEY,   -- ⚠️ 替代随机 UUIDv4
+    id uuid DEFAULT uuidv7() PRIMARY KEY,   -- 替代随机 UUIDv4
     created_at timestamptz DEFAULT now()
 );
 -- 对比 UUIDv4：v7 按时间排序插入 → 索引不碎片化
 ```
 
-> 🎯 **要点**：PG 18 三大亮点——**AIO**（性能 3×）、**UUIDv7**（分布式 ID 原生解）、**Skip Scan**（索引使用更聪明）。对 Java 后端影响最大的其实是 UUIDv7 与 AIO。
+> **要点**：PG 18 三大亮点——**AIO**（性能 3×）、**UUIDv7**（分布式 ID 原生解）、**Skip Scan**（索引使用更聪明）。对 Java 后端影响最大的其实是 UUIDv7 与 AIO。
 
 ---
 
@@ -91,18 +91,18 @@ CREATE TABLE orders (
 
 | 维度 | PostgreSQL | MySQL |
 |------|:---:|:---:|
-| SQL 标准 | ✅ 最合规 | 中等 |
-| 复杂查询 | ✅ 优化器强 | 简单查询快 |
+| SQL 标准 | ✓ 最合规 | 中等 |
+| 复杂查询 | ✓ 优化器强 | 简单查询快 |
 | MVCC | 多版本存储（VACUUM 回收） | undo log 版本链 |
 | 索引 | **六种**（B-tree/GIN/GiST/BRIN/Hash/向量） | B-tree/Hash/全文 |
 | JSON | **JSONB（可索引）** | JSON（不可索引） |
-| 扩展 | ✅ PostGIS/pgvector/PL 语言 | 较少 |
+| 扩展 | ✓ PostGIS/pgvector/PL 语言 | 较少 |
 | 并发 | 读不阻塞写（快照） | 读写互斥（锁粒度） |
-| 递归 CTE | ✅ | ⚠️ 8.0+ 才支持 |
-| 窗口函数 | ✅ 完整 | ⚠️ 8.0+ |
+| 递归 CTE | ✓ | 8.0+ 才支持 |
+| 窗口函数 | ✓ 完整 | 8.0+ |
 | 分区 | 声明式分区 | 分区表 |
 | 运维 | 较复杂（VACUUM） | 简单（自动清理） |
-| 向量检索 | ✅ pgvector | ❌ |
+| 向量检索 | ✓ pgvector | ✗ |
 
 ### 3.2 MVCC 实现差异（核心）
 
@@ -119,7 +119,7 @@ MySQL：undo log 回滚段
   → 无需手动管理
   → 长事务导致 undo 膨胀
 
-⚠️ 面试必答：
+面试必答：
 "PG 与 MySQL MVCC 最大差异——
  PG 多版本在表内（VACUUM 回收）、
  MySQL 在 undo 回滚段（purge 回收）；
@@ -149,7 +149,7 @@ PG 进程模型（与 MySQL 线程模型不同）：
   Backend 进程（每连接一个）
   辅助进程：WAL writer / Checkpointer / Autovacuum / Stats
 
-⚠️ 面试必答：
+面试必答：
 "PG = 多进程架构（每连接一个进程）、
  MySQL = 多线程架构（共享内存）；
  PG 进程隔离更稳（一个连接崩不影响其他），
@@ -174,7 +174,7 @@ TOAST：大字段自动压缩外置存储
 WAL（Write-Ahead Log）：
   修改前先写日志（与 MySQL redo log 同原理）
   崩溃恢复重放 WAL
-  ⚠️ 对比 MySQL：PG 的 WAL 同时承担复制（流复制）
+  对比 MySQL：PG 的 WAL 同时承担复制（流复制）
 
 PG 特有：WAL 压缩、WAL 归档（PITR）
 ```
@@ -191,15 +191,15 @@ PG 特有：WAL 压缩、WAL 归档（PITR）
 | WAL | 预写日志（崩溃恢复+复制） | redo log |
 | CTE | 公用表表达式（WITH 子句） | 8.0+ |
 | 窗口函数 | OVER 子句 | 8.0+ |
-| LATERAL | 行级子查询 JOIN | ❌ 无 |
-| RETURNING | 增删改返回行 | ❌ 无 |
+| LATERAL | 行级子查询 JOIN | ✗ 无 |
+| RETURNING | 增删改返回行 | ✗ 无 |
 | UPSERT | ON CONFLICT 冲突处理 | ON DUPLICATE |
 | JSONB | 二进制 JSON（可索引） | JSON |
-| BRIN 索引 | 块范围索引（超大表） | ❌ 无 |
+| BRIN 索引 | 块范围索引（超大表） | ✗ 无 |
 | GIN 索引 | 倒排索引（全文/数组） | FULLTEXT |
-| GiST 索引 | 通用搜索树（几何） | ❌ 无 |
-| pgvector | 向量相似检索扩展 | ❌ 无 |
-| PostGIS | 地理空间扩展 | ❌ 无 |
+| GiST 索引 | 通用搜索树（几何） | ✗ 无 |
+| pgvector | 向量相似检索扩展 | ✗ 无 |
+| PostGIS | 地理空间扩展 | ✗ 无 |
 | Tablespace | 表空间（物理位置） | 无 |
 | Schema | 命名空间 | 库即命名空间 |
 | 流复制 | WAL 日志复制 | binlog 复制 |
@@ -221,7 +221,7 @@ PG 特有：WAL 压缩、WAL 归档（PITR）
 
 ---
 
-> 🎯 **本体系学习建议**：PG 的学习重点是**差异**——与 MySQL 的 3 大差异（MVCC 无回滚段 + 六种索引 + 扩展生态）是面试主线。先建立对比认知（00），再学独有特性（01-04），最后实战（05-06）。
+> **本体系学习建议**：PG 的学习重点是**差异**——与 MySQL 的 3 大差异（MVCC 无回滚段 + 六种索引 + 扩展生态）是面试主线。先建立对比认知（00），再学独有特性（01-04），最后实战（05-06）。
 
 ---
 

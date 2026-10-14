@@ -1,6 +1,6 @@
 # 06 - Qwen 在开发框架中的集成
 
-> 🎯 Qwen 兼容 OpenAI 协议 = 所有主流框架零成本接入 — LangChain4j、Spring AI、Python LangChain、OpenClaw 全部改 baseUrl 即用。百炼平台一个 Key 还能调用 GLM/Kimi/MiniMax/DeepSeek
+> Qwen 兼容 OpenAI 协议 = 所有主流框架零成本接入 — LangChain4j、Spring AI、Python LangChain、OpenClaw 全部改 baseUrl 即用。百炼平台一个 Key 还能调用 GLM/Kimi/MiniMax/DeepSeek
 
 ---
 
@@ -173,10 +173,10 @@ export OPENAI_API_KEY="$DASHSCOPE_API_KEY"
 # 设置 → Models → OpenAI API Key → base URL 改为百炼端点
 ```
 
-> 💡 **百炼 Coding Plan 的价值：** 一个订阅（Pro ¥200/月）即可在 Claude Code/Cline/OpenClaw/Cursor 中自由切换 Qwen3.5/GLM-5/Kimi/MiniMax 四大开源模型。
+> **百炼 Coding Plan 的价值：** 一个订阅（Pro ¥200/月）即可在 Claude Code/Cline/OpenClaw/Cursor 中自由切换 Qwen3.5/GLM-5/Kimi/MiniMax 四大开源模型。
 
 ---
 
-> 🎯 **核心要点**：Qwen 集成一句话 — **"OpenAI 兼容 = 所有框架零成本接入"**。所有框架只需改 `baseUrl`（dashscope.aliyuncs.com/compatible-mode/v1）+ `model`（qwen3.5-plus/flash）。最大卖点：**百炼平台一个 Key 调用 100+ 模型**（Qwen/GLM/Kimi/MiniMax/DeepSeek）+ Coding Plan 订阅跨工具自由切换。
+> **核心要点**：Qwen 集成一句话 — **"OpenAI 兼容 = 所有框架零成本接入"**。所有框架只需改 `baseUrl`（dashscope.aliyuncs.com/compatible-mode/v1）+ `model`（qwen3.5-plus/flash）。最大卖点：**百炼平台一个 Key 调用 100+ 模型**（Qwen/GLM/Kimi/MiniMax/DeepSeek）+ Coding Plan 订阅跨工具自由切换。
 
 **下一模块**：[07-Qwen选型与生态对比](07-Qwen选型与生态对比.md) / **返回总览**：[00-总览](00-Qwen-API知识体系总览.md)

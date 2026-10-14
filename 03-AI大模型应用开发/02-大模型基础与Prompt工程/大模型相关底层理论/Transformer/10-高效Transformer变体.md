@@ -1,6 +1,6 @@
 # 10 - 高效 Transformer 变体
 
-> 🎯 标准 Attention 的 O(n²) 复杂度是长序列的天敌。本章覆盖 Sparse Attention、Linformer、Reformer、Longformer、Flash Attention 等高效方案，理解它们的设计思想比记住名字更重要
+> 标准 Attention 的 O(n²) 复杂度是长序列的天敌。本章覆盖 Sparse Attention、Linformer、Reformer、Longformer、Flash Attention 等高效方案，理解它们的设计思想比记住名字更重要
 
 ---
 
@@ -93,10 +93,10 @@ Flash Attention ≠ 改变复杂度，而是优化计算方式
   → Flash Attention: 减少显存读写 = 加速
 
 效果：
-  ✅ 显存：O(N²) → O(N)
-  ✅ 速度：2-4x 加速
-  ✅ 精度：数学等价（不是近似）
-  ✅ 长序列：支持到 64K+
+  ✓ 显存：O(N²) → O(N)
+  ✓ 速度：2-4x 加速
+  ✓ 精度：数学等价（不是近似）
+  ✓ 长序列：支持到 64K+
 
 版本：
   Flash Attention 1 (2022)：基础 tiling + recomputation
@@ -113,10 +113,10 @@ Flash Attention ≠ 改变复杂度，而是优化计算方式
 | 标准 Attention | O(n²) | 0% | 基准 |
 | Sparse (Longformer) | O(n·w) | 小 | 特定场景 |
 | Linformer | O(n) | 中等 | 实验/小众 |
-| **Flash Attention** | **O(n²)** | **0%** | **💯 标配！** |
-| **Flash Attn 2** | **O(n²)** | **0%** | **💯 标配！** |
+| **Flash Attention** | **O(n²)** | **0%** | **标配！** |
+| **Flash Attn 2** | **O(n²)** | **0%** | **标配！** |
 
-> 🎯 Flash Attention 之所以成为标配：因为它不是近似，而是等价实现——零精度损失 + 显存 O(N) + 速度 2-4x
+> Flash Attention 之所以成为标配：因为它不是近似，而是等价实现——零精度损失 + 显存 O(N) + 速度 2-4x
 
 ## 核心要点回顾
 

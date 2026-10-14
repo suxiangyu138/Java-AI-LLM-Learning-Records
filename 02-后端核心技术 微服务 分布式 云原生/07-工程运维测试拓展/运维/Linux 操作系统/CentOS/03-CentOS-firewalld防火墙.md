@@ -1,10 +1,10 @@
 # CentOS firewalld 深度实战
 
-> 🔥 Zone 区域体系、service/port/rich-rule 三层规则、直接规则 Direct Rules、NAT 转发与端口映射、与 nftables/iptables 底层关系
+> Zone 区域体系、service/port/rich-rule 三层规则、直接规则 Direct Rules、NAT 转发与端口映射、与 nftables/iptables 底层关系
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [firewalld 架构原理](#1-firewalld-架构原理)
 2. [Zone 区域精讲](#2-zone-区域精讲)
@@ -250,7 +250,7 @@ sudo firewall-cmd --list-all
 
 # 策略：仅开放必要端口，默认全拒
 sudo firewall-cmd --set-default-zone=drop
-# ⚠️ 别在远程服务器上直接设为 drop！会断开 SSH
+# 别在远程服务器上直接设为 drop！会断开 SSH
 # 正确做法：先 add-service=ssh --permanent，再改 default-zone
 ```
 
@@ -270,7 +270,7 @@ sudo firewall-cmd --query-panic
 
 ---
 
-> 🎯 **原则**：默认 zone=public，按需白名单放行。数据库不对外，仅负载均衡器 IP 能接触应用端口。**Rich Rule 加 source address 限 IP** = 最安全的端口开放方式。
+> **原则**：默认 zone=public，按需白名单放行。数据库不对外，仅负载均衡器 IP 能接触应用端口。**Rich Rule 加 source address 限 IP** = 最安全的端口开放方式。
 
 ---
 

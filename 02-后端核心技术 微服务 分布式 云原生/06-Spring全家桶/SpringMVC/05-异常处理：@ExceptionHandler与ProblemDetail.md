@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [HandlerExceptionResolver 解析链](#1-handlerexceptionresolver-解析链)
 2. [@ExceptionHandler 与 @RestControllerAdvice](#2-exceptionhandler-与-restcontrolleradvice)
@@ -43,7 +43,7 @@
 | HttpMediaTypeNotAcceptableException | 406 |
 | HttpMediaTypeNotSupportedException | 415 |
 
-> 🎯 **核心要点**：默认映射是"兜底"，业务上要用 @RestControllerAdvice 覆盖关键异常（校验、业务、未知）——否则客户端拿到的是框架默认错误体（无业务码、格式不统一）。
+> **核心要点**：默认映射是"兜底"，业务上要用 @RestControllerAdvice 覆盖关键异常（校验、业务、未知）——否则客户端拿到的是框架默认错误体（无业务码、格式不统一）。
 
 ## 2. @ExceptionHandler 与 @RestControllerAdvice
 
@@ -79,7 +79,7 @@ public class GlobalExceptionHandler {
 | `@RestControllerAdvice` | 全局 | 拦截所有控制器的异常（可 basePackages 限定） |
 | `@ControllerAdvice` | 全局 | 返回 ModelAndView（服务端渲染） |
 
-> ⚠️ **@RestControllerAdvice 的隐藏职责**：除了异常处理，它还能挂 `@InitBinder`（全局绑定器）与 `@ModelAttribute`（全局模型）——不要只当"异常类"用。
+> **@RestControllerAdvice 的隐藏职责**：除了异常处理，它还能挂 `@InitBinder`（全局绑定器）与 `@ModelAttribute`（全局模型）——不要只当"异常类"用。
 
 ## 3. RFC 7807 ProblemDetail 标准错误体
 
@@ -132,7 +132,7 @@ public class GlobalExceptionHandler {
 | `instance` | 发生问题的 URI |
 | 自定义属性 | setProperty 扩展（业务码、时间戳、字段错误） |
 
-> 🎯 **要点**：ProblemDetail 是 RFC 7807 标准——**不是自定义 JSON，是行业规范**。用它 = 客户端开箱即用的错误解析能力 + 可扩展业务属性。2026 年面试"错误响应怎么做"，答 ProblemDetail 是标准答案。
+> **要点**：ProblemDetail 是 RFC 7807 标准——**不是自定义 JSON，是行业规范**。用它 = 客户端开箱即用的错误解析能力 + 可扩展业务属性。2026 年面试"错误响应怎么做"，答 ProblemDetail 是标准答案。
 
 ## 4. 异常处理优先级与局部覆盖
 
@@ -175,7 +175,7 @@ public class SpecialController {
 }
 ```
 
-> ⚠️ **500 兜底的两条红线**：①必须完整日志（堆栈）——未知异常的排查全靠它；②对外响应**不得泄露堆栈/内部信息**（安全），统一"系统繁忙"。
+> **500 兜底的两条红线**：①必须完整日志（堆栈）——未知异常的排查全靠它；②对外响应**不得泄露堆栈/内部信息**（安全），统一"系统繁忙"。
 
 ## 5. 业务异常体系设计
 
@@ -224,7 +224,7 @@ public ProblemDetail handleBiz(BizException e) {
 | 服务层抛、全局层转 | 业务代码只抛异常，不做响应 |
 | 拒绝异常即响应 | 不在 service 拼响应体（耦合 HTTP 层） |
 
-> 🎯 **要点**：异常体系 = 基类（码+状态）+ 语义子类 + 全局 handler 翻译。**业务代码抛异常、Advice 翻译成响应**——这个分层让 Controller 保持薄、Service 保持纯粹。
+> **要点**：异常体系 = 基类（码+状态）+ 语义子类 + 全局 handler 翻译。**业务代码抛异常、Advice 翻译成响应**——这个分层让 Controller 保持薄、Service 保持纯粹。
 
 ## 6. 生产级全局异常处理器模板
 
@@ -287,7 +287,7 @@ public class GlobalExceptionHandler {
 - [ ] 认证/授权异常与 Security 体系联动（401/403 语义正确）
 - [ ] 全局与局部覆盖的边界测试（控制器内 handler 生效验证）
 
-> 🎯 **核心要点**：异常处理 = 解析链兜底 + Advice 全局翻译 + ProblemDetail 标准体。四件套：校验异常（字段级错误）、业务异常（业务码）、安全异常（401/403）、未知异常（日志 + 不泄露）——配齐就是企业级错误响应。**业务代码只抛语义异常，响应格式是全局层的事**。
+> **核心要点**：异常处理 = 解析链兜底 + Advice 全局翻译 + ProblemDetail 标准体。四件套：校验异常（字段级错误）、业务异常（业务码）、安全异常（401/403）、未知异常（日志 + 不泄露）——配齐就是企业级错误响应。**业务代码只抛语义异常，响应格式是全局层的事**。
 
 ---
 

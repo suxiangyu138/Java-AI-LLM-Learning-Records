@@ -6,7 +6,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [Logback 三层架构](#1-logback-三层架构)
 2. [核心组件：Logger/Appender/Layout](#2-核心组件loggerappenderlayout)
@@ -31,7 +31,7 @@
 Logback 三层
 ├── ① logback-core：核心（Appender/Layout 基础设施）
 ├── ② logback-classic：SLF4J 实现层（Logger 体系）
-│   └── ⚠️ 业务开发只用这个（core 是传递依赖）
+│   └── 业务开发只用这个（core 是传递依赖）
 ├── ③ logback-access：HTTP 访问日志（Servlet 容器）
 │   └── 用途：与 Tomcat/Jetty 集成（访问日志）
 └── 依赖（Maven）
@@ -193,7 +193,7 @@ SizeAndTimeBased（2026 生产标准）
 异步参数详解（生产推荐值）
 ├── queueSize：2048（默认 256——太小易丢）
 ├── discardingThreshold：0（默认 20%——会丢 INFO！）
-│   ├── ⚠️ 默认：队列满时丢弃 20% 尾部（含 INFO/WARN）
+│   ├── 默认：队列满时丢弃 20% 尾部（含 INFO/WARN）
 │   └── 设为 0：只丢 TRACE/DEBUG（不丢 INFO）
 ├── neverBlock：true（队列满不阻塞业务线程）
 ├── includeCallerData：false（不记录调用位置——性能）
@@ -246,7 +246,7 @@ SizeAndTimeBased（2026 生产标准）
 运行时调整日志级别
 ├── ① 配置热更新：scan=true + scanPeriod（60 秒）
 │   ├── 改 logback.xml → 自动生效（无需重启）
-│   └── ⚠️ 生产改配置谨慎（回滚方案）
+│   └── 生产改配置谨慎（回滚方案）
 ├── ② JMX：JMX 控制台调整
 │   ├── 生产开启 JMX 需安全
 │   └── 适合运维工具集成
@@ -286,7 +286,7 @@ Spring Boot actuator 调级
 
 ## 9. 核心要点
 
-> 🎯 **核心要点**：
+> **核心要点**：
 > 1. 三层架构：core（基础）/classic（SLF4J 实现——业务用）/access（HTTP 访问）
 > 2. 三组件：Logger（产生）+ Appender（输出）+ Encoder（格式）
 > 3. 生产配置模板：滚动（时间+大小）+ ERROR 单独文件 + traceId 输出 + UTF-8

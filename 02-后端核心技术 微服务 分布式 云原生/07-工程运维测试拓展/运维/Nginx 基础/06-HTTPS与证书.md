@@ -1,7 +1,7 @@
 # 06-HTTPS 与证书
 > TLS 证书配置、HTTP→HTTPS 跳转、TLS 性能优化、HTTP/2、证书管理——"接入层集中做 TLS 终止"
 
-## 📚 目录
+## 目录
 1. [HTTPS 基础与证书类型](#1-https-基础与证书类型)
 2. [HTTPS 服务器配置](#2-https-服务器配置)
 3. [HTTP → HTTPS 跳转](#3-http--https-跳转)
@@ -65,7 +65,7 @@ server {
 | `ssl_session_cache` | 会话复用（性能关键） |
 | `ssl_prefer_server_ciphers` | 服务端优先套件 |
 
-> ⚠️ **私钥安全**：`chmod 600` 私钥文件；证书链要完整（缺中间证书 = 移动端/部分浏览器报错）。
+> **私钥安全**：`chmod 600` 私钥文件；证书链要完整（缺中间证书 = 移动端/部分浏览器报错）。
 
 ## 3. HTTP → HTTPS 跳转
 
@@ -92,7 +92,7 @@ server {
   部分场景（支付回调/兼容）可 302 临时
 ```
 
-> 🎯 **HTTPS 全站跳转**：80 端口 server 统一 `return 301 https://$host$request_uri;`——**保留路径与参数**（`$request_uri` 而非 `$uri`，后者丢参数）。
+> **HTTPS 全站跳转**：80 端口 server 统一 `return 301 https://$host$request_uri;`——**保留路径与参数**（`$request_uri` 而非 `$uri`，后者丢参数）。
 
 ## 4. TLS 性能优化
 
@@ -114,7 +114,7 @@ ssl_stapling_verify on;
 ssl_protocols TLSv1.2 TLSv1.3;
 ```
 
-> 💡 **TLS 1.3 的价值**：握手从 2-RTT 降到 1-RTT（会话恢复 0-RTT）——**升级 TLS1.3 是最有效的 HTTPS 提速**。
+> **TLS 1.3 的价值**：握手从 2-RTT 降到 1-RTT（会话恢复 0-RTT）——**升级 TLS1.3 是最有效的 HTTPS 提速**。
 
 ## 5. HTTP/2 配置
 
@@ -144,7 +144,7 @@ HTTP/2 能力：
 | 头部 | 明文重复 | HPACK 压缩 |
 | 配置 | - | `listen 443 ssl http2` |
 
-> ⚠️ HTTP/2 的队头阻塞仍在 TCP 层——HTTP/3（QUIC）才彻底解决（Nginx 1.25+ 实验支持 QUIC/HTTP3）。
+> HTTP/2 的队头阻塞仍在 TCP 层——HTTP/3（QUIC）才彻底解决（Nginx 1.25+ 实验支持 QUIC/HTTP3）。
 
 ## 6. 证书管理（签发/续期/监控）
 
@@ -170,7 +170,7 @@ openssl s_client -connect example.com:443 2>/dev/null \
   | openssl x509 -noout -dates
 ```
 
-> ⚠️ **证书纪律**：自动续期（certbot）+ 过期告警（7 天）+ 私钥权限 600——三件套缺一不可；自签名证书仅内网测试。
+> **证书纪律**：自动续期（certbot）+ 过期告警（7 天）+ 私钥权限 600——三件套缺一不可；自签名证书仅内网测试。
 
 ## 7. 常见 HTTPS 问题
 
@@ -185,7 +185,7 @@ openssl s_client -connect example.com:443 2>/dev/null \
 
 ## 8. 核心要点
 
-> 🎯 **核心要点**：
+> **核心要点**：
 > - Nginx 做 TLS 终止：证书集中管理，后端无感知；
 > - 全站跳转：80 端口 `return 301 https://$host$request_uri;`（保留路径参数）；
 > - 安全基线：TLSv1.2/1.3 + 私钥 600 + 完整证书链；

@@ -130,7 +130,7 @@ gh api /orgs/my-org/teams/backend/members --jq '.[].login'
 1. 直接仓库协作者（Repository Collaborator）
    → Settings → Collaborators → 直接添加个人
 
-2. Team 权限（推荐 ⭐）
+2. Team 权限（推荐 ★）
    → Team → Repositories → 添加仓库 + 选择权限级别
 
 3. 组织 Base Permissions（兜底）
@@ -172,7 +172,7 @@ CHANGELOG.md          # 版本变更记录
 ```markdown
 <!-- CONTRIBUTING.md 典型内容 -->
 
-## 🚀 快速开始
+## 快速开始
 1. Fork 本仓库
 2. git clone <你的Fork>
 3. git checkout -b feat/your-feature
@@ -180,18 +180,18 @@ CHANGELOG.md          # 版本变更记录
 5. git push origin feat/your-feature
 6. 提交 Pull Request
 
-## 📋 PR 规范
+## PR 规范
 - 一个 PR 只做一件事
 - PR 标题遵循 Conventional Commits
 - 必须包含测试
 - 必须通过 CI 检查
 
-## 🔍 Code Review 流程
+## Code Review 流程
 1. 至少 2 位 Maintainer 审批
 2. CI 必须全绿
 3. 所有讨论必须解决
 
-## 🧪 开发环境搭建
+## 开发环境搭建
 ...
 ```
 
@@ -228,14 +228,14 @@ v2.1.3
 
 ```
 OpenSSF Scorecard（开源安全基金会评分卡）检查项：
-  ✅ Code-Review          — 代码审查是否强制执行
-  ✅ Branch-Protection    — 分支保护
-  ✅ Signed-Releases      — Release 产物是否签名
-  ✅ Dependency-Update-Tool — 是否使用 Dependabot/Renovate
-  ✅ Fuzzing              — 是否进行模糊测试
-  ✅ SAST                 — 静态代码分析
-  ✅ Token-Permissions    — Actions Token 权限最小化
-  ✅ Vulnerabilities      — 已知漏洞是否修复
+  ✓ Code-Review          — 代码审查是否强制执行
+  ✓ Branch-Protection    — 分支保护
+  ✓ Signed-Releases      — Release 产物是否签名
+  ✓ Dependency-Update-Tool — 是否使用 Dependabot/Renovate
+  ✓ Fuzzing              — 是否进行模糊测试
+  ✓ SAST                 — 静态代码分析
+  ✓ Token-Permissions    — Actions Token 权限最小化
+  ✓ Vulnerabilities      — 已知漏洞是否修复
 ```
 
 ---
@@ -280,13 +280,13 @@ gh pr create --base main --title "docs: fix typo in README" \
 #    → 修改后标记 Resolved
 #    → 保持礼貌和耐心
 
-# 10. 🎉 合并！
+# 10. 合并！
 ```
 
 ### 5.2 开源礼仪
 
 ```
-✅ DO：
+✓ DO：
   1. 阅读 CONTRIBUTING.md 和 CODE_OF_CONDUCT
   2. 先搜索是否已有相关 Issue/PR
   3. Issue 中提供完整信息（复现步骤、环境、日志）
@@ -294,7 +294,7 @@ gh pr create --base main --title "docs: fix typo in README" \
   5. 保持礼貌和建设性（即使是批评）
   6. 接受"不修复"的决定（维护者有最终决定权）
 
-❌ DON'T：
+✗ DON'T：
   1. 在 Issue 中催促进度（"为什么还没修？"）
   2. 提交大而全的 PR（没有事先讨论设计）
   3. 态度恶劣（开源维护者是志愿工作）

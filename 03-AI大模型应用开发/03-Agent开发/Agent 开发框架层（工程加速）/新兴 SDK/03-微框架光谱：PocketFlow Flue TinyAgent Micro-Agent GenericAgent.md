@@ -2,7 +2,7 @@
 
 > 定位：微框架篇——五个值得关注的轻量框架的机制、差异与适用：从"100 行零依赖"到"垂域服务化"的光谱（2026-08 基准）
 
-## 📚 目录
+## 目录
 
 1. [光谱总览](#1-光谱总览)
 2. [PocketFlow：100 行 LLM 框架](#2-pocketflow100-行-llm-框架)
@@ -23,7 +23,7 @@
 | Micro-Agent | Python | <3K 行 | 垂域最短路径（API 交付） | Agent 即服务 |
 | GenericAgent | Python | ~3K 行 | 技能结晶（确定性复用） | 本地自进化 |
 
-> 🎯 **光谱逻辑**：从"最轻（教学/嵌入）"到"最生产（服务化）"——按使用目的选位置，不是按流行度。
+> **光谱逻辑**：从"最轻（教学/嵌入）"到"最生产（服务化）"——按使用目的选位置，不是按流行度。
 
 ## 2. PocketFlow：100 行 LLM 框架
 
@@ -35,7 +35,7 @@
 | 卖点 | 反 LangChain（40.5 万行）与 CrewAI（1.8 万行）的"瘦身宣言" |
 | 适合 | 教学、嵌入现有系统、需要读源码掌控一切的场景 |
 
-> 💡 **价值不在性能在可读性**：100 行意味着开发者可以读懂每一个字符——适合学习"Agent 循环到底是什么"（与阶段 1 手写极简 Agent 呼应）。
+> **价值不在性能在可读性**：100 行意味着开发者可以读懂每一个字符——适合学习"Agent 循环到底是什么"（与阶段 1 手写极简 Agent 呼应）。
 
 ## 3. Flue：生产型 TypeScript 框架
 
@@ -46,7 +46,7 @@
 | 部署 | Node.js、Cloudflare Workers（Durable Objects，~12ms 冷启动）、GitHub Actions、GitLab CI、Render |
 | 特点 | 沙箱与 Skills 一等公民；多环境一致执行 |
 
-> 🎯 **Flue 的差异化**：把"沙箱 + 技能包 + 子 Agent 成本控制"做成原语——代表 2026 年"生产运行时"类轻量框架的方向。
+> **Flue 的差异化**：把"沙箱 + 技能包 + 子 Agent 成本控制"做成原语——代表 2026 年"生产运行时"类轻量框架的方向。
 
 ## 4. TinyAgent：流式优先微框架
 
@@ -57,7 +57,7 @@
 | 特点 | 流式优先架构、工具结构化输出、事件驱动更新、provider 无关（任意 OpenAI 兼容端点） |
 | 细节 | Anthropic 风格 prompt caching、可选 Rust `_alchemy` 绑定、全类型提示 |
 
-> 💡 **关注点**：流式优先 + provider 无关是轻量框架的趋势方向——"任意 OpenAI 兼容端点"意味着 OpenRouter/本地/云全可接。
+> **关注点**：流式优先 + provider 无关是轻量框架的趋势方向——"任意 OpenAI 兼容端点"意味着 OpenRouter/本地/云全可接。
 
 ## 5. Micro-Agent：垂域服务化
 
@@ -68,7 +68,7 @@
 | 内置 | 会话记忆、Skills（领域知识注入）、内置 RAG、MCP/工具、SSE 流式、多 LLM 配置 |
 | 交付 | FastAPI 服务（`uvicorn api.app:app`）+ Docker |
 
-> 🎯 **Micro-Agent 代表"Agent 即服务"模式**：垂域 Agent 不是库而是 API——与[Python 异步 + FastAPI](../../../01-Python语言/Python%20异步%20+%20FastAPI/)体系的交付形态一致。
+> **Micro-Agent 代表"Agent 即服务"模式**：垂域 Agent 不是库而是 API——与[Python 异步 + FastAPI](../../../01-Python语言/Python%20异步%20+%20FastAPI/)体系的交付形态一致。
 
 ## 6. GenericAgent：技能结晶自进化
 
@@ -79,7 +79,7 @@
 | 模型 | 任意 OpenAI 兼容端点（GPT-5、Ollama、vLLM、OpenRouter） |
 | 适合 | 单机持久技能记忆场景 |
 
-> ⚠️ **单人维护风险**：MIT + 单人维护 = 依赖 bus factor——生产采用前确认维护活跃度（09 篇评估法）。
+> **单人维护风险**：MIT + 单人维护 = 依赖 bus factor——生产采用前确认维护活跃度（09 篇评估法）。
 
 ## 7. 横向对比
 
@@ -93,7 +93,7 @@
 
 ## 8. 核心要点
 
-> 🎯 **核心要点**：
+> **核心要点**：
 > 1. 微框架光谱：教学（PocketFlow）→ 生产（Flue）→ 轻量循环（TinyAgent）→ 垂域 API（Micro-Agent）→ 自进化（GenericAgent）
 > 2. 2026 方向：沙箱/技能包/成本控制成为原语（Flue 五原语）；流式+provider 无关（TinyAgent）；Agent 即 API（Micro-Agent）
 > 3. 共同哲学：最小抽象 + 执行可靠性优先——与 LangChain 式重型框架的对抗是主旋律

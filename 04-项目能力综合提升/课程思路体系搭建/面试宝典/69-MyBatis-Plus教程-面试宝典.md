@@ -29,7 +29,7 @@ MyBatis-Plus（简称 MP）是 MyBatis 的**增强工具**，在 MyBatis 基础�
 | 学习成本 | 低（熟悉 MyBatis 即可） | 中 | 高 |
 | 复杂 SQL 优化 | 灵活（完全可控） | 灵活（完全可控） | 困难（黑盒） |
 
-> 💡 **面试高频话术**：MP 在保留 MyBatis 手写 SQL 灵活性的基础上，解决了 80% 单表 CRUD 的重复劳动，适合国内互联网公司追求开发效率的场景。
+> **面试高频话术**：MP 在保留 MyBatis 手写 SQL 灵活性的基础上，解决了 80% 单表 CRUD 的重复劳动，适合国内互联网公司追求开发效率的场景。
 
 ### 1.3 BaseMapper 提供了哪些 CRUD 方法？
 BaseMapper 是 MP 的核心接口，泛型参数为实体类，提供以下方法：
@@ -146,7 +146,7 @@ public class User {
 }
 ```
 
-> 🎯 **面试重点**：雪花算法（Snowflake ID）生成的 ID 是 **全局唯一、趋势递增** 的 64 位 Long，由「1 bit 符号位 + 41 bit 时间戳 + 10 bit 工作机器 ID + 12 bit 序列号」组成，适合分布式环境。
+> **面试重点**：雪花算法（Snowflake ID）生成的 ID 是 **全局唯一、趋势递增** 的 64 位 Long，由「1 bit 符号位 + 41 bit 时间戳 + 10 bit 工作机器 ID + 12 bit 序列号」组成，适合分布式环境。
 
 ### 1.7 @TableField 有哪些常用配置？
 `@TableField` 用于配置非主键字段的映射行为：
@@ -213,7 +213,7 @@ luw.set(User::getEmail, "new@email.com").eq(User::getId, 1L);
 userMapper.update(null, luw);
 ```
 
-> 💡 **最佳实践**：日常开发优先使用 `LambdaQueryWrapper` / `LambdaUpdateWrapper`，避免字段名硬编码导致的运行时异常。推荐通过 `Wrappers.lambdaQuery()` 静态方法创建。
+> **最佳实践**：日常开发优先使用 `LambdaQueryWrapper` / `LambdaUpdateWrapper`，避免字段名硬编码导致的运行时异常。推荐通过 `Wrappers.lambdaQuery()` 静态方法创建。
 
 ### 1.9 @TableLogic 逻辑删除如何工作？
 `@TableLogic` 注解标识逻辑删除字段，MP 在执行 `deleteById` 等删除操作时会自动将 SQL 转换为 UPDATE 语句：
@@ -248,7 +248,7 @@ mybatis-plus:
       logic-not-delete-value: 0     # 逻辑未删除值（默认 0）
 ```
 
-> ⚠️ **注意**：逻辑删除后，唯一索引可能冲突。建议使用唯一索引时考虑包含逻辑删除字段，或用 `delete_time` 代替 `deleted` 标记。
+> **注意**：逻辑删除后，唯一索引可能冲突。建议使用唯一索引时考虑包含逻辑删除字段，或用 `delete_time` 代替 `deleted` 标记。
 
 ### 1.10 MP 如何防止 SQL 注入？
 MP 的条件构造器对传入的参数值使用 **预编译占位符（#{}）**，而非字符串拼接（${}），从根本上防止 SQL 注入。对于表名等无法预编译的场景，MP 在 Wrapper 内部对参数进行转义处理。
@@ -260,7 +260,7 @@ qw.eq(User::getName, "' OR 1=1 --"); // 被当作普通字符串值
 // 最终 SQL: WHERE name = ?  （参数值为 "' OR 1=1 --"）
 ```
 
-> 💡 **源码级理解**：Wrapper 底层使用 MyBatis 的 `ParameterMapping` 机制，所有 value 参数都通过 `#{ew.paramNameValuePairs.xxx}` 占位符传递，不参与 SQL 拼接。
+> **源码级理解**：Wrapper 底层使用 MyBatis 的 `ParameterMapping` 机制，所有 value 参数都通过 `#{ew.paramNameValuePairs.xxx}` 占位符传递，不参与 SQL 拼接。
 
 ### 1.11 主键 ASSIGN_ID（雪花算法）的工作原理？
 MP 默认使用 `IdentifierGenerator` 接口的实现 `DefaultIdentifierGenerator` 生成主键，内部封装了雪花算法（Snowflake）：
@@ -308,7 +308,7 @@ newUser.setName("test");
 newUser.insert();      // 直接插入
 ```
 
-> ⚠️ AR 模式需要实体类重写 `pkVal()` 方法（或使用 `@TableId`），并确保 `serialVersionUID`。实际项目中 IService 模式更常见，AR 模式适合小型项目或原型开发。
+> AR 模式需要实体类重写 `pkVal()` 方法（或使用 `@TableId`），并确保 `serialVersionUID`。实际项目中 IService 模式更常见，AR 模式适合小型项目或原型开发。
 
 ### 1.13 saveBatch 批量操作的原理？
 IService 提供的 `saveBatch` 方法用于批量插入数据，默认每批 1000 条：
@@ -373,7 +373,7 @@ public class User {
 }
 ```
 
-> 💡 使用 JSON 处理器时必须设置 `@TableName(autoResultMap = true)`，否则查询结果中 JSON 字段不会被正确映射。
+> 使用 JSON 处理器时必须设置 `@TableName(autoResultMap = true)`，否则查询结果中 JSON 字段不会被正确映射。
 
 ---
 
@@ -447,7 +447,7 @@ UPDATE user SET name = ?, version = version + 1 WHERE id = ? AND version = ?;
 -- 参数: [新名字, 1, 0]  -- version=0 只影响旧版本
 ```
 
-> 🎯 **面试回答**：乐观锁适合**读多写少**场景，利用版本号避免长事务锁。如果更新失败（影响行数为 0），业务层应重试或告知用户。
+> **面试回答**：乐观锁适合**读多写少**场景，利用版本号避免长事务锁。如果更新失败（影响行数为 0），业务层应重试或告知用户。
 
 ### 2.4 MetaObjectHandler 自动填充的原理？
 `MetaObjectHandler` 接口配合 `@TableField(fill = ...)` 实现插入/更新时自动填充字段：
@@ -532,7 +532,7 @@ UPDATE order SET status = 2 WHERE tenant_id = 'tenant_001';
 DELETE FROM order WHERE id = ? AND tenant_id = 'tenant_001';
 ```
 
-> 🎯 **面试重点**：多租户插件通过 MyBatis 拦截器在 MappedStatement 构建后修改 SQL 的 Statement。需注意：某些表不需要租户隔离（如字典表），通过 `getTableName()` 排除。
+> **面试重点**：多租户插件通过 MyBatis 拦截器在 MappedStatement 构建后修改 SQL 的 Statement。需注意：某些表不需要租户隔离（如字典表），通过 `getTableName()` 排除。
 
 ### 2.7 动态表名插件（DynamicTableNameInnerInterceptor）？
 动态表名插件在运行时**按策略替换表名**，适用于分表场景：
@@ -742,7 +742,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
 }
 ```
 
-> ⚠️ **注意**：`saveBatch()` 内部是一个大事务，数据量大时可能锁时间过长。建议按业务拆分为多个小事务，或使用 `BATCH` ExecutorType。
+> **注意**：`saveBatch()` 内部是一个大事务，数据量大时可能锁时间过长。建议按业务拆分为多个小事务，或使用 `BATCH` ExecutorType。
 
 ---
 
@@ -980,7 +980,7 @@ public void exportLargeData(HttpServletResponse response) {
 }
 ```
 
-> 💡 **大厂面试加分点**：大数据场景避免一次性加载到内存，用游标或分页流式处理。MySQL 游标需要 `@Options(resultSetType = ResultSetType.FORWARD_ONLY, fetchSize = Integer.MIN_VALUE)` 配合。
+> **大厂面试加分点**：大数据场景避免一次性加载到内存，用游标或分页流式处理。MySQL 游标需要 `@Options(resultSetType = ResultSetType.FORWARD_ONLY, fetchSize = Integer.MIN_VALUE)` 配合。
 
 ---
 

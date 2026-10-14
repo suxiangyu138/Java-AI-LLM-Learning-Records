@@ -1,10 +1,10 @@
 # JMeter 分布式与命令行模式
 
-> 🌐 CLI 非 GUI 模式、分布式压测架构、最佳配置调优、插件系统 —— 从单机到集群的完整方案
+> CLI 非 GUI 模式、分布式压测架构、最佳配置调优、插件系统 —— 从单机到集群的完整方案
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [CLI 命令行模式](#1-cli-命令行模式)
 2. [分布式压测架构](#2-分布式压测架构)
@@ -145,15 +145,15 @@ jmeter -n -t test.jmx -R 192.168.1.10,192.168.1.11 -l result.jtl
 ```text
 分布式压测的关键注意点：
 
-  ✅ 所有 Agent 的 JMeter 版本必须一致
-  ✅ 所有 Agent 的 Java 版本一致（推荐）
-  ✅ 测试数据文件（CSV）要在每个 Agent 的相同路径
+  ✓ 所有 Agent 的 JMeter 版本必须一致
+  ✓ 所有 Agent 的 Java 版本一致（推荐）
+  ✓ 测试数据文件（CSV）要在每个 Agent 的相同路径
      → 或用 props 传递路径
-  ✅ 函数/变量跨 Agent 不共享
+  ✓ 函数/变量跨 Agent 不共享
      → ${__counter(FALSE)} 每个 Agent 各自计数
-  ✅ 关闭防火墙或开放 RMI 端口
-  ✅ 内网环境（RMI 不建议暴露到公网）
-  ✅ CSV 数据 Sharing mode = All threads 时要注意
+  ✓ 关闭防火墙或开放 RMI 端口
+  ✓ 内网环境（RMI 不建议暴露到公网）
+  ✓ CSV 数据 Sharing mode = All threads 时要注意
      → 各 Agent 独立读取，不会互相协调
 ```
 
@@ -219,14 +219,14 @@ systemctl stop firewalld
 
 | 插件 | 用途 | 推荐度 |
 |------|------|:-----:|
-| **JMeter Plugins Manager** | 插件管理 | ⭐⭐⭐⭐⭐ |
-| **Custom Thread Groups** | Stepping/Ultimate Thread Group | ⭐⭐⭐⭐⭐ |
-| **3 Basic Graphs** | 响应时间/吞吐量实时图 | ⭐⭐⭐⭐ |
-| **PerfMon (Servers Perf. Monitoring)** | 监控服务器 CPU/Memory | ⭐⭐⭐⭐ |
-| **Throughput Shaping Timer** | 精确控制 QPS 形状 | ⭐⭐⭐⭐ |
-| **Dummy Sampler** | 占位请求 | ⭐⭐⭐ |
-| **WebSocket Sampler** | WebSocket 压测 | ⭐⭐⭐ |
-| **Random CSV Data Set** | 随机取 CSV 行 | ⭐⭐⭐ |
+| **JMeter Plugins Manager** | 插件管理 | ★★★★★ |
+| **Custom Thread Groups** | Stepping/Ultimate Thread Group | ★★★★★ |
+| **3 Basic Graphs** | 响应时间/吞吐量实时图 | ★★★★ |
+| **PerfMon (Servers Perf. Monitoring)** | 监控服务器 CPU/Memory | ★★★★ |
+| **Throughput Shaping Timer** | 精确控制 QPS 形状 | ★★★★ |
+| **Dummy Sampler** | 占位请求 | ★★★ |
+| **WebSocket Sampler** | WebSocket 压测 | ★★★ |
+| **Random CSV Data Set** | 随机取 CSV 行 | ★★★ |
 
 ### 4.3 Stepping Thread Group
 
@@ -256,7 +256,7 @@ Custom Thread Groups → Stepping Thread Group
 
 ---
 
-> 🎯 **核心要点**：**正式压测用 CLI 模式**（jmeter -n），**大并发用分布式**（Master+Agent），**插件必装 Stepping Thread Group**（阶梯加压），**OS 调优**避免出现文件描述符耗尽。
+> **核心要点**：**正式压测用 CLI 模式**（jmeter -n），**大并发用分布式**（Master+Agent），**插件必装 Stepping Thread Group**（阶梯加压），**OS 调优**避免出现文件描述符耗尽。
 
 ---
 

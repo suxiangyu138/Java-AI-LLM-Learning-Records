@@ -2,7 +2,7 @@
 
 > 定位：Boot Starter 全配置、Artemis vs Classic 双模切换、嵌入式 Broker 深度、生产 checklist、集成测试三层——从开发到生产一键部署
 
-## 📚 目录
+## 目录
 
 1. [Starter 与 Artemis 双模](#1-starter-与-artemis-双模)
 2. [Classic 与 Artemis 的完整配置差异](#2-classic-与-artemis-的完整配置差异)
@@ -31,7 +31,7 @@
 </dependency>
 <!-- 底层为 artemis-jakarta-client（AMQP/MQTT/STOMP） -->
 
-<!-- ⚠️ 不能同时引入两个 Starter（ConnectionFactory Bean 冲突） -->
+<!-- 不能同时引入两个 Starter（ConnectionFactory Bean 冲突） -->
 ```
 
 ### 1.2 Boot 自动装配逻辑
@@ -45,7 +45,7 @@ spring-boot-starter-activemq 做了什么：
   ③ 自动创建 JmsTemplate Bean（无需手动 @Bean）
   ④ 有 @JmsListener 注解 → 自动启用监听容器
 
-⚠️ 面试必答：
+面试必答：
 "Boot Starter 自动装配 = 类路径检测 +
  自动创建 ConnectionFactory + JmsTemplate +
  @EnableJms 自动开启监听器；
@@ -75,7 +75,7 @@ spring:
 
     # 安全：只信任白名单
     packages:
-      trust-all: false               # ⚠️ 生产必设 false
+      trust-all: false               # 生产必设 false
       trusted: com.example.dto,com.example.event
 
     # 发送默认值
@@ -160,27 +160,27 @@ public class EmbeddedClassicBrokerConfig {
 ```yaml
 spring:
   artemis:
-    mode: embedded                         # ⚠️ 一行开启嵌入式
+    mode: embedded                         # 一行开启嵌入式
     host: localhost
     port: 61616
     embedded:
       enabled: true
       persistent: false                    # 开发：非持久化
-      queues: orders.queue,events.topic    # ⚠️ 预创建队列
+      queues: orders.queue,events.topic    # 预创建队列
 ```
 
 ### 3.3 生产能用嵌入式吗？
 
 ```
-⚠️ 原则上不推荐（嵌入式 Broker = 与应用同 JVM）：
+原则上不推荐（嵌入式 Broker = 与应用同 JVM）：
   → JVM 崩溃 = Broker 也崩溃（消息丢失）
   → 单点故障（不能独立扩展）
 
 适用场景：
-  ✅ 开发/测试（免外部依赖）
-  ✅ 单元测试（集成测试用真实 Broker）
-  ✅ 边缘设备/桌面应用（不能部署独立中间件）
-  ⚠️ 生产：选外部独立部署 Broker（高可用 + 独立运维）
+  ✓ 开发/测试（免外部依赖）
+  ✓ 单元测试（集成测试用真实 Broker）
+  ✓ 边缘设备/桌面应用（不能部署独立中间件）
+  生产：选外部独立部署 Broker（高可用 + 独立运维）
 ```
 
 ---
@@ -209,7 +209,7 @@ spring:
   jms:
     listener:
       concurrency: 5-20             # 消费者线程
-      acknowledge-mode: CLIENT      # ⚠️ 手动确认
+      acknowledge-mode: CLIENT      # 手动确认
     template:
       delivery-mode: PERSISTENT     # 持久化
       time-to-live: 60000
@@ -235,14 +235,14 @@ public JmsListenerContainerFactory<?> factoryWithErrorHandler(ConnectionFactory 
     f.setConnectionFactory(cf);
     f.setErrorHandler(t -> {
         log.error("JMS listener error: {}", t.getCause().getMessage());
-        // ⚠️ 对接告警系统（Prometheus AlertManager / 钉钉 / 邮件）
+        // 对接告警系统（Prometheus AlertManager / 钉钉 / 邮件）
     });
     return f;
 }
 ```
 
 ```
-⚠️ 生产 Checklist 八项：
+生产 Checklist 八项：
   ① failover 高可用 URL
   ② 连接池启用 + 池满阻塞
   ③ trust-all=false + trusted 白名单
@@ -265,7 +265,7 @@ public JmsListenerContainerFactory<?> factoryWithErrorHandler(ConnectionFactory 
 class BusinessLogicTest {
 
     @MockBean
-    private JmsTemplate jms;                    // ⚠️ mock JMS
+    private JmsTemplate jms;                    // mock JMS
 
     @Autowired
     private OrderService orderService;
@@ -282,7 +282,7 @@ class BusinessLogicTest {
 ### 5.2 第二重：嵌入式 Broker（真实 JMS，不依赖外部）
 
 ```java
-@SpringBootTest     // ⚠️ 用 vm://localhost 嵌入式 Broker
+@SpringBootTest     // 用 vm://localhost 嵌入式 Broker
 class EmbeddedBrokerTest {
 
     @Autowired
@@ -334,15 +334,15 @@ class RealBrokerTest {
         jms.convertAndSend("test.queue", "hello");
         assertEquals("hello", jms.receiveAndConvert("test.queue"));
     }
-    // ⚠️ 与生产环境一致（Artemis 二进制 + 完整协议栈）
+    // 与生产环境一致（Artemis 二进制 + 完整协议栈）
 }
 ```
 
-> 🎯 **要点**：三层测试对应三个场景——Mock（最快，CI 单测）、嵌入式（验证 JMS 语义）、Testcontainers（与生产一致）。"三层测试金字塔"是 JMS 集成的质量安全保障。
+> **要点**：三层测试对应三个场景——Mock（最快，CI 单测）、嵌入式（验证 JMS 语义）、Testcontainers（与生产一致）。"三层测试金字塔"是 JMS 集成的质量安全保障。
 
 ---
 
-> 🎯 **核心要点**：Boot 集成 = **Artemis 双模**（Classic/Artemis Starter 切换）+ **配置差异**（activemq.* vs artemis.*）+ **嵌入式 Broker**（开发/测试/边缘）+ **生产八项 Checklist**（failover/连接池/安全/手动ACK/重试上限/告警/DLQ）+ **测试三重境界**（Mock → 嵌入式 → Testcontainers）。
+> **核心要点**：Boot 集成 = **Artemis 双模**（Classic/Artemis Starter 切换）+ **配置差异**（activemq.* vs artemis.*）+ **嵌入式 Broker**（开发/测试/边缘）+ **生产八项 Checklist**（failover/连接池/安全/手动ACK/重试上限/告警/DLQ）+ **测试三重境界**（Mock → 嵌入式 → Testcontainers）。
 
 ---
 

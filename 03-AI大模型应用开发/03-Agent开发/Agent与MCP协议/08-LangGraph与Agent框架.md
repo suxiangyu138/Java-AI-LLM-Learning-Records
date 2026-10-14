@@ -1,6 +1,6 @@
 # 08 - LangGraph 与 Agent 框架
 
-> 🎯 LangGraph = 状态图驱动的 Agent 编排。相比 LangChain 的线性 Chain，LangGraph 支持循环、分支、并行 — 这才是 Agent 真正需要的控制流
+> LangGraph = 状态图驱动的 Agent 编排。相比 LangChain 的线性 Chain，LangGraph 支持循环、分支、并行 — 这才是 Agent 真正需要的控制流
 
 ---
 
@@ -137,9 +137,9 @@ graph.add_edge("splitter", "task_c")
 
 | 方案 | 说明 | 成熟度 |
 |------|------|:---:|
-| **Spring AI** | Spring 官方 AI 框架 | ⭐⭐⭐ |
-| **LangChain4j** | LangChain 的 Java 移植 | ⭐⭐⭐ |
-| **Python 服务 + HTTP** | Java→HTTP→Python Agent | ⭐⭐⭐⭐⭐ |
+| **Spring AI** | Spring 官方 AI 框架 | ★★★ |
+| **LangChain4j** | LangChain 的 Java 移植 | ★★★ |
+| **Python 服务 + HTTP** | Java→HTTP→Python Agent | ★★★★★ |
 
 ```java
 // Spring AI 示例
@@ -188,7 +188,7 @@ public class AgentController {
   框架已成熟（状态管理/检查点/可观测），自研 = 重复造轮子 + 踩坑
 ```
 
-> 🎯 **核心要点**：框架选型 2026 = "**生产用 LangGraph 级（精确控制）、Java 用 LangChain4j、编程用 IDE Agent、跨服务走 A2A**"——**框架是基础设施，别自研**（除非有明确差异化需求）。
+> **核心要点**：框架选型 2026 = "**生产用 LangGraph 级（精确控制）、Java 用 LangChain4j、编程用 IDE Agent、跨服务走 A2A**"——**框架是基础设施，别自研**（除非有明确差异化需求）。
 
 ---
 

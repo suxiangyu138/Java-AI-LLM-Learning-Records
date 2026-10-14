@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [设计原则：抽象与透明的平衡](#1-设计原则抽象与透明的平衡)
 2. [API 设计：流畅、类型安全、可发现](#2-api-设计流畅类型安全可发现)
@@ -35,7 +35,7 @@
 | **可观测** | 请求日志可开关、错误带上下文 | 出问题只能靠猜 |
 | **零配置起步** | 默认值让"第一个 Demo"零配置跑通 | 要配 10 个参数才能跑 |
 
-> 🎯 **核心要点**：SDK 是"**产品**"而非"代码"——它的用户是开发者，设计标准是"第一次用能不能 5 分钟跑通、出问题能不能 5 分钟定位"。**默认智能 + 逃生通道**是这一切的支点。
+> **核心要点**：SDK 是"**产品**"而非"代码"——它的用户是开发者，设计标准是"第一次用能不能 5 分钟跑通、出问题能不能 5 分钟定位"。**默认智能 + 逃生通道**是这一切的支点。
 
 ---
 
@@ -56,7 +56,7 @@ PayClient client = PayClient.builder()
 **领域模型用类型表达**（record 是 SDK 建模的现代标配）：
 
 ```java
-// ✅ 类型安全：请求/响应用 record（不可变 + 值相等 + 组件即文档）
+// ✓ 类型安全：请求/响应用 record（不可变 + 值相等 + 组件即文档）
 public record PayRequest(String orderId, BigDecimal amount, String channel) {
     public PayRequest {                     // 紧凑构造器：参数校验内建
         if (amount == null || amount.compareTo(BigDecimal.ZERO) <= 0) {
@@ -67,7 +67,7 @@ public record PayRequest(String orderId, BigDecimal amount, String channel) {
 
 public record PayResult(String transactionId, PayStatus status, Instant paidAt) { }
 public enum PayStatus { PENDING, SUCCESS, FAILED }
-// ❌ 反例：Map<String, Object> request = Map.of("orderId", ...) —— 无类型、无校验、无文档
+// ✗ 反例：Map<String, Object> request = Map.of("orderId", ...) —— 无类型、无校验、无文档
 ```
 
 **方法签名设计**：
@@ -79,7 +79,7 @@ public enum PayStatus { PENDING, SUCCESS, FAILED }
 | 返回不可变 | record / 不可变集合（见 Java集合框架/08） |
 | 同步 + 异步并存 | `pay()` 与 `payAsync()` / `CompletableFuture` |
 
-> 🎯 **核心要点**：SDK API 的可发现性 = **"看一眼方法名和参数就知道怎么用"**——record + 枚举 + Builder 三件套让 SDK 的"签名即文档"。
+> **核心要点**：SDK API 的可发现性 = **"看一眼方法名和参数就知道怎么用"**——record + 枚举 + Builder 三件套让 SDK 的"签名即文档"。
 
 ---
 
@@ -105,9 +105,9 @@ catch (PaySdkException e) { /* 兜底 */ }
 **② 错误信息带上下文与建议**：
 
 ```java
-// ✅ 消息 = 发生了什么 + 为什么 + 怎么办
+// ✓ 消息 = 发生了什么 + 为什么 + 怎么办
 throw new PayAuthException("鉴权失败：appId 或密钥错误（appId=wx123），请检查凭据配置");
-// ❌ 反例：throw new RuntimeException("请求失败")  —— 无从下手
+// ✗ 反例：throw new RuntimeException("请求失败")  —— 无从下手
 ```
 
 **③ 错误对象与响应解耦**：SDK 异常携带 HTTP 状态、错误码、traceId（见 `Java异常体系/06` 的错误码与追踪设计）：
@@ -121,7 +121,7 @@ public class PaySdkException extends RuntimeException {
 }
 ```
 
-> 🎯 **核心要点**：SDK 异常设计的验收标准——**"调用方不看文档也能正确处理"**：可重试的异常类型上能区分、消息里能定位、错误码能对应平台文档。
+> **核心要点**：SDK 异常设计的验收标准——**"调用方不看文档也能正确处理"**：可重试的异常类型上能区分、消息里能定位、错误码能对应平台文档。
 
 ---
 
@@ -151,7 +151,7 @@ public class PaySdkException extends RuntimeException {
 // 或：SDK 版本映射平台版本（pay-sdk-2.x 对应平台 v2）
 ```
 
-> 🎯 **核心要点**：**SDK 的版本承诺 = 消费者的信任**——"升级 SDK 不会破坏我的代码"是 SDK 传播的根基。破坏性变更 ≠ 禁止，而是必须"走流程"（版本号 + 迁移指南 + 过渡期）。
+> **核心要点**：**SDK 的版本承诺 = 消费者的信任**——"升级 SDK 不会破坏我的代码"是 SDK 传播的根基。破坏性变更 ≠ 禁止，而是必须"走流程"（版本号 + 迁移指南 + 过渡期）。
 
 ---
 
@@ -180,7 +180,7 @@ public class PaySdkException extends RuntimeException {
 public PayResult pay(PayRequest request) { ... }
 ```
 
-> 💡 现代实践：文档与代码**同源**（javadoc/OpenAPI 注释生成），避免"文档漂移"；quick-start 是 CI 里**真实执行的测试**（而不是手写示例）——"文档里能跑的代码"才算数。
+> 现代实践：文档与代码**同源**（javadoc/OpenAPI 注释生成），避免"文档漂移"；quick-start 是 CI 里**真实执行的测试**（而不是手写示例）——"文档里能跑的代码"才算数。
 
 ---
 
@@ -205,7 +205,7 @@ PayClient client = PayClient.builder()
 
 **SDK 自带 mock 的价值**：调用方集成测试不依赖外部环境（CI 稳定、速度快、无成本）——**"能不能离线测"是开发者选择 SDK 的隐藏标准**（2025 行业最佳实践：mock servers + sandboxes + fixtures 三件套）。
 
-> 🎯 **核心要点**：SDK 的测试不是"自己的测试"，而是"**让调用方更好测试**"——契约测试（防平台变更破坏解析）+ mock 能力（调用方离线集成）双管齐下。
+> **核心要点**：SDK 的测试不是"自己的测试"，而是"**让调用方更好测试**"——契约测试（防平台变更破坏解析）+ mock 能力（调用方离线集成）双管齐下。
 
 ---
 
@@ -237,7 +237,7 @@ PayClient client = PayClient.builder()
 | 公告与变更日志 | 每个正式版有 Changelog + 升级提示 |
 | 自动化 | GitHub Actions/流水线：构建 → 测试 → 发布 → 文档更新一体 |
 
-> 🎯 **核心要点**：SDK 发布 = "**发布一次，服务千次**"——制品的不可变性、版本语义、文档同步，任何一环出错都会在消费者侧放大。发布流水线自动化是底线（详见 `Maven与Gradle/` 系统）。
+> **核心要点**：SDK 发布 = "**发布一次，服务千次**"——制品的不可变性、版本语义、文档同步，任何一环出错都会在消费者侧放大。发布流水线自动化是底线（详见 `Maven与Gradle/` 系统）。
 
 ---
 

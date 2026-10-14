@@ -586,4 +586,4 @@ Netty: 基于NIO的高性能网络框架
 
 ---
 
-> ⚠️ 三大铁律：始终设置超时、始终关闭资源（try-with-resources）、理解BIO的线程模型局限。
+> 三大铁律：始终设置超时、始终关闭资源（try-with-resources）、理解BIO的线程模型局限。

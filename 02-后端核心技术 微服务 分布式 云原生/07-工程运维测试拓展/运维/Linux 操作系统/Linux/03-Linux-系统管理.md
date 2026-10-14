@@ -1,10 +1,10 @@
 # 03 - Linux 系统管理
 
-> 🎯 系统管理是后端工程师的"基础设施能力" — 从磁盘分区到进程管理、从 systemd 服务到内核参数调优，掌握这些才能让 Java 应用在生产环境稳定运行
+> 系统管理是后端工程师的"基础设施能力" — 从磁盘分区到进程管理、从 systemd 服务到内核参数调优，掌握这些才能让 Java 应用在生产环境稳定运行
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [磁盘管理](#1-磁盘管理)
 2. [进程管理](#2-进程管理)
@@ -25,7 +25,7 @@
 | 命令 | 用途 | 示例 |
 |------|------|------|
 | `df -h` | 查看文件系统磁盘空间占用 | `df -h` — 人类可读格式 |
-| `df -i` | 查看 inode 使用情况 | `df -i` — ⚠️ 小文件过多会耗尽 inode |
+| `df -i` | 查看 inode 使用情况 | `df -i` — 小文件过多会耗尽 inode |
 | `du -sh <dir>` | 统计目录总大小 | `du -sh /var/log` |
 | `du -h --max-depth=1` | 一级子目录大小 | `du -h --max-depth=1 /opt/` |
 | `lsblk` | 列出块设备（树状） | `lsblk` — 查看磁盘分区结构 |
@@ -53,7 +53,7 @@ sudo mkfs.xfs /dev/sdb1        # XFS（推荐大文件场景）
 sudo mount /dev/sdb1 /mnt/data
 
 # 5. 永久挂载（写入 /etc/fstab）
-# ⭐ 推荐用 UUID，比设备名更稳定
+# ★ 推荐用 UUID，比设备名更稳定
 UUID=$(sudo blkid -s UUID -o value /dev/sdb1)
 echo "UUID=$UUID /data xfs defaults,noatime 0 2" | sudo tee -a /etc/fstab
 
@@ -74,7 +74,7 @@ df -h /data
 | pass | fsck 检查顺序 | `0` 不检查, `1` 根分区, `2` 其他 |
 
 ```bash
-# ⭐ 推荐挂载选项
+# ★ 推荐挂载选项
 # defaults,noatime  — 不更新访问时间，减少磁盘 IO
 # defaults,nofail   — 设备不存在时不阻塞启动（适合外接存储）
 ```
@@ -117,8 +117,8 @@ df -h /data
 |:---:|------|------|----------|
 | Running | **R** | 正在运行或等待运行 | 正常 |
 | Sleeping | **S** | 可中断休眠（等待事件） | 正常 — 大多数进程在此状态 |
-| Disk Sleep | **D** | 不可中断休眠（等待 IO） | ⚠️ 磁盘 IO 瓶颈 |
-| Zombie | **Z** | 僵尸进程（已终止，父进程未回收） | ⚠️ 过多时占用 PID 资源 |
+| Disk Sleep | **D** | 不可中断休眠（等待 IO） | 磁盘 IO 瓶颈 |
+| Zombie | **Z** | 僵尸进程（已终止，父进程未回收） | 过多时占用 PID 资源 |
 | Stopped | **T** | 被信号暂停 | `Ctrl+Z` 或调试中 |
 | Dead | **X** | 已死亡 | 几乎看不到 |
 
@@ -166,7 +166,7 @@ tail -f logs/app.log
 # Ctrl+Z 暂停 → bg → disown -h %1
 ```
 
-> ⚠️ **注意**：生产环境应使用 `systemd` 或容器编排管理进程，避免依赖 `nohup`。`nohup` 不会自动重启、没有健康检查。
+> **注意**：生产环境应使用 `systemd` 或容器编排管理进程，避免依赖 `nohup`。`nohup` 不会自动重启、没有健康检查。
 
 ---
 
@@ -190,7 +190,7 @@ tail -f logs/app.log
 | `journalctl -u <svc> -f` | 查看服务日志（实时） |
 | `journalctl -u <svc> --since "1h ago"` | 查看最近 1 小时日志 |
 
-### 3.2 自定义 Java 服务 Unit（⭐ 生产级模板）
+### 3.2 自定义 Java 服务 Unit（★ 生产级模板）
 
 ```ini
 # /etc/systemd/system/myapp.service
@@ -331,7 +331,7 @@ chmod o= data/                   # 清除其他人所有权限
 chown appuser:appuser app.jar    # 修改文件所属用户:组
 chown -R appuser:appuser /opt/   # 递归修改
 
-# ⭐ 常用部署目录权限
+# ★ 常用部署目录权限
 mkdir -p /opt/myapp/{logs,data,config}
 chown -R root:appuser /opt/myapp        # 应用文件 root 所有，appuser 组可读
 chmod 750 /opt/myapp
@@ -339,12 +339,12 @@ chown -R appuser:appuser /opt/myapp/logs  # 日志目录 appuser 可写
 chmod 750 /opt/myapp/logs
 ```
 
-> 💡 更深入的权限管理（SUID/SGID/ACL/sudo/capabilities）请参见 `13-Linux权限与用户管理深度.md`
+> 更深入的权限管理（SUID/SGID/ACL/sudo/capabilities）请参见 `13-Linux权限与用户管理深度.md`
 
 ### 5.3 sudo 配置（速查）
 
 ```bash
-# ⚠️ 永远用 visudo 编辑
+# 永远用 visudo 编辑
 visudo
 
 # 为 appuser 赋予特定命令的无密码 sudo
@@ -367,7 +367,7 @@ echo 'appuser ALL=(root) NOPASSWD: /bin/systemctl restart myapp, /bin/systemctl 
 | `~/.bash_profile` | 当前用户 | 交互式登录 Shell（优先于 ~/.profile） |
 | `~/.bashrc` | 当前用户 | 交互式非登录 Shell |
 
-> 💡 登录 Shell vs 非登录 Shell：SSH 登录触发登录 Shell（读 `~/.bash_profile`）；`bash` 命令开启非登录 Shell（读 `~/.bashrc`）。`~/.bash_profile` 通常会 source `~/.bashrc`。
+> 登录 Shell vs 非登录 Shell：SSH 登录触发登录 Shell（读 `~/.bash_profile`）；`bash` 命令开启非登录 Shell（读 `~/.bashrc`）。`~/.bash_profile` 通常会 source `~/.bashrc`。
 
 ### 6.2 Java 环境变量配置
 

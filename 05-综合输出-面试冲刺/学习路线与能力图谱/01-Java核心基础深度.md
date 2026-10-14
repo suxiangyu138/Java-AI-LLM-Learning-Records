@@ -11,12 +11,12 @@
 
 | 类 | 底层结构 | 线程安全 | 关键参数 |
 |----|---------|---------|---------|
-| ArrayList | `Object[]` 数组 | ❌ | 默认容量 10，扩容 1.5 倍 |
-| LinkedList | 双向链表 | ❌ | Node 节点 prev/next |
-| HashMap (JDK8+) | 数组 + 链表 + 红黑树 | ❌ | 默认容量 16，负载因子 0.75，树化阈值 8，链化阈值 6 |
-| ConcurrentHashMap (JDK8+) | Node 数组 + CAS + synchronized | ✅ | 分段锁升级为桶级别锁 |
-| HashSet | HashMap 的 key（value 为 PRESENT） | ❌ | — |
-| LinkedHashMap | HashMap + 双向链表 | ❌ | 按插入顺序/访问顺序 |
+| ArrayList | `Object[]` 数组 | ✗ | 默认容量 10，扩容 1.5 倍 |
+| LinkedList | 双向链表 | ✗ | Node 节点 prev/next |
+| HashMap (JDK8+) | 数组 + 链表 + 红黑树 | ✗ | 默认容量 16，负载因子 0.75，树化阈值 8，链化阈值 6 |
+| ConcurrentHashMap (JDK8+) | Node 数组 + CAS + synchronized | ✓ | 分段锁升级为桶级别锁 |
+| HashSet | HashMap 的 key（value 为 PRESENT） | ✗ | — |
+| LinkedHashMap | HashMap + 双向链表 | ✗ | 按插入顺序/访问顺序 |
 
 ### 1.2 HashMap 源码要点
 
@@ -90,10 +90,10 @@ Node<K,V>[] resize();  // 扩容
 |------|-------------|---------------|
 | 实现 | JVM 级别（monitorenter/exit） | JDK 级别（AQS） |
 | 锁获取 | 隐式，自动释放 | 显式，lock()/unlock() |
-| 公平锁 | ❌ 非公平 | ✅ 支持公平/非公平 |
-| 可中断 | ❌ 不可中断 | ✅ lockInterruptibly() |
+| 公平锁 | ✗ 非公平 | ✓ 支持公平/非公平 |
+| 可中断 | ✗ 不可中断 | ✓ lockInterruptibly() |
 | 条件变量 | wait/notify（1 个） | Condition（多个） |
-| 尝试获取 | ❌ 一直阻塞 | ✅ tryLock() |
+| 尝试获取 | ✗ 一直阻塞 | ✓ tryLock() |
 | 性能 | JDK6+ 优化后接近 | 略优于 synchronized |
 
 **选型口诀**：普通场景用 synchronized（简单安全），需要公平锁/可中断/多条件/尝试获取时用 ReentrantLock。

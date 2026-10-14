@@ -2,7 +2,7 @@
 
 > 定位：盘点以哈希为核心的所有集合类——HashSet 去重原理、LinkedHashMap LRU、WeakHashMap 缓存、IdentityHashMap 引用相等，附完整选型指南
 
-## 📚 目录
+## 目录
 
 1. [Hash 家族图谱](#1-hash-家族图谱)
 2. [HashSet 与 LinkedHashSet：去重原理](#2-hashset-与-linkedhashset去重原理)
@@ -61,16 +61,16 @@ public class HashSet<E> extends AbstractSet<E> {
 
 **去重原理**：add 实际是 `map.put(e, PRESENT)`——返回 null 说明之前不存在（新增），返回旧值说明已存在（覆盖占位符）。
 
-> 💡 **去重的真正裁判是 equals/hashCode**：`new HashSet<>().add("a")` 再 add 一个 `new String("a")` 会失败——String 重写了 equals，所以"内容相同"即重复。自定义类不重写 equals，两个内容相同的对象不会被去重。
+> **去重的真正裁判是 equals/hashCode**：`new HashSet<>().add("a")` 再 add 一个 `new String("a")` 会失败——String 重写了 equals，所以"内容相同"即重复。自定义类不重写 equals，两个内容相同的对象不会被去重。
 
 ### 2.2 与 List 去重的性能对比
 
 ```java
-// ❌ O(n²)：每次 contains 线性扫描
+// ✗ O(n²)：每次 contains 线性扫描
 List<Integer> list = ...;
 list.stream().distinct().collect(toList());
 
-// ✅ O(n)：哈希查找
+// ✓ O(n)：哈希查找
 Set<Integer> set = new HashSet<>(list);
 ```
 
@@ -97,7 +97,7 @@ head ◄─► Node ◄─► Node ◄─► ... ◄─► tail
 ### 3.2 LRU 缓存的优雅实现
 
 ```java
-// ⭐ Java 最经典的 LRU 实现：继承 + removeEldestEntry
+// ★ Java 最经典的 LRU 实现：继承 + removeEldestEntry
 class LRUCache<K, V> extends LinkedHashMap<K, V> {
     private final int maxCapacity;
 
@@ -119,7 +119,7 @@ cache.put("d", 4);                    // 淘汰最老节点 b
 System.out.println(cache.keySet());   // [c, a, d]
 ```
 
-> ⚠️ **注意**：LinkedHashMap 不是线程安全的。并发场景用 `Collections.synchronizedMap` 包裹或 Caffeine 等专门缓存库。
+> **注意**：LinkedHashMap 不是线程安全的。并发场景用 `Collections.synchronizedMap` 包裹或 Caffeine 等专门缓存库。
 
 ### 3.3 SequencedMap（Java 21+）
 
@@ -159,11 +159,11 @@ threadCache.put(Thread.currentThread(), conn);  // 线程消亡 → 缓存自动
 
 | 场景 | 合适？ | 原因 |
 |------|:---:|------|
-| 线程局部缓存 | ✅ | 线程销毁自动清 |
-| 全局热点缓存 | ❌ | 热点 key 随时被回收，缓存命中率低 |
-| 大对象缓存 | ⚠️ | 可缓解内存压力，但 value 的强引用可能拖延 Entry 回收 |
+| 线程局部缓存 | ✓ | 线程销毁自动清 |
+| 全局热点缓存 | ✗ | 热点 key 随时被回收，缓存命中率低 |
+| 大对象缓存 | | 可缓解内存压力，但 value 的强引用可能拖延 Entry 回收 |
 
-> 💡 **设计要点**：value 不能强引用 key（否则 key 永不回收，Entry 白占内存）。`Entry` 只弱引用 key，value 是普通强引用字段。
+> **设计要点**：value 不能强引用 key（否则 key 永不回收，Entry 白占内存）。`Entry` 只弱引用 key，value 是普通强引用字段。
 
 ---
 
@@ -222,11 +222,11 @@ Hashtable 是 JDK 1.0 遗留：全表 synchronized、不允许 null key/value、
 ```java
 Map<String, Integer> map = new HashMap<>();
 
-// 方式一：entrySet（✅ 推荐，一次遍历拿到 key+value，无二次查找）
+// 方式一：entrySet（✓ 推荐，一次遍历拿到 key+value，无二次查找）
 for (Map.Entry<String, Integer> e : map.entrySet())
     System.out.println(e.getKey() + "=" + e.getValue());
 
-// 方式二：keySet + get（❌ 每次 get 都重新 hash 一次，性能差）
+// 方式二：keySet + get（✗ 每次 get 都重新 hash 一次，性能差）
 for (String k : map.keySet()) System.out.println(k + "=" + map.get(k));
 
 // 方式三：values（只要值）
@@ -241,12 +241,12 @@ map.entrySet().stream().filter(e -> e.getValue() > 10).toList();
 
 | 方式 | 性能 | 说明 |
 |------|:---:|------|
-| entrySet | ⭐ 最优 | 一次迭代 |
-| keySet + get | ❌ 最差 | 二次 hash，元素多时明显 |
-| forEach | ⭐ 同 entrySet | 内部也是 entrySet 迭代 |
+| entrySet | ★ 最优 | 一次迭代 |
+| keySet + get | ✗ 最差 | 二次 hash，元素多时明显 |
+| forEach | ★ 同 entrySet | 内部也是 entrySet 迭代 |
 | Stream | 取决于操作 | 需要中间处理时用 |
 
-> ⚠️ **fail-fast**：遍历中结构修改（put/remove）抛 `ConcurrentModificationException`——`modCount` 检测到变化即失败。需要边遍历边删除：迭代器 `iterator.remove()` 或 `removeIf`。
+> **fail-fast**：遍历中结构修改（put/remove）抛 `ConcurrentModificationException`——`modCount` 检测到变化即失败。需要边遍历边删除：迭代器 `iterator.remove()` 或 `removeIf`。
 
 ---
 
@@ -296,7 +296,7 @@ map.entrySet().stream().filter(e -> e.getValue() > 10).toList();
 
 ---
 
-> 🎯 **核心要点**：Hash 家族万变不离其宗——核心哈希结构都是"数组 + 冲突处理"，差异只在于**判等规则**（equals / == / 弱引用）、**附加结构**（双向链表 / 线性探测）与**适用场景**。
+> **核心要点**：Hash 家族万变不离其宗——核心哈希结构都是"数组 + 冲突处理"，差异只在于**判等规则**（equals / == / 弱引用）、**附加结构**（双向链表 / 线性探测）与**适用场景**。
 
 ---
 

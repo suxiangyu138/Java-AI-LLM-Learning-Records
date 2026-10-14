@@ -36,7 +36,7 @@ Java 应用 → JDBC API → 厂商驱动(MySQL/Oracle/MSSQL) → 数据库
 | 解析结果 | 接收查询返回的ResultSet |
 | 资源管理 | 处理SQLException，管理连接生命周期 |
 
-> 💡 **核心**：换数据库只需换驱动和URL，无需修改业务代码。
+> **核心**：换数据库只需换驱动和URL，无需修改业务代码。
 
 ```xml
 <dependency> <!-- MySQL 8.0+ -->
@@ -46,7 +46,7 @@ Java 应用 → JDBC API → 厂商驱动(MySQL/Oracle/MSSQL) → 数据库
 </dependency>
 ```
 
-> ⚠️ MySQL8驱动类 `com.mysql.cj.jdbc.Driver`（带 `cj`），MySQL5为 `com.mysql.jdbc.Driver`（无 `cj`），不可混用。
+> MySQL8驱动类 `com.mysql.cj.jdbc.Driver`（带 `cj`），MySQL5为 `com.mysql.jdbc.Driver`（无 `cj`），不可混用。
 
 ---
 
@@ -76,7 +76,7 @@ jdbc:mysql://host:port/database?参数1=值1&参数2=值2
 | `useSSL=false` | 开发环境关闭SSL校验 | 推荐 |
 | `allowMultiQueries=true` | 允许一次执行多条SQL | 按需 |
 
-> 💡 `Connection` 非线程安全，禁止多线程共享同一个连接。
+> `Connection` 非线程安全，禁止多线程共享同一个连接。
 
 ---
 
@@ -115,7 +115,7 @@ stmt.executeUpdate("DELETE FROM user WHERE id = " + userId);
 | UNION注入 | `' UNION SELECT ...` | 窃取其他表数据 |
 | 逻辑删除 | `1 OR 1=1` | 全表删除/更新 |
 
-> 🎯 Statement的字符串拼接SQL存在严重安全漏洞，**企业开发严禁使用**，所有参数化查询必须使用 PreparedStatement。
+> Statement的字符串拼接SQL存在严重安全漏洞，**企业开发严禁使用**，所有参数化查询必须使用 PreparedStatement。
 
 ---
 
@@ -126,11 +126,11 @@ stmt.executeUpdate("DELETE FROM user WHERE id = " + userId);
 | 对比维度 | Statement | PreparedStatement |
 |----------|-----------|-------------------|
 | SQL传递 | 字符串拼接 | `?` 占位符 + 参数分离 |
-| SQL注入 | ❌ 高危 | ✅ 自动转义特殊字符，彻底防护 |
-| 预编译缓存 | ❌ 每次重新编译 | ✅ 数据库缓存编译模板，重复执行性能高 |
+| SQL注入 | ✗ 高危 | ✓ 自动转义特殊字符，彻底防护 |
+| 预编译缓存 | ✗ 每次重新编译 | ✓ 数据库缓存编译模板，重复执行性能高 |
 | 代码可读性 | 差，引号嵌套混乱 | 好，SQL与参数分离 |
-| 动态表名/列名 | ✅ 支持拼接 | ❌ `?` 只能替代值 |
-| 企业推荐 | ❌ 禁止使用 | ✅ 唯一推荐 |
+| 动态表名/列名 | ✓ 支持拼接 | ✗ `?` 只能替代值 |
+| 企业推荐 | ✗ 禁止使用 | ✓ 唯一推荐 |
 
 ### 4.2 核心用法
 
@@ -154,7 +154,7 @@ PreparedStatement:
   ③ 自动转义：参数不参与SQL编译，注入无效                  ← 注入失败！
 ```
 
-> 💡 **预编译缓存**：同一条SQL反复执行（如批量插入），只需编译一次，后续仅传参数，数据库和网络开销大幅降低。
+> **预编译缓存**：同一条SQL反复执行（如批量插入），只需编译一次，后续仅传参数，数据库和网络开销大幅降低。
 
 ---
 
@@ -190,7 +190,7 @@ String colName = meta.getColumnName(1);
 String colType = meta.getColumnTypeName(1);
 ```
 
-> ⚠️ 资源关闭顺序：`ResultSet` → `Statement`/`PreparedStatement` → `Connection`，反序会导致资源泄露。
+> 资源关闭顺序：`ResultSet` → `Statement`/`PreparedStatement` → `Connection`，反序会导致资源泄露。
 
 ---
 
@@ -237,10 +237,10 @@ try {
 
 | 级别 | 脏读 | 不可重复读 | 幻读 | 默认 |
 |------|:----:|:----------:|:----:|:----:|
-| `READ_UNCOMMITTED` | ✅ | ✅ | ✅ | |
-| `READ_COMMITTED` | ❌ | ✅ | ✅ | Oracle |
-| `REPEATABLE_READ` | ❌ | ❌ | ✅ | **MySQL InnoDB** |
-| `SERIALIZABLE` | ❌ | ❌ | ❌ | |
+| `READ_UNCOMMITTED` | ✓ | ✓ | ✓ | |
+| `READ_COMMITTED` | ✗ | ✓ | ✓ | Oracle |
+| `REPEATABLE_READ` | ✗ | ✗ | ✓ | **MySQL InnoDB** |
+| `SERIALIZABLE` | ✗ | ✗ | ✗ | |
 
 ```java
 conn.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
@@ -250,7 +250,7 @@ conn.rollback(sp);             // 回滚到保存点
 conn.releaseSavepoint(sp);
 ```
 
-> 💡 隔离级别越高并发性能越差。MySQL InnoDB默认**可重复读**，通过MVCC在保证隔离性的同时提供较高并发性能。
+> 隔离级别越高并发性能越差。MySQL InnoDB默认**可重复读**，通过MVCC在保证隔离性的同时提供较高并发性能。
 
 ---
 
@@ -277,7 +277,7 @@ pstmt.executeBatch(); conn.commit(); pstmt.clearBatch();
 | `executeBatch()` | 批量发送执行，返回int[] |
 | `clearBatch()` | 清空队列 |
 
-> ⚠️ 配合**手动事务**性能最佳，避免单事务数据量过大。
+> 配合**手动事务**性能最佳，避免单事务数据量过大。
 
 ---
 
@@ -339,7 +339,7 @@ spring:
       max-lifetime: 1800000          # 最大存活ms
 ```
 
-> 💡 连接池原理：初始化时创建一批Connection缓存到池中，`getConnection()` 从池中取，`close()` 归还而非真正关闭TCP连接。
+> 连接池原理：初始化时创建一批Connection缓存到池中，`getConnection()` 从池中取，`close()` 归还而非真正关闭TCP连接。
 
 ---
 
@@ -442,7 +442,7 @@ class User {
 }
 ```
 
-> 💡 `try-with-resources`（JDK 7+）自动调用 `close()` 释放资源，代码简洁。事务场景需手动控制时使用 `try-catch-finally`。
+> `try-with-resources`（JDK 7+）自动调用 `close()` 释放资源，代码简洁。事务场景需手动控制时使用 `try-catch-finally`。
 
 ---
 
@@ -486,4 +486,4 @@ class User {
 
 ---
 
-> 🎯 **核心总结**：JDBC是Java数据库编程的基石。核心掌握三大重点：① PreparedStatement防注入（理解Statement为何危险）；② 事务手动控制（ACID + 隔离级别）；③ 连接池原理（为什么以及如何提升性能）。所有ORM框架底层均封装JDBC——理解JDBC是掌控数据库编程的第一步。
+> **核心总结**：JDBC是Java数据库编程的基石。核心掌握三大重点：① PreparedStatement防注入（理解Statement为何危险）；② 事务手动控制（ACID + 隔离级别）；③ 连接池原理（为什么以及如何提升性能）。所有ORM框架底层均封装JDBC——理解JDBC是掌控数据库编程的第一步。

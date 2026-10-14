@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [Collection 接口体系设计](#1-collection-接口体系设计)
 2. [Iterable 与 Iterator：for-each 的底层原理](#2-iterable-与-iteratorfor-each-的底层原理)
@@ -38,7 +38,7 @@ Iterable<E>                          （可迭代：唯一顶层）
 
 **设计启示**：接口按"能力"而非"实现"划分——`Stack` 能当列表用但语义错误；`LinkedHashSet` 是 Set 却有序——**面向接口编程让这些差异透明化**。
 
-> 🎯 **核心要点**：永远用接口类型声明变量（`List<String>` 而非 `ArrayList<String>`），实现类可以自由替换——这是集合框架最重要的设计哲学。
+> **核心要点**：永远用接口类型声明变量（`List<String>` 而非 `ArrayList<String>`），实现类可以自由替换——这是集合框架最重要的设计哲学。
 
 ---
 
@@ -76,8 +76,8 @@ List<String> list = List.of("a", "b");
 Iterator<String> it = list.iterator();
 it.next();        // a
 it.next();        // b
-// it.next();     // ❌ NoSuchElementException：游标越界
-// it.remove();   // ❌ UnsupportedOperationException：不可变集合的迭代器不支持删除
+// it.next();     // ✗ NoSuchElementException：游标越界
+// it.remove();   // ✗ UnsupportedOperationException：不可变集合的迭代器不支持删除
 ```
 
 **三条易错点**：
@@ -86,7 +86,7 @@ it.next();        // b
 2. `Iterator.remove()` 是"最后返回的那个元素"，不能在 `next()` 之前调用（抛 `IllegalStateException`）；
 3. 迭代器是一次性游标，用完即弃，不能复用。
 
-> 💡 增强 for 内部还隐藏一个细节：**数组的 for-each 是普通 for 循环**（按索引），不是迭代器——所以数组遍历无 fail-fast 概念。
+> 增强 for 内部还隐藏一个细节：**数组的 for-each 是普通 for 循环**（按索引），不是迭代器——所以数组遍历无 fail-fast 概念。
 
 ---
 
@@ -121,18 +121,18 @@ List<String> list = new ArrayList<>(List.of("a", "b", "c"));
 
 // 场景 1：for-each 中直接 remove → 抛异常
 for (String s : list) {
-    if (s.equals("b")) list.remove(s);     // ❌ ConcurrentModificationException
+    if (s.equals("b")) list.remove(s);     // ✗ ConcurrentModificationException
 }
 
 // 场景 2：迭代器与集合操作混用 → 抛异常
 Iterator<String> it = list.iterator();
 while (it.hasNext()) {
     String s = it.next();
-    if (s.equals("b")) list.remove(s);     // ❌ 集合的 remove 改动了 modCount
+    if (s.equals("b")) list.remove(s);     // ✗ 集合的 remove 改动了 modCount
 }
 ```
 
-> ⚠️ **三个边界认知**：① fail-fast 是"尽力而为"的检测，不保证绝对安全——单线程内删除后**恰好**把 modCount 加回原值（如删除两个再添加两个）理论上能绕过检测；② 多线程下即使不抛异常也不代表安全，普通集合本就线程不安全；③ **`set()` 修改元素值不算结构性修改**（元素个数没变），不触发异常。
+> **三个边界认知**：① fail-fast 是"尽力而为"的检测，不保证绝对安全——单线程内删除后**恰好**把 modCount 加回原值（如删除两个再添加两个）理论上能绕过检测；② 多线程下即使不抛异常也不代表安全，普通集合本就线程不安全；③ **`set()` 修改元素值不算结构性修改**（元素个数没变），不触发异常。
 
 ---
 
@@ -151,15 +151,15 @@ List<String> list = new ArrayList<>(List.of("a", "b", "c", "b"));
 // 姿势 1：迭代器删除
 Iterator<String> it = list.iterator();
 while (it.hasNext()) {
-    if (it.next().equals("b")) it.remove();     // ✅ 删除的是"刚返回的元素"
+    if (it.next().equals("b")) it.remove();     // ✓ 删除的是"刚返回的元素"
 
     // 姿势 4（等价于上面三行）：
-    // list.removeIf(s -> s.equals("b"));       // ✅ 单行，内部也是迭代器+remove
+    // list.removeIf(s -> s.equals("b"));       // ✓ 单行，内部也是迭代器+remove
 }
 System.out.println(list);   // [a, c]
 ```
 
-> 🎯 **核心要点**：所有安全删除的本质是**让"检查者"与"修改者"是同一个对象**——迭代器内部删除会同步更新 expectedModCount，所以不触发 fail-fast。`removeIf` 是它的封装，日常首选。
+> **核心要点**：所有安全删除的本质是**让"检查者"与"修改者"是同一个对象**——迭代器内部删除会同步更新 expectedModCount，所以不触发 fail-fast。`removeIf` 是它的封装，日常首选。
 
 ---
 
@@ -214,7 +214,7 @@ lhs.reversed().stream().forEach(System.out::println);   // c, b, a —— 以前
 
 **边界行为**：空集合上 `getFirst()` 抛 `NoSuchElementException`；不可变集合的 `addFirst` 抛 `UnsupportedOperationException`；`HashMap`/`HashSet`/`EnumMap` **不实现**（无顺序保证）。
 
-> 🎯 **核心要点**：SequencedCollection 的工程价值是"**参数类型可以声明顺序语义**"——方法签名写 `SequencedCollection<T>` 而非 `List<T>` 或 `Deque<T>`，任何有序列集合（含 LinkedHashSet）都能传入，同时首尾操作有了统一 API。
+> **核心要点**：SequencedCollection 的工程价值是"**参数类型可以声明顺序语义**"——方法签名写 `SequencedCollection<T>` 而非 `List<T>` 或 `Deque<T>`，任何有序列集合（含 LinkedHashSet）都能传入，同时首尾操作有了统一 API。
 
 ---
 
@@ -239,7 +239,7 @@ System.out.println(orders.contains(new Order("A1")));  // false！
 // 除非 Order 重写了 equals（值相等），否则这是"引用比较"，必为 false
 ```
 
-> ⚠️ **通用契约**：`add` 成功后 `contains` 必须为 true；`remove` 成功后 `size` 减一——违反这些契约的实现（如 equals/hashCode 错误的元素）会让集合行为不可预期，排查时先检查元素类的 equals。
+> **通用契约**：`add` 成功后 `contains` 必须为 true；`remove` 成功后 `size` 减一——违反这些契约的实现（如 equals/hashCode 错误的元素）会让集合行为不可预期，排查时先检查元素类的 equals。
 
 ---
 

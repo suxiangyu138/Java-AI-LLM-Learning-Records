@@ -1,10 +1,10 @@
 # Claude Code 深度解析
 
-> 🧠 Anthropic 出品的终端 AI Agent —— 三层架构、CLAUDE.md 上下文、Worktree 隔离、Hook 自动化、Skills 扩展
+> Anthropic 出品的终端 AI Agent —— 三层架构、CLAUDE.md 上下文、Worktree 隔离、Hook 自动化、Skills 扩展
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [核心定位与架构](#1-核心定位与架构)
 2. [CLAUDE.md 项目记忆](#2-claudemd-项目记忆)
@@ -61,17 +61,17 @@ Personal Java backend + AI learning knowledge base.
 ...
 
 ## Documentation Standards
-- `> 🎯` summary, `> ⚠️` warning, `> 💡` tip
+- `> ` summary, `> ` warning, `> ` tip
 - Tables preferred for comparisons
 - Code blocks MUST specify language
 ```
 
 ```text
 CLAUDE.md 作用：
-  ✅ 每次对话自动加载 → 省去重复说明项目背景
-  ✅ 定义文档规范 → 所有输出自动遵循
-  ✅ 指定常用命令 → Agent 自动使用正确的构建/测试命令
-  ✅ 项目级 Memory → 比每次在对话中说明准确
+  ✓ 每次对话自动加载 → 省去重复说明项目背景
+  ✓ 定义文档规范 → 所有输出自动遵循
+  ✓ 指定常用命令 → Agent 自动使用正确的构建/测试命令
+  ✓ 项目级 Memory → 比每次在对话中说明准确
 ```
 
 ---
@@ -87,9 +87,9 @@ Worktree = 对 Agent 启用独立 Git 工作树
   → 完成任务后自动清理（如无变更）
 
 适用场景：
-  ✅ 多 Agent 并行修改同一仓库（避免文件冲突）
-  ✅ 验证性任务（Agent 改完但不确定是否正确时）
-  ⚠️ 开销：每次创建 200-500ms + 磁盘空间
+  ✓ 多 Agent 并行修改同一仓库（避免文件冲突）
+  ✓ 验证性任务（Agent 改完但不确定是否正确时）
+  开销：每次创建 200-500ms + 磁盘空间
 ```
 
 ---
@@ -144,18 +144,18 @@ Skills = 可加载的专项能力包
 
 ```text
 最佳实践：
-  ✅ 项目根目录放 CLAUDE.md（最关键！）
-  ✅ 复杂任务拆分为多个小 Agent 调用
-  ✅ 利用 Workflow 并行化独立任务
-  ✅ Skills 封装重复性操作流程
-  ✅ Git 频繁提交，方便回滚 AI 改动
-  ❌ 不要让 Agent 一次改太多文件
-  ❌ 不要跳过 Review AI 的每次改动
+  ✓ 项目根目录放 CLAUDE.md（最关键！）
+  ✓ 复杂任务拆分为多个小 Agent 调用
+  ✓ 利用 Workflow 并行化独立任务
+  ✓ Skills 封装重复性操作流程
+  ✓ Git 频繁提交，方便回滚 AI 改动
+  ✗ 不要让 Agent 一次改太多文件
+  ✗ 不要跳过 Review AI 的每次改动
 ```
 
 ---
 
-> 🎯 Claude Code 是 **2026 年 Agent 能力最强的终端 AI 工具**。优势在于复杂多文件重构，劣势在于无实时补全需搭配 IDE 工具。CLAUDE.md 是使用它的第一要务。
+> Claude Code 是 **2026 年 Agent 能力最强的终端 AI 工具**。优势在于复杂多文件重构，劣势在于无实时补全需搭配 IDE 工具。CLAUDE.md 是使用它的第一要务。
 
 ---
 

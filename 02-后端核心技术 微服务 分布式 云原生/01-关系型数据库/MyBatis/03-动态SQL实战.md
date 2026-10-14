@@ -1,6 +1,6 @@
 # 03 - 动态 SQL 实战
 
-> 🎯 动态 SQL 是 MyBatis 最强大的特性——`<if>`、`<foreach>`、`<choose>`、`<where>`、`<trim>`、`<set>` 六大标签，让 SQL 像代码一样灵活组合
+> 动态 SQL 是 MyBatis 最强大的特性——`<if>`、`<foreach>`、`<choose>`、`<where>`、`<trim>`、`<set>` 六大标签，让 SQL 像代码一样灵活组合
 
 ---
 
@@ -121,14 +121,14 @@
 ## 3. 性能陷阱
 
 ```xml
-<!-- ❌ foreach 在 IN 中数据量过大 → 产生超长 SQL -->
+<!-- ✗ foreach 在 IN 中数据量过大 → 产生超长 SQL -->
 <select id="findByIds">
     SELECT * FROM users WHERE id IN
     <foreach collection="ids" item="id" separator=",">#{id}</foreach>
     <!-- ids 有 10000 个 → SQL 长达 100KB → MySQL 可能拒绝执行 -->
 </select>
 
-<!-- ✅ 解决：分批 IN 或临时表 JOIN -->
+<!-- ✓ 解决：分批 IN 或临时表 JOIN -->
 ```
 
 ## 核心要点回顾

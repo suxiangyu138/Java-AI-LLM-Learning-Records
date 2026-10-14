@@ -2,7 +2,7 @@
 
 > 工程用 PriorityQueue，面试才手写堆：默认小顶堆、O(log n) 插入删除、比较器定制——本节目录全部 API、五种比较器写法与复杂度速查。
 
-## 📚 目录
+## 目录
 
 1. [核心 API 一览](#1-核心-api-一览)
 2. [构造与比较器](#2-构造与比较器)
@@ -25,7 +25,7 @@ heap.size(); heap.isEmpty();
 heap.clear();
 ```
 
-> ⚠️ **remove(Object)/contains 是 O(n)**——堆只保证根最快，任意元素操作需要线性扫描；需要频繁删任意元素时用「延迟删除」技巧（见 06 模块与专题 5 精要）。
+> **remove(Object)/contains 是 O(n)**——堆只保证根最快，任意元素操作需要线性扫描；需要频繁删任意元素时用「延迟删除」技巧（见 06 模块与专题 5 精要）。
 
 ## 2. 构造与比较器
 
@@ -74,7 +74,7 @@ class Order implements Comparable<Order> {
 PriorityQueue<Order> heap = new PriorityQueue<>();   // 自然序即按 amount
 ```
 
-> ⚠️ **整数相减溢出陷阱**：`a.amount - b.amount` 当值接近 Integer.MAX_VALUE 时会溢出——生产代码用 `Integer.compare(a.amount, b.amount)` 或 `Comparator.comparingInt`。
+> **整数相减溢出陷阱**：`a.amount - b.amount` 当值接近 Integer.MAX_VALUE 时会溢出——生产代码用 `Integer.compare(a.amount, b.amount)` 或 `Comparator.comparingInt`。
 
 ## 4. 工程最佳实践
 
@@ -111,7 +111,7 @@ public int findKthLargest(int[] nums, int k) {   // 215
 | 性能 | 略慢（对象装箱/动态扩容） | 更可控 |
 | 使用场景 | **工程默认** | 面试手写、性能极端敏感 |
 
-> 💡 通用优先队列模板：`PriorityQueue<int[]>` 存二元组（值, 索引）是图/矩阵/双指针题的万能搭档。
+> 通用优先队列模板：`PriorityQueue<int[]>` 存二元组（值, 索引）是图/矩阵/双指针题的万能搭档。
 
 ## 5. 复杂度速查表
 
@@ -146,12 +146,12 @@ ConcurrentSkipListMap<Integer, String> skiplist = new ConcurrentSkipListMap<>();
 
 | 误区 | 正确认知 |
 |------|---------|
-| `PriorityQueue` 是有序的 | ❌ 只有根最值有序；`toArray()` 不保证有序 |
-| 迭代器按优先级遍历 | ❌ 迭代器无序，要 `poll()` 循环才有序 |
+| `PriorityQueue` 是有序的 | ✗ 只有根最值有序；`toArray()` 不保证有序 |
+| 迭代器按优先级遍历 | ✗ 迭代器无序，要 `poll()` 循环才有序 |
 | `add` 与 `offer` 等价 | 基本等价（add 失败抛异常、offer 返回 false） |
 | 对象比较器写反 | 小顶堆是 `(a,b) -> a-b`；写反变「伪大顶堆」但语义错乱 |
 
-> 🎯 **核心要点**：PriorityQueue 验收——会写四种堆（默认/大顶/对象 Lambda/多字段链式）、记住「**TopK 口诀**：前 K 大装小堆」、警惕两个 O(n) 陷阱（remove/contains）与整数溢出；工程题永远优先 PriorityQueue，只有面试官说「手写」才掏 02 模块的模板。
+> **核心要点**：PriorityQueue 验收——会写四种堆（默认/大顶/对象 Lambda/多字段链式）、记住「**TopK 口诀**：前 K 大装小堆」、警惕两个 O(n) 陷阱（remove/contains）与整数溢出；工程题永远优先 PriorityQueue，只有面试官说「手写」才掏 02 模块的模板。
 
 ---
 

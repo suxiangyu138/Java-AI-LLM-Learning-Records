@@ -1,6 +1,6 @@
 # 05 - DispatcherServlet 请求处理全链路
 
-> 🎯 一个 HTTP 请求进入 Spring MVC 后的完整旅程 — doDispatch 八阶段 + 参数解析复合器 + HandlerAdapter 适配逻辑 + 返回值处理器分支。附带责任链设计分析
+> 一个 HTTP 请求进入 Spring MVC 后的完整旅程 — doDispatch 八阶段 + 参数解析复合器 + HandlerAdapter 适配逻辑 + 返回值处理器分支。附带责任链设计分析
 
 ---
 
@@ -158,7 +158,7 @@ public interface HandlerMethodArgumentResolver {
 | ServletModelAttributeMethodProcessor | 无注解的 POJO | 按字段名绑定请求参数（对象绑定） |
 | ServletRequestMethodArgumentResolver | HttpServletRequest 等 | 直接注入 Servlet 原生对象 |
 
-> 💡 **调试技巧** — `HandlerMethodArgumentResolver` 执行前打印 `parameter` 和 `resolver.getClass()`，可看清每个参数走哪个解析器。
+> **调试技巧** — `HandlerMethodArgumentResolver` 执行前打印 `parameter` 和 `resolver.getClass()`，可看清每个参数走哪个解析器。
 
 ---
 
@@ -231,6 +231,6 @@ afterCompletion — 可访问异常（ex 参数），进行资源清理
 
 ---
 
-> 🎯 **核心要点**：DispatcherServlet = 前端控制器模式（统一入口）+ 责任链模式（可插拔拦截器）。面试被问"一个 HTTP 请求怎么到 Controller 的"：从 DispatcherServlet → HandlerMapping（路由）→ HandlerAdapter（三任务：参数解析/反射调用/返回值处理）→ 视图渲染或 JSON 输出。每个环节追踪哪个类、哪个方法。
+> **核心要点**：DispatcherServlet = 前端控制器模式（统一入口）+ 责任链模式（可插拔拦截器）。面试被问"一个 HTTP 请求怎么到 Controller 的"：从 DispatcherServlet → HandlerMapping（路由）→ HandlerAdapter（三任务：参数解析/反射调用/返回值处理）→ 视图渲染或 JSON 输出。每个环节追踪哪个类、哪个方法。
 
 **下一模块**：[06-事件驱动模型与ApplicationContext内部机制](06-事件驱动模型与ApplicationContext内部机制.md) / **返回总览**：[00-深度剖析总览](00-Spring生态深度剖析总览.md)

@@ -2,7 +2,7 @@
 
 > 第一个有界面的 AI 应用：用 Streamlit 把 03 篇的模型调用包成一个聊天网页。理解 st.chat_message / st.chat_input / st.write_stream 三个核心原语与 session_state 的运行机制，这是 08 篇闭环 Demo 的界面层。
 
-## 📚 目录
+## 目录
 
 1. [目标与验收](#1-目标与验收)
 2. [为什么是 Streamlit](#2-为什么是-streamlit)
@@ -32,7 +32,7 @@ AI Demo 阶段的界面选型，Streamlit 是事实标准：**纯 Python 写界�
 # app.py
 import streamlit as st
 
-st.set_page_config(page_title="我的 AI 助手", page_icon="🤖", layout="centered")
+st.set_page_config(page_title="我的 AI 助手", page_icon="", layout="centered")
 st.title("Python AI 助手")
 st.caption("Level1 Demo · DeepSeek V4 驱动")
 
@@ -159,7 +159,7 @@ if prompt := st.chat_input("说点什么..."):
 
 **按钮/输入框"点了没反应"**：控件回调后 rerun 了但界面没变化——检查代码是否依赖了某个"只初始化一次"的状态（比如 message 列表被重新赋值覆盖了历史——初始化语句要放在 `if "messages" not in st.session_state` 判断里，而不是每次重跑都执行）；**多标签页相互干扰**：session_state 按浏览器会话（标签页）隔离，两个标签页互不影响是正常行为，想共享数据才需要持久化（Level2 用数据库）。
 
-> 🎯 **核心要点**：Streamlit 的心智模型是"**状态机重放**"——脚本每轮重跑、session_state 保留数据、控件即变量、重资源用缓存装饰器。记住这个模型，界面层就通了；08 篇会把这里的三原语直接复用进闭环 Demo。
+> **核心要点**：Streamlit 的心智模型是"**状态机重放**"——脚本每轮重跑、session_state 保留数据、控件即变量、重资源用缓存装饰器。记住这个模型，界面层就通了；08 篇会把这里的三原语直接复用进闭环 Demo。
 
 ---
 

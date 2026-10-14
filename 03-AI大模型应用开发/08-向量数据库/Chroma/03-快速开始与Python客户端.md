@@ -128,7 +128,7 @@ Server 模式还暴露 REST 端点（`/api/v1/collections` 等），非 Python �
 
 铁律有三条：**写读必须用同一个 embedding 函数**（换模型 = 换空间，检索毫无意义）；**把模型名写进 collection metadata** 留痕；**embedding 维度与 space 创建后不可变**，换模型就建新集合（用 forking 对比效果，见 06）。
 
-> 🎯 **核心要点**：`PersistentClient(path)` 一条命令获得本地持久化向量库；写操作记"add 抛错、upsert 覆盖、update 部分、delete 按条件"，读操作记"query 嵌套、get 扁平、后置过滤、include 控制返回"；并发写必须逃到服务模式。
+> **核心要点**：`PersistentClient(path)` 一条命令获得本地持久化向量库；写操作记"add 抛错、upsert 覆盖、update 部分、delete 按条件"，读操作记"query 嵌套、get 扁平、后置过滤、include 控制返回"；并发写必须逃到服务模式。
 
 ---
 

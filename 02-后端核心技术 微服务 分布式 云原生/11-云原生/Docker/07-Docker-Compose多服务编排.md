@@ -1,7 +1,7 @@
 # 07-Docker Compose 多服务编排
 > 通过 YAML 文件"声明"多容器的最终运行状态——MySQL/Redis/Spring Boot 一键启动，核心价值"一致性、高效性、可维护性"
 
-## 📚 目录
+## 目录
 1. [核心认知：声明式环境](#1-核心认知声明式环境)
 2. [compose 文件结构](#2-compose-文件结构)
 3. [核心命令全集](#3-核心命令全集)
@@ -64,14 +64,14 @@ docker-compose logs -f springboot-service # 3. 查看 Java 服务日志（实时
 docker-compose restart springboot-service # 4. 重启某个服务（无需重启整个环境）
 docker-compose stop                      # 5. 停止整个环境（保留容器和数据）
 docker-compose down                      # 6. 停止并删除环境（容器/网络删除，数据卷保留）
-docker-compose down -v                   # 7. 停止并删除容器、网络和数据卷（⚠️ 会删数据库数据）
+docker-compose down -v                   # 7. 停止并删除容器、网络和数据卷（会删数据库数据）
 docker-compose up -d --build             # 8. 重新构建镜像并启动（Java 代码修改后）
 docker-compose exec springboot-service bash   # 9. 进入服务容器（调试）
 docker-compose config                    # 10. 查看最终配置
 docker-compose ps --filter "health=healthy"  # 11. 查看健康检查通过的服务
 ```
 
-> 💡 修改了 Spring Boot 代码后只需 `docker-compose up -d --build` 即可重新构建镜像并重启 Java 服务，无需手动删旧容器、重启整个环境。
+> 修改了 Spring Boot 代码后只需 `docker-compose up -d --build` 即可重新构建镜像并重启 Java 服务，无需手动删旧容器、重启整个环境。
 
 ```bash
 # Compose 安装（二进制方式，CentOS/Ubuntu 通用）
@@ -271,7 +271,7 @@ services:
       - /data/prod/springboot/logs:/app/logs
 ```
 
-> ⚠️ 安全加固三要点：① 敏感信息不写 YAML（环境变量或 Docker Secrets）；② 网络隔离（internal 内部网络）；③ 镜像必须来自自定义 Registry 且经漏洞扫描。
+> 安全加固三要点：① 敏感信息不写 YAML（环境变量或 Docker Secrets）；② 网络隔离（internal 内部网络）；③ 镜像必须来自自定义 Registry 且经漏洞扫描。
 
 ## 8. CI/CD 联动
 
@@ -318,7 +318,7 @@ pipeline {
 
 ## 10. 核心要点
 
-> 🎯 **核心要点**：
+> **核心要点**：
 > - 声明式 vs 命令式：告诉 Docker"要什么"而非"如何做"；
 > - `depends_on` 只管启动顺序，**`condition: service_healthy` 才管"就绪"**；
 > - 服务间通信用**服务名**（`jdbc:mysql://mysql-service:3306`），与微服务容器名通信同理；

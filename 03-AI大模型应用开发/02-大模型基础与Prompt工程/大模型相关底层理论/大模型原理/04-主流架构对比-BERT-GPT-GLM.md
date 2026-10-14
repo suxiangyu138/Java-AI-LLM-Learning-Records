@@ -1,6 +1,6 @@
 # 04 - 主流架构对比：BERT、GPT、GLM
 
-> 🎯 三大架构代表了 LLM 的三个方向 — 理解（BERT）、生成（GPT）、统一（GLM）。看清架构差异，才能选对模型做对事
+> 三大架构代表了 LLM 的三个方向 — 理解（BERT）、生成（GPT）、统一（GLM）。看清架构差异，才能选对模型做对事
 
 ---
 
@@ -49,9 +49,9 @@
 BERT = Transformer 的 Encoder 部分
 
 关键设计：
-  ✅ 双向注意力：每个 token 同时看到左右所有 token
-  ✅ 无解码器，不生成文本
-  ✅ 预训练 → 微调流程
+  ✓ 双向注意力：每个 token 同时看到左右所有 token
+  ✓ 无解码器，不生成文本
+  ✓ 预训练 → 微调流程
 
 规模：
   BERT-base:  12 层, 768 维, 12 头, 110M 参数
@@ -90,14 +90,14 @@ BERT = Transformer 的 Encoder 部分
 ### 2.4 适用场景
 
 ```text
-✅ 文本分类（情感分析、垃圾检测）
-✅ 命名实体识别（NER）
-✅ 语义匹配（搜索、推荐）
-✅ Embedding 提取（作为 Encoder 输出向量）
+✓ 文本分类（情感分析、垃圾检测）
+✓ 命名实体识别（NER）
+✓ 语义匹配（搜索、推荐）
+✓ Embedding 提取（作为 Encoder 输出向量）
 
-❌ 对话生成
-❌ 代码生成
-❌ 文案创作
+✗ 对话生成
+✗ 代码生成
+✗ 文案创作
 ```
 
 ---
@@ -110,9 +110,9 @@ BERT = Transformer 的 Encoder 部分
 GPT = Transformer 的 Decoder 部分（去掉 Cross-Attention）
 
 关键设计：
-  ✅ 因果掩码（Causal Mask）：只能看到当前位置之前的 token
-  ✅ 自回归生成：逐 token 生成，每次基于已生成的内容
-  ✅ 纯生成模型
+  ✓ 因果掩码（Causal Mask）：只能看到当前位置之前的 token
+  ✓ 自回归生成：逐 token 生成，每次基于已生成的内容
+  ✓ 纯生成模型
 
 GPT 系列演进：
   GPT-1 (2018): 117M, 12层, 768维 — 证明预训练+微调有效
@@ -216,9 +216,9 @@ T5（Text-to-Text Transfer Transformer, Google 2019）
 |------|:---:|:---:|:---:|
 | **架构** | Encoder-Decoder | Decoder-Only | Encoder-Only |
 | **框架** | Text-to-Text | 自回归生成 | MLM |
-| **理解** | ✅ | ✅ | ✅ |
-| **生成** | ✅ | ✅ | ❌ |
-| **主流度** | ⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐ |
+| **理解** | ✓ | ✓ | ✓ |
+| **生成** | ✓ | ✓ | ✗ |
+| **主流度** | ★★ | ★★★★★ | ★★★ |
 
 ---
 
@@ -231,10 +231,10 @@ T5（Text-to-Text Transfer Transformer, Google 2019）
 | **架构** | Encoder-Only | Decoder-Only | Encoder(改进) | Encoder-Decoder |
 | **注意力** | 双向 | 单向(因果) | 双向+自回归 | 编码双向+解码单向 |
 | **预训练任务** | MLM+NSP | CLM(Next Token) | 自回归空白填充 | Span Corruption |
-| **生成能力** | ❌ | ✅ | ✅ | ✅ |
-| **理解能力** | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐⭐ |
-| **开源** | ✅ | GPT-4×/LLaMA✅ | ✅ | ✅ |
-| **中文友好** | ⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐ |
+| **生成能力** | ✗ | ✓ | ✓ | ✓ |
+| **理解能力** | ★★★★★ | ★★★★ | ★★★★ | ★★★★ |
+| **开源** | ✓ | GPT-4×/LLaMA✓ | ✓ | ✓ |
+| **中文友好** | ★★ | ★★★ | ★★★★★ | ★★ |
 | **当前地位** | Embedding专用 | 绝对主流 | 中文首选开源 | 特定任务 |
 
 ---
@@ -243,23 +243,23 @@ T5（Text-to-Text Transfer Transformer, Google 2019）
 
 ```text
 选 BERT 类：
-  ✅ 纯文本理解任务（分类、NER、语义匹配）
-  ✅ 需要 Embedding 向量
-  ✅ 资源受限（110M 参数即可）
+  ✓ 纯文本理解任务（分类、NER、语义匹配）
+  ✓ 需要 Embedding 向量
+  ✓ 资源受限（110M 参数即可）
 
 选 GPT 类（LLaMA/Qwen/DeepSeek）：
-  ✅ 对话、生成、代码编写
-  ✅ 通用 AI 应用（RAG、Agent）
-  ✅ 需要 Follow Instructions
+  ✓ 对话、生成、代码编写
+  ✓ 通用 AI 应用（RAG、Agent）
+  ✓ 需要 Follow Instructions
 
 选 GLM 类：
-  ✅ 中文场景（语义理解优于 LLaMA）
-  ✅ 同时需要理解和生成
-  ✅ 开源本地部署
+  ✓ 中文场景（语义理解优于 LLaMA）
+  ✓ 同时需要理解和生成
+  ✓ 开源本地部署
 
 选 T5 类：
-  ✅ 有明确输入-输出结构的任务
-  ✅ 翻译、摘要等 Seq2Seq 场景
+  ✓ 有明确输入-输出结构的任务
+  ✓ 翻译、摘要等 Seq2Seq 场景
 ```
 
 ---

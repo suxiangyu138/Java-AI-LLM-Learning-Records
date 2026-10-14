@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [环境准备与依赖](#1-环境准备与依赖)
 2. [最小可跑配置](#2-最小可跑配置)
@@ -46,7 +46,7 @@
 <!-- <artifactId>spring-cloud-starter-circuitbreaker-reactor-resilience4j</artifactId> -->
 ```
 
-> 💡 最少依赖：只加一个 starter 即可用 `CircuitBreakerFactory`——**Factory Bean 由 spring-cloud-commons 自动装配**，无需任何注解启用。
+> 最少依赖：只加一个 starter 即可用 `CircuitBreakerFactory`——**Factory Bean 由 spring-cloud-commons 自动装配**，无需任何注解启用。
 
 ## 2. 最小可跑配置
 
@@ -68,7 +68,7 @@ resilience4j:
         wait-duration-in-open-state: 30s
 ```
 
-> ⚠️ **注意**：`configs.default` 是所有熔断器的兜底配置；不配 = Resilience4J 出厂默认（窗口 100、阈值 50%、最少 100 次、OPEN 60s）——**测试期必配 `minimum-number-of-calls` 调小**，否则流量不够永不熔断（[06 篇](06-配置属性速查.md) 全属性）。
+> **注意**：`configs.default` 是所有熔断器的兜底配置；不配 = Resilience4J 出厂默认（窗口 100、阈值 50%、最少 100 次、OPEN 60s）——**测试期必配 `minimum-number-of-calls` 调小**，否则流量不够永不熔断（[06 篇](06-配置属性速查.md) 全属性）。
 
 ### 2.2 三种配置粒度的最小对应
 
@@ -127,7 +127,7 @@ String r3 = cb.run(supplier, throwable -> {
 CircuitBreaker cbGroup = cbFactory.create("orderService-v2", "orderGroup");
 ```
 
-> 🎯 核心要点：
+> 核心要点：
 > - **fallback 是"异常就兜底"，与熔断状态无关**——CLOSED 状态下一次调用抛异常，同样走 fallback（不是只有熔断才降级）；
 > - **熔断器实例是重量级对象**（状态机+滑动窗口），`create()` 有缓存，**别每次请求都 create 新名字**（同名返回同一个）；
 > - fallback 里**不要抛异常**（否则调用方看到的不是兜底而是新异常，降级失效，见 [08 篇](08-生产实践与选型避坑.md)）。
@@ -199,7 +199,7 @@ public class ReactiveOrderService {
 | 超时实现 | TimeLimiter 中断线程 | 取消订阅（基于响应式超时） |
 | 适用 | Feign/RestTemplate | WebClient/WebFlux 链路 |
 
-> ⚠️ **别混用**：阻塞式 starter 的 Factory 对 Mono 无效（run 会直接执行订阅），响应式链路全程用 reactive 版本。
+> **别混用**：阻塞式 starter 的 Factory 对 Mono 无效（run 会直接执行订阅），响应式链路全程用 reactive 版本。
 
 ## 5. Customizer：Java 配置三形态
 
@@ -269,7 +269,7 @@ public Customizer<ReactiveResilience4JCircuitBreakerFactory> reactiveCustomizer(
 }
 ```
 
-> 💡 补充 Customizer 还有：`addBulkheadCustomizer` / `addThreadPoolBulkheadCustomizer`（隔离配置）、`configureExecutorService`（线程池定制）——见 [04 篇](04-弹性能力全景：隔离超时重试限流.md)。
+> 补充 Customizer 还有：`addBulkheadCustomizer` / `addThreadPoolBulkheadCustomizer`（隔离配置）、`configureExecutorService`（线程池定制）——见 [04 篇](04-弹性能力全景：隔离超时重试限流.md)。
 
 ## 6. 配置优先级总图
 
@@ -309,7 +309,7 @@ public Customizer<ReactiveResilience4JCircuitBreakerFactory> reactiveCustomizer(
 | 响应式不生效 | 阻塞/响应式 starter 混用 | 全链路用 reactor starter |
 | 改配置没变化 | 优先级理解反了（Customizer 覆盖了 yaml？） | 同键 yaml 优先；重启生效 |
 
-> 💡 观察状态机的快捷方式：把 `logging.level.io.github.resilience4j=DEBUG` 打开，状态转换日志直接可见；生产建议用事件监听收集到监控（[08 篇](08-生产实践与选型避坑.md)）。
+> 观察状态机的快捷方式：把 `logging.level.io.github.resilience4j=DEBUG` 打开，状态转换日志直接可见；生产建议用事件监听收集到监控（[08 篇](08-生产实践与选型避坑.md)）。
 
 ---
 

@@ -194,7 +194,7 @@ List<Document> hits = vectorStore.similaritySearch(
 
 阈值与过滤的配合注意：**`similarityThreshold` 与 post-filter 是两套独立机制，会叠加吞结果**——阈值筛掉低分候选、过滤再吞掉不匹配候选，两者叠加后 topK 可能只剩一两条；调参时先放宽一个（阈值设 0 或去掉过滤）确认另一路的召回，再逐步收紧。阈值与过滤参数都进评估闭环（见上段）定值，不拍脑袋。
 
-> 🎯 **核心要点**：Java 接 PgVector 三路径——Spring AI starter（统一抽象）、JdbcTemplate + `<->`（最小成本）、JPA + Flyway（生产形态）；`?::vector` 类型转换与 pgvector-java 驱动是两个必踩点；混合检索的 FTS 部分走原生 SQL，服务层 RRF 融合。
+> **核心要点**：Java 接 PgVector 三路径——Spring AI starter（统一抽象）、JdbcTemplate + `<->`（最小成本）、JPA + Flyway（生产形态）；`?::vector` 类型转换与 pgvector-java 驱动是两个必踩点；混合检索的 FTS 部分走原生 SQL，服务层 RRF 融合。
 
 ---
 

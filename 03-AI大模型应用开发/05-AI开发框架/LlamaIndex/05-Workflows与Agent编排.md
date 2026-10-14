@@ -2,7 +2,7 @@
 
 > LlamaIndex 的编排层：Workflows 1.0 事件驱动异步编排（非 DAG）、LlamaAgents 文档处理 Agent 一键部署——生产基准 6ms 框架开销，比 LangGraph 更轻。
 
-## 📚 目录
+## 目录
 
 1. [Workflows 设计思想](#1-workflows-设计思想)
 2. [事件驱动 vs DAG](#2-事件驱动-vs-dag)
@@ -256,7 +256,7 @@ result = await wf.run(query="复杂多跳问题")
 | "比 LangGraph 全面" | 更轻但状态机深度不如 |
 | "Agent 必须用 LlamaAgents" | 自定义 Workflows 是基础，模板是加速 |
 
-> 🎯 核心要点：Workflows = 事件驱动异步编排（@step + 类型化事件，非 DAG）；动态流程选事件驱动、固定流程选 DAG；反思循环（检索→评估→再检索）用事件驱动天然实现；子工作流实现嵌套智能体；LlamaAgents 是文档处理 Agent 一键部署（数据层差异化）；基准 6ms/1.6K token 优于 LangGraph（但状态机深度不如它）。
+> 核心要点：Workflows = 事件驱动异步编排（@step + 类型化事件，非 DAG）；动态流程选事件驱动、固定流程选 DAG；反思循环（检索→评估→再检索）用事件驱动天然实现；子工作流实现嵌套智能体；LlamaAgents 是文档处理 Agent 一键部署（数据层差异化）；基准 6ms/1.6K token 优于 LangGraph（但状态机深度不如它）。
 
 ---
 

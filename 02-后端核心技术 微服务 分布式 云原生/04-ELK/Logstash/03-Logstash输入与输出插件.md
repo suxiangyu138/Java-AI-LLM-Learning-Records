@@ -63,7 +63,7 @@ output.logstash:
 | 性能 | 每连接独立 worker，高吞吐 |
 | 版本兼容 | Beats 与 Logstash 主版本一致 |
 
-> 🎯 生产标配：**Filebeat（边缘采集）→ beats input（Logstash）** 是 ELK 日志链路的事实标准组合。
+> 生产标配：**Filebeat（边缘采集）→ beats input（Logstash）** 是 ELK 日志链路的事实标准组合。
 
 ---
 
@@ -92,13 +92,13 @@ input {
 ```text
 sincedb = 记录每个文件已读到哪个字节位置的游标文件
 作用：重启 Logstash 后从断点继续，不重复不遗漏
-⚠️ 注意：
+注意：
   · 默认 sincedb 在 data 目录，随容器重建会丢失（挂载卷）
   · 文件轮转（rotation）时按 inode 跟踪
   · 删除 sincedb = 重新读全部历史文件（慎用）
 ```
 
-> 💡 选型提示：**能走 Filebeat 就别用 file 输入**——Filebeat 自带断点、压缩、背压，file 输入适合无 Filebeat 的裸机场景。
+> 选型提示：**能走 Filebeat 就别用 file 输入**——Filebeat 自带断点、压缩、背压，file 输入适合无 Filebeat 的裸机场景。
 
 ---
 
@@ -186,7 +186,7 @@ input {
 | tcp | syslog 转发、设备日志 |
 | udp | 高吞吐可丢场景（不推荐日志核心链路） |
 
-> ⚠️ 安全提示：HTTP/TCP 输入暴露在公网前必须加认证（user/password 或 token）或放内网。
+> 安全提示：HTTP/TCP 输入暴露在公网前必须加认证（user/password 或 token）或放内网。
 
 ---
 
@@ -222,7 +222,7 @@ input {
   · 自增 ID 增量：WHERE id > :sql_last_value
   · 全量：不加条件（数据量小时可用）
 
-⚠️ 注意：delete 操作不会被同步（只增不删）——需要全量
+注意：delete 操作不会被同步（只增不删）——需要全量
    定期重建或双写策略
 ```
 
@@ -320,7 +320,7 @@ DLQ 作用：ES 写入失败（映射冲突/超限）的事件不丢弃
 需要归档？→ s3/file output
 ```
 
-> 🎯 **核心要点**：输入输出是管道的「两端世界」——**输入端三原则**（Beats 优先、Kafka 兜底削峰、HTTP/JDBC 直推需鉴权）；**输出端两重点**（ES 输出用批量 + 幂等 ID、失败进 DLQ 不丢数据）。生产链路最稳组合：**Filebeat → Logstash（beats input → ES output + DLQ）→ ES**；大流量升级为 **Filebeat → Kafka → Logstash → ES**。
+> **核心要点**：输入输出是管道的「两端世界」——**输入端三原则**（Beats 优先、Kafka 兜底削峰、HTTP/JDBC 直推需鉴权）；**输出端两重点**（ES 输出用批量 + 幂等 ID、失败进 DLQ 不丢数据）。生产链路最稳组合：**Filebeat → Logstash（beats input → ES output + DLQ）→ ES**；大流量升级为 **Filebeat → Kafka → Logstash → ES**。
 
 ---
 

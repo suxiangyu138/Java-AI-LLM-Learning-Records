@@ -1,7 +1,7 @@
 # Spring AI 总览
 > Spring 官方 AI 工程框架（2.0.0 GA）：ChatClient 流式 API + Advisor 链 + 统一工具调用 + MCP 原生集成 + RAG/ETL，把 AI 能力变成 Spring 生态的普通 Bean
 
-## 📚 目录
+## 目录
 1. [知识体系导图](#1-知识体系导图)
 2. [模块导航](#2-模块导航)
 3. [学习路线推荐](#3-学习路线推荐)
@@ -93,7 +93,7 @@ Spring AI（2.0.0 GA / Spring Boot 4.0-4.1 / Framework 7 / Jackson 3）
 | 旧线 | 1.1.x ↔ Boot 3.5.x | Boot 3 项目只能停在该线 |
 | MCP 传输 | Streamable HTTP 默认（SSE 弃用）+ STDIO | 传输层移入 Spring AI 内部实现 |
 
-> ⚠️ **时效性**：本文档按 2026-08 官方发布博客、Reference 与 Javadoc 编写。2.0 是破坏性大版本，1.x 用户迁移前务必读官方 [Upgrade Notes](https://docs.spring.io/spring-ai/reference/upgrade-notes.html)。
+> **时效性**：本文档按 2026-08 官方发布博客、Reference 与 Javadoc 编写。2.0 是破坏性大版本，1.x 用户迁移前务必读官方 [Upgrade Notes](https://docs.spring.io/spring-ai/reference/upgrade-notes.html)。
 
 ## 6. 参考来源
 

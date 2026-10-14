@@ -2,7 +2,7 @@
 
 > JVM 不只是 Java 的家——JSR 223 打开多语言之门，Groovy 写 DSL，Kotlin 写脚本，JBang 让 Java 脚本飞
 
-## 📚 目录
+## 目录
 
 1. [JSR 223 / javax.script 详解](#1)
 2. [Nashorn 到 GraalVM 的迁移之路](#2)
@@ -123,7 +123,7 @@ if (engine instanceof Compilable compilable) {
 }
 ```
 
-> 💡 **提示**：编译型脚本引擎（如 GraalVM JS、Groovy）支持 `Compilable`，`CompiledScript.eval()` 性能显著优于 `ScriptEngine.eval()`。
+> **提示**：编译型脚本引擎（如 GraalVM JS、Groovy）支持 `Compilable`，`CompiledScript.eval()` 性能显著优于 `ScriptEngine.eval()`。
 
 ### 1.4 函数调用（Invocable）
 
@@ -185,7 +185,7 @@ engine.eval("print(local); print(shared);");
 | `ENGINE_SCOPE` | 当前 ScriptEngine 实例 | 引擎生命周期 | 请求级变量 |
 | `GLOBAL_SCOPE` | 同一 ScriptEngineManager 创建的所有引擎 | Manager 生命周期 | 全局配置、共享数据 |
 
-> 🎯 **核心要点**：ScriptEngine 的核心价值在于**动态可配置性**——规则引擎、定价公式、数据转换等经常变化的逻辑，用脚本维护比硬编码灵活得多。
+> **核心要点**：ScriptEngine 的核心价值在于**动态可配置性**——规则引擎、定价公式、数据转换等经常变化的逻辑，用脚本维护比硬编码灵活得多。
 
 ---
 
@@ -195,10 +195,10 @@ engine.eval("print(local); print(shared);");
 
 | JDK 版本 | Nashorn 状态 | 说明 |
 |---------|:---:|------|
-| JDK 8 | ✅ 内置 | Oracle Nashorn，ECMAScript 5.1 + 扩展 |
-| JDK 9-10 | ✅ 内置 | 继续可用 |
-| JDK 11 | ⚠️ 标记废弃 | `@deprecated forRemoval=true` |
-| JDK 15+ | ❌ 已移除 | 彻底从 JDK 中移除 |
+| JDK 8 | ✓ 内置 | Oracle Nashorn，ECMAScript 5.1 + 扩展 |
+| JDK 9-10 | ✓ 内置 | 继续可用 |
+| JDK 11 | 标记废弃 | `@deprecated forRemoval=true` |
+| JDK 15+ | ✗ 已移除 | 彻底从 JDK 中移除 |
 
 ### 2.2 如果项目仍在使用 Nashorn
 
@@ -275,11 +275,11 @@ public class GraalVMScripting {
 
 | 检查项 | Nashorn | GraalVM | 迁移策略 |
 |--------|---------|---------|---------|
-| `print()` | ✅ 内置 | ❌ 改用 `console.log()` | 搜索替换 |
-| `load()` | ✅ 内置 | ❌ 改用 `Polyglot.evalFile()` | 重新实现 |
+| `print()` | ✓ 内置 | ✗ 改用 `console.log()` | 搜索替换 |
+| `load()` | ✓ 内置 | ✗ 改用 `Polyglot.evalFile()` | 重新实现 |
 | Java 类型访问 | `Java.type()` | `Java.type()` 需启用 | 打开 `allowHostAccess` |
-| Java.from/Java.to | ✅ 内置 | ❌ 改用 JS 原生方法 | 用 `Array.from` 替代 |
-| `Object.bindProperties()` | ✅ 内置 | ❌ 不支持 | 手动赋值属性 |
+| Java.from/Java.to | ✓ 内置 | ✗ 改用 JS 原生方法 | 用 `Array.from` 替代 |
+| `Object.bindProperties()` | ✓ 内置 | ✗ 不支持 | 手动赋值属性 |
 | 类型转换 | 自动隐式转换 | 更严格 | 显式转换 |
 | 正则表达式 | Nashorn 特有扩展 | 标准 RegExp | 复查跨平台正则 |
 
@@ -454,9 +454,9 @@ pipeline {
     }
 
     post {
-        success  { emailext body: '构建成功 ✅', subject: 'CI 通知',
+        success  { emailext body: '构建成功 ✓', subject: 'CI 通知',
                     to: 'team@company.com' }
-        failure  { emailext body: '构建失败 ❌', subject: 'CI 通知',
+        failure  { emailext body: '构建失败 ✗', subject: 'CI 通知',
                     to: 'team@company.com' }
     }
 }
@@ -467,11 +467,11 @@ pipeline {
 | 领域 | 地位 | 趋势 |
 |------|:---:|:---:|
 | **Jenkins Pipeline** | 事实标准 | 稳定，维护模式 |
-| **Gradle 构建** | 被 Kotlin DSL 取代中 | ⬇️ 下降 |
+| **Gradle 构建** | 被 Kotlin DSL 取代中 | ↓下降 |
 | **Spock 测试** | 主流选择 | 稳定 |
-| **Grails 框架** | 遗留维护 | ⬇️ 下降 |
-| **DSL 构造** | 核心优势保持 | ➡️ 稳定 |
-| **新后端服务** | 不推荐 | ⬇️ |
+| **Grails 框架** | 遗留维护 | ↓下降 |
+| **DSL 构造** | 核心优势保持 | →稳定 |
+| **新后端服务** | 不推荐 | ↓|
 
 ---
 
@@ -525,7 +525,7 @@ runBlocking {
     repos
         .sortedByDescending { it.stars }
         .take(5)
-        .forEach { println("⭐ ${it.stars} - ${it.name} (${it.language ?: "N/A"})") }
+        .forEach { println("★ ${it.stars} - ${it.name} (${it.language ?: "N/A"})") }
 }
 ```
 
@@ -576,16 +576,16 @@ tasks.withType<Test> {
 
 | 维度 | Kotlin (.kts) | Groovy (.groovy) |
 |------|:---:|:---:|
-| **类型安全** | ✅ 静态类型 | ⚠️ 可选静态类型 |
-| **IDE 支持** | ⭐⭐⭐⭐⭐ | ⭐⭐⭐ |
+| **类型安全** | ✓ 静态类型 | 可选静态类型 |
+| **IDE 支持** | ★★★★★ | ★★★ |
 | **编译速度** | 中等 | 中等偏慢 |
 | **脚本启动速度** | 较慢（编译开销） | 中等 |
-| **Java 互操作** | ✅ 优秀 | ✅ 优秀 |
-| **DSL 构建** | ✅ 扩展函数 + Lambda | ✅ 闭包委托 |
-| **空安全** | ✅ 内建 | ❌ |
-| **协程/异步** | ✅ 一等支持 | ❌ GPars 插件 |
-| **Gradle 推荐** | ✅ 默认推荐 | 仍可用 |
-| **Android** | ✅ 官方语言 | ❌ 不支持 |
+| **Java 互操作** | ✓ 优秀 | ✓ 优秀 |
+| **DSL 构建** | ✓ 扩展函数 + Lambda | ✓ 闭包委托 |
+| **空安全** | ✓ 内建 | ✗ |
+| **协程/异步** | ✓ 一等支持 | ✗ GPars 插件 |
+| **Gradle 推荐** | ✓ 默认推荐 | 仍可用 |
+| **Android** | ✓ 官方语言 | ✗ 不支持 |
 
 ---
 
@@ -632,12 +632,12 @@ public class github_stars {
         }
 
         var repos = new Gson().fromJson(json, JsonArray.class);
-        System.out.println("\n📦 " + user + " 的仓库 (Star 数):");
+        System.out.println("\n" + user + " 的仓库 (Star 数):");
         System.out.println("=".repeat(50));
 
         for (var repo : repos) {
             var obj = repo.getAsJsonObject();
-            System.out.printf("  ⭐ %-6d %s%n",
+            System.out.printf("  ★ %-6d %s%n",
                 obj.get("stargazers_count").getAsInt(),
                 obj.get("name").getAsString());
         }
@@ -707,14 +707,14 @@ jbang edit --live hello.java       # 实时重载模式
 | 维度 | JBang | JShell | 传统 Maven/Gradle |
 |------|:---:|:---:|:---:|
 | **上手成本** | 极低 | 极低 | 中等 |
-| **依赖管理** | ✅ `//DEPS` 注解 | ❌ 手动 `--class-path` | ✅ pom.xml / build.gradle |
-| **脚本可执行** | ✅ Shebang | ✅ Shebang | ❌ 需打包 JAR |
-| **IDE 支持** | ✅ 原生 jbang edit | ✅ 原生集成 | ✅ 原生支持 |
-| **导出为项目** | ✅ `jbang export` | ❌ | N/A |
-| **生产部署** | ❌ 不推荐 | ❌ | ✅ 标准方式 |
+| **依赖管理** | ✓ `//DEPS` 注解 | ✗ 手动 `--class-path` | ✓ pom.xml / build.gradle |
+| **脚本可执行** | ✓ Shebang | ✓ Shebang | ✗ 需打包 JAR |
+| **IDE 支持** | ✓ 原生 jbang edit | ✓ 原生集成 | ✓ 原生支持 |
+| **导出为项目** | ✓ `jbang export` | ✗ | N/A |
+| **生产部署** | ✗ 不推荐 | ✗ | ✓ 标准方式 |
 | **适合场景** | 工具脚本、原型 | 学习、探索 | 正式项目 |
 
-> 🎯 **核心要点**：JBang 填补了"Java 工具脚本"的空白——用 Java 写脚本，享受 JVM 生态全部类库，同时保持脚本的轻便性。
+> **核心要点**：JBang 填补了"Java 工具脚本"的空白——用 Java 写脚本，享受 JVM 生态全部类库，同时保持脚本的轻便性。
 
 ---
 
@@ -725,14 +725,14 @@ jbang edit --live hello.java       # 实时重载模式
 | 维度 | Java (JEP 330) | JShell | Groovy | Kotlin .kts | JBang | GraalVM JS |
 |------|:---:|:---:|:---:|:---:|:---:|:---:|
 | **JDK 版本** | 11+ | 9+ | 任意 | 任意 | 任意 | 任意 |
-| **类型安全** | ✅ | ✅ | ⚠️ 可选 | ✅ | ✅ | ❌ 动态 |
-| **启动速度** | ⭐⭐⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ |
+| **类型安全** | ✓ | ✓ | 可选 | ✓ | ✓ | ✗ 动态 |
+| **启动速度** | ★★★★★ | ★★★ | ★★★★ | ★★★ | ★★★★ | ★★★★★ |
 | **依赖管理** | 手动 | 手动 | Gradle/Maven | `@DependsOn` | `//DEPS` | 手动 |
-| **脚本即执行** | ❌ | ✅ Shebang | ✅ | ✅ | ✅ | ✅ |
-| **交互式 REPL** | N/A | ✅ | ✅ groovysh | ✅ | ❌ | ❌ |
-| **DSL 能力** | ⭐⭐ | ⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐ | ⭐⭐ |
-| **IDE 支持** | ✅ | ✅ | ⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ✅ | ⭐⭐ |
-| **生产嵌入** | ❌ | ❌ | ✅ ScriptEngine | ⚠️ 可行 | ❌ | ✅ 最佳 |
+| **脚本即执行** | ✗ | ✓ Shebang | ✓ | ✓ | ✓ | ✓ |
+| **交互式 REPL** | N/A | ✓ | ✓ groovysh | ✓ | ✗ | ✗ |
+| **DSL 能力** | ★★ | ★ | ★★★★★ | ★★★★ | ★★ | ★★ |
+| **IDE 支持** | ✓ | ✓ | ★★★ | ★★★★★ | ✓ | ★★ |
+| **生产嵌入** | ✗ | ✗ | ✓ ScriptEngine | 可行 | ✗ | ✓ 最佳 |
 
 ### 6.2 场景选型速查
 
@@ -748,7 +748,7 @@ jbang edit --live hello.java       # 实时重载模式
 | **快速 CRUD API** | Kotlin .kts | 协程 + 类型安全 |
 | **跨语言多语言脚本** | GraalVM Polyglot | 真正多语言互操作 |
 
-> 🎯 **核心要点**：没有万能工具——JShell 用于探索，JBang 用于工具脚本，Groovy 用于 DSL，Kotlin 用于类型安全的构建脚本，GraalVM 用于多语言集成。各取所长，组合使用。
+> **核心要点**：没有万能工具——JShell 用于探索，JBang 用于工具脚本，Groovy 用于 DSL，Kotlin 用于类型安全的构建脚本，GraalVM 用于多语言集成。各取所长，组合使用。
 
 ---
 

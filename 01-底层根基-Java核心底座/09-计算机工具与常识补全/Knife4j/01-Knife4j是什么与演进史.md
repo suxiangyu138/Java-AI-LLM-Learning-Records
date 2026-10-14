@@ -1,6 +1,6 @@
 # 01 - Knife4j 是什么与演进史
 
-> 🎯 Knife4j 是国人为 Java MVC 生态打造的 API 文档增强解决方案——它不重新发明规范，而是把 SpringDoc/Swagger 生成的文档做得更好用：离线导出、在线调试、微服务聚合、中文界面。理解"增强层"定位，就理解了它的一切
+> Knife4j 是国人为 Java MVC 生态打造的 API 文档增强解决方案——它不重新发明规范，而是把 SpringDoc/Swagger 生成的文档做得更好用：离线导出、在线调试、微服务聚合、中文界面。理解"增强层"定位，就理解了它的一切
 
 ---
 
@@ -101,6 +101,6 @@ Knife4j 的准确定位：**在 SpringDoc（或 Springfox）生成的 OpenAPI �
 
 ---
 
-> 🎯 **核心要点**：Knife4j = 增强层（UI + 调试 + 导出 + 聚合 + 安全），不重新发明规范——标准注解照用、/v3/api-docs 照存、swagger-ui.html 照在。演进：swagger-bootstrap-ui → Knife4j 2.x → 3.x(OpenAPI3) → 4.x(Jakarta) → Next 5.x(社区)。2026 选型：Boot 2/3 用官方 4.x、Boot 4 用 Next、关注维护选 Next。文档质量靠注解，Knife4j 只负责好用。
+> **核心要点**：Knife4j = 增强层（UI + 调试 + 导出 + 聚合 + 安全），不重新发明规范——标准注解照用、/v3/api-docs 照存、swagger-ui.html 照在。演进：swagger-bootstrap-ui → Knife4j 2.x → 3.x(OpenAPI3) → 4.x(Jakarta) → Next 5.x(社区)。2026 选型：Boot 2/3 用官方 4.x、Boot 4 用 Next、关注维护选 Next。文档质量靠注解，Knife4j 只负责好用。
 
 **下一模块**：[02-安装与快速开始](02-安装与快速开始.md) / **返回总览**：[00-总览](00-Knife4j知识体系总览.md)

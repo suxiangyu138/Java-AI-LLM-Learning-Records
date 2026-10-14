@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [知识体系导图](#1-知识体系导图)
 2. [模块导航](#2-模块导航)
@@ -176,7 +176,7 @@ LangGraph 解决"这些组件怎么编排"（任意控制流）
 LangGraph Platform 解决"怎么部署成服务"
 ```
 
-> 🎯 **核心要点**：LangGraph 补上了 LangChain 最大的短板——复杂控制流。没有 LangGraph 的 Agent 只能用线性 Chain 硬凑，有了 LangGraph 才能实现真正的"观察→思考→行动→观察→..."循环。
+> **核心要点**：LangGraph 补上了 LangChain 最大的短板——复杂控制流。没有 LangGraph 的 Agent 只能用线性 Chain 硬凑，有了 LangGraph 才能实现真正的"观察→思考→行动→观察→..."循环。
 
 ---
 

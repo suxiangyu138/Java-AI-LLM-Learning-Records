@@ -20,7 +20,7 @@
 - **前馈传播（Forward Propagation）**：输入数据从输入层逐层向前传播，每层通过加权求和 `z = w·x + b`，再经过激活函数（ReLU、Sigmoid、Tanh）引入非线性。
 - **反向传播（Backpropagation）**：通过链式法则计算损失函数对各层权重的梯度，从输出层反向传播至输入层，更新权重以最小化损失。
 
-> 💡 神经网络的核心能力在于：多层非线性变换可以逼近任意复杂函数（万能逼近定理）。
+> 神经网络的核心能力在于：多层非线性变换可以逼近任意复杂函数（万能逼近定理）。
 
 ### 1.2 大语言模型（LLM）是如何工作的？
 LLM基于**Transformer架构**，核心是**自注意力机制（Self-Attention）**：
@@ -28,7 +28,7 @@ LLM基于**Transformer架构**，核心是**自注意力机制（Self-Attention�
 2. **SFT（监督微调）**：用人工标注的高质量问答数据微调，让模型学会遵循指令。
 3. **RLHF（基于人类反馈的强化学习）**：通过奖励模型优化输出，使其更符合人类偏好。
 
-> 🎯 关键点：LLM本质是一个巨大的概率模型，每一步生成下一个 token 的概率分布。
+> 关键点：LLM本质是一个巨大的概率模型，每一步生成下一个 token 的概率分布。
 
 ### 1.3 LangChain 解决了什么问题？
 LangChain 是一个**大模型应用开发框架**，解决了以下核心问题：
@@ -50,7 +50,7 @@ Agent 是让 LLM 能够**自主决策并调用工具**的机制：
 4. LLM 结合工具结果生成最终回复
 5. 循环执行直到任务完成
 
-> ⚠️ Agent ≠ LLM。Agent = LLM + Tools + Memory + Planning 的组合体。
+> Agent ≠ LLM。Agent = LLM + Tools + Memory + Planning 的组合体。
 
 ### 1.5 消息(Message)在 LangChain 中的作用？
 LangChain 用消息系统管理对话上下文：
@@ -83,7 +83,7 @@ tool = TavilySearchResults(max_results=3)
 result = tool.invoke({"query": "2024年诺贝尔物理学奖"})
 ```
 
-> 💡 Tavily 相比于通用搜索引擎的优势：返回结构化结果、过滤广告、支持实时新闻、专为 AI 调用优化 API 格式。
+> Tavily 相比于通用搜索引擎的优势：返回结构化结果、过滤广告、支持实时新闻、专为 AI 调用优化 API 格式。
 
 ### 1.8 提示词工程的基本要素有哪些？
 
@@ -219,7 +219,7 @@ result = llm_with_structure.invoke("北京今天天气怎么样？")
    - 用 PPO 算法优化策略模型
    - 使输出更符合人类偏好（有用、安全、诚实）
 
-> 🎯 面试重点：RLHF 的成本最高但也最关键，决定了模型的对齐质量。
+> 面试重点：RLHF 的成本最高但也最关键，决定了模型的对齐质量。
 
 ### 2.2 LangChain 消息系统详解
 
@@ -424,7 +424,7 @@ response = local_llm.invoke("解释一下什么是RAG")
 print(response.content)
 ```
 
-> 💡 面试技巧：提到 DeepSeek 的性价比优势和 Ollama 的本地部署隐私优势。
+> 面试技巧：提到 DeepSeek 的性价比优势和 Ollama 的本地部署隐私优势。
 
 ### 3.2 LangChain 消息管理与对话机器人
 
@@ -1672,44 +1672,44 @@ async def chat(request: ChatRequest):
 
 | 序号 | 知识点 | 掌握程度 |
 |------|--------|---------|
-| 1 | 神经网络的前馈传播与反向传播 | ⬜ |
-| 2 | Transformer 自注意力机制原理 | ⬜ |
-| 3 | LLM 三阶段训练（预训练→SFT→RLHF） | ⬜ |
-| 4 | OpenAI 兼容 API 请求/响应格式 | ⬜ |
-| 5 | LangChain 核心组件（Model/Prompt/Memory/Tool/Agent） | ⬜ |
-| 6 | SystemMessage / HumanMessage / AIMessage / ToolMessage 的区别 | ⬜ |
-| 7 | 5种 Memory 类型及适用场景 | ⬜ |
-| 8 | Agent 执行循环流程（入→判断→调用→回传→出） | ⬜ |
-| 9 | Tool 定义方式（@tool / Tool / StructuredTool） | ⬜ |
-| 10 | LangChain Tool 自动生成 Schema 的规则 | ⬜ |
-| 11 | Tavily 搜索引擎集成 | ⬜ |
-| 12 | LangSmith Tracing 配置和使用 | ⬜ |
-| 13 | LangSmith Dataset + Testing 创建 | ⬜ |
-| 14 | Ollama 本地部署和调用 | ⬜ |
-| 15 | DeepSeek API 调用的参数配置 | ⬜ |
-| 16 | 阿里云百炼平台的基本能力 | ⬜ |
-| 17 | 流式输出服务端（FastAPI SSE） + 前端实现 | ⬜ |
-| 18 | Structured Output（with_structured_output / Pydantic） | ⬜ |
-| 19 | Function Calling 与 Tool Calling 的区别 | ⬜ |
-| 20 | 阿里云 OSS 对接（文件上传/日志存储） | ⬜ |
-| 21 | Agent 防死循环（max_iterations + 条件判断） | ⬜ |
-| 22 | 多用户隔离（session_id + 独立 Memory） | ⬜ |
-| 23 | Prompt 模板管理（ChatPromptTemplate + FewShotPromptTemplate） | ⬜ |
-| 24 | 思维链（Chain-of-Thought）提示词设计 | ⬜ |
-| 25 | API 错误处理和重试机制（tenacity） | ⬜ |
-| 26 | 多模型路由和降级策略 | ⬜ |
-| 27 | VectorStore 知识库构建流程 | ⬜ |
-| 28 | RAG 架构（Retrieve-Augment-Generate） | ⬜ |
-| 29 | Docker 容器化 AI 应用 | ⬜ |
-| 30 | AI 私厨 Agent 完整项目架构 | ⬜ |
+| 1 | 神经网络的前馈传播与反向传播 | □ |
+| 2 | Transformer 自注意力机制原理 | □ |
+| 3 | LLM 三阶段训练（预训练→SFT→RLHF） | □ |
+| 4 | OpenAI 兼容 API 请求/响应格式 | □ |
+| 5 | LangChain 核心组件（Model/Prompt/Memory/Tool/Agent） | □ |
+| 6 | SystemMessage / HumanMessage / AIMessage / ToolMessage 的区别 | □ |
+| 7 | 5种 Memory 类型及适用场景 | □ |
+| 8 | Agent 执行循环流程（入→判断→调用→回传→出） | □ |
+| 9 | Tool 定义方式（@tool / Tool / StructuredTool） | □ |
+| 10 | LangChain Tool 自动生成 Schema 的规则 | □ |
+| 11 | Tavily 搜索引擎集成 | □ |
+| 12 | LangSmith Tracing 配置和使用 | □ |
+| 13 | LangSmith Dataset + Testing 创建 | □ |
+| 14 | Ollama 本地部署和调用 | □ |
+| 15 | DeepSeek API 调用的参数配置 | □ |
+| 16 | 阿里云百炼平台的基本能力 | □ |
+| 17 | 流式输出服务端（FastAPI SSE） + 前端实现 | □ |
+| 18 | Structured Output（with_structured_output / Pydantic） | □ |
+| 19 | Function Calling 与 Tool Calling 的区别 | □ |
+| 20 | 阿里云 OSS 对接（文件上传/日志存储） | □ |
+| 21 | Agent 防死循环（max_iterations + 条件判断） | □ |
+| 22 | 多用户隔离（session_id + 独立 Memory） | □ |
+| 23 | Prompt 模板管理（ChatPromptTemplate + FewShotPromptTemplate） | □ |
+| 24 | 思维链（Chain-of-Thought）提示词设计 | □ |
+| 25 | API 错误处理和重试机制（tenacity） | □ |
+| 26 | 多模型路由和降级策略 | □ |
+| 27 | VectorStore 知识库构建流程 | □ |
+| 28 | RAG 架构（Retrieve-Augment-Generate） | □ |
+| 29 | Docker 容器化 AI 应用 | □ |
+| 30 | AI 私厨 Agent 完整项目架构 | □ |
 
 ---
 
-> 🎯 **面试核心策略：**
+> **面试核心策略：**
 > 1. **基础概念区**（一问一答）：快速准确，用关键词 + 一句话总结
 > 2. **深度原理区**（链式追问）：展示知识体系完整性，从底层到应用
 > 3. **代码实战区**（手写 + 解释）：用 Python 代码证明工程能力
 > 4. **系统设计区**（白板 + 架构图）：展示架构思维和全局视野
 > 5. **常见坑点**：用亲身经历的语气讲"之前在生产上遇到过……"
 >
-> 💡 **加分项：** 提到 AI 私厨项目经验、LangSmith 监控实践、Ollama + DeepSeek 成本优化方案
+> **加分项：** 提到 AI 私厨项目经验、LangSmith 监控实践、Ollama + DeepSeek 成本优化方案

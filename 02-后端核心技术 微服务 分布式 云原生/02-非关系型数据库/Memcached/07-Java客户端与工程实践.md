@@ -3,7 +3,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [Xmemcached 客户端](#1-xmemcached-客户端)
 2. [连接与配置](#2-连接与配置)
@@ -20,7 +20,7 @@
 
 | 客户端 | 特点 | 状态 |
 |--------|------|------|
-| **Xmemcached** | 主流、高性能、NIO | ✅ 推荐 |
+| **Xmemcached** | 主流、高性能、NIO | ✓ 推荐 |
 | Memcached-java-client | 老牌、稳定 | 维护放缓 |
 | Spymemcached | 功能全、异步 | 维护放缓 |
 
@@ -367,7 +367,7 @@ public SessionData getSession(String sessionId) {
 | 无降级路径 | 缓存挂 = 系统挂 | try-catch 降级 |
 | 大对象直接缓存 | 1MB 限制/性能差 | 拆分/压缩/存引用 |
 
-> 🎯 **核心要点**：Java 集成 = Xmemcached（NIO + Ketama + 连接池）+ 合理序列化（JSON/Protobuf）+ Spring 注解或手动 Cache-Aside。三个工程纪律：**批量（getBulk/异步写）提升吞吐、写库后删缓存保一致性、缓存异常必须有降级路径**。防击穿/穿透模板（互斥重建 + 空值缓存）是生产必备技能。
+> **核心要点**：Java 集成 = Xmemcached（NIO + Ketama + 连接池）+ 合理序列化（JSON/Protobuf）+ Spring 注解或手动 Cache-Aside。三个工程纪律：**批量（getBulk/异步写）提升吞吐、写库后删缓存保一致性、缓存异常必须有降级路径**。防击穿/穿透模板（互斥重建 + 空值缓存）是生产必备技能。
 
 ---
 

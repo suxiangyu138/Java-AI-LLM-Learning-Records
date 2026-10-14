@@ -1,6 +1,6 @@
 # 03 - Python AI 项目管理工具链
 
-> 🎯 **2026 年结论：uv 是 Python AI 项目的首选包管理器** — Rust 编写、10-100 倍加速、OpenAI 已收购其开发团队。一个工具替代 pip/pip-tools/pipx/poetry/pyenv/virtualenv/twine 共 7 个工具
+> **2026 年结论：uv 是 Python AI 项目的首选包管理器** — Rust 编写、10-100 倍加速、OpenAI 已收购其开发团队。一个工具替代 pip/pip-tools/pipx/poetry/pyenv/virtualenv/twine 共 7 个工具
 
 ---
 
@@ -20,12 +20,12 @@
 |------|--------|--------|-----|-------|
 | 语言 | **Rust**（单二进制） | Python | Python | Python/C |
 | 解析速度 | **10-100 倍** | 中等 | 慢 | 慢 |
-| 锁文件 | ✅ uv.lock | ✅ poetry.lock | ❌（需 pip-tools） | ✅ environment.yml |
-| Python 版本管理 | ✅ 内置 | ❌（需 pyenv） | ❌ | ✅ |
-| 虚拟环境 | ✅ 自动 | ✅ 自动 | ❌（需手动 venv） | ✅ |
-| 发布 | ✅ `uv publish` | ✅ | ❌（需 twine） | ❌ |
+| 锁文件 | ✓ uv.lock | ✓ poetry.lock | ✗（需 pip-tools） | ✓ environment.yml |
+| Python 版本管理 | ✓ 内置 | ✗（需 pyenv） | ✗ | ✓ |
+| 虚拟环境 | ✓ 自动 | ✓ 自动 | ✗（需手动 venv） | ✓ |
+| 发布 | ✓ `uv publish` | ✓ | ✗（需 twine） | ✗ |
 | 替代工具数 | **7 个** | 3-4 个 | 仅基础 | 多 |
-| CUDA/非 PyPI | ❌（仅 PyPI） | ❌ | ❌ | **✅ 最佳** |
+| CUDA/非 PyPI | ✗（仅 PyPI） | ✗ | ✗ | **✓ 最佳** |
 | 适用 | **新项目/AI 应用首选** | 库发布 | 遗留项目 | 深度学习/CUDA |
 
 **实测数据（AI 依赖场景）：**
@@ -136,6 +136,6 @@ jobs:
 
 ---
 
-> 🎯 **核心要点**：2026 年 Python AI 项目的标准答案 = **uv 一把梭 + pyproject.toml 收敛全配置**。纯 LLM 应用直接用 uv；深度学习项目 Conda + uv 混合。uv 一个二进制替代 7 个传统工具，10-100 倍速度提升，OpenAI 已收购。
+> **核心要点**：2026 年 Python AI 项目的标准答案 = **uv 一把梭 + pyproject.toml 收敛全配置**。纯 LLM 应用直接用 uv；深度学习项目 Conda + uv 混合。uv 一个二进制替代 7 个传统工具，10-100 倍速度提升，OpenAI 已收购。
 
 **下一模块**：[04-HuggingFace生态](04-HuggingFace生态.md) / **返回总览**：[00-生态总览](00-Python生态知识体系总览.md)

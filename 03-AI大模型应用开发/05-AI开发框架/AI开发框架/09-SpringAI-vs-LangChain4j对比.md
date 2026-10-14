@@ -1,6 +1,6 @@
 # 09 - Spring AI vs LangChain4j 对比
 
-> 🎯 两个框架都能做 Chat/RAG/Agent/Function Calling — 核心差异在于设计哲学和生态整合。本文给出 15 维度深度对比 + 代码级差异 + 迁移指南
+> 两个框架都能做 Chat/RAG/Agent/Function Calling — 核心差异在于设计哲学和生态整合。本文给出 15 维度深度对比 + 代码级差异 + 迁移指南
 
 ---
 
@@ -24,16 +24,16 @@
 | **版本（2026.08）** | 2.0.0 GA（稳定） | 1.15.0-beta25（快速迭代） | Spring AI |
 | **Java 最低版本** | 17（Boot 4 推荐 21） | 8+ | LangChain4j |
 | **Chat API** | `ChatClient`（Builder 模式） | `ChatLanguageModel.generate()` + `AiServices` | 各有特色 |
-| **声明式接口** | ❌ 无动态代理 | ✅ **AiServices**（核心特色） | LangChain4j |
+| **声明式接口** | ✗ 无动态代理 | ✓ **AiServices**（核心特色） | LangChain4j |
 | **RAG 管道** | `QuestionAnswerAdvisor` + `RetrievalAugmentationAdvisor` | `EmbeddingStoreContentRetriever` + `AiServices` | 各有特色 |
 | **Function Calling** | `@Tool` + 反射扫描 | `@Tool` + `AiServices` 自动集成 | 各有特色 |
 | **多轮对话记忆** | `MessageChatMemoryAdvisor` + `InMemoryChatMemory` | `ChatMemory` + `MessageWindowChatMemory` | 各有特色 |
 | **流式输出** | `Flux<String>` (Reactor) + SSE | `StreamingResponseHandler` + `TokenStream` | Spring AI |
-| **Spring Boot 集成** | ⭐⭐⭐⭐⭐ **原生**（自动配置/starter） | ⭐⭐⭐ 需手动 Bean 配置 | Spring AI |
+| **Spring Boot 集成** | ★★★★★ **原生**（自动配置/starter） | ★★★ 需手动 Bean 配置 | Spring AI |
 | **文档加载器** | Tika/PDF/JSON/Text 等 10+ | **30+**（含 GitHub/Notion/数据库等） | LangChain4j |
 | **多模型切换** | 统一的 `ChatModel` 接口 → 改配置 | 各自独立 Builder → 改代码 | Spring AI |
 | **可观测性** | 内置 Micrometer + OpenTelemetry | 需手动集成 | Spring AI |
-| **MCP 支持** | ✅ 官方 Java SDK 提供方 | ✅ 社区支持 | Spring AI |
+| **MCP 支持** | ✓ 官方 Java SDK 提供方 | ✓ 社区支持 | Spring AI |
 
 ---
 
@@ -144,8 +144,8 @@ String reply = agent.ask("北京天气？");
 | 维护方 | Broadcom（商业公司） | 社区志愿者 |
 | 发布节奏 | 跟随 Spring Boot 大版本 | 独立迭代（更频繁） |
 | 文档质量 | 官方文档 + Spring 风格指南 | 官方文档 + 大量社区教程 |
-| 商业支持 | ✅（通过 Broadcom） | ❌（纯社区） |
-| 与 Spring 全家桶集成 | ✅ 安全/Session/Actuator | 需手动配置 |
+| 商业支持 | ✓（通过 Broadcom） | ✗（纯社区） |
+| 与 Spring 全家桶集成 | ✓ 安全/Session/Actuator | 需手动配置 |
 | 向量库支持 | 10+（pgvector/Redis/Milvus/Pinecone/...） | 15+ |
 | 嵌入模型 | 10+ | 10+ |
 
@@ -216,6 +216,6 @@ Q3: 功能侧重？
 
 ---
 
-> 🎯 **核心要点**：没有绝对的好坏 — **Spring Boot 团队 → Spring AI（零摩擦原生集成 + 商业支持）**；**复杂 Agent/Chain 编排 → LangChain4j（声明式 AiServices + 更丰富的加载器/编排能力）**。2026 年的趋势是两者互补共存：Spring AI 做基础设施层（模型网关/可观测性/MCP），LangChain4j 做 Agent 编排层。项目里同时引入两个框架也是合理选择。
+> **核心要点**：没有绝对的好坏 — **Spring Boot 团队 → Spring AI（零摩擦原生集成 + 商业支持）**；**复杂 Agent/Chain 编排 → LangChain4j（声明式 AiServices + 更丰富的加载器/编排能力）**。2026 年的趋势是两者互补共存：Spring AI 做基础设施层（模型网关/可观测性/MCP），LangChain4j 做 Agent 编排层。项目里同时引入两个框架也是合理选择。
 
 **下一模块**：[10-其他框架速览](10-其他框架速览.md) / **返回总览**：[00-总览](00-Java-AI开发框架体系总览.md)

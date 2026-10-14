@@ -13,9 +13,9 @@
 | 连接成本/连接 | 高 | 中 | 低（14-64 KiB） | 高（100KB-1MB） |
 | 代理友好度 | 好 | 好 | 好（需关缓冲） | 差（需 Upgrade 穿透） |
 | 双向能力 | 可模拟 | 可模拟 | 无（需配合 POST） | 原生 |
-| LLM 流式适用 | ❌ | ❌ | ✅ 默认选择 | 仅双向场景 |
+| LLM 流式适用 | ✗ | ✗ | ✓ 默认选择 | 仅双向场景 |
 
-> 🎯 核心要点：**"用户打字→服务端流式吐 token"是教科书级单向场景，SSE 是默认与正解**；不要没有双向需求就"升级"到 WebSocket——迁移成本真实存在（代理配置、重连、横向扩展都要重做）。
+> 核心要点：**"用户打字→服务端流式吐 token"是教科书级单向场景，SSE 是默认与正解**；不要没有双向需求就"升级"到 WebSocket——迁移成本真实存在（代理配置、重连、横向扩展都要重做）。
 
 ## 2. SSE 协议详解
 
@@ -34,7 +34,7 @@ data: {"text": "天气"}
 
 | 字段 | 作用 | 必选 |
 |---|---|---|
-| `data:` | 事件载荷（可多行拼接，各 models 拼接方式不同） | ✅ |
+| `data:` | 事件载荷（可多行拼接，各 models 拼接方式不同） | ✓ |
 | `id:` | 事件序号，重连时随 Last-Event-ID 上报 | 推荐 |
 | `event:` | 事件类型，前端按类型分发渲染 | 推荐 |
 | `retry:` | 重连间隔（毫秒） | 可选 |
@@ -124,7 +124,7 @@ WebSocket 的成本：每层都要配（nginx `Upgrade` 头、ALB、Cloudflare�
 | 客户端失联 | 服务端超时清理生成任务（如 60s 无读则 abort 模型请求，避免烧钱） |
 | 前端兜底 | 超过 3 秒无事件判定流卡死，提示"继续等待/停止"；自动重连 + 指数退避 |
 
-> 💡 Vercel Edge/Serverless 支持 SSE 但不支持 WebSocket（需外挂 Ably/Pusher）；Cloudflare Workers 两者皆可（WebSocketPair + Durable Objects）。HTTP/3 对 SSE 有天然增益。
+> Vercel Edge/Serverless 支持 SSE 但不支持 WebSocket（需外挂 Ably/Pusher）；Cloudflare Workers 两者皆可（WebSocketPair + Durable Objects）。HTTP/3 对 SSE 有天然增益。
 
 ## 9. 最小可运行后端示例（FastAPI）
 

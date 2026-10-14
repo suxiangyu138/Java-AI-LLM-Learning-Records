@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [安装与版本锁定](#1-安装与版本锁定)
 2. [读取：load 家族](#2-读取load-家族)
@@ -40,10 +40,10 @@ with open("config.yaml", encoding="utf-8") as f:
 
 | 函数 | 语义 | 生产使用 |
 |------|------|---------|
-| `yaml.safe_load(s)` | **安全加载**（只构造 str/int/float/bool/null/list/dict） | **✅ 唯一入口** |
-| `yaml.load(s, Loader=...)` | 指定 Loader 加载 | ⚠️ 必须显式传安全 Loader |
+| `yaml.safe_load(s)` | **安全加载**（只构造 str/int/float/bool/null/list/dict） | **✓ 唯一入口** |
+| `yaml.load(s, Loader=...)` | 指定 Loader 加载 | 必须显式传安全 Loader |
 | `yaml.load(s)` | 无 Loader 参数 | 6.0 起默认 SafeLoader，但**不推荐依赖隐式行为** |
-| `yaml.unsafe_load(s)` | 完整 Loader（可执行任意代码） | ❌ 禁止用于不可信输入（04 篇） |
+| `yaml.unsafe_load(s)` | 完整 Loader（可执行任意代码） | ✗ 禁止用于不可信输入（04 篇） |
 
 **safe_load 的返回类型**：永远是纯数据结构（dict/list/str/int/float/bool/None）——**"安全 = 不可能构造出你没想到的对象"**。**字符串与文件的两种输入**：safe_load 接受**字符串**（`safe_load(text)`）或**文件对象**（`safe_load(f)`）——**文件对象时 PyYAML 直接流式读取，不需要先 `f.read()`**；两种姿势等价，**生产用文件对象（少一步 read，内存友好）**，测试/调试用字符串。文件读取的完整姿势（生产模板）：
 
@@ -152,7 +152,7 @@ with open("app.yaml", encoding="utf-8") as f:
 4. safe_dump 与 dump 的差异？allow_unicode 不传的后果？
 5. YAMLError 的三个层级？ConstructorError 提示什么问题？
 
-> 🎯 **核心要点**：基础 API = **读用 `safe_load`（唯一入口）+ 写用 `safe_dump`（allow_unicode）+ 多文档用 `*_all` 家族 + 中文读写双 utf-8 + 解析失败带行号快速失败**——"六行代码覆盖 90% 场景，剩下的细节在 04-09 篇"。
+> **核心要点**：基础 API = **读用 `safe_load`（唯一入口）+ 写用 `safe_dump`（allow_unicode）+ 多文档用 `*_all` 家族 + 中文读写双 utf-8 + 解析失败带行号快速失败**——"六行代码覆盖 90% 场景，剩下的细节在 04-09 篇"。
 
 ---
 

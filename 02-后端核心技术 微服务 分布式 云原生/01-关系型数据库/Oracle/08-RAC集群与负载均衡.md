@@ -1,6 +1,6 @@
 # 08 - RAC 集群与负载均衡
 
-> 🎯 RAC (Real Application Clusters) 是 Oracle 的横向扩展方案——多个节点共享同一份数据，任一节点故障自动切换到其他节点，对应用透明
+> RAC (Real Application Clusters) 是 Oracle 的横向扩展方案——多个节点共享同一份数据，任一节点故障自动切换到其他节点，对应用透明
 
 ---
 

@@ -1,6 +1,6 @@
 # 06 - ONNX Runtime 跨平台部署
 
-> 🎯 ONNX = 深度学习模型的"通用格式" — PyTorch 训练 → ONNX 导出 → Java/C#/C++ 等多语言推理
+> ONNX = 深度学习模型的"通用格式" — PyTorch 训练 → ONNX 导出 → Java/C#/C++ 等多语言推理
 
 ### 导出流程
 
@@ -93,7 +93,7 @@ Criteria<Input, Output> criteria = Criteria.builder()
 Java：DJL / onnxruntime-java 官方绑定
 ```
 
-> 🎯 **核心要点**：ONNX 的 2026 定位 = "**小模型跨平台 + Java/边缘部署**"——大模型在线推理已属 vLLM 阵营；**Java 后端的 RAG 链路（Embedding/重排小模型）用 ONNX + DJL 是最佳实践**。
+> **核心要点**：ONNX 的 2026 定位 = "**小模型跨平台 + Java/边缘部署**"——大模型在线推理已属 vLLM 阵营；**Java 后端的 RAG 链路（Embedding/重排小模型）用 ONNX + DJL 是最佳实践**。
 
 ---
 
@@ -138,7 +138,7 @@ Java 侧加载：
 | 重排模型（BGE-Reranker） | ~500MB | 内存加载 |
 | 分类器/意图识别 | <100MB | 内存加载 |
 
-> 🎯 **核心要点**：ONNX 导出 = "**dynamic_axes（变长必配）+ opset 版本 + onnxsim 优化**"三件事——Java 侧用 `onnxruntime-java` 或 DJL；**小模型（Embedding/重排）是 ONNX 在 RAG 链路中的主战场**。
+> **核心要点**：ONNX 导出 = "**dynamic_axes（变长必配）+ opset 版本 + onnxsim 优化**"三件事——Java 侧用 `onnxruntime-java` 或 DJL；**小模型（Embedding/重排）是 ONNX 在 RAG 链路中的主战场**。
 
 ---
 
@@ -148,12 +148,12 @@ Java 侧加载：
 
 | 引擎 | 大模型在线 | 小模型 Java | 边缘 | 本地 |
 |------|:----------:|:----------:|:----:|:----:|
-| vLLM | ✅ 默认 | ❌ | ❌ | ❌ |
-| TensorRT-LLM | ✅ 极致 | ❌ | ❌ | ❌ |
-| SGLang | ✅ 高吞吐 | ❌ | ❌ | ❌ |
-| **ONNX Runtime** | ❌ | ✅ | ✅ | ✅ |
-| llama.cpp | ❌ | 部分 | ✅ | ✅ |
-| Ollama | ❌ | ❌ | ❌ | ✅ 本地 |
+| vLLM | ✓ 默认 | ✗ | ✗ | ✗ |
+| TensorRT-LLM | ✓ 极致 | ✗ | ✗ | ✗ |
+| SGLang | ✓ 高吞吐 | ✗ | ✗ | ✗ |
+| **ONNX Runtime** | ✗ | ✓ | ✓ | ✓ |
+| llama.cpp | ✗ | 部分 | ✓ | ✓ |
+| Ollama | ✗ | ✗ | ✗ | ✓ 本地 |
 
 **ONNX 选型速查**：
 
@@ -167,7 +167,7 @@ Java 侧加载：
 一句话：ONNX = "小模型的跨平台标准"，大模型时代的专用工具
 ```
 
-> 🎯 **核心要点**：引擎定位 = "**大模型在线 vLLM、小模型 Java/边缘 ONNX、本地 Ollama**"——ONNX 在 2026 是"小模型 + Java/边缘"的专属赛道，与 vLLM 互不竞争。
+> **核心要点**：引擎定位 = "**大模型在线 vLLM、小模型 Java/边缘 ONNX、本地 Ollama**"——ONNX 在 2026 是"小模型 + Java/边缘"的专属赛道，与 vLLM 互不竞争。
 
 ---
 
@@ -205,4 +205,4 @@ OrtSession session = env.createSession("model.onnx", new OrtSession.SessionOptio
 □ 超时与降级（模型服务不可用时的兜底）
 ```
 
-> 🎯 **核心要点**：Java ONNX 部署 = "**导出（dynamic_axes）→ 优化 → 加载（session 复用）→ 服务化**"四步——**input/output 名称对齐与 session 复用**是两个最常踩的坑。
+> **核心要点**：Java ONNX 部署 = "**导出（dynamic_axes）→ 优化 → 加载（session 复用）→ 服务化**"四步——**input/output 名称对齐与 session 复用**是两个最常踩的坑。

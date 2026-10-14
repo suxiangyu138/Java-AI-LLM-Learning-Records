@@ -2,7 +2,7 @@
 
 > 支持矩阵的剩余拼图：Cursor（Nightly 尚不稳定）、OpenCode（开源原生）、Snowflake/Kiro/Junie 等——约 40 平台的生态全景与完整支持矩阵。
 
-## 📚 目录
+## 目录
 
 1. [平台全景](#1-平台全景)
 2. [Cursor](#2-cursor)
@@ -166,7 +166,7 @@
 
 > "Agent Skills 的生态全景是约 40 平台：成熟梯队（Claude Code/Codex GA）、预览梯队（Copilot/Gemini）、早期（Cursor Nightly）、开源原生（OpenCode）。跨平台策略是'主开发 + 多验证'：以功能最全的 Claude Code 为主平台开发测试，Codex 或 Gemini 做第二验证，技能放 .agents/skills/ 通用总线——一份 SKILL.md 六家可跑。"
 
-> 🎯 核心要点：约 40 平台全景（四梯队）；Cursor Nightly（等稳定）；OpenCode 开源原生（自托管）；完整六家矩阵（状态/目录/调用/特色）；通用总线 .agents/skills/；选择按需求（功能/终端/VS Code/免费/开源）；跨平台策略"主开发 + 多验证"。
+> 核心要点：约 40 平台全景（四梯队）；Cursor Nightly（等稳定）；OpenCode 开源原生（自托管）；完整六家矩阵（状态/目录/调用/特色）；通用总线 .agents/skills/；选择按需求（功能/终端/VS Code/免费/开源）；跨平台策略"主开发 + 多验证"。
 
 ---
 

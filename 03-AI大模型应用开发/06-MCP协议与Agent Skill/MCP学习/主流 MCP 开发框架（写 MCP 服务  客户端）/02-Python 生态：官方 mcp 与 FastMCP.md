@@ -2,7 +2,7 @@
 
 > Python 的 MCP 版图：官方 mcp SDK（1.x 稳定 / 2.0b1 MCPServer）与 FastMCP 3.x 社区框架——各自定位、代码对照、选型决策，以及 v2 迁移路径。
 
-## 📚 目录
+## 目录
 
 1. [Python 生态三件套](#1-python-生态三件套)
 2. [官方 mcp SDK：1.x 稳定线](#2-官方-mcp-sdk1x-稳定线)
@@ -236,7 +236,7 @@ Python 生态的配套工具（阶段 2 已用过，这里给全景）：
 
 **Python 生态的面试表达**：被问"你用什么写 MCP"时，回答分三层——第一层讲事实（"业务 Server 用 FastMCP，协议层用官方 SDK"）；第二层讲理由（"FastMCP 建在官方 SDK 上，效率与合规兼得；官方 v2 的 MCPServer 是未来方向"）；第三层讲判断（"基础设施场景会切官方以保证 day-one 合规，业务场景留在 FastMCP 等 v2 稳定"）——**三层回答展示的是"选型思维"而非"工具熟练度"**，这正是框架知识体系区别于"会写代码"的价值所在。同样的三层结构适用于任何生态的面试问答：先事实、再理由、后判断，三层齐备的答案在任何框架问题面前都不会浅。
 
-> 🎯 **核心要点**：Python 生态 = 官方 mcp（Tier 1 协议层，1.28 稳定 / 2.0b1 MCPServer 无状态重写）+ FastMCP 3.x（社区高层框架，中间件/OAuth/code mode 等差异化）+ 选型两分（业务 Server 用 FastMCP，协议基础设施用官方）+ 工具链（Inspector 跨语言 / mcp-migration 迁移）+ v2 迁移（改名机械、无状态改造是正活）。**记住一个事实：FastMCP 是写 Python MCP Server 的事实标准，官方 SDK 是协议的法定标准——两者不是竞争，是分工；官方 v2 让高层 API 收敛，差异化靠社区扩展**。
+> **核心要点**：Python 生态 = 官方 mcp（Tier 1 协议层，1.28 稳定 / 2.0b1 MCPServer 无状态重写）+ FastMCP 3.x（社区高层框架，中间件/OAuth/code mode 等差异化）+ 选型两分（业务 Server 用 FastMCP，协议基础设施用官方）+ 工具链（Inspector 跨语言 / mcp-migration 迁移）+ v2 迁移（改名机械、无状态改造是正活）。**记住一个事实：FastMCP 是写 Python MCP Server 的事实标准，官方 SDK 是协议的法定标准——两者不是竞争，是分工；官方 v2 让高层 API 收敛，差异化靠社区扩展**。
 
 ---
 

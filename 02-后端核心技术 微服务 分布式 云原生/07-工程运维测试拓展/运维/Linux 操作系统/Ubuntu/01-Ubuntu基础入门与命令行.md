@@ -1,10 +1,10 @@
 # Ubuntu 基础入门与命令行
 
-> 🐧 目录结构、终端操作、20+ 核心命令、vim 速查、SSH 远程连接 —— Java 开发者的 Ubuntu 第一步
+> 目录结构、终端操作、20+ 核心命令、vim 速查、SSH 远程连接 —— Java 开发者的 Ubuntu 第一步
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [Linux 目录结构](#1-linux-目录结构)
 2. [终端基础操作](#2-终端基础操作)
@@ -21,8 +21,8 @@
 ├── /bin              ← 系统基础命令（ls, cat, cp）
 ├── /boot             ← 内核和启动文件
 ├── /dev              ← 设备文件（sda=硬盘, tty=终端）
-├── /etc              ← 系统配置文件（nginx, ssh, hosts）⭐
-├── /home             ← 用户家目录（/home/ubuntu）⭐
+├── /etc              ← 系统配置文件（nginx, ssh, hosts）★
+├── /home             ← 用户家目录（/home/ubuntu）★
 │   └── /home/ubuntu  ← ~ （你的目录！）
 ├── /opt              ← 第三方软件安装
 ├── /proc             ← 进程和内核信息（虚拟文件系统）
@@ -31,7 +31,7 @@
 ├── /usr              ← 用户软件（/usr/bin, /usr/lib）
 │   └── /usr/local    ← 本地编译安装的软件
 ├── /var              ← 可变数据（日志、数据库）
-│   ├── /var/log      ← 系统日志 ⭐
+│   ├── /var/log      ← 系统日志 ★
 │   └── /var/www      ← Web 服务根目录
 └── /srv              ← 服务数据
 
@@ -92,7 +92,7 @@ nohup java -jar app.jar > app.log 2>&1 &  # 后台运行 + 日志
 | `pwd` | 当前路径 | `pwd` |
 | `cp` | 复制 | `cp -r dir1 dir2`（递归复制） |
 | `mv` | 移动/重命名 | `mv old.txt new.txt` |
-| `rm` | 删除 | `rm -rf dir`（⚠️ 危险！） |
+| `rm` | 删除 | `rm -rf dir`（危险！） |
 | `mkdir` | 创建目录 | `mkdir -p a/b/c`（递归创建） |
 | `touch` | 创建文件 | `touch file.txt` |
 | `find` | 查找文件 | `find . -name "*.java"` |
@@ -239,7 +239,7 @@ rsync -avz --exclude 'logs/' ./app/ user@server:~/app/
 
 ---
 
-> 🎯 **核心要点**：`man 命令` 查手册，`Ctrl+R` 搜历史，`tail -f` 看日志，`grep` 搜内容，`|` 管道组合。前 20 个命令背熟就能完成 80% 日常工作。
+> **核心要点**：`man 命令` 查手册，`Ctrl+R` 搜历史，`tail -f` 看日志，`grep` 搜内容，`|` 管道组合。前 20 个命令背熟就能完成 80% 日常工作。
 
 ---
 

@@ -6,7 +6,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [效率四件套总览](#1-效率四件套总览)
 2. [alias 别名系统](#2-alias-别名系统)
@@ -65,7 +65,7 @@ unalias gs       # 取消
 
 ```bash
 # 高危命令的确认保护
-alias rm='rm -i'                    # 删除前确认（⚠️ 重要）
+alias rm='rm -i'                    # 删除前确认（重要）
 alias mv='mv -i'
 alias cp='cp -i'
 
@@ -74,7 +74,7 @@ alias mv='mv -i'
 # 使用原命令：\rm file（前导反斜杠绕过别名）
 ```
 
-> 🎯 **别名规范**：短（≤3 字符）、可记忆、团队统一（共享 .bashrc 片段）——`gs`/`gp`/`gcm` 是 Git 操作的事实标准缩写。
+> **别名规范**：短（≤3 字符）、可记忆、团队统一（共享 .bashrc 片段）——`gs`/`gp`/`gcm` 是 Git 操作的事实标准缩写。
 
 ---
 
@@ -175,7 +175,7 @@ export FZF_DEFAULT_OPTS='--height 40% --preview "bat --color=always {}"'
 # Alt+C   目录跳转
 ```
 
-> 🎯 **fzf 的本质**：**把「精确记忆」变成「模糊识别」**——不用记得文件名/命令全文，几个字符 + 回车即可。配合 rg（搜索）+ bat（预览）是 2026 标准组合。
+> **fzf 的本质**：**把「精确记忆」变成「模糊识别」**——不用记得文件名/命令全文，几个字符 + 回车即可。配合 rg（搜索）+ bat（预览）是 2026 标准组合。
 
 ---
 
@@ -290,11 +290,11 @@ bind -n C-Down select-pane -D
 
 ```text
 tmux 常见问题
-├── ⚠️ 断线重连后窗口大小错乱 → Ctrl+b :resize-window -A（或重设）
-├── ⚠️ tmux 里颜色不对 → 设置 TERM=xterm-256color
-├── ⚠️ 复制粘贴不方便 → 配置鼠标 + 缓冲区
-├── ⚠️ 忘记会话名 → tmux ls 查看
-└── ✅ tmux + Neovim 联动：vim-tmux-navigator 统一 Ctrl+hjkl 导航
+├── 断线重连后窗口大小错乱 → Ctrl+b :resize-window -A（或重设）
+├── tmux 里颜色不对 → 设置 TERM=xterm-256color
+├── 复制粘贴不方便 → 配置鼠标 + 缓冲区
+├── 忘记会话名 → tmux ls 查看
+└── ✓ tmux + Neovim 联动：vim-tmux-navigator 统一 Ctrl+hjkl 导航
 ```
 
 ---
@@ -339,13 +339,13 @@ tmux 常见问题
 17:30  Ctrl+b d 脱离（一切保留，明天 attach 恢复）
 ```
 
-> 🎯 **金句**：现代命令行效率 = **找得到（fzf/atuin）× 记得住（zoxide/starship）× 不丢失（tmux）× 敲得少（alias/补全）**——四者组合，双手不离键盘。
+> **金句**：现代命令行效率 = **找得到（fzf/atuin）× 记得住（zoxide/starship）× 不丢失（tmux）× 敲得少（alias/补全）**——四者组合，双手不离键盘。
 
 ---
 
 ## 8. 核心要点
 
-> 🎯 **核心要点**：
+> **核心要点**：
 > 1. 效率四件套：alias（缩短）/历史搜索（复用）/fzf（模糊找）/tmux（会话持久）
 > 2. alias 规范：短 + 可记忆 + 团队统一；高危命令加 `-i` 确认
 > 3. Ctrl+R 反向搜索是基础技能——fzf/atuin 接管后更强（模糊 + 预览 + 同步）

@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [Agent 开发路径总览](#1-agent-开发路径总览)
 2. [LangChain4j AiServices：声明式 Agent](#2-langchain4j-aiservices声明式-agent)
@@ -136,19 +136,19 @@ AgentListener listener = new AgentListener() {
 
     @Override
     public void onToolCallStarted(ToolCall toolCall) {
-        log.info("🔧 工具调用开始: {} 参数: {}",
+        log.info("工具调用开始: {} 参数: {}",
             toolCall.name(), toolCall.arguments());
     }
 
     @Override
     public void onToolCallCompleted(ToolCall toolCall, String result) {
-        log.info("✅ 工具调用完成: {} 耗时: {}ms",
+        log.info("✓ 工具调用完成: {} 耗时: {}ms",
             toolCall.name(), toolCall.elapsed());
     }
 
     @Override
     public void onError(Throwable error) {
-        log.error("❌ Agent 错误: {}", error.getMessage());
+        log.error("✗ Agent 错误: {}", error.getMessage());
         // 触发告警
     }
 };
@@ -373,7 +373,7 @@ MultiAgentState result = pipeline.invoke(
 |------|-----|-----|
 | **发起方** | Google（Google DeepMind） | Google |
 | **定位** | Agent ↔ 工具 | Agent ↔ Agent |
-| **Java 支持** | Spring AI ✅ / LangChain4j Client ✅ | LangChain4j ✅ / Spring AI ❌ |
+| **Java 支持** | Spring AI ✓ / LangChain4j Client ✓ | LangChain4j ✓ / Spring AI ✗ |
 | **通信模式** | JSON-RPC | 任务导向 |
 | **典型场景** | 查询数据库、调用 API | Agent A 委托任务给 Agent B |
 
@@ -569,7 +569,7 @@ alerts:
 
 ---
 
-> 🎯 **核心要点**：Java Agent 开发路线清晰——简单场景用 AiServices/FallbackCallback，复杂工作流用 LangGraph4j 图编排，跨 Agent 通信走 A2A 协议。2026 年的关键能力是**可观测性**（AgentListener/Micrometer）和**状态管理**（LangGraph4j Checkpoint）——这两项决定 Agent 系统能否生产落地。
+> **核心要点**：Java Agent 开发路线清晰——简单场景用 AiServices/FallbackCallback，复杂工作流用 LangGraph4j 图编排，跨 Agent 通信走 A2A 协议。2026 年的关键能力是**可观测性**（AgentListener/Micrometer）和**状态管理**（LangGraph4j Checkpoint）——这两项决定 Agent 系统能否生产落地。
 
 ---
 

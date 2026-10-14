@@ -2,7 +2,7 @@
 
 > Skill 的全部结构就一个文件夹：SKILL.md（必填：frontmatter 元数据 + 使用说明正文）+ scripts/references/assets（可选配套）——字段规则、发现路径、正文规范一次讲透。
 
-## 📚 目录
+## 目录
 
 1. [目录结构](#1-目录结构)
 2. [YAML frontmatter 必填字段](#2-yaml-frontmatter-必填字段)
@@ -26,7 +26,7 @@ my-skill/
 
 | 文件/目录 | 必需 | 用途 |
 |---|---|---|
-| SKILL.md | ✅ | 技能入口（元数据 + 指令） |
+| SKILL.md | ✓ | 技能入口（元数据 + 指令） |
 | scripts/ | 可选 | 可执行代码（脚本/程序） |
 | references/ | 可选 | 详细参考资料 |
 | assets/ | 可选 | 模板/资源/schema |
@@ -236,7 +236,7 @@ allowed-tools:
 | "description 一句话够" | 触发匹配靠它——写场景与关键词 |
 | "allowed-tools 可选可不选" | 安全必配（06 篇） |
 
-> 🎯 核心要点：SKILL.md = frontmatter（name/description 必填）+ 正文（≤500 行）；description 是匹配钥匙（触发词）；allowed-tools 最小权限；发现路径三级（项目/用户/插件）；命名 kebab-case 与目录一致；正文规范（编号步骤/确切代码/大文件拆出）；五个易错点 + 完整示例直接可抄。
+> 核心要点：SKILL.md = frontmatter（name/description 必填）+ 正文（≤500 行）；description 是匹配钥匙（触发词）；allowed-tools 最小权限；发现路径三级（项目/用户/插件）；命名 kebab-case 与目录一致；正文规范（编号步骤/确切代码/大文件拆出）；五个易错点 + 完整示例直接可抄。
 
 ---
 

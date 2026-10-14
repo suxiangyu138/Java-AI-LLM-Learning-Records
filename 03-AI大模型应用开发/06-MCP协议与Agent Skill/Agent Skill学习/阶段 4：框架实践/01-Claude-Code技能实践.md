@@ -2,7 +2,7 @@
 
 > 标准原创者与功能最全的实现（GA）：自动触发 + 斜杠调用 + 子代理 + 生命周期钩子，独有 allowed-tools/disable-model-invocation——"Claude Code 能跑的，通常其他工具也能跑"。
 
-## 📚 目录
+## 目录
 
 1. [Claude Code 的支持状态](#1-claude-code-的支持状态)
 2. [技能目录与调用方式](#2-技能目录与调用方式)
@@ -192,7 +192,7 @@ agent: Explore          # 用只读调研子代理
 
 > "Claude Code 是 Agent Skills 的事实参考实现（GA、功能最全）：allowed-tools 工具沙箱、disable-model-invocation 手动触发、生命周期钩子、子代理执行（context: fork）都是独有或最完善的。跨平台测试以它为主——'Claude Code 能跑的其他通常也能跑'，但注意专属字段在别处会静默降级。与 MCP 组合也是它的原生优势。"
 
-> 🎯 核心要点：Claude Code = 标准参考实现（GA，SWE-bench 80.9% 第一）；目录 .claude/skills/；独有能力（allowed-tools/钩子/子代理/动态注入/ultrathink）；子代理（context: fork + agent 指定）；与 MCP 原生组合；跨平台注意（专属字段降级 + API 成本管理）。
+> 核心要点：Claude Code = 标准参考实现（GA，SWE-bench 80.9% 第一）；目录 .claude/skills/；独有能力（allowed-tools/钩子/子代理/动态注入/ultrathink）；子代理（context: fork + agent 指定）；与 MCP 原生组合；跨平台注意（专属字段降级 + API 成本管理）。
 
 ---
 

@@ -29,7 +29,7 @@
 | 管理困难 | 缺乏统一调度、监控、生命周期管理机制 |
 | 响应变慢 | 任务到达时才创建线程，任务等待耗时 |
 
-> ⚠️ **企业级铁律**：禁止手动 `new Thread()` 执行任务，强制使用线程池。
+> **企业级铁律**：禁止手动 `new Thread()` 执行任务，强制使用线程池。
 
 ### 1.2 线程池的核心优势
 
@@ -71,13 +71,13 @@ ExecutorService  (子接口: submit, shutdown, awaitTermination...)
 
 | 方法 | 返回 | 特点 | 生产推荐 |
 |------|------|------|:--------:|
-| `newFixedThreadPool(n)` | `ThreadPoolExecutor` | 固定核心线程，无界队列 | ❌ |
-| `newCachedThreadPool()` | `ThreadPoolExecutor` | 核心0，最大无限，60s超时 | ❌ |
-| `newSingleThreadExecutor()` | `ThreadPoolExecutor` | 单线程，无界队列 | ❌ |
-| `newScheduledThreadPool(n)` | `ScheduledThreadPoolExecutor` | 定时/周期任务 | ⚠️ 有界队列可接受 |
-| `newWorkStealingPool(n)` | `ForkJoinPool` | JDK 8+，工作窃取 | ✅ |
+| `newFixedThreadPool(n)` | `ThreadPoolExecutor` | 固定核心线程，无界队列 | ✗ |
+| `newCachedThreadPool()` | `ThreadPoolExecutor` | 核心0，最大无限，60s超时 | ✗ |
+| `newSingleThreadExecutor()` | `ThreadPoolExecutor` | 单线程，无界队列 | ✗ |
+| `newScheduledThreadPool(n)` | `ScheduledThreadPoolExecutor` | 定时/周期任务 | 有界队列可接受 |
+| `newWorkStealingPool(n)` | `ForkJoinPool` | JDK 8+，工作窃取 | ✓ |
 
-> ⚠️ `FixedThreadPool` 和 `SingleThreadExecutor` 内部使用无界 `LinkedBlockingQueue`，任务堆积会导致 OOM。`CachedThreadPool` 最大线程数为 `Integer.MAX_VALUE`，也易导致 OOM。
+> `FixedThreadPool` 和 `SingleThreadExecutor` 内部使用无界 `LinkedBlockingQueue`，任务堆积会导致 OOM。`CachedThreadPool` 最大线程数为 `Integer.MAX_VALUE`，也易导致 OOM。
 
 ---
 
@@ -119,7 +119,7 @@ public ThreadPoolExecutor(
 | `PriorityBlockingQueue` | 优先级排序 | 无界 | 任务需要按优先级执行 |
 | `DelayQueue` | 延迟时间出队 | 无界 | 延迟任务调度 |
 
-> 💡 **生产推荐**：始终使用 `ArrayBlockingQueue` 或指定容量的 `LinkedBlockingQueue` 作为有界队列，避免无界队列导致 OOM。
+> **生产推荐**：始终使用 `ArrayBlockingQueue` 或指定容量的 `LinkedBlockingQueue` 作为有界队列，避免无界队列导致 OOM。
 
 ### 3.4 ThreadFactory：自定义线程名
 
@@ -139,7 +139,7 @@ ThreadFactory customFactory = r -> {
 };
 ```
 
-> 💡 自定义线程名是线上排查的基石——Arthas/jstack 中可以快速定位线程归属。
+> 自定义线程名是线上排查的基石——Arthas/jstack 中可以快速定位线程归属。
 
 ---
 
@@ -205,7 +205,7 @@ ThreadFactory customFactory = r -> {
 | 3 | 队列满 且 `workerCount < maximumPoolSize` | 新建非核心线程执行任务 |
 |  | 队列满 且 `workerCount == maximumPoolSize` | 执行拒绝策略 |
 
-> 🎯 **关键理解**：线程池不是"先核心、再队列、最后非核心"的简单三段式，而是**当核心线程都在忙时先缓冲到队列，队列满后才创建非核心线程**。核心线程永远优先执行新任务，队列只是缓冲层。
+> **关键理解**：线程池不是"先核心、再队列、最后非核心"的简单三段式，而是**当核心线程都在忙时先缓冲到队列，队列满后才创建非核心线程**。核心线程永远优先执行新任务，队列只是缓冲层。
 
 ### 4.3 prestartAllCoreThreads：预启动核心线程
 
@@ -255,7 +255,7 @@ RejectedExecutionHandler customHandler = (r, executor) -> {
 };
 ```
 
-> ⚠️ **生产经验**：`CallerRunsPolicy` 是最常用的拒绝策略——调用者（通常是业务线程）自己执行慢任务，反向压力自然降低提交速度，避免任务丢弃。
+> **生产经验**：`CallerRunsPolicy` 是最常用的拒绝策略——调用者（通常是业务线程）自己执行慢任务，反向压力自然降低提交速度，避免任务丢弃。
 
 ---
 
@@ -286,29 +286,29 @@ ExecutorService cached = Executors.newCachedThreadPool();
 
 | 线程池类型 | 缺陷 | 风险等级 |
 |-----------|------|:--------:|
-| `FixedThreadPool` | 无界 `LinkedBlockingQueue`，任务堆积 OOM | 🔴 高危 |
-| `SingleThreadExecutor` | 同上 | 🔴 高危 |
-| `CachedThreadPool` | `maxPoolSize` 无限，线程爆炸 OOM | 🔴 高危 |
-| `ScheduledThreadPool` | 无界 `DelayedWorkQueue`，定时任务堆积 OOM | 🟡 中危 |
-| `newWorkStealingPool` | 内部 `ForkJoinPool`，参数相对可控 | 🟢 可控 |
+| `FixedThreadPool` | 无界 `LinkedBlockingQueue`，任务堆积 OOM | 高危 |
+| `SingleThreadExecutor` | 同上 | 高危 |
+| `CachedThreadPool` | `maxPoolSize` 无限，线程爆炸 OOM | 高危 |
+| `ScheduledThreadPool` | 无界 `DelayedWorkQueue`，定时任务堆积 OOM | 中危 |
+| `newWorkStealingPool` | 内部 `ForkJoinPool`，参数相对可控 | 可控 |
 
 ### 6.3 生产环境推荐方案
 
 ```java
-// ✅ 正确做法：手动 new ThreadPoolExecutor，指定有界队列
+// ✓ 正确做法：手动 new ThreadPoolExecutor，指定有界队列
 ThreadPoolExecutor executor = new ThreadPoolExecutor(
         4,                              // corePoolSize
         8,                              // maximumPoolSize
         60L, TimeUnit.SECONDS,          // keepAliveTime
-        new ArrayBlockingQueue<>(1000), // ✅ 有界队列，防止OOM
-        new ThreadFactoryBuilder()      // ✅ 自定义线程名
+        new ArrayBlockingQueue<>(1000), // ✓ 有界队列，防止OOM
+        new ThreadFactoryBuilder()      // ✓ 自定义线程名
                 .setNameFormat("biz-pool-%d")
                 .build(),
-        new ThreadPoolExecutor.CallerRunsPolicy() // ✅ 合理拒绝策略
+        new ThreadPoolExecutor.CallerRunsPolicy() // ✓ 合理拒绝策略
 );
 ```
 
-> ⚠️ **企业级铁律**：禁止使用 `Executors` 创建线程池，必须手动 `new ThreadPoolExecutor`。
+> **企业级铁律**：禁止使用 `Executors` 创建线程池，必须手动 `new ThreadPoolExecutor`。
 
 ---
 
@@ -404,7 +404,7 @@ public class ThreadPoolConfigDemo {
 目的：避免一个业务耗尽线程池，影响其他业务
 ```
 
-> 💡 **线程池隔离**是高并发微服务架构中的最佳实践——不同业务使用独立的线程池，避免相互干扰。
+> **线程池隔离**是高并发微服务架构中的最佳实践——不同业务使用独立的线程池，避免相互干扰。
 
 ---
 
@@ -417,8 +417,8 @@ public class ThreadPoolConfigDemo {
 | 线程数 | 单线程 | 线程池，多线程调度 |
 | 异常处理 | 单个任务抛异常 → Timer 整个终止 | 单任务异常不影响其他任务 |
 | 时间精度 | 受系统时间调整影响 | 相对时间，稳定 |
-| catch异常 | 不捕获 | ✅ 可自定义异常处理 |
-| 推荐指数 | ❌ 不推荐 | ✅ 推荐 |
+| catch异常 | 不捕获 | ✓ 可自定义异常处理 |
+| 推荐指数 | ✗ 不推荐 | ✓ 推荐 |
 
 ### 8.2 核心方法
 
@@ -450,7 +450,7 @@ scheduler.scheduleAtFixedRate(() -> {
 }, 0, 5, TimeUnit.SECONDS);
 ```
 
-> 💡 使用 `scheduleAtFixedRate` 时，异常必须自行捕获，否则任务会在第一次异常后静默取消不再执行。
+> 使用 `scheduleAtFixedRate` 时，异常必须自行捕获，否则任务会在第一次异常后静默取消不再执行。
 
 ---
 
@@ -791,7 +791,7 @@ public void shutdownPool(ExecutorService pool, long timeout, TimeUnit unit) {
 
 ---
 
-> 🎯 **本章核心总结**
+> **本章核心总结**
 >
 > 1. **线程池是企业级并发基石**，禁止手动 `new Thread()`，必须使用 `ThreadPoolExecutor`
 > 2. **七大参数**：`corePoolSize`（常驻核心）、`maximumPoolSize`（扩容上限）、`keepAliveTime`（超时回收）、`workQueue`（有界队列防OOM）、`threadFactory`（命名溯源）、`handler`（降级兜底）

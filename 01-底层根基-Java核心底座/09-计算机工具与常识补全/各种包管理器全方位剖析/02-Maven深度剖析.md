@@ -6,7 +6,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [Maven 的定位与哲学](#1-maven-的定位与哲学)
 2. [POM：项目模型文件](#2-pom项目模型文件)
@@ -45,7 +45,7 @@ Maven 能做什么（构建全生命周期）
 
 ## 2. POM：项目模型文件
 
-> 🎯 **POM（Project Object Model）= 项目的「完整说明书」**——所有构建信息都声明在这里。
+> **POM（Project Object Model）= 项目的「完整说明书」**——所有构建信息都声明在这里。
 
 ```xml
 <!-- pom.xml 核心结构（Maven 3.x 风格） -->
@@ -121,13 +121,13 @@ Maven 能做什么（构建全生命周期）
 </dependencyManagement>
 ```
 
-> ⚠️ **常见误解**：`dependencyManagement` 不引入依赖（只约束版本）；`dependencies` 才真正引入——BOM 导入后仍需在 `dependencies` 里声明依赖（可省版本号）。
+> **常见误解**：`dependencyManagement` 不引入依赖（只约束版本）；`dependencies` 才真正引入——BOM 导入后仍需在 `dependencies` 里声明依赖（可省版本号）。
 
 ---
 
 ## 3. 生命周期：构建的阶段化
 
-> 🎯 **生命周期 = 预定义的阶段序列**——执行 `mvn package` 会自动跑完它前面的所有阶段。
+> **生命周期 = 预定义的阶段序列**——执行 `mvn package` 会自动跑完它前面的所有阶段。
 
 ```text
 Maven 三套生命周期（各自独立，互不干扰）
@@ -162,13 +162,13 @@ mvn install（在聚合父目录执行）
 └── 坑：下游模块跑不过 → 上游必须先 install（-am 参数自动处理）
 ```
 
-> 💡 **Maven 3 的多模块是「串行 + 线性阶段」**——父模块所有阶段完成后才轮到子模块（效率问题在 Maven 4 用树形生命周期 + 并发构建器解决，见 [[03-Maven4新特性与实战]]）。
+> **Maven 3 的多模块是「串行 + 线性阶段」**——父模块所有阶段完成后才轮到子模块（效率问题在 Maven 4 用树形生命周期 + 并发构建器解决，见 [[03-Maven4新特性与实战]]）。
 
 ---
 
 ## 4. 依赖机制
 
-> 🎯 **依赖机制是 Maven 的灵魂**——坐标声明 + 自动传递 + 冲突就近裁决。
+> **依赖机制是 Maven 的灵魂**——坐标声明 + 自动传递 + 冲突就近裁决。
 
 ```xml
 <dependency>
@@ -237,30 +237,30 @@ mvn install（在聚合父目录执行）
 
 ## 5. scope 依赖范围
 
-> 🎯 **scope 决定依赖「何时可用、是否传递」**——用错 scope 是常见生产事故来源（如测试依赖打进生产包）。
+> **scope 决定依赖「何时可用、是否传递」**——用错 scope 是常见生产事故来源（如测试依赖打进生产包）。
 
 | scope | 编译 | 测试 | 运行 | 是否传递 | 典型依赖 |
 |-------|:---:|:---:|:---:|:---:|---------|
-| `compile`（默认） | ✅ | ✅ | ✅ | ✅ | 业务库 |
-| `provided` | ✅ | ✅ | ❌ | 否 | Servlet API、Lombok |
-| `runtime` | ❌ | ✅ | ✅ | ✅ | JDBC 驱动 |
-| `test` | ❌ | ✅ | ❌ | 否 | JUnit、Mockito |
-| `system` | ✅ | ✅ | ❌ | 否 | 本机 jar（已废弃，勿用） |
+| `compile`（默认） | ✓ | ✓ | ✓ | ✓ | 业务库 |
+| `provided` | ✓ | ✓ | ✗ | 否 | Servlet API、Lombok |
+| `runtime` | ✗ | ✓ | ✓ | ✓ | JDBC 驱动 |
+| `test` | ✗ | ✓ | ✗ | 否 | JUnit、Mockito |
+| `system` | ✓ | ✓ | ✗ | 否 | 本机 jar（已废弃，勿用） |
 | `import` | — | — | — | — | 仅限 dependencyManagement 导入 BOM |
 
 ```text
 典型错误案例
-├── ❌ JUnit 写成 compile → 测试依赖打进生产 jar（体积膨胀 + 泄露测试代码）
-├── ❌ JDBC 驱动写成 compile → 换数据库要重新打包（应为 runtime）
-├── ❌ Lombok 不写 provided → 编译期注解处理器进入生产（启动报错）
-└── ✅ 正确姿势：Lombok=provided / JDBC=runtime / 测试库=test
+├── ✗ JUnit 写成 compile → 测试依赖打进生产 jar（体积膨胀 + 泄露测试代码）
+├── ✗ JDBC 驱动写成 compile → 换数据库要重新打包（应为 runtime）
+├── ✗ Lombok 不写 provided → 编译期注解处理器进入生产（启动报错）
+└── ✓ 正确姿势：Lombok=provided / JDBC=runtime / 测试库=test
 ```
 
 ---
 
 ## 6. 仓库体系
 
-> 🎯 **仓库是依赖的来源和去向**——理解「本地 → 远程」的查找顺序就理解了 Maven 的速度问题。
+> **仓库是依赖的来源和去向**——理解「本地 → 远程」的查找顺序就理解了 Maven 的速度问题。
 
 ```text
 查找顺序（依赖解析时）
@@ -306,13 +306,13 @@ mvn install（在聚合父目录执行）
 </settings>
 ```
 
-> ⚠️ **镜像只代理不托管**：mirror 拦截的是「访问中央仓库的请求」；私有包（SNAPSHOT）要配 `<repositories>`/`<distributionManagement>` 指向 Nexus——两者经常混用导致「私包拉不下来」。
+> **镜像只代理不托管**：mirror 拦截的是「访问中央仓库的请求」；私有包（SNAPSHOT）要配 `<repositories>`/`<distributionManagement>` 指向 Nexus——两者经常混用导致「私包拉不下来」。
 
 ---
 
 ## 7. 插件体系
 
-> 🎯 **插件 = 生命周期的「执行者」**——生命周期阶段本身不干活，绑定的插件才干活。
+> **插件 = 生命周期的「执行者」**——生命周期阶段本身不干活，绑定的插件才干活。
 
 ```text
 插件与生命周期绑定
@@ -447,7 +447,7 @@ mvn help:effective-pom     # 看合并继承后的真实 POM
 
 ## 10. 核心要点
 
-> 🎯 **核心要点**：
+> **核心要点**：
 > 1. **POM = 项目说明书**：GAV 坐标 + 父继承/BOM + 依赖 + 插件
 > 2. **生命周期阶段化**：validate→compile→test→package→install→deploy，命令含前置阶段
 > 3. **依赖自动传递** + 就近裁决——冲突排查先用 `dependency:tree`

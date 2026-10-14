@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [组件一句话定位](#1-组件一句话定位)
 2. [版本现状（2026-08）](#2-版本现状2026-08)
@@ -50,7 +50,7 @@
 | starter-web | Boot 启动器 | web + webmvc + Tomcat 自动配置 | 是（内嵌 Tomcat） |
 | starter-restclient | Boot 启动器 | 纯客户端（无服务器） | 否 |
 
-> 💡 面试陷阱题："spring-boot-starter-web 是模块吗？"——不是，它是 Boot 的**依赖聚合器**（web + webmvc + Tomcat + 自动配置）；模块坐标只有 `org.springframework:spring-web`。
+> 面试陷阱题："spring-boot-starter-web 是模块吗？"——不是，它是 Boot 的**依赖聚合器**（web + webmvc + Tomcat + 自动配置）；模块坐标只有 `org.springframework:spring-web`。
 
 ## 2. 版本现状（2026-08）
 
@@ -71,7 +71,7 @@
 - **7.1**：`PreFlightRequestFilter`（CORS 预检专用过滤器）；`HttpHeaders`/`WebSocketHttpHeaders` 互操作修复；
 - **Boot 4 新 starter**：`spring-boot-starter-restclient` / `spring-boot-starter-webclient` 明确客户端意图。
 
-> ⚠️ **要点**：7.0 的 web 变化是"HTTP 客户端与转换器现代化"——RestClient 是唯一同步客户端的未来；存量 RestTemplate 无需急迁（支持期 2029+），但新代码一律 RestClient。
+> **要点**：7.0 的 web 变化是"HTTP 客户端与转换器现代化"——RestClient 是唯一同步客户端的未来；存量 RestTemplate 无需急迁（支持期 2029+），但新代码一律 RestClient。
 
 ### 2.1 版本窗口与升级影响面
 
@@ -91,7 +91,7 @@
 | API 版本化 | 手动加头 | `ApiVersionInserter` 自动注入 | 新能力，可选 |
 | CORS 预检 | CorsFilter 通用处理 | `PreFlightRequestFilter`（7.1） | 新能力，可选 |
 
-> ⚠️ **升级节奏建议**：① 6.x → 7.x 先跑编译，按上表改名清单逐项处理；② 转换器配置 API 迁移属于"行为等价"重构——先迁移再改行为；③ RestTemplate 存量代码维持原样，与 RestClient 并行运行验证行为一致后逐步替换。
+> **升级节奏建议**：① 6.x → 7.x 先跑编译，按上表改名清单逐项处理；② 转换器配置 API 迁移属于"行为等价"重构——先迁移再改行为；③ RestTemplate 存量代码维持原样，与 RestClient 并行运行验证行为一致后逐步替换。
 
 ### 2.2 7.x 新能力一览
 
@@ -106,7 +106,7 @@
 | `PreFlightRequestFilter` | 7.1 | CORS 预检独立处理 | 需显式注册 |
 | `spring-boot-starter-restclient/webclient` | Boot 4 | 客户端意图明确的 starter | Boot 4 提供 |
 
-> 💡 新能力使用优先级：**改名的转换器**（编译期必处理）> **RestClient**（新代码必用）> **ApiVersionInserter/接口组**（多版本服务建议）> **PreFlightRequestFilter**（CORS 复杂场景可选）。
+> 新能力使用优先级：**改名的转换器**（编译期必处理）> **RestClient**（新代码必用）> **ApiVersionInserter/接口组**（多版本服务建议）> **PreFlightRequestFilter**（CORS 复杂场景可选）。
 
 ## 3. 能力地图
 
@@ -114,7 +114,7 @@
 |--------|--------|-----------|
 | HTTP 模型 | 请求/响应对象 | `HttpMessage`、`HttpHeaders`、`ResponseEntity`、`MediaType` |
 | 消息转换 | 对象 ↔ 字节 | `HttpMessageConverter`、`JacksonJsonHttpMessageConverter`（7.0 改名） |
-| 同步客户端 | HTTP 客户端 | `RestClient`（✅ 推荐）、`RestTemplate`（7.0 弃用） |
+| 同步客户端 | HTTP 客户端 | `RestClient`（✓ 推荐）、`RestTemplate`（7.0 弃用） |
 | 响应式客户端 | 非阻塞 HTTP | `WebClient`（WebFlux 系列） |
 | API 版本化 | 客户端版本注入 | `ApiVersionInserter`（7.0） |
 | HTTP 接口 | 声明式远程调用 | `@HttpExchange`、`@ImportHttpServices`（7.0 组） |
@@ -135,7 +135,7 @@
 | Servlet 过滤器（编码/CORS/请求上下文） | 响应式调度器/背压（Reactor，webflux 消费） |
 | WebAsyncManager 异步抽象 | 声明式接口代理语义（web 的 HttpServiceProxyFactory 也在此） |
 
-> 🎯 **判断口诀**：凡"HTTP 协议语义"归 spring-web；凡"业务应用语义"（映射、权限、渲染）归上层——面试被问"某个能力在哪个模块"按此判断。
+> **判断口诀**：凡"HTTP 协议语义"归 spring-web；凡"业务应用语义"（映射、权限、渲染）归上层——面试被问"某个能力在哪个模块"按此判断。
 
 ### 3.2 阻塞 vs 响应式：传输层的取舍
 
@@ -148,7 +148,7 @@
 | 阻塞库 | JDBC 等直接可用 | 需全链路响应式客户端 |
 | 适用 | 常规服务间调用、CRUD | 网关、实时流、管道编排 |
 
-> 💡 **官方立场（2025-09 博客）**：虚拟线程成熟后，大多数 HTTP 客户端场景回到同步栈；响应式保留给"需要背压/流式/极端连接复用"的窄场景——**先同步后响应式，别反着来**。
+> **官方立场（2025-09 博客）**：虚拟线程成熟后，大多数 HTTP 客户端场景回到同步栈；响应式保留给"需要背压/流式/极端连接复用"的窄场景——**先同步后响应式，别反着来**。
 
 ### 3.3 生产实践要点
 
@@ -161,7 +161,7 @@
 | 监控埋点 | 客户端加拦截器统计耗时/错误率（traceId 透传） |
 | 测试用 RestTestClient | 统一 mock/真实服务器测试，替代手写 mock 代码 |
 
-> 🎯 生产四连问：**超时配了吗？池配了吗？重试上限了吗？异常映射了吗？**——四个问题答不上来，客户端代码别上线。
+> 生产四连问：**超时配了吗？池配了吗？重试上限了吗？异常映射了吗？**——四个问题答不上来，客户端代码别上线。
 
 ## 4. 与深度体系的映射
 
@@ -175,7 +175,7 @@
 | 07-异步与流式速查 | [SpringMVC-07-异步处理：虚拟线程、SSE与流式响应](../../../SpringMVC/07-异步处理：虚拟线程、SSE与流式响应.md) |
 | 08-集成地图与常见问题 | [SpringBoot-03-SpringBootWeb开发](../../../SpringBoot/03-SpringBootWeb开发.md) |
 
-> 💡 本系列定位"查得快"——HTTP 层以下（协议/转换/客户端）归 spring-web，HTTP 层以上（控制器/映射/异常）归 MVC 系列；响应式栈（WebClient/WebFlux）见响应式编程组件系列。
+> 本系列定位"查得快"——HTTP 层以下（协议/转换/客户端）归 spring-web，HTTP 层以上（控制器/映射/异常）归 MVC 系列；响应式栈（WebClient/WebFlux）见响应式编程组件系列。
 
 ## 5. 快速上手 3 步
 
@@ -281,7 +281,7 @@ RestClient restClient(RestClient.Builder builder) {
 | `spring.servlet.multipart.max-request-size` | `10MB` | 单请求上传上限 |
 | `server.forward-headers-strategy` | `none` | 解析代理头（X-Forwarded-*） |
 
-> ⚠️ 纯代码配置优先（@Bean 定制请求工厂），属性只覆盖"无代码场景"——**超时/池这类关键项建议代码显式配置**，属性与代码叠加时以代码为准（属性用于兜底默认值）。
+> 纯代码配置优先（@Bean 定制请求工厂），属性只覆盖"无代码场景"——**超时/池这类关键项建议代码显式配置**，属性与代码叠加时以代码为准（属性用于兜底默认值）。
 
 ## 6. 速查导航
 
@@ -311,7 +311,7 @@ RestClient restClient(RestClient.Builder builder) {
 | 415 与 406 怎么区分记忆 | 415 是"请求进来读不了"（Content-Type 无转换器可读）；406 是"响应出不去"（Accept/produces 无交集可写）——一进一出 |
 | WebClient 在 MVC 服务里能用吗 | 能，但 `.block()` 只允许在非事件循环线程；常规同步服务优先 RestClient |
 
-> 💡 面试叙事线：**协议层（spring-web）→ 控制器层（webmvc）→ 自动配置（Boot）**——先讲清 spring-web 是公共底座，再展开上层，结构感最强。
+> 面试叙事线：**协议层（spring-web）→ 控制器层（webmvc）→ 自动配置（Boot）**——先讲清 spring-web 是公共底座，再展开上层，结构感最强。
 
 ## 7. 学习路线推荐
 

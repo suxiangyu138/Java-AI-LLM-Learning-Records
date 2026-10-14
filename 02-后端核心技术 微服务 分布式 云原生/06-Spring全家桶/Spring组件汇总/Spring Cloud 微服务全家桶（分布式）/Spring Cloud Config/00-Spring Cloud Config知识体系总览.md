@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [组件一句话定位](#1-组件一句话定位)
 2. [版本现状（2026-08）](#2-版本现状2026-08)
@@ -62,34 +62,34 @@
 | 敏感信息 | 明文躺在代码里 | {cipher} 密文 + 服务端解密 |
 | 灰度/回滚 | 手动 | label（分支）切换 |
 
-> 🎯 判断标准一句话：**"微服务数量 > 3 且配置要按环境区分管理？"**——是，上 Config；但**如果你已在 SCA 生态用 Nacos 配置中心，不需要 Config**（Nacos 内置长轮询推送，[08 篇](08-生产实践与选型避坑.md) 选型对比）。
+> 判断标准一句话：**"微服务数量 > 3 且配置要按环境区分管理？"**——是，上 Config；但**如果你已在 SCA 生态用 Nacos 配置中心，不需要 Config**（Nacos 内置长轮询推送，[08 篇](08-生产实践与选型避坑.md) 选型对比）。
 
 ### 1.2 适用与不适用场景
 
 | 场景 | 适合？ | 说明 |
 |------|:---:|------|
-| 多微服务集中配置管理 | ✅ | 主战场（Git 后端） |
-| 按环境区分配置 | ✅ | profile（dev/test/prd）+ label（分支） |
-| 配置历史回溯/审计 | ✅ | Git 天然版本化 |
-| 敏感配置加密 | ✅ | {cipher} + 对称/非对称密钥 |
-| 配置变更广播 | ✅ | Bus 配套（全网刷新） |
-| SCA 生态（Nacos 配置中心） | ❌ | Nacos 内置推送，Config 多余 |
-| 动态规则实时下发（限流/熔断规则） | ⚠️ | 能刷但要重启或 refresh；Sentinel 控制台体验更好 |
-| 超大配置/频繁变更 | ⚠️ | Git 拉取模式，秒级刷新延迟，不是毫秒级推送 |
+| 多微服务集中配置管理 | ✓ | 主战场（Git 后端） |
+| 按环境区分配置 | ✓ | profile（dev/test/prd）+ label（分支） |
+| 配置历史回溯/审计 | ✓ | Git 天然版本化 |
+| 敏感配置加密 | ✓ | {cipher} + 对称/非对称密钥 |
+| 配置变更广播 | ✓ | Bus 配套（全网刷新） |
+| SCA 生态（Nacos 配置中心） | ✗ | Nacos 内置推送，Config 多余 |
+| 动态规则实时下发（限流/熔断规则） | | 能刷但要重启或 refresh；Sentinel 控制台体验更好 |
+| 超大配置/频繁变更 | | Git 拉取模式，秒级刷新延迟，不是毫秒级推送 |
 
-> ⚠️ **最大认知误区**：把 Config 当"实时配置推送系统"——**Config 是"启动拉取 + 手动/事件触发刷新"模型，不是推送模型**；毫秒级热更新该选 Nacos（长轮询）或 Apollo（推送），Config + Bus 是"广播事件让各实例自己刷新"（[08 篇](08-生产实践与选型避坑.md) 刷新模型对比）。
+> **最大认知误区**：把 Config 当"实时配置推送系统"——**Config 是"启动拉取 + 手动/事件触发刷新"模型，不是推送模型**；毫秒级热更新该选 Nacos（长轮询）或 Apollo（推送），Config + Bus 是"广播事件让各实例自己刷新"（[08 篇](08-生产实践与选型避坑.md) 刷新模型对比）。
 
 ### 1.3 与配置中心方案对照
 
 | 方案 | 存储 | 推送机制 | 动态刷新 | 加密 | 生态 |
 |------|------|---------|:---:|:---:|------|
-| **Spring Cloud Config** | Git 默认，后端可换 | 启动拉取 + refresh 事件 | ✅（refresh/Bus） | ✅ {cipher} | **官方 Cloud** |
-| **Nacos 配置中心** | 内嵌存储 | **长轮询拉取（秒级）** | ✅ 内置 | ⚠️ 基础 | SCA |
-| Apollo | 数据库 | 推送 + 长轮询 | ✅ | ✅ | 携程（独立） |
-| Consul KV | KV 存储 | Watch 通知 | ✅ | ❌ | HashiCorp |
-| Vault | 秘钥引擎 | API 拉取 | ⚠️ | ✅（本职） | HashiCorp（常与 Config 复合） |
+| **Spring Cloud Config** | Git 默认，后端可换 | 启动拉取 + refresh 事件 | ✓（refresh/Bus） | ✓ {cipher} | **官方 Cloud** |
+| **Nacos 配置中心** | 内嵌存储 | **长轮询拉取（秒级）** | ✓ 内置 | 基础 | SCA |
+| Apollo | 数据库 | 推送 + 长轮询 | ✓ | ✓ | 携程（独立） |
+| Consul KV | KV 存储 | Watch 通知 | ✓ | ✗ | HashiCorp |
+| Vault | 秘钥引擎 | API 拉取 | | ✓（本职） | HashiCorp（常与 Config 复合） |
 
-> 🎯 面试必答：**"Config 和 Nacos 配置中心什么区别？"**——Config：**Git 存储 + 启动拉取**，刷新靠 refresh 端点/Bus 广播事件，需配套组件；Nacos：**内嵌存储 + 长轮询推送**，配置变更服务端通知客户端秒级生效，**不依赖额外组件**——功能上 Nacos 更省事，但 Config 的优势是 **Git 版本化 + 加密体系 + 官方生态**（[08 篇](08-生产实践与选型避坑.md) 全维度）。
+> 面试必答：**"Config 和 Nacos 配置中心什么区别？"**——Config：**Git 存储 + 启动拉取**，刷新靠 refresh 端点/Bus 广播事件，需配套组件；Nacos：**内嵌存储 + 长轮询推送**，配置变更服务端通知客户端秒级生效，**不依赖额外组件**——功能上 Nacos 更省事，但 Config 的优势是 **Git 版本化 + 加密体系 + 官方生态**（[08 篇](08-生产实践与选型避坑.md) 全维度）。
 
 ## 2. 版本现状（2026-08）
 
@@ -103,7 +103,7 @@
 | 3.x | 老存量 | Spring Cloud 2021.0.x（Jubilee）、Boot 2.6/2.7（javax） |
 | 1.x/2.x | 废弃 | Hoxton/Ilford 时代 |
 
-> ⚠️ **版本策略（2026 起）**：**新项目 Boot 4.x + Cloud 2025.1.x + Config 5.0.x**；存量 Boot 3.5 用 4.3.x（**OSS 已 EOL，建议尽快升级**）；Config 版本与 SCCB/Bus 同为 release train 成员，**统一跟 BOM 走**（[01 篇](01-模块清单与版本矩阵.md) 矩阵）。
+> **版本策略（2026 起）**：**新项目 Boot 4.x + Cloud 2025.1.x + Config 5.0.x**；存量 Boot 3.5 用 4.3.x（**OSS 已 EOL，建议尽快升级**）；Config 版本与 SCCB/Bus 同为 release train 成员，**统一跟 BOM 走**（[01 篇](01-模块清单与版本矩阵.md) 矩阵）。
 
 ### 2.1 5.0 关键变化（4.3.x → 5.0.x 迁移要点）
 
@@ -152,7 +152,7 @@
 | 分布式事务 | Seata | 与配置无关 |
 | 业务消息 | MQ | 与配置无关 |
 
-> ⚠️ **常见归因错误**：改配置后"刷新了但没生效"怪 Config Server"没推送"——**排查路径："Git 仓库有没有改 → Config Server 有没有刷到新版本（/actuator/env 看 version）→ 客户端 refresh 事件有没有到 → @RefreshScope Bean 有没有重建"**——链路每段独立验证（[08 篇](08-生产实践与选型避坑.md) 排错表）。
+> **常见归因错误**：改配置后"刷新了但没生效"怪 Config Server"没推送"——**排查路径："Git 仓库有没有改 → Config Server 有没有刷到新版本（/actuator/env 看 version）→ 客户端 refresh 事件有没有到 → @RefreshScope Bean 有没有重建"**——链路每段独立验证（[08 篇](08-生产实践与选型避坑.md) 排错表）。
 
 ## 4. 与对照体系的映射
 
@@ -164,7 +164,7 @@
 | 06-加密 | [密码学知识体系](../../../../../01-底层根基-Java核心底座/数学基础/密码学/)（对称/非对称原理） |
 | 08-选型 | [Nacos 配置中心](../Spring Cloud Alibaba（阿里实现，属于 Spring Cloud 生态实现）/Nacos：注册中心 + 配置中心/00-Nacos知识体系总览.md)（vs Nacos 全维度） |
 
-> 💡 分工约定：**本系列回答"Config 怎么配、配置怎么拉、怎么刷、怎么加密、怎么选型"**；Git 本身的用法在 [Linux/Git 工具体系](../../../../../02-后端核心技术 微服务 分布式 云原生/07-工程运维基础/) 对照，动态刷新的消息底座在 [Spring Cloud Bus](../Spring Cloud Bus/00-Spring Cloud Bus知识体系总览.md) 对照。
+> 分工约定：**本系列回答"Config 怎么配、配置怎么拉、怎么刷、怎么加密、怎么选型"**；Git 本身的用法在 [Linux/Git 工具体系](../../../../../02-后端核心技术 微服务 分布式 云原生/07-工程运维基础/) 对照，动态刷新的消息底座在 [Spring Cloud Bus](../Spring Cloud Bus/00-Spring Cloud Bus知识体系总览.md) 对照。
 
 ## 5. 快速上手 3 步
 
@@ -235,7 +235,7 @@ spring:
     name: order-service                                    # ★ 按这个名字找配置
 ```
 
-> 🎯 跑通即及格：**① 访问 `http://localhost:8888/order-service/dev` 能看到 JSON 配置；② 起客户端，日志出现 `Located property source` / 接口读到配置仓库里的值；③ 改 Git 配置 → 客户端 `/actuator/refresh` → 新值生效**——三件事都通，主链路打通（[02 篇](02-快速开始与配置读取速查.md)）。
+> 跑通即及格：**① 访问 `http://localhost:8888/order-service/dev` 能看到 JSON 配置；② 起客户端，日志出现 `Located property source` / 接口读到配置仓库里的值；③ 改 Git 配置 → 客户端 `/actuator/refresh` → 新值生效**——三件事都通，主链路打通（[02 篇](02-快速开始与配置读取速查.md)）。
 
 ### 5.1 三步验证与排障起点
 
@@ -245,7 +245,7 @@ spring:
 | ② 客户端拉到 | 起客户端，看日志 | `Located property source: [configserver:...]` |
 | ③ 刷新生效 | 改 Git → refresh 端点 | @RefreshScope Bean 值更新（无需重启） |
 
-> 💡 排障起点：**先查 Server 端 `/order-service/dev` 通不通（404 = 仓库路径/文件名不对），再查客户端 `spring.config.import` 和 `spring.application.name` 匹配**（[08 篇](08-生产实践与选型避坑.md) 排错表）。
+> 排障起点：**先查 Server 端 `/order-service/dev` 通不通（404 = 仓库路径/文件名不对），再查客户端 `spring.config.import` 和 `spring.application.name` 匹配**（[08 篇](08-生产实践与选型避坑.md) 排错表）。
 
 ## 6. 速查导航
 

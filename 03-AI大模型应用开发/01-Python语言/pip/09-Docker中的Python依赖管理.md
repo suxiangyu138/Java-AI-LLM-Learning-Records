@@ -1,6 +1,6 @@
 # 09 - Docker 中的 Python 依赖管理
 
-> 🎯 Docker 镜像中的 Python 依赖决定了部署的成败——镜像大小、构建速度、缓存命中率、安全性，都取决于你如何写 Dockerfile
+> Docker 镜像中的 Python 依赖决定了部署的成败——镜像大小、构建速度、缓存命中率、安全性，都取决于你如何写 Dockerfile
 
 ---
 
@@ -16,12 +16,12 @@
 ## 1. Dockerfile 最佳实践
 
 ```dockerfile
-# ❌ 坏的实践
+# ✗ 坏的实践
 FROM python:3.12
 COPY . .
 RUN pip install -r requirements.txt    # 每次代码变动都重装依赖！
 
-# ✅ 好的实践：利用 Docker 层缓存
+# ✓ 好的实践：利用 Docker 层缓存
 FROM python:3.12-slim
 
 WORKDIR /app
@@ -40,10 +40,10 @@ CMD ["python", "main.py"]
 
 ```text
 Docker 按顺序构建层，每层有缓存：
-  1. FROM python:3.12-slim        ← 缓存 ✅
-  2. COPY requirements.txt .      ← 文件没变 → 缓存 ✅
-  3. RUN pip install ...           ← 复用缓存 ✅ (秒级！)
-  4. COPY . .                     ← 代码变了 → 缓存失效 ❌
+  1. FROM python:3.12-slim        ← 缓存 ✓
+  2. COPY requirements.txt .      ← 文件没变 → 缓存 ✓
+  3. RUN pip install ...           ← 复用缓存 ✓ (秒级！)
+  4. COPY . .                     ← 代码变了 → 缓存失效 ✗
   5. CMD ...
 
 关键：把不常变的放前面！依赖 > 配置 > 代码
@@ -144,10 +144,10 @@ tests/
 ```text
 AI 项目镜像大小对比：
 
-❌ 原始：python:3.12 + pip install + 缓存 + 源码 + git 历史
+✗ 原始：python:3.12 + pip install + 缓存 + 源码 + git 历史
    → 3.5 GB（含 CUDA 镜像）
 
-✅ 优化后：nvidia/cuda:12.1-runtime + slim + --no-cache-dir + .dockerignore
+✓ 优化后：nvidia/cuda:12.1-runtime + slim + --no-cache-dir + .dockerignore
    → 2.1 GB（减 40%）
 ```
 

@@ -2,7 +2,7 @@
 
 > Spring 注解体系的本质是把「对象如何被创建、装配、增强」从代码里搬到声明上：@Component 族解决"注册什么"、@Autowired 解决"注入什么"、@Configuration 解决"怎么创建"、@Transactional 解决"围绕方法加什么行为"。Spring 7 的新动作是 Resilience 注解入核与 JSpecify 空安全
 
-## 📚 目录
+## 目录
 
 1. [组件注册四件套与派生注解机制](#1-组件注册四件套与派生注解机制)
 2. [装配与配置：@Autowired / @Value / @Configuration](#2-装配与配置autowired--value--configuration)
@@ -58,7 +58,7 @@
 - `@ConcurrencyLimit`：限制方法并发调用数，`ThrottlePolicy.BLOCK`（排队）/`REJECT`（立即拒绝）——虚拟线程时代没有池上限，此注解成为防拖垮下游的标配；
 - `@Timeout`：声明式超时切断；
 - 激活方式：配置类上用 **`@EnableResilientMethods`** 替代旧 `@EnableRetry`；
-- ⚠️ 行为变化：7.0.2+ 中接口上标注的 @Retryable **不再对实现类生效**（#36233），必须标注在实现类。
+- 行为变化：7.0.2+ 中接口上标注的 @Retryable **不再对实现类生效**（#36233），必须标注在实现类。
 
 **@ApiVersion 版本化**：类级 `@ApiVersion("v1")` 让多个控制器版本共存，配合 `@GetMapping(path = "/{id}", version = "2.0+")` 的方法级版本语义——细节在 07 篇展开。
 

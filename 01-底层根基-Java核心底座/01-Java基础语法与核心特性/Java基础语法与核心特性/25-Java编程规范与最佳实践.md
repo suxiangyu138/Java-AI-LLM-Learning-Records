@@ -96,8 +96,8 @@ public interface UserService { ... }
 
 // 公有方法必须有 Javadoc（@param、@return、@throws）
 // 代码注释：解释 Why 而非 What
-// ❌ i = i + 1;   // 加 1  （无意义）
-// ✅ 跳过第一个表头行，从索引 1 开始处理
+// ✗ i = i + 1;   // 加 1  （无意义）
+// ✓ 跳过第一个表头行，从索引 1 开始处理
 ```
 
 ---
@@ -109,10 +109,10 @@ public interface UserService { ... }
 > 代码中直接出现的未经定义的、含义不明的字面量。
 
 ```java
-// ❌ 反例：魔法值遍布
+// ✗ 反例：魔法值遍布
 if (status == 1) { order.setStatus(2); }
 
-// ✅ 正例：常量定义
+// ✓ 正例：常量定义
 public class OrderConstants {
     public static final int STATUS_PENDING = 1;
     public static final int STATUS_PAID = 2;
@@ -147,7 +147,7 @@ long money = 1_000_000_000L;
 ### 4.1 POJO 规约
 
 ```java
-// ✅ 正确：布尔字段用 Boolean，不设 is 前缀
+// ✓ 正确：布尔字段用 Boolean，不设 is 前缀
 public class UserDO {
     private Long id;
     private String userName;
@@ -155,10 +155,10 @@ public class UserDO {
     // getter/setter...
 }
 
-// ❌ 反例：boolean isDeleted → 某些框架序列化行为不一致
+// ✗ 反例：boolean isDeleted → 某些框架序列化行为不一致
 ```
 
-> ⚠️ POJO 的布尔变量不加 `is` 前缀，否则 FastJSON 等框架序列化可能异常。
+> POJO 的布尔变量不加 `is` 前缀，否则 FastJSON 等框架序列化可能异常。
 
 ### 4.2 Record 简化数据载体（JDK 17+）
 
@@ -199,11 +199,11 @@ public final class DateUtil {
 ### 5.1 初始化指定容量
 
 ```java
-// ❌ 不指定容量：频繁扩容（1.5 倍数组复制）
+// ✗ 不指定容量：频繁扩容（1.5 倍数组复制）
 List<String> list = new ArrayList<>();
 Map<String, Object> map = new HashMap<>();
 
-// ✅ 预估容量
+// ✓ 预估容量
 List<String> list = new ArrayList<>(100);
 Map<String, Object> map = new HashMap<>(32);   // 负载因子 0.75
 ```
@@ -213,12 +213,12 @@ Map<String, Object> map = new HashMap<>(32);   // 负载因子 0.75
 ```java
 List<String> list = new ArrayList<>(Arrays.asList("a", "b", "c"));
 
-// ❌ ConcurrentModificationException
+// ✗ ConcurrentModificationException
 for (String s : list) { if ("b".equals(s)) { list.remove(s); } }
 
-// ✅ 方案一：Iterator.remove()
-// ✅ 方案二：list.removeIf(s -> s.equals("b"))  （JDK 8+）
-// ✅ 方案三：stream().filter().collect()
+// ✓ 方案一：Iterator.remove()
+// ✓ 方案二：list.removeIf(s -> s.equals("b"))  （JDK 8+）
+// ✓ 方案三：stream().filter().collect()
 ```
 
 ### 5.3 线程安全选择
@@ -229,7 +229,7 @@ for (String s : list) { if ("b".equals(s)) { list.remove(s); } }
 | 多线程读多写少 | `ConcurrentHashMap` / `CopyOnWriteArrayList` | 读无锁 |
 | 多线程写多 | `ConcurrentHashMap` | CAS + 分段锁 |
 
-> 💡 返回集合时用 `Collections.emptyList()` 替代 `return null`，避免调用方 NPE。
+> 返回集合时用 `Collections.emptyList()` 替代 `return null`，避免调用方 NPE。
 
 ---
 
@@ -274,10 +274,10 @@ try (Connection conn = dataSource.getConnection();
 ### 6.4 异常日志打印
 
 ```java
-// ❌ 仅 message，丢失栈信息
+// ✗ 仅 message，丢失栈信息
 log.error("错误: " + e.getMessage());
 
-// ✅ 完整栈信息
+// ✓ 完整栈信息
 log.error("处理失败, orderId: {}", orderId, e);   // e 作为最后一个参数
 ```
 
@@ -288,9 +288,9 @@ log.error("处理失败, orderId: {}", orderId, e);   // e 作为最后一个参
 ### 7.1 线程池手动创建
 
 ```java
-// ❌ 禁止：Executors.newFixedThreadPool() 无界队列可能 OOM
+// ✗ 禁止：Executors.newFixedThreadPool() 无界队列可能 OOM
 
-// ✅ 手动 ThreadPoolExecutor
+// ✓ 手动 ThreadPoolExecutor
 ThreadPoolExecutor executor = new ThreadPoolExecutor(
     5, 10, 60L, TimeUnit.SECONDS,
     new LinkedBlockingQueue<>(100),              // 有界队列
@@ -322,7 +322,7 @@ private final ConcurrentHashMap<String, CacheEntry> cache = new ConcurrentHashMa
 cache.computeIfAbsent(key, k -> loadFromDB(k));        // 原子化写入
 ```
 
-> ⚠️ `SimpleDateFormat` 线程不安全，使用 `DateTimeFormatter`；`volatile` 不保证原子性，计数用 `AtomicInteger`。
+> `SimpleDateFormat` 线程不安全，使用 `DateTimeFormatter`；`volatile` 不保证原子性，计数用 `AtomicInteger`。
 
 ---
 
@@ -342,7 +342,7 @@ cache.computeIfAbsent(key, k -> loadFromDB(k));        // 原子化写入
 ### 8.2 重构示例：卫语句
 
 ```java
-// ❌ 深层嵌套
+// ✗ 深层嵌套
 public String process(Order order) {
     if (order != null) {
         if (order.isPaid()) {
@@ -352,7 +352,7 @@ public String process(Order order) {
     } else { return "订单为空"; }
 }
 
-// ✅ 卫语句提前返回
+// ✓ 卫语句提前返回
 public String process(Order order) {
     if (order == null) { return "订单为空"; }
     if (!order.isPaid()) { return "未支付"; }
@@ -386,8 +386,8 @@ public String process(Order order) {
 ### 9.2 密码与加密
 
 ```java
-// ❌ 禁用：MD5、SHA-1、DES、ECB 模式
-// ✅ 推荐
+// ✗ 禁用：MD5、SHA-1、DES、ECB 模式
+// ✓ 推荐
 String hash = BCrypt.hashpw(password, BCrypt.gensalt());  // 密码哈希
 Cipher cipher = Cipher.getInstance("AES/GCM/NoPadding");  // 对称加密 256 位
 // 非对称：RSA 密钥 ≥ 2048；签名：SHA256withRSA
@@ -421,10 +421,10 @@ Cipher cipher = Cipher.getInstance("AES/GCM/NoPadding");  // 对称加密 256 �
 ```java
 private static final Logger log = LoggerFactory.getLogger(UserService.class);
 
-// ❌ 字符串拼接（即使不输出也创建对象）
+// ✗ 字符串拼接（即使不输出也创建对象）
 log.debug("User id: " + userId);
 
-// ✅ 占位符（延迟构建）
+// ✓ 占位符（延迟构建）
 log.debug("User id: {}, name: {}", userId, name);
 log.error("处理失败, bizId: {}", bizId, e);        // 异常在最后
 
@@ -454,7 +454,7 @@ log.error("处理失败, bizId: {}", bizId, e);        // 异常在最后
 # 禁止 import 通配符、魔法值
 ```
 
-> 💡 IntelliJ IDEA 安装 "Alibaba Java Coding Guidelines" 插件实现实时检查。
+> IntelliJ IDEA 安装 "Alibaba Java Coding Guidelines" 插件实现实时检查。
 
 ---
 
@@ -491,4 +491,4 @@ log.error("处理失败, bizId: {}", bizId, e);        // 异常在最后
 | 9 | **安全左移** | 编码阶段即防范注入和敏感信息泄露 |
 | 10 | **持续重构** | 发现坏味道立即处理 |
 
-> 🎯 编程规范的核心不是约束，而是**沟通**——让你的代码不仅被机器执行，更被人理解。好的规范能降低团队协作成本 50% 以上，是企业级开发的必修课。
+> 编程规范的核心不是约束，而是**沟通**——让你的代码不仅被机器执行，更被人理解。好的规范能降低团队协作成本 50% 以上，是企业级开发的必修课。

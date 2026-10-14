@@ -173,7 +173,7 @@ GET /goods/_search
 }
 ```
 
-> ⚠️ `query_string` 用户输入特殊字符会报错，生产环境建议用 `bool` + `match` 替代。安全替代：`simple_query_string`。
+> `query_string` 用户输入特殊字符会报错，生产环境建议用 `bool` + `match` 替代。安全替代：`simple_query_string`。
 
 ---
 
@@ -198,7 +198,7 @@ GET /goods/_search
 // title 已分词为 ["华为", "手机", "P40"]，term 不分词查不到
 ```
 
-> 💡 `term` 查询不走分词，匹配的是倒排索引中存的完整词条。
+> `term` 查询不走分词，匹配的是倒排索引中存的完整词条。
 
 ### 3.2 terms（多值 IN 查询）
 
@@ -311,7 +311,7 @@ GET /goods/_search
 ### 4.3 filter 性能优势
 
 ```json
-// ✅ 推荐：filter 不评分 + 可缓存
+// ✓ 推荐：filter 不评分 + 可缓存
 GET /goods/_search
 {
   "query": {
@@ -325,7 +325,7 @@ GET /goods/_search
   }
 }
 
-// ❌ 不推荐：不必要地参与评分
+// ✗ 不推荐：不必要地参与评分
 GET /goods/_search
 {
   "query": {
@@ -339,7 +339,7 @@ GET /goods/_search
 }
 ```
 
-> 💡 filter 不计算相关性评分（跳过打分阶段），结果会被 ES 缓存，相同 filter 复用效率极高。**能放 filter 不要放 must**。
+> filter 不计算相关性评分（跳过打分阶段），结果会被 ES 缓存，相同 filter 复用效率极高。**能放 filter 不要放 must**。
 
 ### 4.4 should 与评分
 
@@ -413,7 +413,7 @@ GET /goods/_search
 // page 2: from=20, size=20
 ```
 
-> ⚠️ **深度分页问题**：from+size 在深度大时性能急剧下降，默认上限 `max_result_window=10000`。因为 ES 需从每个分片取 (from+size) 条数据到协调节点汇总排序后截取。
+> **深度分页问题**：from+size 在深度大时性能急剧下降，默认上限 `max_result_window=10000`。因为 ES 需从每个分片取 (from+size) 条数据到协调节点汇总排序后截取。
 
 ---
 
@@ -642,4 +642,4 @@ PUT /goods/_settings
 | **scroll 和 search_after 区别？** | scroll 创建快照上下文、耗内存、适合批量导出；search_after 无状态、适合实时滚动 |
 | **bool 查询子句执行顺序？** | must/filter 同时执行，should 在 must 后，must_not 最后过滤 |
 
-> 🎯 **极简总结**：全文搜索用 `match`，精确查询用 `term`，精确条件放 `filter`，评分条件放 `must`，深分页用 `search_after`，海量导出用 `scroll`。
+> **极简总结**：全文搜索用 `match`，精确查询用 `term`，精确条件放 `filter`，评分条件放 `must`，深分页用 `search_after`，海量导出用 `scroll`。

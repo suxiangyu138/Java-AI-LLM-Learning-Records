@@ -1,6 +1,6 @@
 # 03 - npm 常用命令速查
 
-> 🎯 后端最常用的 15 条 npm 命令 — 从安装依赖到运行脚本，覆盖日常接触前端项目的全部操作
+> 后端最常用的 15 条 npm 命令 — 从安装依赖到运行脚本，覆盖日常接触前端项目的全部操作
 
 ---
 
@@ -23,7 +23,7 @@
 | `npm install <pkg> -g` | 全局安装 | 安装 CLI 工具 |
 | `npm uninstall <pkg>` | 卸载依赖 | 删除 `<dependency>` |
 | `npm update` | 更新依赖（遵守 ^/~ 范围） | — |
-| `npm ci` | ⭐ 严格按 lock 安装（CI 环境使用） | `mvn clean install -o` |
+| `npm ci` | ★ 严格按 lock 安装（CI 环境使用） | `mvn clean install -o` |
 
 ```bash
 # ═══ 最常用 ═══
@@ -32,7 +32,7 @@ npm install axios                   # 添加生产依赖
 npm install eslint -D               # 添加开发依赖
 
 # ═══ CI 环境 ═══
-npm ci                              # ⚠️ 比 npm install 更严格：
+npm ci                              # 比 npm install 更严格：
                                     #    删除 node_modules，严格按 lock 安装
                                     #    不会修改 package-lock.json
 
@@ -47,8 +47,8 @@ npm uninstall axios                 # 卸载 + 从 package.json 移除
 
 | `npm install` vs `npm ci` | npm install | npm ci |
 |---------------------------|:---:|:---:|
-| 按 lock 文件 | ⚠️ 可能更新 lock | ✅ 严格按 lock |
-| 速度 | 慢 | ⭐ 快 |
+| 按 lock 文件 | 可能更新 lock | ✓ 严格按 lock |
+| 速度 | 慢 | ★ 快 |
 | 使用场景 | 本地开发 | **CI/CD 环境** |
 | 前提 | package.json | package.json + lock |
 
@@ -125,7 +125,7 @@ npm version patch              # 自动更新版本号（1.0.0 → 1.0.1）
 | 添加依赖 | `npm install <pkg>` | `yarn add <pkg>` | `pnpm add <pkg>` |
 | CI 安装 | `npm ci` | `yarn --frozen-lockfile` | `pnpm install --frozen-lockfile` |
 | 全局安装 | `npm install -g` | `yarn global add` | `pnpm add -g` |
-| 速度 | ⭐⭐ | ⭐⭐ | ⭐⭐⭐ 最快 |
+| 速度 | ★★ | ★★ | ★★★ 最快 |
 | 磁盘效率 | 低（扁平化去重） | 中 | 高（硬链接共享） |
 
-> 🎯 **后端常用组合**：`npm install`（开发）、`npm ci`（CI）、`npm run build`（构建）、`npm audit fix`（安全）、`npm ls --depth=0`（看直接依赖）。这 5 条够用 90% 的场景。
+> **后端常用组合**：`npm install`（开发）、`npm ci`（CI）、`npm run build`（构建）、`npm audit fix`（安全）、`npm ls --depth=0`（看直接依赖）。这 5 条够用 90% 的场景。

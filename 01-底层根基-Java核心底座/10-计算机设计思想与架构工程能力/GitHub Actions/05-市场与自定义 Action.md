@@ -76,7 +76,7 @@ runs:
 
 **官方集补充（发布/容器场景）**：`docker/build-push-action`（多平台构建 + 推送 registry，配 `cache-from/to` 联动 Actions 缓存）、`docker/login-action`（registry 登录，密码走 secrets）、`softprops/action-gh-release`（打 Release + 传附件，第三方但事实标准）、`actions/configure-pages`（GitHub Pages 部署上下文）。发布类工作流的完整链条是"构建 → 扫描（trivy/安全）→ 签名（cosign）→ 推送 → 发 Release"，每环一个 Action，链条本身用可复用工作流封装（08 篇）。
 
-> 🎯 核心要点：用 Action 的三层决策——**官方集 > 可信第三方 > 自建**；自建默认从复合 Action 开始（零构建、易维护）；引用一律"major tag 起步、第三方 pin SHA"；2026 新增的 `$/` 让仓库内部复用不再需要跨仓库发布。
+> 核心要点：用 Action 的三层决策——**官方集 > 可信第三方 > 自建**；自建默认从复合 Action 开始（零构建、易维护）；引用一律"major tag 起步、第三方 pin SHA"；2026 新增的 `$/` 让仓库内部复用不再需要跨仓库发布。
 
 ---
 

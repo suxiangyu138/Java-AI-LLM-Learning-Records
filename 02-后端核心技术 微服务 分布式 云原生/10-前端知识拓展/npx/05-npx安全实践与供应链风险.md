@@ -1,6 +1,6 @@
 # 05 - npx 安全实践与供应链风险
 
-> 🎯 npx 的本质是"从远程拉取代码并执行" — 每个 npx 命令都是一次供应链信任决策。理解攻击面、锁定版本、规范 CI，才能安全使用这个利器
+> npx 的本质是"从远程拉取代码并执行" — 每个 npx 命令都是一次供应链信任决策。理解攻击面、锁定版本、规范 CI，才能安全使用这个利器
 
 ---
 
@@ -25,7 +25,7 @@ npx 的便利性恰恰是它的攻击面：**未安装的工具会从 registry �
 | 缓存复用 | `_npx` 缓存中的旧版可能被复用，无法感知 |
 | 与 npm 装依赖不同 | `npm install` 后有 lockfile 可审计；npx 的临时安装**没有** lockfile |
 
-> ⚠️ **本质**：`npx some-tool` 应视为**运行不可信软件**，与 Java 中执行任意远程 jar 同等风险级别（且无沙箱隔离）。
+> **本质**：`npx some-tool` 应视为**运行不可信软件**，与 Java 中执行任意远程 jar 同等风险级别（且无沙箱隔离）。
 
 ---
 
@@ -35,12 +35,12 @@ npx 的便利性恰恰是它的攻击面：**未安装的工具会从 registry �
 
 ```bash
 # 恶意包会注册近似名字，等待拼错
-npx create-vue-app        # ❌ 近似官方 create-vue 的恶意包
-npx create-vite-app       # ❌ 近似 create-vite
-npx eslit                 # ❌ 拼错 eslint
+npx create-vue-app        # ✗ 近似官方 create-vue 的恶意包
+npx create-vite-app       # ✗ 近似 create-vite
+npx eslit                 # ✗ 拼错 eslint
 ```
 
-> 💡 攻击者把恶意包发布到 npm registry 上，名字与知名工具仅差一个字母。拼写错误 → 拉到恶意包 → postinstall 执行恶意脚本。
+> 攻击者把恶意包发布到 npm registry 上，名字与知名工具仅差一个字母。拼写错误 → 拉到恶意包 → postinstall 执行恶意脚本。
 
 ### 2.2 版本漂移（Version Drift）
 
@@ -49,7 +49,7 @@ npx prettier              # 不带版本 → 每次可能拉到不同的 latest
 npx -y some-tool          # -y 跳过确认 → 无人工审查直接执行
 ```
 
-> 💡 无版本约束时，某天 upstream 发布恶意版本（或账户被盗），团队 CI 立即中招 — 这就是经典的 **供应链攻击**（如 event-stream、colors 事件）。
+> 无版本约束时，某天 upstream 发布恶意版本（或账户被盗），团队 CI 立即中招 — 这就是经典的 **供应链攻击**（如 event-stream、colors 事件）。
 
 ### 2.3 安装后脚本投毒
 
@@ -62,7 +62,7 @@ npx -y some-tool          # -y 跳过确认 → 无人工审查直接执行
 }
 ```
 
-> 💡 npm 包安装时会执行 `preinstall` / `postinstall` 脚本 — 这正是 npm 生态供应链攻击（如 `ua-parser-js`、`node-ipc` 事件）的主要载体。
+> npm 包安装时会执行 `preinstall` / `postinstall` 脚本 — 这正是 npm 生态供应链攻击（如 `ua-parser-js`、`node-ipc` 事件）的主要载体。
 
 ---
 
@@ -86,7 +86,7 @@ npx --no http-server dist/                             # 3. 只用本地
 npm audit --audit-level=high                            # 4. 定期审计
 ```
 
-> 💡 **Java 后端对标**：固定版本 = 在 `pom.xml` 锁定版本号；`npm audit` = OWASP Dependency Check；声明进 package.json = 依赖纳入版本管理；内网 registry = Nexus 私服。
+> **Java 后端对标**：固定版本 = 在 `pom.xml` 锁定版本号；`npm audit` = OWASP Dependency Check；声明进 package.json = 依赖纳入版本管理；内网 registry = Nexus 私服。
 
 ---
 
@@ -137,10 +137,10 @@ echo "registry=http://nexus.example.com/repository/npm-group/" >> .npmrc
 npm ci --ignore-scripts        # 极端场景：禁止安装脚本（谨慎，部分包会失效）
 ```
 
-> ⚠️ **注意**：`--ignore-scripts` 会破坏依赖 esbuild、sharp 等需要 install 脚本的包，仅作最后防线使用。
+> **注意**：`--ignore-scripts` 会破坏依赖 esbuild、sharp 等需要 install 脚本的包，仅作最后防线使用。
 
 ---
 
-> 🎯 **核心要点**：npx 安全三原则 — ① **固定版本**（`pkg@x.y.z` 或 `-p`）② **CI 只跑 lockfile 二进制**（`npm ci` + `npm run`）③ **内网 registry + 依赖审计**。把每个 npx 命令当作一次"运行远程代码"的决策，供应链攻击就无从下手。
+> **核心要点**：npx 安全三原则 — ① **固定版本**（`pkg@x.y.z` 或 `-p`）② **CI 只跑 lockfile 二进制**（`npm ci` + `npm run`）③ **内网 registry + 依赖审计**。把每个 npx 命令当作一次"运行远程代码"的决策，供应链攻击就无从下手。
 
 **返回总览**：[00-npx知识体系总览](00-npx知识体系总览.md)

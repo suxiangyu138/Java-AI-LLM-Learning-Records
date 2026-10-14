@@ -1,6 +1,6 @@
 # 03 - Extended Thinking 深度思考
 
-> 🎯 Claude 的核心差异化 — 让模型在"草稿纸"上推理后再回答。2026 年 Opus/Sonnet 4.6+ 升级为"自适应思考"（自动判断是否需要深度推理）。本章覆盖两种模式、effort 控制、成本管理、流式可视化
+> Claude 的核心差异化 — 让模型在"草稿纸"上推理后再回答。2026 年 Opus/Sonnet 4.6+ 升级为"自适应思考"（自动判断是否需要深度推理）。本章覆盖两种模式、effort 控制、成本管理、流式可视化
 
 ---
 
@@ -27,15 +27,15 @@
 └── Manual Extended Thinking（旧，Haiku 4.5 仍用）— 手动设置预算
     语法：thinking: {"type": "enabled", "budget_tokens": 4096}
     支持模型：Haiku 4.5 及更早模型
-    ⚠️ Opus 4.7/Sonnet 4.6 使用此语法 → 400 错误
+    Opus 4.7/Sonnet 4.6 使用此语法 → 400 错误
 ```
 
 | 对比 | Adaptive | Manual（旧） |
 |------|----------|:---:|
 | 模型支持 | Opus 4.7/4.6、Sonnet 4.6 | Haiku 4.5 及老模型 |
 | 推理深度 | effort 参数（low~xhigh） | budget_tokens（1024+） |
-| 是否自动判断 | ✅ 自动 | ❌ 手动 |
-| 交错思考 | ✅ 自动支持 | ❌ |
+| 是否自动判断 | ✓ 自动 | ✗ 手动 |
+| 交错思考 | ✓ 自动支持 | ✗ |
 
 ---
 
@@ -170,6 +170,6 @@ content_block_stop              → 完毕
 
 ---
 
-> 🎯 **核心要点**：Extended Thinking 的 2026 年三句话 — **① 4.6+ 模型用 adaptive（effort 控制深度），旧模型用 manual（budget_tokens）② 不要全局启用 — 按任务复杂度门控，简单任务不启用 ③ Thinking 按输出价计费，可能是最终回答的 3-5 倍 Token**。Coding 推荐 `effort: "xhigh"`。
+> **核心要点**：Extended Thinking 的 2026 年三句话 — **① 4.6+ 模型用 adaptive（effort 控制深度），旧模型用 manual（budget_tokens）② 不要全局启用 — 按任务复杂度门控，简单任务不启用 ③ Thinking 按输出价计费，可能是最终回答的 3-5 倍 Token**。Coding 推荐 `effort: "xhigh"`。
 
 **下一模块**：[04-Tool-Use工具调用](04-Tool-Use工具调用.md) / **返回总览**：[00-总览](00-Claude-API知识体系总览.md)

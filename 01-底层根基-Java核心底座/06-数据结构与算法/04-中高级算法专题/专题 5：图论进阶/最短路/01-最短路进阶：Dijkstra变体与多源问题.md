@@ -2,7 +2,7 @@
 
 > 定位：最短路的理论纵深——Dijkstra 原理与堆优化、变体（最大概率/最小最大差/零一 BFS）、Bellman-Ford 限步、Floyd 多源、状态压缩 BFS
 
-## 📚 目录
+## 目录
 
 1. [Dijkstra 原理与堆优化](#1-dijkstra-原理与堆优化)
 2. [Dijkstra 的三大变体](#2-dijkstra-的三大变体)
@@ -24,10 +24,10 @@ Dijkstra：非负权图的单源最短路
   ② 松弛：用该节点更新邻居距离
   ③ 每个节点确定一次 → O(V·(V+E)) 朴素
 
-⚠️ 正确性前提：非负权（贪心成立）
+正确性前提：非负权（贪心成立）
   负权 → Dijkstra 失效 → Bellman-Ford/SPFA
 
-⚠️ 面试必答：
+面试必答：
 "Dijkstra = 贪心 + 松弛——
  每次取距离最小者（非负权保证不再被更新），
  松弛邻居。负权会破坏贪心正确性。"
@@ -42,14 +42,14 @@ int[] dijkstra(int n, List<int[]>[] graph, int start) {
     Arrays.fill(dist, Integer.MAX_VALUE);
     dist[start] = 0;
 
-    // ⚠️ 优先队列：{距离, 节点}（距离小的先出）
+    // 优先队列：{距离, 节点}（距离小的先出）
     PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> a[0] - b[0]);
     pq.offer(new int[]{0, start});
 
     while (!pq.isEmpty()) {
         int[] cur = pq.poll();
         int d = cur[0], u = cur[1];
-        if (d > dist[u]) continue;            // ⚠️ 懒删除（旧记录跳过）
+        if (d > dist[u]) continue;            // 懒删除（旧记录跳过）
         for (int[] e : graph[u]) {
             int v = e[0], w = e[1];
             if (dist[u] + w < dist[v]) {      // 松弛
@@ -60,8 +60,8 @@ int[] dijkstra(int n, List<int[]>[] graph, int start) {
     }
     return dist;
 }
-// ⚠️ 复杂度：O(E log V)（每边入堆一次）
-// ⚠️ 面试必答："堆优化 Dijkstra = 优先队列 +
+// 复杂度：O(E log V)（每边入堆一次）
+// 面试必答："堆优化 Dijkstra = 优先队列 +
 //   懒删除（dist 更新过时跳过）——O(E log V)。"
 ```
 
@@ -78,7 +78,7 @@ int[] dijkstra(int n, List<int[]>[] graph, int start) {
 | 最小费用 | 权值相加 | 743 标准 |
 
 ```
-⚠️ 面试必答：
+面试必答：
 "Dijkstra 变体 = 改'距离定义'——
  贪心前提（单调性）不变：
  概率（相乘递减）、最大差（取 max 单调）。
@@ -89,12 +89,12 @@ int[] dijkstra(int n, List<int[]>[] graph, int start) {
 
 ```java
 /** 1514. 概率最大的路径（Dijkstra 变体） */
-// ⚠️ 距离 = 概率乘积（单调递减），用最大堆
+// 距离 = 概率乘积（单调递减），用最大堆
 PriorityQueue<double[]> pq = new PriorityQueue<>((a, b) ->
-        Double.compare(b[0], a[0]));         // ⚠️ 最大堆（概率大优先）
+        Double.compare(b[0], a[0]));         // 最大堆（概率大优先）
 
 // 松弛：prob[v] = max(prob[v], prob[u] × w)
-// ⚠️ 面试必答："1514 = Dijkstra 取最大——
+// 面试必答："1514 = Dijkstra 取最大——
 //   概率相乘单调递减，贪心仍成立；
 //   只是堆变最大堆、松弛变取 max。"
 ```
@@ -103,9 +103,9 @@ PriorityQueue<double[]> pq = new PriorityQueue<>((a, b) ->
 
 ```java
 /** 1631. 最小体力消耗路径（Dijkstra 变体） */
-// ⚠️ 距离 = 路径上最大边差（取 max 单调）
+// 距离 = 路径上最大边差（取 max 单调）
 // 松弛：effort[v] = min(effort[v], max(effort[u], 边差))
-// ⚠️ 面试必答："1631 = Dijkstra 的 max 语义——
+// 面试必答："1631 = Dijkstra 的 max 语义——
 //   路径代价是'最大边'，松弛用 max 组合；
 //   贪心前提（代价单调不减）仍成立。"
 ```
@@ -121,12 +121,12 @@ Bellman-Ford：
   迭代 V-1 轮，每轮松弛所有边
   → 第 k 轮后得到"最多 k 条边"的最短路
 
-⚠️ 适用：
+适用：
   ① 负权图（Dijkstra 失效）
   ② 限步数（787 K 站中转）
   ③ 判负环（第 V 轮仍松弛 → 负环）
 
-⚠️ 面试必答：
+面试必答：
 "Bellman-Ford = 全边松弛 V-1 轮——
  第 k 轮 = 最多 k 条边的最短路；
  负权可用、可判负环、可限步数。"
@@ -141,8 +141,8 @@ int findCheapestPrice(int n, int[][] flights, int src, int dst, int k) {
     Arrays.fill(dist, Integer.MAX_VALUE);
     dist[src] = 0;
 
-    for (int i = 0; i <= k; i++) {           // ⚠️ 最多 k 次中转 = k+1 段
-        int[] next = dist.clone();           // ⚠️ 快照（本轮基于上轮）
+    for (int i = 0; i <= k; i++) {           // 最多 k 次中转 = k+1 段
+        int[] next = dist.clone();           // 快照（本轮基于上轮）
         for (int[] f : flights) {
             if (dist[f[0]] != Integer.MAX_VALUE) {
                 next[f[1]] = Math.min(next[f[1]], dist[f[0]] + f[2]);
@@ -152,8 +152,8 @@ int findCheapestPrice(int n, int[][] flights, int src, int dst, int k) {
     }
     return dist[dst] == Integer.MAX_VALUE ? -1 : dist[dst];
 }
-// ⚠️ 快照的必要性：每轮必须基于"上一轮结果"（防同轮串联）
-// ⚠️ 面试必答："787 = Bellman-Ford 限步——
+// 快照的必要性：每轮必须基于"上一轮结果"（防同轮串联）
+// 面试必答："787 = Bellman-Ford 限步——
 //   k+1 轮松弛、每轮基于快照（防串联超步）。"
 ```
 
@@ -168,9 +168,9 @@ Floyd-Warshall：任意两点最短路
   dp[k][i][j] = 经过前 k 个中转的最短路
   滚动：dp[i][j] = min(dp[i][j], dp[i][k] + dp[k][j])
 
-⚠️ 复杂度：O(V³)——稠密图/多源查询才用
+复杂度：O(V³)——稠密图/多源查询才用
 
-⚠️ 面试必答：
+面试必答：
 "Floyd = 三重循环中转点——
  O(V³)，适合'多源查询'（任意两点）；
  单源用 Dijkstra 更优。"
@@ -181,7 +181,7 @@ Floyd-Warshall：任意两点最短路
 ```java
 /** Floyd 模板（1334 阈值距离内最少城市） */
 int[][] floyd(int n, int[][] edges) {
-    int INF = Integer.MAX_VALUE / 2;         // ⚠️ 防加和溢出
+    int INF = Integer.MAX_VALUE / 2;         // 防加和溢出
     int[][] dist = new int[n][n];
     for (int[] row : dist) Arrays.fill(row, INF);
     for (int i = 0; i < n; i++) dist[i][i] = 0;
@@ -190,14 +190,14 @@ int[][] floyd(int n, int[][] edges) {
         dist[e[1]][e[0]] = Math.min(dist[e[1]][e[0]], e[2]);
     }
 
-    for (int k = 0; k < n; k++)              // ⚠️ 中转点最外层
+    for (int k = 0; k < n; k++)              // 中转点最外层
         for (int i = 0; i < n; i++)
             for (int j = 0; j < n; j++)
                 if (dist[i][k] + dist[k][j] < dist[i][j])
                     dist[i][j] = dist[i][k] + dist[k][j];
     return dist;
 }
-// ⚠️ 面试必答："Floyd 模板 = 中转点最外层
+// 面试必答："Floyd 模板 = 中转点最外层
 //   （k 必须在外层）+ INF 防溢出。"
 ```
 
@@ -209,12 +209,12 @@ int[][] floyd(int n, int[][] edges) {
 
 ```
 边权只有 0 或 1 的最短路：
-  ⚠️ 双端队列替代优先队列：
+  双端队列替代优先队列：
     0 权边 → 队首插入
     1 权边 → 队尾插入
   → O(V+E)（优于 Dijkstra 的 O(E log V)）
 
-⚠️ 面试必答：
+面试必答：
 "0-1 BFS = 双端队列——
  0 权前插、1 权后插，
  队列天然有序 → O(V+E)。"
@@ -227,7 +227,7 @@ int[][] floyd(int n, int[][] edges) {
   例：矩阵中'免费一次'类问题、
       开关类（+1 代价）问题
 
-⚠️ 面试表达：
+面试表达：
 "'0/1 边权'识别后直接用 0-1 BFS——
  比 Dijkstra 快一个 log 因子。"
 ```
@@ -248,7 +248,7 @@ int[][] floyd(int n, int[][] edges) {
 | 无权 | BFS | O(V+E) |
 
 ```
-⚠️ 面试必答：
+面试必答：
 "最短路六算法——无权 BFS、0/1 边 0-1 BFS、
  非负 Dijkstra、负权 BF/SPFA、限步 BF、
  多源 Floyd。'图的性质'决定选型。"
@@ -265,7 +265,7 @@ int[][] floyd(int n, int[][] edges) {
   多源查询 → Floyd
   限步数 → BF 快照
 
-⚠️ 面试必答：
+面试必答：
 "'边权类型 + 查询类型'两问定算法——
  这是最短路选型的完整决策树。"
 ```
@@ -309,7 +309,7 @@ int[][] floyd(int n, int[][] edges) {
 
 ---
 
-> 🎯 **核心要点**：最短路 = **选型决策**（边权 + 查询类型）+ **Dijkstra 变体**（距离语义可改）+ **限步/多源**（BF 快照/Floyd）。"图的性质决定算法"是最短路题的第一原则。
+> **核心要点**：最短路 = **选型决策**（边权 + 查询类型）+ **Dijkstra 变体**（距离语义可改）+ **限步/多源**（BF 快照/Floyd）。"图的性质决定算法"是最短路题的第一原则。
 
 ---
 

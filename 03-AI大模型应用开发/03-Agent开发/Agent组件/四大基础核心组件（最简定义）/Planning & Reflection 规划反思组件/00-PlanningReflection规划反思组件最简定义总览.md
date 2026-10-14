@@ -2,7 +2,7 @@
 
 > 定位：四大基础核心组件之「规划与反思」的最简速记层——3 分钟看懂"想清楚再做 + 做后复盘"；深化见 [Planner 规划器](..%2F..%2F..%2FAgent%20子组件专项学习%2FPlanner%20规划器%2F00-Planner规划器总览.md) 与 [Reflection 反思模块](..%2F..%2F..%2FAgent%20子组件专项学习%2FReflection%20反思模块%2F00-Reflection反思模块总览.md)（各 11 篇）。2026 一句话：**规划 = 先想清楚再做（Plan-Execute）；反思 = 做后复盘改进（≠重试）；两者都只在"可验证"时可靠**。
 
-## 📚 目录
+## 目录
 
 1. [速记导图](#1-速记导图)
 2. [30 秒速查表](#2-30-秒速查表)
@@ -48,7 +48,7 @@ Planning & Reflection 规划反思组件（最简定义）
 
 ## 4. 2026 关键事实
 
-> 📅 基准窗口：2026-08。详见各篇【参考来源】。
+> 基准窗口：2026-08。详见各篇【参考来源】。
 
 - **生产模式谱系**：prompt chaining → routing → parallelization → orchestrator-workers → evaluator-optimizer → 全自主 Agent——**从最简单开始，"穷尽确定性替代后才毕业到 Agent"**；混合模式是生产常态（简单任务 ReAct、复杂长任务 Plan-Execute、关键步骤后 Reflect）。
 - **反思前提不变**：**"只有可验证 oracle 才加反思"**——无 oracle 的批评退化为自证偏见；Reflexion 91% vs 80% 基线证明语言化反馈有效（NeurIPS 2023 奠基结论 2026 仍适用）。

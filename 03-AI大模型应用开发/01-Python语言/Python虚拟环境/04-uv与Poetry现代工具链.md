@@ -6,7 +6,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [2026 格局：为什么 uv 成为默认](#1-2026-格局为什么-uv-成为默认)
 2. [uv 三大提速来源](#2-uv-三大提速来源)
@@ -48,13 +48,13 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 uv --version
 ```
 
-> 🎯 **2026 共识**：新项目默认 uv——`uv init` → `uv add` → `uv sync` → `uv run` 四步闭环。
+> **2026 共识**：新项目默认 uv——`uv init` → `uv add` → `uv sync` → `uv run` 四步闭环。
 
 ---
 
 ## 2. uv 三大提速来源
 
-> 📊 实测：冷安装 50 个依赖 **2-5 秒**（pip 需 30-50 秒），快 **10-100 倍**。
+> 实测：冷安装 50 个依赖 **2-5 秒**（pip 需 30-50 秒），快 **10-100 倍**。
 
 | 提速来源 | 原理 | 效果 |
 |---------|------|------|
@@ -120,7 +120,7 @@ uv python list       # 查看已管理版本
 uv run python --version
 ```
 
-> 💡 **uv python** 的价值：团队无需各自装 Python——一个 uv 命令解决解释器版本问题。
+> **uv python** 的价值：团队无需各自装 Python——一个 uv 命令解决解释器版本问题。
 
 ---
 
@@ -159,7 +159,7 @@ build-backend = "hatchling.build"
 | **单一事实源** | 元数据 + 依赖 + 构建配置一个文件 |
 | **标准演进** | PEP 621 是 PyPA 官方标准 |
 
-> ⚠️ **2026 提醒**：新项目不用 pyproject.toml 会积累技术债——requirements.txt 时代正在结束。但**锁文件不可互用**（uv.lock vs poetry.lock 格式不同）。
+> **2026 提醒**：新项目不用 pyproject.toml 会积累技术债——requirements.txt 时代正在结束。但**锁文件不可互用**（uv.lock vs poetry.lock 格式不同）。
 
 ---
 
@@ -192,7 +192,7 @@ uv sync --frozen
 uv sync --frozen --no-dev
 ```
 
-> 🎯 **铁律**：**uv.lock 必须提交版本控制**——它是环境可复现的唯一保证。
+> **铁律**：**uv.lock 必须提交版本控制**——它是环境可复现的唯一保证。
 
 ---
 
@@ -241,10 +241,10 @@ poetry publish
 | 维度 | uv | Poetry |
 |------|:---:|:---:|
 | 安装速度 | **快 10-100 倍** | 慢 |
-| Python 管理 | ✅（uv python） | ❌ |
-| 锁文件 | ✅（uv.lock 跨平台） | ✅（poetry.lock） |
-| 开发/测试依赖组 | ✅ | ✅ |
-| PyPI 发布 | ✅ | ✅✅（成熟） |
+| Python 管理 | ✓（uv python） | ✗ |
+| 锁文件 | ✓（uv.lock 跨平台） | ✓（poetry.lock） |
+| 开发/测试依赖组 | ✓ | ✓ |
+| PyPI 发布 | ✓ | ✓✓（成熟） |
 | 生态成熟度 | 新（增长最快） | 成熟 |
 | 适用 | **新项目（2026 默认）** | 存量 + 库发布 |
 
@@ -257,13 +257,13 @@ poetry publish
 └── 全 Python 工具 → uv tool install
 ```
 
-> 🎯 **总结**：uv 是 2026 年的默认答案，Poetry 是存量与发布的稳妥答案——二者共享 pyproject.toml 标准，切换成本被标准化降到最低。
+> **总结**：uv 是 2026 年的默认答案，Poetry 是存量与发布的稳妥答案——二者共享 pyproject.toml 标准，切换成本被标准化降到最低。
 
 ---
 
 ## 8. 核心要点
 
-> 🎯 **核心要点**：
+> **核心要点**：
 > 1. uv = Rust 六合一工具（pip/venv/pyenv/pip-tools/pipx/poetry 大部分功能），快 10-100 倍
 > 2. 三大提速：Rust 执行 + 全局缓存 + 并行解析；新项目四步闭环（init/add/sync/run）
 > 3. pyproject.toml（PEP 621）是统一声明标准；**uv.lock 提交版本控制**，`uv sync --frozen` 确定性构建

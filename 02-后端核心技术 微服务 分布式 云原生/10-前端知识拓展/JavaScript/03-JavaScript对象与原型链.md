@@ -2,7 +2,7 @@
 
 > 定位：对象机制、原型链、class 语法、继承方案、Object 方法体系——"JS 的面向对象到底怎么工作"
 
-## 📚 目录
+## 目录
 
 1. [对象基础](#1-对象基础)
 2. [原型与原型链](#2-原型与原型链)
@@ -33,7 +33,7 @@ const obj = { [key]: 'value' };       // {dynamic: 'value'}
 user.email = 'a@b.com';               // 添加
 delete user.age;                      // 删除
 'name' in user;                       // 存在性检查（含原型）
-Object.hasOwn(user, 'name');          // ⚠️ 自有属性检查（ES2022）
+Object.hasOwn(user, 'name');          // 自有属性检查（ES2022）
 ```
 
 ### 1.2 属性特性
@@ -51,7 +51,7 @@ Object.defineProperty(user, 'id', {
 Object.keys(obj)      // 自有可枚举键
 Object.values(obj)    // 自有可枚举值
 Object.entries(obj)   // [键, 值] 对数组
-for (const key in obj) // ⚠️ 含原型链上的可枚举属性
+for (const key in obj) // 含原型链上的可枚举属性
 ```
 
 ---
@@ -63,7 +63,7 @@ for (const key in obj) // ⚠️ 含原型链上的可枚举属性
 ```
 每个函数都有 prototype 属性（原型对象）
 每个对象都有 __proto__（内部 [[Prototype]]）指向其原型
-  ⚠️ 现代写法：Object.getPrototypeOf(obj)
+  现代写法：Object.getPrototypeOf(obj)
 
 函数的关系（面试必画）：
   function Person() {}
@@ -95,7 +95,7 @@ p.hasOwnProperty('sayHello');  // false（来自原型）
 
 查找规则：属性访问时沿链向上找，找到即停
 
-⚠️ 面试必答：
+面试必答：
 "原型链是 JS 的继承机制——
  实例属性 > 原型链逐层查找；
  方法放原型（共享）、状态放实例（独立）。"
@@ -182,7 +182,7 @@ class Animal {
 ```javascript
 class Dog extends Animal {
     constructor(name, breed) {
-        super(name);            // ⚠️ 必须先调 super（this 之前）
+        super(name);            // 必须先调 super（this 之前）
         this.breed = breed;
     }
     bark() { return '汪汪'; }
@@ -193,7 +193,7 @@ class Dog extends Animal {
 
 // 静态继承
 class Cat extends Animal {}
-Cat.create('咪咪');    // ✅ 静态方法也继承
+Cat.create('咪咪');    // ✓ 静态方法也继承
 ```
 
 | 特性 | 说明 |
@@ -214,10 +214,10 @@ Cat.create('咪咪');    // ✅ 静态方法也继承
 | 原型链继承 | Child.prototype = Parent.prototype | 引用属性共享 |
 | 构造函数继承 | Parent.call(this) | 方法不共享 |
 | 组合继承 | 两者结合 | 父构造调用两次 |
-| 寄生组合继承 | Object.create 桥接 | ✅ 最优（class 底层） |
-| class extends | 语法糖 | ✅ 现代标准 |
+| 寄生组合继承 | Object.create 桥接 | ✓ 最优（class 底层） |
+| class extends | 语法糖 | ✓ 现代标准 |
 
-> 🎯 **要点**：面试从"手写继承"问起——最优是寄生组合继承（Object.create 桥接避免父构造重复调用）；class extends 是现代答案。
+> **要点**：面试从"手写继承"问起——最优是寄生组合继承（Object.create 桥接避免父构造重复调用）；class extends 是现代答案。
 
 ### 5.2 组合 vs 继承（设计层面）
 
@@ -225,7 +225,7 @@ Cat.create('咪咪');    // ✅ 静态方法也继承
 优先组合：has-a（对象组合）
 慎用继承：is-a（层级明确才用）
 
-⚠️ 面试必答：
+面试必答：
 "'组合优于继承'——继承层级深了
  难以维护（脆弱的基类问题）；
  现代组件设计多用组合。"
@@ -260,7 +260,7 @@ const copy = { ...original };              // 展开（现代首选）
 const copy2 = Object.assign({}, original);
 
 // 深拷贝
-const deep = structuredClone(original);    // ⚠️ 现代原生深拷贝（ES2022）
+const deep = structuredClone(original);    // 现代原生深拷贝（ES2022）
 // 旧方案：JSON.parse(JSON.stringify(obj))（有函数/undefined 丢失问题）
 
 // 手写浅拷贝（面试题）
@@ -272,11 +272,11 @@ function shallowCopy(obj) {
 }
 ```
 
-> 🎯 **要点**：展开运算符 `{...obj}` 是浅拷贝首选；`structuredClone` 是原生深拷贝（支持循环引用）；JSON 方案有坑（函数/Date/undefined）。
+> **要点**：展开运算符 `{...obj}` 是浅拷贝首选；`structuredClone` 是原生深拷贝（支持循环引用）；JSON 方案有坑（函数/Date/undefined）。
 
 ---
 
-> 🎯 **核心要点**：对象体系 = **原型链**（继承机制，方法放原型/状态放实例）+ **class 语法糖**（extends/super/私有 #）+ **继承演进**（寄生组合最优）+ **Object 方法**（keys/entries/assign/clone）。"原型链 + this + 闭包"是 JS 三大底层机制。
+> **核心要点**：对象体系 = **原型链**（继承机制，方法放原型/状态放实例）+ **class 语法糖**（extends/super/私有 #）+ **继承演进**（寄生组合最优）+ **Object 方法**（keys/entries/assign/clone）。"原型链 + this + 闭包"是 JS 三大底层机制。
 
 ---
 

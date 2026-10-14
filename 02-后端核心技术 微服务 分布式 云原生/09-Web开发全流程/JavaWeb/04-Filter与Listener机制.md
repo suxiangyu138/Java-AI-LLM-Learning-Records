@@ -76,7 +76,7 @@ public class LoggingFilter implements Filter {
         System.out.println("→ [" + method + "] " + uri + " - 开始");
 
         // ═══ 调用下一个 Filter 或 Servlet ═══
-        // ⚠️ 必须调用！否则请求链中断，Servlet 不会执行
+        // 必须调用！否则请求链中断，Servlet 不会执行
         chain.doFilter(request, response);
 
         // ═══ 后置处理（响应从 Servlet 返回之后） ═══
@@ -93,7 +93,7 @@ public class LoggingFilter implements Filter {
 }
 ```
 
-> ⚠️ `chain.doFilter()` 是链的关键——不调用则请求中断！Filter 链按注册顺序执行，`doFilter()` 前后的代码分别对应前置和后置处理。
+> `chain.doFilter()` 是链的关键——不调用则请求中断！Filter 链按注册顺序执行，`doFilter()` 前后的代码分别对应前置和后置处理。
 
 ---
 
@@ -133,7 +133,7 @@ doFilter of FilterA  ───────────────────�
 | **编程式注册** | 按 `addMapping` 的调用顺序（明确可控） |
 
 ```java
-// ⚠️ 重要：如果多个 Filter 有顺序依赖，不要依赖注解！
+// 重要：如果多个 Filter 有顺序依赖，不要依赖注解！
 // 应使用 web.xml 或编程式注册明确指定顺序
 
 // web.xml 中明确顺序：
@@ -365,7 +365,7 @@ ServletRequest 事件（请求级）
 
 ## 5. 八大 Listener 详解
 
-### 5.1 ServletContextListener（⭐最常用）
+### 5.1 ServletContextListener（★最常用）
 
 ```java
 @WebListener
@@ -549,7 +549,7 @@ public class RequestLogListener implements ServletRequestListener {
         long elapsed = System.currentTimeMillis() - start;
         // 慢请求告警
         if (elapsed > 3000) {
-            System.err.println("⚠ SLOW: " + req.getRequestURI() + " " + elapsed + "ms");
+            System.err.println("SLOW: " + req.getRequestURI() + " " + elapsed + "ms");
         }
     }
 }
@@ -559,14 +559,14 @@ public class RequestLogListener implements ServletRequestListener {
 
 | 接口 | 事件类型 | 监听对象 | 常用度 |
 |------|---------|---------|--------|
-| `ServletContextListener` | 生命周期 | 应用启停 | ⭐⭐⭐⭐⭐ |
-| `ServletContextAttributeListener` | 属性变更 | Context 属性 | ⭐⭐ |
-| `HttpSessionListener` | 生命周期 | Session 创建/销毁 | ⭐⭐⭐⭐ |
-| `HttpSessionAttributeListener` | 属性变更 | Session 属性 | ⭐⭐⭐ |
-| `HttpSessionBindingListener` | 绑定通知 | 对象自己感知 | ⭐⭐ |
-| `HttpSessionActivationListener` | 钝化/活化 | Session 持久化 | ⭐ |
-| `ServletRequestListener` | 生命周期 | 请求开始/结束 | ⭐⭐⭐ |
-| `ServletRequestAttributeListener` | 属性变更 | Request 属性 | ⭐ |
+| `ServletContextListener` | 生命周期 | 应用启停 | ★★★★★ |
+| `ServletContextAttributeListener` | 属性变更 | Context 属性 | ★★ |
+| `HttpSessionListener` | 生命周期 | Session 创建/销毁 | ★★★★ |
+| `HttpSessionAttributeListener` | 属性变更 | Session 属性 | ★★★ |
+| `HttpSessionBindingListener` | 绑定通知 | 对象自己感知 | ★★ |
+| `HttpSessionActivationListener` | 钝化/活化 | Session 持久化 | ★ |
+| `ServletRequestListener` | 生命周期 | 请求开始/结束 | ★★★ |
+| `ServletRequestAttributeListener` | 属性变更 | Request 属性 | ★ |
 
 ---
 

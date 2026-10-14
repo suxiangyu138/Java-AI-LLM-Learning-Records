@@ -1,6 +1,6 @@
 # 08 - Kafka 与 Spring 生态集成
 
-> 🎯 Spring Kafka 让 Java 开发者用熟悉的注解和模板模式操作 Kafka — 从基础配置到消息转换、错误处理，覆盖生产级集成全链路
+> Spring Kafka 让 Java 开发者用熟悉的注解和模板模式操作 Kafka — 从基础配置到消息转换、错误处理，覆盖生产级集成全链路
 
 ---
 
@@ -422,7 +422,7 @@ public void sendInTransaction() {
 ### 7.2 Kafka + DB 事务
 
 ```text
-⚠️ Kafka + DB 不是真正的 XA 事务！
+Kafka + DB 不是真正的 XA 事务！
 
 方案 1：CDC（Change Data Capture）— 推荐
   写入 DB → Debezium 捕获 binlog → 写入 Kafka

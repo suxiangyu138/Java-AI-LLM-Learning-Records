@@ -1,5 +1,5 @@
 # Shell 必做项目清单 面试问答清单
-> 🎯 基于 Shell 实战项目清单，涵盖面试高频问题与完美解答方案，帮助你在面试中脱颖而出。
+> 基于 Shell 实战项目清单，涵盖面试高频问题与完美解答方案，帮助你在面试中脱颖而出。
 
 ## 目录
 1. [基础概念与核心原理](#1-基础概念与核心原理)
@@ -11,7 +11,7 @@
 
 ## 1. 基础概念与核心原理
 
-> 💡 面试官在这一环节考察你的基本功是否扎实
+> 面试官在这一环节考察你的基本功是否扎实
 
 ### Q1：Shell 脚本中 `$?`、`$0`、`$@`、`$#` 这些特殊变量分别代表什么？
 
@@ -97,7 +97,7 @@ awk '{print $7, $NF}' access.log | sed 's/"//g' | awk '{
 }' | sort -k2 -rn | head -10
 ```
 
-> 💡 **面试技巧**：提到这些工具时，一定要带上真实的业务场景，比如"我用 awk 统计过 Nginx 日志中每个接口的 P99 延迟"，比背命令印象深 10 倍。
+> **面试技巧**：提到这些工具时，一定要带上真实的业务场景，比如"我用 awk 统计过 Nginx 日志中每个接口的 P99 延迟"，比背命令印象深 10 倍。
 
 ---
 
@@ -137,13 +137,13 @@ if [[ $email =~ ^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$ ]]; then
 fi
 ```
 
-> ⚠️ **生产建议**：在脚本头声明 `#!/bin/bash` 而不是 `#!/bin/sh`，然后放心使用 `[[ ]]`，代码可读性会提升很多。如果需要兼容 `sh`（如某些 Docker 基础镜像），则必须用 `[ ]` 且注意引号。
+> **生产建议**：在脚本头声明 `#!/bin/bash` 而不是 `#!/bin/sh`，然后放心使用 `[[ ]]`，代码可读性会提升很多。如果需要兼容 `sh`（如某些 Docker 基础镜像），则必须用 `[ ]` 且注意引号。
 
 ---
 
 ## 2. 项目实战深度问答
 
-> 💡 面试官会深挖你的项目细节，验证你"真的做过"而不是"背过"
+> 面试官会深挖你的项目细节，验证你"真的做过"而不是"背过"
 
 ### Q4：请展示你写过的 MySQL 数据库备份脚本，说说为什么这么设计？
 
@@ -334,7 +334,7 @@ for service in "${SERVICES[@]}"; do
 done
 ```
 
-> 💡 **设计亮点**：双重检测（进程 + 端口）避免误判；三次重启失败后才告警防止抖动；钉钉 + 邮件双通道保证告警可达。
+> **设计亮点**：双重检测（进程 + 端口）避免误判；三次重启失败后才告警防止抖动；钉钉 + 邮件双通道保证告警可达。
 
 ---
 
@@ -459,13 +459,13 @@ fi
 log "部署成功!"
 ```
 
-> 🎯 **核心哲学**：部署的黄金法则是"永远可以回退"。这个脚本最巧妙的地方是健康检查才决定一切——版本上了不算，启动成功不算，API 健康检查通过才算。
+> **核心哲学**：部署的黄金法则是"永远可以回退"。这个脚本最巧妙的地方是健康检查才决定一切——版本上了不算，启动成功不算，API 健康检查通过才算。
 
 ---
 
 ## 3. 进阶与系统设计
 
-> 💡 这是拉开差距的环节，考察架构思维
+> 这是拉开差距的环节，考察架构思维
 
 ### Q7：如何设计一个生产级的服务器巡检一体化脚本？
 
@@ -501,9 +501,9 @@ collect_cpu_info() {
     
     local cpu_usage=$(top -bn1 | grep "Cpu(s)" | awk '{print $2}' | cut -d. -f1)
     if [ "$cpu_usage" -gt 80 ]; then
-        echo "| CPU 使用率 | ${cpu_usage}% | ⚠️ 告警 |" >> "$REPORT_FILE"
+        echo "| CPU 使用率 | ${cpu_usage}% | 告警 |" >> "$REPORT_FILE"
     else
-        echo "| CPU 使用率 | ${cpu_usage}% | ✅ 正常 |" >> "$REPORT_FILE"
+        echo "| CPU 使用率 | ${cpu_usage}% | ✓ 正常 |" >> "$REPORT_FILE"
     fi
     
     # CPU 负载与核心数对比
@@ -525,11 +525,11 @@ collect_memory_info() {
     local mem_percent=$(free | grep Mem | awk '{print $3/$2 * 100.0}' | cut -d. -f1)
     
     if [ "$mem_percent" -gt 90 ]; then
-        echo "| 内存使用 | ${mem_used}/${mem_total} (${mem_percent}%) | 🔴 严重 |" >> "$REPORT_FILE"
+        echo "| 内存使用 | ${mem_used}/${mem_total} (${mem_percent}%) | 严重 |" >> "$REPORT_FILE"
     elif [ "$mem_percent" -gt 70 ]; then
-        echo "| 内存使用 | ${mem_used}/${mem_total} (${mem_percent}%) | ⚠️ 告警 |" >> "$REPORT_FILE"
+        echo "| 内存使用 | ${mem_used}/${mem_total} (${mem_percent}%) | 告警 |" >> "$REPORT_FILE"
     else
-        echo "| 内存使用 | ${mem_used}/${mem_total} (${mem_percent}%) | ✅ 正常 |" >> "$REPORT_FILE"
+        echo "| 内存使用 | ${mem_used}/${mem_total} (${mem_percent}%) | ✓ 正常 |" >> "$REPORT_FILE"
     fi
     
     echo "| Swap 使用 | $(free -h | grep Swap | awk '{print $3}') | - |" >> "$REPORT_FILE"
@@ -550,11 +550,11 @@ collect_disk_info() {
         local usage=$(echo $line | awk '{print $5}' | sed 's/%//')
         
         if [ "$usage" -gt 90 ]; then
-            echo "| $mount | $size | $used | $avail | ${usage}% | 🔴 严重 |" >> "$REPORT_FILE"
+            echo "| $mount | $size | $used | $avail | ${usage}% | 严重 |" >> "$REPORT_FILE"
         elif [ "$usage" -gt 75 ]; then
-            echo "| $mount | $size | $used | $avail | ${usage}% | ⚠️ 告警 |" >> "$REPORT_FILE"
+            echo "| $mount | $size | $used | $avail | ${usage}% | 告警 |" >> "$REPORT_FILE"
         else
-            echo "| $mount | $size | $used | $avail | ${usage}% | ✅ 正常 |" >> "$REPORT_FILE"
+            echo "| $mount | $size | $used | $avail | ${usage}% | ✓ 正常 |" >> "$REPORT_FILE"
         fi
     done
 }
@@ -569,9 +569,9 @@ collect_service_info() {
     for port in 80 443 8080 3306 6379 11434; do
         if ss -tlnp | grep -q ":$port "; then
             local process=$(ss -tlnp "sport = :$port" | grep -oP 'users:\(\(".*?"\)' | head -1)
-            echo "| $port | ✅ 监听 | ${process:-未知} |" >> "$REPORT_FILE"
+            echo "| $port | ✓ 监听 | ${process:-未知} |" >> "$REPORT_FILE"
         else
-            echo "| $port | ❌ 未监听 | - |" >> "$REPORT_FILE"
+            echo "| $port | ✗ 未监听 | - |" >> "$REPORT_FILE"
         fi
     done
 }
@@ -599,7 +599,7 @@ cat "$REPORT_FILE"
 ## CPU 状态
 | 指标 | 值 | 状态 |
 |------|-----|------|
-| CPU 使用率 | 45% | ✅ 正常 |
+| CPU 使用率 | 45% | ✓ 正常 |
 | 每核负载 | 0.82 | - |
 ```
 
@@ -640,13 +640,13 @@ cat "$REPORT_FILE"
 # 5. 需要单元测试保证质量
 ```
 
-> 💡 **最佳实践**：我的习惯是"Shell 做胶水，Python 做逻辑"。用 Shell 编排流程、调用系统工具，当需要复杂处理时交给 Python 脚本。比如备份脚本中，调度和压缩用 Shell，数据一致性校验用 Python。
+> **最佳实践**：我的习惯是"Shell 做胶水，Python 做逻辑"。用 Shell 编排流程、调用系统工具，当需要复杂处理时交给 Python 脚本。比如备份脚本中，调度和压缩用 Shell，数据一致性校验用 Python。
 
 ---
 
 ## 4. 场景题与故障排查
 
-> 💡 考察实际解决问题的能力
+> 考察实际解决问题的能力
 
 ### Q9：你写的一个脚本在生产环境出了问题（比如误删了文件），你后来怎么优化避免再犯？
 
@@ -704,7 +704,7 @@ find "$LOG_DIR" -name "*.log" -mtime +30 -delete
 echo "清理完成"
 ```
 
-> 🎯 **经验教训**：别相信任何变量不为空，别相信目录范围安全，别直接执行破坏性操作。这条原则适用于所有运维脚本。
+> **经验教训**：别相信任何变量不为空，别相信目录范围安全，别直接执行破坏性操作。这条原则适用于所有运维脚本。
 
 ---
 
@@ -728,7 +728,7 @@ mv /opt/app/logs/app.log /opt/app/logs/app.log.$(date +%Y%m%d)
 systemctl restart app  # 某些应用需要重启才能写入新文件
 ```
 
-> ⚠️ `rm` 再重新创建文件会导致文件描述符失效，Java 进程可能不再写日志。用 `>` 或 `truncate` 直接在原文件上截断，进程 fd 不受影响。
+> `rm` 再重新创建文件会导致文件描述符失效，Java 进程可能不再写日志。用 `>` 或 `truncate` 直接在原文件上截断，进程 fd 不受影响。
 
 **根治方案（配置 logrotate）：**
 
@@ -818,7 +818,7 @@ wait  # 等待剩余任务完成
 echo "所有任务执行完毕"
 ```
 
-> 💡 在面试中提这个，说明你写 Shell 不只会顺序执行，有"工程效率意识"，这对面试官是一个很加分的信号。
+> 在面试中提这个，说明你写 Shell 不只会顺序执行，有"工程效率意识"，这对面试官是一个很加分的信号。
 
 ---
 
@@ -871,11 +871,11 @@ bash -x script.sh 2>&1 | head -50  # 只看前 50 步
 ls /nonexist; echo "退出码: $?"
 ```
 
-> 🎯 总结：跨平台兼容性是 Shell 脚本中最容易被忽视的坑。从此以后，我所有脚本开头都会加一句 `#!/bin/bash` 声明 + `set -eo pipefail`。
+> 总结：跨平台兼容性是 Shell 脚本中最容易被忽视的坑。从此以后，我所有脚本开头都会加一句 `#!/bin/bash` 声明 + `set -eo pipefail`。
 
 ---
 
-## 💎 面试加分金句
+## 面试加分金句
 
 1. "我写 Shell 脚本的黄金法则：先想好容错再写功能。所有关键步骤都有退出码检查，所有变量都有空值校验。"
 2. "自动化不是'写个脚本就自动了'，而是要设计'异常路径'——磁盘满了怎么办？数据库连不上怎么办？脚本中断了怎么恢复？"
@@ -883,7 +883,7 @@ ls /nonexist; echo "退出码: $?"
 4. "每个生产级脚本都包含三个要素：日志可追溯、状态可监控、执行可回滚。少一个都不能上生产。"
 5. "监控脚本不是为了发现宕机，而是为了在用户发现之前你已经发现了。所以我坚持做到实时告警 + 自动恢复。"
 
-## 📋 高频追问清单
+## 高频追问清单
 
 | 追问方向 | 应对策略 |
 |----------|----------|
@@ -893,7 +893,7 @@ ls /nonexist; echo "退出码: $?"
 | JSON 在 Shell 中怎么解析？ | 推荐 `jq` 工具；如果没有，可以用 `grep -oP` 正则提取 |
 | 你写过多少行 Shell 脚本？ | 用具体数字量化：备份脚本 200+ 行，部署脚本 300+ 行，巡检脚本 400+ 行 |
 
-## 🔗 关联知识点
+## 关联知识点
 
 - [Linux必做项目清单-面试问答](./Linux必做项目清单-面试问答.md) — Shell 脚本的基础是 Linux 命令
 - [三大核心项目-面试问答](./三大核心项目-面试问答.md) — 自动化部署脚本是项目落地的关键环节

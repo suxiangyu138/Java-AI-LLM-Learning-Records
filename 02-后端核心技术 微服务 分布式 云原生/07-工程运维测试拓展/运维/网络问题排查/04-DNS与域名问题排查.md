@@ -1,7 +1,7 @@
 # 04-DNS 与域名问题排查
 > "域名解析失败"是最高频的网络问题之一：解析流程、nslookup/dig 定位、缓存与 TTL、Java 侧 DNS 问题——从"Unknown host"到根因
 
-## 📚 目录
+## 目录
 1. [DNS 解析流程](#1-dns-解析流程)
 2. [解析失败的定位](#2-解析失败的定位)
 3. [缓存与 TTL 问题](#3-缓存与-ttl-问题)
@@ -62,7 +62,7 @@ cat /etc/hosts | grep api.example
 | SERVFAIL | 上游解析失败 | DNS 服务器问题 |
 | TIMEOUT | DNS 服务器无响应 | 网络/DNS 服务器故障 |
 
-> 🎯 **核心对比法**：`nslookup 域名`（本地 DNS）vs `nslookup 域名 @8.8.8.8`（公网 DNS）——两者结果不同 = 本地 DNS 配置问题；都失败 = 域名记录本身问题。
+> **核心对比法**：`nslookup 域名`（本地 DNS）vs `nslookup 域名 @8.8.8.8`（公网 DNS）——两者结果不同 = 本地 DNS 配置问题；都失败 = 域名记录本身问题。
 
 ## 3. 缓存与 TTL 问题
 
@@ -90,7 +90,7 @@ dig api.example.com | grep -A1 'ANSWER SECTION'
 curl -v --resolve api.example.com:443:新IP https://api.example.com
 ```
 
-> 💡 **变更流程规范**：IP 变更前**先降低 TTL**（如 600 → 60），等缓存刷新后再切换——生产变更的标准姿势。
+> **变更流程规范**：IP 变更前**先降低 TTL**（如 600 → 60），等缓存刷新后再切换——生产变更的标准姿势。
 
 ## 4. Java 应用 DNS 问题
 
@@ -117,7 +117,7 @@ java -Dnetworkaddress.cache.ttl=30 -jar app.jar
 | `networkaddress.cache.ttl` | 正向缓存 TTL（秒；-1 永久、0 不缓存） |
 | `networkaddress.cache.negative.ttl` | 负缓存 TTL（解析失败缓存） |
 
-> ⚠️ **Java 经典坑**：域名 IP 变更后 Java 应用仍连旧地址——优先检查 `networkaddress.cache.ttl` 是否被配成永久缓存。
+> **Java 经典坑**：域名 IP 变更后 Java 应用仍连旧地址——优先检查 `networkaddress.cache.ttl` 是否被配成永久缓存。
 
 ### 4.2 Java 侧排查
 
@@ -163,7 +163,7 @@ kubectl exec pod -- cat /etc/resolv.conf    # 看 search 域
 # 常见：同命名空间用短名、跨命名空间用 FQDN
 ```
 
-> 💡 K8s DNS 排查详细见 [07-容器与微服务网络排查](07-容器与微服务网络排查.md)（含 CoreDNS 故障）。
+> K8s DNS 排查详细见 [07-容器与微服务网络排查](07-容器与微服务网络排查.md)（含 CoreDNS 故障）。
 
 ## 6. 高频场景排查表
 
@@ -178,7 +178,7 @@ kubectl exec pod -- cat /etc/resolv.conf    # 看 search 域
 
 ## 7. 核心要点
 
-> 🎯 **核心要点**：
+> **核心要点**：
 > - 解析链路：hosts → 本地缓存 → DNS 服务器 → 递归；逐环排查；
 > - 对比法：本地 DNS vs 公网 DNS（8.8.8.8）结果不同 = 本地问题；
 > - dig status 四态：NOERROR/NXDOMAIN（记录不存在）/SERVFAIL/TIMEOUT；

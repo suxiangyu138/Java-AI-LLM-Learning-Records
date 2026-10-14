@@ -1,6 +1,6 @@
 # 05 - Java 新特性与 JDK 演进高频题
 
-> 🎯 2026 年面试新特性权重持续上升 — Java 8 是底线，Java 17/21（LTS）是关键，虚拟线程/结构化并发是加分项。本章按版本演进梳理必考点
+> 2026 年面试新特性权重持续上升 — Java 8 是底线，Java 17/21（LTS）是关键，虚拟线程/结构化并发是加分项。本章按版本演进梳理必考点
 
 ---
 
@@ -39,7 +39,7 @@ Comparator<String> c = (a, b) -> a.length() - b.length();  // 有参
 | 惰性求值 | 中间操作不执行，终止操作才触发 | filter/map/sorted |
 | 不可变 | 不修改源数据，返回新流 | — |
 | 流水线 | 中间操作链 + 终止操作 | collect/forEach/count |
-| 并行流 | parallelStream 自动分治 | ⚠️ 慎用 |
+| 并行流 | parallelStream 自动分治 | 慎用 |
 
 ```java
 // 经典链式写法
@@ -229,12 +229,12 @@ ScopedValue.where(REQUEST_ID, "req-123").run(() -> doWork());
 
 | 版本 | LTS | 关键特性 |
 |------|:---:|----------|
-| Java 8 | ✅ | Lambda/Stream/Optional/新时间 API（行业基线） |
-| Java 11 | ✅ | var（10）/HTTP Client/垃圾收集器优化 |
-| Java 17 | ✅ | record（16）/sealed/switch 模式匹配 preview/强封装 |
-| Java 21 | ✅ | **虚拟线程**/Sequenced Collections/记录模式/switch 模式正式 |
-| Java 24 | ❌ | 结构化并发、Scoped Values 转正 |
-| Java 25 | ✅ | 新 LTS（2025.09） |
+| Java 8 | ✓ | Lambda/Stream/Optional/新时间 API（行业基线） |
+| Java 11 | ✓ | var（10）/HTTP Client/垃圾收集器优化 |
+| Java 17 | ✓ | record（16）/sealed/switch 模式匹配 preview/强封装 |
+| Java 21 | ✓ | **虚拟线程**/Sequenced Collections/记录模式/switch 模式正式 |
+| Java 24 | ✗ | 结构化并发、Scoped Values 转正 |
+| Java 25 | ✓ | 新 LTS（2025.09） |
 
 ### 6.2 升级到 17/21 的常见坑？
 
@@ -250,6 +250,6 @@ ScopedValue.where(REQUEST_ID, "req-123").run(() -> doWork());
 
 ---
 
-> 🎯 **核心要点**：新特性模块的面试策略 = **"8 是底线、17 是默认、21 是亮点"**。Java 8 的四件套（Lambda/Stream/Optional/时间 API）必须讲透；17 的 record/sealed 能写代码；21 的虚拟线程能讲清楚"解决了什么、适合什么、怎么启用" — 这就是 2026 面试的差异化得分点。
+> **核心要点**：新特性模块的面试策略 = **"8 是底线、17 是默认、21 是亮点"**。Java 8 的四件套（Lambda/Stream/Optional/时间 API）必须讲透；17 的 record/sealed 能写代码；21 的虚拟线程能讲清楚"解决了什么、适合什么、怎么启用" — 这就是 2026 面试的差异化得分点。
 
 **下一模块**：[06-深度追问与场景实战](06-深度追问与场景实战.md) / **返回总览**：[00-Java核心面试大全总览](00-Java核心面试大全总览.md)

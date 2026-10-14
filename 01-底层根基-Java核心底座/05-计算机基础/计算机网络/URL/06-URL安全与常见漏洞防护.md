@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [URL 安全威胁全景图](#1-url-安全威胁全景图)
 2. [SSRF 服务端请求伪造](#2-ssrf-服务端请求伪造)
@@ -34,12 +34,12 @@
 
 | 漏洞 | 危害等级 | 常见场景 | 一句话防御 |
 |------|:---:|---------|-----------|
-| SSRF | 🔴 严重 | 网页截图、URL 抓取、Webhook、文件代理 | Scheme + Host + IP 白名单 |
-| 开放重定向 | 🟠 高 | OAuth `redirect_uri`、登录后跳转、统一登出 | 白名单域名 + 相对路径 |
-| 解析器差异 | 🟠 高 | WAF / Nginx 过滤后 Java 解析执行 | 统一解析器 + 输入规范化 |
-| 路径穿越 | 🔴 严重 | 文件下载 `?path=`、静态资源 `..` | 拒绝 `..` + 限制根目录 |
-| URL 伪协议 XSS | 🟡 中 | UGC 内容中的 `<a href>` 、分享链接 | 白名单 `http`/`https` |
-| 敏感信息泄露 | 🟡 中 | Token 放 Query、Referer 带到第三方 | Token 放 Header/Body |
+| SSRF | 严重 | 网页截图、URL 抓取、Webhook、文件代理 | Scheme + Host + IP 白名单 |
+| 开放重定向 | 高 | OAuth `redirect_uri`、登录后跳转、统一登出 | 白名单域名 + 相对路径 |
+| 解析器差异 | 高 | WAF / Nginx 过滤后 Java 解析执行 | 统一解析器 + 输入规范化 |
+| 路径穿越 | 严重 | 文件下载 `?path=`、静态资源 `..` | 拒绝 `..` + 限制根目录 |
+| URL 伪协议 XSS | 中 | UGC 内容中的 `<a href>` 、分享链接 | 白名单 `http`/`https` |
+| 敏感信息泄露 | 中 | Token 放 Query、Referer 带到第三方 | Token 放 Header/Body |
 
 ---
 
@@ -54,7 +54,7 @@
 
 攻击者输入：http://169.254.169.254/latest/meta-data/
     → 后端请求该 URL
-    → 🔴 读取到云服务器元数据（AWS / 阿里云 / 腾讯云等）
+    → 读取到云服务器元数据（AWS / 阿里云 / 腾讯云等）
 ```
 
 ### 2.2 经典攻击载荷
@@ -143,15 +143,15 @@ public boolean isInternalIp(URI uri) throws Exception {
 **第三层：禁止重定向跟随到内网（最关键）**
 
 ```java
-// ⚠️ 很多 SSRF 漏洞不在初始 URL，而在 30X 重定向链中
+// 很多 SSRF 漏洞不在初始 URL，而在 30X 重定向链中
 // 攻击者：https://evil.com/redirect → 302 → http://169.254.169.254/
 
-// ✅ 使用自定义 RedirectHandler，每步都检查
+// ✓ 使用自定义 RedirectHandler，每步都检查
 HttpClient client = HttpClient.newBuilder()
-    .followRedirects(Redirect.NORMAL)  // ❌ 默认跟着走
+    .followRedirects(Redirect.NORMAL)  // ✗ 默认跟着走
     .build();
 
-// ✅ 手动控制重定向
+// ✓ 手动控制重定向
 HttpClient client = HttpClient.newBuilder()
     .followRedirects(Redirect.NEVER)   // 关掉自动跟随
     .build();
@@ -174,7 +174,7 @@ if (isRedirect(resp.statusCode())) {
 // 方式三：限制 HttpClient 只处理 http/https
 // JDK HttpClient 默认就只支持 http/https，不需要额外配置
 
-// ⚠️ 如果用 URL.openConnection() 需要小心
+// 如果用 URL.openConnection() 需要小心
 // URL.openConnection() 会加载对应协议的 URLStreamHandler
 // new URL("file:///etc/passwd").openConnection() → 读取本地文件
 ```
@@ -278,11 +278,11 @@ public class SafeUrlFetcher {
 
 ```text
 正常流程：https://mysite.com/login?redirect=/home
-    → 登录成功 → 302 → /home    ✅
+    → 登录成功 → 302 → /home    ✓
 
 攻击流程：https://mysite.com/login?redirect=https://fiishing-site.com
     → 登录成功 → 302 → https://fiishing-site.com
-    → 🔴 用户看到钓鱼登录页，域名仍然很像 mysite.com
+    → 用户看到钓鱼登录页，域名仍然很像 mysite.com
 ```
 
 ### 3.2 高风险场景
@@ -405,7 +405,7 @@ public boolean validateRedirectUri(String requested, String registered) {
 攻击字符串：https://evil.com#@safe.com/path
 
 Java URI.create()：
-  host = "evil.com"           ← 过滤层（Java）认为 host 是 evil.com，拒绝 ✅
+  host = "evil.com"           ← 过滤层（Java）认为 host 是 evil.com，拒绝 ✓
 
 浏览器 new URL()：
   host = "safe.com"           ← 执行层（浏览器）看到的是 safe.com
@@ -429,9 +429,9 @@ Java URI.create()：
 | `https://a.com#@b.com` | host=`a.com` | host=`a.com` | host=`a.com` |
 | `https://a b.com/` | 抛异常 | `https://a%20b.com/` | 抛异常/编码 |
 | `https://a.com:443@b.com` | host=`b.com` | host=`b.com` | host=`b.com` |
-| `https://0x7f000001/` | host=`0x7f000001` | host=`127.0.0.1` ⚠️ | host=`127.0.0.1` ⚠️ |
-| `https://2130706433/` | host=`2130706433` | host=`127.0.0.1` ⚠️ | host=`127.0.0.1` ⚠️ |
-| `https://0/` | host=`0` | host=`0.0.0.0` ⚠️ | host=`0.0.0.0` ⚠️ |
+| `https://0x7f000001/` | host=`0x7f000001` | host=`127.0.0.1` | host=`127.0.0.1` |
+| `https://2130706433/` | host=`2130706433` | host=`127.0.0.1` | host=`127.0.0.1` |
+| `https://0/` | host=`0` | host=`0.0.0.0` | host=`0.0.0.0` |
 
 ### 4.3 DNS 层面的绕过
 
@@ -458,12 +458,12 @@ public boolean isInternalAfterResolution(String host) throws Exception {
     return isInternal(addr);
 }
 
-// ⚠️ 不能只做字符串黑名单（如 contains("127.0.0.1")）
+// 不能只做字符串黑名单（如 contains("127.0.0.1")）
 // 必须真正解析 DNS，拿到 InetAddress 后判断
 // 0x7f000001 的字符串不含 "127.0.0.1"，但解析后就是 127.0.0.1
 ```
 
-> 🎯 **核心防御原则**：**过滤在语法层做（Scheme 白名单），校验在 IP 层做（DNS 解析后检查）。永远不要依赖字符串匹配来防御 SSRF。**
+> **核心防御原则**：**过滤在语法层做（Scheme 白名单），校验在 IP 层做（DNS 解析后检查）。永远不要依赖字符串匹配来防御 SSRF。**
 
 ---
 
@@ -476,7 +476,7 @@ public boolean isInternalAfterResolution(String host) throws Exception {
     → 读 /var/files/report.pdf
 
 攻击：GET /download?file=../../etc/passwd
-    → 读 /var/files/../../etc/passwd → /etc/passwd 🔴
+    → 读 /var/files/../../etc/passwd → /etc/passwd 
 
 编码绕过：GET /download?file=%2e%2e%2f%2e%2e%2fetc%2fpasswd
     → URL 解码 → ../../etc/passwd
@@ -507,7 +507,7 @@ public class SafeFileAccessor {
     private final Path baseDir;
 
     public SafeFileAccessor(@Value("${app.file.base-dir}") String baseDir) {
-        // ✅ 第一步：获取规范化的实际路径（解析符号链接）
+        // ✓ 第一步：获取规范化的实际路径（解析符号链接）
         this.baseDir = Paths.get(baseDir).toRealPath().normalize();
     }
 
@@ -763,18 +763,18 @@ https://mysite.com/api/doc/42?token=abc123xyz
 
 | 场景 | 缓解 | 说明 |
 |------|------|------|
-| 邮件验证链接 | ✅ 一次性 + 短有效期 | 用完即失效 |
-| 密码重置链接 | ✅ 一次性 + 短有效期 + 需交互 | 点击后需要重输密码 |
-| WebSocket 鉴权 | ⚠️ 放 Query 是不得已 | 首帧发鉴权消息代替 |
-| 文件临时下载 | ✅ 签名 URL + 短有效期 | 1h 过期 |
-| 分享链接 | ✅ 不透明 token（如分享码） | 非 JWT，不可解码 |
+| 邮件验证链接 | ✓ 一次性 + 短有效期 | 用完即失效 |
+| 密码重置链接 | ✓ 一次性 + 短有效期 + 需交互 | 点击后需要重输密码 |
+| WebSocket 鉴权 | 放 Query 是不得已 | 首帧发鉴权消息代替 |
+| 文件临时下载 | ✓ 签名 URL + 短有效期 | 1h 过期 |
+| 分享链接 | ✓ 不透明 token（如分享码） | 非 JWT，不可解码 |
 
 ```java
-// ❌ 错误：把 JWT 放 URL 上
+// ✗ 错误：把 JWT 放 URL 上
 String url = "https://mysite.com/share?jwt=" + fullJwt;
 // JWT 可解码出用户 ID、角色等信息
 
-// ✅ 正确：用一个随机不透明 token 映射到后台权限
+// ✓ 正确：用一个随机不透明 token 映射到后台权限
 String shareCode = randomAlphanumeric(12);
 redis.setex("share:" + shareCode, 3600, documentId);
 String url = "https://mysite.com/s/" + shareCode;
@@ -836,7 +836,7 @@ String url = "https://mysite.com/s/" + shareCode;
 
 ---
 
-> 🎯 **本篇核心要点**
+> **本篇核心要点**
 > 1. SSRF 防御分四层：Scheme 白名单 → DNS 解析 + IP 判断 → 禁止重定向跟随到内网 → 禁用危险协议
 > 2. **DNS 解析后再判断 IP**，不要做字符串匹配——`0x7f000001` 不含 `127.0.0.1` 但解析后就是它
 > 3. 开放重定向的防御：允许相对路径（注意防 `//evil.com`），有 scheme 时必须白名单域名

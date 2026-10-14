@@ -1,6 +1,6 @@
 # 02 - Gateway 架构与运行机制
 
-> 🎯 Gateway 是 OpenClaw 的"神经中枢" — 单一长驻进程，监听 127.0.0.1:18789，负责所有消息路由、身份认证、渠道管理、Cron 调度。理解 Gateway = 理解 OpenClaw 的一切
+> Gateway 是 OpenClaw 的"神经中枢" — 单一长驻进程，监听 127.0.0.1:18789，负责所有消息路由、身份认证、渠道管理、Cron 调度。理解 Gateway = 理解 OpenClaw 的一切
 
 ---
 
@@ -117,7 +117,7 @@ Session Key 格式：
   → 同一用户在不同渠道发消息 = 不同 Session
   → 支持 identity linking 跨平台身份链接
 
-⚠️ 多用户 DM 必须开启 per-channel-peer
+多用户 DM 必须开启 per-channel-peer
   → 默认 main 模式会共享 session 上下文 → 隐私泄露
 ```
 
@@ -160,6 +160,6 @@ interface ChannelPlugin {
 
 ---
 
-> 🎯 **核心要点**：Gateway 的三个"一" — **一个端口（18789）跑所有通信、一个进程（守护进程）管所有调度、一个 SessionKey 保证消息不串渠道**。三层认证（Token + Device Identity + Pairing Approval）保证即使开放到公网也不会被未授权设备控制。
+> **核心要点**：Gateway 的三个"一" — **一个端口（18789）跑所有通信、一个进程（守护进程）管所有调度、一个 SessionKey 保证消息不串渠道**。三层认证（Token + Device Identity + Pairing Approval）保证即使开放到公网也不会被未授权设备控制。
 
 **下一模块**：[03-Agent实现原理与ReAct循环](03-Agent实现原理与ReAct循环.md) / **返回总览**：[00-总览](00-OpenClaw知识体系总览.md)

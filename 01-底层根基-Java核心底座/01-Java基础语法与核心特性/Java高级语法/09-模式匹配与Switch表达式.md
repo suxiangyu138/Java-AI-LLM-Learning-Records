@@ -1,6 +1,6 @@
 # 09 - 模式匹配与 Switch 表达式
 
-> 🎯 Java 14-21 的 Switch 进化是语言现代化的重要一步——从只能匹配基本类型到支持模式匹配、Record 解构、穷举检查。AI 应用中处理多种响应类型/事件类型，Switch 模式匹配是最优雅的方案
+> Java 14-21 的 Switch 进化是语言现代化的重要一步——从只能匹配基本类型到支持模式匹配、Record 解构、穷举检查。AI 应用中处理多种响应类型/事件类型，Switch 模式匹配是最优雅的方案
 
 ---
 
@@ -114,7 +114,7 @@ return switch (obj) {
 ### 穷举检查
 
 ```java
-// 密封类 + Switch 模式匹配 = 编译器保证穷举 ✅
+// 密封类 + Switch 模式匹配 = 编译器保证穷举 ✓
 sealed interface Shape permits Circle, Rectangle, Triangle {}
 
 double area = switch (shape) {

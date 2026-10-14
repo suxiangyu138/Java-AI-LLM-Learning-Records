@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [ChatModel 的定位](#1-chatmodel-的定位)
 2. [接入各家模型](#2-接入各家模型)
@@ -126,7 +126,7 @@ print(review.rating)      # 8.5
 
 **验收动作**：① 用 ChatOpenAI 接入 OpenAI/DeepSeek/vLLM 三选二（base_url 方式）；② 定义 @tool 并用 bind_tools 调用（看 tool_calls 输出）；③ 用 with_structured_output 输出一个 Pydantic 对象；④ 写"模型接入备忘"（三家配置）——**"接入 + 工具 + 结构化 = ChatModel 能力"**——**练习纪律**：模型配置进环境变量——"密钥不写代码"。
 
-> 🎯 **核心要点**：ChatModel = 统一插座（**消息进消息出——换模型只改类名/base_url——OpenAI 兼容一家通吃**）；**bind_tools（告知工具——意图在 tool_calls——执行是应用的事——工具描述是模型决策依据）**；**with_structured_output（Pydantic 强制——比提示词可靠——输出对象的类型安全——抽取/表单场景标配）**——"换模型只改一个类名——ChatModel 是'模型层的统一插座'"。
+> **核心要点**：ChatModel = 统一插座（**消息进消息出——换模型只改类名/base_url——OpenAI 兼容一家通吃**）；**bind_tools（告知工具——意图在 tool_calls——执行是应用的事——工具描述是模型决策依据）**；**with_structured_output（Pydantic 强制——比提示词可靠——输出对象的类型安全——抽取/表单场景标配）**——"换模型只改一个类名——ChatModel 是'模型层的统一插座'"。
 
 ---
 

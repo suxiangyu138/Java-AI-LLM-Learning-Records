@@ -1,6 +1,6 @@
 # 01 - Python 模块系统与导入机制
 
-> 🎯 `import` 不只是"导入一个文件" — 它是一整套查找→编译→执行→缓存的机制。理解模块系统是理解大型 Python 项目结构的前提
+> `import` 不只是"导入一个文件" — 它是一整套查找→编译→执行→缓存的机制。理解模块系统是理解大型 Python 项目结构的前提
 
 ---
 
@@ -69,14 +69,14 @@ from ..parent import something # 上级目录
 from .subpkg import module     # 子包中的模块
 ```
 
-> ⚠️ 相对导入只能在包内部使用（即文件被作为包的一部分导入时）。直接 `python script.py` 执行时不能用相对导入。
+> 相对导入只能在包内部使用（即文件被作为包的一部分导入时）。直接 `python script.py` 执行时不能用相对导入。
 
 ---
 
 ## 4. 循环导入问题与解决方案
 
 ```python
-# ❌ 问题：A 导入 B，B 导入 A → 互相依赖
+# ✗ 问题：A 导入 B，B 导入 A → 互相依赖
 # a.py
 from b import func_b       # B 还没执行完 → func_b 未定义 → ImportError
 
@@ -120,7 +120,7 @@ sys.path.insert(0, '/path/to/my/modules')
 
 ```python
 # 当 my_module.py 被直接执行：
-# python my_module.py  →  __name__ == "__main__"  ✅
+# python my_module.py  →  __name__ == "__main__"  ✓
 
 # 当 my_module.py 被导入：
 # import my_module     →  __name__ == "my_module"
@@ -132,6 +132,6 @@ if __name__ == "__main__":
 
 ---
 
-> 🎯 **核心要点**：模块系统的三个关键认知 — ① `import` = 查找→编译→执行→缓存、**同一模块只执行一次** ② 循环导入的解药是"延迟导入或导入模块而非成员" ③ `sys.modules` 是所有模块的全局缓存（字典）。
+> **核心要点**：模块系统的三个关键认知 — ① `import` = 查找→编译→执行→缓存、**同一模块只执行一次** ② 循环导入的解药是"延迟导入或导入模块而非成员" ③ `sys.modules` 是所有模块的全局缓存（字典）。
 
 **下一模块**：[02-系统交互与文件处理模块](02-系统交互与文件处理模块.md) / **返回总览**：[00-总览](00-Python模块对象知识体系总览.md)

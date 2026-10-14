@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [Servlet Filter vs Spring 过滤器](#1-servlet-filter-vs-spring-过滤器)
 2. [spring-web 内建过滤器](#2-spring-web-内建过滤器)
@@ -35,7 +35,7 @@
 | 典型 | 编码、CORS、日志 | 鉴权、审计、性能 |
 | 顺序 | Order 值 | MappedInterceptor 顺序 |
 
-> 🎯 **核心要点**：**过滤器比拦截器早且广**——跨域/编码等"协议级"处理必须过滤器（静态资源也要过）；业务级鉴权/审计用拦截器或 Security 过滤器链（更后）。
+> **核心要点**：**过滤器比拦截器早且广**——跨域/编码等"协议级"处理必须过滤器（静态资源也要过）；业务级鉴权/审计用拦截器或 Security 过滤器链（更后）。
 
 ### 1.1 Filter 链的完整链路与注册方式
 
@@ -61,7 +61,7 @@
 | `@WebFilter` + `@ServletComponentScan` | Servlet 注解 | 遗留代码 |
 | 编程式 `ServletContextInitializer` | Boot 内注册 | 需要动态决定 |
 
-> 💡 Boot 4 下 `@Component` 过滤器默认 Order = 最低优先级（`Ordered.LOWEST_PRECEDENCE`）——**大多数"过滤器不生效"是排序问题**，规范姿势是 FilterRegistrationBean + 显式 Order。
+> Boot 4 下 `@Component` 过滤器默认 Order = 最低优先级（`Ordered.LOWEST_PRECEDENCE`）——**大多数"过滤器不生效"是排序问题**，规范姿势是 FilterRegistrationBean + 显式 Order。
 
 ## 2. spring-web 内建过滤器
 
@@ -75,7 +75,7 @@
 | `RequestContextFilter` | 请求绑定到线程（RequestContextHolder） | Boot 用监听器替代 |
 | `OrderedFilter` / `OrderedRequestContextFilter` | 提供顺序的基类 | 组合排序 |
 
-> 💡 **乱码排查第一站**：确认 `CharacterEncodingFilter` 存在且 charset=UTF-8（Boot 4 默认）——请求/响应乱码先查它，再看连接器/驱动配置（[Spring-JDBC-08](../Spring‑JDBC/08-集成地图与常见问题.md) 的数据乱码是另一条链）。
+> **乱码排查第一站**：确认 `CharacterEncodingFilter` 存在且 charset=UTF-8（Boot 4 默认）——请求/响应乱码先查它，再看连接器/驱动配置（[Spring-JDBC-08](../Spring‑JDBC/08-集成地图与常见问题.md) 的数据乱码是另一条链）。
 
 ### 2.1 内建过滤器机制细节
 
@@ -97,7 +97,7 @@
   → 编码/CORS 等"幂等性敏感"过滤器不会重复设置
 ```
 
-> 💡 自写过滤器建议继承 `OncePerRequestFilter`（Boot 下几乎所有 Spring 过滤器都这么做）——避免 forward 场景重复执行；有顺序需求再实现 `OrderedFilter`。
+> 自写过滤器建议继承 `OncePerRequestFilter`（Boot 下几乎所有 Spring 过滤器都这么做）——避免 forward 场景重复执行；有顺序需求再实现 `OrderedFilter`。
 
 ### 2.2 内建过滤器配置示例
 
@@ -134,7 +134,7 @@ public HiddenHttpMethodFilter hiddenHttpMethodFilter() {
 | FormContentFilter | PUT 表单体读不到 | 与 HiddenHttpMethod 搭配（Boot 自动配） |
 | RequestContextFilter | 请求上下文不绑定 | Boot 用监听器替代，无需手配 |
 
-> ⚠️ 编码过滤器**请求/响应两侧**都管：请求侧解码、响应侧编码——只配一侧会在另一个方向乱码；`forceEncoding` 会覆盖客户端声明的 charset（按需权衡）。
+> 编码过滤器**请求/响应两侧**都管：请求侧解码、响应侧编码——只配一侧会在另一个方向乱码；`forceEncoding` 会覆盖客户端声明的 charset（按需权衡）。
 
 ### 2.3 自定义过滤器完整示例
 
@@ -176,7 +176,7 @@ public class FilterConfig {
 }
 ```
 
-> 💡 自定义过滤器要点：继承 `OncePerRequestFilter`（幂等）+ 实现 `OrderedFilter`（可排序）+ FilterRegistrationBean 注册（生效）——**三件套齐了才算一个合格的 Spring 过滤器**。
+> 自定义过滤器要点：继承 `OncePerRequestFilter`（幂等）+ 实现 `OrderedFilter`（可排序）+ FilterRegistrationBean 注册（生效）——**三件套齐了才算一个合格的 Spring 过滤器**。
 
 ## 3. 过滤器排序与注册
 
@@ -209,7 +209,7 @@ public class TraceFilter extends OncePerRequestFilter implements OrderedFilter {
 | Boot 默认链 | CharacterEncoding → Cors → FormContent → RequestContext（各自动配置） |
 | 与 Security | Spring Security 的 FilterChainProxy 也在过滤器链中（Order=-100 附近） |
 
-> ⚠️ 过滤器顺序错误是"配置不生效"的常见原因：CORS 过滤器必须在业务过滤器**之前**（否则跨域请求被业务过滤器拦下）；编码过滤器必须在**一切读取请求体之前**。
+> 过滤器顺序错误是"配置不生效"的常见原因：CORS 过滤器必须在业务过滤器**之前**（否则跨域请求被业务过滤器拦下）；编码过滤器必须在**一切读取请求体之前**。
 
 ### 3.1 排序数值速查与常见错误
 
@@ -231,7 +231,7 @@ public class TraceFilter extends OncePerRequestFilter implements OrderedFilter {
 | 自定义过滤器不生效 | 没注册（Boot 需要注册） | FilterRegistrationBean 注册 |
 | 过滤器执行两次 | 非 OncePerRequestFilter 且 forward 场景 | 继承 OncePerRequestFilter |
 
-> ⚠️ **Boot 自动配置陷阱**：Boot 的自动配置过滤器（如 CharacterEncodingFilter）优先级很高——自定义过滤器想"先于"它们，Order 必须更小；直接 `new` 的过滤器不进链（必须注册）。
+> **Boot 自动配置陷阱**：Boot 的自动配置过滤器（如 CharacterEncodingFilter）优先级很高——自定义过滤器想"先于"它们，Order 必须更小；直接 `new` 的过滤器不进链（必须注册）。
 
 ### 3.2 过滤器、拦截器与安全链的协作
 
@@ -257,7 +257,7 @@ public class TraceFilter extends OncePerRequestFilter implements OrderedFilter {
 | Security vs 拦截器 | Security 在前 | 未认证请求到不了控制器 |
 | 拦截器 vs 转换器 | 拦截器在前 | 拦截器可改 body（包装请求） |
 
-> 💡 面试经典追问"过滤器里改请求体怎么做"——答 `HttpServletRequestWrapper`（缓存 body）+ 过滤器内包装传递；这正说明过滤器层的"协议级"定位：它可以在请求到达控制器前做任何包装。
+> 面试经典追问"过滤器里改请求体怎么做"——答 `HttpServletRequestWrapper`（缓存 body）+ 过滤器内包装传递；这正说明过滤器层的"协议级"定位：它可以在请求到达控制器前做任何包装。
 
 ## 4. CORS：跨域配置速查
 
@@ -298,7 +298,7 @@ source.registerCorsConfiguration("/api/**", config);
 | `maxAge` | 预检缓存秒数 | 减少预检请求 |
 | `exposedHeaders` | 暴露给前端的响应头 | 默认只暴露基础头 |
 
-> ⚠️ **跨域三问排查**：① 请求有没有过预检（OPTIONS）→ 没有则过滤器没生效；② 响应有没有 `Access-Control-Allow-Origin` → 没有则 CORS 配置未命中路径；③ 带 Cookie 时报错 → `allowCredentials` + 具体来源（非 `*`）。
+> **跨域三问排查**：① 请求有没有过预检（OPTIONS）→ 没有则过滤器没生效；② 响应有没有 `Access-Control-Allow-Origin` → 没有则 CORS 配置未命中路径；③ 带 Cookie 时报错 → `allowCredentials` + 具体来源（非 `*`）。
 
 ### 4.1 预检请求细节与 PreFlightRequestFilter（7.1）
 
@@ -325,7 +325,7 @@ source.registerCorsConfiguration("/api/**", config);
 | PreFlightRequestFilter（7.1） | 分离关注点 | 只处理 OPTIONS 预检；真实请求的 CORS 头由其他配置负责 |
 | MVC addCorsMappings | MVC 环境 | 最简，覆盖 /api/** |
 
-> 💡 **排查口诀**：前端报 CORS 错误先问"预检过没过"——DevTools 看 Network 里有没有 OPTIONS 请求、响应有没有 `Access-Control-Allow-Origin`；**预检本身 404/403 也是常见坑**（Security 拦截）。
+> **排查口诀**：前端报 CORS 错误先问"预检过没过"——DevTools 看 Network 里有没有 OPTIONS 请求、响应有没有 `Access-Control-Allow-Origin`；**预检本身 404/403 也是常见坑**（Security 拦截）。
 
 ### 4.2 CORS 配置项深入
 
@@ -350,14 +350,14 @@ config.setAllowCredentials(true);      // 模式匹配可与凭证共存 ★
 config.setExposedHeaders(List.of("X-Trace-Id", "Content-Disposition"));
 ```
 
-> ⚠️ **exposedHeaders 漏配**是最隐蔽的坑：后端明明返回了 `X-Trace-Id`，前端 JS 却读不到（浏览器只暴露白名单头）——跨域调试"头丢了"先看它。
+> **exposedHeaders 漏配**是最隐蔽的坑：后端明明返回了 `X-Trace-Id`，前端 JS 却读不到（浏览器只暴露白名单头）——跨域调试"头丢了"先看它。
 
 ## 5. CORS 与安全组件配合
 
 ```text
 CORS 在 Spring Security 下的正确姿势（常见误区）：
-  ❌ 只配 MVC 的 addCorsMappings —— Security 过滤器链会先拦下预检
-  ✅ Security 侧配置 CorsConfigurationSource + 授权规则放行 OPTIONS
+  ✗ 只配 MVC 的 addCorsMappings —— Security 过滤器链会先拦下预检
+  ✓ Security 侧配置 CorsConfigurationSource + 授权规则放行 OPTIONS
       http.cors(withDefaults())            // 启用 Security 的 CORS 处理器
       http.authorizeHttpRequests(auth ->
           auth.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()  // 预检放行
@@ -366,7 +366,7 @@ CORS 在 Spring Security 下的正确姿势（常见误区）：
   Spring Security 7.1 支持 PreFlightRequestFilter 的预检过滤（见 Security 系列）
 ```
 
-> 🎯 **核心要点**：跨域是"过滤器链问题"不是"控制器问题"——**Security 在前则 Security 必须先认识 CORS**；预检（OPTIONS）请求默认不带认证信息，必须放行；MVC 配置与 Security 配置二选一为主（Security 的 `cors()` 会读取 MVC 的 CorsConfigurationSource，可复用）。
+> **核心要点**：跨域是"过滤器链问题"不是"控制器问题"——**Security 在前则 Security 必须先认识 CORS**；预检（OPTIONS）请求默认不带认证信息，必须放行；MVC 配置与 Security 配置二选一为主（Security 的 `cors()` 会读取 MVC 的 CorsConfigurationSource，可复用）。
 
 ### 5.1 完整配置示例与面试追问
 

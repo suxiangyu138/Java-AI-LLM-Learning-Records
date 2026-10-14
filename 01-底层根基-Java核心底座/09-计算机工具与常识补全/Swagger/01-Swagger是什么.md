@@ -1,7 +1,7 @@
 # 01-Swagger是什么
 > 定位：Swagger 是 API 文档工具家族——规范已改名 OpenAPI，工具仍是事实标准；2026 年 Java 生态的集成方案是 springdoc 3.1.0，且已长出 AI 时代的 MCP 集成。
 
-## 📚 目录
+## 目录
 1. [命名史：Swagger → OpenAPI](#1-命名史swagger--openapi)
 2. [工具家族](#2-工具家族)
 3. [2026 基线](#3-2026-基线)
@@ -68,7 +68,7 @@ Swagger 家族三件套，各管一段：
 4. springdoc 3.x 的 MCP 集成解决什么问题？
 5. 五条边界里哪条最容易被忽略？
 
-> 🎯 **核心要点**：规范叫 OpenAPI（3.1）、工具叫 Swagger；springdoc 3.1.0 是 Java 生态标准（Boot 4.1/swagger-ui 5.32）；springfox 已死；3.x 的 MCP 集成让文档化 API 变成 AI 工具；契约决策看 RESTful 体系、工具落地看本体系。
+> **核心要点**：规范叫 OpenAPI（3.1）、工具叫 Swagger；springdoc 3.1.0 是 Java 生态标准（Boot 4.1/swagger-ui 5.32）；springfox 已死；3.x 的 MCP 集成让文档化 API 变成 AI 工具；契约决策看 RESTful 体系、工具落地看本体系。
 
 ---
 

@@ -1,7 +1,7 @@
 # Shell专题精要
 > 命令行文本处理——awk/grep/sed 三剑客，运维与数据处理岗的必考标签
 
-## 📚 目录
+## 目录
 1. [核心概念](#1-核心概念)
 2. [完整代码模板](#2-完整代码模板)
 3. [三剑客详解](#3-三剑客详解)
@@ -35,7 +35,7 @@ Shell 标签题 = LeetCode 上的 Shell 脚本题
 "词频统计/转置/第 N 行" → Shell 模板题
 "文件处理" 且要求命令行 → Shell
 
-⚠️ 面试定位：
+面试定位：
   运维/DevOps/大数据岗必考
   纯算法岗很少考
   4 道 LeetCode Shell 题（192-195）覆盖全部考点
@@ -52,7 +52,7 @@ Shell 标签题 = LeetCode 上的 Shell 脚本题
 例（词频统计）：
   cat → tr（分词）→ sort（排序）→ uniq（计数）→ sort（排序）
 
-⚠️ 与算法题的类比：
+与算法题的类比：
   管道 = 函数组合（f(g(h(x)))）
   每个命令 = 一个纯函数（输入流 → 输出流）
 ```
@@ -93,7 +93,7 @@ grep -E '^(\([0-9]{3}\) |[0-9]{3}-)[0-9]{3}-[0-9]{4}$' file.txt
 # [0-9]{3}-        "xxx-"
 # [0-9]{4}$        "xxxx" 结尾
 
-# ⚠️ grep -E = 扩展正则（egrep）
+# grep -E = 扩展正则（egrep）
 # 基础正则需转义 () 和 {} → 面试用 -E 更清晰
 ```
 
@@ -117,7 +117,7 @@ awk '{ for (i = 1; i <= NF; i++) {
 #      alice 21
 # 输出：name alice
 #      age 21
-# ⚠️ NR = 行号，NF = 当前行字段数，$i = 第 i 列
+# NR = 行号，NF = 当前行字段数，$i = 第 i 列
 ```
 
 ### 2.4 195. 第十行（三种解法）
@@ -132,9 +132,9 @@ awk 'NR == 10' file.txt
 
 # 方法三：head + tail
 head -n 10 file.txt | tail -n 1
-# ⚠️ 文件不足 10 行时：
+# 文件不足 10 行时：
 #   sed/awk 输出空；head|tail 也可能空（tail 无行）
-#   ⚠️ 注意：若文件 < 10 行，应输出空（不是报错）
+#   注意：若文件 < 10 行，应输出空（不是报错）
 ```
 
 ---
@@ -151,7 +151,7 @@ grep -i 'pattern' file        # 忽略大小写
 grep -c 'pattern' file        # 计数
 grep -E '正则' file           # 扩展正则
 
-# ⚠️ 常见正则：
+# 常见正则：
 #   ^abc 开头 / abc$ 结尾 / a.b 任意字符
 #   [0-9] 数字类 / (a|b) 或
 ```
@@ -163,9 +163,9 @@ sed -n '10p' file             # 打印第 10 行
 sed -n '5,10p' file           # 打印 5-10 行
 sed 's/old/new/g' file        # 全局替换
 sed '/pattern/d' file         # 删除匹配行
-sed -i 's/old/new/' file      # ⚠️ -i 原地修改（小心！）
+sed -i 's/old/new/' file      # -i 原地修改（小心！）
 
-# ⚠️ 面试高频：sed -n 'Np' 取第 N 行
+# 面试高频：sed -n 'Np' 取第 N 行
 #   s/old/new/g：g 全局（不写只替换每行第一个）
 ```
 
@@ -181,7 +181,7 @@ awk '{sum += $1} END {print sum}'   # 求和（END 最后执行）
 # 内置变量：
 #   $0 整行 / $1..$N 各列 / NR 行号 / NF 列数 / FS 分隔符
 
-# ⚠️ 面试核心：$N 取列 + NR/NF 控制行与列
+# 面试核心：$N 取列 + NR/NF 控制行与列
 ```
 
 ---
@@ -197,7 +197,7 @@ awk '{sum += $1} END {print sum}'   # 求和（END 最后执行）
   uniq -c = 计数（哈希）
   awk = 映射/归约
 
-⚠️ 面试表达：
+面试表达：
 "管道把任务分解：分词 → 排序 → 计数 →
  排序 → 格式化。每个命令一个职责，
  组合解决复杂问题——类似函数的组合。"
@@ -219,7 +219,7 @@ awk '{sum += $1} END {print sum}'   # 求和（END 最后执行）
 | `\s` | 空白 | `\s+` |
 
 ```
-⚠️ grep 正则注意：
+grep 正则注意：
   基础正则：+ ? | 需要转义
   grep -E：直接使用（推荐）
 ```
@@ -239,7 +239,7 @@ sed -n 'Np' | sed 's/x/y/g'
 # 去重
 sort -u file
 
-# ⚠️ 面试准备：掌握 sort/uniq/tr/awk/sed/grep 六个命令
+# 面试准备：掌握 sort/uniq/tr/awk/sed/grep 六个命令
 #   足够覆盖 LeetCode Shell 全部题目
 ```
 
@@ -249,10 +249,10 @@ sort -u file
 
 | 题号 | 题目 | 核心知识点 | 难度 |
 |:---:|------|------|:---:|
-| 192 | 统计词频 | tr/sort/uniq/awk 管道 | 🟡 |
-| 193 | 有效电话号码 | grep 正则 | 🟢 |
-| 194 | 转置文件 | awk 二维数组 | 🟡 |
-| 195 | 第十行 | sed -n '10p' | 🟢 |
+| 192 | 统计词频 | tr/sort/uniq/awk 管道 | |
+| 193 | 有效电话号码 | grep 正则 | |
+| 194 | 转置文件 | awk 二维数组 | |
+| 195 | 第十行 | sed -n '10p' | |
 
 ---
 
@@ -291,7 +291,7 @@ sort -u file
 | tr 忘 -s | 多空格干扰 | tr -s |
 | sort 忘 -n | 字典序而非数值 | sort -n |
 
-> 🎯 **核心要点**：Shell = **管道组合 + 三剑客（grep/sed/awk）**。识别信号："Shell 脚本、词频统计、转置文件"。四道 LeetCode Shell 题（192-195）覆盖全部考点；awk 的 NR/NF/$N 与"先 sort 再 uniq"是两个核心细节。
+> **核心要点**：Shell = **管道组合 + 三剑客（grep/sed/awk）**。识别信号："Shell 脚本、词频统计、转置文件"。四道 LeetCode Shell 题（192-195）覆盖全部考点；awk 的 NR/NF/$N 与"先 sort 再 uniq"是两个核心细节。
 
 ---
 

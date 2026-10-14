@@ -2,7 +2,7 @@
 
 > 定位：微服务组件接入、事件驱动、Boot 4 新特性、Spring Boot 面试题精选——收官篇
 
-## 📚 目录
+## 目录
 
 1. [微服务组件接入](#1-微服务组件接入)
 2. [事件驱动与异步](#2-事件驱动与异步)
@@ -24,7 +24,7 @@ spring:
         server-addr: nacos:8848
         namespace: prod
   application:
-    name: order-service          # ⚠️ 注册名（服务间调用用）
+    name: order-service          # 注册名（服务间调用用）
 
 # 服务发现与调用（OpenFeign 或 Boot 4 @HttpServiceClient）
 # @EnableDiscoveryClient  // 注册
@@ -43,7 +43,7 @@ spring:
 | 链路追踪 | 可观测 | OTel + Jaeger |
 | 消息 | 异步解耦 | RabbitMQ/Kafka |
 
-> 🎯 **要点**：Spring Cloud 微服务 = Boot 应用 + 注册发现 + 配置中心 + 网关 + 熔断。**Nacos 一站式**（注册 + 配置）是 2026 国产主流方案。
+> **要点**：Spring Cloud 微服务 = Boot 应用 + 注册发现 + 配置中心 + 网关 + 熔断。**Nacos 一站式**（注册 + 配置）是 2026 国产主流方案。
 
 ---
 
@@ -59,7 +59,7 @@ public class OrderService {
 
     public void createOrder(OrderDTO dto) {
         orderRepo.save(order);
-        // ⚠️ 发布事件（解耦：下单后通知）
+        // 发布事件（解耦：下单后通知）
         publisher.publishEvent(new OrderCreatedEvent(order));
     }
 }
@@ -72,7 +72,7 @@ public class OrderEventListener {
         // 发短信/记录日志/异步处理（与下单逻辑解耦）
     }
 
-    // ⚠️ 异步监听（事务提交后 + 独立线程）
+    // 异步监听（事务提交后 + 独立线程）
     @Async
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void asyncHandle(OrderCreatedEvent event) { }
@@ -102,7 +102,7 @@ public class OrderConsumer {
 }
 ```
 
-> 🎯 **要点**：事件驱动两层——应用内事件（@EventListener 解耦模块）、消息队列（@RabbitListener 跨服务异步）。**事务后事件**（@TransactionalEventListener）保证数据一致性。
+> **要点**：事件驱动两层——应用内事件（@EventListener 解耦模块）、消息队列（@RabbitListener 跨服务异步）。**事务后事件**（@TransactionalEventListener）保证数据一致性。
 
 ---
 
@@ -121,7 +121,7 @@ public class OrderConsumer {
 | SSRF 防护 | InetAddressFilter | 4.1 出站请求过滤 |
 
 ```
-⚠️ 面试必答：
+面试必答：
 "Boot 4 核心四变化——模块化（快）、
  Jakarta EE 11、虚拟线程、官方声明式
  HTTP 客户端；升级用 Migrator 工具。"
@@ -222,7 +222,7 @@ K8s 配合 readiness 探针实现零中断。
 
 ---
 
-> 🎯 **核心要点**：微服务进阶 = **组件接入**（Nacos 注册配置 + 网关 + 熔断）+ **事件驱动**（@EventListener 解耦 + MQ 异步）+ **Boot 4 新特性**（模块化/虚拟线程/@HttpServiceClient）+ **面试十二问**（自动配置/事务失效/幂等/优雅关闭是最高频）。Spring Boot 面试主线：原理（自动配置）→ 实践（事务/安全）→ 生产（优雅关闭/监控）→ 新特性（Boot 4）。
+> **核心要点**：微服务进阶 = **组件接入**（Nacos 注册配置 + 网关 + 熔断）+ **事件驱动**（@EventListener 解耦 + MQ 异步）+ **Boot 4 新特性**（模块化/虚拟线程/@HttpServiceClient）+ **面试十二问**（自动配置/事务失效/幂等/优雅关闭是最高频）。Spring Boot 面试主线：原理（自动配置）→ 实践（事务/安全）→ 生产（优雅关闭/监控）→ 新特性（Boot 4）。
 
 ---
 

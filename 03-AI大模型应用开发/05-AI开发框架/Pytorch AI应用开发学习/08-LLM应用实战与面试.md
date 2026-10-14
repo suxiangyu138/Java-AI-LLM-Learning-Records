@@ -2,7 +2,7 @@
 
 > 收官篇：PyTorch 在 LLM 时代的实战位置（transformers 加载/微调/显存）、AI 工程师面试速记、与仓库其他体系的闭环——从框架到应用的最后一公里。
 
-## 📚 目录
+## 目录
 
 1. [PyTorch 在 LLM 时代的定位](#1-pytorch-在-llm-时代的定位)
 2. [transformers 加载与推理](#2-transformers-加载与推理)
@@ -279,7 +279,7 @@ PyTorch 实操（本体系）
 = AI 应用开发全栈能力
 ```
 
-> 🎯 收官总结：PyTorch 是 AI 工程的底座——LLM 生态（transformers/PEFT/vLLM）全部建立其上；本体系覆盖"张量→训练→部署"全链路，与深度学习理论体系（是什么）、推理部署体系（怎么快）、框架体系（怎么编排）互补；安全铁律（weights_only/safetensors）贯穿始终；学完做一遍 MNIST 全流程 + LoRA 微调即毕业。
+> 收官总结：PyTorch 是 AI 工程的底座——LLM 生态（transformers/PEFT/vLLM）全部建立其上；本体系覆盖"张量→训练→部署"全链路，与深度学习理论体系（是什么）、推理部署体系（怎么快）、框架体系（怎么编排）互补；安全铁律（weights_only/safetensors）贯穿始终；学完做一遍 MNIST 全流程 + LoRA 微调即毕业。
 
 ---
 

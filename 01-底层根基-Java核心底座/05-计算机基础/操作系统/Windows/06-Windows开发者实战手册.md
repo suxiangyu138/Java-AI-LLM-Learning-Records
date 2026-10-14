@@ -1,10 +1,10 @@
 # Windows 开发者实战手册
 
-> 🛠️ 端口被占？环境变量不生效？IDEA 启动卡成 PPT？编码乱码？Git 换行符冲突？—— Java 开发者在 Windows 上的十大高频问题，一次性全部解决
+> 端口被占？环境变量不生效？IDEA 启动卡成 PPT？编码乱码？Git 换行符冲突？—— Java 开发者在 Windows 上的十大高频问题，一次性全部解决
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [端口相关排错](#1-端口相关排错)
 2. [环境变量疑难杂症](#2-环境变量疑难杂症)
@@ -192,7 +192,7 @@ chcp                                 # 查看当前代码页
 # === 永久将控制台设为 UTF-8（Win10 1903+）===
 # 设置 → 时间和语言 → 语言和区域 → 管理语言设置
 # → 更改系统区域设置 → Beta：使用 Unicode UTF-8 提供全球语言支持
-# ⚠️ 会影响部分老软件（不推荐轻易开启）
+# 会影响部分老软件（不推荐轻易开启）
 
 # === Java 应用强制 UTF-8（推荐方案）===
 # 启动时加 JVM 参数
@@ -211,7 +211,7 @@ IntelliJ IDEA 全链路 UTF-8 设置：
    - Global Encoding: UTF-8
    - Project Encoding: UTF-8
    - Default encoding for properties files: UTF-8
-   ✅ Transparent native-to-ascii conversion
+   ✓ Transparent native-to-ascii conversion
 
 2. Help → Edit Custom VM Options
    追加：-Dfile.encoding=UTF-8

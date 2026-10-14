@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [RAG 架构全景](#1-rag-架构全景)
 2. [文档摄入 Pipeline](#2-文档摄入-pipeline)
@@ -24,7 +24,7 @@
 ┌─────────────────────────────────────────────────────────────┐
 │                     Java RAG 数据流                           │
 │                                                              │
-│  📥 文档摄入（离线）                                           │
+│  文档摄入（离线）                                           │
 │  ┌──────┐   ┌────────┐   ┌────────┐   ┌───────────────┐    │
 │  │ 原始  │→│ 文档    │→│ 文本    │→│ Embedding      │    │
 │  │ 文档  │  │ 解析    │  │ 切片    │  │ 向量化         │    │
@@ -37,7 +37,7 @@
 │                                    │ 向量存储  │ │ 关键词  │  │
 │                                    └────┬─────┘ └───┬────┘  │
 │                                         │           │       │
-│  🔍 在线检索                                              │   │
+│  在线检索                                              │   │
 │  ┌──────┐   ┌────────┐   ┌────────────┐    │           │   │
 │  │ 用户  │→│ Query  │→│ 混合检索    │←───┘           │   │
 │  │ 问题  │  │ 向量化  │  │ 向量+关键词  │←───────────────┘   │
@@ -83,7 +83,7 @@
 |------|------|------|------|------|
 | **固定大小** | 按 token 数切分 | 实现简单、速度快 | 破坏语义完整性 | 简单文档 |
 | **语义切片** | 按段落/标题切分 | 语义完整 | 实现复杂 | 结构化文档 |
-| **递归切片** | 先按大分隔符，再细分 | 平衡效率与语义 | 参数调优 | 通用场景 ✅ |
+| **递归切片** | 先按大分隔符，再细分 | 平衡效率与语义 | 参数调优 | 通用场景 ✓ |
 | **滑动窗口** | overlap 保证边界不丢失 | 关键信息不遗漏 | 存储冗余 | 关键信息密集型 |
 
 ```java
@@ -270,12 +270,12 @@ public class VectorSearchService {
 
 | 模型 | 维度 | 提供方 | 中文支持 | 推荐 |
 |------|:---:|------|:---:|:---:|
-| **bge-m3** | 1024 | BAAI（智源） | ✅ 优秀 | ⭐ 中文首选 |
-| **bge-large-zh** | 1024 | BAAI（智源） | ✅ 优秀 | 中文专项 |
-| **text-embedding-3-small** | 1536 | OpenAI | ⚠️ 可用 | 国际场景 |
-| **text-embedding-3-large** | 3072 | OpenAI | ⚠️ 可用 | 高精度需求 |
-| **nomic-embed-text** | 768 | Nomic AI | ⚠️ 可用 | 轻量级 |
-| **mxbai-embed-large** | 1024 | mixedbread | ⚠️ 可用 | 多语言 |
+| **bge-m3** | 1024 | BAAI（智源） | ✓ 优秀 | ★ 中文首选 |
+| **bge-large-zh** | 1024 | BAAI（智源） | ✓ 优秀 | 中文专项 |
+| **text-embedding-3-small** | 1536 | OpenAI | 可用 | 国际场景 |
+| **text-embedding-3-large** | 3072 | OpenAI | 可用 | 高精度需求 |
+| **nomic-embed-text** | 768 | Nomic AI | 可用 | 轻量级 |
+| **mxbai-embed-large** | 1024 | mixedbread | 可用 | 多语言 |
 
 ---
 
@@ -285,12 +285,12 @@ public class VectorSearchService {
 
 ```text
 向量检索擅长：语义匹配
-  "如何提升系统性能" ≈ "优化响应速度的方法" ✅
-  但："JVM调优" ≠ "JVM参数设置" ❌（语义相似但关键词不同）
+  "如何提升系统性能" ≈ "优化响应速度的方法" ✓
+  但："JVM调优" ≠ "JVM参数设置" ✗（语义相似但关键词不同）
 
 关键词检索擅长：精确匹配
-  "NullPointerException line 42" ✅
-  但："空指针咋处理" ≠ "NullPointerException" ❌（同义不同词）
+  "NullPointerException line 42" ✓
+  但："空指针咋处理" ≠ "NullPointerException" ✗（同义不同词）
 
 混合检索 = 向量 + 关键词 → RRF 融合 → 取长补短
 ```
@@ -447,15 +447,15 @@ public class HybridSearchService {
   PGVector（向量检索）──┐
                         ├── RRF 融合 → 结果
   Elasticsearch（关键词）──┘
-  ❌ 需要维护两套基础设施
-  ❌ 数据同步有延迟
+  ✗ 需要维护两套基础设施
+  ✗ 数据同步有延迟
 
 2026 新方案：纯 PGVector（一个系统）
   PGVector dense vector（向量检索）──┐
                                      ├── 原生 RRF → 结果
   PGVector sparse vector（关键词）────┘
-  ✅ 零同步延迟（ACID 事务覆盖）
-  ✅ 一套 SQL 完成混合检索
+  ✓ 零同步延迟（ACID 事务覆盖）
+  ✓ 一套 SQL 完成混合检索
 ```
 
 ### 5.2 sparsevec 表结构
@@ -645,7 +645,7 @@ interface AccurateRagAgent {
 
 ---
 
-> 🎯 **核心要点**：Java RAG 在 2026 年已完全不需要 Python。完整链路由 Spring AI 驱动，PGVector + Elasticsearch 混合检索为核心，RRF 算法融合排序。PGVector sparsevec 的出现标志着"纯 PostgreSQL RAG"时代的到来——一套数据库解决所有检索需求。
+> **核心要点**：Java RAG 在 2026 年已完全不需要 Python。完整链路由 Spring AI 驱动，PGVector + Elasticsearch 混合检索为核心，RRF 算法融合排序。PGVector sparsevec 的出现标志着"纯 PostgreSQL RAG"时代的到来——一套数据库解决所有检索需求。
 
 ---
 

@@ -1,7 +1,7 @@
 # 07-Spring Cloud 源码导读
 > 微服务四组件源码入口：Nacos 注册/订阅、OpenFeign 动态代理、Gateway 路由定位、Stream Binder 绑定——每个只读"入口到结论"一条链
 
-## 📚 目录
+## 目录
 1. [阅读策略：四组件各读一条链](#1-阅读策略四组件各读一条链)
 2. [Nacos 客户端源码](#2-nacos-客户端源码)
 3. [OpenFeign 源码](#3-openfeign-源码)
@@ -20,7 +20,7 @@
 | Gateway | "请求进入 → 路由命中 → 过滤器链 → 转发" | 定位与过滤链 |
 | Stream | "定义函数 → 绑定创建 → 消费消息" | 绑定生命周期 |
 
-> 💡 Spring Cloud 源码体量巨大，**全读不现实**。策略 = 每组件一条完整主链 + 入口类速查表（第 6 节），遇到问题再按表打点。
+> Spring Cloud 源码体量巨大，**全读不现实**。策略 = 每组件一条完整主链 + 入口类速查表（第 6 节），遇到问题再按表打点。
 
 ## 2. Nacos 客户端源码
 
@@ -51,7 +51,7 @@
  → 订阅机制：subscribe 注册监听 → 服务变更 → 回调更新本地缓存
 ```
 
-> 🎯 **核心要点**：Nacos 客户端 = **注册（注册+心跳） + 发现（查询+订阅）**两条链。临时实例"不在即删"由心跳维护——这是 AP 语义的客户端证据。
+> **核心要点**：Nacos 客户端 = **注册（注册+心跳） + 发现（查询+订阅）**两条链。临时实例"不在即删"由心跳维护——这是 AP 语义的客户端证据。
 
 ## 3. OpenFeign 源码
 
@@ -119,7 +119,7 @@ GatewayFilterChain = 组合模式（DefaultGatewayFilterChain）
  → 顺序：路由级 → 全局级（Order 决定）
 ```
 
-> 💡 自写过滤器看两个接口：`GlobalFilter`（全局，`filter(exchange, chain)`）+ `Ordered`（排序）；`GatewayFilterFactory`（配置化生成）。
+> 自写过滤器看两个接口：`GlobalFilter`（全局，`filter(exchange, chain)`）+ `Ordered`（排序）；`GatewayFilterFactory`（配置化生成）。
 
 ## 5. Spring Cloud Stream 源码
 
@@ -152,7 +152,7 @@ Kafka 消息 → ConcurrentMessageListenerContainer
  → 函数消费（Consumer<...>）→ 处理结果 → output 通道 → 生产
 ```
 
-> 🎯 **核心要点**：Stream 源码 = **绑定层（Binder SPI）+ 编程层（函数式模型）**两层的拼接。业务只面对函数，Binder 负责把 MessageChannel 翻译成中间件资源（详见仓库「Spring Cloud Stream」体系）。
+> **核心要点**：Stream 源码 = **绑定层（Binder SPI）+ 编程层（函数式模型）**两层的拼接。业务只面对函数，Binder 负责把 MessageChannel 翻译成中间件资源（详见仓库「Spring Cloud Stream」体系）。
 
 ## 6. 四个"入口类"速查表
 
@@ -165,7 +165,7 @@ Kafka 消息 → ConcurrentMessageListenerContainer
 
 ## 7. 核心要点
 
-> 🎯 **核心要点**：
+> **核心要点**：
 > - 每组件只读一条主链：注册/订阅（Nacos）、代理/调用（Feign）、定位/过滤（Gateway）、绑定/消费（Stream）；
 > - 四组件都复用同一套路：自动配置发现 → Registrar/FactoryBean 注册 → 代理或处理器 → 执行链；
 > - 断点入口记"入口类 + 关键方法"两个词即可，不要背代码；

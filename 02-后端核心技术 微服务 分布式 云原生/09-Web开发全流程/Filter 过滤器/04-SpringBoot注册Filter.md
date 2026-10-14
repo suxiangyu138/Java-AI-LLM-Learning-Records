@@ -1,7 +1,7 @@
 # 04-Spring Boot 注册 Filter
 > 三种注册方式、顺序控制、OncePerRequestFilter——"Boot 时代的 Filter 正确姿势"
 
-## 📚 目录
+## 目录
 1. [三种注册方式对比](#1-三种注册方式对比)
 2. [方式一：@WebFilter + @ServletComponentScan](#2-方式一webfilter--servletcomponentscan)
 3. [方式二：FilterRegistrationBean（推荐）](#3-方式二filterregistrationbean推荐)
@@ -15,11 +15,11 @@
 
 | 方式 | 写法 | 顺序控制 | 推荐度 |
 |------|------|:---:|:---:|
-| @WebFilter + 扫描 | 注解 | ❌ 不可控 | ⚠️ |
-| **FilterRegistrationBean** | Java 配置 | ✅ setOrder | ✅ 推荐 |
-| @Component + @Order | 注解 + 排序 | ✅（有限） | ⚠️ |
+| @WebFilter + 扫描 | 注解 | ✗ 不可控 | |
+| **FilterRegistrationBean** | Java 配置 | ✓ setOrder | ✓ 推荐 |
+| @Component + @Order | 注解 + 排序 | ✓（有限） | |
 
-> 🎯 **Boot 时代推荐 FilterRegistrationBean**：顺序可控 + 可配置 URL + 可注入依赖——**@WebFilter 在 Boot 中顺序不可控是最大问题**。
+> **Boot 时代推荐 FilterRegistrationBean**：顺序可控 + 可配置 URL + 可注入依赖——**@WebFilter 在 Boot 中顺序不可控是最大问题**。
 
 ## 2. 方式一：@WebFilter + @ServletComponentScan
 
@@ -46,7 +46,7 @@ public class Application {
 | 原生 | 无法配置精确 URL 细节 |
 | | 无法注入 Spring Bean（非 Spring 管理的 Filter） |
 
-> ⚠️ **@WebFilter 的坑**：① 顺序不可控（多 Filter 时无法保证执行次序）；② Filter 实例不是 Spring Bean（无法 @Autowired）——**业务需要注入依赖时别用这个方式**。
+> **@WebFilter 的坑**：① 顺序不可控（多 Filter 时无法保证执行次序）；② Filter 实例不是 Spring Bean（无法 @Autowired）——**业务需要注入依赖时别用这个方式**。
 
 ## 3. 方式二：FilterRegistrationBean（推荐）
 
@@ -78,7 +78,7 @@ public class FilterConfig {
 @Component
 public class LoginFilter implements Filter {
     @Autowired
-    private UserService userService;           // ✅ 可注入
+    private UserService userService;           // ✓ 可注入
 
     @Override
     public void doFilter(...) { ... }
@@ -92,7 +92,7 @@ public class LoginFilter implements Filter {
 | Spring Bean | Filter 可 @Autowired（推荐 Filter 也注册为 Bean） |
 | 启动时注册 | 容器初始化时装配 |
 
-> 🎯 **推荐组合**：**Filter 本身 @Component（可注入）+ FilterRegistrationBean 注册（控顺序）**——既能依赖注入又能精确控制顺序与范围。
+> **推荐组合**：**Filter 本身 @Component（可注入）+ FilterRegistrationBean 注册（控顺序）**——既能依赖注入又能精确控制顺序与范围。
 
 ## 4. 方式三：@Component + @Order
 
@@ -109,7 +109,7 @@ public class LogFilter implements Filter {
 | 最简单（一个注解） | 顺序基于 Order，但与其他 Filter 注册方式混合时规则复杂 |
 | 自动注册 | 只能 /* 全部拦截（无法配置 URL） |
 
-> ⚠️ **@Component Filter 的注意**：默认拦截所有请求（无法配 URL 白名单）；与 FilterRegistrationBean 混用时的顺序规则容易混乱——**统一用一种方式更清晰**。
+> **@Component Filter 的注意**：默认拦截所有请求（无法配 URL 白名单）；与 FilterRegistrationBean 混用时的顺序规则容易混乱——**统一用一种方式更清晰**。
 
 ## 5. 顺序控制
 
@@ -139,7 +139,7 @@ public FilterRegistrationBean<CharacterEncodingFilter> encodingFilter() {
 }
 ```
 
-> 💡 **顺序设计**：编码最先（否则乱码）、CORS 次之、鉴权/安全居中、耗时统计最外层——**"先能让请求通，再管业务"**。
+> **顺序设计**：编码最先（否则乱码）、CORS 次之、鉴权/安全居中、耗时统计最外层——**"先能让请求通，再管业务"**。
 
 ## 6. OncePerRequestFilter
 
@@ -168,11 +168,11 @@ public class LoginFilter extends OncePerRequestFilter {     // 继承它
 | 依赖注入 | 需要注册方式配合 | 天然 Spring Bean |
 | 推荐 | 简单场景 | **Spring 场景推荐** |
 
-> 🎯 **OncePerRequestFilter 是 Spring 场景的标准基类**：解决"转发/包含时重复执行"问题 + 天然支持依赖注入——**Boot 项目中自定义 Filter 优先继承它**（Spring Security 的过滤器就是这么做的）。
+> **OncePerRequestFilter 是 Spring 场景的标准基类**：解决"转发/包含时重复执行"问题 + 天然支持依赖注入——**Boot 项目中自定义 Filter 优先继承它**（Spring Security 的过滤器就是这么做的）。
 
 ## 7. 核心要点
 
-> 🎯 **核心要点**：
+> **核心要点**：
 > - 三方式：@WebFilter（顺序不可控，弃用倾向）、**FilterRegistrationBean（推荐，顺序可控）**、@Component+@Order（简单但范围受限）；
 > - 推荐组合：Filter @Component（可注入）+ FilterRegistrationBean（控顺序）；
 > - 顺序规则：Order 越小越先；编码最先、CORS 次之、鉴权居中、统计最外；

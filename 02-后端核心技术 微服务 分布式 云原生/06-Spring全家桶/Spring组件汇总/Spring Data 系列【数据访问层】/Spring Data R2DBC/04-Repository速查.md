@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [Repository 接口层次](#1-repository-接口层次)
 2. [派生方法关键词全表](#2-派生方法关键词全表)
@@ -36,7 +36,7 @@ Repository<T, ID>
 | `deleteById` / `delete(entity)` | `Mono<Void>` | 删除 |
 | `findAll()` | `Flux<T>` | 全量（大表慎用） |
 
-> ⚠️ **响应式类型是硬约束**：Repository 方法必须返回 `Mono`/`Flux`（或 `Mono<Page>` 等响应式包装）——**返回 `T`/`List<T>` 会直接报错**；这与 JPA 最大的 API 差异，老 JPA 代码迁移不是改签名这么简单（[09 篇](09-集成地图与常见问题.md) 迁移对照）。
+> **响应式类型是硬约束**：Repository 方法必须返回 `Mono`/`Flux`（或 `Mono<Page>` 等响应式包装）——**返回 `T`/`List<T>` 会直接报错**；这与 JPA 最大的 API 差异，老 JPA 代码迁移不是改签名这么简单（[09 篇](09-集成地图与常见问题.md) 迁移对照）。
 
 ### 1.1 与 JPA Repository 的差异
 
@@ -48,7 +48,7 @@ Repository<T, ID>
 | 懒加载 | 有 | **无** |
 | 派生查询生成 | JPQL | SQL（同名字段/操作符） |
 
-> 🎯 面试必答：**"R2DBC 的 save 和 JPA 的 save 区别？"**——JPA 分离对象会先 SELECT 再 MERGE；R2DBC 的 save **无状态**：有 id 直接 UPDATE（`WHERE id=?`），无 id 直接 INSERT——没有先查后写、没有持久化上下文跟踪；**代价是"改属性不调 save 就丢"**（无脏检查），收益是"无状态、直写、可预测"。
+> 面试必答：**"R2DBC 的 save 和 JPA 的 save 区别？"**——JPA 分离对象会先 SELECT 再 MERGE；R2DBC 的 save **无状态**：有 id 直接 UPDATE（`WHERE id=?`），无 id 直接 INSERT——没有先查后写、没有持久化上下文跟踪；**代价是"改属性不调 save 就丢"**（无脏检查），收益是"无状态、直写、可预测"。
 
 ## 2. 派生方法关键词全表
 
@@ -90,7 +90,7 @@ public interface ProductRepository extends R2dbcRepository<Product, Long> {
 }
 ```
 
-> 💡 派生方法适用边界（同 JPA）：单表、属性路径清晰的查询；**多表 join/复杂 SQL 必须 @Query 或 DatabaseClient**（聚合根模型下 join 是常态，别硬写派生方法）。
+> 派生方法适用边界（同 JPA）：单表、属性路径清晰的查询；**多表 join/复杂 SQL 必须 @Query 或 DatabaseClient**（聚合根模型下 join 是常态，别硬写派生方法）。
 
 ## 3. @Query SQL 直写
 
@@ -126,7 +126,7 @@ public interface OrderRepository extends R2dbcRepository<OrderEntity, Long> {
 | 表名 | 带引号标识符：`order` 是保留字，用反引号 `` `order` ``（MySQL） |
 | 分页 | 方法入参 `Pageable` → 自动拼 LIMIT/OFFSET（见 5 节） |
 
-> ⚠️ **SQL 直写是 R2DBC 的第一公民**：没有 JPQL 层、没有方言生成器——SQL 完全由你掌控（好：可预测、可 EXPLAIN；坏：**方言差异自己管**，跨库移植要改 SQL）。
+> **SQL 直写是 R2DBC 的第一公民**：没有 JPQL 层、没有方言生成器——SQL 完全由你掌控（好：可预测、可 EXPLAIN；坏：**方言差异自己管**，跨库移植要改 SQL）。
 
 ### 3.2 复杂查询：join 与聚合
 
@@ -151,7 +151,7 @@ public record OrderWithUser(Long id, String orderNo, String username) {}
 public record CategoryStat(String category, Long cnt, BigDecimal total) {}
 ```
 
-> 💡 **DTO 投影的映射规则**：SQL 列名 → record/接口 getter（`order_no` ↔ `orderNo` 由映射器按驼峰匹配，4.x 对 record 投影支持完善）；列名与属性不一致时用 SQL 别名对齐（`select ... as ...`）。
+> **DTO 投影的映射规则**：SQL 列名 → record/接口 getter（`order_no` ↔ `orderNo` 由映射器按驼峰匹配，4.x 对 record 投影支持完善）；列名与属性不一致时用 SQL 别名对齐（`select ... as ...`）。
 
 ## 4. @Modifying 写操作
 
@@ -181,7 +181,7 @@ public interface ProductRepository extends R2dbcRepository<Product, Long> {
 | 原子性 | 单条 UPDATE 天然原子（`stock = stock - ?` 防超卖，与 JPA/MyBatis 同思路） |
 | 事务 | 单条无需；多条组合加 `@Transactional`（[06 篇](06-响应式事务与并发控制速查.md)） |
 
-> ⚠️ **无生命周期回调**：@Modifying 批量更新不触发审计注解（@LastModifiedDate 不自动改）——批量场景手动维护时间列（与 JPA 相同边界）；**@Version 也不参与**（需手动 where version 条件）。
+> **无生命周期回调**：@Modifying 批量更新不触发审计注解（@LastModifiedDate 不自动改）——批量场景手动维护时间列（与 JPA 相同边界）；**@Version 也不参与**（需手动 where version 条件）。
 
 ## 5. 分页与排序
 
@@ -201,10 +201,10 @@ Mono<Page<Product>> findByCategoryPaged(@Param("category") String category, Page
 
 | 返回类型 | count 查询 | 适用 |
 |---------|:---:|------|
-| `Mono<Page<T>>` | ✅（额外 count） | 页码导航 |
-| `Flux<T>` + Pageable | ❌（只 LIMIT/OFFSET） | 加载更多（无 total） |
+| `Mono<Page<T>>` | ✓（额外 count） | 页码导航 |
+| `Flux<T>` + Pageable | ✗（只 LIMIT/OFFSET） | 加载更多（无 total） |
 
-> ⚠️ **响应式分页细节**：① 返回 `Mono<Page<T>>` 才会自动 count（两趟查询）；② **深分页同 SQL 问题**——大 offset 慢，游标分页（`WHERE id > :lastId ORDER BY id LIMIT :size`）是正解（与 [JPA 系列 keyset](../../Spring%20Data%20系列【数据访问层】/Spring%20Data%20JPA/04-Repository速查.md) 完全一致）；③ `Sort` 字段名要对应真实列名（4.x 类型安全可用 `Sort.by(Product::getCreatedAt)`）。
+> **响应式分页细节**：① 返回 `Mono<Page<T>>` 才会自动 count（两趟查询）；② **深分页同 SQL 问题**——大 offset 慢，游标分页（`WHERE id > :lastId ORDER BY id LIMIT :size`）是正解（与 [JPA 系列 keyset](../../Spring%20Data%20系列【数据访问层】/Spring%20Data%20JPA/04-Repository速查.md) 完全一致）；③ `Sort` 字段名要对应真实列名（4.x 类型安全可用 `Sort.by(Product::getCreatedAt)`）。
 
 ## 6. QueryByExample 样例查询
 
@@ -228,7 +228,7 @@ Flux<Product> result = productRepository.findAll(Example.of(probe, matcher));
 | 支持 | 非 null 字段精确匹配、字符串匹配器、忽略字段、大小写 |
 | 不支持 | 区间、in、排序组合、关联条件——**动态多条件查询用 [05 篇](05-查询构造与DatabaseClient速查.md) Criteria** |
 
-> 🎯 QBE 定位（同 JPA）：管理后台"全字段模糊筛选"原型；业务级动态查询主力是 Criteria/DatabaseClient。
+> QBE 定位（同 JPA）：管理后台"全字段模糊筛选"原型；业务级动态查询主力是 Criteria/DatabaseClient。
 
 ## 7. 4.x 行为变化
 
@@ -242,7 +242,7 @@ Flux<Product> result = productRepository.findAll(Example.of(probe, matcher));
 | AOT Repository | — | 支持 | GraalVM Native 可用 |
 | 空值注解 | JetBrains | JSpecify | 静态检查适配 |
 
-> 💡 升级建议：先跑全量测试（重点：表列大小写、@Query 引号行为、投影映射），再启用新能力（类型安全路径、upsert）——[09 篇](09-集成地图与常见问题.md) 有完整迁移清单。
+> 升级建议：先跑全量测试（重点：表列大小写、@Query 引号行为、投影映射），再启用新能力（类型安全路径、upsert）——[09 篇](09-集成地图与常见问题.md) 有完整迁移清单。
 
 ---
 

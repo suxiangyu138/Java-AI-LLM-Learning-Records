@@ -2,7 +2,7 @@
 
 > Jakarta Validation（原 Bean Validation）把"入参合法性"从 if-else 地狱变成声明式注解。它真正难的不是注解本身，而是三组容易混淆的概念：@NotNull/@NotEmpty/@NotBlank 的语义边界、@Valid 的级联传播、分组校验的作用域。校验失效时，问题十有八九出在这三处
 
-## 📚 目录
+## 目录
 
 1. [体系与版本基线](#1-体系与版本基线)
 2. [内置约束：三兄弟与数值族](#2-内置约束三兄弟与数值族)
@@ -26,9 +26,9 @@
 
 | 注解 | null | 空串 "" | 纯空白 "   " | 适用类型 |
 |------|:---:|:---:|:---:|------|
-| @NotNull | ❌ 拒绝 | ✅ 放行 | ✅ 放行 | 任意对象（包括 String/集合） |
-| @NotEmpty | ❌ 拒绝 | ❌ 拒绝 | ✅ 放行 | CharSequence/Collection/Map/数组 |
-| @NotBlank | ❌ 拒绝 | ❌ 拒绝 | ❌ 拒绝 | 仅 CharSequence |
+| @NotNull | ✗ 拒绝 | ✓ 放行 | ✓ 放行 | 任意对象（包括 String/集合） |
+| @NotEmpty | ✗ 拒绝 | ✗ 拒绝 | ✓ 放行 | CharSequence/Collection/Map/数组 |
+| @NotBlank | ✗ 拒绝 | ✗ 拒绝 | ✗ 拒绝 | 仅 CharSequence |
 
 两个使用禁忌：@NotEmpty/@NotBlank 不能标在 int 等非适用类型上（抛 `UnexpectedTypeException`，因为没有对应 ConstraintValidator 实现）；@NotBlank 本质是 `@NotNull` 的语义超集，标了 @NotBlank 就不需要再标 @NotNull。
 
@@ -55,7 +55,7 @@ public class Order {
 
 容器元素注解的位置语义是高频考点：`List<@NotNull Item>` 约束的是**元素不能为 null**，`List<@Valid Item>` 是元素内部级联，`@NotNull List<Item>` 是集合本身非空——三者可以叠加但含义完全不同。Map 场景 `Map<@NotBlank String, @Valid Item>` 可分别约束键值。漏写 @Valid 是"校验静默失效"的第一大原因：不报错、不警告，只有数据脏了才发现。
 
-> 🎯 **核心要点**：级联是显式声明（@Valid），不是默认行为。任何嵌套 DTO/集合字段，要么确认"内部无需校验"，要么补 @Valid。
+> **核心要点**：级联是显式声明（@Valid），不是默认行为。任何嵌套 DTO/集合字段，要么确认"内部无需校验"，要么补 @Valid。
 
 ---
 

@@ -2,7 +2,7 @@
 
 > 定位：Spring MVC 核心、RESTful API、参数绑定、全局异常处理、参数校验、声明式 HTTP 客户端——Web 层实战
 
-## 📚 目录
+## 目录
 
 1. [Spring MVC 核心](#1-spring-mvc-核心)
 2. [RESTful 控制器](#2-restful-控制器)
@@ -25,7 +25,7 @@
   → 返回值解析（@ResponseBody → JSON）
   → 响应
 
-⚠️ 面试必答：
+面试必答：
 "Spring MVC 核心 = DispatcherServlet 前端控制器——
  所有请求先到它，再分发到 Controller；
  HandlerMapping 找方法、HandlerAdapter 执行。"
@@ -37,7 +37,7 @@
 Controller（接收参数/返回响应）→ Service（业务逻辑）
   → Repository（数据访问）
 
-⚠️ 规范：
+规范：
   Controller 不写业务逻辑（薄控制器）
   Service 管事务与业务
   分层解耦是 Spring 架构第一原则
@@ -54,7 +54,7 @@ public class UserController {
 
     private final UserService userService;
 
-    public UserController(UserService userService) {   // ⚠️ 构造器注入
+    public UserController(UserService userService) {   // 构造器注入
         this.userService = userService;
     }
 
@@ -88,7 +88,7 @@ public class UserController {
 }
 ```
 
-> 🎯 **要点**：RESTful 五方法——GET 查、POST 建（201）、PUT 改、DELETE 删。DTO 接收（防越权字段）、VO 返回（不暴露实体）是规范。
+> **要点**：RESTful 五方法——GET 查、POST 建（201）、PUT 改、DELETE 删。DTO 接收（防越权字段）、VO 返回（不暴露实体）是规范。
 
 ---
 
@@ -167,17 +167,17 @@ public class UserDTO {
     private Long id;
 }
 
-// ⚠️ 校验失败 → MethodArgumentNotValidException → 全局异常处理
+// 校验失败 → MethodArgumentNotValidException → 全局异常处理
 ```
 
-> 🎯 **要点**：参数校验 = DTO 注解（@Valid）+ 分组校验 + 全局异常统一响应。**DTO 校验是防御注入/越权/非法输入的第一道门**。
+> **要点**：参数校验 = DTO 注解（@Valid）+ 分组校验 + 全局异常统一响应。**DTO 校验是防御注入/越权/非法输入的第一道门**。
 
 ---
 
 ## 5. 全局异常处理
 
 ```java
-// ⚠️ 全局异常处理器（统一响应格式）
+// 全局异常处理器（统一响应格式）
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -199,8 +199,8 @@ public class GlobalExceptionHandler {
     // 兜底异常（系统异常）
     @ExceptionHandler(Exception.class)
     public Result<Void> handleOther(Exception e) {
-        log.error("系统异常", e);                 // ⚠️ 记录日志
-        return Result.error(500, "系统繁忙");      // ⚠️ 不暴露内部细节
+        log.error("系统异常", e);                 // 记录日志
+        return Result.error(500, "系统繁忙");      // 不暴露内部细节
     }
 }
 ```
@@ -218,14 +218,14 @@ public class Result<T> {
 }
 ```
 
-> 🎯 **要点**：全局异常三块——业务异常（可预期）、校验异常（参数）、兜底异常（隐藏细节）。**统一响应格式**（code/message/data）是前后端协作的约定。
+> **要点**：全局异常三块——业务异常（可预期）、校验异常（参数）、兜底异常（隐藏细节）。**统一响应格式**（code/message/data）是前后端协作的约定。
 
 ---
 
 ## 6. 声明式 HTTP 客户端（Boot 4）
 
 ```java
-// ⚠️ Boot 4 新特性：@HttpServiceClient 声明式调用（官方替代 Feign）
+// Boot 4 新特性：@HttpServiceClient 声明式调用（官方替代 Feign）
 // ① 定义接口
 @HttpExchange("/api/users")               // 基础路径
 public interface UserClient {
@@ -261,11 +261,11 @@ public class OrderService {
 }
 ```
 
-> 🎯 **要点**：Boot 4 的 `@HttpServiceClient`（@HttpExchange/@GetExchange 等）让"接口即客户端"——官方声明式 HTTP 方案，替代 RestTemplate/Feign。微服务内部调用的标准答案。
+> **要点**：Boot 4 的 `@HttpServiceClient`（@HttpExchange/@GetExchange 等）让"接口即客户端"——官方声明式 HTTP 方案，替代 RestTemplate/Feign。微服务内部调用的标准答案。
 
 ---
 
-> 🎯 **核心要点**：Web 体系 = **DispatcherServlet**（前端控制器分发）+ **RESTful 五方法**（DTO/VO 分层）+ **参数绑定七式**（路径/查询/体/头/Cookie/日期/文件）+ **校验**（@Valid + 分组）+ **全局异常**（业务/校验/兜底三分类）+ **@HttpServiceClient**（Boot 4 声明式调用）。"薄控制器 + DTO 校验 + 统一异常"是企业级 Web 三规范。
+> **核心要点**：Web 体系 = **DispatcherServlet**（前端控制器分发）+ **RESTful 五方法**（DTO/VO 分层）+ **参数绑定七式**（路径/查询/体/头/Cookie/日期/文件）+ **校验**（@Valid + 分组）+ **全局异常**（业务/校验/兜底三分类）+ **@HttpServiceClient**（Boot 4 声明式调用）。"薄控制器 + DTO 校验 + 统一异常"是企业级 Web 三规范。
 
 ---
 

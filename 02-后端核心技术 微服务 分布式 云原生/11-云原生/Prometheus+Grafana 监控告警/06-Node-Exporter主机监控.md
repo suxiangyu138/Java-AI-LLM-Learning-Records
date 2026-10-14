@@ -1,6 +1,6 @@
 # 06 - Node Exporter 主机监控
 
-> 🎯 Node Exporter 是 Prometheus 的"主机体检仪" — 从 CPU/内存/磁盘/网络到 systemd 服务状态，覆盖 Linux 主机监控的全部维度
+> Node Exporter 是 Prometheus 的"主机体检仪" — 从 CPU/内存/磁盘/网络到 systemd 服务状态，覆盖 Linux 主机监控的全部维度
 
 ---
 
@@ -103,7 +103,7 @@ node_memory_SwapFree_bytes          # Swap 空闲
 (1 - node_memory_SwapFree_bytes / node_memory_SwapTotal_bytes) * 100
 ```
 
-> ⚠️ Java 应用场景：Swap 使用率是重要的 OOM 预警信号。JVM 堆内存被 swap 出去会导致 GC 时间暴涨。
+> Java 应用场景：Swap 使用率是重要的 OOM 预警信号。JVM 堆内存被 swap 出去会导致 GC 时间暴涨。
 
 ---
 
@@ -186,7 +186,7 @@ time() - node_boot_time_seconds         # 运行时长（秒）
 
 ## 7. Textfile Collector（自定义指标）
 
-> 💡 用于暴露 Prometheus 无法直接采集的自定义指标（如 cron 任务结果、备份状态）。
+> 用于暴露 Prometheus 无法直接采集的自定义指标（如 cron 任务结果、备份状态）。
 
 ```bash
 # 启用 textfile collector
@@ -264,4 +264,4 @@ groups:
           summary: "{{ $labels.instance }} Swap 使用率 > 50%，检查内存是否不足"
 ```
 
-> 🎯 **Node Exporter 是监控体系的基石** — 主机不行，应用再健康也没用。先配好主机告警，再往上构建应用层监控。
+> **Node Exporter 是监控体系的基石** — 主机不行，应用再健康也没用。先配好主机告警，再往上构建应用层监控。

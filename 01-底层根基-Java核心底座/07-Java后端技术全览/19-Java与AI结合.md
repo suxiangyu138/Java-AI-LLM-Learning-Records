@@ -1776,7 +1776,7 @@ public class DJLInferenceService {
 
 ## 在线演示
 
-🔗 [https://ai-assistant.your-domain.com](https://ai-assistant.your-domain.com)
+[https://ai-assistant.your-domain.com](https://ai-assistant.your-domain.com)
 
 ## 快速开始
 
@@ -1936,18 +1936,18 @@ Claude Code 在 Java 项目中的使用：
 ```
 简历标题方案：
 
-❌ "Java 后端开发工程师"
-✅ "Java 后端开发工程师 | AI 应用集成经验"
+✗ "Java 后端开发工程师"
+✓ "Java 后端开发工程师 | AI 应用集成经验"
 
-❌ "熟练掌握 Spring Boot"
-✅ "使用 Spring Boot + LangChain4j 构建 AI RAG 应用"
+✗ "熟练掌握 Spring Boot"
+✓ "使用 Spring Boot + LangChain4j 构建 AI RAG 应用"
 
 技能描述优化：
 
-❌ "了解 AI 技术"
-✅ "集成 OpenAI API 实现智能对话（SSE 流式输出）"
-✅ "使用 LangChain4j 构建 RAG 知识库问答系统"
-✅ "部署 pgvector 向量数据库实现语义搜索"
+✗ "了解 AI 技术"
+✓ "集成 OpenAI API 实现智能对话（SSE 流式输出）"
+✓ "使用 LangChain4j 构建 RAG 知识库问答系统"
+✓ "部署 pgvector 向量数据库实现语义搜索"
 ```
 
 ### 10.2 学习路径

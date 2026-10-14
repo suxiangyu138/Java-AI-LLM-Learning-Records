@@ -1,6 +1,6 @@
 # 04 - ZooKeeper Session 与 Watcher 机制
 
-> 🎯 Session 是 ZK 客户端与服务器的"生命线"，Watch 是事件驱动的"神经系统" — 理解两者的生命周期和交互方式，才能真正驾驭 ZooKeeper
+> Session 是 ZK 客户端与服务器的"生命线"，Watch 是事件驱动的"神经系统" — 理解两者的生命周期和交互方式，才能真正驾驭 ZooKeeper
 
 ---
 
@@ -62,7 +62,7 @@ Session 超时 = tickTime × N
 ## 2. Session 生命周期
 
 ```java
-// ⭐ Session 断开重连 vs 过期重建
+// ★ Session 断开重连 vs 过期重建
 CountDownLatch latch = new CountDownLatch(1);
 ZooKeeper zk = new ZooKeeper("127.0.0.1:2181", 10000, event -> {
     switch (event.getState()) {
@@ -76,7 +76,7 @@ ZooKeeper zk = new ZooKeeper("127.0.0.1:2181", 10000, event -> {
             break;
         case Expired:
             System.out.println("Session 过期！临时节点已丢失 — 需要重建");
-            // ⚠️ 必须重建 ZooKeeper 连接，重新创建临时节点！
+            // 必须重建 ZooKeeper 连接，重新创建临时节点！
             zk.close();
             zk = new ZooKeeper("127.0.0.1:2181", 10000, this);
             break;
@@ -86,14 +86,14 @@ ZooKeeper zk = new ZooKeeper("127.0.0.1:2181", 10000, event -> {
 
 | 事件 | 临时节点 | Connection Watch | 客户端操作 |
 |------|:---:|:---:|------|
-| 网络短暂断开 | ✅ 还在 | — | 等待自动重连 |
-| Session 过期 | ❌ 被删除 | ✅ 触发 | 关闭老连接，**重建新连接** |
+| 网络短暂断开 | ✓ 还在 | — | 等待自动重连 |
+| Session 过期 | ✗ 被删除 | ✓ 触发 | 关闭老连接，**重建新连接** |
 
 ---
 
 ## 3. Watcher 机制详解
 
-> ⚠️ **Watch 是一次性的！** 触发后必须重新注册。
+> **Watch 是一次性的！** 触发后必须重新注册。
 
 ### 3.1 三种注册方式
 
@@ -108,7 +108,7 @@ ZooKeeper zk = new ZooKeeper("127.0.0.1:2181", 10000, event -> {
 // 方式2：getData / exists (Watch 数据)
 zk.getData("/config", event -> {
     System.out.println("/config 数据变更");
-    // ⚠️ 需要重新注册！
+    // 需要重新注册！
     zk.getData("/config", this, stat);
 }, stat);
 
@@ -124,11 +124,11 @@ zk.getChildren("/services", event -> {
 
 | 操作 | NodeCreated | NodeDeleted | NodeDataChanged | NodeChildrenChanged |
 |------|:---:|:---:|:---:|:---:|
-| `create` | ✅ | ❌ | ❌ | 父节点 ✅ |
-| `delete` | ❌ | ✅ | ❌ | 父节点 ✅ |
-| `setData` | ❌ | ❌ | ✅ | ❌ |
-| `getData` 注册 | ✅ | ✅ | ✅ | ❌ |
-| `getChildren` 注册 | ❌ | ✅ | ❌ | ✅ |
+| `create` | ✓ | ✗ | ✗ | 父节点 ✓ |
+| `delete` | ✗ | ✓ | ✗ | 父节点 ✓ |
+| `setData` | ✗ | ✗ | ✓ | ✗ |
+| `getData` 注册 | ✓ | ✓ | ✓ | ✗ |
+| `getChildren` 注册 | ✗ | ✓ | ✗ | ✓ |
 
 ### 3.3 服务端通知机制
 
@@ -145,7 +145,7 @@ zk.getChildren("/services", event -> {
 
 ## 4. Watch 的坑与最佳实践
 
-### ❌ 常见坑
+### ✗ 常见坑
 
 | 坑 | 表现 | 解决 |
 |----|------|------|
@@ -153,10 +153,10 @@ zk.getChildren("/services", event -> {
 | 羊群效应 | 所有客户端 Watch 同一节点，同时被唤醒 | 用临时顺序节点 + Watch 前驱 |
 | 空通知 | 收到了 Watch 但数据未实际变化 | 收到 Watch 后 `getData` 获取最新数据 |
 
-### ✅ 最佳实践
+### ✓ 最佳实践
 
 ```java
-// ⭐ Curator 的 TreeCache — 自动反复注册，屏蔽 Watch 复杂性
+// ★ Curator 的 TreeCache — 自动反复注册，屏蔽 Watch 复杂性
 CuratorFramework client = CuratorFrameworkFactory.newClient(...);
 client.start();
 
@@ -171,4 +171,4 @@ cache.getListenable().addListener((c, event) -> {
 cache.start();    // 自动注册 Watch，反复监听
 ```
 
-> 🎯 **Curator 推荐**：原生 Watch 一次性和重注册太容易踩坑，生产环境一律用 Curator 的 `TreeCache`/`NodeCache`/`PathChildrenCache`。Session 过期必须重建整个 ZooKeeper 对象。
+> **Curator 推荐**：原生 Watch 一次性和重注册太容易踩坑，生产环境一律用 Curator 的 `TreeCache`/`NodeCache`/`PathChildrenCache`。Session 过期必须重建整个 ZooKeeper 对象。

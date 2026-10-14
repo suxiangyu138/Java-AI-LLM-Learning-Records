@@ -27,7 +27,7 @@
 | 渲染API | ReactDOM.render | createRoot |
 
 ### 1.2 JSX的本质是什么？
-> 🎯 JSX是 `React.createElement` 的语法糖，最终编译为虚拟DOM对象。
+> JSX是 `React.createElement` 的语法糖，最终编译为虚拟DOM对象。
 
 ```jsx
 // JSX写法
@@ -84,7 +84,7 @@ const sortedList = useMemo(() => {
 ```
 
 ### 1.6 React.memo的作用？
-> 💡 React.memo是性能优化高阶组件，通过浅比较props决定是否重新渲染。
+> React.memo是性能优化高阶组件，通过浅比较props决定是否重新渲染。
 
 ```jsx
 const Child = React.memo(({ name }) => {
@@ -108,7 +108,7 @@ function Parent() {
 | 适用场景 | 需要即时校验/联动 | 简单表单、文件上传 |
 
 ### 1.8 useContext使用场景？
-> 🎯 用于跨层级传递数据，避免props层层传递（prop drilling）。
+> 用于跨层级传递数据，避免props层层传递（prop drilling）。
 
 ```jsx
 const ThemeContext = createContext('light')
@@ -126,7 +126,7 @@ function Child() {
 ```
 
 ### 1.9 React中的事件机制？
-> 💡 React事件是合成事件（SyntheticEvent），所有事件绑定在root节点上（事件委托）。
+> React事件是合成事件（SyntheticEvent），所有事件绑定在root节点上（事件委托）。
 
 ```jsx
 // 合成事件与原生事件区别
@@ -160,7 +160,7 @@ const [searchParams] = useSearchParams()
 ## 二、深度原理剖析
 
 ### 2.1 React18自动批处理（Automatic Batching）？
-> 🎯 React18中所有状态更新自动批处理，无论它们在哪里触发。
+> React18中所有状态更新自动批处理，无论它们在哪里触发。
 
 ```jsx
 // React17：setTimeout中不会批处理，导致两次渲染
@@ -182,7 +182,7 @@ flushSync(() => {
 ```
 
 ### 2.2 Fiber架构的核心原理？
-> 💡 Fiber是React16引入的新的协调引擎，React18的并发模式基于Fiber。
+> Fiber是React16引入的新的协调引擎，React18的并发模式基于Fiber。
 
 **Fiber核心特点：**
 1. **可中断渲染**：将渲染拆分为小任务单元，可被优先级更高的任务中断
@@ -207,7 +207,7 @@ flushSync(() => {
 ```
 
 ### 2.3 Virtual DOM和Diff算法？
-> 🎯 React的Diff算法复杂度为O(n)，基于三个策略：
+> React的Diff算法复杂度为O(n)，基于三个策略：
 
 1. **Tree Diff**：跨层级移动节点较少，只比较同层级节点
 2. **Component Diff**：同类组件则递归比较，不同类直接替换
@@ -222,7 +222,7 @@ flushSync(() => {
 ```
 
 ### 2.4 Concurrent Mode（并发模式）工作原理？
-> 💡 并发模式让React可以同时准备多个版本的UI，根据优先级切换。
+> 并发模式让React可以同时准备多个版本的UI，根据优先级切换。
 
 ```jsx
 // useTransition：标记低优先级更新
@@ -423,7 +423,7 @@ function Counter() {
     return () => clearInterval(timer)
   }, []) // ✗ 错误
 
-  // ✅ 使用函数式更新
+  // ✓ 使用函数式更新
   useEffect(() => {
     const timer = setInterval(() => {
       setCount(c => c + 1)

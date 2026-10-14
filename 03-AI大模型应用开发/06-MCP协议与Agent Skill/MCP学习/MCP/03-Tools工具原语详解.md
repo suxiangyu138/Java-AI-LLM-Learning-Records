@@ -1,6 +1,6 @@
 # 03 - Tools 工具原语详解
 
-> 🎯 Tools 是 MCP 的"行动层" — LLM 通过标准化接口执行搜索、查询、计算、部署等操作。与 OpenAI Function Calling Schema 兼容，但通过 MCP 实现跨平台复用
+> Tools 是 MCP 的"行动层" — LLM 通过标准化接口执行搜索、查询、计算、部署等操作。与 OpenAI Function Calling Schema 兼容，但通过 MCP 实现跨平台复用
 
 ---
 
@@ -109,7 +109,7 @@
     },
     {
       "name": "deploy_service",
-      "description": "部署服务到 Kubernetes 集群。⚠️ 会修改生产环境！使用前需确认",
+      "description": "部署服务到 Kubernetes 集群。会修改生产环境！使用前需确认",
       "inputSchema": {
         "type": "object",
         "properties": {
@@ -160,14 +160,14 @@ openWorldHint: true
 ```text
 Schema 设计 = LLM 填参质量
 
-✅ 好 Schema 的特征：
+✓ 好 Schema 的特征：
   ① 每个属性有明确的 description（这是给 LLM 的提示！）
   ② 枚举值说明含义（不只看值名）
   ③ default 值减轻 LLM 决策负担
   ④ 约束清晰可验证（min/max/pattern/enum）
   ⑤ required 列表精确（不必要的不强制）
 
-❌ 坏 Schema：
+✗ 坏 Schema：
   { "type": "object", "properties": { "q": { "type": "string" } } }
   → LLM 完全不知道 q 是什么意思、怎么填
 ```
@@ -275,7 +275,7 @@ Schema 设计 = LLM 填参质量
   "id": 10,
   "result": {
     "content": [
-      { "type": "text", "text": "✅ 部署成功！api-gateway v2.1.0 已上线\n- 3/3 Pod 运行中\n- 健康检查通过\n- 访问地址: https://api.example.com" }
+      { "type": "text", "text": "✓ 部署成功！api-gateway v2.1.0 已上线\n- 3/3 Pod 运行中\n- 健康检查通过\n- 访问地址: https://api.example.com" }
     ],
     "isError": false
   }
@@ -297,11 +297,11 @@ Schema 设计 = LLM 填参质量
     "content": [
       {
         "type": "text",
-        "text": "❌ 城市 'Mars' 不在支持范围内。支持的城市：北京、上海、广州、深圳、..."
+        "text": "✗ 城市 'Mars' 不在支持范围内。支持的城市：北京、上海、广州、深圳、..."
       }
     ],
     "isError": true
-    // ⚠️ 这是"工具执行失败"，不是协议错误！
+    // 这是"工具执行失败"，不是协议错误！
     // LLM 看到 isError: true 后可以调整参数重试
   }
 }
@@ -329,7 +329,7 @@ Schema 设计 = LLM 填参质量
 │  ├─────────────────┼──────────────┼──────────────────┤   │
 │  │ 错误字段         │ error        │ result.isError   │   │
 │  │ HTTP 状态码      │ 4xx/5xx      │ 200 OK           │   │
-│  │ LLM 可恢复       │ ❌            │ ✅ (读错误描述)    │   │
+│  │ LLM 可恢复       │ ✗            │ ✓ (读错误描述)    │   │
 │  │ 示例              │ 方法不存在    │ 城市不支持         │   │
 │  └─────────────────┴──────────────┴──────────────────┘   │
 └─────────────────────────────────────────────────────────┘
@@ -365,13 +365,13 @@ Schema 设计 = LLM 填参质量
 ```text
 哪些工具适合流式输出？
 
-✅ 适合流式：
+✓ 适合流式：
   • 长文本生成（摘要、报告）
   • 代码生成（逐行输出）
   • 日志实时追踪
   • 数据流处理
 
-❌ 不适合流式：
+✗ 不适合流式：
   • 简单查询（一次返回即可）
   • 需要完整结果才能处理的操作
   • 原子性操作（要么全成功，要么全失败）
@@ -441,7 +441,7 @@ Server: (SSE Stream)
 }
 ```
 
-> 🎯 **核心要点**：Tools = JSON Schema 定义 + Annotations 语义标注 + 标准调用-响应 + isError 业务错误 + progressToken 进度通知。好的 Tool 定义 = LLM 能自主正确调用并处理错误
+> **核心要点**：Tools = JSON Schema 定义 + Annotations 语义标注 + 标准调用-响应 + isError 业务错误 + progressToken 进度通知。好的 Tool 定义 = LLM 能自主正确调用并处理错误
 
 ---
 

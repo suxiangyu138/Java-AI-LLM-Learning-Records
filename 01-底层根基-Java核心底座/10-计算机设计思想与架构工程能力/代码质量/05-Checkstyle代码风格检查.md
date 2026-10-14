@@ -341,7 +341,7 @@ Checkstyle 官方提供了可直接使用的 Google Java Style 配置：
 </configuration>
 ```
 
-> 💡 推荐以 `google_checks.xml` 为基础，在此基础上做少量团队定制，而不是从零编写所有配置。
+> 推荐以 `google_checks.xml` 为基础，在此基础上做少量团队定制，而不是从零编写所有配置。
 
 ---
 
@@ -354,7 +354,7 @@ Checkstyle 官方提供了可直接使用的 Google Java Style 配置：
 **类别**：文件检查（Checker 级别）
 
 ```java
-// ❌ FileLength: 文件超过 2000 行
+// ✗ FileLength: 文件超过 2000 行
 // ... 大量代码 ...
 
 // 修正方案：拆分为多个类
@@ -369,14 +369,14 @@ Checkstyle 官方提供了可直接使用的 Google Java Style 配置：
 ```java
 public class LineLengthExample {
 
-    // ❌ LineLength: 第 5 行超过 100 字符
+    // ✗ LineLength: 第 5 行超过 100 字符
     public Result processOrderAndGenerateInvoice(
             Order order, Customer customer, Address shippingAddress,
             PaymentMethod paymentMethod, DiscountCalculator discountCalc) {
-        // ✅ 拆分为多行
+        // ✓ 拆分为多行
     }
 
-    // ❌ 太长的方法链
+    // ✗ 太长的方法链
     public void badStyle() {
         String result = orderService.findOrder(orderId).map(Order::getCustomer)
             .flatMap(customerService::getCustomerProfile).orElseThrow(() -> new NotFoundException("Order not found"));
@@ -404,7 +404,7 @@ public class LineLengthExample {
 ```java
 public class OrderManager {
 
-    // ❌ MethodLength: 150 行的方法，远超阈值
+    // ✗ MethodLength: 150 行的方法，远超阈值
     public void processOrder(Order order) {
         // 第 1-10 行：参数校验
         if (order == null) throw new IllegalArgumentException();
@@ -435,7 +435,7 @@ public class OrderManager {
 ```java
 public class OrderManager {
 
-    // ✅ 拆分为多个方法，每个方法不超过 30 行
+    // ✓ 拆分为多个方法，每个方法不超过 30 行
     public void processOrder(Order order) {
         validateOrder(order);
         BigDecimal total = calculateTotal(order);
@@ -472,7 +472,7 @@ public class OrderManager {
 ```java
 public class WhitespaceExample {
 
-    // ❌ WhitespaceAround: 运算符两侧缺少空格
+    // ✗ WhitespaceAround: 运算符两侧缺少空格
     public void badStyle() {
         int x=1+2;                 // 应为 `int x = 1 + 2;`
         if(x>0) {                  // 应为 `if (x > 0) {`
@@ -482,7 +482,7 @@ public class WhitespaceExample {
         List<String> list=new ArrayList<>();  // generic 运算符缺少空格
     }
 
-    // ✅ 正确风格
+    // ✓ 正确风格
     public void goodStyle() {
         int x = 1 + 2;
         if (x > 0) {
@@ -502,14 +502,14 @@ public class WhitespaceExample {
 ```java
 public class NoWhitespaceBeforeExample {
 
-    // ❌ NoWhitespaceBefore: 分号前不应有空格
+    // ✗ NoWhitespaceBefore: 分号前不应有空格
     public void badStyle() {
         for (int i = 0 ; i < 10 ; i++) {  // 分号前空格
             // ...
         }
     }
 
-    // ✅ correct
+    // ✓ correct
     public void goodStyle() {
         for (int i = 0; i < 10; i++) {
             // ...
@@ -525,21 +525,21 @@ public class NoWhitespaceBeforeExample {
 ```java
 public class NamingConventions {
 
-    // ❌ ConstantName: 常量应全大写
+    // ✗ ConstantName: 常量应全大写
     public static final int maxRetryCount = 3;       // 应为 MAX_RETRY_COUNT
     public static final String default_name = "default"; // 应全大写+下划线
 
-    // ✅
+    // ✓
     public static final int MAX_RETRY_COUNT = 3;
     public static final String DEFAULT_NAME = "default";
 
-    // ❌ LocalVariableName: 局部变量应小驼峰
+    // ✗ LocalVariableName: 局部变量应小驼峰
     public void process() {
         int MAX_VALUE = 100;  // 应为 maxValue
         String user_name = "test";  // 应为 userName
     }
 
-    // ✅
+    // ✓
     public void processCorrect() {
         int maxValue = 100;
         String userName = "test";
@@ -552,28 +552,28 @@ public class NamingConventions {
 ```java
 public class MethodNamingExample {
 
-    // ❌ MethodName: 方法名应小驼峰
-    public void Process_Order() { }           // ❌
-    public void get_User_Info() { }           // ❌
-    private void DoSomething() { }            // ❌
+    // ✗ MethodName: 方法名应小驼峰
+    public void Process_Order() { }           // ✗
+    public void get_User_Info() { }           // ✗
+    private void DoSomething() { }            // ✗
 
-    // ✅
-    public void processOrder() { }            // ✅
-    public void getUserInfo() { }             // ✅
-    private void doSomething() { }            // ✅
+    // ✓
+    public void processOrder() { }            // ✓
+    public void getUserInfo() { }             // ✓
+    private void doSomething() { }            // ✓
 }
 ```
 
 **TypeName**（类名）：
 
 ```java
-// ❌ TypeName: 类名应大驼峰
-class userService { }          // ❌ 应为 UserService
-class order_processor { }      // ❌ 应为 OrderProcessor
+// ✗ TypeName: 类名应大驼峰
+class userService { }          // ✗ 应为 UserService
+class order_processor { }      // ✗ 应为 OrderProcessor
 
-// ✅
-class UserService { }          // ✅
-class OrderProcessor { }       // ✅
+// ✓
+class UserService { }          // ✓
+class OrderProcessor { }       // ✓
 ```
 
 **配置示例**：
@@ -600,11 +600,11 @@ class OrderProcessor { }       // ✅
 **AvoidStarImport**（禁止通配符导入）：
 
 ```java
-// ❌ AvoidStarImport
+// ✗ AvoidStarImport
 import java.util.*;              // 应具体导入
 import java.io.*;                // 应具体导入
 
-// ✅
+// ✓
 import java.util.ArrayList;
 import java.util.List;
 import java.io.IOException;
@@ -616,11 +616,11 @@ import java.io.InputStream;
 ```java
 package com.example;
 
-import java.util.List;            // ✅ 使用
-import java.util.ArrayList;       // ✅ 使用
-import java.util.Date;            // ❌ UnusedImports: 未使用
-import java.sql.Connection;       // ❌ UnusedImports: 未使用
-import java.io.Serializable;      // ❌ 未实现接口
+import java.util.List;            // ✓ 使用
+import java.util.ArrayList;       // ✓ 使用
+import java.util.Date;            // ✗ UnusedImports: 未使用
+import java.sql.Connection;       // ✗ UnusedImports: 未使用
+import java.io.Serializable;      // ✗ 未实现接口
 
 public class UserService {
     private List<String> names = new ArrayList<>();
@@ -634,7 +634,7 @@ public class UserService {
 ```java
 public class UserController {
 
-    // ❌ MissingJavadocMethod (若配置): 公有方法缺少 Javadoc
+    // ✗ MissingJavadocMethod (若配置): 公有方法缺少 Javadoc
     public User getUser(Long id) {
         return userService.findById(id);
     }
@@ -646,7 +646,7 @@ public class UserController {
      * @return 用户对象，未找到时返回 null
      * @throws IllegalArgumentException 如果 id 为 null
      */
-    // ✅ 完整 Javadoc
+    // ✓ 完整 Javadoc
     public User findUserById(Long id) {
         if (id == null) {
             throw new IllegalArgumentException("id must not be null");
@@ -659,7 +659,7 @@ public class UserController {
 **JavadocType**（类 Javadoc）：
 
 ```java
-// ❌ MissingJavadocType
+// ✗ MissingJavadocType
 public class OrderService {
     // ...
 }
@@ -670,7 +670,7 @@ public class OrderService {
  * @author dev-team
  * @since 1.0.0
  */
-// ✅ 完整类注释
+// ✓ 完整类注释
 public class OrderProcessingService {
     // ...
 }
@@ -686,14 +686,14 @@ public class User {
     private String name;
     private String email;
 
-    // ❌ HiddenField: 参数 name 隐藏了成员变量
+    // ✗ HiddenField: 参数 name 隐藏了成员变量
     public User(String name, String email) {
         name = name;     // 实际是参数自赋值，成员变量未更新
         email = email;   // 同上
     }
 
     public void setName(String name) {
-        name = name;     // ❌ HiddenField: 参数隐藏了字段
+        name = name;     // ✗ HiddenField: 参数隐藏了字段
     }
 }
 ```
@@ -701,14 +701,14 @@ public class User {
 **修正方案**：
 
 ```java
-    // ✅ 使用 this 关键字区分
+    // ✓ 使用 this 关键字区分
     public User(String name, String email) {
         this.name = name;
         this.email = email;
     }
 
     public void setName(String name) {
-        this.name = name;  // ✅
+        this.name = name;  // ✓
     }
 ```
 
@@ -717,7 +717,7 @@ public class User {
 ```java
 public class DiscountCalculator {
 
-    // ❌ MagicNumber: 使用字面量数字
+    // ✗ MagicNumber: 使用字面量数字
     public double calculate(double price) {
         if (price > 1000) {          // 1000 是什么？
             return price * 0.9;      // 0.9 是什么？
@@ -735,7 +735,7 @@ public class DiscountCalculator {
 ```java
 public class DiscountCalculator {
 
-    // ✅ 使用命名常量
+    // ✓ 使用命名常量
     private static final double PREMIUM_THRESHOLD = 1000.0;
     private static final double STANDARD_THRESHOLD = 500.0;
     private static final double PREMIUM_DISCOUNT = 0.9;
@@ -753,7 +753,7 @@ public class DiscountCalculator {
 }
 ```
 
-> 💡 并非所有数字都是魔术数字。`0`、`1`、`-1` 在初始化场景中是允许的。可以通过 `ignoreNumbers` 属性配置。
+> 并非所有数字都是魔术数字。`0`、`1`、`-1` 在初始化场景中是允许的。可以通过 `ignoreNumbers` 属性配置。
 
 ```xml
 <module name="MagicNumber">
@@ -767,7 +767,7 @@ public class DiscountCalculator {
 ```java
 public class StatusHandler {
 
-    // ❌ MissingSwitchDefault: switch 没有 default 分支
+    // ✗ MissingSwitchDefault: switch 没有 default 分支
     public String handleStatus(String status) {
         switch (status) {
             case "ACTIVE":
@@ -784,7 +784,7 @@ public class StatusHandler {
 **修正方案**：
 
 ```java
-    // ✅
+    // ✓
     public String handleStatus(String status) {
         switch (status) {
             case "ACTIVE":
@@ -802,7 +802,7 @@ public class StatusHandler {
 **DesignForExtension**（设计为扩展）：
 
 ```java
-// ❌ DesignForExtension: 非 final/abstract 的公有/保护方法
+// ✗ DesignForExtension: 非 final/abstract 的公有/保护方法
 // 暗示该方法设计为可被重写，但未提供文档说明如何重写
 public class BaseService {
 
@@ -821,7 +821,7 @@ public class BaseService {
 **修正方案**：
 
 ```java
-// ✅ 方案一：声明为 final，禁止重写
+// ✓ 方案一：声明为 final，禁止重写
 public class BaseService {
     public final void save(Entity entity) {
         validate(entity);
@@ -829,7 +829,7 @@ public class BaseService {
     }
 }
 
-// ✅ 方案二：抽象方法 + 文档说明重写契约
+// ✓ 方案二：抽象方法 + 文档说明重写契约
 public abstract class BaseService {
     public final void save(Entity entity) {
         Entity validated = validate(entity);
@@ -850,7 +850,7 @@ public abstract class BaseService {
 public class FinalVariableExample {
 
     public void process(Order order) {
-        // ❌ FinalLocalVariable (如果启用): 局部变量不可变但未声明 final
+        // ✗ FinalLocalVariable (如果启用): 局部变量不可变但未声明 final
         Long orderId = order.getId();
         Customer customer = order.getCustomer();
         BigDecimal total = calculateTotal(order);
@@ -859,7 +859,7 @@ public class FinalVariableExample {
 ```
 
 ```java
-    // ✅ 声明为 final，明确不可变性
+    // ✓ 声明为 final，明确不可变性
     public void process(Order order) {
         final Long orderId = order.getId();
         final Customer customer = order.getCustomer();
@@ -999,7 +999,7 @@ public class LegacyCode {
 </module>
 ```
 
-> ⚠️ 注释抑制应谨慎使用，优先使用 `@SuppressWarnings` 注解或 `suppressions.xml`。注释抑制没有类型安全检查，更容易出错。
+> 注释抑制应谨慎使用，优先使用 `@SuppressWarnings` 注解或 `suppressions.xml`。注释抑制没有类型安全检查，更容易出错。
 
 ---
 
@@ -1169,13 +1169,13 @@ IntelliJ 可以导入 Checkstyle 配置，使代码格式化器自动满足 Chec
 ```
 Settings → Editor → Code Style → Java
 ├── Scheme: Project
-└── ⚙ (齿轮图标) → Import Scheme → Checkstyle Configuration
+└── (齿轮图标) → Import Scheme → Checkstyle Configuration
     └── 选择 checkstyle.xml
 ```
 
 这样 `Ctrl + Alt + L`（格式化代码）后就能通过大部分的 Checkstyle 检查。
 
-> 💡 将 Checkstyle 配置文件与 IntelliJ Code Style 联动是最佳实践。开发者在编写代码时 `Ctrl+Alt+L` 格式化，即可满足大部分风格检查，减少 CI 失败。
+> 将 Checkstyle 配置文件与 IntelliJ Code Style 联动是最佳实践。开发者在编写代码时 `Ctrl+Alt+L` 格式化，即可满足大部分风格检查，减少 CI 失败。
 
 ---
 
@@ -1277,7 +1277,7 @@ mvn spotless:check    # 检查格式违规
 mvn spotless:apply    # 自动修复格式
 ```
 
-> 🎯 **最佳实践**：用 Google Java Format（Spotless）做**自动格式化**，用 Checkstyle 做**风格检查（超越格式的命名/注释/设计）**。两者解决不同的问题，互补使用。
+> **最佳实践**：用 Google Java Format（Spotless）做**自动格式化**，用 Checkstyle 做**风格检查（超越格式的命名/注释/设计）**。两者解决不同的问题，互补使用。
 
 ---
 
@@ -1645,37 +1645,37 @@ package com.example.controller;
 import java.util.*;
 import java.io.*;
 
-// ❌ MissingJavadocType
+// ✗ MissingJavadocType
 public class UserController {
-// ❌ TypeName: 类名应大驼峰（此处故意正确）
+// ✗ TypeName: 类名应大驼峰（此处故意正确）
     private String name_;
-    // ❌ MemberName: 不应以下划线结尾
+    // ✗ MemberName: 不应以下划线结尾
 
-    // ❌ LineLength: 超长行
+    // ✗ LineLength: 超长行
     private static final String VERY_LONG_CONSTANT_NAME = "这是非常长的字符串，超过 100 个字符的限制，Checkstyle 应该能检测到并报告违规问题";
 
-    // ❌ MissingJavadocMethod
-    public User getUser(Long user_id) {  // ❌ ParameterName: 下划线命名
+    // ✗ MissingJavadocMethod
+    public User getUser(Long user_id) {  // ✗ ParameterName: 下划线命名
         return userService.findById(user_id);
     }
 
     public void process(String name, String email, String phone, String address, String zipCode) {
-    // ❌ ParameterNumber: 参数超过 5 个
+    // ✗ ParameterNumber: 参数超过 5 个
 
-        // ❌ UnusedImports: java.io.* 未使用
-        // ❌ AvoidStarImport: import java.util.* 通配符导入
+        // ✗ UnusedImports: java.io.* 未使用
+        // ✗ AvoidStarImport: import java.util.* 通配符导入
 
-        // ❌ MagicNumber
+        // ✗ MagicNumber
         double price = 3.14159 * 2;
 
-        // ❌ WhitespaceAround
+        // ✗ WhitespaceAround
         int x=1+2;
 
-        // ❌ HiddenField
+        // ✗ HiddenField
         name_=name;
     }
 
-    // ❌ MagicNumber
+    // ✗ MagicNumber
     public double calculate(double value) {
         return value > 1000 ? value * 0.9 : value * 0.95;
     }
@@ -1812,4 +1812,4 @@ java -jar checkstyle-10.13.0-all.jar \
 
 ---
 
-> 🎯 Checkstyle 是代码风格自动化的基石工具。它的核心价值不在于"发现错误"，而在于**消除团队中因代码风格差异而产生的认知摩擦**。当团队统一使用 Google Java Style + Checkstyle 强制执行后，Code Review 将从"这里少了个空格"转向真正重要的逻辑评审。配合 Spotless/Google Java Format 自动格式化，可以实现"提交即合规"的流畅开发体验。
+> Checkstyle 是代码风格自动化的基石工具。它的核心价值不在于"发现错误"，而在于**消除团队中因代码风格差异而产生的认知摩擦**。当团队统一使用 Google Java Style + Checkstyle 强制执行后，Code Review 将从"这里少了个空格"转向真正重要的逻辑评审。配合 Spotless/Google Java Format 自动格式化，可以实现"提交即合规"的流畅开发体验。

@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [授权模型演进：从 AccessDecisionManager 到 AuthorizationManager](#1-授权模型演进从-accessdecisionmanager-到-authorizationmanager)
 2. [请求级授权：authorizeHttpRequests 全解](#2-请求级授权authorizehttprequests-全解)
@@ -34,7 +34,7 @@
 | 方法安全开关 | `@EnableGlobalMethodSecurity` | `@EnableMethodSecurity`（见 04 篇） |
 | 请求匹配 | antMatchers/MvcRequestMatcher | requestMatchers + PathPattern |
 
-> 🎯 **本质**：AuthorizationManager 是一个**策略接口**——`authorize(authentication, 目标对象) → AuthorizationDecision`。认证信息 + 目标（请求/方法/对象）进，决策出。授权逻辑 = 若干个 AuthorizationManager 的组合与编排。
+> **本质**：AuthorizationManager 是一个**策略接口**——`authorize(authentication, 目标对象) → AuthorizationDecision`。认证信息 + 目标（请求/方法/对象）进，决策出。授权逻辑 = 若干个 AuthorizationManager 的组合与编排。
 
 ## 2. 请求级授权：authorizeHttpRequests 全解
 
@@ -75,7 +75,7 @@ http.authorizeHttpRequests(auth -> auth
 .requestMatchers("/**").authenticated()          ← 后声明，兜底
 ```
 
-> ⚠️ **顺序坑**：把 `/admin/**` 写在 `/**` 之后，admin 规则永远不生效。规则顺序 = 精确到宽松。
+> **顺序坑**：把 `/admin/**` 写在 `/**` 之后，admin 规则永远不生效。规则顺序 = 精确到宽松。
 
 ## 3. AuthorizationManager 接口与自定义授权器
 
@@ -143,16 +143,16 @@ SecurityFilterChain chain(HttpSecurity http, IpAndTimeAuthorizationManager ipMan
 | 路径变量 | `{var}` | `{var}` + `{*var}`（结尾捕获） |
 
 ```java
-// ✅ 合法
+// ✓ 合法
 .requestMatchers("/api/**")                    // 结尾通配
 .requestMatchers("/admin/{module}/**")         // 变量 + 结尾通配
 .requestMatchers("/**/report")                 // 开头通配
 
-// ❌ 非法（启动即报错或静默不匹配）
+// ✗ 非法（启动即报错或静默不匹配）
 .requestMatchers("/api/**/admin")              // 中间通配
 ```
 
-> ⚠️ **迁移期提醒**：6.5 可用 `PathPatternRequestMatcherBuilderFactoryBean` 发布匹配器提前演练；升级 7.0 前**为每条规则写测试**——PathPattern 的差异全是静默的。
+> **迁移期提醒**：6.5 可用 `PathPatternRequestMatcherBuilderFactoryBean` 发布匹配器提前演练；升级 7.0 前**为每条规则写测试**——PathPattern 的差异全是静默的。
 
 ## 5. 7.0 行为变化：dispatch 授权与 CSRF 默认值
 
@@ -216,7 +216,7 @@ public class GrayReleaseAuthorizationManager implements AuthorizationManager<Req
 - 命中率监控：对关键规则埋点（放行/拒绝计数），灰度上线时观察拒绝曲线；
 - 审计：敏感操作的授权决策落审计日志（合规需求）。
 
-> 🎯 **核心要点**：7.0 的授权 = `authorizeHttpRequests` 声明规则 + `AuthorizationManager` 承载策略 + PathPattern 严格匹配。三大纪律：①规则从精确到宽松排列；②复杂逻辑写 AuthorizationManager 而非 SpEL 长表达式；③升级 7.0 先跑授权测试（dispatch 默认授权 + PathPattern 差异 + CSRF 默认值是三大静默杀手）。
+> **核心要点**：7.0 的授权 = `authorizeHttpRequests` 声明规则 + `AuthorizationManager` 承载策略 + PathPattern 严格匹配。三大纪律：①规则从精确到宽松排列；②复杂逻辑写 AuthorizationManager 而非 SpEL 长表达式；③升级 7.0 先跑授权测试（dispatch 默认授权 + PathPattern 差异 + CSRF 默认值是三大静默杀手）。
 
 ---
 

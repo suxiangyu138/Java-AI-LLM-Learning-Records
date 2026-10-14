@@ -1,6 +1,6 @@
 # 05 - BERT：Encoder-Only 架构
 
-> 🎯 BERT 是 NLP 的"ImageNet 时刻"——证明大规模预训练 + 下游微调范式远超任务特定模型。理解 BERT 的双向注意力、MLM 预训练、微调范式，是理解整个预训练时代的钥匙
+> BERT 是 NLP 的"ImageNet 时刻"——证明大规模预训练 + 下游微调范式远超任务特定模型。理解 BERT 的双向注意力、MLM 预训练、微调范式，是理解整个预训练时代的钥匙
 
 ---
 
@@ -101,7 +101,7 @@ e 1 1 1 1 1              e 1 1 1 1 1
 | 代表 | BERT/RoBERTa/DeBERTa | GPT/Llama/Qwen |
 | 当前地位 | 被 LLM 替代 | **主流范式** |
 
-> 🎯 为什么 Decoder-Only 赢了？GPT-3 证明了"足够大的 Decoder-Only 模型 + Few-shot Prompt 可以替代 BERT 的理解能力"—一个模型搞定理解和生成
+> 为什么 Decoder-Only 赢了？GPT-3 证明了"足够大的 Decoder-Only 模型 + Few-shot Prompt 可以替代 BERT 的理解能力"—一个模型搞定理解和生成
 
 ## 核心要点回顾
 

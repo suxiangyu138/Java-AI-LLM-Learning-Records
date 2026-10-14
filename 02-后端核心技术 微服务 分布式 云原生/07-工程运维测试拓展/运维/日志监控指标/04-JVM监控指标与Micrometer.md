@@ -1,7 +1,7 @@
 # 04-JVM 监控指标与 Micrometer
 > JVM 到底该看哪些指标：内存/GC/线程/类加载指标体系、Micrometer 门面、Spring Boot Actuator 暴露——从"指标一堆"到"指标有用"
 
-## 📚 目录
+## 目录
 1. [Micrometer：指标门面](#1-micrometer指标门面)
 2. [JVM 指标四大族](#2-jvm-指标四大族)
 3. [内存指标解读](#3-内存指标解读)
@@ -54,7 +54,7 @@ public class OrderController {
 }
 ```
 
-> ⚠️ **标签纪律**（与 Loki 同理）：标签只用低基数维度（接口名/渠道/错误类型）——**用户 ID/订单 ID 进标签 = 指标爆炸**。
+> **标签纪律**（与 Loki 同理）：标签只用低基数维度（接口名/渠道/错误类型）——**用户 ID/订单 ID 进标签 = 指标爆炸**。
 
 ## 2. JVM 指标四大族
 
@@ -93,7 +93,7 @@ jvm_classes_loaded_classes     # 已加载类数
   元空间（Metaspace）——类元数据，-XX:MaxMetaspaceSize 限制
   代码缓存、压缩类空间等
 
-⚠️ 元空间泄漏信号：jvm_memory_used_bytes{area="nonheap"} 持续增长
+元空间泄漏信号：jvm_memory_used_bytes{area="nonheap"} 持续增长
   常见原因：动态生成类（CGLIB/反射/热部署）未回收
 ```
 
@@ -145,7 +145,7 @@ GC 健康三问：
 | `jvm_classes_loaded_classes` | 已加载类数 | 持续增长 = 类泄漏（动态代理/热部署） |
 | `jvm_classes_unloaded_classes` | 已卸载类数 | 长期为 0 + loaded 增长 = 泄漏 |
 
-> 💡 类加载泄漏是"看不见的泄漏"：动态生成类（CGLIB/反射/每次请求 new classloader）不回收时，Metaspace 缓慢上涨直到 OOM。
+> 类加载泄漏是"看不见的泄漏"：动态生成类（CGLIB/反射/每次请求 new classloader）不回收时，Metaspace 缓慢上涨直到 OOM。
 
 ## 6. Spring Boot Actuator 暴露
 
@@ -178,7 +178,7 @@ management:
 curl localhost:8080/actuator/prometheus | grep jvm_memory_used
 ```
 
-> 💡 Prometheus 采集配置（scrape 配置、ServiceMonitor）见同级 `11-云原生/Prometheus+Grafana 监控告警/07-Spring-Boot应用监控.md`——本体系聚焦"看哪些指标"。
+> Prometheus 采集配置（scrape 配置、ServiceMonitor）见同级 `11-云原生/Prometheus+Grafana 监控告警/07-Spring-Boot应用监控.md`——本体系聚焦"看哪些指标"。
 
 ## 7. 常用告警指标与阈值
 
@@ -192,11 +192,11 @@ curl localhost:8080/actuator/prometheus | grep jvm_memory_used
 | 类泄漏 | `jvm_classes_loaded_classes` 趋势 | 持续增长无回落 |
 | 线程阻塞 | `jvm_threads_states_threads{state="blocked"}` | 持续 > 10 |
 
-> 🎯 **告警不是指标越多越好**：JVM 核心就 6 条（堆、GC 停顿、GC 次数、存活数据、线程、类加载）——**先覆盖这 6 条，再按业务扩展**。
+> **告警不是指标越多越好**：JVM 核心就 6 条（堆、GC 停顿、GC 次数、存活数据、线程、类加载）——**先覆盖这 6 条，再按业务扩展**。
 
 ## 8. 核心要点
 
-> 🎯 **核心要点**：
+> **核心要点**：
 > - Micrometer = 指标门面（类比 SLF4J）：Counter/Gauge/Timer 四类 Meter；
 > - JVM 四大族：内存/GC/线程/类加载——各 3-4 个核心指标足够；
 > - 内存三信号：used 高位（压力）、live data 增长（泄漏）、Metaspace 增长（类泄漏）；

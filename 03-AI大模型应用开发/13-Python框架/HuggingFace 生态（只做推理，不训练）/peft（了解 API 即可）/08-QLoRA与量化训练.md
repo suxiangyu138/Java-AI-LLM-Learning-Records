@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [QLoRA 是什么：三件套](#1-qlora-是什么三件套)
 2. [bitsandbytes：4bit 引擎](#2-bitsandbytes4bit-引擎)
@@ -136,7 +136,7 @@ model.save_pretrained("./qlora-out")   # 同样只存 adapter
 4. 7B/70B 量级的显存账本？峰值显存怎么实测？
 5. QLoRA 的两个代价是什么？loftq 初始化解决什么？
 
-> 🎯 **核心要点**：QLoRA = **4bit 量化底座（NF4 + 双重量化 + 分页优化器）+ LoRA + 梯度 checkpointing**——单卡微调大模型的事实标准；**"显存够用纯 LoRA，显存紧/模型大上 QLoRA——量化是显存换速度的不得已"**。
+> **核心要点**：QLoRA = **4bit 量化底座（NF4 + 双重量化 + 分页优化器）+ LoRA + 梯度 checkpointing**——单卡微调大模型的事实标准；**"显存够用纯 LoRA，显存紧/模型大上 QLoRA——量化是显存换速度的不得已"**。
 
 ---
 

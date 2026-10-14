@@ -1,6 +1,6 @@
 # 02 - SQL 基础与核心语法（Oracle vs MySQL）
 
-> 🎯 Oracle SQL 和 MySQL 有 30% 的语法差异——分页、字符串拼接、日期函数、自增主键都不同。本章用对比方式快速掌握 Oracle SQL 的核心语法
+> Oracle SQL 和 MySQL 有 30% 的语法差异——分页、字符串拼接、日期函数、自增主键都不同。本章用对比方式快速掌握 Oracle SQL 的核心语法
 
 ---
 

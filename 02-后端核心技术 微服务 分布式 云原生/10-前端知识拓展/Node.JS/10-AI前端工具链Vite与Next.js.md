@@ -1,6 +1,6 @@
 # 10 - AI 前端工具链：Vite 与 Next.js
 
-> 🎯 AI 应用的前端离不开现代构建工具。Vite 是新一代构建工具（替代 Webpack），Next.js 是全栈 React 框架。Java 后端开发者不需要成为前端专家，但要能"跑起来、改得动"
+> AI 应用的前端离不开现代构建工具。Vite 是新一代构建工具（替代 Webpack），Next.js 是全栈 React 框架。Java 后端开发者不需要成为前端专家，但要能"跑起来、改得动"
 
 ---
 

@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [三类查询对象选型](#1-三类查询对象选型)
 2. [CriteriaQuery：链式条件查询](#2-criteriaquery链式条件查询)
@@ -23,12 +23,12 @@
 |------|--------------|-------------|-------------|
 | 表达方式 | Java 链式（类型安全） | JSON 字符串 | ELC builder（类型安全） |
 | 能力覆盖 | 常规条件（match/range/exists） | 全部 DSL（不校验语法） | **全部 DSL**（聚合/kNN/高亮/建议器） |
-| 动态拼接 | ✅ 适合 | ❌ 拼字符串易错 | ✅ 适合 |
-| 类型检查 | ✅ 编译期 | ❌ 运行期 | ✅ 编译期 |
+| 动态拼接 | ✓ 适合 | ✗ 拼字符串易错 | ✓ 适合 |
+| 类型检查 | ✓ 编译期 | ✗ 运行期 | ✓ 编译期 |
 | 使用占比 | 简单场景 | 尽量不用 | **复杂场景主力** |
 | 性能 | 无差异（最终都是 JSON） | 无差异 | 无差异 |
 
-> 🎯 **选型一句话**："简单用 Criteria，复杂用 Native，String 只有偷懒一个理由"——生产代码里 StringQuery 出现得越少越好。
+> **选型一句话**："简单用 Criteria，复杂用 Native，String 只有偷懒一个理由"——生产代码里 StringQuery 出现得越少越好。
 
 ## 2. CriteriaQuery：链式条件查询
 
@@ -71,7 +71,7 @@ SearchHits<Product> hits = operations.search(query, Product.class, IndexCoordina
 | `where("field").matches("term")` | match 语义 | match |
 | `criteria.and(...)` / `criteria.or(...)` | 条件组合 | bool must / should |
 
-> ⚠️ **Criteria 的坑**：① `is()` 对字符串生成 query_string（特殊字符需转义）；② **Nested 对象与 GeoJson 不能派生**——嵌套查询/地理查询必须 NativeQuery；③ `between` 双边界都包含（与 [04 篇](04-Repository速查.md) 派生 Between 一致）。
+> **Criteria 的坑**：① `is()` 对字符串生成 query_string（特殊字符需转义）；② **Nested 对象与 GeoJson 不能派生**——嵌套查询/地理查询必须 NativeQuery；③ `between` 双边界都包含（与 [04 篇](04-Repository速查.md) 派生 Between 一致）。
 
 ## 3. NativeQuery：全能力查询（主力）
 
@@ -115,7 +115,7 @@ SearchHits<Product> hits = operations.search(query, Product.class, IndexCoordina
 | `withRoute(String)` | 路由键 |
 | `withRuntimeFields(List<RuntimeField>)` | 运行时字段 |
 
-> 🎯 **为什么 NativeQuery 是主力**：它直接透传 ELC 的 Query 模型——SDE 不必为每个新 DSL 特性"补课"，ES 新增查询能力（如 kNN、hybrid、新布尔组合）当天就能用。**"薄封装、全能力"是 4.4 起的设计取向**。
+> **为什么 NativeQuery 是主力**：它直接透传 ELC 的 Query 模型——SDE 不必为每个新 DSL 特性"补课"，ES 新增查询能力（如 kNN、hybrid、新布尔组合）当天就能用。**"薄封装、全能力"是 4.4 起的设计取向**。
 
 ### 3.2 常用 ELC 查询 lambda 速查
 
@@ -166,7 +166,7 @@ NativeQuery query = NativeQuery.builder()
     .build();
 ```
 
-> 💡 **列表接口三件套**：`SourceFilter`（减传输）+ `TrackTotalHitsUpTo`（减统计开销）+ 合理 `Pageable`（减结果量）——三个参数一次配齐，搜索列表页 QPS 明显提升。
+> **列表接口三件套**：`SourceFilter`（减传输）+ `TrackTotalHitsUpTo`（减统计开销）+ 合理 `Pageable`（减结果量）——三个参数一次配齐，搜索列表页 QPS 明显提升。
 
 ## 5. 高亮查询速查
 
@@ -203,7 +203,7 @@ List<String> fragments = hits.getSearchHit(0).getHighlightField("name");  // 高
 | `withPhraseLimit` | 短语匹配限制 |
 | `getHighlightField(field)` | 从 SearchHit 取高亮片段 |
 
-> ⚠️ **高亮三连坑**：① 返回类型必须是 `SearchHits`/`SearchPage`；② 高亮字段必须分词索引（Text），Keyword 字段高亮无意义；③ 搜索关键词与高亮关键词不一致时高亮不生效（ES 按命中的 term 高亮，不做二次匹配）。
+> **高亮三连坑**：① 返回类型必须是 `SearchHits`/`SearchPage`；② 高亮字段必须分词索引（Text），Keyword 字段高亮无意义；③ 搜索关键词与高亮关键词不一致时高亮不生效（ES 按命中的 term 高亮，不做二次匹配）。
 
 ## 6. 文档级操作（DocumentOperations）
 
@@ -241,7 +241,7 @@ String[] ids = ops.delete(List.of("id1", "id2"), index);
 | `get` / `exists` | 单文档读取 | — |
 | `count` | 文档数统计 | 看板 |
 
-> 🎯 **save vs update 的选择**：字段多、全量覆盖 → `save`；只改一两个字段、高并发递增 → `update` + `withRetryOnConflict`（乐观并发，冲突重试）。**生产并发写场景几乎都用 update 而不是 save**——save 的覆盖写会丢并发更新。
+> **save vs update 的选择**：字段多、全量覆盖 → `save`；只改一两个字段、高并发递增 → `update` + `withRetryOnConflict`（乐观并发，冲突重试）。**生产并发写场景几乎都用 update 而不是 save**——save 的覆盖写会丢并发更新。
 
 ## 7. 搜索操作（SearchOperations）
 
@@ -270,7 +270,7 @@ SearchScrollHits<Product> scrollHits = operations.searchScrollStart(1, query, Pr
 | `searchScrollStart` / `searchScrollContinue` / `searchScrollClear` | `SearchScrollHits<T>` | 滚动 API |
 | `openPointInTime` / `closePointInTime` | PIT id | PIT 深分页 |
 
-> ⚠️ **索引坐标（IndexCoordinates）**：4.0 起所有模板方法都必须显式传 `IndexCoordinates`（索引名）——不再从实体隐式推断；写多索引查询时用逗号拼接。漏传会直接编译不过（好事：显式化）。
+> **索引坐标（IndexCoordinates）**：4.0 起所有模板方法都必须显式传 `IndexCoordinates`（索引名）——不再从实体隐式推断；写多索引查询时用逗号拼接。漏传会直接编译不过（好事：显式化）。
 
 ## 8. 查询执行链路与调优
 
@@ -304,7 +304,7 @@ SearchScrollHits<Product> scrollHits = operations.searchScrollStart(1, query, Pr
 | 深分页慢 | 用 search_after 了吗 | 见 06 篇 |
 | 高亮慢 | term_vector 开没开 | Text 字段高亮开 term_vector（`@Field(termVector=WITH_POSITIONS_OFFSETS)`） |
 
-> 💡 **排障三板斧**：① 传输层日志开 trace 看真实 DSL（02 篇）；② 拿 DSL 去 Kibana `_profile` 分析阶段耗时；③ 对比"原生客户端直查 vs SDE 查询"耗时可定位是不是组件层开销——三斧下去 90% 的"ES 慢"问题都能定位到层。
+> **排障三板斧**：① 传输层日志开 trace 看真实 DSL（02 篇）；② 拿 DSL 去 Kibana `_profile` 分析阶段耗时；③ 对比"原生客户端直查 vs SDE 查询"耗时可定位是不是组件层开销——三斧下去 90% 的"ES 慢"问题都能定位到层。
 
 ---
 

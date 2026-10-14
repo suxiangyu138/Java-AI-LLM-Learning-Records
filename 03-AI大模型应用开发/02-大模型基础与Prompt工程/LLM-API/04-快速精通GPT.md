@@ -1,4 +1,4 @@
-# 🚀 快速精通 GPT（OpenAI）
+# 快速精通 GPT（OpenAI）
 
 > **核心摘要**：OpenAI GPT 系列是当前最主流、生态最成熟的闭源大语言模型。本文涵盖 GPT 模型全景图、API 完整实战（基础对话、流式输出、Function Calling、Structured Outputs、Vision）、进阶能力（Prompt Caching、Batch API、推理模型）、成本优化与 Prompt 工程最佳实践。
 

@@ -1,6 +1,6 @@
 # 01 - Java 基础与面向对象高频题
 
-> 🎯 面试第一关 — 占权重最高、最不容易拉开差距也最不能丢分的模块。重点是"概念准确 + 对比清晰 + 能举反例"
+> 面试第一关 — 占权重最高、最不容易拉开差距也最不能丢分的模块。重点是"概念准确 + 对比清晰 + 能举反例"
 
 ---
 
@@ -39,7 +39,7 @@ a.sound();              // 输出 "汪汪"（动态绑定）
 - 接口 vs 抽象类？→ 接口：行为契约、多实现、默认方法；抽象类：模板骨架、单继承、可有状态字段
 
 **记忆点：**
-> 🎯 封装藏数据、继承传血脉、多态靠重写。抽象类管"是什么"（is-a），接口管"能做什么"（can-do）。
+> 封装藏数据、继承传血脉、多态靠重写。抽象类管"是什么"（is-a），接口管"能做什么"（can-do）。
 
 ### 1.2 接口 vs 抽象类的本质区别？
 
@@ -80,7 +80,7 @@ a.equals(b)     // true：String 重写了 equals，比较内容
 **追问：** 重写 equals 为什么必须重写 hashCode？→ 违反约定会导致 HashMap/HashSet 中对象"找不到"（相同对象 hashCode 不同 → 分到不同桶，get 返回 null）。equals 相等的对象 hashCode 必须相等。
 
 **记忆点：**
-> 🎯 基本类型比值，引用类型比地址；equals 默认比地址，重写后才比内容。重写 equals 必须重写 hashCode — 这是集合类的地基。
+> 基本类型比值，引用类型比地址；equals 默认比地址，重写后才比内容。重写 equals 必须重写 hashCode — 这是集合类的地基。
 
 ### 2.2 hashCode() 在 HashMap 中如何工作？
 
@@ -132,14 +132,14 @@ if (anObject instanceof String) {               // 类型检查
 
 ```java
 // 拼接性能对比：100 万次拼接
-String s = ""; for(...) { s += "a"; }          // ❌ 每次创建新对象，O(n²)
-StringBuilder sb = new StringBuilder(); ...     // ✅ 底层 char[] 扩容，O(n)
+String s = ""; for(...) { s += "a"; }          // ✗ 每次创建新对象，O(n²)
+StringBuilder sb = new StringBuilder(); ...     // ✓ 底层 char[] 扩容，O(n)
 ```
 
 **追问：** JDK 为什么对 `+` 做了优化？→ 编译期常量折叠 + 字节码转 StringBuilder.append（但循环内仍低效）。concat 和 + 的区别？→ + 会 new StringBuilder，concat 是 char[] 拷贝，小串用 + 即可。
 
 **记忆点：**
-> 🎯 单线程拼接 → StringBuilder；多线程共享 → StringBuffer；大量字符串拼接一定不用 String 的 `+`（O(n²) 陷阱）。
+> 单线程拼接 → StringBuilder；多线程共享 → StringBuffer；大量字符串拼接一定不用 String 的 `+`（O(n²) 陷阱）。
 
 ### 3.3 字符串常量池与 intern()
 
@@ -188,7 +188,7 @@ private static void change(int x, User u2) {
 ```java
 Integer a = 100, b = 100;      a == b   // true（缓存池命中）
 Integer c = 200, d = 200;      c == d   // false（各自 new）
-Integer e = null; int f = e;            // ❌ 拆箱 NPE
+Integer e = null; int f = e;            // ✗ 拆箱 NPE
 ```
 
 **追问：** 拆箱 NPE 场景？→ 包装类型入参 + 自动拆箱时值为 null → NullPointerException（线上高频故障）。阿里规范为什么说包装类型做 POJO 属性？→ 区分"值为 0"与"值为空"。
@@ -212,11 +212,11 @@ Integer e = null; int f = e;            // ❌ 拆箱 NPE
 
 ```java
 List<? extends Number> list = new ArrayList<Integer>();
-// list.add(1);  // ❌ 不能写：编译器不知道具体是 Integer 还是 Double
+// list.add(1);  // ✗ 不能写：编译器不知道具体是 Integer 还是 Double
 
 List<? super Integer> list2 = new ArrayList<Number>();
-list2.add(1);     // ✅ 能写
-// Number n = list2.get(0);  // ❌ 读出来是 Object
+list2.add(1);     // ✓ 能写
+// Number n = list2.get(0);  // ✗ 读出来是 Object
 ```
 
 **追问：** 为什么擦除后还有类型信息？→ 字节码 Signature 属性保留签名（反射 getGenericType 可读）。桥方法？→ 继承泛型父类时编译器生成桥方法保持多态。
@@ -261,6 +261,6 @@ public @interface ExcelColumn {
 
 ---
 
-> 🎯 **核心要点**：基础模块的面试哲学是"每个概念准备两层" — 第一层定义准确（是什么 + 对比表），第二层机制清楚（为什么 + 反例/陷阱）。String、equals/hashCode、值传递、装箱缓存是追问率最高的四个点，务必讲透。
+> **核心要点**：基础模块的面试哲学是"每个概念准备两层" — 第一层定义准确（是什么 + 对比表），第二层机制清楚（为什么 + 反例/陷阱）。String、equals/hashCode、值传递、装箱缓存是追问率最高的四个点，务必讲透。
 
 **下一模块**：[02-集合框架高频题与源码深挖](02-集合框架高频题与源码深挖.md) / **返回总览**：[00-Java核心面试大全总览](00-Java核心面试大全总览.md)

@@ -1,10 +1,10 @@
 # 09 - Grok Java 后端集成实战
 
-> 🎯 Java 开发者如何将 Grok 的能力嵌入到后端系统中？本章从 Spring AI 集成、自建 API 客户端、Agent 开发到生产级最佳实践，提供完整的 Java + Grok 集成方案
+> Java 开发者如何将 Grok 的能力嵌入到后端系统中？本章从 Spring AI 集成、自建 API 客户端、Agent 开发到生产级最佳实践，提供完整的 Java + Grok 集成方案
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [集成方案选型](#1-集成方案选型)
 2. [Spring AI 集成 Grok](#2-spring-ai-集成-grok)
@@ -20,28 +20,28 @@
 ```text
 方案对比（2026.07）
 │
-├── 🥇 Cursor + Grok 4.5 ⭐⭐⭐⭐⭐ (2026 新增！最推荐)
+├── Cursor + Grok 4.5 ★★★★★ (2026 新增！最推荐)
 │   ├── IDE 内原生 Grok 4.5 — 免 API Key、免配置
 │   ├── Agent 模式：多文件编辑 + 终端 + Git 一键操作
 │   ├── Token 效率 4.2× → Agent 任务极省
 │   └── 适合：Java 开发者日常编码首选
 │
-├── Spring AI ⭐⭐⭐⭐⭐ (API 集成推荐)
+├── Spring AI ★★★★★ (API 集成推荐)
 │   ├── 自动配置、连接池、重试
 │   ├── 统一抽象（可随时切换底层模型）
 │   └── 适合：Spring Boot 项目需要 API 可控调用
 │
-├── LangChain4j ⭐⭐⭐⭐
+├── LangChain4j ★★★★
 │   ├── 更灵活的 API
 │   ├── 内置 RAG / Agent 原语
 │   └── 适合：需要复杂 LLM 编排
 │
-├── 直接 HTTP ⭐⭐⭐
+├── 直接 HTTP ★★★
 │   ├── 零依赖、完全可控
 │   ├── 不依赖 Spring 生态
 │   └── 适合：轻量级项目 / 非 Spring 项目
 │
-└── OpenAI SDK 兼容 ⭐⭐⭐⭐
+└── OpenAI SDK 兼容 ★★★★
     ├── 直接用 OpenAI Java SDK
     ├── 仅改 base URL 和 Key
     └── 适合：已有 OpenAI 集成的项目迁移
@@ -509,12 +509,12 @@ public class RagService {
 └─────────────────────────────────────────┘
 
 可用工具：
-├── 📁 FileTool — 读写文件
-├── 🔍 SearchTool — 搜索 Web/X 平台
-├── 🗄️ DatabaseTool — SQL 查询
-├── 🌐 HttpTool — HTTP API 调用
-├── 📊 CodeInterpreter — Python 执行
-└── 🔧 ShellTool — Shell 命令 (沙箱)
+├── FileTool — 读写文件
+├── SearchTool — 搜索 Web/X 平台
+├── DatabaseTool — SQL 查询
+├── HttpTool — HTTP API 调用
+├── CodeInterpreter — Python 执行
+└── ShellTool — Shell 命令 (沙箱)
 ```
 
 ### 5.2 Agent 核心实现
@@ -676,7 +676,7 @@ public class DatabaseQueryTool implements AgentTool {
             String sql = new ObjectMapper()
                 .readTree(arguments).get("sql").asText();
 
-            // 🛡️ 安全检查：只允许 SELECT
+            // 安全检查：只允许 SELECT
             if (!sql.trim().toUpperCase().startsWith("SELECT")) {
                 return "错误：仅允许 SELECT 查询";
             }
@@ -701,15 +701,15 @@ public class DatabaseQueryTool implements AgentTool {
 
 | 实践 | 说明 | 优先级 |
 |------|------|:---:|
-| **API Key 安全管理** | 环境变量/密钥管理服务，绝不硬编码 | 🔴 必须 |
-| **连接池 + 超时** | 配置 HTTP 连接池，防止连接泄漏 | 🔴 必须 |
-| **熔断降级** | 使用 Resilience4j/Sentinel 防止雪崩 | 🔴 必须 |
-| **缓存策略** | 相同问题缓存结果，减少 API 调用 | 🟡 推荐 |
-| **Token 预算管理** | 监控和限制每用户/每会话 Token 消耗 | 🟡 推荐 |
-| **内容审核** | 对用户输入和模型输出做内容安全检查 | 🟡 推荐 |
-| **请求日志** | 记录所有 API 调用（脱敏后），便于审计 | 🟢 建议 |
-| **灰度发布** | 模型切换时用灰度策略验证 | 🟢 建议 |
-| **多模型 Fallback** | Grok 不可用时自动切换 GPT-4o 等 | 🟢 建议 |
+| **API Key 安全管理** | 环境变量/密钥管理服务，绝不硬编码 | 必须 |
+| **连接池 + 超时** | 配置 HTTP 连接池，防止连接泄漏 | 必须 |
+| **熔断降级** | 使用 Resilience4j/Sentinel 防止雪崩 | 必须 |
+| **缓存策略** | 相同问题缓存结果，减少 API 调用 | 推荐 |
+| **Token 预算管理** | 监控和限制每用户/每会话 Token 消耗 | 推荐 |
+| **内容审核** | 对用户输入和模型输出做内容安全检查 | 推荐 |
+| **请求日志** | 记录所有 API 调用（脱敏后），便于审计 | 建议 |
+| **灰度发布** | 模型切换时用灰度策略验证 | 建议 |
+| **多模型 Fallback** | Grok 不可用时自动切换 GPT-4o 等 | 建议 |
 
 ### 6.2 熔断配置示例
 
@@ -827,7 +827,7 @@ public class GrokMetrics {
 }
 ```
 
-> 🎯 **核心要点**：Java 集成 Grok 最推荐 Spring AI 方案——开箱即用的连接管理、多模型配置和工具调用支持。生产环境务必加上熔断、限流、重试三板斧，配合指标监控和成本追踪，才能让 Grok 从"Demo"变成"生产级"。
+> **核心要点**：Java 集成 Grok 最推荐 Spring AI 方案——开箱即用的连接管理、多模型配置和工具调用支持。生产环境务必加上熔断、限流、重试三板斧，配合指标监控和成本追踪，才能让 Grok 从"Demo"变成"生产级"。
 
 ---
 

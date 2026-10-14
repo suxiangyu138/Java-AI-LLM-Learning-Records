@@ -1,6 +1,6 @@
 # 01 - AI Agent 开发框架对比
 
-> 🎯 2026 年 Python Agent 框架格局已显著收敛 — 本文覆盖 10+ 主流框架的定位、核心能力、GitHub 数据、选型决策树。核心判断：模型原生能力在增强，框架"胶水"价值在降低
+> 2026 年 Python Agent 框架格局已显著收敛 — 本文覆盖 10+ 主流框架的定位、核心能力、GitHub 数据、选型决策树。核心判断：模型原生能力在增强，框架"胶水"价值在降低
 
 ---
 
@@ -142,6 +142,6 @@ Python Agent 框架分层（2026）
 
 ---
 
-> 🎯 **核心要点**：Agent 框架选型三问 — **① 团队技术栈**（Python→LangGraph/CrewAI、.NET→MS Agent Framework、Google→ADK）**② 核心场景**（RAG→LlamaIndex、流程控制→LangGraph、快速多角色→CrewAI）**③ 简单优先**（先试原生 Function Calling，不够再上框架）。
+> **核心要点**：Agent 框架选型三问 — **① 团队技术栈**（Python→LangGraph/CrewAI、.NET→MS Agent Framework、Google→ADK）**② 核心场景**（RAG→LlamaIndex、流程控制→LangGraph、快速多角色→CrewAI）**③ 简单优先**（先试原生 Function Calling，不够再上框架）。
 
 **下一模块**：[02-模型推理与服务引擎](02-模型推理与服务引擎.md) / **返回总览**：[00-生态总览](00-Python生态知识体系总览.md)

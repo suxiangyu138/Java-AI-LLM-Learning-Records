@@ -1,7 +1,7 @@
 # 07-pipeline与推理API
 > 定位：pipeline 是 transformers 的任务级推理入口——一个函数跑通「加载→分词→推理→后处理」全流程；与 Auto 家族的分工是「快速验证 vs 精细控制」。
 
-## 📚 目录
+## 目录
 1. [pipeline 是什么](#1-pipeline-是什么)
 2. [任务家族全景](#2-任务家族全景)
 3. [三参数与返回结构](#3-三参数与返回结构)
@@ -127,7 +127,7 @@ pipe("图片路径或PIL对象", max_new_tokens=100)   # [{'generated_text': '�
 4. `return_full_text=False` 的作用？
 5. 多模态模型与纯文本模型在加载上的差异？
 
-> 🎯 **核心要点**：pipeline = 任务级零配置推理，验证与标准任务首选；生成注意 return_full_text 与 batch_size；流式/精细控制回 Auto 家族；model_kwargs 透传量化与精度；多模态走 AutoProcessor。
+> **核心要点**：pipeline = 任务级零配置推理，验证与标准任务首选；生成注意 return_full_text 与 batch_size；流式/精细控制回 Auto 家族；model_kwargs 透传量化与精度；多模态走 AutoProcessor。
 
 ---
 

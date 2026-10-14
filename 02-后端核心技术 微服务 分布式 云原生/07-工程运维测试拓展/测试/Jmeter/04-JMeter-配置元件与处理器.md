@@ -1,10 +1,10 @@
 # JMeter 配置元件与处理器
 
-> 🔧 CSV Data Set Config 数据驱动、HTTP Header/Cookie Manager、User Defined Variables、前后置处理器 —— 构建真实压测场景
+> CSV Data Set Config 数据驱动、HTTP Header/Cookie Manager、User Defined Variables、前后置处理器 —— 构建真实压测场景
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [配置元件 Config Element](#1-配置元件-config-element)
 2. [CSV Data Set Config](#2-csv-data-set-config)
@@ -123,10 +123,10 @@ invalid_user,wrong,UNKNOWN,401
 
 ```text
 自动管理 Cookie：
-  ✅ 接收 Set-Cookie → 自动存储
-  ✅ 后续请求自动带 Cookie
-  ✅ 按域名隔离
-  ✅ 模拟浏览器行为
+  ✓ 接收 Set-Cookie → 自动存储
+  ✓ 后续请求自动带 Cookie
+  ✓ 按域名隔离
+  ✓ 模拟浏览器行为
 
 配置项：
   Clear cookies each iteration? → 每轮迭代清空
@@ -141,7 +141,7 @@ invalid_user,wrong,UNKNOWN,401
   → 条件请求（If-Modified-Since）
   → 更真实模拟用户浏览器流量
 
-⚠️ 注意：
+注意：
   → 压测静态资源本身时不要开启
   → 混合压测时根据需要开启
 ```
@@ -187,7 +187,7 @@ vars.put("sign", sign);
 | 处理器 | 功能 | 场景 |
 |--------|------|------|
 | **Regular Expression Extractor** | 正则提取响应内容 | 提取 token, sessionId |
-| **JSON Extractor** | JSON Path 提取 | REST API 响应提取 ✅ |
+| **JSON Extractor** | JSON Path 提取 | REST API 响应提取 ✓ |
 | **CSS/JQuery Extractor** | CSS 选择器提取 HTML | 网页内容提取 |
 | **XPath Extractor** | XML 路径提取 | SOAP 响应 |
 | **Boundary Extractor** | 左右边界提取 | 简单字符串提取 |
@@ -253,14 +253,14 @@ Timer = 控制请求之间的等待时间
   Poisson Random Timer      → 泊松分布延迟
 
 使用建议：
-  ✅ Think Time：Gaussian Random Timer（模拟真实用户）
-  ✅ 限流目标：Constant Throughput Timer
-  ✅ 瞬时并发：Synchronizing Timer（如秒杀场景）
+  ✓ Think Time：Gaussian Random Timer（模拟真实用户）
+  ✓ 限流目标：Constant Throughput Timer
+  ✓ 瞬时并发：Synchronizing Timer（如秒杀场景）
 ```
 
 ---
 
-> 🎯 **核心要点**：**CSV Data Set Config** 是数据驱动的灵魂，**JSON Extractor** 是链式请求的枢纽，**HTTP Header Manager** 是请求头的管家。配置元件执行一次，处理器每次请求都跑。
+> **核心要点**：**CSV Data Set Config** 是数据驱动的灵魂，**JSON Extractor** 是链式请求的枢纽，**HTTP Header Manager** 是请求头的管家。配置元件执行一次，处理器每次请求都跑。
 
 ---
 

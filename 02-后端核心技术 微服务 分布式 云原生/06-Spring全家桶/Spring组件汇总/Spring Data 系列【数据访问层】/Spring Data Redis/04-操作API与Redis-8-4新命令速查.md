@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [六大 Operations 全览](#1-六大-operations-全览)
 2. [Value / Hash 操作速查](#2-value--hash-操作速查)
@@ -30,7 +30,7 @@
 | （附）`opsForGeo()` | GEO | add/radius | 附近的人（[Redis-03](../../../../02-非关系型数据库/Redis/03-Redis高级数据结构.md)） |
 | （附）`opsForHyperLogLog()` | HLL | add/size | 基数统计（UV） |
 
-> 💡 记忆抓手：**"opsFor 开头的都是 Redis 模板的六块面板"**——拿到 RedisTemplate 后按数据结构选面板；每块面板方法名 ≈ Redis 命令的驼峰化（set ↔ SET、increment ↔ INCR、leftPush ↔ LPUSH）。
+> 记忆抓手：**"opsFor 开头的都是 Redis 模板的六块面板"**——拿到 RedisTemplate 后按数据结构选面板；每块面板方法名 ≈ Redis 命令的驼峰化（set ↔ SET、increment ↔ INCR、leftPush ↔ LPUSH）。
 
 ## 2. Value / Hash 操作速查
 
@@ -80,7 +80,7 @@ Object v2 = h.getAndExpire("cart:user:1", "sku:1001", Duration.ofMinutes(5)); //
 h.putIfAbsent("cart:user:1", "sku:1003", 1);               // HSETEX 配合（HSETNX 语义）
 ```
 
-> 💡 Hash 的适用：**"对象但只改部分字段"**（购物车数量、会话属性）——HINCRBY 原子改单字段，不用整个对象读写（对比 Value 存 JSON 每次全量序列化）。
+> Hash 的适用：**"对象但只改部分字段"**（购物车数量、会话属性）——HINCRBY 原子改单字段，不用整个对象读写（对比 Value 存 JSON 每次全量序列化）。
 
 ## 3. List / Set / ZSet 操作速查
 
@@ -97,7 +97,7 @@ l.trim("list:hot", 0, 99);                          // LTRIM 截断（只留 100
 l.size("queue:mail");                               // LLEN 积压量
 ```
 
-> ⚠️ 队列适用边界：List 当队列（LPUSH+BRPOP）是**轻量任务队列**——无 ACK、无重试、无死信；需要可靠消费 → Stream（[09 篇](09-消息Pub-Sub与Stream速查.md)）。
+> 队列适用边界：List 当队列（LPUSH+BRPOP）是**轻量任务队列**——无 ACK、无重试、无死信；需要可靠消费 → Stream（[09 篇](09-消息Pub-Sub与Stream速查.md)）。
 
 ### 3.2 SetOperations（去重/标签）
 
@@ -131,7 +131,7 @@ z.add("task:delay", "task:1", System.currentTimeMillis() + 60000);
 Set<Object> due = z.rangeByScore("task:delay", 0, System.currentTimeMillis());  // 到期任务
 ```
 
-> 🎯 面试必答：**"排行榜怎么实现？"**——ZSet：`ZADD 分数` + `ZINCRBY 加分` + `ZREVRANGE 取前 N`（带分数）+ `ZREVRANK 查名次`——O(logN) 复杂度，Redis 原生解决；**同分排序**注意（默认按字典序，需业务处理）；**排行榜过滤**（黑名单）用 ZREM。
+> 面试必答：**"排行榜怎么实现？"**——ZSet：`ZADD 分数` + `ZINCRBY 加分` + `ZREVRANGE 取前 N`（带分数）+ `ZREVRANK 查名次`——O(logN) 复杂度，Redis 原生解决；**同分排序**注意（默认按字典序，需业务处理）；**排行榜过滤**（黑名单）用 ZREM。
 
 ## 4. Stream 操作与 8.4 增强
 
@@ -154,7 +154,7 @@ st.ack("stream:order", "group1", msgs.stream().map(MapRecord::getId).toList()); 
 | `XREADGROUP CLAIM min-idle-time` | 8.4：认领空闲 pending + 新消息一步完成（消费恢复更高效） |
 | 用途 | 消息可靠消费（ACK 语义接近 MQ，[09 篇](09-消息Pub-Sub与Stream速查.md) 选型） |
 
-> 💡 Stream vs List 队列：Stream 有消费组/ACK/死信思路（接近 MQ），List 队列轻量无保障——**可靠消费选 Stream**（[09 篇](09-消息Pub-Sub与Stream速查.md)）。
+> Stream vs List 队列：Stream 有消费组/ACK/死信思路（接近 MQ），List 队列轻量无保障——**可靠消费选 Stream**（[09 篇](09-消息Pub-Sub与Stream速查.md)）。
 
 ## 5. Redis 8.4 新命令（面试加分项）
 
@@ -179,7 +179,7 @@ Boolean ok = redisTemplate.opsForValue()
 | 锁释放 | GET 对比 → DEL | **条件 DEL**（CAS 原子） |
 | 库存扣减校验 | GET → DECR → 校验 | 条件 SET / 原子 DECR + 校验 |
 
-> 🎯 面试必答：**"Redis 8.4 的条件 SET 解决什么问题？"**——把"先 GET 再 SET"两步检查变成**一条原子命令**（compare-and-set）：① 防重场景（幂等标记）免 Lua；② 锁释放场景（检查持有者再删）免 Lua——**两步之间有竞态窗口，条件命令消除窗口**；注意 8.4 条件命令的服务端版本要求（Redis 8.4+，[6.2 版本对照](#62-命令版本对照排错表)）。
+> 面试必答：**"Redis 8.4 的条件 SET 解决什么问题？"**——把"先 GET 再 SET"两步检查变成**一条原子命令**（compare-and-set）：① 防重场景（幂等标记）免 Lua；② 锁释放场景（检查持有者再删）免 Lua——**两步之间有竞态窗口，条件命令消除窗口**；注意 8.4 条件命令的服务端版本要求（Redis 8.4+，[6.2 版本对照](#62-命令版本对照排错表)）。
 
 ### 5.2 DELEX / MSETEX / DIGEST
 
@@ -229,7 +229,7 @@ List<Object> results = redisTemplate.executePipelined((RedisCallback<Object>) co
 | Stream 基础（XADD/XREADGROUP） | 5.0+ | 常规 |
 | XREADGROUP CLAIM min-idle-time | **8.4** | 认领增强 |
 
-> ⚠️ **版本不匹配的典型症状**：`unknown command 'DELEX'` / `ERR unknown command`——先查服务端版本（`redis-cli info server` 的 redis_version），新命令对老集群直接不可用；**上 8.4 新特性前先确认集群版本与模块**（RediSearch 是否安装）。
+> **版本不匹配的典型症状**：`unknown command 'DELEX'` / `ERR unknown command`——先查服务端版本（`redis-cli info server` 的 redis_version），新命令对老集群直接不可用；**上 8.4 新特性前先确认集群版本与模块**（RediSearch 是否安装）。
 
 ---
 

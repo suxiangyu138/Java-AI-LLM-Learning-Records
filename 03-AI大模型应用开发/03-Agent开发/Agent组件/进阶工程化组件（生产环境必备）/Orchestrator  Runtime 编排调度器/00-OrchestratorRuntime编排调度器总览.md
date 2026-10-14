@@ -2,7 +2,7 @@
 
 > 定位：Agent 生产工程化组件之「编排器与运行时」——Agent 的"操作系统"：执行引擎、持久执行、程序级调度、幂等重试、会话一致性、沙箱隔离。2026 核心共识：**"持久性、编排与可恢复性是任何企业生产 Agent 的真正阻碍"**——Agent 非确定性打破了经典可靠性假设（checkpoint/重试/幂等全部失效）；Google Agent Executor 开源与 Temporal/LangGraph 互补分层是两大标志事件。总览做索引与速查，子主题各一篇。
 
-## 📚 目录
+## 目录
 
 1. [知识体系导图](#1-知识体系导图)
 2. [模块导航](#2-模块导航)
@@ -71,7 +71,7 @@ Orchestrator Runtime 编排调度器
 
 ## 5. 2026 生态基准
 
-> 📅 基准窗口：2026-08。版本与事实以各模块【参考来源】为准。
+> 基准窗口：2026-08。版本与事实以各模块【参考来源】为准。
 
 - **运行时元年**："durability, orchestration, resumability 是企业生产 Agent 的真正阻碍"——**Google Agent Executor（2026-05 开源）**：事件日志+快照持久执行、默认拒绝沙箱（GKE Sandbox/Kata）、单写者会话一致性、连接恢复、轨迹分支；配套 **Agent Substrate**（K8s 基础 agent-first 计算层，毫秒级工具调用规模）。
 - **可验证执行**：Diagrid Catalyst 2.0（2026-07，Dapr 1.18）：加密历史签名 + 执行血统 + 工作流证明——**每个执行步骤可加密签名追溯**（合规链）；支持 LangGraph/MAF/ADK/Strands/OpenAI Agents/CrewAI/Pydantic AI，气隙部署，10x 性能。

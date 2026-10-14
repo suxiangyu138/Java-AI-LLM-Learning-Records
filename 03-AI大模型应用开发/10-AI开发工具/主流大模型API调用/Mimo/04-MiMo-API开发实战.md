@@ -1,6 +1,6 @@
 # 04 - MiMo API 开发实战
 
-> 🎯 MiMo API 完全兼容 OpenAI 协议 — 改 base_url 即用。本章覆盖快速接入、对话/流式、函数调用、长文本调用、价格计算与 Token Plan
+> MiMo API 完全兼容 OpenAI 协议 — 改 base_url 即用。本章覆盖快速接入、对话/流式、函数调用、长文本调用、价格计算与 Token Plan
 
 ---
 
@@ -36,7 +36,7 @@ response = client.chat.completions.create(
 print(response.choices[0].message.content)
 ```
 
-> 💡 也可通过火山引擎等第三方平台调用（OpenAI 兼容协议，改 base_url 即用）。
+> 也可通过火山引擎等第三方平台调用（OpenAI 兼容协议，改 base_url 即用）。
 
 ---
 
@@ -108,7 +108,7 @@ if msg.tool_calls:
     print(response2.choices[0].message.content)
 ```
 
-> 💡 **V2.5 改进**：并行 tool calls 的 JSON 格式合规性提升 — 多工具并行调用更稳定。
+> **V2.5 改进**：并行 tool calls 的 JSON 格式合规性提升 — 多工具并行调用更稳定。
 
 ---
 
@@ -174,6 +174,6 @@ print(f"成本: ¥{cost:.4f}")
 
 ---
 
-> 🎯 **核心要点**：MiMo API 三件事 — **① OpenAI 兼容（改 base_url 即用）② 长文本直接塞入（1M 上下文 + 800K 检索 95%）③ 缓存命中极便宜（¥0.025/百万）**。长文档场景的最佳姿势：整库/整文直接传入 + 稳定前缀触发缓存命中 + 成本比国际旗舰低 10-100 倍。
+> **核心要点**：MiMo API 三件事 — **① OpenAI 兼容（改 base_url 即用）② 长文本直接塞入（1M 上下文 + 800K 检索 95%）③ 缓存命中极便宜（¥0.025/百万）**。长文档场景的最佳姿势：整库/整文直接传入 + 稳定前缀触发缓存命中 + 成本比国际旗舰低 10-100 倍。
 
 **下一模块**：[05-长文本与RAG场景实战](05-长文本与RAG场景实战.md) / **返回总览**：[00-总览](00-Mimo-API知识体系总览.md)

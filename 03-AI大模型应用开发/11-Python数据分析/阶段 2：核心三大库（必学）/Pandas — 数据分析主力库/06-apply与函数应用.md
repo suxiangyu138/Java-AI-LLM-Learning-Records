@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [函数应用三兄弟](#1-函数应用三兄弟)
 2. [map 映射](#2-map-映射)
@@ -145,7 +145,7 @@ df["g2"] = np.where(df["age"] >= 30, "adult", "young")
 
 **验收动作**：① map 做 sex 编码（含未映射 NaN 兜底）；② apply 函数做年龄四档（含 NaN 处理）；③ 新建列三层级各一次（np.where 打标/loc 先默认后定向/apply 拼接描述）；④ 10 万元素 apply vs np.where 计时对比——**"三工具 + 层级 + 实测 = 函数层通过"**——**练习纪律**：apply 函数先处理 NaN——"NaN 进函数 = 报错或错值"。
 
-> 🎯 **核心要点**：三兄弟（map 查表替换/apply 逐值逻辑/applymap 全表）；map 未映射变 NaN（fillna 兜底）；DataFrame.apply 行级要 axis=1（不写是对列算）；新建列三层级（向量化最快 → loc 定向 → apply 最后——np.where 嵌套打标）；**"能向量化就不 apply——apply 是最后选项不是默认选项"**（写前自问三句）。
+> **核心要点**：三兄弟（map 查表替换/apply 逐值逻辑/applymap 全表）；map 未映射变 NaN（fillna 兜底）；DataFrame.apply 行级要 axis=1（不写是对列算）；新建列三层级（向量化最快 → loc 定向 → apply 最后——np.where 嵌套打标）；**"能向量化就不 apply——apply 是最后选项不是默认选项"**（写前自问三句）。
 
 ---
 

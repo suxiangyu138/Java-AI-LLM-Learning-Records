@@ -2,7 +2,7 @@
 
 > 单测的核心矛盾：被测单元需要依赖（DB、HTTP、消息队列），而单测必须快且确定。Mockito 5.x 与 Jupiter 原生集成，用 Mock/Stub/Spy 把依赖挡在测试边界之外。
 
-## 📚 目录
+## 目录
 
 1. [测试替身谱系](#1)
 2. [Mockito 核心 API](#2)
@@ -21,7 +21,7 @@
 | Mock | 预置行为 + 验证交互 | Mockito `mock()` |
 | Spy | 真实对象 + 选择性覆盖部分方法 | Mockito `spy()` |
 
-> 💡 **Mock 不是万能**：进程内 Fake（内存版依赖）常比 Mock 更贴合真实语义、重构更稳；Mock 优先用于「外部边界」（HTTP/RPC/MQ/时间），Fake 用于「内部协作对象」（Repository 之类）的快速迭代。
+> **Mock 不是万能**：进程内 Fake（内存版依赖）常比 Mock 更贴合真实语义、重构更稳；Mock 优先用于「外部边界」（HTTP/RPC/MQ/时间），Fake 用于「内部协作对象」（Repository 之类）的快速迭代。
 
 ## 2. Mockito 核心 API
 
@@ -48,7 +48,7 @@ doNothing().when(mock).send(any(Message.class));
 doThrow(new IOException("连接失败")).when(mock).connect();
 ```
 
-> ⚠️ **何时用 do- 风格**：`when(mock.voidMethod())` 编译不过（void 无法套用）；以及**避免在 stub 时真实执行一次方法副作用**（`when(spy.realMethod())` 会先跑真实方法）——一律用 do- 风格更安全。
+> **何时用 do- 风格**：`when(mock.voidMethod())` 编译不过（void 无法套用）；以及**避免在 stub 时真实执行一次方法副作用**（`when(spy.realMethod())` 会先跑真实方法）——一律用 do- 风格更安全。
 
 ### 2.3 Verify 交互验证
 
@@ -123,7 +123,7 @@ doReturn(bigList).when(spy).findRecent(anyInt());   // 只覆盖 findRecent，�
 assertEquals(3, spy.count());                        // 真实方法
 ```
 
-> ⚠️ Spy 的两个坑：`when(spy.realMethod())` 会先执行真实方法（用 `doReturn`）；final 方法/私有方法无法 spy（Mockito 5 内联 mock maker 可 mock final 类）。
+> Spy 的两个坑：`when(spy.realMethod())` 会先执行真实方法（用 `doReturn`）；final 方法/私有方法无法 spy（Mockito 5 内联 mock maker 可 mock final 类）。
 
 ## 4. 静态方法与构造器 Mock
 
@@ -213,7 +213,7 @@ class SyncServiceTest {
 }
 ```
 
-> 🎯 **核心要点**：Mock 的边界哲学是「**挡外部、不挡内部**」——Mock 是外部边界（网络/时间/ID）的闸门，Fake 是内部协作对象的替身，真实对象是确定逻辑的唯一真相；Mockito 5 的严格桩模式把「测试与行为漂移」提前暴露在编译期，是团队规范化的基础设施。Mock 静态/构造器是战术武器，使用频率接近零才是健康的代码。
+> **核心要点**：Mock 的边界哲学是「**挡外部、不挡内部**」——Mock 是外部边界（网络/时间/ID）的闸门，Fake 是内部协作对象的替身，真实对象是确定逻辑的唯一真相；Mockito 5 的严格桩模式把「测试与行为漂移」提前暴露在编译期，是团队规范化的基础设施。Mock 静态/构造器是战术武器，使用频率接近零才是健康的代码。
 
 ---
 

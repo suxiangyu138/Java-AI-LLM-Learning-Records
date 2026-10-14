@@ -2,7 +2,7 @@
 
 > 定位：欧拉路径的理论纵深——存在性判定定理、Hierholzer 算法完整推导、与哈密顿路径对比、一笔画问题、构造类应用
 
-## 📚 目录
+## 目录
 
 1. [欧拉路径/回路的判定定理](#1-欧拉路径回路的判定定理)
 2. [Hierholzer 算法推导](#2-hierholzer-算法推导)
@@ -27,7 +27,7 @@
   ② 欧拉路径存在 ⟺ 恰有 0 或 2 个奇数度节点
      （2 个时：起点 = 一个奇度节点，终点 = 另一个）
 
-⚠️ 面试必答：
+面试必答：
 "欧拉判定两句话：全偶有回路、
  恰两个奇度有路径（奇度 0 个时路径即回路）。"
 ```
@@ -44,7 +44,7 @@
   其余节点进出配对
   >2 个奇度 → 必然有边无法经过
 
-⚠️ 边数统计佐证：
+边数统计佐证：
   所有节点度数之和 = 2×边数（偶数）
   → 奇度节点数必为偶数（0、2、4...）
 ```
@@ -62,11 +62,11 @@ boolean hasEulerPath(int n, int[][] edges) {
     int startCnt = 0, endCnt = 0;
     for (int i = 0; i < n; i++) {
         int diff = out[i] - in[i];
-        if (diff == 1) startCnt++;        // ⚠️ 出比入多 1 → 起点候选
+        if (diff == 1) startCnt++;        // 出比入多 1 → 起点候选
         else if (diff == -1) endCnt++;    // 入比出多 1 → 终点候选
         else if (diff != 0) return false; // 差 >1 → 不可能
     }
-    // ⚠️ 回路：全 0；路径：恰好 1 个起点 + 1 个终点
+    // 回路：全 0；路径：恰好 1 个起点 + 1 个终点
     return (startCnt == 0 && endCnt == 0) ||
            (startCnt == 1 && endCnt == 1);
 }
@@ -89,11 +89,11 @@ Hierholzer（1873）：找欧拉回路/路径的线性算法
   ③ 回溯到有分叉的点 → 继续走
   ④ 栈弹出顺序即欧拉路径（逆序）
 
-⚠️ 为什么有效：
+为什么有效：
   贪心走会形成"子环"，回溯时把子环
   插入主路径 → 所有边恰好一次
 
-⚠️ 面试表达：
+面试表达：
 "Hierholzer = 贪心走边 + 回溯拼接——
  走一步删一条边，死路时把路径入栈；
  分叉点回来继续。复杂度 O(E) 线性。"
@@ -108,13 +108,13 @@ List<String> result = new ArrayList<>();
 void hierholzer(String node, Map<String, List<String>> graph) {
     List<String> neighbors = graph.get(node);
     while (neighbors != null && !neighbors.isEmpty()) {
-        String next = neighbors.remove(0);     // ⚠️ 走边即删（贪心）
+        String next = neighbors.remove(0);     // 走边即删（贪心）
         hierholzer(next, graph);               // 递归走
     }
-    result.add(node);                          // ⚠️ 死路回溯时入栈
+    result.add(node);                          // 死路回溯时入栈
 }
 // 调用后 result 反转 = 欧拉路径
-// ⚠️ 为什么"入栈"而非"直接加入"：
+// 为什么"入栈"而非"直接加入"：
 //   后加入的是主路径，先加入的是子环
 //   反转后才是正确的访问顺序
 
@@ -141,10 +141,10 @@ void hierholzerIter(String start, Map<String, List<String>> graph) {
 每个节点进栈出栈一次 → O(V)
 总复杂度 O(V + E)（线性！）
 
-⚠️ 对比：暴力找路径 O(E!)（排列所有边序）
+对比：暴力找路径 O(E!)（排列所有边序）
   Hierholzer 从指数降到线性 —— 贪心 + 回溯的威力
 
-⚠️ 面试表达：
+面试表达：
 "Hierholzer 线性 O(V+E)——每条边走一次删一次。
  关键设计：'边删除'保证不重不漏。"
 ```
@@ -169,7 +169,7 @@ void hierholzerIter(String start, Map<String, List<String>> graph) {
   每条边被删除恰好一次（贪心走时删）
   递归/栈保证删除的边都进入结果
 
-⚠️ 面试表达：
+面试表达：
 "正确性三性质：死路必是终点、
  回溯能续走子环、删边保证不重不漏——
  三个性质合起来证明算法完备。"
@@ -201,12 +201,12 @@ void hierholzerIter(String start, Map<String, List<String>> graph) {
 | 例子 | 一笔画 | 旅行商（TSP） |
 
 ```
-⚠️ 常见混淆：
+常见混淆：
   欧拉 = 边不重复（笔画问题）
   哈密顿 = 点不重复（旅行问题）
   判定难度天差地别：欧拉多项式、哈密顿 NP 完全
 
-⚠️ 面试必答：
+面试必答：
 "欧拉路径管'边'（一笔画），O(E) 可解；
  哈密顿路径管'点'（TSP），NP 完全——
  这是两类问题最根本的区别。"
@@ -238,7 +238,7 @@ void hierholzerIter(String start, Map<String, List<String>> graph) {
   0 个奇度：任意起点 → 一笔画回路
   2 个奇度：必须从奇度节点开始 → 在另一个奇度结束
 
-⚠️ 面试必答：
+面试必答：
 "一笔画判定 = 数奇度节点：0 个（回路）或
  2 个（从奇度起笔）——这就是欧拉定理的
  通俗版。"
@@ -250,7 +250,7 @@ void hierholzerIter(String start, Map<String, List<String>> graph) {
 2 个奇度节点：从任一奇度开始（必然结束于另一个）
 0 个奇度：可从任意点开始（回到自身）
 
-⚠️ 面试表达：
+面试表达：
 "奇度节点是'有进无出/有出无进'的节点——
  路径必须从'出多'开始、在'入多'结束。
  这就是起笔选择的数学依据。"
@@ -266,12 +266,12 @@ void hierholzerIter(String start, Map<String, List<String>> graph) {
 判定：只需存在性（度数条件）
 构造：需要输出路径（Hierholzer）
 
-⚠️ 构造题的两种形态：
+构造题的两种形态：
   ① 给定图 → 输出欧拉路径（332 重新安排行程）
   ② 设计图使欧拉路径存在（753 保险箱）
   ③ 合法重排（2097）：给边集 → 找路径
 
-⚠️ 面试表达：
+面试表达：
 "'存在性'用度数判定 O(V)；
  '构造'用 Hierholzer O(E)。
  构造题先证存在（度数条件），再构造。"
@@ -286,7 +286,7 @@ void hierholzerIter(String start, Map<String, List<String>> graph) {
   节点 = k-1 位，边 = k 位（每边对应一个密码）
   图全偶度 → 欧拉回路存在 → Hierholzer 构造
 
-⚠️ 面试表达：
+面试表达：
 "753 的本质是 de Bruijn 序列——
  把'密码'建模成图的边、'前缀'建模成节点，
  一条欧拉回路恰好覆盖所有密码一次。"
@@ -332,7 +332,7 @@ void hierholzerIter(String start, Map<String, List<String>> graph) {
 
 ---
 
-> 🎯 **核心要点**：欧拉体系 = **判定**（度数条件：全偶/两奇）+ **构造**（Hierholzer：贪心删边 + 回溯）+ **对比**（边 vs 点、多项式 vs NP 完全）。一笔画是判定定理的通俗版，de Bruijn 序列是构造类的代表应用。
+> **核心要点**：欧拉体系 = **判定**（度数条件：全偶/两奇）+ **构造**（Hierholzer：贪心删边 + 回溯）+ **对比**（边 vs 点、多项式 vs NP 完全）。一笔画是判定定理的通俗版，de Bruijn 序列是构造类的代表应用。
 
 ---
 

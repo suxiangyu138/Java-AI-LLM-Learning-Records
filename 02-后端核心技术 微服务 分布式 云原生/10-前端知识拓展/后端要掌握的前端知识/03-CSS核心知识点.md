@@ -1,5 +1,5 @@
 # 03-CSS核心知识点
-> 🎯 后端只需了解CSS的布局模型和调试方法 — 能看懂为什么"页面乱了"，知道什么是Flex布局和响应式设计
+> 后端只需了解CSS的布局模型和调试方法 — 能看懂为什么"页面乱了"，知道什么是Flex布局和响应式设计
 
 ---
 
@@ -99,7 +99,7 @@ border-radius: 8px;       /* 圆角 */
 }
 ```
 
-> 💡 **后端理解**：`box-sizing: border-box` 让一个`width: 300px`的盒子总宽度就是300px（padding和border内扣），而不是300+padding+border。看到前端全局设置这个属性是正常的。
+> **后端理解**：`box-sizing: border-box` 让一个`width: 300px`的盒子总宽度就是300px（padding和border内扣），而不是300+padding+border。看到前端全局设置这个属性是正常的。
 
 ---
 
@@ -179,4 +179,4 @@ Flex布局核心记忆：
 4. 常见原因：z-index层级、overflow:hidden裁剪、position定位
 ```
 
-> 🎯 **后端学CSS的最小集合**：理解盒模型 → 看懂Flex布局 → 知道响应式概念 → 能用DevTools查看元素样式。
+> **后端学CSS的最小集合**：理解盒模型 → 看懂Flex布局 → 知道响应式概念 → 能用DevTools查看元素样式。

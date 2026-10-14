@@ -2,7 +2,7 @@
 
 > 定位：最小生成树的理论纵深——Kruskal 与 Prim 双算法、切分定理与贪心正确性、虚拟节点技巧、关键边判定、MST 与其他图论的衔接
 
-## 📚 目录
+## 目录
 
 1. [MST 定义与切分定理](#1-mst-定义与切分定理)
 2. [Kruskal：并查集 + 排序](#2-kruskal并查集--排序)
@@ -23,7 +23,7 @@
   n 个节点 → n-1 条边
   无环 + 连通 + 权值最小
 
-⚠️ 面试必答：
+面试必答：
 "MST = 连通所有节点的 n-1 条最小权边
  （无环）——'最小连通骨架'。"
 ```
@@ -35,11 +35,11 @@
   把图切成两半（任意划分），横跨切分的最短边
   必属于某个 MST
 
-⚠️ 推论：
+推论：
   任意时刻，连接"已连接集合"与"外部"的最短边
   是安全的（贪心不会错）
 
-⚠️ 面试必答：
+面试必答：
 "切分定理保证贪心正确——
  跨切分的最短边必在某个 MST 中；
  Kruskal 与 Prim 都是它的实现
@@ -58,9 +58,9 @@ Kruskal：
   ② 从小到大选边：不形成环（并查集判断）就加入
   ③ 选够 n-1 条 → 完成
 
-⚠️ 判环：并查集 find(u) == find(v) → 会成环 → 跳过
+判环：并查集 find(u) == find(v) → 会成环 → 跳过
 
-⚠️ 面试必答：
+面试必答：
 "Kruskal = 边排序 + 并查集判环——
  从小到大加边，不成环就收；
  O(E log E)（排序主导）。"
@@ -81,16 +81,16 @@ int kruskal(int n, int[][] edges) {          // edges: {u, v, w}
     int total = 0, count = 0;
     for (int[] e : edges) {
         int ru = find(parent, e[0]), rv = find(parent, e[1]);
-        if (ru != rv) {                      // ⚠️ 不成环
+        if (ru != rv) {                      // 不成环
             parent[ru] = rv;
             total += e[2];
-            if (++count == n - 1) break;     // ⚠️ n-1 条完成
+            if (++count == n - 1) break;     // n-1 条完成
         }
     }
     return total;
 }
-// ⚠️ 复杂度：O(E log E)
-// ⚠️ 面试必答："Kruskal 三件套——排序、
+// 复杂度：O(E log E)
+// 面试必答："Kruskal 三件套——排序、
 //   并查集判环、n-1 条提前结束。"
 ```
 
@@ -106,11 +106,11 @@ Prim：
   ② 优先队列维护"连接已选与未选的最短边"
   ③ 每次取最短边 → 新节点入集 → 加入它的边
 
-⚠️ 与 Dijkstra 的区别：
+与 Dijkstra 的区别：
   Dijkstra：dist = 到源点的距离
   Prim：dist = 到集合的最短边（取 min 累计）
 
-⚠️ 面试必答：
+面试必答：
 "Prim = 集合扩张贪心——
  每步从'边界'取最短边；
  与 Dijkstra 同构（优先队列 + visited），
@@ -130,7 +130,7 @@ int prim(int n, List<int[]>[] graph) {
     while (!pq.isEmpty()) {
         int[] cur = pq.poll();
         int u = cur[0], w = cur[1];
-        if (inTree[u]) continue;             // ⚠️ 已在树中跳过
+        if (inTree[u]) continue;             // 已在树中跳过
         inTree[u] = true;
         total += w;
         if (++count == n) break;
@@ -141,8 +141,8 @@ int prim(int n, List<int[]>[] graph) {
     }
     return total;
 }
-// ⚠️ 复杂度：O(E log V)
-// ⚠️ 面试必答："Prim = 优先队列 + visited——
+// 复杂度：O(E log V)
+// 面试必答："Prim = 优先队列 + visited——
 //   每步取'到集合最短边'，O(E log V)。"
 ```
 
@@ -156,13 +156,13 @@ int prim(int n, List<int[]>[] graph) {
 |------|:---:|:---:|
 | 核心 | 边排序 + 并查集 | 优先队列 + visited |
 | 复杂度 | O(E log E) | O(E log V) |
-| 稠密图 | E 大 → 慢 | ✅ 更优 |
-| 稀疏图 | ✅ 更优 | 可用 |
-| 边集输入 | ✅ 天然 | 需转邻接 |
-| 进阶扩展 | ✅ 关键边/次小 | 较少 |
+| 稠密图 | E 大 → 慢 | ✓ 更优 |
+| 稀疏图 | ✓ 更优 | 可用 |
+| 边集输入 | ✓ 天然 | 需转邻接 |
+| 进阶扩展 | ✓ 关键边/次小 | 较少 |
 
 ```
-⚠️ 面试必答：
+面试必答：
 "稀疏图 Kruskal（E ≈ V）、稠密图 Prim——
  都是 O(E log) 级别，实现偏好决定；
  Kruskal 对'边集操作'（关键边）更自然。"
@@ -175,7 +175,7 @@ int prim(int n, List<int[]>[] graph) {
 "边集 + 并查集直觉" → Kruskal
 "邻接表 + 扩张直觉" → Prim
 
-⚠️ 面试表达：
+面试表达：
 "'最小连接'识别 MST；实现选型看
  数据形态（边集 vs 邻接）。"
 ```
@@ -193,7 +193,7 @@ int prim(int n, List<int[]>[] graph) {
   引水 = 城市间连边（费用 = 管道费）
   → 最小生成树（连通所有城市 + 水源）
 
-⚠️ 面试必答：
+面试必答：
 "虚拟节点把'选项'转成'边'——
  1168 的井 = 连向虚拟水源的边；
  选打井还是引水 = MST 自动决策。"
@@ -206,11 +206,11 @@ int prim(int n, List<int[]>[] graph) {
 int minCostToSupplyWater(int n, int[] wells, int[][] pipes) {
     List<int[]> edges = new ArrayList<>();
     for (int i = 1; i <= n; i++)
-        edges.add(new int[]{0, i, wells[i - 1]});   // ⚠️ 井 → 虚拟边
+        edges.add(new int[]{0, i, wells[i - 1]});   // 井 → 虚拟边
     for (int[] p : pipes) edges.add(p);             // 管道边
     return kruskal(n + 1, edges.toArray(new int[0][]));
 }
-// ⚠️ 面试必答："1168 = 虚拟节点 + Kruskal——
+// 面试必答："1168 = 虚拟节点 + Kruskal——
 //   打井费用变成'水源边'，MST 自动在
 //   打井与引水间选最优。"
 ```
@@ -229,9 +229,9 @@ int minCostToSupplyWater(int n, int[] wells, int[][] pipes) {
   删边跑 MST → 权值变化 → 关键边
   强制选边跑 MST → 权值不变 → 至少在一个 MST 中
 
-⚠️ 复杂度：O(E² log E)（每边一次 MST）——n 小可行
+复杂度：O(E² log E)（每边一次 MST）——n 小可行
 
-⚠️ 面试必答：
+面试必答：
 "关键边判定 = 删边后 MST 变化——
  枚举每条边重跑 MST；
  权值增大 = 关键、不变 = 伪关键。"
@@ -248,7 +248,7 @@ int minCostToSupplyWater(int n, int[] wells, int[][] pipes) {
 | 关键边 | 删边重跑 |
 
 ```
-⚠️ 面试必答：
+面试必答：
 "MST 变体大多基于 Kruskal 扩展——
  次小（替换边）、最大（降序）、
  关键边（删边重跑）。"
@@ -294,7 +294,7 @@ int minCostToSupplyWater(int n, int[] wells, int[][] pipes) {
 
 ---
 
-> 🎯 **核心要点**：MST = **切分定理**（贪心根基）+ **Kruskal/Prim 双算法** + **虚拟节点**（选项转边）+ **进阶**（关键边）。"最小连接"识别后，稀疏图 Kruskal、稠密图 Prim 是标准答案。
+> **核心要点**：MST = **切分定理**（贪心根基）+ **Kruskal/Prim 双算法** + **虚拟节点**（选项转边）+ **进阶**（关键边）。"最小连接"识别后，稀疏图 Kruskal、稠密图 Prim 是标准答案。
 
 ---
 

@@ -2,7 +2,7 @@
 
 > JSON 是现代 Web 的"通用数据语言"——轻量、可读、语言无关，是所有 Java 开发者必会的基础技能
 
-## 📚 目录
+## 目录
 
 1. [JSON 语法规范 (RFC 8259)](#1)
 2. [JSON 数据类型详解](#2)
@@ -35,7 +35,7 @@ JSON（JavaScript Object Notation）是一种轻量级的数据交换格式，�
 
 ### 1.2 基本语法规则
 
-| 规则 | 说明 | 正确 ✅ | 错误 ❌ |
+| 规则 | 说明 | 正确 ✓ | 错误 ✗ |
 |------|------|---------|---------|
 | **键必须双引号** | key 用 `"` 包裹 | `"name": "Alice"` | `name: "Alice"` |
 | **字符串双引号** | 值用 `"` 而非 `'` | `"hello"` | `'hello'` |
@@ -94,15 +94,15 @@ JSON 值
 
 ```json
 {
-  "integer": 9007199254740993,      // ⚠️ 超出 JS/部分库的安全整数范围
-  "float": 0.1 + 0.2,               // ⚠️ 浮点精度问题：不传 0.3，传字符串
-  "bigDecimal": "123456789.987654321", // ✅ 大数、精确小数用字符串
+  "integer": 9007199254740993,      // 超出 JS/部分库的安全整数范围
+  "float": 0.1 + 0.2,               // 浮点精度问题：不传 0.3，传字符串
+  "bigDecimal": "123456789.987654321", // ✓ 大数、精确小数用字符串
   "scientific": 1.5e10,              // 1.5 × 10¹⁰ = 15000000000
-  "leadingZero": 42                  // ❌ 不允许前导零（如 042）
+  "leadingZero": 42                  // ✗ 不允许前导零（如 042）
 }
 ```
 
-> 🎯 **核心要点**：涉及金额、大整数时，JSON 中优先用**字符串**传递，避免 Number 精度丢失。Jackson 可用 `@JsonFormat(shape = Shape.STRING)` 将 `BigDecimal`/`Long` 序列化为字符串。
+> **核心要点**：涉及金额、大整数时，JSON 中优先用**字符串**传递，避免 Number 精度丢失。Jackson 可用 `@JsonFormat(shape = Shape.STRING)` 将 `BigDecimal`/`Long` 序列化为字符串。
 
 ### 2.3 null vs 缺失字段
 
@@ -128,7 +128,7 @@ JSON 值
 ### 3.1 扁平 vs 嵌套
 
 ```json
-// ❌ 过度嵌套 —— 难以解析和扩展
+// ✗ 过度嵌套 —— 难以解析和扩展
 {
   "user": {
     "profile": {
@@ -139,7 +139,7 @@ JSON 值
   }
 }
 
-// ✅ 适度扁平 —— 命名体现层级
+// ✓ 适度扁平 —— 命名体现层级
 {
   "userId": 1,
   "userName": "Alice",
@@ -356,10 +356,10 @@ Set<ValidationMessage> errors = schema.validate(
     new ObjectMapper().readTree(userJson));
 
 if (errors.isEmpty()) {
-    System.out.println("✅ 校验通过");
+    System.out.println("✓ 校验通过");
 } else {
     errors.forEach(e ->
-        System.out.printf("❌ %s: %s%n", e.getPath(), e.getMessage()));
+        System.out.printf("✗ %s: %s%n", e.getPath(), e.getMessage()));
 }
 ```
 
@@ -388,13 +388,13 @@ if (errors.isEmpty()) {
 
 | 维度 | JSON | XML | YAML | Protobuf |
 |------|:---:|:---:|:---:|:---:|
-| **可读性** | ⭐⭐⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ❌ 二进制 |
+| **可读性** | ★★★★★ | ★★★ | ★★★★★ | ✗ 二进制 |
 | **数据体积** | 中等 | 大（标签冗余） | 中等 | 极小（压缩） |
 | **解析速度** | 快 | 慢 | 中等 | 极快 |
 | **Schema 支持** | JSON Schema | XSD (成熟) | 弱 | .proto (强) |
-| **注释** | ❌ 不支持 | ✅ | ✅ | ✅ |
-| **多态** | ❌ 需自行实现 | ✅ xsi:type | ✅ | ✅ |
-| **Java 生态** | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐⭐ |
+| **注释** | ✗ 不支持 | ✓ | ✓ | ✓ |
+| **多态** | ✗ 需自行实现 | ✓ xsi:type | ✓ | ✓ |
+| **Java 生态** | ★★★★★ | ★★★★ | ★★★ | ★★★★ |
 | **适合场景** | Web API、配置 | 企业系统集成 | 配置文件、DevOps | 高性能 RPC |
 
 ### 6.2 格式选型决策
@@ -415,7 +415,7 @@ if (errors.isEmpty()) {
 └── 前端构建工具配置 → JSON (package.json) / YAML (CI/CD)
 ```
 
-> 🎯 **核心要点**：JSON 是通用数据交换的"通用语"——你不需要在所有场景都用 JSON，但你必须能读写、校验、安全处理 JSON。
+> **核心要点**：JSON 是通用数据交换的"通用语"——你不需要在所有场景都用 JSON，但你必须能读写、校验、安全处理 JSON。
 
 ---
 

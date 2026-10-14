@@ -2,7 +2,7 @@
 
 > 定位：状态提升、Context 跨层传递、useReducer、Zustand/Redux——React 状态管理的完整层次
 
-## 📚 目录
+## 目录
 
 1. [状态管理的层次](#1-状态管理的层次)
 2. [状态提升](#2-状态提升)
@@ -22,7 +22,7 @@ React 状态管理的递进层次：
   ④ useReducer：复杂状态逻辑（多操作/联动）
   ⑤ 外部库：Zustand/Redux（全局共享 + 中间件）
 
-⚠️ 面试必答：
+面试必答：
 "状态管理从简到繁——先 useState，
  共享提升，跨层 Context，复杂逻辑
  useReducer，全局才上 Zustand/Redux。"
@@ -33,7 +33,7 @@ React 状态管理的递进层次：
 ## 2. 状态提升
 
 ```jsx
-// ⚠️ 状态提升：兄弟组件共享状态 → 放到共同父组件
+// 状态提升：兄弟组件共享状态 → 放到共同父组件
 
 // 子组件：受控（状态由父管理）
 function Child({ value, onChange }) {
@@ -53,7 +53,7 @@ function Parent() {
         </div>
     );
 }
-// ⚠️ 单向数据流：状态在父、数据向下、回调向上
+// 单向数据流：状态在父、数据向下、回调向上
 ```
 
 ---
@@ -96,7 +96,7 @@ function Button() {
 ### 3.2 Context 的注意事项
 
 ```jsx
-// ⚠️ 性能陷阱：value 每次渲染都是新对象 → 全部消费者重渲染
+// 性能陷阱：value 每次渲染都是新对象 → 全部消费者重渲染
 // 解决 1：useMemo 稳定 value
 const value = useMemo(() => ({ theme, setTheme }), [theme, setTheme]);
 
@@ -104,15 +104,15 @@ const value = useMemo(() => ({ theme, setTheme }), [theme, setTheme]);
 export const ThemeContext = createContext('light');
 export const UserContext = createContext(null);
 
-// ⚠️ Context vs props：
+// Context vs props：
 //   Context：跨层（3+ 层）省去逐层传递
 //   props：显式清晰（1-2 层优先 props）
-// ⚠️ Context vs 外部状态库：
+// Context vs 外部状态库：
 //   Context 变化 → 全部消费者重渲染（无选择性）
 //   Zustand 可订阅特定 slice（性能更好）
 ```
 
-> 🎯 **要点**：Context 三件套——createContext（默认值）、Provider（提供）、useContext（消费）。**useMemo 稳定 value** 是性能关键；大范围状态用 Zustand 更精细。
+> **要点**：Context 三件套——createContext（默认值）、Provider（提供）、useContext（消费）。**useMemo 稳定 value** 是性能关键；大范围状态用 Zustand 更精细。
 
 ---
 
@@ -157,12 +157,12 @@ function Counter() {
 |------|:---:|:---:|
 | 适用 | 简单状态 | 复杂联动逻辑 |
 | 更新 | 直接 set | dispatch action |
-| 可测试 | 较弱 | ✅ reducer 纯函数 |
-| 可预测 | 一般 | ✅ 集中管理 |
+| 可测试 | 较弱 | ✓ reducer 纯函数 |
+| 可预测 | 一般 | ✓ 集中管理 |
 | 选型 | 默认 | 多个互相关联的状态 |
 
 ```jsx
-// ⚠️ 适用场景：多个状态联动（表单多字段/购物车）
+// 适用场景：多个状态联动（表单多字段/购物车）
 // 例：购物车 add/remove/clear/update 四个 action
 function cartReducer(state, action) {
     switch (action.type) {
@@ -204,7 +204,7 @@ export const useStore = create((set) => ({
 
 // 组件使用
 function CartButton() {
-    // ⚠️ 选择订阅：只订阅 cart → cart 变化才重渲染
+    // 选择订阅：只订阅 cart → cart 变化才重渲染
     const cart = useStore((state) => state.cart);
     const addToCart = useStore((state) => state.addToCart);
     return <button onClick={() => addToCart({ id: 1 })}>{cart.length}</button>;
@@ -222,7 +222,7 @@ export const userSlice = createSlice({
     initialState: { name: '', token: null },
     reducers: {
         setUser: (state, action) => {
-            state.name = action.payload.name;   // ⚠️ Immer 直接修改
+            state.name = action.payload.name;   // Immer 直接修改
             state.token = action.payload.token;
         },
         logout: (state) => {
@@ -249,11 +249,11 @@ dispatch(setUser({ name: '张三', token: 'x' }));
 | Jotai | 原子状态（细粒度） | 中等 |
 | Context | 内置 | 跨层小范围 |
 
-> 🎯 **要点**：2026 状态管理选型——**小范围跨层用 Context、全局共享用 Zustand**（轻量）、大型复杂工程 Redux Toolkit。Zustand 的选择订阅（只订阅需要的状态）是性能优势核心。
+> **要点**：2026 状态管理选型——**小范围跨层用 Context、全局共享用 Zustand**（轻量）、大型复杂工程 Redux Toolkit。Zustand 的选择订阅（只订阅需要的状态）是性能优势核心。
 
 ---
 
-> 🎯 **核心要点**：状态管理体系 = **状态提升**（兄弟共享 → 共同父级）+ **Context**（跨层 + useMemo 稳定 value）+ **useReducer**（复杂联动逻辑）+ **Zustand/Redux**（全局共享 + 选择订阅）。选型阶梯："useState → 提升 → Context → Reducer → 外部库"由简到繁。
+> **核心要点**：状态管理体系 = **状态提升**（兄弟共享 → 共同父级）+ **Context**（跨层 + useMemo 稳定 value）+ **useReducer**（复杂联动逻辑）+ **Zustand/Redux**（全局共享 + 选择订阅）。选型阶梯："useState → 提升 → Context → Reducer → 外部库"由简到繁。
 
 ---
 

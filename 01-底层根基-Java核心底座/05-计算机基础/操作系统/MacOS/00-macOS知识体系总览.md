@@ -1,10 +1,10 @@
 # macOS 知识体系
 
-> 🍎 从 Java 开发者的视角驾驭 macOS —— Darwin 内核、zsh 终端、Homebrew 生态、APFS 文件系统、launchd 服务、多 JDK 丝滑切换，打造高效的 macOS 开发工作流
+> 从 Java 开发者的视角驾驭 macOS —— Darwin 内核、zsh 终端、Homebrew 生态、APFS 文件系统、launchd 服务、多 JDK 丝滑切换，打造高效的 macOS 开发工作流
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [知识体系导图](#1-知识体系导图)
 2. [模块导航](#2-模块导航)
@@ -18,14 +18,14 @@
 ```
 macOS 知识体系 (Java 开发者视角)
 │
-├── 🏗️ 系统认知层
+├── 系统认知层
 │   └── 01-macOS系统基础与演进
 │       ├── macOS 版本演进 (Mac OS X → macOS 15 Sequoia)
 │       ├── Darwin 内核架构：XNU = Mach + BSD
 │       ├── 文件系统演进：HFS+ → APFS
 │       └── macOS 与 Linux/Windows 的本质差异
 │
-├── ⌨️ 终端能力层
+├── 终端能力层
 │   └── 02-macOS终端与Shell全指南
 │       ├── Terminal.app vs iTerm2 vs Warp
 │       ├── zsh：macOS 默认 Shell 深度使用
@@ -33,7 +33,7 @@ macOS 知识体系 (Java 开发者视角)
 │       ├── 管道、重定向、脚本
 │       └── macOS 特有命令（open、pbcopy、mdfind）
 │
-├── ☕ Java 开发环境层
+├── Java 开发环境层
 │   └── 03-macOS环境配置与Java开发
 │       ├── macOS 环境变量体系（zsh profile / plist）
 │       ├── Homebrew 安装多 JDK 版本
@@ -41,21 +41,21 @@ macOS 知识体系 (Java 开发者视角)
 │       ├── JAVA_HOME 与 /usr/libexec/java_home
 │       └── IDEA / VS Code macOS 专属配置
 │
-├── 📦 软件管理层
+├── 软件管理层
 │   └── 04-Homebrew包管理与软件生态
 │       ├── Homebrew 核心命令与原理
 │       ├── Formulae vs Casks vs MAS
 │       ├── Brewfile：一键恢复开发环境
 │       └── Mac App Store 命令行（mas）
 │
-├── 🗄️ 系统运维层
+├── 系统运维层
 │   └── 05-macOS文件系统进程与安全
 │       ├── APFS 特性：快照、克隆、加密、空间共享
 │       ├── macOS 权限模型：Sandbox、TCC、Gatekeeper
 │       ├── launchd：统一服务管理器
 │       └── 网络、防火墙、安全审计
 │
-└── 🛠️ 实战排错层
+└── 实战排错层
     └── 06-macOS开发者实战手册
         ├── M 芯片兼容性（Rosetta 2、原生 ARM）
         ├── 端口占用、权限拒绝、编码乱码
@@ -82,9 +82,9 @@ macOS 知识体系 (Java 开发者视角)
 
 | 路线 | 路径 | 时长 | 目标 |
 |------|------|:--:|------|
-| 🟢 **快速上手** | 02 → 03 | 半天 | 能配好 Java 环境、熟练使用终端 |
-| 🟡 **系统掌握** | 01 → 02 → 03 → 06 | 1 天 | 理解 macOS 核心机制、独立排查环境问题 |
-| 🔴 **全栈运维** | 全部 6 模块 | 2-3 天 | 从开发到运维全面掌控 macOS 技术栈 |
+| **快速上手** | 02 → 03 | 半天 | 能配好 Java 环境、熟练使用终端 |
+| **系统掌握** | 01 → 02 → 03 → 06 | 1 天 | 理解 macOS 核心机制、独立排查环境问题 |
+| **全栈运维** | 全部 6 模块 | 2-3 天 | 从开发到运维全面掌控 macOS 技术栈 |
 
 ---
 
@@ -105,7 +105,7 @@ macOS 知识体系 (Java 开发者视角)
 
 ---
 
-> 🎯 **开始学习**：[01-macOS系统基础与演进](./01-macOS系统基础与演进.md) ｜ **快速实战**：[03-macOS环境配置与Java开发](./03-macOS环境配置与Java开发.md)
+> **开始学习**：[01-macOS系统基础与演进](./01-macOS系统基础与演进.md) ｜ **快速实战**：[03-macOS环境配置与Java开发](./03-macOS环境配置与Java开发.md)
 
 ---
 

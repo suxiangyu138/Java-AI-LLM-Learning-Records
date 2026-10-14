@@ -1,6 +1,6 @@
 # 05 - Chrome DevTools 网络调试实战
 
-> 🎯 Chrome DevTools 是后端工程师的"火眼金睛" — Network 面板抓包分析、重放请求验证接口、查看请求头和响应头、性能瀑布图定位瓶颈
+> Chrome DevTools 是后端工程师的"火眼金睛" — Network 面板抓包分析、重放请求验证接口、查看请求头和响应头、性能瀑布图定位瓶颈
 
 ---
 
@@ -36,11 +36,11 @@
 
 | 列 | 说明 | 后端关注 |
 |----|------|:---:|
-| **Name** | 请求 URL | ✅ |
-| **Status** | HTTP 状态码 | ⭐⭐⭐ |
+| **Name** | 请求 URL | ✓ |
+| **Status** | HTTP 状态码 | ★★★ |
 | **Type** | 资源类型（xhr/doc/script） | API 关注 xhr/fetch |
-| **Time** | 总耗时 | ⭐⭐ |
-| **Waterfall** | 时间瀑布图 | ⭐⭐ |
+| **Time** | 总耗时 | ★★ |
+| **Waterfall** | 时间瀑布图 | ★★ |
 
 ---
 
@@ -49,7 +49,7 @@
 ```
 过滤栏（Filter）常用技巧：
 
-  XHR           → 仅显示 AJAX 请求（⭐ 后端最常用）
+  XHR           → 仅显示 AJAX 请求（★ 后端最常用）
   method:POST   → 仅 POST 请求
   status-code:5 → 仅 5xx 错误
   domain:api    → 仅 api.example.com 域名
@@ -61,15 +61,15 @@
 常用快捷键：
   Ctrl+E          → 开始/停止记录
   Ctrl+F          → 搜索请求（按 URL/Header/Body）
-  Preserve log    → ✅ 勾选！页面跳转后保留日志
-  Disable cache   → ✅ 勾选！开发时禁用缓存
+  Preserve log    → ✓ 勾选！页面跳转后保留日志
+  Disable cache   → ✓ 勾选！开发时禁用缓存
 ```
 
 ---
 
 ## 3. 请求详情分析
 
-### Headers 标签（⭐ 最重要）
+### Headers 标签（★ 最重要）
 
 ```
   General:
@@ -77,12 +77,12 @@
     Request Method: GET
     Status Code: 200 OK
 
-  Response Headers:     ← ⭐ 看服务端返回的 Header
+  Response Headers:     ← ★ 看服务端返回的 Header
     Content-Type: application/json
     Cache-Control: max-age=3600
     Access-Control-Allow-Origin: *
 
-  Request Headers:      ← ⭐ 看浏览器发出的 Header
+  Request Headers:      ← ★ 看浏览器发出的 Header
     Authorization: Bearer eyJhbGci...
     Content-Type: application/json
     Cookie: SESSIONID=abc123
@@ -91,7 +91,7 @@
 ### Preview / Response 标签
 
 ```
-  Preview：格式化展示 JSON（树形可折叠） ⭐ 推荐
+  Preview：格式化展示 JSON（树形可折叠） ★ 推荐
   Response：原始响应体（可查看完整 JSON/HTML）
 ```
 
@@ -104,7 +104,7 @@ DNS Lookup:      5.2ms   ← DNS 解析
 Initial Connection: 12.3ms ← TCP 握手 + TLS 握手
 SSL:             8.1ms   ← TLS 握手（HTTP/2 可合并）
 Request sent:    0.1ms   ← 发送请求
-Waiting (TTFB):  250ms   ← ⭐ 等待服务端处理（排查重点）
+Waiting (TTFB):  250ms   ← ★ 等待服务端处理（排查重点）
 Content Download: 3.5ms  ← 下载响应
 
 总耗时 = 各阶段之和
@@ -162,7 +162,7 @@ Waterfall 颜色含义：
   █ 排队/阻塞
   █ DNS 解析
   █ 连接建立（TCP + TLS）
-  █ 等待响应（TTFB — ⭐ 后端关注）
+  █ 等待响应（TTFB — ★ 后端关注）
   █ 下载内容
 
 常见问题：
@@ -175,11 +175,11 @@ Waterfall 颜色含义：
 
 | 检查项 | 看哪里 | 正常值 |
 |--------|--------|:---:|
-| 请求是否压缩 | Response Headers → `Content-Encoding: gzip` | ✅ |
-| 缓存是否生效 | Status: 304 / Size: (disk cache) | ✅ |
+| 请求是否压缩 | Response Headers → `Content-Encoding: gzip` | ✓ |
+| 缓存是否生效 | Status: 304 / Size: (disk cache) | ✓ |
 | DNS 是否预解析 | `<link rel="dns-prefetch">` | 可选 |
-| 连接是否复用 | Timing → SSL 仅首次出现 | ✅ |
-| 静态资源 CDN | domain → cdn.example.com | ✅ |
+| 连接是否复用 | Timing → SSL 仅首次出现 | ✓ |
+| 静态资源 CDN | domain → cdn.example.com | ✓ |
 | 接口 TTFB | Timing → Waiting | < 200ms |
 
-> 🎯 **后端调试三件套**：Network 面板看请求/响应 + Copy as cURL 带回终端重现 + Timing 定位 TTFB 瓶颈。`Preserve log` 和 `Disable cache` 始终开启。
+> **后端调试三件套**：Network 面板看请求/响应 + Copy as cURL 带回终端重现 + Timing 定位 TTFB 瓶颈。`Preserve log` 和 `Disable cache` 始终开启。

@@ -1,6 +1,6 @@
 # 09 - Function Calling 与 Tool Use 深度实战
 
-> 🎯 Function Calling 是 LLM API 开发中最重要但也最容易出错的部分。不同平台的格式、限制、最佳实践各不相同。本文提供跨平台（OpenAI/Claude/Hermes/国产）的统一 Function Calling 封装方案、递归调用模式和 Agent 基础架构
+> Function Calling 是 LLM API 开发中最重要但也最容易出错的部分。不同平台的格式、限制、最佳实践各不相同。本文提供跨平台（OpenAI/Claude/Hermes/国产）的统一 Function Calling 封装方案、递归调用模式和 Agent 基础架构
 
 > **前置阅读**：[[04-快速精通GPT]]、[[06-快速精通Claude API]]、[[02-大模型API调用实践]]
 
@@ -24,11 +24,11 @@
 | 工具定义 | `tools` 参数 | `tools` 参数 | `<tools>` XML | `tools` 参数 | `tools` 参数 |
 | 调用格式 | `tool_calls` JSON | `tool_use` block | `<tool_call>` XML | `tool_calls` JSON | `tool_calls` JSON |
 | 结果回填 | `role: "tool"` | `tool_result` | `<tool_response>` | `role: "tool"` | `role: "tool"` |
-| 并行调用 | ✅ 原生 | ✅ 原生 | ✅ 数组 | ✅ 原生 | ⚠️ 有限 |
-| 强制调用 | `tool_choice` | ❌ 仅建议 | ❌ 仅建议 | `tool_choice` | `tool_choice` |
-| 兼容 OpenAI | ✅ 原生 | ❌ 需适配 | ⚠️ vLLM 解析 | ✅ 完全兼容 | ✅ 完全兼容 |
+| 并行调用 | ✓ 原生 | ✓ 原生 | ✓ 数组 | ✓ 原生 | 有限 |
+| 强制调用 | `tool_choice` | ✗ 仅建议 | ✗ 仅建议 | `tool_choice` | `tool_choice` |
+| 兼容 OpenAI | ✓ 原生 | ✗ 需适配 | vLLM 解析 | ✓ 完全兼容 | ✓ 完全兼容 |
 
-> 🎯 **核心思路**：以 OpenAI 格式为统一标准，非标准平台（Claude/Hermes）在适配层做转换
+> **核心思路**：以 OpenAI 格式为统一标准，非标准平台（Claude/Hermes）在适配层做转换
 
 ## 2. 统一 FC 封装层
 

@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [组件一句话定位](#1-组件一句话定位)
 2. [版本现状（2026-08）](#2-版本现状2026-08)
@@ -50,7 +50,7 @@
 - 7.0 三大卖点：原生 MFA、模块化配置（Customizer Bean）、PKCE 默认；
 - 2026-06 批次（7.0.6/7.1.0）：多项 CVE 修复（SAML 反序列化、XSS、开放重定向、X.509 冒用）。
 
-> ⚠️ **选型提醒**：新项目直接 7.1.x；Boot 3 存量项目按"6.5 → 7.0"迁移路径走（清 deprecation → 升 Boot 4）。
+> **选型提醒**：新项目直接 7.1.x；Boot 3 存量项目按"6.5 → 7.0"迁移路径走（清 deprecation → 升 Boot 4）。
 
 ## 3. 能力地图
 
@@ -75,7 +75,7 @@
 | 03-配置属性速查 | [01-与 Boot 自动配置协同](../../Spring Security与Spring Security OAuth2/01-核心架构：SecurityFilterChain与认证授权流程.md) |
 | 04-集成地图与常见问题 | [05-Web防护](../../Spring Security与Spring Security OAuth2/05-Web防护：CSRF、CORS与安全头.md)、[10-生产实践与面试题](../../Spring Security与Spring Security OAuth2/10-生产实践与面试题.md) |
 
-> 💡 本系列定位"查得快"，深度体系定位"学得透"——速查命中后，跳转深度体系看机制与实战。
+> 本系列定位"查得快"，深度体系定位"学得透"——速查命中后，跳转深度体系看机制与实战。
 
 ## 5. 快速上手 3 步
 
@@ -113,7 +113,7 @@ public class SecurityConfig {
 }
 ```
 
-> ⚠️ **上线前必查**：Boot 4 默认 CSRF 覆盖 API——无状态接口若返回 403，先看 [05-Web防护](../../Spring Security与Spring Security OAuth2/05-Web防护：CSRF、CORS与安全头.md) 再决定关不关。
+> **上线前必查**：Boot 4 默认 CSRF 覆盖 API——无状态接口若返回 403，先看 [05-Web防护](../../Spring Security与Spring Security OAuth2/05-Web防护：CSRF、CORS与安全头.md) 再决定关不关。
 
 ## 6. 速查导航
 

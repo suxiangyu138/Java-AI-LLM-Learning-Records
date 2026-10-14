@@ -162,7 +162,7 @@ openclaw terminal     # 终端对话
 
 **说明**：`/model` 切换模型。
 
-> ⚠️ **注意**：当前使用 `@mariozechner/pi-coding-agent` v0.73.1，官方已迁移到 `@earendil-works/pi-coding-agent`，后续可升级。
+> **注意**：当前使用 `@mariozechner/pi-coding-agent` v0.73.1，官方已迁移到 `@earendil-works/pi-coding-agent`，后续可升级。
 
 ---
 

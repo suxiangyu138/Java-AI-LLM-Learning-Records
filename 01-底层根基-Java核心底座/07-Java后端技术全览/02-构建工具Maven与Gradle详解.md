@@ -172,11 +172,11 @@ SNAPSHOT vs RELEASE：
 
 | Scope | 编译可用 | 测试可用 | 运行时可用 | 打包进 JAR | 典型示例 |
 |-------|---------|---------|-----------|-----------|---------|
-| **compile** | ✅ | ✅ | ✅ | ✅ | spring-boot-starter-web（默认） |
-| **provided** | ✅ | ✅ | ❌ | ❌ | servlet-api, lombok |
-| **runtime** | ❌ | ✅ | ✅ | ✅ | mysql-connector-java, 数据库驱动 |
-| **test** | ❌ | ✅ | ❌ | ❌ | junit, mockito, h2 |
-| **system** | ✅ | ✅ | ✅ | ❌ | 本地 jar（不推荐） |
+| **compile** | ✓ | ✓ | ✓ | ✓ | spring-boot-starter-web（默认） |
+| **provided** | ✓ | ✓ | ✗ | ✗ | servlet-api, lombok |
+| **runtime** | ✗ | ✓ | ✓ | ✓ | mysql-connector-java, 数据库驱动 |
+| **test** | ✗ | ✓ | ✗ | ✗ | junit, mockito, h2 |
+| **system** | ✓ | ✓ | ✓ | ✗ | 本地 jar（不推荐） |
 | **import** | 导入 BOM，不实际引入依赖 | - | - | - | spring-cloud-dependencies |
 
 ```xml
@@ -675,9 +675,9 @@ dependencies {
 | **构建模型** | 固定生命周期 | DAG（有向无环图）任务模型 |
 | **性能** | 中等 | 快（增量构建 + 构建缓存 + Daemon） |
 | **灵活性** | 低（插件扩展） | 高（脚本编程） |
-| **约定优于配置** | ✅ 强约束 | ⚠️ 较宽松 |
+| **约定优于配置** | ✓ 强约束 | 较宽松 |
 | **学习成本** | 低 | 中 |
-| **IDE 支持** | ⭐⭐⭐⭐⭐ | ⭐⭐⭐ |
+| **IDE 支持** | ★★★★★ | ★★★ |
 | **依赖冲突解决** | 自动（最短路径） | 自动（最新版本） |
 | **生态** | 老牌，市场占有率高 | Android 首选，新项目增多 |
 

@@ -1,7 +1,7 @@
 # Java 集成
 > MinIO Java SDK 全解：依赖与客户端、上传下载、分片上传、流式、预签名、版本操作——S3 兼容意味着这套代码切云 OSS 零改动
 
-## 📚 目录
+## 目录
 1. [依赖与客户端初始化](#1-依赖与客户端初始化)
 2. [基础操作：桶与对象](#2-基础操作桶与对象)
 3. [上传全形态](#3-上传全形态)
@@ -54,7 +54,7 @@ minio:
   secret-key: ${MINIO_SECRET_KEY}
 ```
 
-> 🎯 依赖哲学：**SDK 只有几十 KB，全部能力都是 S3 HTTP API 的封装**——网络问题排查、签名问题、超时配置，底层都在 HTTP 层（与 [Web 高阶 HTTP 体系](../../09-Web开发全流程/Web%20高阶知识/01-HTTP协议深入.md) 同源）。
+> 依赖哲学：**SDK 只有几十 KB，全部能力都是 S3 HTTP API 的封装**——网络问题排查、签名问题、超时配置，底层都在 HTTP 层（与 [Web 高阶 HTTP 体系](../../09-Web开发全流程/Web%20高阶知识/01-HTTP协议深入.md) 同源）。
 
 ## 2. 基础操作：桶与对象
 
@@ -131,7 +131,7 @@ client.putObject(PutObjectArgs.builder()
 | `.userMetadata` | 自定义元数据（`X-Amz-Meta-*`，可回读） |
 | 大小阈值 | **>100MB 用分片上传**（§4），`putObject` 适合中小文件 |
 
-> ⚠️ **上传前先设计键**：`users/{userId}/avatars/{uuid}.jpg` 这样的键前缀（[01 §2](01-对象存储核心概念与S3模型.md)）——上传瞬间定死组织方式，后面改键 = 全部重传。
+> **上传前先设计键**：`users/{userId}/avatars/{uuid}.jpg` 这样的键前缀（[01 §2](01-对象存储核心概念与S3模型.md)）——上传瞬间定死组织方式，后面改键 = 全部重传。
 
 ## 4. 分片上传：大文件的正确姿势
 
@@ -179,7 +179,7 @@ public void uploadLarge(String bucket, String objectKey, InputStream stream,
 | 断点续传 | 用 `listParts` 查已传片，续传未传部分 |
 | 中断清理 | 未 complete 的分片会占用存储——配生命周期自动清理（`AbortIncompleteMultipartUpload`） |
 
-> 🎯 面试点：**"大文件必须分片"的三个理由**——① 单请求大小限制；② 断点续传（网络抖动不用重传全部）；③ 并发加速（多片并行上传）。MinIO SDK 的 `putObject` 超过阈值会自动转分片，但**显式分片才能控制片大小与续传**。
+> 面试点：**"大文件必须分片"的三个理由**——① 单请求大小限制；② 断点续传（网络抖动不用重传全部）；③ 并发加速（多片并行上传）。MinIO SDK 的 `putObject` 超过阈值会自动转分片，但**显式分片才能控制片大小与续传**。
 
 ## 5. 下载与流式处理
 
@@ -209,7 +209,7 @@ client.getObject(GetObjectArgs.builder()
         .build());
 ```
 
-> 💡 流式铁律：**下载永远"流式转发"**（`transferTo`），别 `readAllBytes()` 进内存——大文件 + 高并发 = OOM。`GetObjectResponse` 实现了 `AutoCloseable`，务必 try-with-resources。
+> 流式铁律：**下载永远"流式转发"**（`transferTo`），别 `readAllBytes()` 进内存——大文件 + 高并发 = OOM。`GetObjectResponse` 实现了 `AutoCloseable`，务必 try-with-resources。
 
 ## 6. 预签名 URL 生成
 
@@ -247,7 +247,7 @@ public Result<String> uploadUrl(@RequestParam String objectKey) {
 | 文件下载 | GET | 按业务（15min-24h） |
 | 前端直传 | PUT | **15 分钟**（越短越安全） |
 
-> 🎯 架构收益（[06](06-后端架构配合.md) 展开）：**预签名 PUT 让文件不经过应用服务器**——应用只签发 URL，前端直接传 MinIO，带宽/内存/磁盘压力全部转移到对象存储。
+> 架构收益（[06](06-后端架构配合.md) 展开）：**预签名 PUT 让文件不经过应用服务器**——应用只签发 URL，前端直接传 MinIO，带宽/内存/磁盘压力全部转移到对象存储。
 
 ## 7. 版本控制与删除
 
@@ -273,7 +273,7 @@ client.copyObject(CopyObjectArgs.builder()
         .build());
 ```
 
-> ⚠️ 删除语义提醒：**版本控制开启后 `removeObject` 不是物理删除**——只是打删除标记（数据还在，可恢复）。物理清理靠生命周期规则或 `mc rm --versions`。别惊讶"删了但容量没降"。
+> 删除语义提醒：**版本控制开启后 `removeObject` 不是物理删除**——只是打删除标记（数据还在，可恢复）。物理清理靠生命周期规则或 `mc rm --versions`。别惊讶"删了但容量没降"。
 
 ## 8. 与云 OSS 的无缝切换
 
@@ -301,7 +301,7 @@ minio:
 | 预签名 | 兼容（云厂商支持） |
 | 代码 | **零改动**（S3 API 兼容的承诺） |
 
-> 🎯 架构价值：**S3 兼容 = 存储方案"可替换"**——开发用 MinIO（免费/私有），生产切云（托管/带宽），甚至双写迁移——这是选择 S3 兼容自托管方案的最大工程收益。
+> 架构价值：**S3 兼容 = 存储方案"可替换"**——开发用 MinIO（免费/私有），生产切云（托管/带宽），甚至双写迁移——这是选择 S3 兼容自托管方案的最大工程收益。
 
 ---
 

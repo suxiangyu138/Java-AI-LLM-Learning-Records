@@ -1,7 +1,7 @@
 # 08-OpenAPI与契约优先
 > 定位：OpenAPI 3.1 是 API 契约的事实标准——Spec-first 工作流让「契约先行、代码后行」成为工程规范；文档、Mock、SDK、测试全部从契约生成，契约是唯一事实来源。
 
-## 📚 目录
+## 目录
 1. [为什么需要契约](#1-为什么需要契约)
 2. [OpenAPI 3.1 核心](#2-openapi-31-核心)
 3. [Spec-first 工作流](#3-spec-first-工作流)
@@ -113,7 +113,7 @@ Spec-first 的五步循环，契约先行、代码后行：
 4. CI 四道闸（lint/oasdiff/契约测试/示例）各拦什么？
 5. AI agent 时代的契约三要点？
 
-> 🎯 **核心要点**：OpenAPI 3.1 是契约事实标准；Spec-first 让契约成为唯一事实来源（评审即契约评审、文档是产物）；契约生成文档/Mock/SDK/骨架；CI 四道闸（lint/oasdiff/Pact-Dredd/示例）；agent 时代 description 与示例就是 API 的说明书。
+> **核心要点**：OpenAPI 3.1 是契约事实标准；Spec-first 让契约成为唯一事实来源（评审即契约评审、文档是产物）；契约生成文档/Mock/SDK/骨架；CI 四道闸（lint/oasdiff/Pact-Dredd/示例）；agent 时代 description 与示例就是 API 的说明书。
 
 ---
 

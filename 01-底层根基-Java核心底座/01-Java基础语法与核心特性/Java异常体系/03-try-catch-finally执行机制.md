@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [try-catch-finally 的完整执行流程](#1-try-catch-finally-的完整执行流程)
 2. [return 与 finally 的交互：返回值快照机制](#2-return-与-finally-的交互返回值快照机制)
@@ -50,7 +50,7 @@ public void demo() {
 2. **没有匹配 catch 的异常**：先执行 finally，再沿调用栈上抛；
 3. **catch 内抛新异常**：finally 仍执行，最终向上传播的是**新异常**（旧异常会作为新异常的 suppressed 或直接丢失——JDK 7+ 若新异常非 null 则旧异常自动挂到 suppressed）。
 
-> 🎯 **核心要点**：finally 的职责是"**无论成败都必须做的事**"——释放资源、关闭连接、恢复状态、清理锁。JDK 7 的 try-with-resources 把最常见的"关资源"场景封装进了语法（见 04 模块）。
+> **核心要点**：finally 的职责是"**无论成败都必须做的事**"——释放资源、关闭连接、恢复状态、清理锁。JDK 7 的 try-with-resources 把最常见的"关资源"场景封装进了语法（见 04 模块）。
 
 ---
 
@@ -89,7 +89,7 @@ public static StringBuilder test2() {
 | finally 修改引用类型局部变量指向的**对象内容** | **影响**返回值（同一个对象） |
 | finally 中写 `return` | **覆盖** try 的返回值（见下节） |
 
-> ⚠️ 这背后的字节码原理：`return` 编译为 `ireturn/areturn` 前先把值放入操作数栈或返回值槽，finally 块内联在 return 指令之前——所以 finally 的赋值无法改变已入槽的值。
+> 这背后的字节码原理：`return` 编译为 `ireturn/areturn` 前先把值放入操作数栈或返回值槽，finally 块内联在 return 指令之前——所以 finally 的赋值无法改变已入槽的值。
 
 ---
 
@@ -98,13 +98,13 @@ public static StringBuilder test2() {
 **finally 中写 `return` 会覆盖 try/catch 的返回值，吞掉异常**：
 
 ```java
-// ❌ 反模式 1：finally 的 return 覆盖正常返回值
+// ✗ 反模式 1：finally 的 return 覆盖正常返回值
 public static int bad1() {
     try { return 1; }
     finally { return 2; }      // 返回 2 —— try 的 1 被丢弃
 }
 
-// ❌ 反模式 2：finally 的 return 吞掉异常
+// ✗ 反模式 2：finally 的 return 吞掉异常
 public static int bad2() {
     try {
         throw new RuntimeException("boom");
@@ -113,7 +113,7 @@ public static int bad2() {
     }
 }
 
-// ❌ 反模式 3：finally 抛异常覆盖原异常
+// ✗ 反模式 3：finally 抛异常覆盖原异常
 public static void bad3() {
     try {
         throw new RuntimeException("原始异常");
@@ -130,7 +130,7 @@ public static void bad3() {
 2. **吞异常**——try 抛出的异常被静默丢弃，故障完全隐藏；
 3. **排查极难**——线上表现为"偶发数据不对"而非报错。
 
-> 🎯 **核心要点**：**finally 只做"清理动作"，永远不返回值、不抛业务异常**。需要返回结果就放到 finally 之后；finally 中真正的失败（如 close 失败）用 try-with-resources 的 suppressed 机制表达（见 04 模块）。
+> **核心要点**：**finally 只做"清理动作"，永远不返回值、不抛业务异常**。需要返回结果就放到 finally 之后；finally 中真正的失败（如 close 失败）用 try-with-resources 的 suppressed 机制表达（见 04 模块）。
 
 ---
 
@@ -148,12 +148,12 @@ public static void demo() {
         System.out.println("try");
         System.exit(0);              // JVM 终止 —— finally 不会执行
     } finally {
-        System.out.println("finally");   // ❌ 不会打印
+        System.out.println("finally");   // ✗ 不会打印
     }
 }
 ```
 
-> 💡 注意区分：`return`、抛异常、`break`/`continue` 都**不会**阻止 finally 执行——只有"JVM 没了"或"线程没了"才会。这也是"finally 一定执行"这句话的唯一例外说明。
+> 注意区分：`return`、抛异常、`break`/`continue` 都**不会**阻止 finally 执行——只有"JVM 没了"或"线程没了"才会。这也是"finally 一定执行"这句话的唯一例外说明。
 
 ---
 
@@ -162,14 +162,14 @@ public static void demo() {
 **编译器强制**：catch 块按顺序匹配，**第一个匹配的生效**——子类异常必须写在父类前面，否则父类 catch 会"截胡"：
 
 ```java
-// ❌ 编译错误：FileNotFoundException 是 IOException 的子类，必须先捕获子类
+// ✗ 编译错误：FileNotFoundException 是 IOException 的子类，必须先捕获子类
 try {
     Files.readString(Path.of("a"));
 } catch (IOException e) {          // 父类在前 → 编译报错
 } catch (FileNotFoundException e) {
 }
 
-// ✅ 正确：先子类后父类
+// ✓ 正确：先子类后父类
 try {
     Files.readString(Path.of("a"));
 } catch (FileNotFoundException e) {      // 具体：文件不存在，单独处理（提示用户）
@@ -179,7 +179,7 @@ try {
 
 **匹配原则**：异常类型按**继承关系**匹配（`instanceof` 语义），与抛出的具体实例无关。
 
-> 🎯 **核心要点**：catch 顺序 = "从具体到通用"——先处理能精准应对的异常（重试、降级、提示），最后才轮到兜底的通用异常。**永远不要 `catch (Exception)` 打头**。
+> **核心要点**：catch 顺序 = "从具体到通用"——先处理能精准应对的异常（重试、降级、提示），最后才轮到兜底的通用异常。**永远不要 `catch (Exception)` 打头**。
 
 ---
 
@@ -188,7 +188,7 @@ try {
 **try 块只包裹"可能抛出该异常"的代码**——包裹范围越大，排查越难：
 
 ```java
-// ❌ 反例：整个方法都包进去
+// ✗ 反例：整个方法都包进去
 try {
     String name = user.getName();                    // 不可能抛 IOException
     Files.writeString(path, name);                   // 唯一可能抛 IOException 的
@@ -197,7 +197,7 @@ try {
     // 到底是哪一步失败了？—— 排查困难
 }
 
-// ✅ 正例：最小范围
+// ✓ 正例：最小范围
 String name = user.getName();
 try {
     Files.writeString(path, name);                   // 只包真正会失败的
@@ -213,7 +213,7 @@ sendNotification(user);                              // 独立于异常处理之
 2. **不误伤**——业务逻辑不会因为无关代码的异常被跳过；
 3. **分工清晰**——每段 try-catch 处理一个独立风险点，可读性高。
 
-> ⚠️ 与"包装"结合：最小 try 块内抛出的异常**统一包装**（`throw new XxxException("上下文", e)`）——上下文信息（哪个路径、哪个用户）让异常消息自带排错线索（见 05 模块异常链）。
+> 与"包装"结合：最小 try 块内抛出的异常**统一包装**（`throw new XxxException("上下文", e)`）——上下文信息（哪个路径、哪个用户）让异常消息自带排错线索（见 05 模块异常链）。
 
 ---
 

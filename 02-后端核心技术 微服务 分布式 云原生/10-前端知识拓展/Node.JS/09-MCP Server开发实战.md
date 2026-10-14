@@ -1,6 +1,6 @@
 # 09 - MCP Server 开发实战
 
-> 🎯 MCP (Model Context Protocol) 是 2025 年最重要的 AI 协议——让 LLM 通过标准化接口调用外部工具和数据源。Node.js/TypeScript 是开发 MCP Server 的首选语言，本章提供从零到可用的完整教程
+> MCP (Model Context Protocol) 是 2025 年最重要的 AI 协议——让 LLM 通过标准化接口调用外部工具和数据源。Node.js/TypeScript 是开发 MCP Server 的首选语言，本章提供从零到可用的完整教程
 
 ---
 
@@ -106,7 +106,7 @@ server.tool(
         return {
             content: results.map(r => ({
                 type: "text",
-                text: `📄 ${r.title}\n${r.snippet}`
+                text: `${r.title}\n${r.snippet}`
             }))
         };
     }

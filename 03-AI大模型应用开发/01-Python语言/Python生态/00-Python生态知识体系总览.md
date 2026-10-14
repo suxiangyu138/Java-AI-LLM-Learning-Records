@@ -1,6 +1,6 @@
 # 00 - Python 生态知识体系总览
 
-> 🎯 AI 时代的 Python 生态全景 — 不做语法教程（已有 `07-Python语言`/`Python高级语法`），专注 AI/LLM 工程化工具链：Agent 框架选型、模型推理引擎、项目管理（uv）、HuggingFace 生态、异步并发模式、评估体系
+> AI 时代的 Python 生态全景 — 不做语法教程（已有 `07-Python语言`/`Python高级语法`），专注 AI/LLM 工程化工具链：Agent 框架选型、模型推理引擎、项目管理（uv）、HuggingFace 生态、异步并发模式、评估体系
 
 ---
 
@@ -18,28 +18,28 @@
 ```
 Python 生态体系（8个文件 — AI/LLM 工程化工具链）
 │
-├── 🤖 Agent 框架（01）
+├── Agent 框架（01）
 │   └── 01-AI-Agent开发框架对比.md      # LangChain/LangGraph/LlamaIndex/CrewAI/AutoGen等10+框架
 │
-├── 🚀 推理引擎（02）
+├── 推理引擎（02）
 │   └── 02-模型推理与服务引擎.md        # vLLM/TGI/Ollama/Triton/推理优化技术
 │
-├── 📦 项目管理（03）
+├── 项目管理（03）
 │   └── 03-Python-AI项目管理工具链.md   # uv vs Poetry vs pip vs Conda + AI项目最佳实践
 │
-├── 🤗 HF 生态（04）
+├── HF 生态（04）
 │   └── 04-HuggingFace生态.md           # Transformers/Datasets/Diffusers/Spaces/Hub
 │
-├── ⚡ 异步并发（05）
+├── 异步并发（05）
 │   └── 05-Python异步编程与AI并发模式.md  # asyncio + LLM并发调用 + 流式处理
 │
-├── 📊 评估可观测（06）
+├── 评估可观测（06）
 │   └── 06-AI应用评估与可观测性.md       # RAGAS/DeepEval/LangSmith/OpenTelemetry
 │
-├── 🏗️ 工程模板（07）
+├── 工程模板（07）
 │   └── 07-Python-AI项目工程化模板.md    # 从零搭AI项目：技术栈/目录结构/CI/CD
 │
-└── 📌 00-Python生态知识体系总览.md       # ← 本文件
+└── 00-Python生态知识体系总览.md       # ← 本文件
 ```
 
 ---
@@ -49,13 +49,13 @@ Python 生态体系（8个文件 — AI/LLM 工程化工具链）
 | # | 文件 | 核心内容 | 级别 |
 |---|------|----------|:---:|
 | 00 | 生态总览 | 全景导航 + 趋势 + 分工 + 2026 生态趋势 | — |
-| 01 | Agent 框架对比 | 10+ 框架横评 + 选型决策树 | ⭐⭐⭐ |
-| 02 | 推理与服务引擎 | vLLM/TGI/Ollama 部署方案 + PagedAttention | ⭐⭐ |
-| 03 | AI 项目管理工具链 | uv 10-100 倍加速/poetry/pip/Conda 选型 | ⭐⭐⭐ |
-| 04 | HuggingFace 生态 | Transformers/Datasets/Spaces/Hub 工作流 | ⭐⭐ |
-| 05 | 异步并发模式 | asyncio + LLM 并发 + 流式 + semaphore 限流 | ⭐⭐ |
-| 06 | 评估与可观测性 | RAGAS/DeepEval/LangSmith/Phoenix 对比 | ⭐⭐ |
-| 07 | 工程化模板 | pyproject.toml 收敛/Ruff/CI/CD/目录结构 | ⭐⭐ |
+| 01 | Agent 框架对比 | 10+ 框架横评 + 选型决策树 | ★★★ |
+| 02 | 推理与服务引擎 | vLLM/TGI/Ollama 部署方案 + PagedAttention | ★★ |
+| 03 | AI 项目管理工具链 | uv 10-100 倍加速/poetry/pip/Conda 选型 | ★★★ |
+| 04 | HuggingFace 生态 | Transformers/Datasets/Spaces/Hub 工作流 | ★★ |
+| 05 | 异步并发模式 | asyncio + LLM 并发 + 流式 + semaphore 限流 | ★★ |
+| 06 | 评估与可观测性 | RAGAS/DeepEval/LangSmith/Phoenix 对比 | ★★ |
+| 07 | 工程化模板 | pyproject.toml 收敛/Ruff/CI/CD/目录结构 | ★★ |
 
 ---
 
@@ -69,7 +69,7 @@ Python 生态体系（8个文件 — AI/LLM 工程化工具链）
 | `pip/` | 包管理基础 | 03 章做 uv/Poetry/Conda 的 AI 项目选型对比 |
 | `Transformer/` | Transformers 库 | 04 章做 HF 全生态（Datasets/Spaces/Diffusers/Hub） |
 
-> 💡 **定位**：Python 基础语法和高级特性专题已覆盖"写 Python 代码"的能力；本体系补充"用 Python 做 AI 工程"的工具链与最佳实践。
+> **定位**：Python 基础语法和高级特性专题已覆盖"写 Python 代码"的能力；本体系补充"用 Python 做 AI 工程"的工具链与最佳实践。
 
 ---
 
@@ -86,6 +86,6 @@ Python 生态体系（8个文件 — AI/LLM 工程化工具链）
 
 ---
 
-> 🎯 **核心要点**：2026 年用 Python 做 AI 工程的标准栈 = **uv 管项目 + Pydantic 管类型 + LangGraph/CrewAI 编排 Agent + vLLM 跑推理 + asyncio 处理并发 + RAGAS 做评估**。本体系每个模块都可独立作为选型参考。
+> **核心要点**：2026 年用 Python 做 AI 工程的标准栈 = **uv 管项目 + Pydantic 管类型 + LangGraph/CrewAI 编排 Agent + vLLM 跑推理 + asyncio 处理并发 + RAGAS 做评估**。本体系每个模块都可独立作为选型参考。
 
 **下一模块**：[01-AI-Agent开发框架对比](01-AI-Agent开发框架对比.md)

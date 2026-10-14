@@ -1,6 +1,6 @@
 # 02 - Tokenization 分词技术
 
-> 🎯 Tokenization 是 LLM 的"第一道工序"——把自然语言切成模型能消化的 Token。词表大小、分词策略、特殊 Token 的设计，直接影响模型的效果和效率
+> Tokenization 是 LLM 的"第一道工序"——把自然语言切成模型能消化的 Token。词表大小、分词策略、特殊 Token 的设计，直接影响模型的效果和效率
 
 ---
 
@@ -86,7 +86,7 @@ Step 4: er+s → ers  (newest → new + est → n + ew + est...)
 | 中 (50K-100K) | **平衡点** | 少数语言仍低效 |
 | 大 (128K-256K) | 多语言效率高 | 嵌入层占更多参数 |
 
-> 🎯 "中文 1 个汉字 ≈ 1.5-3 个 Token"→ 同样内容，中文的 Token 消耗比英文高 50-100%
+> "中文 1 个汉字 ≈ 1.5-3 个 Token"→ 同样内容，中文的 Token 消耗比英文高 50-100%
 
 ## 4. 实战：HuggingFace Tokenizer
 

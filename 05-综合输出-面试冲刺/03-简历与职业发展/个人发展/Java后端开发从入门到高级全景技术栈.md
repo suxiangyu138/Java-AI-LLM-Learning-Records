@@ -220,16 +220,16 @@ Git/Maven  MyBatis        RabbitMQ/Kafka  Prometheus + ELK
 
 | 能力域 | 初级 | 中级 | 高级 |
 |--------|:---:|:---:|:---:|
-| Java SE / JVM | ✅ | ✅ | ✅ |
-| Spring Boot / MVC | ✅ | ✅ | ✅ |
-| MySQL / Redis | ✅ | ✅ | ✅ |
-| MyBatis / JPA | ✅ | ✅ | ✅ |
-| Spring Cloud 微服务 | — | ✅ | ✅ |
-| MQ / ES / NoSQL | — | ✅ | ✅ |
-| Docker / K8s | — | ✅ | ✅ |
-| 监控可观测 | — | — | ✅ |
-| JVM 调优 / 高可用 | — | — | ✅ |
-| 安全体系 | — | — | ✅ |
+| Java SE / JVM | ✓ | ✓ | ✓ |
+| Spring Boot / MVC | ✓ | ✓ | ✓ |
+| MySQL / Redis | ✓ | ✓ | ✓ |
+| MyBatis / JPA | ✓ | ✓ | ✓ |
+| Spring Cloud 微服务 | — | ✓ | ✓ |
+| MQ / ES / NoSQL | — | ✓ | ✓ |
+| Docker / K8s | — | ✓ | ✓ |
+| 监控可观测 | — | — | ✓ |
+| JVM 调优 / 高可用 | — | — | ✓ |
+| 安全体系 | — | — | ✓ |
 
 ---
 

@@ -1,6 +1,6 @@
 # 07 - Prompt Engineering 核心技法
 
-> 🎯 Prompt Engineering 是"不用改模型、不用花钱训练"就能显著提升 LLM 输出质量的核心技能。本章覆盖 Few-shot、CoT、ReAct、System Prompt 四大核心技法的原理与实战
+> Prompt Engineering 是"不用改模型、不用花钱训练"就能显著提升 LLM 输出质量的核心技能。本章覆盖 Few-shot、CoT、ReAct、System Prompt 四大核心技法的原理与实战
 
 ---
 
@@ -143,7 +143,7 @@ System Prompt 的推荐结构：
 输出格式（Markdown 表格）：
 | 行号 | 问题 | 严重性 | 建议修复 |
 
-如果代码没有明显问题，只输出 "✅ 未发现明显问题"。
+如果代码没有明显问题，只输出 "✓ 未发现明显问题"。
 如果你不确定某个问题是否存在，明确说"不确定"并解释原因。
 ```
 

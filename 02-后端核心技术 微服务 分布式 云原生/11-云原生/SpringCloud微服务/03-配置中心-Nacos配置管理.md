@@ -1,6 +1,6 @@
 # 03 - 配置中心：Nacos 配置管理
 
-> 🎯 配置中心让应用"不用重启就能改配置" — Nacos Config 比 Spring Cloud Config + Bus 更简洁：无需 MQ、天然支持动态刷新、控制台可视化编辑
+> 配置中心让应用"不用重启就能改配置" — Nacos Config 比 Spring Cloud Config + Bus 更简洁：无需 MQ、天然支持动态刷新、控制台可视化编辑
 
 ---
 
@@ -81,7 +81,7 @@ Data ID = ${prefix}-${spring.profiles.active}.${file-extension}
 
 ```java
 @RestController
-@RefreshScope   // ⭐ 动态刷新 — Nacos 配置变更后自动更新 Bean
+@RefreshScope   // ★ 动态刷新 — Nacos 配置变更后自动更新 Bean
 public class ConfigController {
 
     @Value("${db.max-pool}")
@@ -196,4 +196,4 @@ Nacos 控制台 → 配置管理 → 历史版本
   → 回滚到指定版本（一键恢复）
 ```
 
-> 🎯 **最佳实践**：生产环境 namespace 隔离、shared-configs 提取公共配置、@RefreshScope 标注需要动态刷新的 Bean、修改配置后先在灰度实例验证。
+> **最佳实践**：生产环境 namespace 隔离、shared-configs 提取公共配置、@RefreshScope 标注需要动态刷新的 Bean、修改配置后先在灰度实例验证。

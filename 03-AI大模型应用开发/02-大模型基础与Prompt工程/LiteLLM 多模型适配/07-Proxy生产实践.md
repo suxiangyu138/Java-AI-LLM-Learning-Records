@@ -1,7 +1,7 @@
 # 07 Proxy 生产实践
 > 从 Demo 到生产：Docker 部署、数据库、可观测、数据面/控制面分离与高可用
 
-## 📚 目录
+## 目录
 1. [生产架构总览](#1-生产架构总览)
 2. [Docker 部署](#2-docker-部署)
 3. [数据库：Postgres 与记账](#3-数据库postgres-与记账)
@@ -45,7 +45,7 @@
 | Redis | 响应缓存/速率计数 |
 | 监控 | OTel 指标 + 日志 |
 
-> 🎯 **核心要点**：**Proxy 无状态 + 数据库持久化 = 可水平扩展**。生产形态 = "Nginx 入口 + 多实例 + PG + Redis"——与 FastAPI 体系生产架构同构（09 章），治理逻辑在网关，状态在数据库。
+> **核心要点**：**Proxy 无状态 + 数据库持久化 = 可水平扩展**。生产形态 = "Nginx 入口 + 多实例 + PG + Redis"——与 FastAPI 体系生产架构同构（09 章），治理逻辑在网关，状态在数据库。
 
 ## 2. Docker 部署
 
@@ -81,7 +81,7 @@ services:
   postgres:
     image: postgres:16
     environment: {POSTGRES_PASSWORD: ${DB_PASSWORD}}
-    volumes: ["pg-data:/var/lib/postgresql/data"]     # ⚠️ 持久化
+    volumes: ["pg-data:/var/lib/postgresql/data"]     # 持久化
 
   redis:
     image: redis:8
@@ -96,7 +96,7 @@ services:
 | 健康检查 | readiness 探针（编排用） |
 | 配置只读挂载 | config.yaml 不可变（改配置重新部署） |
 
-> ⚠️ **config.yaml 里不写密钥**——全部环境变量引用（`os.environ/OPENAI_API_KEY`）。配置文件可以进 git，密钥永远不进。
+> **config.yaml 里不写密钥**——全部环境变量引用（`os.environ/OPENAI_API_KEY`）。配置文件可以进 git，密钥永远不进。
 
 ## 3. 数据库：Postgres 与记账
 
@@ -115,11 +115,11 @@ curl "http://localhost:4000/spend/logs?limit=5" \
 
 | 数据 | 生命周期 | 备份要求 |
 |------|---------|---------|
-| Virtual Keys | 长期 | ⭐ 必须备份（丢了 key 全失效） |
+| Virtual Keys | 长期 | ★ 必须备份（丢了 key 全失效） |
 | Spend Logs | 长期 | 必须（成本审计） |
 | 缓存数据 | 短期 | 可丢 |
 
-> 💡 备份策略：**PG 每日备份（含 key 表）**——key 数据丢失 = 所有调用方要换 key，事故级别。Spend Logs 定期归档到数仓做成本分析（05 章周报）。
+> 备份策略：**PG 每日备份（含 key 表）**——key 数据丢失 = 所有调用方要换 key，事故级别。Spend Logs 定期归档到数仓做成本分析（05 章周报）。
 
 ## 4. 可观测：日志/指标/追踪
 
@@ -144,7 +144,7 @@ general_settings:
 | 健康 | 模型失败率/可用数 | 供应商故障（fallback 生效） |
 | 缓存 | 命中率 | 低于 50% 查 leakage |
 
-> 🎯 **核心要点**：网关是**观测的黄金点位**——所有请求/成本/失败都过它。OTel 一行配置，Prometheus + Grafana 全家桶接入（FastAPI 体系 08 章可观测三支柱同款模式）。**告警三件套：成本超预算、模型失败率、缓存命中率**。
+> **核心要点**：网关是**观测的黄金点位**——所有请求/成本/失败都过它。OTel 一行配置，Prometheus + Grafana 全家桶接入（FastAPI 体系 08 章可观测三支柱同款模式）。**告警三件套：成本超预算、模型失败率、缓存命中率**。
 
 ## 5. 数据面/控制面分离（2026）
 
@@ -167,7 +167,7 @@ general_settings:
 | 数据面 | 模型调用端点 | 按流量扩容 |
 | 控制面 | key/团队/花费管理 | 按管理量 |
 
-> 💡 工程含义：**大规模生产把两组实例分开部署**——数据面按 QPS 扩容，控制面按管理并发扩容，互不拖累。小规模（<100 QPS）单组即可。
+> 工程含义：**大规模生产把两组实例分开部署**——数据面按 QPS 扩容，控制面按管理并发扩容，互不拖累。小规模（<100 QPS）单组即可。
 
 ## 6. 高可用与扩容
 
@@ -184,7 +184,7 @@ general_settings:
 # 或 K8s Deployment replicas=3（readiness 探针摘流量）
 ```
 
-> 🎯 **核心要点**：**网关自身的 HA 简单（无状态多实例）；真正的 HA 在供应商层**——多供应商 fallback（04 章）让"某家供应商故障"对业务不可见，这才是 LLM 生产架构的可靠核心。
+> **核心要点**：**网关自身的 HA 简单（无状态多实例）；真正的 HA 在供应商层**——多供应商 fallback（04 章）让"某家供应商故障"对业务不可见，这才是 LLM 生产架构的可靠核心。
 
 ## 7. 版本管理与升级
 
@@ -196,7 +196,7 @@ general_settings:
 | 回滚 | 旧镜像 tag 即回滚 |
 | 配置兼容 | 升级前 diff config 字段（迁移文档） |
 
-> ⚠️ LiteLLM 迭代极快（每周多个 minor），**Breaking Changes 偶发**——升级三步：读 release notes → 测试环境回归 → 灰度切换。生产严禁盲升。
+> LiteLLM 迭代极快（每周多个 minor），**Breaking Changes 偶发**——升级三步：读 release notes → 测试环境回归 → 灰度切换。生产严禁盲升。
 
 ## 8. 常见坑
 

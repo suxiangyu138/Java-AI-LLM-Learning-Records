@@ -1,6 +1,6 @@
 # 04 - M3 文本 API 开发实战
 
-> 🎯 M3 的独特优势 — **同时兼容 Anthropic 和 OpenAI 两种 API 格式**。推荐 Anthropic 协议（支持 thinking 块）。本章覆盖双协议接入、thinking 模式、函数调用、长上下文调用
+> M3 的独特优势 — **同时兼容 Anthropic 和 OpenAI 两种 API 格式**。推荐 Anthropic 协议（支持 thinking 块）。本章覆盖双协议接入、thinking 模式、函数调用、长上下文调用
 
 ---
 
@@ -232,6 +232,6 @@ print(f"成本: ¥{estimate_cost('MiniMax-M3', 100_000, 20_000, 50_000):.4f}")
 
 ---
 
-> 🎯 **核心要点**：M3 API 四件事 — **① 双协议兼容（Anthropic 推荐 + OpenAI 备用，同一端点）② thinking 模式（复杂任务开、简单任务关，共享定价）③ 函数调用双协议同构 ④ Token Plan 超值（同价位 15 倍于 Claude）**。价格 $0.30/$1.20 仅为 Claude Opus 的 1/15。
+> **核心要点**：M3 API 四件事 — **① 双协议兼容（Anthropic 推荐 + OpenAI 备用，同一端点）② thinking 模式（复杂任务开、简单任务关，共享定价）③ 函数调用双协议同构 ④ Token Plan 超值（同价位 15 倍于 Claude）**。价格 $0.30/$1.20 仅为 Claude Opus 的 1/15。
 
 **下一模块**：[05-语音与视频全模态能力](05-语音与视频全模态能力.md) / **返回总览**：[00-总览](00-MiniMax-API知识体系总览.md)

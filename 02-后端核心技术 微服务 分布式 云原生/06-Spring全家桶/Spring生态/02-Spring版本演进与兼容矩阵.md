@@ -1,6 +1,6 @@
 # 02 - Spring 版本演进与兼容矩阵
 
-> 🎯 版本对齐是 Spring 项目的第一基建 — Boot、Framework、Cloud、Java、Jakarta 五者必须匹配，错一个版本就是一片兼容性事故。本章是"版本字典"
+> 版本对齐是 Spring 项目的第一基建 — Boot、Framework、Cloud、Java、Jakarta 五者必须匹配，错一个版本就是一片兼容性事故。本章是"版本字典"
 
 ---
 
@@ -67,9 +67,9 @@ Spring AI 历史
 
 ```text
 新项目 2026 年起：
-  ✅ 选 Boot 4.1 + Framework 7.1 + Java 21（LTS）+ Jakarta EE 11
-  ✅ 微服务 → Spring Cloud 2026.x；AI 需求 → Spring AI 2.x（Boot 4 线）
-  ⚠️ 若依赖生态未适配 Boot 4（老库仍用 javax.*）→ 暂用 Boot 3.5.x 过渡
+  ✓ 选 Boot 4.1 + Framework 7.1 + Java 21（LTS）+ Jakarta EE 11
+  ✓ 微服务 → Spring Cloud 2026.x；AI 需求 → Spring AI 2.x（Boot 4 线）
+  若依赖生态未适配 Boot 4（老库仍用 javax.*）→ 暂用 Boot 3.5.x 过渡
 
 存量项目：
   3.0-3.4 → 先升 3.5（修弃用 API）→ 再评估升 4.0
@@ -84,11 +84,11 @@ Spring AI 历史
 |------|------------------|------|
 | Boot 2.7 | 已结束（2023） | 遗留系统，尽快迁移 |
 | Boot 3.2-3.4 | 已结束 | 未升 3.5 的有 CVE 风险 |
-| **Boot 3.5.x** | **2026.06（社区）/ 2026.11（整体）** | ⚠️ 现在的"升级压力线" |
+| **Boot 3.5.x** | **2026.06（社区）/ 2026.11（整体）** | 现在的"升级压力线" |
 | Boot 4.0/4.1 | 长期（商业支持 72 个月） | 当前主线 |
 | Framework 7.0.x | 活跃 | 7.0.8（2026.06）修复 16 个高危 CVE |
 
-> ⚠️ **生产铁律**：支持已结束的版本没有免费安全补丁 — 2026 年面试/述职的常见题："你们项目升级 Spring Boot 了吗？为什么？"
+> **生产铁律**：支持已结束的版本没有免费安全补丁 — 2026 年面试/述职的常见题："你们项目升级 Spring Boot 了吗？为什么？"
 
 ---
 
@@ -128,10 +128,10 @@ Spring AI 历史
 | jakarta/javax 混淆 | 依赖树中混有老库 | 全量搜 javax. 引用 |
 | CVE 漏洞 | 版本过旧 | `mvn versions:display-dependency-updates` |
 
-> ⚠️ **注意**：Boot 3.x 已对循环依赖默认禁用（启动直接失败）— 这是从 2.x 升级最常见的第一坑；Boot 4 延续并收紧。
+> **注意**：Boot 3.x 已对循环依赖默认禁用（启动直接失败）— 这是从 2.x 升级最常见的第一坑；Boot 4 延续并收紧。
 
 ---
 
-> 🎯 **核心要点**：版本矩阵记住"一条主线 + 两个节点" — 主线：Boot 4.1 + Framework 7.1 + Java 21 + Cloud 2026.x；节点：Boot 3.5 支持 2026.06/11 截止、Framework 7.1 预计 2026.11 GA。任何新项目先对表，任何存量项目先看支持周期。
+> **核心要点**：版本矩阵记住"一条主线 + 两个节点" — 主线：Boot 4.1 + Framework 7.1 + Java 21 + Cloud 2026.x；节点：Boot 3.5 支持 2026.06/11 截止、Framework 7.1 预计 2026.11 GA。任何新项目先对表，任何存量项目先看支持周期。
 
 **下一模块**：[03-SpringBoot4与SpringFramework7新特性](03-SpringBoot4与SpringFramework7新特性.md) / **返回总览**：[00-Spring生态知识体系总览](00-Spring生态知识体系总览.md)

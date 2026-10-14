@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [FastAPI 生态全景](#1-fastapi-生态全景)
 2. [组合的分工](#2-组合的分工)
@@ -111,7 +111,7 @@ app = FastAPI(lifespan=lifespan)
 
 **验收动作**：① 给 FastAPI 应用加 lifespan（启动/关闭打印）；② 写一个 WebSocket 端点跑通；③ 写一个流式响应（StreamingResponse）体验；④ 画"FastAPI 生态分工图"——**"生态位置 + 分工 + 配合 = 懂配合"**——**练习纪律**：报错先分侧——"排障先分侧（uvicorn vs FastAPI）"。
 
-> 🎯 **核心要点**：FastAPI 生态（**三件套：FastAPI 写/Pydantic 验/uvicorn 跑——只有 uvicorn 是'跑起来'的那个——fastapi 不含 uvicorn 要另装**）；**分工（FastAPI 管逻辑/uvicorn 管网络——排障先分侧三问）**；**三个高频配合（生命周期 lifespan 驱动资源/WebSocket 实时/StreamingResponse 流式——LLM API 服务的标配底座）**；与全栈体系衔接（**发动机手册 vs 整车手册——互相引用互补**）——"FastAPI + uvicorn = 2026 年 Python API 开发的标准组合——一个写、一个跑"。
+> **核心要点**：FastAPI 生态（**三件套：FastAPI 写/Pydantic 验/uvicorn 跑——只有 uvicorn 是'跑起来'的那个——fastapi 不含 uvicorn 要另装**）；**分工（FastAPI 管逻辑/uvicorn 管网络——排障先分侧三问）**；**三个高频配合（生命周期 lifespan 驱动资源/WebSocket 实时/StreamingResponse 流式——LLM API 服务的标配底座）**；与全栈体系衔接（**发动机手册 vs 整车手册——互相引用互补**）——"FastAPI + uvicorn = 2026 年 Python API 开发的标准组合——一个写、一个跑"。
 
 ---
 

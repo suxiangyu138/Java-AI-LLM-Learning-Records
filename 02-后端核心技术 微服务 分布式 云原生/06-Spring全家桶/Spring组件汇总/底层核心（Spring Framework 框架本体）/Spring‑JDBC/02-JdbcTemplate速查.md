@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [三兄弟定位](#1-三兄弟定位)
 2. [核心 API 速查](#2-核心-api-速查)
@@ -19,11 +19,11 @@
 
 | 类 | 定位 | 7.0 状态 |
 |----|------|---------|
-| `JdbcTemplate` | 经典模板：占位符 `?`，全 API | ✅ 稳定（继续使用） |
-| `NamedParameterJdbcTemplate` | 命名参数 `:name` 封装 | ⚠️ 废弃（收编进 JdbcClient） |
-| `JdbcClient` | Fluent 流式 API（6.1+） | ✅ 推荐（见 [03-JdbcClient 速查](03-JdbcClient速查.md)） |
+| `JdbcTemplate` | 经典模板：占位符 `?`，全 API | ✓ 稳定（继续使用） |
+| `NamedParameterJdbcTemplate` | 命名参数 `:name` 封装 | 废弃（收编进 JdbcClient） |
+| `JdbcClient` | Fluent 流式 API（6.1+） | ✓ 推荐（见 [03-JdbcClient 速查](03-JdbcClient速查.md)） |
 
-> 🎯 **核心要点**：三者底层同一套执行引擎（`JdbcTemplate` 是内核）——JdbcClient 是**外壳风格升级**，性能/事务语义完全一致；选型：新代码 JdbcClient，存量 JdbcTemplate 可不动。
+> **核心要点**：三者底层同一套执行引擎（`JdbcTemplate` 是内核）——JdbcClient 是**外壳风格升级**，性能/事务语义完全一致；选型：新代码 JdbcClient，存量 JdbcTemplate 可不动。
 
 ### 1.1 选型决策树
 
@@ -46,7 +46,7 @@
 | 语句级配置 | 无（7.0 仍无） | 有（7.0） |
 | 团队存量 | 大量既有代码 | 新项目 / 新模块 |
 
-> 💡 现实回答："新代码统一 JdbcClient，存量 JdbcTemplate 不主动重写"——重写不产生业务价值，只有升级时顺手迁移。
+> 现实回答："新代码统一 JdbcClient，存量 JdbcTemplate 不主动重写"——重写不产生业务价值，只有升级时顺手迁移。
 
 ### 1.2 面试官追问什么
 
@@ -57,7 +57,7 @@
 | 能同时用两个模板操作同一个事务吗 | 能——只要共享同一个 DataSource，连接绑定机制一致 |
 | 为什么推荐 JdbcClient 却还保留 JdbcTemplate | 兼容存量 + 简单场景 JdbcTemplate 更直接；两者同一执行内核 |
 
-> 💡 组合关系是高频考点：`NamedParameterJdbcTemplate` 内部把命名参数转成 `?` 后委托给 `JdbcTemplate` 执行——"模板套模板"的组合设计让命名参数能力可以叠加在任何执行能力上，也是理解 JdbcClient 内部结构（见 [03-JdbcClient 速查](03-JdbcClient速查.md) 第 1 节）的前置知识。
+> 组合关系是高频考点：`NamedParameterJdbcTemplate` 内部把命名参数转成 `?` 后委托给 `JdbcTemplate` 执行——"模板套模板"的组合设计让命名参数能力可以叠加在任何执行能力上，也是理解 JdbcClient 内部结构（见 [03-JdbcClient 速查](03-JdbcClient速查.md) 第 1 节）的前置知识。
 
 还有一个常被问的延伸：既然 JdbcTemplate 线程安全，为什么还要每次 new？——答案是不需要，Spring 中的 JdbcTemplate 就是单例 Bean；每次 new 只是失去了共享配置的收益，并不会出错。这个反直觉问题考验的是对"无状态"的理解深度：线程安全来自"无可变状态 + 连接按线程绑定"，与实例数量无关。
 
@@ -89,7 +89,7 @@ List<Order> orders2 = jdbcTemplate.query(sql,
         BeanPropertyRowMapper.newInstance(Order.class), min);
 ```
 
-> ⚠️ 经典坑：`queryForObject` 空结果抛 `EmptyResultDataAccessException`，多行抛 `IncorrectResultSizeDataAccessException`——"无结果"场景用 `query(...).stream().findFirst()` 或 JdbcClient 的 `optional()`。
+> 经典坑：`queryForObject` 空结果抛 `EmptyResultDataAccessException`，多行抛 `IncorrectResultSizeDataAccessException`——"无结果"场景用 `query(...).stream().findFirst()` 或 JdbcClient 的 `optional()`。
 
 ### 2.1 execute 的三种用法
 
@@ -114,7 +114,7 @@ jdbcTemplate.execute("{call sp_batch_close_order()}");
 | 需要 Statement 对象 | `execute(StatementCallback<T>)` | T |
 | CallableStatement 场景 | `execute(CallableStatementCreator, CallableStatementCallback<T>)` | T |
 
-> ⚠️ DDL 注意：MySQL 的 DDL 会**隐式提交**——`execute("DROP TABLE ...")` 即使包在事务里也无法回滚；批量建表/删表操作要评估影响面，别在事务中间夹 DDL。
+> DDL 注意：MySQL 的 DDL 会**隐式提交**——`execute("DROP TABLE ...")` 即使包在事务里也无法回滚；批量建表/删表操作要评估影响面，别在事务中间夹 DDL。
 
 ### 2.2 查询形态对照（面试必背）
 
@@ -163,7 +163,7 @@ jdbcTemplate.query(joinSql, (rs, i) -> new OrderDetailDto(
         rs.getLong("order_id"), rs.getString("user_name"), rs.getBigDecimal("total")));
 ```
 
-> 💡 面试点：RowMapper 每行回调一次、**不持有全结果**（流式处理大结果集不炸内存）；`ResultSetExtractor` 则是"整个结果集一次性提取"（聚合统计场景）。
+> 面试点：RowMapper 每行回调一次、**不持有全结果**（流式处理大结果集不炸内存）；`ResultSetExtractor` 则是"整个结果集一次性提取"（聚合统计场景）。
 
 ### 3.1 RowMapper 实战要点与坑
 
@@ -193,7 +193,7 @@ Long total = jdbcTemplate.query("SELECT amount FROM t_order WHERE user_id = ?",
         }, userId);
 ```
 
-> 🎯 面试追问："RowMapper 和 ResultSetExtractor 什么时候用谁？"——逐行映射用 RowMapper（每行独立成对象、内存友好）；需要跨行聚合（sum 之后再算比例）用 ResultSetExtractor，它在整个 ResultSet 上只回调一次。
+> 面试追问："RowMapper 和 ResultSetExtractor 什么时候用谁？"——逐行映射用 RowMapper（每行独立成对象、内存友好）；需要跨行聚合（sum 之后再算比例）用 ResultSetExtractor，它在整个 ResultSet 上只回调一次。
 
 ### 3.2 BeanPropertyRowMapper 配置细节
 
@@ -214,7 +214,7 @@ jdbcTemplate.query(sql, mapper, args);
 | primitivesDefaultedForNullValue | false | 开启后 null 列映射为 0/false——掩盖空值，慎开 |
 | 自定义列映射器 | 无 | 个别列名差异时使用 |
 
-> ⚠️ 生产建议：用 DTO（包装类型）承接可空列，保持默认配置——`setPrimitivesDefaultedForNullValue(true)` 会把"数据库 null"静默变成"0/空串"，是隐蔽数据 bug 的来源，排查时极难发现。
+> 生产建议：用 DTO（包装类型）承接可空列，保持默认配置——`setPrimitivesDefaultedForNullValue(true)` 会把"数据库 null"静默变成"0/空串"，是隐蔽数据 bug 的来源，排查时极难发现。
 
 ## 4. 参数绑定与命名参数
 
@@ -241,7 +241,7 @@ ps.setTimestamp(i, Timestamp.valueOf(localDateTime));
 | `BeanPropertySqlParameterSource` | POJO 属性 → 命名参数（`:propertyName`） |
 | 集合展开 | 命名参数遇 `List/Set/数组` 自动展开为 `IN (?,?,?)` |
 
-> ⚠️ 命名参数展开集合是面试常考点：`IN (:ids)` 的 `:ids` 若为 `List.of(1,2,3)`，Spring 展开为 3 个占位符——**空集合**会展开为 0 个参数导致 SQL 错误，需提前判空。
+> 命名参数展开集合是面试常考点：`IN (:ids)` 的 `:ids` 若为 `List.of(1,2,3)`，Spring 展开为 3 个占位符——**空集合**会展开为 0 个参数导致 SQL 错误，需提前判空。
 
 ### 4.1 参数类型推断的源码级细节
 
@@ -268,7 +268,7 @@ jdbcTemplate.update(
         });
 ```
 
-> ⚠️ 高频线上坑：`LocalDateTime` 参数在部分旧驱动上 `setObject` 失败，报 `Can't infer the SQL type`——解法是显式转 `Timestamp`，或用 `MapSqlParameterSource.registerSqlType` 声明类型。
+> 高频线上坑：`LocalDateTime` 参数在部分旧驱动上 `setObject` 失败，报 `Can't infer the SQL type`——解法是显式转 `Timestamp`，或用 `MapSqlParameterSource.registerSqlType` 声明类型。
 
 ### 4.2 命名参数与位置参数的选型
 
@@ -300,7 +300,7 @@ jdbcTemplate.update(conn -> {
 Long orderId = keyHolder.getKey().longValue();         // 回填的主键
 ```
 
-> 💡 替代方案：`SimpleJdbcInsert`（见 [05-批量操作与存储过程速查](05-批量操作与存储过程速查.md)）提供 `usingGeneratedKeyColumns("id")` 的声明式回填——代码更简。
+> 替代方案：`SimpleJdbcInsert`（见 [05-批量操作与存储过程速查](05-批量操作与存储过程速查.md)）提供 `usingGeneratedKeyColumns("id")` 的声明式回填——代码更简。
 
 ### 5.1 KeyHolder 多列回填与数据库差异
 
@@ -327,7 +327,7 @@ String docNo = (String) keys.get("doc_no");
 | Oracle | 依赖序列/触发器，`getKey` 可能为 null——用显式查询兜底 |
 | H2 | 兼容 MySQL 行为 |
 
-> 💡 回填失败经典排查：`getKey()` 返回 null 且无异常——多半是驱动不支持 `RETURN_GENERATED_KEYS` 或列名与驱动元数据不符；先 `getKeys()` 打印实际内容，比猜快得多。
+> 回填失败经典排查：`getKey()` 返回 null 且无异常——多半是驱动不支持 `RETURN_GENERATED_KEYS` 或列名与驱动元数据不符；先 `getKeys()` 打印实际内容，比猜快得多。
 
 ## 6. 配置项速查
 
@@ -340,7 +340,7 @@ String docNo = (String) keys.get("doc_no");
 | `resultSetType` / `resultSetConcurrency` | 默认 | 可滚动/只读结果集 |
 | `exceptionTranslator` | SQLErrorCode 翻译器 | 自定义异常映射（见 [06-异常体系与错误映射速查](06-异常体系与错误映射速查.md)） |
 
-> 🎯 **核心要点**：`fetchSize`/`maxRows`/`queryTimeout` 是"大结果集三件套"——JdbcTemplate 全局设置；7.0 起 JdbcClient 支持**按语句设置**，更细粒度（[03-JdbcClient 速查](03-JdbcClient速查.md)）。
+> **核心要点**：`fetchSize`/`maxRows`/`queryTimeout` 是"大结果集三件套"——JdbcTemplate 全局设置；7.0 起 JdbcClient 支持**按语句设置**，更细粒度（[03-JdbcClient 速查](03-JdbcClient速查.md)）。
 
 ### 6.1 面试官追问什么
 
@@ -355,7 +355,7 @@ String docNo = (String) keys.get("doc_no");
 | 如何防 SQL 注入 | 永远 `?` 占位 + 参数绑定；禁止任何字符串拼接（参数来自白名单也不拼） |
 | 一个事务里多次查询会新开连接吗 | 不会——DataSourceUtils 返回事务绑定连接（见 [04-DataSource 与连接池速查](04-DataSource与连接池速查.md)） |
 
-> 🎯 面试主线："连接管理（DataSourceUtils）→ 参数绑定（StatementCreatorUtils）→ 结果映射（RowMapper）→ 异常翻译（SQLExceptionTranslator）"——把这条链讲清楚，JdbcTemplate 的追问基本都能接住。
+> 面试主线："连接管理（DataSourceUtils）→ 参数绑定（StatementCreatorUtils）→ 结果映射（RowMapper）→ 异常翻译（SQLExceptionTranslator）"——把这条链讲清楚，JdbcTemplate 的追问基本都能接住。
 
 ### 6.2 生产实践配置清单
 
@@ -367,7 +367,7 @@ String docNo = (String) keys.get("doc_no");
 | `ignoreWarnings` | true（诊断期 false） | 避免非致命警告频繁刷日志 |
 | 日志级别 | jdbc.core=DEBUG（按需） | 看 SQL 与参数，排查必备 |
 
-> 🎯 生产经验："全局宽松 + 热点收紧"——全局 `queryTimeout=30` 兜底，报表等特殊场景用 JdbcClient 语句级配置单独收紧（[03-JdbcClient 速查](03-JdbcClient速查.md) 第 5 节），既安全又不误伤正常查询；注意 fetchSize 在 MySQL 下需要 `useCursorFetch=true` 才真正生效（见 [08-集成地图与常见问题](08-集成地图与常见问题.md)）。
+> 生产经验："全局宽松 + 热点收紧"——全局 `queryTimeout=30` 兜底，报表等特殊场景用 JdbcClient 语句级配置单独收紧（[03-JdbcClient 速查](03-JdbcClient速查.md) 第 5 节），既安全又不误伤正常查询；注意 fetchSize 在 MySQL 下需要 `useCursorFetch=true` 才真正生效（见 [08-集成地图与常见问题](08-集成地图与常见问题.md)）。
 
 再补一条运维视角：`queryTimeout` 的生效依赖驱动实现——MySQL 驱动把它转成 `Statement.setQueryTimeout`，由服务端 `max_execution_time` 兜底配合；排查"超时配置没生效"时，先确认驱动版本支持，再确认没有更低层级的 socketTimeout 抢先触发。
 

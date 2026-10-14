@@ -64,7 +64,7 @@ Linux 对 RISC-V 的支持经历三个阶段：2017 年合并基础支持 → 20
 
 最后给运维一个提示：RISC-V 节点的监控与运维工具（Prometheus node_exporter、Ansible 等）多为 Go/Python 编写，riscv64 构建直接可用——**运维侧从 x86 迁移到 RISC-V 的成本，比想象中低得多**，真正要花时间的是固件与启动参数这类系统层差异。
 
-> 🎯 **核心要点**：2026 年 RISC-V 软件栈全面就绪——GCC/LLVM/QEMU 生产级、Linux 内核一等公民、Ubuntu 26.04 LTS 原生支持、Android 强制 RVA23、CUDA 移植起步；服务器平台规范 1.0（UEFI+ACPI+PCIe/IOMMU+BMC）补齐了"数据中心可运维"的最后拼图；剩余差距集中在闭源商业软件与 GPU 训练栈，但"能不能用"的问题已经正式翻篇——对开发者，RISC-V 现在是"与 x86 并列的本机目标"而非实验品。
+> **核心要点**：2026 年 RISC-V 软件栈全面就绪——GCC/LLVM/QEMU 生产级、Linux 内核一等公民、Ubuntu 26.04 LTS 原生支持、Android 强制 RVA23、CUDA 移植起步；服务器平台规范 1.0（UEFI+ACPI+PCIe/IOMMU+BMC）补齐了"数据中心可运维"的最后拼图；剩余差距集中在闭源商业软件与 GPU 训练栈，但"能不能用"的问题已经正式翻篇——对开发者，RISC-V 现在是"与 x86 并列的本机目标"而非实验品。
 
 ---
 

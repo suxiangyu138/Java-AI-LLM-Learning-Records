@@ -103,10 +103,10 @@ db.users.find({ name: { $gte: "A", $lte: "Z" } })       // 走索引（范围）
 db.users.createIndex({ name: 1, age: -1 })
 
 // 前缀原则适用：
-db.users.find({ name: "张三" })                          // ✅ 走索引（前缀）
-db.users.find({ name: "张三", age: 25 })                 // ✅ 走索引
-db.users.find({ name: "张三" }).sort({ age: -1 })        // ✅ 走索引（排序）
-db.users.find({ age: 25 })                               // ❌ 不走索引（非前缀）
+db.users.find({ name: "张三" })                          // ✓ 走索引（前缀）
+db.users.find({ name: "张三", age: 25 })                 // ✓ 走索引
+db.users.find({ name: "张三" }).sort({ age: -1 })        // ✓ 走索引（排序）
+db.users.find({ age: 25 })                               // ✗ 不走索引（非前缀）
 
 // 复合索引支持的查询模式：
 // { name: "张三" }                     — 前缀
@@ -127,12 +127,12 @@ db.users.find({ age: 25 })                               // ❌ 不走索引（�
 db.posts.createIndex({ tags: 1 })
 
 // 高效查询数组包含
-db.posts.find({ tags: "Java" })              // 走索引 ✅
-db.posts.find({ tags: { $all: ["Java", "MongoDB"] } })  // 走索引 ✅
+db.posts.find({ tags: "Java" })              // 走索引 ✓
+db.posts.find({ tags: { $all: ["Java", "MongoDB"] } })  // 走索引 ✓
 
 // 复合多键索引（数组字段只能有一个）
-// ✅ db.posts.createIndex({ tags: 1, createdAt: -1 })
-// ❌ db.posts.createIndex({ tags: 1, authors: 1 })  — 不能有两个数组字段
+// ✓ db.posts.createIndex({ tags: 1, createdAt: -1 })
+// ✗ db.posts.createIndex({ tags: 1, authors: 1 })  — 不能有两个数组字段
 ```
 
 ### 2.4 文本索引（全文搜索）
@@ -278,8 +278,8 @@ db.users.createIndex(
 )
 
 // 测试唯一性
-db.users.insertOne({ email: "test@example.com" })  // ✅ 成功
-db.users.insertOne({ email: "test@example.com" })  // ❌ E11000 duplicate key error
+db.users.insertOne({ email: "test@example.com" })  // ✓ 成功
+db.users.insertOne({ email: "test@example.com" })  // ✗ E11000 duplicate key error
 
 // 唯一索引与 null
 db.users.createIndex({ phone: 1 }, { unique: true, sparse: true })
@@ -406,7 +406,7 @@ db.users.find({ name: "张三", age: { $gt: 18 } }).explain("allPlansExecution")
 ```javascript
 // 索引：{ name: 1, age: 1, email: 1 }
 
-// 覆盖查询 ✅
+// 覆盖查询 ✓
 db.users.find(
   { name: "张三" },
   { _id: 0, name: 1, age: 1, email: 1 }
@@ -414,7 +414,7 @@ db.users.find(
 // explain: stage: IXSCAN，没有 FETCH 阶段
 // totalDocsExamined: 0（没有读取文档！）
 
-// 非覆盖查询 ❌
+// 非覆盖查询 ✗
 db.users.find(
   { name: "张三" },
   { _id: 0, name: 1, age: 1, address: 1 }
@@ -483,13 +483,13 @@ db.users.createIndex({ city: 1, name: 1, age: 1 })
 ```javascript
 // 查询：city="北京" AND age > 18 ORDER BY name
 
-// ❌ 错误：{ age: 1, city: 1, name: 1 }
+// ✗ 错误：{ age: 1, city: 1, name: 1 }
 // 范围放在第一位，无法利用索引排序
 
-// ❌ 错误：{ city: 1, age: 1, name: 1 }
+// ✗ 错误：{ city: 1, age: 1, name: 1 }
 // 范围字段在排序字段前，无法覆盖排序
 
-// ✅ 正确：{ city: 1, name: 1, age: 1 }
+// ✓ 正确：{ city: 1, name: 1, age: 1 }
 // 等值-排序-范围
 ```
 
@@ -1056,14 +1056,14 @@ db.orders.aggregate([
 
 // 有索引 { status: 1, createdAt: -1 }
 db.orders.aggregate([
-  { $match: { status: "completed" } },    // 走索引 ✅
-  { $sort: { createdAt: -1 } },            // 走索引 ✅
+  { $match: { status: "completed" } },    // 走索引 ✓
+  { $sort: { createdAt: -1 } },            // 走索引 ✓
   { $group: { _id: "$category", total: { $sum: "$amount" } } }
 ])
 
 // 无索引的情况
 db.orders.aggregate([
-  { $match: { status: "completed" } },    // COLLSCAN ❌
+  { $match: { status: "completed" } },    // COLLSCAN ✗
   { $group: { ... } }
 ])
 ```

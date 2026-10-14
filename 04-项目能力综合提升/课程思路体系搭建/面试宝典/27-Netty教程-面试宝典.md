@@ -43,7 +43,7 @@ Thread───Client1 (注册回调，OS 完成后通知)
        └──Client2 (异步不阻塞)
 ```
 
-> 💡 Netty 本质上是 NIO 的封装，但它的 I/O 模型实际上是 **Reactor 模式**（多路复用）。
+> Netty 本质上是 NIO 的封装，但它的 I/O 模型实际上是 **Reactor 模式**（多路复用）。
 
 ---
 
@@ -122,7 +122,7 @@ while (true) {
 }
 ```
 
-> ⚠️ BIO 在连接数 > 1000 时性能急剧下降，因为大量线程导致频繁上下文切换和内存溢出。
+> BIO 在连接数 > 1000 时性能急剧下降，因为大量线程导致频繁上下文切换和内存溢出。
 
 ---
 
@@ -245,7 +245,7 @@ group.next().scheduleAtFixedRate(() -> {
 }, 0, 1, TimeUnit.SECONDS);
 ```
 
-> 💡 **核心约束**：一个 Channel 的生命周期内只绑定到一个固定的 EventLoop，**一个 EventLoop 可以服务于多个 Channel**。这种设计避免了线程安全问题。
+> **核心约束**：一个 Channel 的生命周期内只绑定到一个固定的 EventLoop，**一个 EventLoop 可以服务于多个 Channel**。这种设计避免了线程安全问题。
 
 ---
 
@@ -304,7 +304,7 @@ public class MyOutboundHandler extends ChannelOutboundHandlerAdapter {
 }
 ```
 
-> 💡 Inbound 事件从 Head → Tail 传播（入站），Outbound 事件从 Tail → Head 传播（出站）。
+> Inbound 事件从 Head → Tail 传播（入站），Outbound 事件从 Tail → Head 传播（出站）。
 
 ---
 
@@ -389,7 +389,7 @@ public interface ChannelHandlerContext extends ... {
 }
 ```
 
-> 💡 **重要特性**：从哪个 Context 开始传播事件，就从哪个位置开始。例如 `ctx.write()` 是从当前 Handler 的**前一节点**（出站方向）开始传播，而 `ctx.channel().write()` 是从 **Tail** 开始传播。
+> **重要特性**：从哪个 Context 开始传播事件，就从哪个位置开始。例如 `ctx.write()` 是从当前 Handler 的**前一节点**（出站方向）开始传播，而 `ctx.channel().write()` 是从 **Tail** 开始传播。
 
 ---
 
@@ -455,7 +455,7 @@ if (buf.hasArray()) {
 }
 ```
 
-> ⚠️ 网络 IO 操作推荐使用 **Direct ByteBuf**，减少数据从堆到堆外的一次拷贝。但 Direct Buffer 分配和释放成本高，推荐使用 **池化**（`PooledByteBufAllocator`）。
+> 网络 IO 操作推荐使用 **Direct ByteBuf**，减少数据从堆到堆外的一次拷贝。但 Direct Buffer 分配和释放成本高，推荐使用 **池化**（`PooledByteBufAllocator`）。
 
 ---
 
@@ -485,7 +485,7 @@ ByteBufAllocator allocator = ByteBufAllocator.DEFAULT;
 // io.netty.allocator.maxOrder         # 最大分配大小（默认 11 → 16MB）
 ```
 
-> 💡 生产环境永远使用 **PooledByteBufAllocator**，性能相差可达 **3~5 倍**。
+> 生产环境永远使用 **PooledByteBufAllocator**，性能相差可达 **3~5 倍**。
 
 ---
 
@@ -579,7 +579,7 @@ public void channelRead(ChannelHandlerContext ctx, Object msg) {
 }
 ```
 
-> 💡 **黄金法则**：谁 `getByteBuf` 谁 release，谁 `retain` 谁 release。不要重复 release，不要漏 release。
+> **黄金法则**：谁 `getByteBuf` 谁 release，谁 `retain` 谁 release。不要重复 release，不要漏 release。
 
 ---
 
@@ -758,7 +758,7 @@ b.childHandler(new ChannelInitializer<SocketChannel>() {
 });
 ```
 
-> ⚠️ **注意**：只有**无状态**（不用成员变量保存连接相关数据）的 Handler 才能加 `@Sharable`。如果 Handler 包含连接特定的数据，不要共享。
+> **注意**：只有**无状态**（不用成员变量保存连接相关数据）的 Handler 才能加 `@Sharable`。如果 Handler 包含连接特定的数据，不要共享。
 
 ---
 
@@ -826,7 +826,7 @@ public class RpcPromise {
 }
 ```
 
-> 💡 JDK 的 Future 需要自己 get() 阻塞获取结果，Netty 的 Future 支持**回调监听器**，不会阻塞调用线程。
+> JDK 的 Future 需要自己 get() 阻塞获取结果，Netty 的 Future 支持**回调监听器**，不会阻塞调用线程。
 
 ---
 
@@ -890,7 +890,7 @@ Linux IO 模型分类：
 | IO 多路复用 | `NIO`（`java.nio.channels.Selector`） | 就绪通知 |
 | 异步 IO | `AIO`（`AsynchronousServerSocketChannel`） | 完成通知 |
 
-> 💡 Linux 的 epoll 是**水平触发（LT）**和**边缘触发（ET）**。Java NIO Selector 是**水平触发**，Netty 支持 epoll ET（如果使用 `EpollEventLoopGroup`）。
+> Linux 的 epoll 是**水平触发（LT）**和**边缘触发（ET）**。Java NIO Selector 是**水平触发**，Netty 支持 epoll ET（如果使用 `EpollEventLoopGroup`）。
 
 ---
 
@@ -943,7 +943,7 @@ FileRegion region = new DefaultFileRegion(
 ctx.writeAndFlush(region);  // 零拷贝发送
 ```
 
-> 💡 Kafka 使用 `FileChannel.transferTo()` 实现文件到网络的高效传输，这是 Kafka 高性能的关键之一。
+> Kafka 使用 `FileChannel.transferTo()` 实现文件到网络的高效传输，这是 Kafka 高性能的关键之一。
 
 ---
 
@@ -1259,7 +1259,7 @@ Arena（竞技场，默认 CPU 核数 × 2）
 - Huge（>16MB）：非池化，每次新建
 ```
 
-> 💡 **PoolThreadCache**：每个线程有独立的缓存，分配时优先从 ThreadLocal 缓存获取，避免加锁。这是 Netty 高性能内存分配的核心。
+> **PoolThreadCache**：每个线程有独立的缓存，分配时优先从 ThreadLocal 缓存获取，避免加锁。这是 Netty 高性能内存分配的核心。
 
 ---
 
@@ -1283,7 +1283,7 @@ Arena（竞技场，默认 CPU 核数 × 2）
 // Boss EventLoop → accept → Worker EventLoop → read + 业务处理
 ```
 
-> 💡 Tomcat 适用于 HTTP 请求-响应模式，Netty 适用于长连接和自定义协议的高性能通信场景。
+> Tomcat 适用于 HTTP 请求-响应模式，Netty 适用于长连接和自定义协议的高性能通信场景。
 
 ---
 

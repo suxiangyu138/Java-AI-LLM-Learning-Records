@@ -1,10 +1,10 @@
 # 05 - Linux 服务管理
 
-> 🎯 从 systemd 服务单元到定时任务、从文件共享到反向代理 — 掌握 Linux 服务管理是让 Java 应用"活着"且"活得好"的基础能力
+> 从 systemd 服务单元到定时任务、从文件共享到反向代理 — 掌握 Linux 服务管理是让 Java 应用"活着"且"活得好"的基础能力
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [systemd 服务管理](#1-systemd-服务管理)
 2. [Crontab 定时任务](#2-crontab-定时任务)
@@ -20,7 +20,7 @@
 
 ## 1. systemd 服务管理
 
-> 💡 systemd 是现代 Linux 的 init 系统（PID=1），所有服务都作为 "unit" 管理。
+> systemd 是现代 Linux 的 init 系统（PID=1），所有服务都作为 "unit" 管理。
 
 ### 1.1 核心命令速查
 
@@ -42,7 +42,7 @@
 | `journalctl -u <name> -f` | 实时查看服务日志 |
 | `journalctl -u <name> --since "1h ago"` | 查看最近 1 小时日志 |
 
-### 1.2 Java 应用自启动 Unit（⭐ 生产级模板）
+### 1.2 Java 应用自启动 Unit（★ 生产级模板）
 
 ```ini
 # /etc/systemd/system/myapp.service
@@ -101,7 +101,7 @@ sudo systemctl stop myapp         # 停止应用
 
 | Type | 说明 | 适用场景 |
 |------|------|----------|
-| `simple` | 默认类型，ExecStart 启动的进程即主进程 | ⭐ Java 应用、大多数长期运行服务 |
+| `simple` | 默认类型，ExecStart 启动的进程即主进程 | ★ Java 应用、大多数长期运行服务 |
 | `forking` | 父进程 fork 子进程后退出 | 传统守护进程（Nginx、Apache） |
 | `oneshot` | 执行一次后退出 | 初始化脚本、数据库迁移 |
 | `notify` | 服务就绪后发送通知 | 支持 sd_notify 的应用 |
@@ -111,7 +111,7 @@ sudo systemctl stop myapp         # 停止应用
 
 ## 2. Crontab 定时任务
 
-> 💡 Cron 是 Linux 定时任务调度器，后端必备：日志轮转、数据备份、健康检查、证书续期。
+> Cron 是 Linux 定时任务调度器，后端必备：日志轮转、数据备份、健康检查、证书续期。
 
 ### 2.1 语法格式
 
@@ -134,7 +134,7 @@ sudo systemctl stop myapp         # 停止应用
 |------|------|
 | `crontab -e` | 编辑当前用户定时任务 |
 | `crontab -l` | 列出当前用户定时任务 |
-| `crontab -r` | 删除所有定时任务（⚠️ 危险） |
+| `crontab -r` | 删除所有定时任务（危险） |
 | `cat /etc/crontab` | 系统级定时任务 |
 | `ls /etc/cron.d/` | 模块化 cron 配置目录 |
 | `ls /etc/cron.daily/` | 每日执行的脚本 |
@@ -172,7 +172,7 @@ sudo systemctl stop myapp         # 停止应用
 
 ### 2.4 Crontab 注意事项
 
-> ⚠️ **常见坑**：
+> **常见坑**：
 > - `%` 在 cron 中有特殊含义，需转义为 `\%`
 > - 环境变量与交互式 Shell 不同，建议脚本开头 `source /etc/profile` 或使用绝对路径
 > - crontab 编辑后立即生效，无需重启 crond
@@ -222,15 +222,15 @@ firewall-cmd --reload
 | 端口 | 21 (控制) + 动态数据端口 | **22 (与 SSH 共用)** |
 | 配置复杂度 | 较高（被动模式、防火墙） | **零配置**（有 SSH 即有 SFTP） |
 | 性能 | 纯文件传输略快 | 加密有少量开销 |
-| 推荐度 | 对外提供匿名下载 | ⭐ **内部运维首选** |
+| 推荐度 | 对外提供匿名下载 | ★ **内部运维首选** |
 
-> 💡 **建议**：内部运维使用 SFTP（`sftp user@host`），无需额外安装配置，安全可靠。对外提供文件下载再用 FTP/FTPS。
+> **建议**：内部运维使用 SFTP（`sftp user@host`），无需额外安装配置，安全可靠。对外提供文件下载再用 FTP/FTPS。
 
 ---
 
 ## 4. NFS 网络文件共享
 
-> 💡 NFS (Network File System) 允许多台服务器共享同一文件系统。典型场景：多台 Web 服务器共享上传文件目录。
+> NFS (Network File System) 允许多台服务器共享同一文件系统。典型场景：多台 Web 服务器共享上传文件目录。
 
 ### 4.1 服务端配置
 
@@ -256,7 +256,7 @@ chmod 755 /data/share
 |------|------|
 | `rw` / `ro` | 读写 / 只读 |
 | `sync` / `async` | 同步写入（数据安全）/ 异步写入（性能好） |
-| `no_root_squash` | 客户端 root 保持 root 权限（⚠️ 安全风险） |
+| `no_root_squash` | 客户端 root 保持 root 权限（安全风险） |
 | `root_squash` | 客户端 root 映射为 nobody（推荐） |
 | `all_squash` | 所有用户映射为 anonymous |
 
@@ -281,13 +281,13 @@ mount -t nfs 192.168.1.100:/data/share /mnt/nfs
 192.168.1.100:/data/share  /mnt/nfs  nfs  defaults,_netdev,soft,intr  0  0
 ```
 
-> ⚠️ **NFS 挂载卡住**：使用 `umount -l` 强制卸载（懒卸载）。推荐挂载选项加 `soft,intr` 避免网络中断时进程 D 状态。
+> **NFS 挂载卡住**：使用 `umount -l` 强制卸载（懒卸载）。推荐挂载选项加 `soft,intr` 避免网络中断时进程 D 状态。
 
 ---
 
 ## 5. Samba 跨平台文件共享
 
-> 💡 Samba 实现 Linux 与 Windows 之间的文件共享（SMB/CIFS 协议）。典型场景：Windows 开发者直接访问 Linux 服务器文件。
+> Samba 实现 Linux 与 Windows 之间的文件共享（SMB/CIFS 协议）。典型场景：Windows 开发者直接访问 Linux 服务器文件。
 
 ### 5.1 安装与配置
 
@@ -351,7 +351,7 @@ mount -t cifs //192.168.1.100/shared /mnt/smb -o username=smbuser
 
 ## 6. Apache HTTP 反向代理
 
-> 💡 Apache HTTPD 可作为 Java 应用的前置反向代理，提供静态资源、SSL 终结、负载均衡。
+> Apache HTTPD 可作为 Java 应用的前置反向代理，提供静态资源、SSL 终结、负载均衡。
 
 ### 6.1 基本安装
 
@@ -401,13 +401,13 @@ systemctl reload httpd
 | 特性 | Apache | Nginx |
 |------|--------|-------|
 | 架构 | 进程/线程（prefork/worker/event） | 事件驱动（异步非阻塞） |
-| 静态文件 | 一般 | ⭐ 极快 |
+| 静态文件 | 一般 | ★ 极快 |
 | 动态内容 | 原生模块（mod_php 等） | 需反向代理 |
 | 配置 | `.htaccess` 灵活 | 集中配置 |
 | 内存占用 | 较高 | 低 |
-| Java 后端场景 | 传统 LAMP 栈 | ⭐ 反向代理首选 |
+| Java 后端场景 | 传统 LAMP 栈 | ★ 反向代理首选 |
 
-> 💡 **建议**：Java 后端优先选 Nginx 或直接 Spring Boot 内置 Tomcat + 云负载均衡。
+> **建议**：Java 后端优先选 Nginx 或直接 Spring Boot 内置 Tomcat + 云负载均衡。
 
 ---
 
@@ -475,14 +475,14 @@ sleep 5
 for i in {1..12}; do
     code=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8080/actuator/health)
     if [ "$code" = "200" ]; then
-        echo "✅ $APP_NAME v$VERSION 部署成功"
+        echo "✓ $APP_NAME v$VERSION 部署成功"
         exit 0
     fi
     sleep 5
 done
 
 # 6. 健康检查失败 — 回滚
-echo "❌ 健康检查失败，回滚到上一版本"
+echo "✗ 健康检查失败，回滚到上一版本"
 ln -snf "$(ls -d $APP_DIR/versions/*/ | tail -2 | head -1)" "$APP_DIR/current"
 systemctl restart $APP_NAME
 exit 1

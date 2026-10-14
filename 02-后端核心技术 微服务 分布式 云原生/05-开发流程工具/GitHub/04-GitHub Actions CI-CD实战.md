@@ -74,7 +74,7 @@ Repository
 # .github/workflows/ci.yml
 name: Java CI                          # Workflow 名称（显示在 Actions 页面）
 
-on:                                     # ⭐ 触发器
+on:                                     # ★ 触发器
   push:
     branches: [main, develop]
   pull_request:
@@ -266,7 +266,7 @@ runs-on: self-hosted
 # 或带标签的自建 Runner：
 runs-on: [self-hosted, linux, gpu]  # 匹配所有标签
 
-# ⚠️ 注意：公开仓库的自建 Runner 有安全风险（任何人都可在 PR 中执行命令）
+# 注意：公开仓库的自建 Runner 有安全风险（任何人都可在 PR 中执行命令）
 # → 务必在 Settings → Actions → Fork pull request workflows 中限制
 ```
 
@@ -290,7 +290,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    services:                              # ⭐ 服务容器（数据库等）
+    services:                              # ★ 服务容器（数据库等）
       mysql:
         image: mysql:8.0
         env:
@@ -499,22 +499,22 @@ jobs:
 
 | Action | 用途 | 使用频率 |
 |--------|------|---------|
-| `actions/checkout@v4` | 检出代码 | ⭐⭐⭐⭐⭐ |
-| `actions/setup-java@v4` | 安装 JDK + 自动缓存 | ⭐⭐⭐⭐⭐ |
-| `actions/setup-node@v4` | 安装 Node.js | ⭐⭐⭐⭐⭐ |
-| `actions/cache@v4` | 手动缓存依赖 | ⭐⭐⭐⭐ |
-| `actions/upload-artifact@v4` | 上传构建产物 | ⭐⭐⭐⭐ |
-| `actions/download-artifact@v4` | 下载之前的产物 | ⭐⭐⭐ |
-| `docker/login-action@v3` | 登录容器仓库 | ⭐⭐⭐⭐ |
-| `docker/build-push-action@v5` | 构建+推送 Docker 镜像 | ⭐⭐⭐⭐ |
-| `docker/metadata-action@v5` | 生成 Docker 标签/注解 | ⭐⭐⭐ |
-| `softprops/action-gh-release@v2` | 创建 Release | ⭐⭐⭐ |
-| `appleboy/ssh-action@v1` | SSH 远程执行命令 | ⭐⭐⭐ |
-| `codecov/codecov-action@v4` | 上传覆盖率 | ⭐⭐⭐ |
-| `github/codeql-action/*` | 安全代码扫描 | ⭐⭐⭐ |
-| `stefanzweifel/git-auto-commit-action` | 自动 commit 变更 | ⭐⭐ |
-| `peter-evans/create-pull-request` | 自动创建 PR | ⭐⭐ |
-| `reviewdog/action-checkstyle` | Checkstyle PR 评论 | ⭐⭐ |
+| `actions/checkout@v4` | 检出代码 | ★★★★★ |
+| `actions/setup-java@v4` | 安装 JDK + 自动缓存 | ★★★★★ |
+| `actions/setup-node@v4` | 安装 Node.js | ★★★★★ |
+| `actions/cache@v4` | 手动缓存依赖 | ★★★★ |
+| `actions/upload-artifact@v4` | 上传构建产物 | ★★★★ |
+| `actions/download-artifact@v4` | 下载之前的产物 | ★★★ |
+| `docker/login-action@v3` | 登录容器仓库 | ★★★★ |
+| `docker/build-push-action@v5` | 构建+推送 Docker 镜像 | ★★★★ |
+| `docker/metadata-action@v5` | 生成 Docker 标签/注解 | ★★★ |
+| `softprops/action-gh-release@v2` | 创建 Release | ★★★ |
+| `appleboy/ssh-action@v1` | SSH 远程执行命令 | ★★★ |
+| `codecov/codecov-action@v4` | 上传覆盖率 | ★★★ |
+| `github/codeql-action/*` | 安全代码扫描 | ★★★ |
+| `stefanzweifel/git-auto-commit-action` | 自动 commit 变更 | ★★ |
+| `peter-evans/create-pull-request` | 自动创建 PR | ★★ |
+| `reviewdog/action-checkstyle` | Checkstyle PR 评论 | ★★ |
 
 ---
 
@@ -530,7 +530,7 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-latest]
         java: [17, 21]
-      fail-fast: false    # ⭐ 某个组合失败不取消其他组合
+      fail-fast: false    # ★ 某个组合失败不取消其他组合
 
     steps:
       - uses: actions/checkout@v4
@@ -594,8 +594,8 @@ env:
   DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
   SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
-# ⚠️ Secrets 在日志中自动脱敏（***）
-# ⚠️ Secrets 不能直接在 if: 条件中使用（需通过 env 中转）
+# Secrets 在日志中自动脱敏（***）
+# Secrets 不能直接在 if: 条件中使用（需通过 env 中转）
 ```
 
 ### 9.2 Environment 部署保护
@@ -610,14 +610,14 @@ on:
 jobs:
   deploy-staging:
     runs-on: ubuntu-latest
-    environment: staging          # ⭐ 指定环境
+    environment: staging          # ★ 指定环境
     steps:
       - run: ./deploy.sh staging
 
   deploy-production:
     needs: deploy-staging
     runs-on: ubuntu-latest
-    environment:                  # ⭐ 生产环境需手动审批
+    environment:                  # ★ 生产环境需手动审批
       name: production
       url: https://app.example.com  # 部署后在 Actions 页面显示链接
     steps:

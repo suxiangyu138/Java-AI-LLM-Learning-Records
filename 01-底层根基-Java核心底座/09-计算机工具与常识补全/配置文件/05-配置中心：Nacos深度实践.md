@@ -6,7 +6,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [配置中心的价值与选型](#1-配置中心的价值与选型)
 2. [Nacos 集成配置](#2-nacos-集成配置)
@@ -99,7 +99,7 @@ spring:
 
 ### 3.1 命名规则（核心易错点）
 
-> 🎯 **Data ID 命名**：`${spring.application.name}-${profile}.${file-extension}`——**服务名必须与 spring.application.name 完全一致**，否则加载不到：
+> **Data ID 命名**：`${spring.application.name}-${profile}.${file-extension}`——**服务名必须与 spring.application.name 完全一致**，否则加载不到：
 
 ```text
 Data ID 规范
@@ -112,7 +112,7 @@ Data ID 规范
 加载优先级（Nacos 内）：
 order-service.yaml（基础）→ order-service-prod.yaml（环境覆盖）
 
-⚠️ 易错点：
+易错点：
 ├── 服务名不一致 → 静默加载不到（不报错！）
 ├── 扩展名不匹配（file-extension: yml 而 DataId 是 yaml）→ 加载不到
 ├── profile 不匹配 → 只加载基础配置
@@ -207,7 +207,7 @@ public void onRefresh(RefreshScopeRefreshedEvent event) {
 
 ### 5.1 隔离模型
 
-> 🎯 **Namespace（命名空间）**：Nacos 的环境物理隔离单元——dev/test/prod 各自独立的配置空间，互不可见：
+> **Namespace（命名空间）**：Nacos 的环境物理隔离单元——dev/test/prod 各自独立的配置空间，互不可见：
 
 ```text
 Nacos 三层层级
@@ -303,7 +303,7 @@ Nacos 高可用三件套
 ├── ③ 健康检查：Spring Boot Admin / 自建探活
 └── 部署形态：K8s StatefulSet + NFS/PVC 持久化
 
-⚠️ 生产红线：
+生产红线：
 ├── 绝不用默认内嵌 Derby 存储（数据易丢）
 ├── 集群至少 3 节点（raft 需要多数派）
 └── 配置中心自身的备份策略（配置即资产）
@@ -327,7 +327,7 @@ Nacos 客户端容错机制
 
 ### 8.1 三层兜底架构
 
-> 🎯 **配置中心失效的降级设计**（生产必备）：
+> **配置中心失效的降级设计**（生产必备）：
 
 ```text
 配置获取三层兜底
@@ -386,19 +386,19 @@ public class OrderProperties {
 |------|:---:|:---:|
 | 生态 | **Spring Cloud Alibaba 标准** | 独立生态（携程开源） |
 | 配置中心定位 | 注册中心 + 配置中心一体 | 纯配置中心 |
-| 动态刷新 | ✅ @RefreshScope | ✅ 更强（秒级推送） |
+| 动态刷新 | ✓ @RefreshScope | ✓ 更强（秒级推送） |
 | 灰度发布 | 支持 | **更强（命名空间级灰度）** |
 | 审计回滚 | 有 | **更强（发布历史/回滚）** |
 | 学习成本 | 低（国内主流） | 中 |
 | 2026 选择 | **国内 Java 团队默认** | 大厂/强治理需求 |
 
-> 🎯 **选型结论**：**2026 国内 Java 生态默认 Nacos**（Spring Cloud Alibaba 一体化）；Apollo 适合「强配置治理」（秒级推送、精细化灰度、严格审计）的大型团队。
+> **选型结论**：**2026 国内 Java 生态默认 Nacos**（Spring Cloud Alibaba 一体化）；Apollo 适合「强配置治理」（秒级推送、精细化灰度、严格审计）的大型团队。
 
 ---
 
 ## 10. 核心要点
 
-> 🎯 **核心要点**：
+> **核心要点**：
 > 1. 配置中心价值：集中管理 + 动态刷新 + 环境隔离 + 变更审计——但单体小应用别过度设计
 > 2. Data ID 规范：`{app-name}-{profile}.{ext}`——服务名不一致会**静默加载不到**（不报错！）
 > 3. 动态刷新：@ConfigurationProperties + @RefreshScope 是标准组合；@Value 需 @RefreshScope 且 static 永远不刷新

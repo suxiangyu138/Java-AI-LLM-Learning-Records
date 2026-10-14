@@ -33,7 +33,7 @@
 | `/mnt` | 挂载点 | 临时挂载文件系统 |
 | `/boot` | 内核和引导文件 | vmlinuz, initramfs, grub |
 
-> 💡 面试常问：`/etc` 存配置，`/var` 存日志，`/proc` 是虚拟文件系统，不占磁盘空间。
+> 面试常问：`/etc` 存配置，`/var` 存日志，`/proc` 是虚拟文件系统，不占磁盘空间。
 
 ### 1.2 Linux 文件类型如何区分？
 ```bash
@@ -68,7 +68,7 @@ stat test.txt          # 查看文件的 inode 信息
 ls -i test.txt         # 查看文件的 inode 号码
 df -i                  # 查看 inode 使用情况（inode 耗尽也会导致无法创建文件）
 ```
-> ⚠️ 面试题：磁盘还有空间却无法创建文件？答：inode 用尽了，常见于大量小文件场景。
+> 面试题：磁盘还有空间却无法创建文件？答：inode 用尽了，常见于大量小文件场景。
 
 ### 1.5 Linux 系统运行级别
 | 运行级别 | Systemd Target | 说明 |
@@ -176,7 +176,7 @@ ps aux                     # 查看所有进程状态
 # X: Dead 死亡（几乎看不到）
 ```
 
-> ⚠️ **D 状态进程**：不可中断睡眠，不能被 kill 杀掉，通常等待磁盘 I/O。如果大量 D 状态进程堆积，说明磁盘 I/O 瓶颈或 NFS 挂载阻塞。
+> **D 状态进程**：不可中断睡眠，不能被 kill 杀掉，通常等待磁盘 I/O。如果大量 D 状态进程堆积，说明磁盘 I/O 瓶颈或 NFS 挂载阻塞。
 >
 > **僵尸进程**：子进程终止后，父进程未调用 `wait()` 回收其 PCB，导致进程表项残留。父进程退出后由 init（PID 1）继承回收。
 
@@ -221,7 +221,7 @@ top -o %MEM              # 按内存使用率排序
 | 跨平台 | 大多数 Unix | 大多数 Unix | 仅 Linux |
 | 实现 | 位图 | 链表 | 红黑树 + 就绪链表 |
 
-> 💡 阿里高频题：epoll 为什么高效？答：① 红黑树管理 fd，增删 O(log n)；② 就绪链表避免全量遍历；③ mmap 共享内核和用户态数据，减少拷贝。
+> 阿里高频题：epoll 为什么高效？答：① 红黑树管理 fd，增删 O(log n)；② 就绪链表避免全量遍历；③ mmap 共享内核和用户态数据，减少拷贝。
 
 ### 2.6 零拷贝技术（Zero-Copy）
 传统文件发送：磁盘 → 内核缓冲区 → 用户缓冲区 → Socket 缓冲区 → 网卡（4 次拷贝 + 4 次上下文切换）。
@@ -260,7 +260,7 @@ cat /proc/interrupts     # 查看系统中断统计
 cat /proc/softirqs       # 查看软中断统计
 ```
 
-> 💡 面试题：为什么中断要分上下半部？答：中断处理时 CPU 关闭中断（或关闭同级中断），如果处理太久会丢失其他中断。上半部快速处理硬件响应，下半部延后完成数据处理工作。
+> 面试题：为什么中断要分上下半部？答：中断处理时 CPU 关闭中断（或关闭同级中断），如果处理太久会丢失其他中断。上半部快速处理硬件响应，下半部延后完成数据处理工作。
 
 ---
 
@@ -436,17 +436,17 @@ echo "CPU 使用率: ${CPU_LOAD}%"
 echo "内存使用: ${MEM_USED}MB / ${MEM_TOTAL}MB"
 
 if [ "$DISK_USAGE" -gt 80 ]; then
-    echo "⚠️ 警告: 根分区使用率已达 ${DISK_USAGE}%"
+    echo "警告: 根分区使用率已达 ${DISK_USAGE}%"
 else
-    echo "✅ 磁盘使用率: ${DISK_USAGE}%"
+    echo "✓ 磁盘使用率: ${DISK_USAGE}%"
 fi
 
 # 检查关键进程
 for proc in nginx mysqld redis-server; do
     if pgrep -x "$proc" > /dev/null; then
-        echo "✅ $proc 运行正常"
+        echo "✓ $proc 运行正常"
     else
-        echo "❌ $proc 未运行"
+        echo "✗ $proc 未运行"
     fi
 done
 ```
@@ -661,7 +661,7 @@ find "$BACKUP_DIR" -name "${DB_NAME}_*.sql.gz" -mtime +$RETENTION_DAYS \
 | Hive Metastore | 2（主备）| 16C/32G |
 | Kafka | 5 | 16C/64G + 4×1TB NVMe |
 
-> 💡 面试常问：数仓分层 ODS/DWD/DWS/ADS 各层用途、Hive 分区和分桶的区别、小文件合并策略。
+> 面试常问：数仓分层 ODS/DWD/DWS/ADS 各层用途、Hive 分区和分桶的区别、小文件合并策略。
 
 ### 5.4 设计一个秒杀系统的 Linux 部署方案
 **需求**：整点秒杀活动，并发 10 万 QPS，需提前扩容和防刷。

@@ -1,6 +1,6 @@
 # 05 - MyBatis 插件与拦截器
 
-> 🎯 MyBatis 插件是 JDK 动态代理的经典应用——通过拦截 Executor、StatementHandler、ParameterHandler、ResultSetHandler 四个组件，实现分页、审计、SQL 日志等横切关注点
+> MyBatis 插件是 JDK 动态代理的经典应用——通过拦截 Executor、StatementHandler、ParameterHandler、ResultSetHandler 四个组件，实现分页、审计、SQL 日志等横切关注点
 
 ---
 

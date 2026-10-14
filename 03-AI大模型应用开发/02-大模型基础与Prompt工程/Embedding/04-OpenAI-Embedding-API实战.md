@@ -1,6 +1,6 @@
 # 04 - OpenAI Embedding API 实战
 
-> 🎯 text-embedding-3 系列是目前最成熟的商业 Embedding API — 接入即用、精度高、批量处理、多维度可选
+> text-embedding-3 系列是目前最成熟的商业 Embedding API — 接入即用、精度高、批量处理、多维度可选
 
 ---
 
@@ -98,7 +98,7 @@ def batch_embed(texts: list[str], model="text-embedding-3-small",
 # 1000 条文本
 #   单条模式：1000 次 API 调用 → ~100s（受 Rate Limit 限制）
 #   批量模式（batch=100）：10 次 API 调用 → ~15s
-#   ✅ 速度提升 6-7×
+#   ✓ 速度提升 6-7×
 ```
 
 ### 2.2 异步并发（更高吞吐）

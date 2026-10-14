@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [一句话定位](#1-一句话定位)
 2. [Web 服务器三兄弟](#2-web-服务器三兄弟)
@@ -99,7 +99,7 @@ WSGI vs ASGI
 
 **验收动作**：① 默写一句话定位 + 三兄弟分工；② 给同学讲 ASGI vs WSGI（3 分钟）；③ 查自己环境的 uvicorn 版本（`pip show uvicorn`）；④ 装 standard 扩展（`pip install 'uvicorn[standard]'`）——**"定位 + 生态 + 协议 + 版本 = 认识 uvicorn"**——**练习纪律**：装完必装 standard——"standard 是性能标配（06 篇详讲）"。
 
-> 🎯 **核心要点**：uvicorn = ASGI 服务器（**FastAPI 写应用、uvicorn 跑应用——发动机**）；三兄弟选型（**框架决定服务器：FastAPI→uvicorn、Flask→Gunicorn——Gunicorn+uvicorn worker 是经典组合**）；**ASGI vs WSGI（异步 + 长连接——交换机 vs 电话——异步 = 单进程扛数千并发）**；版本基线（**0.52.1（2026-08-01）/51 亿下载/每月迭代——稳定优先 + 锁版本区间 >=0.49,<1.0**）——"Web 应用的发动机——让异步 Python 跑起来"。
+> **核心要点**：uvicorn = ASGI 服务器（**FastAPI 写应用、uvicorn 跑应用——发动机**）；三兄弟选型（**框架决定服务器：FastAPI→uvicorn、Flask→Gunicorn——Gunicorn+uvicorn worker 是经典组合**）；**ASGI vs WSGI（异步 + 长连接——交换机 vs 电话——异步 = 单进程扛数千并发）**；版本基线（**0.52.1（2026-08-01）/51 亿下载/每月迭代——稳定优先 + 锁版本区间 >=0.49,<1.0**）——"Web 应用的发动机——让异步 Python 跑起来"。
 
 ---
 

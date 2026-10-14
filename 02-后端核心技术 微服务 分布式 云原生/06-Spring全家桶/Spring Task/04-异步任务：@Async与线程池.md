@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [@Async 的代理机制与生效三条件](#1-async-的代理机制与生效三条件)
 2. [TaskExecutor 体系与线程池选型](#2-taskexecutor-体系与线程池选型)
@@ -40,7 +40,7 @@ public class OrderController {
 
     @PostMapping("/order")
     public void create() {
-        notifyService.sendSms("138...");   // ✅ 走代理 → 异步
+        notifyService.sendSms("138...");   // ✓ 走代理 → 异步
     }
 }
 ```
@@ -53,7 +53,7 @@ public class OrderController {
 | 方法被代理调用 | **从外部 Bean 调用**（同类 `this.` 调用绕过代理） | 同步执行（最常见坑） |
 | 方法非 private | 代理需能覆写 | 注解被忽略 |
 
-> ⚠️ **自调用失效**：`this.sendSms()` 直接调用内部方法，绕过 Spring 代理——这是 @Async 第一大坑（与 @Transactional 完全同族）。解法：注入自身代理、拆成两个 Bean、或 `AopContext.currentProxy()`。
+> **自调用失效**：`this.sendSms()` 直接调用内部方法，绕过 Spring 代理——这是 @Async 第一大坑（与 @Transactional 完全同族）。解法：注入自身代理、拆成两个 Bean、或 `AopContext.currentProxy()`。
 
 ### 1.2 代理下的行为细节
 
@@ -77,10 +77,10 @@ TaskExecutor（接口）
 
 | 实现 | 特点 | 生产适用 |
 |------|------|:---:|
-| ThreadPoolTaskExecutor | 完整池语义（核心/最大/队列/拒绝） | ✅ 首选 |
-| TaskExecutorAdapter + 虚拟线程 | Boot 4 默认（06 篇） | ✅ Java 21+ |
-| SimpleAsyncTaskExecutor | 无池化、每任务一线程 | ❌ 一般不用 |
-| SyncTaskExecutor | 同步 | ❌ 仅特殊 |
+| ThreadPoolTaskExecutor | 完整池语义（核心/最大/队列/拒绝） | ✓ 首选 |
+| TaskExecutorAdapter + 虚拟线程 | Boot 4 默认（06 篇） | ✓ Java 21+ |
+| SimpleAsyncTaskExecutor | 无池化、每任务一线程 | ✗ 一般不用 |
+| SyncTaskExecutor | 同步 | ✗ 仅特殊 |
 
 ### 2.2 自定义线程池（生产模板）
 
@@ -111,7 +111,7 @@ public class AsyncConfig implements AsyncConfigurer {
 }
 ```
 
-> 💡 **配置属性版**：`spring.task.execution.pool.core-size=8`、`max-size=16`、`queue-capacity=200`、`thread-name-prefix=async-`——纯配置即可，无需写类。**Boot 4 + 虚拟线程场景下这些属性同样被忽略**（06 篇）。
+> **配置属性版**：`spring.task.execution.pool.core-size=8`、`max-size=16`、`queue-capacity=200`、`thread-name-prefix=async-`——纯配置即可，无需写类。**Boot 4 + 虚拟线程场景下这些属性同样被忽略**（06 篇）。
 
 ### 2.3 拒绝策略选型
 
@@ -119,10 +119,10 @@ public class AsyncConfig implements AsyncConfigurer {
 |------|------|------|
 | AbortPolicy（默认） | 抛 RejectedExecutionException | 明确失败（配合降级） |
 | CallerRunsPolicy | 提交者线程执行 | **生产推荐**：打满时慢下来而非丢任务 |
-| DiscardPolicy | 静默丢弃 | ❌ 不推荐 |
+| DiscardPolicy | 静默丢弃 | ✗ 不推荐 |
 | DiscardOldestPolicy | 丢最老任务 | 最新优先场景 |
 
-> 🎯 **要点**：队列打满 = 系统过载的信号。CallerRuns 让生产者自己干活（背压），Abort 让上层立刻感知——**宁可明确失败+告警，不要静默丢弃**。
+> **要点**：队列打满 = 系统过载的信号。CallerRuns 让生产者自己干活（背压），Abort 让上层立刻感知——**宁可明确失败+告警，不要静默丢弃**。
 
 ## 3. 返回值：void / Future / CompletableFuture
 
@@ -153,7 +153,7 @@ CompletableFuture.allOf(stockFuture, priceFuture)
         .thenRun(() -> render(stockFuture.join(), priceFuture.join()));
 ```
 
-> ⚠️ **注意**：`@Async` 返回的 CompletableFuture 由 Spring 包装（AsyncResult 桥接）——**不要在 @Async 方法内部自己 `complete()`**；方法返回的 future 会自动完成。若内部用 `CompletableFuture.supplyAsync(...)` 再包一层，则内层线程不走 Spring 线程池。
+> **注意**：`@Async` 返回的 CompletableFuture 由 Spring 包装（AsyncResult 桥接）——**不要在 @Async 方法内部自己 `complete()`**；方法返回的 future 会自动完成。若内部用 `CompletableFuture.supplyAsync(...)` 再包一层，则内层线程不走 Spring 线程池。
 
 ## 4. 异步异常处理与回调
 
@@ -182,7 +182,7 @@ sendNotify(1001)
     .exceptionally(ex -> { log.error("notify failed", ex); return null; });
 ```
 
-> ⚠️ **静默吞异常**：void 方法 + 未配置 `AsyncUncaughtExceptionHandler` → 异常只打默认日志（甚至无日志），业务无感知。**生产必须配全局 handler + 告警**。
+> **静默吞异常**：void 方法 + 未配置 `AsyncUncaughtExceptionHandler` → 异常只打默认日志（甚至无日志），业务无感知。**生产必须配全局 handler + 告警**。
 
 ### 4.2 事务与 SecurityContext 的传播
 
@@ -207,7 +207,7 @@ executor.setTaskDecorator(runnable -> {
 });
 ```
 
-> 🎯 **要点**：异步 = 新线程 = 一切 ThreadLocal 上下文归零。**MDC、租户、安全上下文必须显式传播**（TaskDecorator 是统一入口）——"异步后日志链路断、权限丢失、租户串号"都是没做传播。
+> **要点**：异步 = 新线程 = 一切 ThreadLocal 上下文归零。**MDC、租户、安全上下文必须显式传播**（TaskDecorator 是统一入口）——"异步后日志链路断、权限丢失、租户串号"都是没做传播。
 
 ## 5. 异步场景清单：何时该用何时不该用
 
@@ -229,7 +229,7 @@ executor.setTaskDecorator(runnable -> {
   ③ 线程池有容量设计（不会打满拖垮主流程）
 ```
 
-> 🎯 **核心要点**：@Async = 代理切到线程池执行。生效三条件（@EnableAsync + 外部代理调用 + 非 private）、返回值三形态（void/Future/CompletableFuture）、异常三路径（future 持有/全局 handler/调用方捕获）——每一条都对"异步出问题"的排障路径。上下文传播（MDC/安全/事务）与容量设计（拒绝策略）是生产红线。
+> **核心要点**：@Async = 代理切到线程池执行。生效三条件（@EnableAsync + 外部代理调用 + 非 private）、返回值三形态（void/Future/CompletableFuture）、异常三路径（future 持有/全局 handler/调用方捕获）——每一条都对"异步出问题"的排障路径。上下文传播（MDC/安全/事务）与容量设计（拒绝策略）是生产红线。
 
 ---
 

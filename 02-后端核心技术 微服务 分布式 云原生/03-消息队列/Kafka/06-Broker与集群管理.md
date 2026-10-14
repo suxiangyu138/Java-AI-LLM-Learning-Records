@@ -1,6 +1,6 @@
 # 06 - Broker 与集群管理
 
-> 🎯 Broker 是 Kafka 集群的骨架，Controller 是大脑 — 理解 Controller 选举、副本同步、故障恢复，才能运维好生产级 Kafka 集群
+> Broker 是 Kafka 集群的骨架，Controller 是大脑 — 理解 Controller 选举、副本同步、故障恢复，才能运维好生产级 Kafka 集群
 
 ---
 
@@ -24,10 +24,10 @@
 Broker = 一个 Kafka 服务进程
 
 每个 Broker：
-  ✅ 处理生产者/消费者请求
-  ✅ 管理存储的 Partition 副本
-  ✅ 与其他 Broker 通信（副本同步/Controller 选举）
-  ✅ 向 Controller 注册自己
+  ✓ 处理生产者/消费者请求
+  ✓ 管理存储的 Partition 副本
+  ✓ 与其他 Broker 通信（副本同步/Controller 选举）
+  ✓ 向 Controller 注册自己
 ```
 
 ### 1.2 集群拓扑
@@ -80,11 +80,11 @@ Broker 进程内部：
 
 ```text
 Kafka Controller 是集群的"大脑"，负责：
-  ✅ Broker 上下线管理
-  ✅ Topic 创建/删除（分区 + 副本分配）
-  ✅ Partition Leader 选举
-  ✅ 分区副本重分配（迁移）
-  ✅ 元数据广播到其他 Broker
+  ✓ Broker 上下线管理
+  ✓ Topic 创建/删除（分区 + 副本分配）
+  ✓ Partition Leader 选举
+  ✓ 分区副本重分配（迁移）
+  ✓ 元数据广播到其他 Broker
 
 一个集群同时只有 1 个 Controller
 ```
@@ -100,9 +100,9 @@ ZooKeeper 模式下的 Controller 选举：
 ④ Controller 宕机 → 临时节点消失 → 其他 Broker 争抢 → 新 Controller
 
 问题：
-  ❌ ZK 依赖 → 运维复杂
-  ❌ Controller 切换时元数据全量加载 → 长时间不可用
-  ❌ ZK 写入压力大（每个 Broker 注册、Segment 信息变更）
+  ✗ ZK 依赖 → 运维复杂
+  ✗ Controller 切换时元数据全量加载 → 长时间不可用
+  ✗ ZK 写入压力大（每个 Broker 注册、Segment 信息变更）
 ```
 
 ### 2.3 Controller 故障影响
@@ -112,7 +112,7 @@ Controller 宕机期间：
   → 无法创建/删除 Topic
   → 无法处理 Broker 上下线
   → Partition Leader 不切换
-  → 已存在的生产/消费不受影响 ✅
+  → 已存在的生产/消费不受影响 ✓
 
 Controller 切换期间（ZK 模式）：
   → 集群短暂不可管理（几秒到几十秒）
@@ -127,16 +127,16 @@ Controller 切换期间（ZK 模式）：
 
 ```text
 ZooKeeper 模式的痛点：
-  ❌ 运维两套系统（Kafka + ZK）
-  ❌ 元数据一致性依赖 ZK
-  ❌ Controller 切换慢（需全量加载 ZK 元数据）
-  ❌ Kafka 受限于 ZK 的写入能力（ZK 写不适合高并发）
+  ✗ 运维两套系统（Kafka + ZK）
+  ✗ 元数据一致性依赖 ZK
+  ✗ Controller 切换慢（需全量加载 ZK 元数据）
+  ✗ Kafka 受限于 ZK 的写入能力（ZK 写不适合高并发）
 
 KRaft 方案：
-  ✅ Kafka 自带元数据管理，无需 ZooKeeper
-  ✅ 元数据日志（Metadata Log）基于 Raft 共识
-  ✅ Controller 切换毫秒级（元数据已在本地日志中）
-  ✅ 支持百万级分区（ZK 模式下受限于 ZK 性能）
+  ✓ Kafka 自带元数据管理，无需 ZooKeeper
+  ✓ 元数据日志（Metadata Log）基于 Raft 共识
+  ✓ Controller 切换毫秒级（元数据已在本地日志中）
+  ✓ 支持百万级分区（ZK 模式下受限于 ZK 性能）
 ```
 
 ### 3.2 KRaft 架构
@@ -193,7 +193,7 @@ process.roles 配置：
   ④ 尽可能让每个 Broker 上的 Leader 数均衡
 
 示例（3 Broker, 3 Partition, RF=3）：
-  Broker 1: P0(L) P1(F) P2(F)  → 各 1 个 Leader ✅
+  Broker 1: P0(L) P1(F) P2(F)  → 各 1 个 Leader ✓
   Broker 2: P0(F) P1(L) P2(F)
   Broker 3: P0(F) P1(F) P2(L)
 ```
@@ -209,9 +209,9 @@ Follower 如何同步 Leader：
 4. Leader 收到 Follower 的 Fetch 确认 → 推进 HW
 
 关键参数：
-  ✅ replica.fetch.wait.max.ms=500    → Follower 长轮询等待时间
-  ✅ replica.fetch.max.bytes=1MB      → 单次 Fetch 最大字节
-  ✅ replica.socket.timeout.ms=30000  → 连接超时
+  ✓ replica.fetch.wait.max.ms=500    → Follower 长轮询等待时间
+  ✓ replica.fetch.max.bytes=1MB      → 单次 Fetch 最大字节
+  ✓ replica.socket.timeout.ms=30000  → 连接超时
 ```
 
 ### 4.3 首选 Leader（Preferred Leader）
@@ -244,7 +244,7 @@ auto.leader.rebalance.enable=true（默认）
 ④ Follower 升级为 Leader
 ⑤ Producer/Consumer 收到元数据更新 → 重连新 Leader
 
-⚠️ ISR 为空时：
+ISR 为空时：
   unclean.leader.election.enable=true（默认 false）
     → 允许非 ISR 副本当选 Leader → 可能丢数据
   unclean.leader.election.enable=false（推荐）
@@ -313,9 +313,9 @@ Kafka 支持在线滚动升级（零停机）
   ③ 确认上一个 Broker 恢复后再重启下一个
   
 版本兼容性：
-  ✅ Kafka 支持跨版本通信（如 2.8 ↔ 3.x）
-  ✅ 建议不要跨度太大（< 2 个大版本）
-  ✅ 新版本特性需所有 Broker 升级后开启
+  ✓ Kafka 支持跨版本通信（如 2.8 ↔ 3.x）
+  ✓ 建议不要跨度太大（< 2 个大版本）
+  ✓ 新版本特性需所有 Broker 升级后开启
 ```
 
 ### 6.3 均衡检查

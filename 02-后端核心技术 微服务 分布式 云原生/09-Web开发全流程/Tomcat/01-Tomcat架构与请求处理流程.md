@@ -2,7 +2,7 @@
 
 > 定位：Catalina 容器层级、请求处理九步流程、Servlet 规范三组件、生命周期——Tomcat 面试第一核心
 
-## 📚 目录
+## 目录
 
 1. [整体架构：Connector + Container](#1-整体架构connector--container)
 2. [Container 层级：Engine/Host/Context/Wrapper](#2-container-层级enginehostcontextwrapper)
@@ -22,7 +22,7 @@ Tomcat 两大核心组件：
 请求路径：
   客户端 → Connector（解析 HTTP）→ Container（执行逻辑）→ 响应返回
 
-⚠️ 面试必答：
+面试必答：
 "Tomcat = Connector + Container 两层——
  Connector 管'通信'（HTTP 解析/IO 模型）、
  Container 管'业务'（Servlet 执行）。
@@ -61,7 +61,7 @@ Tomcat 两大核心组件：
        └─ Context（Web 应用，可多个）
            └─ Wrapper（Servlet，可多个）
 
-⚠️ 面试必答：
+面试必答：
 "四级容器从大到小——Engine（引擎）、
  Host（域名）、Context（应用）、
  Wrapper（Servlet）；请求按层级
@@ -95,7 +95,7 @@ Tomcat 两大核心组件：
 ⑧ 响应沿原路径返回
 ⑨ Connector 发送响应给客户端
 
-⚠️ 面试必答：
+面试必答：
 "请求九步——连接接收、解析封装、
  容器定位、Valve 拦截、Filter 链、
  Servlet 执行、响应返回。
@@ -106,11 +106,11 @@ Tomcat 两大核心组件：
 ### 3.2 类加载与单实例
 
 ```
-⚠️ Servlet 是单实例多线程：
+Servlet 是单实例多线程：
   每个 Servlet 只实例化一次
   多个线程并发调用 service()
 
-⚠️ 面试必答：
+面试必答：
 "Servlet 单实例多线程——线程安全问题
  在 Servlet 内共享字段（用局部变量/
  ThreadLocal）。实例化一次、服务多次。"
@@ -181,7 +181,7 @@ public class AppListener implements ServletContextListener {
 | Filter | 请求前后 | 鉴权、日志、编码、压缩 |
 | Listener | 生命周期事件 | 初始化、清理、会话管理 |
 
-> 🎯 **要点**：三组件分工——Servlet 管业务、Filter 管拦截（链式）、Listener 管事件。Filter 链顺序 = web.xml 声明顺序。
+> **要点**：三组件分工——Servlet 管业务、Filter 管拦截（链式）、Listener 管事件。Filter 链顺序 = web.xml 声明顺序。
 
 ---
 
@@ -192,11 +192,11 @@ public class AppListener implements ServletContextListener {
 ```
 加载 → 实例化 → init（一次）→ service（多次）→ destroy（一次）
 
-⚠️ 触发时机：
+触发时机：
   init：首次请求时（或 load-on-startup 提前）
   destroy：应用停止/热部署时
 
-⚠️ 面试必答：
+面试必答：
 "Servlet 生命周期五阶段——加载、实例化、
  init（一次）、service（每次请求）、
  destroy（一次）。单实例多线程是关键特征。"
@@ -209,7 +209,7 @@ public class AppListener implements ServletContextListener {
    → 请求服务
    → contextDestroyed（销毁）
 
-⚠️ 面试必答：
+面试必答：
 "应用生命周期与 ServletContextListener
  挂钩——初始化放数据源/配置、
  销毁放清理（连接池关闭）。"
@@ -217,7 +217,7 @@ public class AppListener implements ServletContextListener {
 
 ---
 
-> 🎯 **核心要点**：Tomcat 架构 = **Connector + Container 双层**（通信 vs 业务）+ **四级容器**（Engine→Host→Context→Wrapper）+ **九步请求流程**（收→解析→定位→拦截→执行）+ **三组件**（Servlet/Filter/Listener）+ **生命周期**（init 一次/service 多次）。"请求怎么走"是 Tomcat 面试第一问。
+> **核心要点**：Tomcat 架构 = **Connector + Container 双层**（通信 vs 业务）+ **四级容器**（Engine→Host→Context→Wrapper）+ **九步请求流程**（收→解析→定位→拦截→执行）+ **三组件**（Servlet/Filter/Listener）+ **生命周期**（init 一次/service 多次）。"请求怎么走"是 Tomcat 面试第一问。
 
 ---
 

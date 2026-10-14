@@ -21,7 +21,7 @@ Root span: user request
 | 中层 | 推理 span（每步规划） | 计划、决策 |
 | 底层 | 工具调用 span（挂在触发它的推理 span 下） | 工具名、参数、结果、延迟 |
 
-> 🎯 核心要点：**工具 span 是触发它的推理 span 的子节点**——归因"哪步决策导致了哪个调用"，这是失败归因的基础（LangCost 类工具的底层结构）。
+> 核心要点：**工具 span 是触发它的推理 span 的子节点**——归因"哪步决策导致了哪个调用"，这是失败归因的基础（LangCost 类工具的底层结构）。
 
 ## 2. Agent 两类 span（OTel GenAI 约定）
 
@@ -30,7 +30,7 @@ Root span: user request
 | create_agent | Agent 初始化 | agent.id、agent.name、agent.description、agent.version |
 | invoke_agent | Agent 执行 | conversation.id、输入/输出类型、token 用量、温度、finish_reason |
 
-> 💡 版本属性的价值：**agent.version 让"模型/提示升级后行为漂移"可归因**——先查版本再查代码，是 2026 调试的第一步。
+> 版本属性的价值：**agent.version 让"模型/提示升级后行为漂移"可归因**——先查版本再查代码，是 2026 调试的第一步。
 
 ## 3. GenAI span 的边界：不只是 LLM 调用
 
@@ -42,7 +42,7 @@ Root span: user request
 | gen_ai.agent.name | 泳道视图与交接可见性 |
 | gen_ai.operation.name | 操作类型（chat/execute_tool/invoke_agent） |
 
-> ⚠️ **conversation.id 必须传播进下游系统 span**——否则只有 LLM 视角没有全栈视角：模型调了 API，但 API 侧发生了什么看不到。
+> **conversation.id 必须传播进下游系统 span**——否则只有 LLM 视角没有全栈视角：模型调了 API，但 API 侧发生了什么看不到。
 
 ## 4. Threads/Sessions：跨轮关联
 
@@ -53,7 +53,7 @@ Root span: user request
 | 会话成本 | 跨轮 token 聚合——意外账单的源头（05 篇） |
 | 会话质量 | 目标是否在整段会话达成（06 篇多轮 eval） |
 
-> 🎯 核心要点：**单 trace 分析抓不住会话级失败模式**——Threads 是跨轮分析的容器，会话是观测单位（01 篇）。追踪链路：trace 内的 span 树 + trace 间的 conversation.id 关联。
+> 核心要点：**单 trace 分析抓不住会话级失败模式**——Threads 是跨轮分析的容器，会话是观测单位（01 篇）。追踪链路：trace 内的 span 树 + trace 间的 conversation.id 关联。
 
 ## 5. RAG 追踪：三段隔离
 
@@ -63,7 +63,7 @@ Root span: user request
 | Retrieval | 召回（查询、命中数、来源） | 检索质量问题 |
 | Generation | 生成（模型、上下文、输出） | 生成质量问题 |
 
-> 💡 **隔离的价值：回答差 → 查是检索差还是生成差**——三段 span 分离是 RAG 排障的分水岭（与 RAG 08 篇评估衔接：评估定位同样三段）。
+> **隔离的价值：回答差 → 查是检索差还是生成差**——三段 span 分离是 RAG 排障的分水岭（与 RAG 08 篇评估衔接：评估定位同样三段）。
 
 ## 6. 结构化的自动收益
 
@@ -74,7 +74,7 @@ Root span: user request
 | 瓶颈定位 | 哪类 span 耗时占比最高 |
 | 成本分配 | 每 span 带 token/成本（05 篇） |
 
-> ⚠️ 2026 生产警示：**编码 Agent 事故（Copilot 1526 个 worktree、$8 重复读文件 1000 次）都有清晰 trace 特征**——重复工具调用 span 模式可自动告警（与 Tool 07 篇失败记忆互补：trace 提供证据，约束机制提供阻止）。
+> 2026 生产警示：**编码 Agent 事故（Copilot 1526 个 worktree、$8 重复读文件 1000 次）都有清晰 trace 特征**——重复工具调用 span 模式可自动告警（与 Tool 07 篇失败记忆互补：trace 提供证据，约束机制提供阻止）。
 
 ## 7. 插桩方式对比（2026）
 
@@ -85,7 +85,7 @@ Root span: user request
 | 手动 SDK | 手写 span | 灵活 | 规模上不可维护 |
 | 非侵入 eBPF | 网络层自动生成（阿里 OBI） | 零代码 | 依赖网络流量可见性 |
 
-> 🎯 核心要点：**框架插桩器优先**（LangChain/LlamaIndex/OpenAI SDK 官方 instrumentors 补全每条代码路径）；手动 span 只适合 demo——规模上必然漏埋。
+> 核心要点：**框架插桩器优先**（LangChain/LlamaIndex/OpenAI SDK 官方 instrumentors 补全每条代码路径）；手动 span 只适合 demo——规模上必然漏埋。
 
 ## 8. 常见误区
 

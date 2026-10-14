@@ -1,6 +1,6 @@
 # 04 - Doubao API 开发实战
 
-> 🎯 豆包 API 完全兼容 OpenAI 协议 — 改 base_url 即可接入。本章覆盖 API Key 获取、三语言调用（Python/HTTP/Java）、流式输出、Coding Plan 双协议端点与错误排查全流程
+> 豆包 API 完全兼容 OpenAI 协议 — 改 base_url 即可接入。本章覆盖 API Key 获取、三语言调用（Python/HTTP/Java）、流式输出、Coding Plan 双协议端点与错误排查全流程
 
 ---
 
@@ -159,7 +159,7 @@ AI 编程套餐（Coding Plan）走独立端点，按协议分流：
 | `https://ark.cn-beijing.volces.com/api/coding` | Anthropic 协议 | Claude Code、Cline 等 |
 | `https://ark.cn-beijing.volces.com/api/coding/v3` | OpenAI 协议 | Cursor、VSCode 扩展、TRAE、Roo Code 等 |
 
-> ⚠️ `/api/v3` 路径对 Coding Plan 已弃用：误用会**无法消耗套餐额度，转而按 API 调用额外计费**。套餐内模型名直接用逻辑名（如 `doubao-seed-2.0-code`、`ark-code-latest`），控制台切换模型 3-5 分钟生效。
+> `/api/v3` 路径对 Coding Plan 已弃用：误用会**无法消耗套餐额度，转而按 API 调用额外计费**。套餐内模型名直接用逻辑名（如 `doubao-seed-2.0-code`、`ark-code-latest`），控制台切换模型 3-5 分钟生效。
 
 ## 8. 错误排查速查
 
@@ -183,6 +183,6 @@ AI 编程套餐（Coding Plan）走独立端点，按协议分流：
 
 ---
 
-> 🎯 **核心要点**：豆包 API = **OpenAI 兼容（改 base_url 即用）+ 显式 model（不填 404）+ Bearer 鉴权**。三个最易踩的坑：thinking 走 extra_body、Coding Plan 走专用端点（误用按量计费）、Java 必须用官方 SDK（签名头）。排查顺序：环境 → 代码 → 策略。
+> **核心要点**：豆包 API = **OpenAI 兼容（改 base_url 即用）+ 显式 model（不填 404）+ Bearer 鉴权**。三个最易踩的坑：thinking 走 extra_body、Coding Plan 走专用端点（误用按量计费）、Java 必须用官方 SDK（签名头）。排查顺序：环境 → 代码 → 策略。
 
 **下一模块**：[05-深度思考与推理控制](05-深度思考与推理控制.md) / **返回总览**：[00-总览](00-Doubao知识体系总览.md)

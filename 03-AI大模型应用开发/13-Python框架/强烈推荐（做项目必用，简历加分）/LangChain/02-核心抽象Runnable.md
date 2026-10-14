@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [设计哲学](#1-设计哲学)
 2. [Runnable 接口](#2-runnable-接口)
@@ -123,7 +123,7 @@ print(result)                                 # 纯字符串结果
 
 **验收动作**：① 用 invoke/stream/batch 三种方式调模型；② 用 RunnableLambda 包一个业务函数并调用；③ 用 | 拼一条最小链（prompt | model | parser）并 invoke；④ 默写设计哲学——**"接口 + 家族 + 组合 = Runnable 核心"**——**练习纪律**：每个组件先问"它是 Runnable 吗"——"一把钥匙开所有门"。
 
-> 🎯 **核心要点**：设计哲学（**一切皆 Runnable 一切皆可组合——统一接口 = 自由组合的前提——胶水代码消失**）；**接口（invoke/stream/batch + a 前缀——一套姿势走天下）**；**家族（Lambda 包函数/Passthrough 透传/Parallel 并行——Lambda 是业务代码进管道的桥）**；**组合基础（| 管道——前出后进——组合结果还是 Runnable——本课打地基 06 篇盖楼）**——"记住这一句，LangChain 的骨架就懂了"。
+> **核心要点**：设计哲学（**一切皆 Runnable 一切皆可组合——统一接口 = 自由组合的前提——胶水代码消失**）；**接口（invoke/stream/batch + a 前缀——一套姿势走天下）**；**家族（Lambda 包函数/Passthrough 透传/Parallel 并行——Lambda 是业务代码进管道的桥）**；**组合基础（| 管道——前出后进——组合结果还是 Runnable——本课打地基 06 篇盖楼）**——"记住这一句，LangChain 的骨架就懂了"。
 
 ---
 

@@ -2,7 +2,7 @@
 
 > 定位：Canvas/SVG、表单进阶、Web 组件、ARIA 可访问性、现代 HTML API——从"会写标签"到"写出可访问的高质量页面"
 
-## 📚 目录
+## 目录
 
 1. [Canvas 绘图](#1-canvas-绘图)
 2. [SVG 矢量图](#2-svg-矢量图)
@@ -80,7 +80,7 @@ ctx.fillText('Hello Canvas', 50, 200);
 | 性能 | 大量元素更快 | 少量元素更快 |
 | 适用 | 游戏/图表/图像 | 图标/Logo/数据可视化 |
 
-> 🎯 **要点**：图标用 SVG（可缩放 + 可样式化）；高频动画用 Canvas。两者都支持 `<img>` 引入外部文件。
+> **要点**：图标用 SVG（可缩放 + 可样式化）；高频动画用 Canvas。两者都支持 `<img>` 引入外部文件。
 
 ---
 
@@ -119,7 +119,7 @@ form.addEventListener('submit', async (e) => {
     // 上传文件（multipart）
     const resp = await fetch('/api/upload', {
         method: 'POST',
-        body: data,                            // ⚠️ 不要手动设 Content-Type
+        body: data,                            // 不要手动设 Content-Type
     });
 });
 
@@ -177,7 +177,7 @@ shadow.appendChild(document.getElementById('cardTemplate').content.cloneNode(tru
 | Shadow DOM | 样式与 DOM 隔离 |
 | Template/Slot | 模板复用 + 插槽 |
 
-> 🎯 **要点**：Web Components 是浏览器原生组件标准——框架无关、可复用；三大技术组合使用。Vue/React 组件与其理念相通。
+> **要点**：Web Components 是浏览器原生组件标准——框架无关、可复用；三大技术组合使用。Vue/React 组件与其理念相通。
 
 ---
 
@@ -190,7 +190,7 @@ ARIA（Accessible Rich Internet Applications）：
   为动态内容补充"语义"的规范
   让屏幕阅读器理解自定义组件
 
-⚠️ 面试必答：
+面试必答：
 "ARIA 是给'非语义元素'补语义的规范——
  自定义组件（div 模拟按钮）需要
  role/aria-label 等让读屏软件可理解。"
@@ -229,7 +229,7 @@ ARIA（Accessible Rich Internet Applications）：
 | prefers-reduced-motion | 尊重减少动画偏好 |
 | 语义优先 | 能用原生标签不用 ARIA |
 
-> 🎯 **要点**："能用原生标签就不用 ARIA"——`<button>` 免费获得键盘/焦点/读屏支持，`<div role="button">` 要手写全部。ARIA 是补丁不是替代。
+> **要点**："能用原生标签就不用 ARIA"——`<button>` 免费获得键盘/焦点/读屏支持，`<div role="button">` 要手写全部。ARIA 是补丁不是替代。
 
 ---
 
@@ -263,7 +263,7 @@ ARIA（Accessible Rich Internet Applications）：
 </details>
 ```
 
-> 🎯 **核心要点**：HTML 进阶四块——Canvas（像素绘图）/SVG（矢量）、原生表单 API（校验/FormData）、Web Components（自定义元素 + Shadow DOM）、ARIA（可访问性补语义）。2026 年 `<dialog>`/`<details>`/popover 等原生组件已广泛可用，**优先原生、ARIA 兜底**是写页面的现代原则。
+> **核心要点**：HTML 进阶四块——Canvas（像素绘图）/SVG（矢量）、原生表单 API（校验/FormData）、Web Components（自定义元素 + Shadow DOM）、ARIA（可访问性补语义）。2026 年 `<dialog>`/`<details>`/popover 等原生组件已广泛可用，**优先原生、ARIA 兜底**是写页面的现代原则。
 
 ---
 

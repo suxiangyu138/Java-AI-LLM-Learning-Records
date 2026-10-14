@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [AOP 解决的问题与核心概念](#1-aop-解决的问题与核心概念)
 2. [切点表达式 Pointcut 语法全解](#2-切点表达式-pointcut-语法全解)
@@ -53,7 +53,7 @@ public Order getOrder(String id) {
 | **切面（Aspect）** | 切点 + 通知的组合 | 完整的地图 + 行动计划 |
 | **织入（Weaving）** | 把通知装进目标方法的时机（Spring 在运行时代理织入） | 执行计划 |
 
-> 🎯 **核心要点**：AOP 的本质是**"横切逻辑与业务逻辑的分离 + 运行期代理织入"**——Spring 的声明式事务、@Async、@Cacheable、安全注解全部建立在 AOP 之上。
+> **核心要点**：AOP 的本质是**"横切逻辑与业务逻辑的分离 + 运行期代理织入"**——Spring 的声明式事务、@Async、@Cacheable、安全注解全部建立在 AOP 之上。
 
 ---
 
@@ -109,7 +109,7 @@ public class TimingAspect {
 public Order getOrder(String id) { return dao.findById(id); }
 ```
 
-> 🎯 **核心要点**：**注解切点 > execution 切点**——`@annotation(MyAnnotation)` 让"织入点"由业务侧显式声明（可读、可控制），execution 按包名类名匹配则容易误伤（升级时类路径变化即失效）。
+> **核心要点**：**注解切点 > execution 切点**——`@annotation(MyAnnotation)` 让"织入点"由业务侧显式声明（可读、可控制），execution 按包名类名匹配则容易误伤（升级时类路径变化即失效）。
 
 ---
 
@@ -151,7 +151,7 @@ public Object retry(ProceedingJoinPoint pjp) throws Throwable {
 }
 ```
 
-> ⚠️ **@AfterReturning 拿返回值的坑**：参数里声明 `Object result` 要求切点返回值匹配；拿不到返回值时**不要声明参数**（Spring 会报参数绑定错误）。
+> **@AfterReturning 拿返回值的坑**：参数里声明 `Object result` 要求切点返回值匹配；拿不到返回值时**不要声明参数**（Spring 会报参数绑定错误）。
 
 ---
 
@@ -194,7 +194,7 @@ public class MonitorAspect {
 2. **pjp.proceed() 的异常必须继续抛**——吞掉异常等于切面改变了业务语义；
 3. **切点表达式用常量抽离**（`@Pointcut` 方法），多通知复用同一规则。
 
-> 💡 AOP 的经典使用清单：日志（请求/响应）、耗时监控、鉴权校验、事务（@Transactional 本身）、缓存（@Cacheable）、重试、幂等、数据脱敏、审计。
+> AOP 的经典使用清单：日志（请求/响应）、耗时监控、鉴权校验、事务（@Transactional 本身）、缓存（@Cacheable）、重试、幂等、数据脱敏、审计。
 
 ---
 
@@ -222,7 +222,7 @@ spring.aop.proxy-target-class: true   # Boot 2.x+ 默认 true
 
 **Spring 7.0 的重大变化（2025-11）**：**CGLIB 成为一致默认**——不再"有接口用 JDK 代理"，统一用 CGLIB 子类代理（配合新注解 `@Proxyable` 控制代理行为），代理行为更可预期，也解决了一些 JDK 代理在 AOT 下的限制。
 
-> 🎯 **核心要点**：代理模型的本质是"**运行时生成替身**"——JDK 代理替身实现接口，CGLIB 替身继承类。**final 类/方法永远无法被任何代理拦截**（CGLIB 也做不到），这是"为什么 @Transactional 不能加在 final 方法上"的底层原因。
+> **核心要点**：代理模型的本质是"**运行时生成替身**"——JDK 代理替身实现接口，CGLIB 替身继承类。**final 类/方法永远无法被任何代理拦截**（CGLIB 也做不到），这是"为什么 @Transactional 不能加在 final 方法上"的底层原因。
 
 ---
 
@@ -237,7 +237,7 @@ public class OrderService {
     public void pay(String orderId) { ... }          // 希望被事务代理
 
     public void checkout(String orderId) {
-        this.pay(orderId);       // ❌ 内部调用：走的是 this（原始对象），事务不生效！
+        this.pay(orderId);       // ✗ 内部调用：走的是 this（原始对象），事务不生效！
         // 容器注入的是代理对象，但 this 指向原始对象 —— AOP 通知全部跳过
     }
 }
@@ -270,7 +270,7 @@ public class OrderService {
 // 解法 4：TransactionTemplate 编程式事务（无需代理）
 ```
 
-> 🎯 **核心要点**：自调用失效影响**所有 AOP 功能**（事务、@Async、@Cacheable、自定义切面）——面试答"事务为什么没生效"的第一候选原因就是它。**根治方案是拆分 Bean**（内聚 + 可代理）。
+> **核心要点**：自调用失效影响**所有 AOP 功能**（事务、@Async、@Cacheable、自定义切面）——面试答"事务为什么没生效"的第一候选原因就是它。**根治方案是拆分 Bean**（内聚 + 可代理）。
 
 ---
 
@@ -294,7 +294,7 @@ public class OrderService { ... }        // 默认即代理，可省略；@Proxy
 // ① 非 final 类即可代理（不再需要接口） ② 若有 JDK 代理依赖（如跨模块接口契约）需检查
 ```
 
-> ⚠️ **升级提示**：Spring 6 → 7 是代际升级（Boot 3.x → 4.x 对应）——AOP 相关注意：CGLIB 默认化带来的行为变化、`javax.*` 注解移除、旧代理配置项失效。迁移清单见 `Spring生态/03-SpringBoot4与SpringFramework7新特性.md`。
+> **升级提示**：Spring 6 → 7 是代际升级（Boot 3.x → 4.x 对应）——AOP 相关注意：CGLIB 默认化带来的行为变化、`javax.*` 注解移除、旧代理配置项失效。迁移清单见 `Spring生态/03-SpringBoot4与SpringFramework7新特性.md`。
 
 ---
 

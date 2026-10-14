@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [RPC 的本质](#1-rpc-的本质)
 2. [Dubbo 3：Java 生态的 RPC 之王](#2-dubbo-3java-生态的-rpc-之王)
@@ -47,8 +47,8 @@
 | 契约 | Java 接口 | proto IDL | Java 接口（HTTP 语义） |
 | 协议 | Triple（HTTP/2） | HTTP/2 | HTTP/1.1（REST） |
 | 序列化 | 多选（protobuf/Hessian2/JSON） | protobuf | JSON |
-| 治理 | ⭐ 全家桶内置 | 需自己配 | Spring Cloud 全家桶 |
-| 跨语言 | Java 为主（Go/Rust 跟进） | ⭐ 多语言标准 | 弱（HTTP 直调） |
+| 治理 | ★ 全家桶内置 | 需自己配 | Spring Cloud 全家桶 |
+| 跨语言 | Java 为主（Go/Rust 跟进） | ★ 多语言标准 | 弱（HTTP 直调） |
 | 适用 | Java 内部高性能 | 多语言/云原生 | Spring 生态标准 |
 
 **选型主线**：**Java 单体生态内、性能敏感 → Dubbo；多语言互调/云原生 → gRPC；Spring 生态纯 HTTP 标准 → OpenFeign**——"**协议收敛到 HTTP/2 的 2026，选型比的是'治理能力'与'生态匹配'，不再是'快不快'**"（OpenFeign 详见 Spring Cloud 专精体系）。
@@ -77,7 +77,7 @@
 4. gRPC 的 IDL 强制是优点还是缺点？
 5. 治理五件与生产六要点？超时优先级是什么？
 
-> 🎯 **核心要点**：RPC = **"本地调用语义 + 网络传输"**——Dubbo 3 的 Triple 协议（HTTP/2 + gRPC 兼容）让"**治理与标准合体**"；选型"**Java 内部 Dubbo、多语言 gRPC、Spring 生态 OpenFeign**"；生产纪律"**非幂等禁重试、超时分级、别阻塞 IO 线程、注册中心本地缓存**"。
+> **核心要点**：RPC = **"本地调用语义 + 网络传输"**——Dubbo 3 的 Triple 协议（HTTP/2 + gRPC 兼容）让"**治理与标准合体**"；选型"**Java 内部 Dubbo、多语言 gRPC、Spring 生态 OpenFeign**"；生产纪律"**非幂等禁重试、超时分级、别阻塞 IO 线程、注册中心本地缓存**"。
 
 ---
 

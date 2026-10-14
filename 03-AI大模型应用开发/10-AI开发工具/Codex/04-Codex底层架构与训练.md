@@ -1,6 +1,6 @@
 # 04 - Codex 底层架构与训练
 
-> 🎯 GPT-5-Codex = Transformer Decoder + 代码专项微调 + RLHF 工程对齐。理解训练流程才能理解为什么它有时"幻觉"
+> GPT-5-Codex = Transformer Decoder + 代码专项微调 + RLHF 工程对齐。理解训练流程才能理解为什么它有时"幻觉"
 
 ---
 

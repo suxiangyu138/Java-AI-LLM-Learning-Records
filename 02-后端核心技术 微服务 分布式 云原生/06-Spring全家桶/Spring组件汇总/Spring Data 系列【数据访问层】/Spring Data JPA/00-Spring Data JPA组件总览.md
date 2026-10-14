@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [组件一句话定位](#1-组件一句话定位)
 2. [版本现状（2026-08）](#2-版本现状2026-08)
@@ -57,34 +57,34 @@
 | 动态查询 | 拼接 Criteria 或字符串 | JpaSpecificationExecutor（4.0 起三类型） |
 | 与 Spring 生态 | 无集成 | Repository、审计、事件、Boot 自动配置 |
 
-> 🎯 判断标准一句话：**"业务代码里有没有重复的 CRUD 模板和查询拼接逻辑？"**——有，用 Spring Data JPA；没有（纯 SQL 复杂报表/存储过程驱动），直接 JDBC 或 MyBatis 更直接。
+> 判断标准一句话：**"业务代码里有没有重复的 CRUD 模板和查询拼接逻辑？"**——有，用 Spring Data JPA；没有（纯 SQL 复杂报表/存储过程驱动），直接 JDBC 或 MyBatis 更直接。
 
 ### 1.2 适用与不适用场景
 
 | 场景 | 适合？ | 说明 |
 |------|:---:|------|
-| 标准业务 CRUD、管理后台 | ✅ | Repository + 派生方法是主战场 |
-| 复杂关联对象图（订单→明细→商品） | ✅ | 关联映射 + fetch join 是 JPA 强项 |
-| 强事务、强一致性核心数据 | ✅ | 声明式事务 + 锁（乐观/悲观） |
-| 动态多条件查询（搜索列表页） | ✅ | Specification / Criteria API |
-| 向量检索 / AI 语义搜索（2026 新能力） | ⚠️ 部分 | 4.0 起经 hibernate-vector 支持向量字段；深度 RAG 仍建议 [Spring Data Elasticsearch 向量检索](../../Spring Data 系列【数据访问层】/Spring Data Elasticsearch/07-向量检索与RAG集成速查.md) |
-| 复杂 SQL / 报表 / 宽表聚合 | ⚠️ 部分 | 原生 SQL @Query 可做，但不如 MyBatis 直接 |
-| 大数据量批量写（每日千万级） | ❌ | ORM 逐条 flush 开销大，批量走 JDBC/DataFlow |
-| 极简 CRUD、SQL 完全掌控 | ❌ | 选 MyBatis 更轻（[MyBatisPlus 系列](../../../../01-关系型数据库/MyBatisPlus/00-MyBatisPlus知识体系总览.md)） |
+| 标准业务 CRUD、管理后台 | ✓ | Repository + 派生方法是主战场 |
+| 复杂关联对象图（订单→明细→商品） | ✓ | 关联映射 + fetch join 是 JPA 强项 |
+| 强事务、强一致性核心数据 | ✓ | 声明式事务 + 锁（乐观/悲观） |
+| 动态多条件查询（搜索列表页） | ✓ | Specification / Criteria API |
+| 向量检索 / AI 语义搜索（2026 新能力） | 部分 | 4.0 起经 hibernate-vector 支持向量字段；深度 RAG 仍建议 [Spring Data Elasticsearch 向量检索](../../Spring Data 系列【数据访问层】/Spring Data Elasticsearch/07-向量检索与RAG集成速查.md) |
+| 复杂 SQL / 报表 / 宽表聚合 | 部分 | 原生 SQL @Query 可做，但不如 MyBatis 直接 |
+| 大数据量批量写（每日千万级） | ✗ | ORM 逐条 flush 开销大，批量走 JDBC/DataFlow |
+| 极简 CRUD、SQL 完全掌控 | ✗ | 选 MyBatis 更轻（[MyBatisPlus 系列](../../../../01-关系型数据库/MyBatisPlus/00-MyBatisPlus知识体系总览.md)） |
 
-> ⚠️ **最大认知误区**：把 JPA 当"SQL 生成器"用。JPA 的核心价值是**对象图一致性**（对象状态机 + 脏检查 + 级联），而不是帮你写 SQL——所有查询最终都要翻译成 SQL 落在数据库上，性能问题 90% 出在"查询写法没对齐数据库特性"（N+1、深分页、大结果集）。
+> **最大认知误区**：把 JPA 当"SQL 生成器"用。JPA 的核心价值是**对象图一致性**（对象状态机 + 脏检查 + 级联），而不是帮你写 SQL——所有查询最终都要翻译成 SQL 落在数据库上，性能问题 90% 出在"查询写法没对齐数据库特性"（N+1、深分页、大结果集）。
 
 ### 1.3 与其他 Spring Data 组件的定位差异
 
 | 组件 | 存储 | 数据模型 | 事务 | 本系列的差异点 |
 |------|------|---------|:---:|--------------|
-| **Spring Data JPA** | **关系型数据库** | **表/实体/关联** | ✅ | **有外键、有事务、有锁；本系列是家族的"地基"** |
-| Spring Data Redis | Redis | K/V、集合 | ⚠️ 有限 | 无索引、无查询 DSL |
-| Spring Data MongoDB | MongoDB | 文档 | ⚠️ | 有聚合管道，无 SQL 事务（跨文档有限） |
-| Spring Data Elasticsearch | ES 9 | 文档 + 倒排索引 + 向量 | ❌ | 查询表达式是 JSON DSL，映射是动态的 |
-| Spring Data R2DBC | 关系型数据库 | 表/实体 | ✅ | 响应式（非阻塞），同库可互转，无一级缓存/延迟加载 |
+| **Spring Data JPA** | **关系型数据库** | **表/实体/关联** | ✓ | **有外键、有事务、有锁；本系列是家族的"地基"** |
+| Spring Data Redis | Redis | K/V、集合 | 有限 | 无索引、无查询 DSL |
+| Spring Data MongoDB | MongoDB | 文档 | | 有聚合管道，无 SQL 事务（跨文档有限） |
+| Spring Data Elasticsearch | ES 9 | 文档 + 倒排索引 + 向量 | ✗ | 查询表达式是 JSON DSL，映射是动态的 |
+| Spring Data R2DBC | 关系型数据库 | 表/实体 | ✓ | 响应式（非阻塞），同库可互转，无一级缓存/延迟加载 |
 
-> 💡 本系列定位"地基"——Repository 设计哲学（派生方法、Pageable、审计、事件）是 Spring Data 全家族的共同底座，会 JPA 后上手 MongoDB/ES/Redis 的数据访问层几乎零门槛（同级目录各有独立系列）。
+> 本系列定位"地基"——Repository 设计哲学（派生方法、Pageable、审计、事件）是 Spring Data 全家族的共同底座，会 JPA 后上手 MongoDB/ES/Redis 的数据访问层几乎零门槛（同级目录各有独立系列）。
 
 ## 2. 版本现状（2026-08）
 
@@ -98,7 +98,7 @@
 | 2023.1 | 3.2.x | 6.4.x | 6.1.x | 3.2.x | 停止维护 |
 | 2021.2 | 2.7.x | 5.6.x | 5.3.x | 2.7.x | EOL |
 
-> ⚠️ **版本策略（2026 起）**：Boot 4 / Spring Framework 7 要求 **Java 21 基线**，JPA 栈从 3.5 直接跳到 4.0（Jakarta EE 11 + JPA 3.2 + Hibernate 7）——**存量 Boot 3.5 项目若不升级 Java 21，只能停留在 3.5.x 且已停止维护**；新项目一律 4.1.x 线。
+> **版本策略（2026 起）**：Boot 4 / Spring Framework 7 要求 **Java 21 基线**，JPA 栈从 3.5 直接跳到 4.0（Jakarta EE 11 + JPA 3.2 + Hibernate 7）——**存量 Boot 3.5 项目若不升级 Java 21，只能停留在 3.5.x 且已停止维护**；新项目一律 4.1.x 线。
 
 ### 2.1 4.x 线关键变化（3.5 → 4.0 迁移要点）
 
@@ -161,7 +161,7 @@
 | 复杂 SQL 报表 | 原生 SQL / MyBatis | JPA 原生查询只是"逃生舱"，不是主战场 |
 | 分布式事务 | Seata / 本地消息表 | @Transactional 只覆盖单数据源本地事务 |
 
-> ⚠️ **常见归因错误**：慢查询怪"JPA 性能差"——慢的是生成的 SQL 没对齐索引/产生了 N+1/深分页，与"ORM"本身无关；排查路径应是"SQL 对不对 → 走没走索引 → 查了多少行"（[07 篇](07-性能优化与批量操作速查.md) 有完整清单）。
+> **常见归因错误**：慢查询怪"JPA 性能差"——慢的是生成的 SQL 没对齐索引/产生了 N+1/深分页，与"ORM"本身无关；排查路径应是"SQL 对不对 → 走没走索引 → 查了多少行"（[07 篇](07-性能优化与批量操作速查.md) 有完整清单）。
 
 ## 4. 与深度体系的映射
 
@@ -173,7 +173,7 @@
 | 07-性能优化与批量操作速查 | [MySQL 索引原理与设计](../../../../01-关系型数据库/MySQL/04-索引原理与设计.md)、[SQL调优系列](../../../../01-关系型数据库/SQL调优/) |
 | 09-集成地图与常见问题 | [SpringBoot 系列](../../../SpringBoot/)、[SpringMVC 系列](../../../SpringMVC/) |
 
-> 💡 分工约定：**速查页回答"API 怎么写"，深度页回答"数据库怎么工作"**——锁的隔离级别实现、索引 B+ 树原理、事务日志在 MySQL 系列；本系列聚焦"实体模型 ↔ 表 ↔ 查询的映射与编排"。
+> 分工约定：**速查页回答"API 怎么写"，深度页回答"数据库怎么工作"**——锁的隔离级别实现、索引 B+ 树原理、事务日志在 MySQL 系列；本系列聚焦"实体模型 ↔ 表 ↔ 查询的映射与编排"。
 
 ## 5. 快速上手 3 步
 
@@ -235,7 +235,7 @@ docker run -d --name mysql8 -p 3306:3306 \
   -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=shop mysql:8.4
 ```
 
-> 💡 Boot 4 内置 H2 可直接启动零配置应用（`runtimeOnly 'com.h2database:h2'` + `ddl-auto: create-drop`），本地联调/写测试最方便；生产换 MySQL/PostgreSQL 只改 url。
+> Boot 4 内置 H2 可直接启动零配置应用（`runtimeOnly 'com.h2database:h2'` + `ddl-auto: create-drop`），本地联调/写测试最方便；生产换 MySQL/PostgreSQL 只改 url。
 
 ### 5.2 三步验证集成真的通了
 
@@ -245,7 +245,7 @@ docker run -d --name mysql8 -p 3306:3306 \
 | ② 写读验证 | save 一条 → findById | 返回同一实体，id 已回填 |
 | ③ 控制台核对 | `mysql -e "select * from shop.product"` | 行存在，列与实体一致 |
 
-> 💡 排障起点：**先确认数据库通不通（JDBC url/账号），再查 JPA 侧**——`Communications link failure` 一般是库没起或连接串错；映射/查询问题才轮到 JPA 层排查。
+> 排障起点：**先确认数据库通不通（JDBC url/账号），再查 JPA 侧**——`Communications link failure` 一般是库没起或连接串错；映射/查询问题才轮到 JPA 层排查。
 
 ## 6. 速查导航
 

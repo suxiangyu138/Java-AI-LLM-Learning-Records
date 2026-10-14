@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [一句话定位](#1-一句话定位)
 2. [解决什么问题](#2-解决什么问题)
@@ -100,7 +100,7 @@ v1.0 关键变化（新代码必须知道）
 
 **验收动作**：① 默写一句话定位 + 四个问题；② 背下"三新对三旧"；③ 装 LangChain 并验证版本（1.x）；④ 查官方文档确认最新写法（create_agent）——**"定位 + 问题 + v1.0 + 生态 = 认识 LangChain"**——**练习纪律**：看到 0.x 教程先怀疑——"老教程大量过时——以 1.x 写法为准"。
 
-> 🎯 **核心要点**：LangChain = LLM 应用编排框架（**乐高拼装指南——1000+ 集成——事实标准**）；解决四问题（**接入/提示词/输出/流程——四大通用环节**）；**v1.0 三新（create_agent + LCEL + LangGraph——AgentExecutor/LLMChain/旧 Memory 三旧）**；**生态四件套（LangChain 组装/LangGraph 编排/Deep Agents 强化/LangSmith 观测）**——"不写 LangChain 也能做 AI 应用——但写了更专业"。
+> **核心要点**：LangChain = LLM 应用编排框架（**乐高拼装指南——1000+ 集成——事实标准**）；解决四问题（**接入/提示词/输出/流程——四大通用环节**）；**v1.0 三新（create_agent + LCEL + LangGraph——AgentExecutor/LLMChain/旧 Memory 三旧）**；**生态四件套（LangChain 组装/LangGraph 编排/Deep Agents 强化/LangSmith 观测）**——"不写 LangChain 也能做 AI 应用——但写了更专业"。
 
 ---
 

@@ -1,6 +1,6 @@
 # 02 - 第一个 Netty 应用
 
-> 🎯 跑通第一个 Server ↔ Client 通信，理解 Bootstrap 启动流程和核心组件 — 代码是最好的老师
+> 跑通第一个 Server ↔ Client 通信，理解 Bootstrap 启动流程和核心组件 — 代码是最好的老师
 
 ---
 
@@ -186,4 +186,4 @@ bootstrap.option(ChannelOption.SO_BACKLOG, 1024)
          .childOption(ChannelOption.CONNECT_TIMEOUT_MILLIS, 5000);
 ```
 
-> 🎯 `TCP_NODELAY=true` 至关重要 — 禁用 Nagle 算法后数据立即发送（低延迟），适合 RPC/即时通信；文件传输场景可设 false 利用 Nagle 批量优化。
+> `TCP_NODELAY=true` 至关重要 — 禁用 Nagle 算法后数据立即发送（低延迟），适合 RPC/即时通信；文件传输场景可设 false 利用 Nagle 批量优化。

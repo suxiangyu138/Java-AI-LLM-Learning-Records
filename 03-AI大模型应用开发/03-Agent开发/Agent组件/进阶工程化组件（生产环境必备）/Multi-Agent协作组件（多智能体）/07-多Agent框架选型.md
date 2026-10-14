@@ -11,7 +11,7 @@
 | CrewAI | 活跃 | v1.14.4（2026-04）；角色 crews + Process |
 | LangGraph | 活跃 | 1.0 GA（2025-10 随 LangChain v1）；StateGraph + checkpointer |
 
-> ⚠️ **别按 GitHub star 选框架**——AutoGen ~58k star 最多却在维护模式；star 数滞后于维护状态变化（2026 多来源警示）。
+> **别按 GitHub star 选框架**——AutoGen ~58k star 最多却在维护模式；star 数滞后于维护状态变化（2026 多来源警示）。
 
 ## 2. 四框架对比
 
@@ -32,7 +32,7 @@
 | AutoGen | 9.63 | 572s | ~10,793 | 最慢最贵 |
 | LangGraph | 9.42 | 506s | ~8,823 | 图控制流 |
 
-> 🎯 核心要点：**质量差异小（9.0+ 都优秀），差异在速度（6x 差距）、token 效率（4x 差距）与一致性**——选框架看工程指标不看质量分数；CrewAI 的 27.7K tokens 说明角色抽象有 token 税。
+> 核心要点：**质量差异小（9.0+ 都优秀），差异在速度（6x 差距）、token 效率（4x 差距）与一致性**——选框架看工程指标不看质量分数；CrewAI 的 27.7K tokens 说明角色抽象有 token 税。
 
 ## 4. LangGraph：生产状态机标杆
 
@@ -49,7 +49,7 @@
 | 内存 | 高 |
 | 锁定 | 生态耦合 |
 
-> ⚠️ **checkpointer ≠ durability**：LangGraph/MAF/LlamaIndex 都持久化状态，但**都不检测运行死亡**——持久执行层可能仍需（2026 共识）。
+> **checkpointer ≠ durability**：LangGraph/MAF/LlamaIndex 都持久化状态，但**都不检测运行死亡**——持久执行层可能仍需（2026 共识）。
 
 ## 5. CrewAI：快速原型标杆
 
@@ -89,7 +89,7 @@
 | 新项目？ | 不选 AutoGen |
 | 跨框架？ | 协议层（A2A/MCP） |
 
-> 🎯 核心要点：**没有最佳框架**——LangGraph 管状态化可控生产编排、CrewAI 管角色化快速原型、MAF 管 MS 生态；跨框架互操作走协议层（A2A/MCP），不让框架锁死架构。
+> 核心要点：**没有最佳框架**——LangGraph 管状态化可控生产编排、CrewAI 管角色化快速原型、MAF 管 MS 生态；跨框架互操作走协议层（A2A/MCP），不让框架锁死架构。
 
 ## 7. 选型常见错误
 

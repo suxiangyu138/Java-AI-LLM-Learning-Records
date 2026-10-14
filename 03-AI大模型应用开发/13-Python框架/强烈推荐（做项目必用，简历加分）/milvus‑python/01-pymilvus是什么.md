@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [官方 SDK 与生态第一入口](#1-官方-sdk-与生态第一入口)
 2. [SDK v2 重设计：四个关键变化](#2-sdk-v2-重设计四个关键变化)
@@ -94,7 +94,7 @@ v1 时代的 ORM 写法（`from pymilvus import connections, Collection, FieldSc
 4. ORM 旧 API 为什么必须迁移？v1→v2 的三行核心映射是什么？
 5. 本体系与 Milvus 主体系的分工边界在哪里？索引原理去哪学？
 
-> 🎯 **核心要点**：pymilvus = Milvus 官方 Python SDK + SDK v2 统一设计（**MilvusClient 一个客户端统治全部 + 一步建集合 + 原生异步 + schema cache**）；2026-08 双线并存（3.0 主线配 3.0.1 / 2.6 维护线 2.6.17），ORM 旧 API 已弃用——**"2026 学 pymilvus 只认 MilvusClient，老教程过时"**。
+> **核心要点**：pymilvus = Milvus 官方 Python SDK + SDK v2 统一设计（**MilvusClient 一个客户端统治全部 + 一步建集合 + 原生异步 + schema cache**）；2026-08 双线并存（3.0 主线配 3.0.1 / 2.6 维护线 2.6.17），ORM 旧 API 已弃用——**"2026 学 pymilvus 只认 MilvusClient，老教程过时"**。
 
 ---
 

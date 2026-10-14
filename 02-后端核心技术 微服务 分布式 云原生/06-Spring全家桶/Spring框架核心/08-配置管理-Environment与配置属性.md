@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [Environment 与 PropertySource 体系](#1-environment-与-propertysource-体系)
 2. [配置文件加载与优先级](#2-配置文件加载与优先级)
@@ -45,7 +45,7 @@ public class ConfigProbe {
 }
 ```
 
-> 🎯 **核心要点**：Environment 让"配置来源"透明——代码只问"配置里是什么"，不关心它来自命令行、环境变量还是配置文件。**属性源顺序 = 优先级**，先注册的在后（Boot 中后声明的覆盖先声明的）。
+> **核心要点**：Environment 让"配置来源"透明——代码只问"配置里是什么"，不关心它来自命令行、环境变量还是配置文件。**属性源顺序 = 优先级**，先注册的在后（Boot 中后声明的覆盖先声明的）。
 
 ---
 
@@ -85,7 +85,7 @@ app:
     max-per-user: 100
 ```
 
-> ⚠️ **敏感配置纪律**：密码、密钥**禁止提交到配置文件进 Git**——用环境变量 / 配置中心（Nacos Config，见 `Spring全家桶/10`）/ K8s Secret 注入。
+> **敏感配置纪律**：密码、密钥**禁止提交到配置文件进 Git**——用环境变量 / 配置中心（Nacos Config，见 `Spring全家桶/10`）/ K8s Secret 注入。
 
 ---
 
@@ -121,7 +121,7 @@ public class AppSettings {
 | 需要类型安全的嵌套结构 | 字符串拼接、类型靠猜 | @ConfigurationProperties |
 | 配置与代码校验 | 无编译期检查 | record + @ConfigurationProperties |
 
-> 🎯 **核心要点**：**@Value 适合"零散的单值"**（几个配置），**@ConfigurationProperties 适合"成组的配置对象"**——工程规范（阿里规约）：配置 3 个以上相关项就建配置类。
+> **核心要点**：**@Value 适合"零散的单值"**（几个配置），**@ConfigurationProperties 适合"成组的配置对象"**——工程规范（阿里规约）：配置 3 个以上相关项就建配置类。
 
 ---
 
@@ -188,7 +188,7 @@ public record OrderProps(
 ) { }
 ```
 
-> 🎯 **核心要点**：**@ConfigurationProperties 的三大优势 = 类型安全（编译期）+ 分组（可读）+ 启动期校验（错误前置）**——Spring Boot 自身全部配置（`server.*`、`spring.datasource.*`）都是这么绑定的，这就是"配置类文档"的来源。
+> **核心要点**：**@ConfigurationProperties 的三大优势 = 类型安全（编译期）+ 分组（可读）+ 启动期校验（错误前置）**——Spring Boot 自身全部配置（`server.*`、`spring.datasource.*`）都是这么绑定的，这就是"配置类文档"的来源。
 
 ---
 
@@ -235,7 +235,7 @@ public class FeatureService {
 1. **配置文件按 Profile 加载**：`application-{profile}.yml` 中同键覆盖基础文件的键；
 2. **生产事故高发点**：`spring.profiles.active` 忘了配 → 加载的是默认/开发配置 → **生产用错了数据源**。规范：生产环境强制从环境变量/启动脚本注入 Profile，代码里不要写死 `active: prod`（K8s 部署时环境变量注入）。
 
-> ⚠️ 配置管理的心法：**代码里的默认值只面向开发**——生产所有环境差异（数据源、密钥、开关）都必须由部署层注入，代码仓库里不应该出现生产密码。
+> 配置管理的心法：**代码里的默认值只面向开发**——生产所有环境差异（数据源、密钥、开关）都必须由部署层注入，代码仓库里不应该出现生产密码。
 
 ---
 
@@ -260,7 +260,7 @@ public class FeatureService {
 ③ 确认覆盖关系：同名键按优先级链（命令行 > 环境变量 > 外部文件 > 包内）逐一排查
 ```
 
-> 🎯 **核心要点**：配置管理的本质是"**变化点与代码分离 + 可追踪 + 可校验**"——@ConfigurationProperties 管结构、Profile 管环境、配置中心管运行时变更、@Validated 管正确性，四件套组合使用。
+> **核心要点**：配置管理的本质是"**变化点与代码分离 + 可追踪 + 可校验**"——@ConfigurationProperties 管结构、Profile 管环境、配置中心管运行时变更、@Validated 管正确性，四件套组合使用。
 
 ---
 

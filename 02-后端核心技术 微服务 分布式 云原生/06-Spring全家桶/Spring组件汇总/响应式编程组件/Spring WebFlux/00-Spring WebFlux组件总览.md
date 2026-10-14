@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [组件一句话定位](#1-组件一句话定位)
 2. [版本现状（2026-08）](#2-版本现状2026-08)
@@ -36,7 +36,7 @@
     └── WebFilter / WebSession（横切）
 ```
 
-> 🎯 **一句话**：WebFlux = "把 Controller 从『每个请求占一个线程』变成『少量线程异步处理海量请求』"——是否值得用，看你的技术栈是否全响应式（见版本现状）。
+> **一句话**：WebFlux = "把 Controller 从『每个请求占一个线程』变成『少量线程异步处理海量请求』"——是否值得用，看你的技术栈是否全响应式（见版本现状）。
 
 ## 2. 版本现状（2026-08）
 
@@ -54,7 +54,7 @@
 - **Kotlin 协程结构化并发**：CoroutineScope 集成（suspend 函数 / Flow / coRouter DSL）；
 - **WebSocket 简化**：非响应式 WebSocket handler 移除，仅保留响应式。
 
-> 💡 选型定论（2026 面试标准答案）：**常规高并发业务 → MVC + 虚拟线程；全响应式技术栈 / 流式长连接 → WebFlux**——WebFlux 不是"更快"，而是"线程模型不同"。
+> 选型定论（2026 面试标准答案）：**常规高并发业务 → MVC + 虚拟线程；全响应式技术栈 / 流式长连接 → WebFlux**——WebFlux 不是"更快"，而是"线程模型不同"。
 
 ## 3. 能力地图
 
@@ -80,7 +80,7 @@
 | 04 集成地图 | [Spring框架核心 深度体系](../../../Spring框架核心/00-Spring框架核心知识体系总览.md) | 容器/Bean 生命周期与 MVC 同源 |
 | 04 集成地图 | [Spring Batch 深度体系-08 调度、运维与可观测性](../../../Spring Batch/08-调度、运维与可观测性.md) | 响应式触发批处理（Mono 包裹 JobOperator 调用） |
 
-> 💡 WebFlux 生态位：**它是 SF 内置模块**（非独立项目）——与 MVC 共享大部分注解/异常/配置心智，差异集中在"线程模型与返回值类型"；本仓库暂无独立深度体系，深入以 [官方参考文档](https://docs.spring.io/spring-framework/reference/web/webflux.html) 为准。
+> WebFlux 生态位：**它是 SF 内置模块**（非独立项目）——与 MVC 共享大部分注解/异常/配置心智，差异集中在"线程模型与返回值类型"；本仓库暂无独立深度体系，深入以 [官方参考文档](https://docs.spring.io/spring-framework/reference/web/webflux.html) 为准。
 
 ## 5. 快速上手 3 步
 
@@ -109,7 +109,7 @@ class OrderController {
 }
 ```
 
-> 💡 运行即得：Netty 默认端口 8080；返回 Mono/Flux 由框架自动订阅并响应——**不要手动 subscribe/block**。
+> 运行即得：Netty 默认端口 8080；返回 Mono/Flux 由框架自动订阅并响应——**不要手动 subscribe/block**。
 
 ## 6. 速查导航
 
@@ -143,6 +143,6 @@ class OrderController {
 
 ---
 
-> 🎯 **核心要点**：WebFlux = 注解式/函数式双风格 + Mono/Flux + Netty 非阻塞；SF 7 时代它的定位是"全响应式栈与流式场景"，高并发红利已被 MVC + 虚拟线程摊薄——**选型先问技术栈，再问场景**。
+> **核心要点**：WebFlux = 注解式/函数式双风格 + Mono/Flux + Netty 非阻塞；SF 7 时代它的定位是"全响应式栈与流式场景"，高并发红利已被 MVC + 虚拟线程摊薄——**选型先问技术栈，再问场景**。
 
 **下一模块**：[01-模块清单](01-模块清单.md)

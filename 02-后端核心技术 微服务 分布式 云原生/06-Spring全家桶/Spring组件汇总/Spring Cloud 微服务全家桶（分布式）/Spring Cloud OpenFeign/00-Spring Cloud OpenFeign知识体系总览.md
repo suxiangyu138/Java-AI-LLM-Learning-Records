@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [组件一句话定位](#1-组件一句话定位)
 2. [版本现状（2026-08）](#2-版本现状2026-08)
@@ -57,37 +57,37 @@
 | 维度 | 手写 RestTemplate | OpenFeign |
 |------|-------------------|-----------|
 | 调用方式 | URL 拼接 + 手动序列化 | 接口方法直接调用 |
-| 服务发现 | 手动（或 @LoadBalanced） | ✅ 自动（name → LB） |
-| 熔断降级 | 手动 try/catch | ✅ fallback 声明式 |
+| 服务发现 | 手动（或 @LoadBalanced） | ✓ 自动（name → LB） |
+| 熔断降级 | 手动 try/catch | ✓ fallback 声明式 |
 | 可读性/可测试 | 逻辑散落 | 接口即契约 |
 | 体积 | 轻 | 反射代理（略重） |
 
-> 🎯 判断标准一句话：**"代码里有没有大量重复的 restTemplate.getForObject？"**——有，用 Feign 收敛成接口；**但新项目（Boot 4）优先考虑 @HttpExchange**（官方新方向，[07 篇](07-迁移到Spring HTTP Service Clients.md)）。
+> 判断标准一句话：**"代码里有没有大量重复的 restTemplate.getForObject？"**——有，用 Feign 收敛成接口；**但新项目（Boot 4）优先考虑 @HttpExchange**（官方新方向，[07 篇](07-迁移到Spring HTTP Service Clients.md)）。
 
 ### 1.2 适用与不适用场景
 
 | 场景 | 适合？ | 说明 |
 |------|:---:|------|
-| 服务间同步 HTTP 调用 | ✅ | 主战场（替代手写 RestTemplate） |
-| 需要熔断降级 | ✅ | fallback/fallbackFactory（[04 篇](04-熔断降级集成.md)） |
-| 存量项目升级 | ✅ | feature-complete 稳定，继续用没问题 |
-| **新项目（Boot 4）** | ⚠️ | 官方建议 @HttpExchange（[07 篇](07-迁移到Spring HTTP Service Clients.md)） |
-| 响应式调用（WebFlux） | ❌ | **无响应式支持**（官方明确建议迁移） |
-| 外部 API 一次性调用 | ⚠️ | 单个接口可用，批量用网关/专门客户端 |
-| 文件上传/长连接 | ⚠️ | 可做但流式场景不如专用客户端 |
+| 服务间同步 HTTP 调用 | ✓ | 主战场（替代手写 RestTemplate） |
+| 需要熔断降级 | ✓ | fallback/fallbackFactory（[04 篇](04-熔断降级集成.md)） |
+| 存量项目升级 | ✓ | feature-complete 稳定，继续用没问题 |
+| **新项目（Boot 4）** | | 官方建议 @HttpExchange（[07 篇](07-迁移到Spring HTTP Service Clients.md)） |
+| 响应式调用（WebFlux） | ✗ | **无响应式支持**（官方明确建议迁移） |
+| 外部 API 一次性调用 | | 单个接口可用，批量用网关/专门客户端 |
+| 文件上传/长连接 | | 可做但流式场景不如专用客户端 |
 
-> ⚠️ **最大认知误区**：把 Feign 当"万能 HTTP 客户端"——**它是服务间调用的声明式方案，不是通用 HTTP 库**：外部 API 调用（第三方支付等）用 RestClient/WebClient 更直接；响应式链路（WebFlux 全异步）Feign 不支持（官方原话建议迁移）。
+> **最大认知误区**：把 Feign 当"万能 HTTP 客户端"——**它是服务间调用的声明式方案，不是通用 HTTP 库**：外部 API 调用（第三方支付等）用 RestClient/WebClient 更直接；响应式链路（WebFlux 全异步）Feign 不支持（官方原话建议迁移）。
 
 ### 1.3 与 HTTP 客户端方案对照
 
 | 方案 | 类型 | 声明式 | 服务发现 | 熔断 | 响应式 | 状态 |
 |------|------|:---:|:---:|:---:|:---:|------|
-| **OpenFeign** | 声明式 | ✅ | ✅（LB 集成） | ✅ | ❌ | **兼容适配器** |
-| **@HttpExchange（HTTP Service Clients）** | 声明式 | ✅ | ✅（5.0 起自动） | ✅（5.0 起） | ✅ | **官方新方向** |
-| RestTemplate / RestClient | 编程式 | ❌ | @LoadBalanced | 手动 | ⚠️ | 通用 |
-| WebClient | 响应式 | ❌ | @LoadBalanced | 手动 | ✅ | 响应式场景 |
+| **OpenFeign** | 声明式 | ✓ | ✓（LB 集成） | ✓ | ✗ | **兼容适配器** |
+| **@HttpExchange（HTTP Service Clients）** | 声明式 | ✓ | ✓（5.0 起自动） | ✓（5.0 起） | ✓ | **官方新方向** |
+| RestTemplate / RestClient | 编程式 | ✗ | @LoadBalanced | 手动 | | 通用 |
+| WebClient | 响应式 | ✗ | @LoadBalanced | 手动 | ✓ | 响应式场景 |
 
-> 🎯 面试必答：**"OpenFeign 现在什么地位？"**——**2025.1（Oakwood）官方明确：OpenFeign 是"兼容适配器"**（feature-complete，只修 bug，官方原话 "We suggest migrating over to Spring HTTP Service Clients instead"）；**新项目导向 Spring Framework 7 的 @HttpExchange**——它比 Feign 少一层反射代理、启动更快、原生镜像更友好，且 5.0 起自动获得服务发现+负载均衡+熔断（[07 篇](07-迁移到Spring HTTP Service Clients.md)）。
+> 面试必答：**"OpenFeign 现在什么地位？"**——**2025.1（Oakwood）官方明确：OpenFeign 是"兼容适配器"**（feature-complete，只修 bug，官方原话 "We suggest migrating over to Spring HTTP Service Clients instead"）；**新项目导向 Spring Framework 7 的 @HttpExchange**——它比 Feign 少一层反射代理、启动更快、原生镜像更友好，且 5.0 起自动获得服务发现+负载均衡+熔断（[07 篇](07-迁移到Spring HTTP Service Clients.md)）。
 
 ## 2. 版本现状（2026-08）
 
@@ -100,7 +100,7 @@
 | 4.0.x | 老存量 | Spring Cloud 2022.0.x（Kilburn）、Boot 3.0/3.1 |
 | 3.x | 老存量 | Spring Cloud 2021.0.x（Jubilee）、Boot 2.6/2.7 |
 
-> ⚠️ **版本策略（2026 起）**：**存量项目保持 5.0.x（稳定够用）**；新项目评估直接上 @HttpExchange（官方新方向）——**OpenFeign 不是"要立即放弃"，而是"不再有新特性"**（[07 篇](07-迁移到Spring HTTP Service Clients.md) 决策树）。
+> **版本策略（2026 起）**：**存量项目保持 5.0.x（稳定够用）**；新项目评估直接上 @HttpExchange（官方新方向）——**OpenFeign 不是"要立即放弃"，而是"不再有新特性"**（[07 篇](07-迁移到Spring HTTP Service Clients.md) 决策树）。
 
 ### 2.1 5.0 关键变化（4.3.x → 5.0.x 迁移要点）
 
@@ -147,7 +147,7 @@
 | 配置管理 | Config/Nacos | 与调用无关 |
 | 服务端负载均衡 | Nginx/Gateway | Feign 是客户端 LB 的使用者 |
 
-> ⚠️ **常见归因错误**：Feign 调用超时怪"Feign 卡了"——**排查路径："网络/下游是否正常 → 超时配置（readTimeout 默认值）→ 重试是否开启（默认关闭）→ 熔断是否误触发"**——Feign 本身是薄封装，问题大多在下游或配置（[08 篇](08-生产实践与选型避坑.md) 排错表）。
+> **常见归因错误**：Feign 调用超时怪"Feign 卡了"——**排查路径："网络/下游是否正常 → 超时配置（readTimeout 默认值）→ 重试是否开启（默认关闭）→ 熔断是否误触发"**——Feign 本身是薄封装，问题大多在下游或配置（[08 篇](08-生产实践与选型避坑.md) 排错表）。
 
 ## 4. 与对照体系的映射
 
@@ -158,7 +158,7 @@
 | 07-迁移 | [LoadBalancer 07 篇（HTTP Service Clients）](../Spring Cloud LoadBalancer/07-API Versioning与HTTP Service Clients（5.0新特性）.md)（@HttpExchange 的 LB 集成） |
 | 02-接口 | [Spring 框架核心](../../../../Spring框架核心/)（Spring MVC 注解契约） |
 
-> 💡 分工约定：**本系列回答"Feign 接口怎么写、熔断怎么接、要不要迁移"**；选实例的底层在 [LoadBalancer 系列](../Spring Cloud LoadBalancer/00-Spring Cloud LoadBalancer知识体系总览.md)，熔断的状态机在 [CircuitBreaker 系列](../Spring Cloud CircuitBreaker/00-Spring Cloud CircuitBreaker知识体系总览.md)。
+> 分工约定：**本系列回答"Feign 接口怎么写、熔断怎么接、要不要迁移"**；选实例的底层在 [LoadBalancer 系列](../Spring Cloud LoadBalancer/00-Spring Cloud LoadBalancer知识体系总览.md)，熔断的状态机在 [CircuitBreaker 系列](../Spring Cloud CircuitBreaker/00-Spring Cloud CircuitBreaker知识体系总览.md)。
 
 ## 5. 快速上手 3 步
 
@@ -204,7 +204,7 @@ public class OrderService {
 }
 ```
 
-> 🎯 跑通即及格：**① 注册中心有 payment-service；② 注入 PaymentClient 调用成功返回；③ 停掉一个实例（等缓存过期）调用仍成功（自动打到存活实例）**——三件事都通，主链路打通（[02 篇](02-快速开始与@FeignClient速查.md)）。
+> 跑通即及格：**① 注册中心有 payment-service；② 注入 PaymentClient 调用成功返回；③ 停掉一个实例（等缓存过期）调用仍成功（自动打到存活实例）**——三件事都通，主链路打通（[02 篇](02-快速开始与@FeignClient速查.md)）。
 
 ### 5.1 三步验证与排障起点
 
@@ -214,7 +214,7 @@ public class OrderService {
 | ② 调用成功 | 调接口 | 返回下游数据 |
 | ③ 故障规避 | 停一个实例 | 自动打到存活实例（LB 生效） |
 
-> 💡 排障起点：**先看依赖树（loadbalancer 有没有）→ 再确认 @EnableFeignClients → 最后查调用日志（开 DEBUG）**——"接口注入失败"或"服务名解析失败"是两大常见启动问题（[08 篇](08-生产实践与选型避坑.md) 坑位表）。
+> 排障起点：**先看依赖树（loadbalancer 有没有）→ 再确认 @EnableFeignClients → 最后查调用日志（开 DEBUG）**——"接口注入失败"或"服务名解析失败"是两大常见启动问题（[08 篇](08-生产实践与选型避坑.md) 坑位表）。
 
 ## 6. 速查导航
 

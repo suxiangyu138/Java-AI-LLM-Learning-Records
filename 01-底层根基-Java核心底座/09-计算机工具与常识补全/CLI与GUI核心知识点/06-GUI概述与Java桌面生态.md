@@ -1,6 +1,6 @@
 # 06 - GUI 概述与 Java 桌面生态
 
-> 🎯 Java 桌面应用生态从 AWT→Swing→JavaFX 演进 20 年 — 虽非主流但理解它能帮助后端工程师读懂 UI 相关代码和概念
+> Java 桌面应用生态从 AWT→Swing→JavaFX 演进 20 年 — 虽非主流但理解它能帮助后端工程师读懂 UI 相关代码和概念
 
 ---
 
@@ -25,9 +25,9 @@ SWT (Eclipse, 2001)     → Eclipse 基金会（原生组件 + 高性能）
 
 | 技术 | 组件类型 | 外观 | 布局 | 现状 |
 |------|:---:|:---:|------|------|
-| **AWT** | 重量级 | OS 原生 | 基础 | ❌ 废弃 |
-| **Swing** | 轻量级 | 可定制 | 丰富 | ⚠️ 维护 |
-| **JavaFX** | 现代 | CSS + FXML | 强大 | ⭐ 推荐 |
+| **AWT** | 重量级 | OS 原生 | 基础 | ✗ 废弃 |
+| **Swing** | 轻量级 | 可定制 | 丰富 | 维护 |
+| **JavaFX** | 现代 | CSS + FXML | 强大 | ★ 推荐 |
 | **SWT** | 混合 | OS 原生 | 丰富 | Eclipse 生态 |
 
 ---
@@ -101,4 +101,4 @@ public class HelloFX extends Application {
 | 布局管理器 | `StackPane`/`HBox`/`VBox` |
 | 外观配置 | CSS |
 
-> 🎯 **后端学 GUI 的价值**：理解事件驱动模型、看懂 IDE 插件代码、写内部工具提升效率。Java GUI 非主流但有用，Swing 老而弥坚，JavaFX 是未来。
+> **后端学 GUI 的价值**：理解事件驱动模型、看懂 IDE 插件代码、写内部工具提升效率。Java GUI 非主流但有用，Swing 老而弥坚，JavaFX 是未来。

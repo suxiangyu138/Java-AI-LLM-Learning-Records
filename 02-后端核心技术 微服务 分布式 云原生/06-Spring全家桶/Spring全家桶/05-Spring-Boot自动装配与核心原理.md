@@ -1,5 +1,5 @@
 # 05-Spring Boot自动装配与核心原理
-> 🎯 Spring Boot是Spring生态的加速器 — 掌握自动装配原理、Starter机制、配置优先级、Actuator监控，是进入微服务世界的必备技能
+> Spring Boot是Spring生态的加速器 — 掌握自动装配原理、Starter机制、配置优先级、Actuator监控，是进入微服务世界的必备技能
 
 ---
 
@@ -25,7 +25,7 @@
 ### 1.1 知识定位
 - **归属**：Spring全家桶核心组件 → 层级2 P0核心必学
 - **前置依赖**：Spring MVC + Maven + IoC/AOP
-- **重要性**：⭐⭐⭐⭐⭐（现代Java后端开发的事实标准）
+- **重要性**：★★★★★（现代Java后端开发的事实标准）
 
 ### 1.2 三层学习目标
 
@@ -41,7 +41,7 @@
 
 ### 2.1 Spring Boot解决了什么问题
 
-> 🎯 **约定大于配置（Convention over Configuration）**：提供默认配置，开发者只需关注业务代码。
+> **约定大于配置（Convention over Configuration）**：提供默认配置，开发者只需关注业务代码。
 
 | 传统Spring MVC | Spring Boot |
 |---------------|-------------|
@@ -91,7 +91,7 @@ SpringApplication.run()
 
 ## 3. 自动装配原理深度剖析
 
-> 🔥 这是Spring Boot面试最核心考点，必须完整掌握！
+> 这是Spring Boot面试最核心考点，必须完整掌握！
 
 ### 3.1 自动装配入口
 
@@ -257,7 +257,7 @@ com.example.MyAutoConfiguration
 
 | 格式 | 示例 | 特点 |
 |------|------|------|
-| `application.yml` | 层级缩进，可读性好 | ⭐⭐⭐⭐⭐ 推荐 |
+| `application.yml` | 层级缩进，可读性好 | ★★★★★ 推荐 |
 | `application.properties` | key=value，简单 | 传统方式 |
 | `application.yaml` | 同yml | 同yml |
 
@@ -355,7 +355,7 @@ management:
 | `info` | `/actuator/info` | 应用信息（可以自定义） |
 | `metrics` | `/actuator/metrics` | 应用指标（JVM内存、HTTP请求数等） |
 | `prometheus` | `/actuator/prometheus` | Prometheus格式指标 |
-| `env` | `/actuator/env` | 环境配置（⚠️ 生产环境不要暴露） |
+| `env` | `/actuator/env` | 环境配置（生产环境不要暴露） |
 | `beans` | `/actuator/beans` | 容器中所有Bean列表 |
 | `mappings` | `/actuator/mappings` | 所有URL映射 |
 | `loggers` | `/actuator/loggers` | 动态修改日志级别 |

@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [整体分层架构](#1-整体分层架构)
 2. [连接工厂：RedisConnectionFactory 抽象](#2-连接工厂redisconnectionfactory-抽象)
@@ -40,7 +40,7 @@ Spring Data Redis 的整体调用链，自上而下分为四层：
 └──────────────────────────────────────────────────────┘
 ```
 
-> 🎯 **核心要点**：模板层持有的是 `RedisConnectionFactory` 引用而非连接本身——每次命令执行都是"工厂借连接 → 执行回调 → 归还连接"的短生命周期模式。这个设计让 RedisTemplate 天然线程安全，也让"连接泄漏"成为最经典的使用错误。
+> **核心要点**：模板层持有的是 `RedisConnectionFactory` 引用而非连接本身——每次命令执行都是"工厂借连接 → 执行回调 → 归还连接"的短生命周期模式。这个设计让 RedisTemplate 天然线程安全，也让"连接泄漏"成为最经典的使用错误。
 
 ## 2. 连接工厂：RedisConnectionFactory 抽象
 
@@ -72,7 +72,7 @@ RedisTemplate.opsForValue().set(k, v)
       3. RedisConnectionUtils.releaseConnection(...)    // finally 归还/关闭
 ```
 
-> ⚠️ **关键细节**：Spring Data Redis 会通过 `ThreadLocal` 缓存当前线程的绑定连接（支持事务场景）。若你在非事务场景手写 `getConnection()` 却忘记 `finally { conn.close(); }`，每次调用都会新建连接不释放——线上表现为"连接数持续增长直到 Redis 拒绝新连接"。
+> **关键细节**：Spring Data Redis 会通过 `ThreadLocal` 缓存当前线程的绑定连接（支持事务场景）。若你在非事务场景手写 `getConnection()` 却忘记 `finally { conn.close(); }`，每次调用都会新建连接不释放——线上表现为"连接数持续增长直到 Redis 拒绝新连接"。
 
 ## 3. Lettuce vs Jedis：两套驱动深度对比
 
@@ -84,7 +84,7 @@ RedisTemplate.opsForValue().set(k, v)
 | 资源管理 | `shareNativeConnection` 共享底层连接 | commons-pool2 连接池 |
 | 集群支持 | 原生支持集群拓扑感知与重定向 | 支持集群，重定向处理较繁琐 |
 | 响应式 | 原生响应式驱动（ReactiveRedisTemplate 同源） | 不支持响应式 |
-| Spring Boot 默认 | ✅ 默认（spring-boot-starter-data-redis 内置） | 需手动引入 `jedis` 依赖 |
+| Spring Boot 默认 | ✓ 默认（spring-boot-starter-data-redis 内置） | 需手动引入 `jedis` 依赖 |
 
 **切换驱动的姿势（Spring Boot 4.x）：**
 
@@ -108,7 +108,7 @@ spring:
       client-type: jedis   # lettuce（默认）/ jedis
 ```
 
-> 💡 **选型建议**：默认 Lettuce 在绝大多数场景够用且更好（省连接、异步底层）。Jedis 仅在"依赖 Bio 语义的既有代码""团队强制统一客户端"等场景值得切回。若使用 Lettuce，注意其内部超时与重试策略需单独配置（见第 6 节）。
+> **选型建议**：默认 Lettuce 在绝大多数场景够用且更好（省连接、异步底层）。Jedis 仅在"依赖 Bio 语义的既有代码""团队强制统一客户端"等场景值得切回。若使用 Lettuce，注意其内部超时与重试策略需单独配置（见第 6 节）。
 
 ## 4. RedisTemplate 模板引擎
 
@@ -167,8 +167,8 @@ public <T> T execute(RedisCallback<T> action) {
 
 | 场景 | RedisTemplate | 原生 RedisConnection |
 |------|--------------|---------------------|
-| 日常 CRUD | ✅ 首选，自动序列化 | ❌ 需手动序列化 |
-| 细粒度控制（原始字节、指定命令） | 通过 `execute` 回调 | ✅ 直接可用 |
+| 日常 CRUD | ✓ 首选，自动序列化 | ✗ 需手动序列化 |
+| 细粒度控制（原始字节、指定命令） | 通过 `execute` 回调 | ✓ 直接可用 |
 | Lua 脚本 | `execute(script, ...)` | `scriptingOps()` |
 | 管道/事务 | `executePipelined` / `@Transactional` | `pipelined()` / `multi()` |
 
@@ -216,7 +216,7 @@ spring:
           max-wait: -1ms     # 获取连接最大等待（-1 无限）
 ```
 
-> ⚠️ **常见误区**：给 Lettuce 配了 pool 却发现不生效——因为默认 `shareNativeConnection=true`，请求根本不经过池。先确认模式再调参。
+> **常见误区**：给 Lettuce 配了 pool 却发现不生效——因为默认 `shareNativeConnection=true`，请求根本不经过池。先确认模式再调参。
 
 ## 6. Spring Boot 自动配置与属性全解
 
@@ -255,7 +255,7 @@ spring:
         pool: {...}
 ```
 
-> 💡 **版本演进提示**：Spring Boot 3.x 将属性从 `spring.redis.*` 迁移到 `spring.data.redis.*`；Spring Boot 4.x 保持 `spring.data.redis.*` 不变，但内部序列化默认策略随 Spring Data Redis 4.x 的 Jackson 3 迁移（详见 02 篇）。
+> **版本演进提示**：Spring Boot 3.x 将属性从 `spring.redis.*` 迁移到 `spring.data.redis.*`；Spring Boot 4.x 保持 `spring.data.redis.*` 不变，但内部序列化默认策略随 Spring Data Redis 4.x 的 Jackson 3 迁移（详见 02 篇）。
 
 ### 6.3 多数据源场景
 
@@ -313,7 +313,7 @@ LettuceConnectionFactory factory = new LettuceConnectionFactory(serverConfig, cl
 | Lettuce 下偶发 `Connection closed` | 共享连接被异常关闭 | 开启 `validateConnection` 或调整客户端 options |
 | 集群重定向异常 | max-redirects 太小 / 拓扑未刷新 | 调大 max-redirects；检查拓扑刷新配置 |
 
-> 🎯 **核心要点**：Spring Data Redis 的四层架构（应用 → 模板 → 工厂 → 驱动）决定了它的线程安全模型（回调 + 短连接借用）与故障模式（连接泄漏、共享连接失效）。记牢"模板安全、连接贵重、必须归还"十二字口诀，架构篇即毕业。
+> **核心要点**：Spring Data Redis 的四层架构（应用 → 模板 → 工厂 → 驱动）决定了它的线程安全模型（回调 + 短连接借用）与故障模式（连接泄漏、共享连接失效）。记牢"模板安全、连接贵重、必须归还"十二字口诀，架构篇即毕业。
 
 ---
 

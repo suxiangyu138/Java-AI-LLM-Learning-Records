@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [Spring Cache 抽象：三层结构](#1-spring-cache-抽象三层结构)
 2. [四大注解全解](#2-四大注解全解)
@@ -33,7 +33,7 @@
 | 抽象层 | 与具体缓存解耦 | 可换 Caffeine/Redis/JCache 实现 |
 | 实现层 | Redis 具体行为 | TTL、双序列化、前缀、并发策略 |
 
-> 🎯 **本质认知**：@Cacheable 不关心后端是 Redis 还是本地——**换成 RedisCacheManager，才获得分布式缓存**。Redis 实现的全部特性（TTL/序列化/前缀）都要在实现层配置。
+> **本质认知**：@Cacheable 不关心后端是 Redis 还是本地——**换成 RedisCacheManager，才获得分布式缓存**。Redis 实现的全部特性（TTL/序列化/前缀）都要在实现层配置。
 
 ## 2. 四大注解全解
 
@@ -62,7 +62,7 @@ public User getUser(Long id, String lang) { ... }
 | `condition` | 执行前判断是否**启用**缓存 | `#id > 0` |
 | `sync` | 同 key 并发只查一次库 | 防击穿（Redis 实现为锁语义） |
 
-> ⚠️ **unless vs condition 最易混淆**：`condition` 在方法调用**前**评估（决定走不走缓存），`unless` 在方法返回**后**评估（决定缓存不缓存）；`unless` 里可以引用 `#result`，`condition` 不行。
+> **unless vs condition 最易混淆**：`condition` 在方法调用**前**评估（决定走不走缓存），`unless` 在方法返回**后**评估（决定缓存不缓存）；`unless` 里可以引用 `#result`，`condition` 不行。
 
 ### 2.2 @CachePut：更新缓存（不读缓存，直接执行方法并写）
 
@@ -86,7 +86,7 @@ public void refreshAll() { ... }
 public void deleteWithPreEvict(Long id) { ... }
 ```
 
-> 💡 `beforeInvocation=true` 场景：方法可能抛异常但缓存必须清（例如"禁用用户"逻辑无论成败都要清）。
+> `beforeInvocation=true` 场景：方法可能抛异常但缓存必须清（例如"禁用用户"逻辑无论成败都要清）。
 
 ### 2.4 @Caching：组合
 
@@ -122,7 +122,7 @@ Redis 实际 key = 前缀(默认 cache:) + 缓存名 + :: + 生成的 key
 例：cache:user::1001        （默认 keyPrefix="cache:"，nameSeparator="::"）
 ```
 
-> ⚠️ **注意**：4.x 默认 key 前缀为 `cache:`，且**多缓存名共享同一前缀**——不同业务缓存名相同生成的 key 不会冲突（因为缓存名拼在 key 里），但运维按前缀区分业务困难，建议按 4.2 节显式指定业务前缀。
+> **注意**：4.x 默认 key 前缀为 `cache:`，且**多缓存名共享同一前缀**——不同业务缓存名相同生成的 key 不会冲突（因为缓存名拼在 key 里），但运维按前缀区分业务困难，建议按 4.2 节显式指定业务前缀。
 
 ## 4. RedisCacheManager 配置实战
 
@@ -187,7 +187,7 @@ public class CacheConfig {
 - `evict`（单 key）：走原子 `DEL`，天然非阻塞；
 - `clear`（全缓存区）：内部改用 **SCAN 游标分批删除**（或 `UNLINK` 异步释放内存），不再一次 `KEYS` 全表扫描——符合 4.0 的非阻塞语义，大缓存区清空不再拖垮服务端。
 
-> 💡 **面试点**：Spring Data Redis 4.0 release notes 明确"非阻塞 eviction for RedisCache"——旧实现 `KEYS` 扫描的阻塞事故（生产常见：清空缓存导致 Redis 卡死数秒）在 4.x 得到根治。
+> **面试点**：Spring Data Redis 4.0 release notes 明确"非阻塞 eviction for RedisCache"——旧实现 `KEYS` 扫描的阻塞事故（生产常见：清空缓存导致 Redis 卡死数秒）在 4.x 得到根治。
 
 ### 5.2 resetCaches() 优化（Spring Data 2026.0.0 / 4.1）
 
@@ -205,7 +205,7 @@ public void refreshAllCaches() {
 
 - **语义**：一次性重置**所有** Redis 缓存区，替代逐缓存区 `clear()`；
 - **优化点**：内部合并为单次 `FLUSHDB`，从"N 个缓存区 = N 次 SCAN+DEL"降为 1 次命令；
-- ⚠️ **前提条件**：仅当 Redis 实例**专用于缓存**时才可安全使用（FLUSHDB 会清掉同库全部数据——包括非缓存业务数据）。
+- **前提条件**：仅当 Redis 实例**专用于缓存**时才可安全使用（FLUSHDB 会清掉同库全部数据——包括非缓存业务数据）。
 
 ### 5.3 4.x 其它行为变化
 
@@ -234,7 +234,7 @@ RedisCacheConfiguration defaults = RedisCacheConfiguration.defaultCacheConfig()
         .serializeKeysWith(...);
 ```
 
-> 💡 注解层只能应对部分难题：穿透的布隆过滤器、双写一致性（见 10 篇）都需要代码层配合——注解是"地基"，不是"全部"。
+> 注解层只能应对部分难题：穿透的布隆过滤器、双写一致性（见 10 篇）都需要代码层配合——注解是"地基"，不是"全部"。
 
 ## 7. 生产配置模板与自检清单
 
@@ -272,7 +272,7 @@ public class CacheConfig {
 - [ ] 更新/删除方法有配套 @CachePut/@CacheEvict（双写一致性链路完整）
 - [ ] 缓存名不包含特殊字符；业务前缀不与其它库冲突
 
-> 🎯 **核心要点**：Spring Cache 注解层解决"声明式缓存"的便利，RedisCacheManager 配置层决定"分布式缓存的正确性"——序列化（JDK 默认是头号坑）、TTL（没配=永不过期）、null 处理（穿透）、sync（击穿）四大配置项缺一不可。4.x 的非阻塞 evict 与 4.1 的 resetCaches（单次 FLUSHDB）是 2026 年新特性的面试加分点。
+> **核心要点**：Spring Cache 注解层解决"声明式缓存"的便利，RedisCacheManager 配置层决定"分布式缓存的正确性"——序列化（JDK 默认是头号坑）、TTL（没配=永不过期）、null 处理（穿透）、sync（击穿）四大配置项缺一不可。4.x 的非阻塞 evict 与 4.1 的 resetCaches（单次 FLUSHDB）是 2026 年新特性的面试加分点。
 
 ---
 

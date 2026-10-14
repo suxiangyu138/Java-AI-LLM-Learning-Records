@@ -40,7 +40,7 @@
 }
 ```
 
-> 💡 BSON 是 JSON 的二进制序列化格式，支持更多数据类型（如 Date、ObjectId、Binary Data）。
+> BSON 是 JSON 的二进制序列化格式，支持更多数据类型（如 Date、ObjectId、Binary Data）。
 
 ---
 
@@ -64,7 +64,7 @@ org.bson.types.ObjectId id = new ObjectId();
 System.out.println(id.toHexString()); // 66234a8f9c2e3fa1b2000001
 ```
 
-> 💡 ObjectId 在客户端生成，**无需依赖数据库**即可保证全局唯一性，这在分片环境中至关重要。
+> ObjectId 在客户端生成，**无需依赖数据库**即可保证全局唯一性，这在分片环境中至关重要。
 
 ---
 
@@ -154,7 +154,7 @@ MongoDB 的数据模型是 **Schema-less（无模式）** 的文档模型，具�
 }
 ```
 
-> 💡 **内嵌（Embedding）** 优先于 **引用（Referencing）**，但注意 BSON 文档大小限制为 **16MB**。
+> **内嵌（Embedding）** 优先于 **引用（Referencing）**，但注意 BSON 文档大小限制为 **16MB**。
 
 ---
 
@@ -252,7 +252,7 @@ db.users.find({ age: { $gt: 25 } }).explain("executionStats");
 }
 ```
 
-> ⚠️ **关键判断：** 如果 `stage: "COLLSCAN"` 且集合很大，说明**没有使用索引**，需要优化。
+> **关键判断：** 如果 `stage: "COLLSCAN"` 且集合很大，说明**没有使用索引**，需要优化。
 
 ---
 
@@ -272,7 +272,7 @@ db.users.find(
 // → stage: "IXSCAN", 无 FETCH 阶段
 ```
 
-> 💡 覆盖查询的 `totalDocsExamined = 0`，是性能最优的查询方式。
+> 覆盖查询的 `totalDocsExamined = 0`，是性能最优的查询方式。
 
 ---
 
@@ -344,7 +344,7 @@ TypedAggregation<Order> agg = Aggregation.newAggregation(
 AggregationResults<Map> results = mongoTemplate.aggregate(agg, Map.class);
 ```
 
-> ⚠️ `$lookup` 性能比 MySQL JOIN 差，尽量避免在频繁查询的路径上使用。
+> `$lookup` 性能比 MySQL JOIN 差，尽量避免在频繁查询的路径上使用。
 
 ---
 
@@ -374,7 +374,7 @@ AggregationResults<Map> results = mongoTemplate.aggregate(agg, Map.class);
 - **Secondary**：只读（默认），从 Primary 同步数据，**可投票**参与选举
 - **Arbiter**：只参与**选举投票**，不存储数据
 
-> 💡 推荐副本集至少 **3 个节点**（1 Primary + 2 Secondary），或 **1 Primary + 1 Secondary + 1 Arbiter**。
+> 推荐副本集至少 **3 个节点**（1 Primary + 2 Secondary），或 **1 Primary + 1 Secondary + 1 Arbiter**。
 
 ---
 
@@ -426,7 +426,7 @@ oplog 示例：
 }
 ```
 
-> ⚠️ **oplog 大小默认**：WiredTiger 引擎下为空闲磁盘的 5%（最多 50GB）。oplog 太小会导致 Secondary 追赶不上而被 **「stale」**。
+> **oplog 大小默认**：WiredTiger 引擎下为空闲磁盘的 5%（最多 50GB）。oplog 太小会导致 Secondary 追赶不上而被 **「stale」**。
 
 ---
 
@@ -519,7 +519,7 @@ sh.shardCollection("mydb.orders", { "orderDate": 1, "userId": 1 });
 | **范围分片** | 按值范围划分 | 范围查询高效 | 可能产生热点 |
 | **Zone 分片** | 按地理位置/标签 | 数据本地化 | 配置复杂 |
 
-> 💡 **分片键选择原则**：基数大（高 cardinality）、频率均匀、不易单调增减。
+> **分片键选择原则**：基数大（高 cardinality）、频率均匀、不易单调增减。
 
 ---
 
@@ -545,7 +545,7 @@ sh.stopBalancer();
 sh.startBalancer();
 ```
 
-> ⚠️ Balancer 在**业务低峰期**自动运行（默认 0:00-6:00），迁移可能影响性能。
+> Balancer 在**业务低峰期**自动运行（默认 0:00-6:00），迁移可能影响性能。
 
 ---
 
@@ -571,7 +571,7 @@ db.serverStatus().wiredTiger;
 //       cacheSizeGB: 4
 ```
 
-> 💡 WT 使用 **B-Tree** 存储数据，支持**行级锁**（Document-level Concurrency），比 MMAPv1 的集合级锁高很多。
+> WT 使用 **B-Tree** 存储数据，支持**行级锁**（Document-level Concurrency），比 MMAPv1 的集合级锁高很多。
 
 ---
 
@@ -622,7 +622,7 @@ db.users.updateOne({ _id: 1 }, { $set: { name: "A" } }); // OK
 db.users.updateOne({ _id: 2 }, { $set: { name: "B" } }); // OK (不冲突)
 ```
 
-> 💡 MongoDB **不**使用表级锁或库级锁（MMAPv1 曾是集合级锁），这是它高并发写入的关键。
+> MongoDB **不**使用表级锁或库级锁（MMAPv1 曾是集合级锁），这是它高并发写入的关键。
 
 ---
 
@@ -665,7 +665,7 @@ Snapshot Read：看到一个固定时间点的版本链
 - 两个水位线：**eviction_target**（80%）和 **eviction_trigger**（95%）
 - Cache 超过 95% 时，**所有写操作阻塞**，直到降到 80% 以下
 
-> ⚠️ 这是生产环境的常见问题：Cache 打满 → 写阻塞 → 雪崩。**务必监控** `wiredTiger.cache.bytes currently in the cache` 和 `percentage overhead`。
+> 这是生产环境的常见问题：Cache 打满 → 写阻塞 → 雪崩。**务必监控** `wiredTiger.cache.bytes currently in the cache` 和 `percentage overhead`。
 
 ---
 
@@ -709,7 +709,7 @@ storage:
       prefixCompression: true  # 索引前缀压缩
 ```
 
-> 💡 生产环境推荐 **Snappy** 平衡压缩率和性能；**Zstd** 是性能与压缩比的最优折中。
+> 生产环境推荐 **Snappy** 平衡压缩率和性能；**Zstd** 是性能与压缩比的最优折中。
 
 ---
 
@@ -852,7 +852,7 @@ db.articles.aggregate([
 ]);
 ```
 
-> ⚠️ 大量数据展开可能导致**内存溢出**（Pipeline 默认内存限制 100MB），可使用 `{ allowDiskUse: true }`。
+> 大量数据展开可能导致**内存溢出**（Pipeline 默认内存限制 100MB），可使用 `{ allowDiskUse: true }`。
 
 ---
 
@@ -888,7 +888,7 @@ try (ClientSession session = client.startSession()) {
 | 事务超时 | 默认 60s（`transactionLifetimeLimitSeconds`）|
 | 事务大小 | 受 oplog 大小限制 |
 
-> 💡 MongoDB 事务性能低于 MySQL InnoDB，不要作为默认选择，仅在确实需要时使用。
+> MongoDB 事务性能低于 MySQL InnoDB，不要作为默认选择，仅在确实需要时使用。
 
 ---
 
@@ -917,7 +917,7 @@ MongoDB 的索引底层使用 **B-Tree**（不是 B+Tree，MySQL 用的是 B+Tre
 // 不支持查询：{ age: { $gt: 20 } } → 无效（没有 name 前缀）
 ```
 
-> 💡 **最左前缀原则**：复合索引的查询必须从最左边的字段开始。
+> **最左前缀原则**：复合索引的查询必须从最左边的字段开始。
 
 ---
 
@@ -1067,7 +1067,7 @@ public class LogEntry {
 | `expireAfterSeconds: 604800` | 文档写入后 7 天过期 |
 | 底层 | 后台每 **60s** 清理一次过期文档 |
 
-> ⚠️ TTL 索引**有 60s 延迟**，不能用于精确的定时任务。
+> TTL 索引**有 60s 延迟**，不能用于精确的定时任务。
 
 ---
 
@@ -1101,7 +1101,7 @@ public boolean deductStock(String productId, int quantity) {
 }
 ```
 
-> 💡 纯 MongoDB 库存方案适合**非金融级**场景（秒杀），金融级建议使用 Redis + MySQL 方案。
+> 纯 MongoDB 库存方案适合**非金融级**场景（秒杀），金融级建议使用 Redis + MySQL 方案。
 
 ---
 
@@ -1223,7 +1223,7 @@ db.collection.find(query).explain("executionStats");
 // 正确：先 $match 缩小范围，再 $group/$sort
 ```
 
-> 💡 慢查询优化的第一原则：**查看 explain() 确认是否走了索引**。
+> 慢查询优化的第一原则：**查看 explain() 确认是否走了索引**。
 
 ---
 
@@ -1277,7 +1277,7 @@ mongorestore --host target:27017 \
   /backup/full_backup/
 ```
 
-> 💡 生产环境建议使用 **MongoDB Ops Manager** 或 **Atlas** 的自动备份功能。
+> 生产环境建议使用 **MongoDB Ops Manager** 或 **Atlas** 的自动备份功能。
 
 ---
 
@@ -1712,7 +1712,7 @@ spring.data.mongodb.uri=mongodb://app_user:app_pass@localhost:27017/mydb?authSou
 // TTL 索引保留 30 天
 ```
 
-> 💡 **桶模式（Bucket Pattern）**是 MongoDB 处理时序数据的最佳实践，减少文档数约 3600 倍（相比每条记录一个文档）。
+> **桶模式（Bucket Pattern）**是 MongoDB 处理时序数据的最佳实践，减少文档数约 3600 倍（相比每条记录一个文档）。
 
 ---
 

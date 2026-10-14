@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [JDK / JRE / JVM 三者关系](#1-jdk--jre--jvm-三者关系)
 2. [JDK 目录结构逐层解析](#2-jdk-目录结构逐层解析)
@@ -37,7 +37,7 @@ JDK（Java Development Kit）        —— JRE + 开发工具（能"开发"Java
 - 运行 Java 程序的方式变为：完整 JDK 直接运行（`java` 命令），或 **jlink 定制最小运行时**（见 03 模块）；
 - 原因：模块化让"按需裁剪"成为可能——jlink 替代了"预打包 JRE"这种笨办法。
 
-> 🎯 **核心要点**：JDK 9 之前 JRE 是独立分发物；JDK 9+ **"运行时是 JDK 的产物而非配套品"**——要么带完整 JDK 跑，要么用 jlink 裁一个刚好够用的运行时。面试答"JDK9 后没有独立 JRE"是基础分，能接"用 jlink 替代"是加分分。
+> **核心要点**：JDK 9 之前 JRE 是独立分发物；JDK 9+ **"运行时是 JDK 的产物而非配套品"**——要么带完整 JDK 跑，要么用 jlink 裁一个刚好够用的运行时。面试答"JDK9 后没有独立 JRE"是基础分，能接"用 jlink 替代"是加分分。
 
 ---
 
@@ -74,7 +74,7 @@ ls $JAVA_HOME/jmods                # 看模块文件
 cat $JAVA_HOME/release             # 版本与特性标记
 ```
 
-> 💡 `JAVA_HOME` 指向的必须是**JDK 根目录**（含 bin/ 的目录），Maven/Gradle/Tomcat 都靠它定位工具链。
+> `JAVA_HOME` 指向的必须是**JDK 根目录**（含 bin/ 的目录），Maven/Gradle/Tomcat 都靠它定位工具链。
 
 ---
 
@@ -99,7 +99,7 @@ javadoc -d doc src/com/example/*.java                # 5. 文档生成
 
 **JDK 26 的维护性变化**（时效性）：`Thread.stop()` 终于在 JDK 26（2026-03）被移除（JDK-8368226）——遗留代码调用它会 NoSuchMethodError；Applet API 也在 JDK 26 被移除（JEP 504）。
 
-> 🎯 **核心要点**：工具链的完整闭环 = **javac（产）→ jar（装）→ java（跑）→ javadoc（说）→ jcmd 系列（医）**——JDK 既是"SDK"也是"工具箱"，五个环节覆盖开发全流程（工具细节见 `JDK/03-JDK核心工具链实战.md`）。
+> **核心要点**：工具链的完整闭环 = **javac（产）→ jar（装）→ java（跑）→ javadoc（说）→ jcmd 系列（医）**——JDK 既是"SDK"也是"工具箱"，五个环节覆盖开发全流程（工具细节见 `JDK/03-JDK核心工具链实战.md`）。
 
 ---
 
@@ -140,7 +140,7 @@ void main() {                      // 隐式类 + 实例 main —— 教学与�
 }
 ```
 
-> 🎯 **核心要点**：javac 保证"类型正确才放行"，java 负责"跑起来"——编译期错误前置是 Java 语言的核心哲学。JDK 25 的 JEP 512 降低了"入口仪式感"，但生产代码仍用标准 main。
+> **核心要点**：javac 保证"类型正确才放行"，java 负责"跑起来"——编译期错误前置是 Java 语言的核心哲学。JDK 25 的 JEP 512 降低了"入口仪式感"，但生产代码仍用标准 main。
 
 ---
 
@@ -168,7 +168,7 @@ java -jar app.jar
 jcmd $(pgrep -f app.jar) Thread.print        # 运行中诊断
 ```
 
-> 💡 构建日常几乎都用 Maven/Gradle 包住这些命令——但**理解裸命令**才能解释"构建工具在做什么"（`mvn package` 的本质就是 javac + jar 的组合，详见 `Maven与Gradle/` 系统）。
+> 构建日常几乎都用 Maven/Gradle 包住这些命令——但**理解裸命令**才能解释"构建工具在做什么"（`mvn package` 的本质就是 javac + jar 的组合，详见 `Maven与Gradle/` 系统）。
 
 ---
 
@@ -197,7 +197,7 @@ java --list-modules | wc -l           # 74
 jdeps --module-path . -s app.jar      # 分析应用模块依赖（裁剪前的侦察）
 ```
 
-> 🎯 **核心要点**：JDK 模块化 = **"SDK 内部工程化"的巅峰示范**——强封装（exports）、显式依赖（requires）、可裁剪（jlink）。理解 JDK 模块化，等于理解了大型 SDK 的组织原则（实战细节见 03 模块与 `Java高级语法/06-模块系统JPMS.md`）。
+> **核心要点**：JDK 模块化 = **"SDK 内部工程化"的巅峰示范**——强封装（exports）、显式依赖（requires）、可裁剪（jlink）。理解 JDK 模块化，等于理解了大型 SDK 的组织原则（实战细节见 03 模块与 `Java高级语法/06-模块系统JPMS.md`）。
 
 ---
 

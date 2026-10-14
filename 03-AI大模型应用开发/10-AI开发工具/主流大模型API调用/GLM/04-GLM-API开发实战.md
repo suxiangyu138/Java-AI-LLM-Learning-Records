@@ -1,6 +1,6 @@
 # 04 - GLM API 开发实战
 
-> 🎯 GLM API 完全兼容 OpenAI 协议 — 改 base_url 即用。本章覆盖快速接入、对话/流式/结构化输出、Function Calling、GLM-5 的思维链调用、价格计算
+> GLM API 完全兼容 OpenAI 协议 — 改 base_url 即用。本章覆盖快速接入、对话/流式/结构化输出、Function Calling、GLM-5 的思维链调用、价格计算
 
 ---
 
@@ -46,7 +46,7 @@ const client = new OpenAI({
 });
 ```
 
-> ⚠️ **安全**：API Key 仅限服务端使用，环境变量存储，严禁硬编码。
+> **安全**：API Key 仅限服务端使用，环境变量存储，严禁硬编码。
 
 ---
 
@@ -212,6 +212,6 @@ print(estimate_cost("glm-5", 100_000, 20_000))   # ≈ ¥0.76/天
 
 ---
 
-> 🎯 **核心要点**：GLM API 接入三件事 — **① OpenAI 兼容（改 base_url 为 open.bigmodel.cn/api/paas/v4）② 模型 ID：glm-5/glm-5.1/glm-5-turbo/glm-5.2 ③ 思维链提示词发挥 GLM-5 的推理强项**。Function Calling 与 OpenAI 完全同构（tool_calls → 执行 → tool_result 回传）。
+> **核心要点**：GLM API 接入三件事 — **① OpenAI 兼容（改 base_url 为 open.bigmodel.cn/api/paas/v4）② 模型 ID：glm-5/glm-5.1/glm-5-turbo/glm-5.2 ③ 思维链提示词发挥 GLM-5 的推理强项**。Function Calling 与 OpenAI 完全同构（tool_calls → 执行 → tool_result 回传）。
 
 **下一模块**：[05-GLM-Agent与长程任务](05-GLM-Agent与长程任务.md) / **返回总览**：[00-总览](00-GLM-API知识体系总览.md)

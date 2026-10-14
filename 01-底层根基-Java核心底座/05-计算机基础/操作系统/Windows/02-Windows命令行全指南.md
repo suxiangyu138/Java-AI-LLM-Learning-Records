@@ -1,10 +1,10 @@
 # Windows 命令行全指南
 
-> ⌨️ CMD 是过去，PowerShell 是现在，Windows Terminal 是颜值，WSL 是未来 —— 掌握 Windows 命令行的四重境界
+> CMD 是过去，PowerShell 是现在，Windows Terminal 是颜值，WSL 是未来 —— 掌握 Windows 命令行的四重境界
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [CMD：经典命令解释器](#1-cmd经典命令解释器)
 2. [PowerShell：面向对象的现代 Shell](#2-powershell面向对象的现代-shell)
@@ -75,7 +75,7 @@ java -jar target/app.jar --spring.profiles.active=dev
 | **清屏** | `cls` | 清空终端 |
 | **帮助** | `help dir` / `dir /?` | 查看命令帮助 |
 
-> ⚠️ **CMD 局限**：文本输出难以结构化处理，写复杂脚本非常痛苦。以下场景应考虑用 PowerShell 替代。
+> **CMD 局限**：文本输出难以结构化处理，写复杂脚本非常痛苦。以下场景应考虑用 PowerShell 替代。
 
 ---
 
@@ -91,7 +91,7 @@ PowerShell: Get-ChildItem → 对象数组 (.NET FileInfo 对象)
          每个对象有 .Name .Length .LastWriteTime .Extension 等属性
 ```
 
-> 🎯 **核心颠覆**：管道传递的不是文本，而是 **.NET 对象**。这意味着你可以直接在管道中访问对象属性，无需 `awk`/`grep`/`cut` 解析文本。
+> **核心颠覆**：管道传递的不是文本，而是 **.NET 对象**。这意味着你可以直接在管道中访问对象属性，无需 `awk`/`grep`/`cut` 解析文本。
 
 ### 2.2 PowerShell 基础命令
 
@@ -188,7 +188,7 @@ function Use-Java17 { $env:JAVA_HOME = "C:\Program Files\Java\jdk-17"; $env:PATH
 function Use-Java21 { $env:JAVA_HOME = "C:\Program Files\Java\jdk-21"; $env:PATH = "$env:JAVA_HOME\bin;$env:PATH" }
 ```
 
-> ⚠️ **执行策略**：如果运行 `.ps1` 脚本时报错"禁止运行脚本"，用管理员身份运行 `Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser`
+> **执行策略**：如果运行 `.ps1` 脚本时报错"禁止运行脚本"，用管理员身份运行 `Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser`
 
 ---
 
@@ -229,7 +229,7 @@ winget install Microsoft.WindowsTerminal
 wt --version
 ```
 
-> 💡 **推荐**：在 VS Code 中设置 `"terminal.integrated.defaultProfile.windows": "PowerShell"`，获得一致体验。
+> **推荐**：在 VS Code 中设置 `"terminal.integrated.defaultProfile.windows": "PowerShell"`，获得一致体验。
 
 ---
 
@@ -242,9 +242,9 @@ wt --version
 | **架构** | 系统调用翻译层（无完整内核） | 完整 Linux 内核（Hyper-V 轻量 VM） |
 | **文件系统性能** | 跨文件系统快（`/mnt/c/` 直接操作） | 跨文件系统较慢（网络挂载） |
 | **Linux 内文件性能** | 一般 | **极快**（原生 ext4） |
-| **完整内核** | ❌ | ✅ |
+| **完整内核** | ✗ | ✓ |
 | **Docker 支持** | 需要 Docker Desktop | 原生支持 |
-| **GPU 加速** | ❌ | ✅ |
+| **GPU 加速** | ✗ | ✓ |
 | **内存管理** | 共享 Windows 内存 | 独立分配（可限制 `.wslconfig`） |
 | **推荐场景** | 跨系统文件操作 | 纯 Linux 开发环境 |
 
@@ -312,7 +312,7 @@ localhostForwarding=true  # localhost 端口转发
 | 编译 C/Rust | WSL2 | GCC/Make 等工具链天然 Linux |
 | Git 操作 | **Windows Git** 或 WSL Git | 跨文件系统操作 Windows 版更快 |
 
-> 🎯 **核心要点**：Java 开发者日常可以 **Windows 原生做主力**，WSL2 作为 Docker、脚本、Linux 测试的**辅助环境**。
+> **核心要点**：Java 开发者日常可以 **Windows 原生做主力**，WSL2 作为 Docker、脚本、Linux 测试的**辅助环境**。
 
 ---
 

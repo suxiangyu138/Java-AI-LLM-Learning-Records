@@ -1,5 +1,5 @@
 # 03-Spring事务管理深度剖析
-> 🔥 Spring面试第一高频考点 — 掌握事务隔离级别、传播行为、@Transactional失效全场景，理解PlatformTransactionManager底层运作机制
+> Spring面试第一高频考点 — 掌握事务隔离级别、传播行为、@Transactional失效全场景，理解PlatformTransactionManager底层运作机制
 
 ---
 
@@ -23,7 +23,7 @@
 ## 1. 本章总览
 
 ### 1.1 知识定位
-- **归属**：Spring Framework 核心 → P0核心必学（重中之重⭐⭐⭐⭐⭐）
+- **归属**：Spring Framework 核心 → P0核心必学（重中之重★★★★★）
 - **前置依赖**：IoC容器 + AOP（事务底层基于AOP实现）
 - **面试频率**：Spring模块**最高频**考点，没有之一
 
@@ -52,10 +52,10 @@
 
 | 隔离级别 | 脏读 | 不可重复读 | 幻读 | MySQL默认 |
 |----------|------|-----------|------|-----------|
-| **READ UNCOMMITTED** | ✅ 可能 | ✅ 可能 | ✅ 可能 | |
-| **READ COMMITTED** | ❌ 解决 | ✅ 可能 | ✅ 可能 | Oracle默认 |
-| **REPEATABLE READ** | ❌ 解决 | ❌ 解决 | ⚠️ 可能（InnoDB中通过间隙锁解决） | ✅ MySQL默认 |
-| **SERIALIZABLE** | ❌ 解决 | ❌ 解决 | ❌ 解决 | |
+| **READ UNCOMMITTED** | ✓ 可能 | ✓ 可能 | ✓ 可能 | |
+| **READ COMMITTED** | ✗ 解决 | ✓ 可能 | ✓ 可能 | Oracle默认 |
+| **REPEATABLE READ** | ✗ 解决 | ✗ 解决 | 可能（InnoDB中通过间隙锁解决） | ✓ MySQL默认 |
+| **SERIALIZABLE** | ✗ 解决 | ✗ 解决 | ✗ 解决 | |
 
 ### 2.3 Spring中的隔离级别配置
 
@@ -86,10 +86,10 @@ public class UserService {
 | 维度 | 编程式事务 | 声明式事务(@Transactional) |
 |------|-----------|---------------------------|
 | 实现方式 | `TransactionTemplate` / `PlatformTransactionManager` | `@Transactional`注解 |
-| 代码侵入性 | ⚠️ 高，业务代码中混合事务逻辑 | ✅ 低，注解即可 |
-| 粒度控制 | ✅ 精细（可精确到某几行代码） | ⚠️ 粗粒度（方法级别） |
+| 代码侵入性 | 高，业务代码中混合事务逻辑 | ✓ 低，注解即可 |
+| 粒度控制 | ✓ 精细（可精确到某几行代码） | 粗粒度（方法级别） |
 | 使用场景 | 少量特殊场景需要精确事务控制时 | 95%的业务场景 |
-| 推荐度 | 特定场景 | ⭐⭐⭐⭐⭐ |
+| 推荐度 | 特定场景 | ★★★★★ |
 
 ```java
 // 编程式事务
@@ -123,19 +123,19 @@ public class OrderService {
 
 ## 4. 事务传播行为详解
 
-> 🎯 传播行为定义了一个事务方法被另一个事务方法调用时的行为
+> 传播行为定义了一个事务方法被另一个事务方法调用时的行为
 
 ### 4.1 七种传播行为完整对比
 
 | 传播行为 | 含义 | 外层有事务 | 外层无事务 | 使用频率 |
 |----------|------|-----------|-----------|----------|
-| **REQUIRED**（默认） | 必须要有事务 | 加入外层事务 | 新建事务 | ⭐⭐⭐⭐⭐ |
-| **REQUIRES_NEW** | 必须新建事务 | 挂起外层，新建独立事务 | 新建事务 | ⭐⭐⭐⭐ |
-| **NESTED** | 嵌套事务 | 创建保存点，可部分回滚 | 新建事务 | ⭐⭐⭐ |
-| **SUPPORTS** | 支持事务 | 加入外层事务 | 以非事务执行 | ⭐⭐ |
-| **NOT_SUPPORTED** | 不支持事务 | 挂起外层，非事务执行 | 非事务执行 | ⭐ |
-| **MANDATORY** | 强制事务 | 加入外层事务 | 抛异常 | ⭐ |
-| **NEVER** | 绝不使用事务 | 抛异常 | 非事务执行 | ⭐ |
+| **REQUIRED**（默认） | 必须要有事务 | 加入外层事务 | 新建事务 | ★★★★★ |
+| **REQUIRES_NEW** | 必须新建事务 | 挂起外层，新建独立事务 | 新建事务 | ★★★★ |
+| **NESTED** | 嵌套事务 | 创建保存点，可部分回滚 | 新建事务 | ★★★ |
+| **SUPPORTS** | 支持事务 | 加入外层事务 | 以非事务执行 | ★★ |
+| **NOT_SUPPORTED** | 不支持事务 | 挂起外层，非事务执行 | 非事务执行 | ★ |
+| **MANDATORY** | 强制事务 | 加入外层事务 | 抛异常 | ★ |
+| **NEVER** | 绝不使用事务 | 抛异常 | 非事务执行 | ★ |
 
 ### 4.2 核心传播行为代码演示
 
@@ -219,14 +219,14 @@ public void createOrder(Order order) { ... }
 ### 5.2 rollbackFor陷阱
 
 ```java
-// ❌ 默认不回滚受检异常（Checked Exception）！
+// ✗ 默认不回滚受检异常（Checked Exception）！
 @Transactional
 public void saveFile() throws IOException {
     fileDao.save(file);     // 如果这里抛出SQLException(RuntimeException) → 回滚
     file.saveToDisk();      // 如果这里抛出IOException(Checked Exception) → 不回滚！
 }
 
-// ✅ 明确指定回滚所有异常
+// ✓ 明确指定回滚所有异常
 @Transactional(rollbackFor = Exception.class)
 public void saveFile() throws IOException {
     fileDao.save(file);
@@ -240,13 +240,13 @@ public class BusinessException extends RuntimeException { ... }
 ### 5.3 readOnly优化
 
 ```java
-// ✅ 查询方法使用readOnly=true（MySQL InnoDB中可提升性能）
+// ✓ 查询方法使用readOnly=true（MySQL InnoDB中可提升性能）
 @Transactional(readOnly = true)
 public User getUser(Long id) {
     return userDao.findById(id);
 }
 
-// ❌ 写操作不能加readOnly
+// ✗ 写操作不能加readOnly
 @Transactional(readOnly = true)
 public void createUser(User user) { // 会报错或静默失效！
     userDao.insert(user);
@@ -289,29 +289,29 @@ public interface UserService {
 
 ## 6. 事务失效全场景-12大场景
 
-> 🔥🔥🔥 这是Spring面试和线上排查的最核心内容，必须逐条掌握！
+> 这是Spring面试和线上排查的最核心内容，必须逐条掌握！
 
 ### 场景汇总表
 
 | 序号 | 场景 | 原因 | 严重度 |
 |------|------|------|--------|
-| 1 | **方法非public** | Spring事务通过AOP代理，无法代理非public方法 | 🔴 高频 |
-| 2 | **同类内部调用** | this调用绕过代理对象 | 🔴 最高频 |
-| 3 | **异常被捕获** | try-catch吞了异常，AOP感知不到 | 🔴 高频 |
-| 4 | **rollbackFor设置错误** | 受检异常默认不回滚 | 🔴 高频 |
-| 5 | **传播行为配置不当** | 如REQUIRES_NEW/NEVER等 | 🟡 偶发 |
-| 6 | **数据库引擎不支持** | MySQL MyISAM不支持事务 | 🟡 |
-| 7 | **多线程环境** | 线程中拿不到Spring事务上下文 | 🟡 |
-| 8 | **没有被Spring管理** | 自己new的对象没有代理 | 🟡 |
-| 9 | **final方法** | CGLIB无法代理final方法 | 🟡 |
-| 10 | **static方法** | Spring AOP不支持static | 🟢 较少 |
-| 11 | **异常类型不匹配** | 抛的是noRollbackFor指定的异常 | 🟢 |
-| 12 | **多数据源未指定事务管理器** | 多数据源时未指定正确的事务管理器 | 🟢 |
+| 1 | **方法非public** | Spring事务通过AOP代理，无法代理非public方法 | 高频 |
+| 2 | **同类内部调用** | this调用绕过代理对象 | 最高频 |
+| 3 | **异常被捕获** | try-catch吞了异常，AOP感知不到 | 高频 |
+| 4 | **rollbackFor设置错误** | 受检异常默认不回滚 | 高频 |
+| 5 | **传播行为配置不当** | 如REQUIRES_NEW/NEVER等 | 偶发 |
+| 6 | **数据库引擎不支持** | MySQL MyISAM不支持事务 | |
+| 7 | **多线程环境** | 线程中拿不到Spring事务上下文 | |
+| 8 | **没有被Spring管理** | 自己new的对象没有代理 | |
+| 9 | **final方法** | CGLIB无法代理final方法 | |
+| 10 | **static方法** | Spring AOP不支持static | 较少 |
+| 11 | **异常类型不匹配** | 抛的是noRollbackFor指定的异常 | |
+| 12 | **多数据源未指定事务管理器** | 多数据源时未指定正确的事务管理器 | |
 
 ### 场景1：方法非public
 
 ```java
-// ❌ 失效：非public方法
+// ✗ 失效：非public方法
 @Service
 public class UserService {
     @Transactional
@@ -320,7 +320,7 @@ public class UserService {
     }
 }
 
-// ✅ 修复：改为public
+// ✓ 修复：改为public
 @Transactional
 public void createUser(User user) {
     userDao.insert(user);
@@ -335,7 +335,7 @@ public class UserService {
     
     public void register(User user) {
         userDao.insert(user);        // 在事务外
-        this.sendWelcomeEmail(user); // ❌ this调用，不经过代理！事务不生效！
+        this.sendWelcomeEmail(user); // ✗ this调用，不经过代理！事务不生效！
     }
     
     @Transactional
@@ -344,7 +344,7 @@ public class UserService {
     }
 }
 
-// ✅ 解决方案1：拆分为两个类（推荐）
+// ✓ 解决方案1：拆分为两个类（推荐）
 @Service
 public class UserService {
     @Autowired private EmailService emailService;
@@ -356,7 +356,7 @@ public class UserService {
     }
 }
 
-// ✅ 解决方案2：注入自身
+// ✓ 解决方案2：注入自身
 @Service
 public class UserService {
     @Autowired private UserService self;
@@ -375,7 +375,7 @@ public class UserService {
 ### 场景3：异常被捕获吞掉
 
 ```java
-// ❌ 失效：try-catch吞了异常
+// ✗ 失效：try-catch吞了异常
 @Transactional
 public void createOrder(Order order) {
     try {
@@ -387,7 +387,7 @@ public void createOrder(Order order) {
 }
 // → order已经插入数据库且提交了！
 
-// ✅ 修复1：让异常抛出
+// ✓ 修复1：让异常抛出
 @Transactional
 public void createOrder(Order order) {
     try {
@@ -399,7 +399,7 @@ public void createOrder(Order order) {
     }
 }
 
-// ✅ 修复2：手动回滚
+// ✓ 修复2：手动回滚
 @Transactional
 public void createOrder(Order order) {
     try {
@@ -415,7 +415,7 @@ public void createOrder(Order order) {
 ### 场景4：rollbackFor错误
 
 ```java
-// ❌ 受检异常不回滚！
+// ✗ 受检异常不回滚！
 @Transactional
 public void importExcel(File file) throws IOException {
     userDao.batchInsert(parse(file)); // SQL成功
@@ -423,7 +423,7 @@ public void importExcel(File file) throws IOException {
     throw new IOException("文件格式错误"); // 受检异常，默认不回滚！数据已持久化！
 }
 
-// ✅ 指定所有异常都回滚
+// ✓ 指定所有异常都回滚
 @Transactional(rollbackFor = Exception.class)
 public void importExcel(File file) throws IOException {
     userDao.batchInsert(parse(file));
@@ -434,15 +434,15 @@ public void importExcel(File file) throws IOException {
 ### 场景5：多线程
 
 ```java
-// ❌ 失效：子线程中获取不到事务上下文
+// ✗ 失效：子线程中获取不到事务上下文
 @Transactional
 public void batchProcess(List<User> users) {
     users.parallelStream().forEach(user -> {
-        userDao.insert(user); // ❌ 多线程并行，每个线程独立事务（或无事务）
+        userDao.insert(user); // ✗ 多线程并行，每个线程独立事务（或无事务）
     });
 }
 
-// ✅ 正确：每个线程单独管理事务
+// ✓ 正确：每个线程单独管理事务
 @Autowired
 private TransactionTemplate transactionTemplate;
 

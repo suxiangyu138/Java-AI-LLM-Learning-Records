@@ -1,6 +1,6 @@
 # 04 - ChannelPipeline 与 Handler
 
-> 🎯 Pipeline 是 Netty 的大动脉 — 入站事件从 Head 传到 Tail、出站事件从 Tail 传到 Head，理解双向链表的传播机制是用好 Netty 的核心
+> Pipeline 是 Netty 的大动脉 — 入站事件从 Head 传到 Tail、出站事件从 Tail 传到 Head，理解双向链表的传播机制是用好 Netty 的核心
 
 ---
 
@@ -68,7 +68,7 @@ public class MyInboundHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
         System.out.println("收到: " + msg);
-        ctx.fireChannelRead(msg);    // ⭐ 传给下一个 Inbound Handler
+        ctx.fireChannelRead(msg);    // ★ 传给下一个 Inbound Handler
         // 如果不调 fireXxx() → 事件在此终止
     }
 }
@@ -89,7 +89,7 @@ public class MyOutboundHandler extends ChannelOutboundHandlerAdapter {
     @Override
     public void write(ChannelHandlerContext ctx, Object msg, ChannelPromise promise) {
         System.out.println("写出: " + msg);
-        ctx.write(msg, promise);     // ⭐ 传给上一个 Outbound Handler
+        ctx.write(msg, promise);     // ★ 传给上一个 Outbound Handler
     }
 }
 ```
@@ -99,7 +99,7 @@ public class MyOutboundHandler extends ChannelOutboundHandlerAdapter {
 | 类 | 特点 | 适用 |
 |----|------|------|
 | `ChannelInboundHandlerAdapter` | 需手动 `ctx.fireChannelRead(msg)` 传递 | 中间 Handler |
-| `SimpleChannelInboundHandler<I>` | 自动释放 ByteBuf + 不需手动传递 | ⭐ 业务 Handler |
+| `SimpleChannelInboundHandler<I>` | 自动释放 ByteBuf + 不需手动传递 | ★ 业务 Handler |
 
 ---
 
@@ -130,15 +130,15 @@ public class ControlHandler extends ChannelInboundHandlerAdapter {
 
 | 方式 | 起点 | 经过出站 Handler |
 |------|------|:---:|
-| `ctx.writeAndFlush(msg)` | 当前 ctx 往前 | ✅ 经过前面的 Outbound |
-| `ctx.channel().writeAndFlush(msg)` | Tail 往前 | ✅ 经过所有 Outbound |
+| `ctx.writeAndFlush(msg)` | 当前 ctx 往前 | ✓ 经过前面的 Outbound |
+| `ctx.channel().writeAndFlush(msg)` | Tail 往前 | ✓ 经过所有 Outbound |
 
 ---
 
 ## 4. Handler 生命周期
 
 ```java
-@Sharable   // ⚠️ 标注了才能被多个 Channel 共享
+@Sharable   // 标注了才能被多个 Channel 共享
 public class LifecycleHandler extends ChannelInboundHandlerAdapter {
 
     @Override
@@ -169,14 +169,14 @@ public class LifecycleHandler extends ChannelInboundHandlerAdapter {
 }
 ```
 
-> ⚠️ **@Sharable**：标注后才可被多个 Channel Pipeline 共享（无状态 Handler）。有状态的 Handler（如 Decoder）不能共享。
+> **@Sharable**：标注后才可被多个 Channel Pipeline 共享（无状态 Handler）。有状态的 Handler（如 Decoder）不能共享。
 
 ---
 
 ## 5. 常见 Handler 组合模式
 
 ```java
-// ⭐ 典型的 Pipeline 配置
+// ★ 典型的 Pipeline 配置
 pipeline
     // ← 入站：Head → Tail →
     .addLast(new LengthFieldBasedFrameDecoder(65535, 0, 4, 0, 4))  // ① 粘包处理
@@ -201,4 +201,4 @@ pipeline
 | ProtobufEncoder | Outbound | Protobuf 对象 → 字节 |
 | LengthFieldPrepender | Outbound | 添加长度字段 |
 
-> 🎯 **Pipeline 口诀**：入站 Head→Tail（读路径），出站 Tail→Head（写路径）。Decoder 是入站，Encoder 是出站，业务 Handler 通常只处理入站。
+> **Pipeline 口诀**：入站 Head→Tail（读路径），出站 Tail→Head（写路径）。Decoder 是入站，Encoder 是出站，业务 Handler 通常只处理入站。

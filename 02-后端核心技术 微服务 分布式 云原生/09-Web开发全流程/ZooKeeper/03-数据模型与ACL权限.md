@@ -1,6 +1,6 @@
 # 03 - ZooKeeper 数据模型与 ACL 权限
 
-> 🎯 ZNode 是 ZK 的一等公民 — 持久/临时/顺序节点四种类型 + Stat 元数据 + ACL 五种权限，构成了 ZK 协调能力的基础
+> ZNode 是 ZK 的一等公民 — 持久/临时/顺序节点四种类型 + Stat 元数据 + ACL 五种权限，构成了 ZK 协调能力的基础
 
 ---
 
@@ -47,7 +47,7 @@ ZooKeeper 的命名空间 — 类 Unix 文件系统：
 | **持久 (PERSISTENT)** | `create /path data` | 显式删除才消失 | 配置数据 |
 | **临时 (EPHEMERAL)** | `create -e /path data` | Session 断开自动删除 | 服务注册、分布式锁 |
 | **持久顺序 (PERSISTENT_SEQUENTIAL)** | `create -s /path data` | 显式删除 + 序号后缀 | 分布式 ID |
-| **临时顺序 (EPHEMERAL_SEQUENTIAL)** | `create -e -s /path data` | Session 断开 + 序号后缀 | ⭐ 分布式锁、Leader 选举 |
+| **临时顺序 (EPHEMERAL_SEQUENTIAL)** | `create -e -s /path data` | Session 断开 + 序号后缀 | ★ 分布式锁、Leader 选举 |
 
 ### 临时顺序节点的妙用
 
@@ -84,7 +84,7 @@ get -s /config/db-url
 
 | 字段 | 说明 | 用途 |
 |------|------|------|
-| `dataVersion` | 数据版本号 | ⭐ CAS 乐观锁（修改时带 version，版本不匹配拒绝写入） |
+| `dataVersion` | 数据版本号 | ★ CAS 乐观锁（修改时带 version，版本不匹配拒绝写入） |
 | `cversion` | 子节点列表版本 | 监测子节点变化 |
 | `numChildren` | 子节点数量 | — |
 | `zxid` | ZooKeeper Transaction ID | 全局唯一递增，判断事件顺序 |
@@ -122,7 +122,7 @@ setAcl /config ip:192.168.1.0/24:cdrwa     # 内网全权限
 getAcl /config
 ```
 
-> ⚠️ 生产环境建议开启 ACL 认证（`-Dzookeeper.skipACL=no`），防止误操作或恶意删除。
+> 生产环境建议开启 ACL 认证（`-Dzookeeper.skipACL=no`），防止误操作或恶意删除。
 
 ---
 
@@ -151,4 +151,4 @@ setquota -b 100M /data            # 限制数据总量 ≤ 100MB
 listquota /data                   # 查看配额
 ```
 
-> 🎯 **记住**：临时节点随 Session 自动消失（释放锁/注销服务）、顺序节点自动加序号、版本号实现乐观锁、Watch 一次性触发。这四点构成 ZK 分布式协调的全部基础。
+> **记住**：临时节点随 Session 自动消失（释放锁/注销服务）、顺序节点自动加序号、版本号实现乐观锁、Watch 一次性触发。这四点构成 ZK 分布式协调的全部基础。

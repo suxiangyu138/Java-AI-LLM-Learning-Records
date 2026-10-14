@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [会话的本质：在无状态协议上模拟状态](#1-会话的本质在无状态协议上模拟状态)
 2. [Cookie 机制与属性全解析](#2-cookie-机制与属性全解析)
@@ -68,7 +68,7 @@ response.addCookie(buildCookie("sessionId", sid,
 | **`Lax`（默认）** | **顶级导航（GET 跳转）带，其他不带** | 默认安全基线 |
 | `None` | 都带（必须配合 Secure） | 第三方 Cookie/SSO 场景 |
 
-> 🎯 **核心要点**：Cookie 三件套（HttpOnly + Secure + SameSite=Lax）是**登录态安全的最小配置**——不设 HttpOnly，一个 XSS 就带走会话；不设 SameSite，一个链接点击就可能被 CSRF。
+> **核心要点**：Cookie 三件套（HttpOnly + Secure + SameSite=Lax）是**登录态安全的最小配置**——不设 HttpOnly，一个 XSS 就带走会话；不设 SameSite，一个链接点击就可能被 CSRF。
 
 ## 3. Session 管理三种方案
 
@@ -120,8 +120,8 @@ JWT = Base64Url(Header).Base64Url(Payload).Signature
 |------|------|------|
 | Authorization 头 | `Bearer <token>` | 推荐；不落 Cookie → 免 CSRF |
 | Cookie 存储 | HttpOnly + Secure + SameSite | 自动携带但有 CSRF 面（SameSite 兜住） |
-| localStorage | ❌ 不推荐 | XSS 可读 |
-| URL 参数 | ❌ 禁止 | 日志泄漏 |
+| localStorage | ✗ 不推荐 | XSS 可读 |
+| URL 参数 | ✗ 禁止 | 日志泄漏 |
 
 ## 5. CORS：跨域请求的闸门
 
@@ -164,7 +164,7 @@ public class CorsConfig {
 }
 ```
 
-> ⚠️ **CORS 三大反模式**：`*` 通配 + `Allow-Credentials` 组合（非法且危险）；来源校验用正则而非精确匹配；允许所有 Header 但业务依赖特定头鉴权。
+> **CORS 三大反模式**：`*` 通配 + `Allow-Credentials` 组合（非法且危险）；来源校验用正则而非精确匹配；允许所有 Header 但业务依赖特定头鉴权。
 
 ## 6. CSRF：第三方发起的伪装请求
 
@@ -209,7 +209,7 @@ evil.com 的页面发起：<img src="https://app.com/transfer?to=hacker&amount=1
 
 ## 8. 核心要点与思考题
 
-> 🎯 **本章三句话总结**：
+> **本章三句话总结**：
 > 1. 会话三方案：内存 Session（单机）、Redis Session（集群）、JWT（无状态）——扩展性递增、可撤销性递减；
 > 2. Cookie 三属性是安全地基：HttpOnly 防 XSS 窃取、Secure 防明文泄露、SameSite=Lax 防 CSRF；
 > 3. CORS 是"浏览器侧的闸门、服务器发的钥匙"，只防浏览器不防 curl——鉴权永远在服务端做。

@@ -1,7 +1,7 @@
 # 03-Dockerfile 与镜像构建
 > 镜像中打包软件的本质 = 将 Java 软件运行所需全量依赖资源按 Docker 规范整合为独立镜像——指令详解、多阶段构建、缓存优化、安全实践
 
-## 📚 目录
+## 目录
 1. [核心认知：Java 视角的镜像打包](#1-核心认知java-视角的镜像打包)
 2. [前置准备：Java 软件自身打包](#2-前置准备java-软件自身打包)
 3. [Dockerfile 基础指令详解](#3-dockerfile-基础指令详解)
@@ -60,7 +60,7 @@ mvn clean package -DskipTests    # 打包（跳过测试加快速度）
 java -jar target/app.jar         # 本地验证可运行
 ```
 
-> 💡 需动态修改的配置（application-prod.yml 等）建议从 JAR 分离，后续用数据卷挂载，避免每次改配置都重新打包。
+> 需动态修改的配置（application-prod.yml 等）建议从 JAR 分离，后续用数据卷挂载，避免每次改配置都重新打包。
 
 ### 2.3 传统 SSM 应用打包（WAR 包）
 
@@ -82,7 +82,7 @@ FROM openjdk:17-jdk-slim
 # FROM openjdk:17
 ```
 
-> ⚠️ **musl vs glibc**：Alpine 基于 musl libc 而非 glibc，体积只有 5MB 左右。对于依赖 glibc 特定行为的 Java 应用（尤其涉及 JNI/Native 库的），应选择 `slim` 版本。
+> **musl vs glibc**：Alpine 基于 musl libc 而非 glibc，体积只有 5MB 左右。对于依赖 glibc 特定行为的 Java 应用（尤其涉及 JNI/Native 库的），应选择 `slim` 版本。
 
 ### 3.2 RUN — 执行构建命令
 
@@ -97,7 +97,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 RUN apk add --no-cache curl bash
 ```
 
-> ⚠️ **缓存清理必须在同一 RUN 中**：`rm -rf /var/lib/apt/lists/*` 必须与 `apt-get update` 在同一 RUN 指令中，否则缓存清理单独成层且无法被移除。
+> **缓存清理必须在同一 RUN 中**：`rm -rf /var/lib/apt/lists/*` 必须与 `apt-get update` 在同一 RUN 指令中，否则缓存清理单独成层且无法被移除。
 
 ### 3.3 COPY vs ADD
 
@@ -129,7 +129,7 @@ ENV APP_VERSION=$APP_VERSION       # 将 ARG 的值持久化为 ENV
 EXPOSE 8080
 ```
 
-> 💡 仅声明容器监听的端口，**不会自动映射端口**——是文档作用，运行时仍需 `-p 8080:8080` 才能真正映射。但 Kubernetes/Docker Compose 编排中 EXPOSE 信息会被自动发现。
+> 仅声明容器监听的端口，**不会自动映射端口**——是文档作用，运行时仍需 `-p 8080:8080` 才能真正映射。但 Kubernetes/Docker Compose 编排中 EXPOSE 信息会被自动发现。
 
 ### 3.6 CMD vs ENTRYPOINT（最容易混淆）
 
@@ -145,7 +145,7 @@ ENTRYPOINT ["java", "-jar", "app.jar"]
 CMD ["--spring.profiles.active=dev"]
 ```
 
-> ⚠️ **Exec vs Shell 形式与 PID 1 问题**：Shell 形式（不带方括号）会通过 `/bin/sh -c` 执行，PID 为 1 的不是应用进程，导致信号无法正确传递（`docker stop` 可能无法优雅关闭 Java 进程）。**始终使用 Exec 形式（JSON 数组语法）**：
+> **Exec vs Shell 形式与 PID 1 问题**：Shell 形式（不带方括号）会通过 `/bin/sh -c` 执行，PID 为 1 的不是应用进程，导致信号无法正确传递（`docker stop` 可能无法优雅关闭 Java 进程）。**始终使用 Exec 形式（JSON 数组语法）**：
 > - 正确：`ENTRYPOINT ["java", "-jar", "app.jar"]`（PID 1 是 Java 进程）
 > - 错误：`ENTRYPOINT java -jar app.jar`（PID 1 是 sh，Java 成为子进程）
 
@@ -281,7 +281,7 @@ docker-compose*.yml
 node_modules/
 ```
 
-> ⚠️ `docker build` 会将当前目录（构建上下文）**整个发送给 Docker 守护进程**。如果忘了忽略 `target/`，几百 MB 的编译输出会被传到守护进程，即使最终不会打包进镜像，构建第一步也会慢得令人崩溃。
+> `docker build` 会将当前目录（构建上下文）**整个发送给 Docker 守护进程**。如果忘了忽略 `target/`，几百 MB 的编译输出会被传到守护进程，即使最终不会打包进镜像，构建第一步也会慢得令人崩溃。
 
 ## 7. 构建自动化：Maven 插件与 Jenkins
 
@@ -328,7 +328,7 @@ node_modules/
 mvn clean package docker:build     # "Java 打包 → 镜像构建 → 推送"全流程
 ```
 
-> 💡 微服务多模块在每个模块配置该插件，根目录执行可批量构建推送；版本管理通过改 pom 中镜像版本号实现，无需手动改 Dockerfile。
+> 微服务多模块在每个模块配置该插件，根目录执行可批量构建推送；版本管理通过改 pom 中镜像版本号实现，无需手动改 Dockerfile。
 
 ### 7.2 Jenkins 流水线
 
@@ -378,7 +378,7 @@ EXPOSE 8080
 ENTRYPOINT ["java", "-Xms512m", "-Xmx1g", "-jar", "/app/app.jar"]
 ```
 
-> ⚠️ 不要以 root 运行 Java 进程——如果被攻破，攻击者有完全权限。
+> 不要以 root 运行 Java 进程——如果被攻破，攻击者有完全权限。
 
 ### 8.2 生产环境安全实践 6 条
 
@@ -406,7 +406,7 @@ HEALTHCHECK --interval=30s --timeout=3s --start-period=40s --retries=3 \
 -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/app/heapdump.hprof   # OOM 堆转储
 ```
 
-> ⚠️ **Java 8 及以下**：JVM 无法识别 Docker 容器内存限制，需添加 `-XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap`。
+> **Java 8 及以下**：JVM 无法识别 Docker 容器内存限制，需添加 `-XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap`。
 
 ### 8.4 多环境适配
 
@@ -470,7 +470,7 @@ docker buildx build --platform linux/amd64,linux/arm64 -t your-repo/springboot-a
 
 ## 11. 核心要点
 
-> 🎯 **核心要点**：
+> **核心要点**：
 > - Dockerfile 铁律：Exec 形式（PID 1）、合并 RUN（减层）、COPY 优先（语义清晰）、`--no-install-recommends` + 缓存清理同 RUN；
 > - 多阶段构建是**必做**（几百 MB → 一百多 MB）；
 > - 缓存优化：不变在前、变化在后，pom 分离先行；

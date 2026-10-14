@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [依赖与 Spring Boot 4 自动配置](#1-依赖与-spring-boot-4-自动配置)
 2. [JobRepository 接口与三种实现](#2-jobrepository-接口与三种实现)
@@ -64,7 +64,7 @@ class HelloJobConfig {
 }
 ```
 
-> 💡 自动配置细节：Boot 4 在 classpath 有 Batch 时自动装配 `JobRepository`、`JobLauncher` 等。需要自定义时，扩展 `DefaultBatchConfiguration`（或 `JdbcDefaultBatchConfiguration` / `MongoDefaultBatchConfiguration`）替换默认行为——**优先用继承替换，而非 @EnableBatchProcessing 全量接管**。
+> 自动配置细节：Boot 4 在 classpath 有 Batch 时自动装配 `JobRepository`、`JobLauncher` 等。需要自定义时，扩展 `DefaultBatchConfiguration`（或 `JdbcDefaultBatchConfiguration` / `MongoDefaultBatchConfiguration`）替换默认行为——**优先用继承替换，而非 @EnableBatchProcessing 全量接管**。
 
 ## 2. JobRepository 接口与三种实现
 
@@ -87,11 +87,11 @@ JobRepository（读写视图）
 
 | 实现 | 引入时机 | 持久化 | 重启支持 | 线程安全 | 适用场景 |
 |------|---------|--------|---------|---------|---------|
-| ResourcelessJobRepository | 5.2 引入，6.0 默认 | 无（不落库） | ❌ | ❌（不可多线程） | 一次性 Job（自有 JVM、单线程）、测试、快速原型 |
-| JdbcJobRepository（JdbcDefaultBatchConfiguration） | 经典实现 | JDBC 6 张表 | ✅ | ✅ | 生产标准选择（可监控、可重启、可审计） |
-| MongoJobRepository（MongoDefaultBatchConfiguration） | 5.2 引入 | MongoDB 集合 | ✅ | ✅ | 已有 Mongo 基础设施、不想维护关系表 |
+| ResourcelessJobRepository | 5.2 引入，6.0 默认 | 无（不落库） | ✗ | ✗（不可多线程） | 一次性 Job（自有 JVM、单线程）、测试、快速原型 |
+| JdbcJobRepository（JdbcDefaultBatchConfiguration） | 经典实现 | JDBC 6 张表 | ✓ | ✓ | 生产标准选择（可监控、可重启、可审计） |
+| MongoJobRepository（MongoDefaultBatchConfiguration） | 5.2 引入 | MongoDB 集合 | ✓ | ✓ | 已有 Mongo 基础设施、不想维护关系表 |
 
-> ⚠️ **Resourceless 的坑**：不保存元数据意味着 **没有重启能力、没有运行历史、不能跨 JVM 共享状态**（远程分区/远程 Chunking 明确不可用）。它只适合"跑完就结束、失败重来"的场景——生产环境默认必须显式配置 JDBC 或 Mongo 仓库。
+> **Resourceless 的坑**：不保存元数据意味着 **没有重启能力、没有运行历史、不能跨 JVM 共享状态**（远程分区/远程 Chunking 明确不可用）。它只适合"跑完就结束、失败重来"的场景——生产环境默认必须显式配置 JDBC 或 Mongo 仓库。
 
 ### 2.3 显式配置 JDBC 仓库（6.0 新注解）
 
@@ -133,7 +133,7 @@ class BatchInfraConfig {
   BATCH_STEP_EXECUTION_SEQ
 ```
 
-> ⚠️ **6.0 迁移关键点**：序列 `BATCH_JOB_SEQ` 改名为 **`BATCH_JOB_INSTANCE_SEQ`**。官方在 `spring-batch-core` 的 `org.springframework.batch.core.migration/6.0` 下提供了各数据库的迁移脚本（注意：DB2 的脚本仅适用于 Informix，DB2 LUW 不支持序列改名，需手工处理）。
+> **6.0 迁移关键点**：序列 `BATCH_JOB_SEQ` 改名为 **`BATCH_JOB_INSTANCE_SEQ`**。官方在 `spring-batch-core` 的 `org.springframework.batch.core.migration/6.0` 下提供了各数据库的迁移脚本（注意：DB2 的脚本仅适用于 Informix，DB2 LUW 不支持序列改名，需手工处理）。
 
 ### 3.2 核心表结构
 
@@ -189,7 +189,7 @@ CREATE TABLE BATCH_JOB_EXECUTION (
 | KEY_NAME / STRING_VAL / LONG_VAL / DOUBLE_VAL / DATE_VAL | 键 + 按类型分列存储 |
 | IDENTIFYING | 是否参与 JOB_KEY 计算（`false` 的参数不决定实例身份） |
 
-> 💡 工程价值：`IDENTIFYING=false` 的参数（如"运行批次号"）**不参与实例身份判定**——同参数重跑时，这类参数的变化不会产生新实例。这是设计"重跑但换批次号"场景的关键。
+> 工程价值：`IDENTIFYING=false` 的参数（如"运行批次号"）**不参与实例身份判定**——同参数重跑时，这类参数的变化不会产生新实例。这是设计"重跑但换批次号"场景的关键。
 
 ### 3.3 主键为什么用序列而非自增
 
@@ -235,7 +235,7 @@ CREATE TABLE BATCH_JOB_EXECUTION (
         transactionManagerRef = "batchTransactionManager")
 ```
 
-> 💡 生产最常见的元数据错误就是"业务数据源与批处理数据源混用"：chunk 事务提交把元数据状态也带进同一个事务，重启逻辑与业务回滚相互污染。
+> 生产最常见的元数据错误就是"业务数据源与批处理数据源混用"：chunk 事务提交把元数据状态也带进同一个事务，重启逻辑与业务回滚相互污染。
 
 ## 6. 6.0 数据库迁移与最佳实践
 
@@ -259,6 +259,6 @@ CREATE TABLE BATCH_JOB_EXECUTION (
 | 按 VERSION 更新 | 每个 chunk 提交 | `BATCH_STEP_EXECUTION(VERSION)` |
 | 按 (STEP_NAME, JOB_EXECUTION_ID) | 每次步骤执行前 | `BATCH_STEP_EXECUTION(STEP_NAME, JOB_EXECUTION_ID)` |
 
-> 🎯 **核心要点**：6.0 默认 Resourceless 让入门门槛归零，但生产必须显式选择 JDBC 或 MongoDB 仓库——元数据是重启、审计、监控的根基。JDBC 方案记住"6 表 + 3 序列 + 乐观锁 + IDENTIFYING 参数"，迁移注意序列改名与 v5 失败实例兼容性问题。
+> **核心要点**：6.0 默认 Resourceless 让入门门槛归零，但生产必须显式选择 JDBC 或 MongoDB 仓库——元数据是重启、审计、监控的根基。JDBC 方案记住"6 表 + 3 序列 + 乐观锁 + IDENTIFYING 参数"，迁移注意序列改名与 v5 失败实例兼容性问题。
 
 **下一模块**：[03-Job与Step构建：Tasklet与Chunk模型](03-Job与Step构建：Tasklet与Chunk模型.md)　|　**返回总览**：[00-Spring Batch知识体系总览](00-Spring Batch知识体系总览.md)

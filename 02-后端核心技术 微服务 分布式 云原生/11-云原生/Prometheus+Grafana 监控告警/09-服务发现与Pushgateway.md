@@ -1,6 +1,6 @@
 # 09 - 服务发现与 Pushgateway
 
-> 🎯 动态环境中手动维护 Target 列表是运维噩梦 — K8s/Consul/file_sd 服务发现让 Prometheus 自动感知目标变化；Pushgateway 解决短任务监控的拉模型短板
+> 动态环境中手动维护 Target 列表是运维噩梦 — K8s/Consul/file_sd 服务发现让 Prometheus 自动感知目标变化；Pushgateway 解决短任务监控的拉模型短板
 
 ---
 
@@ -19,11 +19,11 @@
 
 | 方式 | 适用场景 | 复杂度 |
 |------|----------|:---:|
-| `static_configs` | 固定 IP 的传统部署 | ⭐ |
-| `file_sd` | CMDB/Ansible 生成 Target 列表 | ⭐⭐ |
-| `kubernetes_sd` | K8s 环境（自动发现 Pod/Service） | ⭐⭐⭐ |
-| `consul_sd` | Consul 注册中心环境 | ⭐⭐ |
-| `dns_sd` | DNS SRV 记录 | ⭐ |
+| `static_configs` | 固定 IP 的传统部署 | ★ |
+| `file_sd` | CMDB/Ansible 生成 Target 列表 | ★★ |
+| `kubernetes_sd` | K8s 环境（自动发现 Pod/Service） | ★★★ |
+| `consul_sd` | Consul 注册中心环境 | ★★ |
+| `dns_sd` | DNS SRV 记录 | ★ |
 
 ---
 
@@ -128,7 +128,7 @@ consul services register -name=user-service -port=8080 \
 
 ## 4. 基于文件的服务发现（file_sd）
 
-> 💡 适合非 K8s 的动态环境，配合 CMDB/CI 自动生成 Target 文件。
+> 适合非 K8s 的动态环境，配合 CMDB/CI 自动生成 Target 文件。
 
 ```yaml
 scrape_configs:
@@ -177,7 +177,7 @@ register_target() {
 
 ## 5. Pushgateway：短任务监控
 
-> 💡 Prometheus 拉模型不适合短任务（Cron Job/Batch）。Pushgateway 作为中间网关接收短任务主动推送的指标。
+> Prometheus 拉模型不适合短任务（Cron Job/Batch）。Pushgateway 作为中间网关接收短任务主动推送的指标。
 
 ### 5.1 架构
 
@@ -248,7 +248,7 @@ pushGateway.pushAdd(registry, "batch_jobs",
 
 ## 6. Pushgateway 使用规范
 
-| ✅ DO | ❌ DON'T |
+| ✓ DO | ✗ DON'T |
 |-------|----------|
 | 仅用于短任务/Cron Job | 不要用于长期运行的服务 |
 | 任务结束前推送一次 | 不要持续推送（会覆盖历史） |
@@ -256,7 +256,7 @@ pushGateway.pushAdd(registry, "batch_jobs",
 | 使用 `pushAdd`（增量） | 慎用 `push`（全量替换） |
 | 配合 `honor_labels: true` | — |
 
-> ⚠️ **Pushgateway 陷阱**：Pushgateway 不会自动清理过期指标。如果短任务挂了，上次推送的指标会永存，导致误报"任务成功"。解决方案：使用 `push_time` 指标 + 告警规则检查时效性。
+> **Pushgateway 陷阱**：Pushgateway 不会自动清理过期指标。如果短任务挂了，上次推送的指标会永存，导致误报"任务成功"。解决方案：使用 `push_time` 指标 + 告警规则检查时效性。
 
 ```promql
 # 告警：指标超过 2 小时未更新（任务可能已挂）

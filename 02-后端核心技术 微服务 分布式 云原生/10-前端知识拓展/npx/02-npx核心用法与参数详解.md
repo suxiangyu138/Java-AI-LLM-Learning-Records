@@ -1,6 +1,6 @@
 # 02 - npx 核心用法与参数详解
 
-> 🎯 npx 的全部核心用法浓缩于此：跑本地命令、临时下载、固定版本、选项速查、参数解析陷阱。掌握本章即可应对 95% 的 npx 场景
+> npx 的全部核心用法浓缩于此：跑本地命令、临时下载、固定版本、选项速查、参数解析陷阱。掌握本章即可应对 95% 的 npx 场景
 
 ---
 
@@ -33,7 +33,7 @@ npm install -D prettier
 npx prettier --write src/
 ```
 
-> 💡 **等价关系**：`npx prettier` 与直接执行 `./node_modules/.bin/prettier` 等价，但 npx 写法更简洁，且工具没装时会自动兜底临时安装。
+> **等价关系**：`npx prettier` 与直接执行 `./node_modules/.bin/prettier` 等价，但 npx 写法更简洁，且工具没装时会自动兜底临时安装。
 
 ### 1.3 检查环境
 
@@ -62,7 +62,7 @@ npx prettier@3.3.3 --version    # 3.3.3
 npx -p typescript@5.6.2 tsc --version   # Version 5.6.2
 ```
 
-> ⚠️ **脚手架必须用 @latest**：如果本地缓存了旧版 create-vite，直接 `npx create-vite` 可能用到缓存旧版。写 `npx create-vite@latest` 确保拿到最新。
+> **脚手架必须用 @latest**：如果本地缓存了旧版 create-vite，直接 `npx create-vite` 可能用到缓存旧版。写 `npx create-vite@latest` 确保拿到最新。
 
 ---
 
@@ -92,7 +92,7 @@ npx -c 'eslint . && prettier --write .'
 npx --no some-tool
 ```
 
-> 💡 **`-p` 的坑**：`-p` 在 **npx** 里是 `--package` 的简写；但在 **npm** 里 `-p` 是 `--parseable`（机器可读输出）的简写。两个工具对同一简写含义不同，混用会翻车。
+> **`-p` 的坑**：`-p` 在 **npx** 里是 `--package` 的简写；但在 **npm** 里 `-p` 是 `--parseable`（机器可读输出）的简写。两个工具对同一简写含义不同，混用会翻车。
 
 ---
 
@@ -101,10 +101,10 @@ npx --no some-tool
 ### 4.1 npx：选项必须在位置参数之前
 
 ```bash
-# ✅ 正确：选项在前
+# ✓ 正确：选项在前
 npx -p typescript tsc --version
 
-# ❌ 错误：--package 会被当成 tsc 的参数吞掉
+# ✗ 错误：--package 会被当成 tsc 的参数吞掉
 npx tsc --version -p typescript
 ```
 
@@ -126,7 +126,7 @@ npx prettier --write --tab-width 2 src/
 npx -c 'prettier --write "$@"' sh -- src/
 ```
 
-> 🎯 **记忆口诀**：npx 选项在左，命令参数在右；npm exec 用 `--` 划清界限。
+> **记忆口诀**：npx 选项在左，命令参数在右；npm exec 用 `--` 划清界限。
 
 ---
 
@@ -150,14 +150,14 @@ npx -c 'prettier --write "$@"' sh -- src/
 ```
 
 ```bash
-npm run lint      # ✅ 走脚本（推荐：团队约定统一）
-npx eslint .      # ✅ 临时跑（推荐：没配脚本时）
+npm run lint      # ✓ 走脚本（推荐：团队约定统一）
+npx eslint .      # ✓ 临时跑（推荐：没配脚本时）
 ```
 
-> 💡 **最佳实践**：项目内的固定流程（lint/format/build/test）写进 `scripts` 用 `npm run`；临时的、一次性的、工具性的用 `npx`。脚本里调工具时优先用 `npm run` 间接调用，避免版本漂移。
+> **最佳实践**：项目内的固定流程（lint/format/build/test）写进 `scripts` 用 `npm run`；临时的、一次性的、工具性的用 `npx`。脚本里调工具时优先用 `npm run` 间接调用，避免版本漂移。
 
 ---
 
-> 🎯 **核心要点**：npx 五板斧 — ① 直接跑（自动装）② 本地优先 ③ `@版本` 固定 ④ `-p` 指定包 ⑤ `-c` 跑命令串。牢记"选项在前、参数在后"，`@latest` 用于脚手架，`-y` 用于 CI。
+> **核心要点**：npx 五板斧 — ① 直接跑（自动装）② 本地优先 ③ `@版本` 固定 ④ `-p` 指定包 ⑤ `-c` 跑命令串。牢记"选项在前、参数在后"，`@latest` 用于脚手架，`-y` 用于 CI。
 
 **下一模块**：[03-npx实战场景大全](03-npx实战场景大全.md) / **返回总览**：[00-npx知识体系总览](00-npx知识体系总览.md)

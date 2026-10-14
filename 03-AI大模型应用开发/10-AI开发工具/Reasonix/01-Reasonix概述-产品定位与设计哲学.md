@@ -2,7 +2,7 @@
 
 > Reasonix（npm 包名 `reasonix`，仓库 DeepSeek-Reasonix）是 esengine 出品的开源终端 AI 编程 Agent，只做一件事：把 DeepSeek 的前缀缓存用工程手段压榨到极致。
 
-## 📚 目录
+## 目录
 
 1. [产品定位](#1-产品定位)
 2. [核心设计哲学：只为 DeepSeek 打造](#2-核心设计哲学只为-deepseek-打造)
@@ -102,7 +102,7 @@ Reasonix 填补了 DeepSeek 生态的空白：DeepSeek 官方没有编程 Agent 
 | "真需要 DeepSeek 原生 Agent 吗？" | 有开发者写微型桥接程序在 Codex 中使用 DeepSeek V4 Pro 也实现 95%+ 命中率；也有人用 Claude Code + DeepSeek V4 更省钱 |
 | 反方辩护 | 通用工具的高命中率靠"碰巧不改前缀"，Reasonix 是把缓存稳定性作为**架构级硬约束**（被 CodeWhale 等项目作为 Feature Request 的设计输入） |
 
-> 🎯 核心要点：Reasonix 的价值主张不是"DeepSeek 上最好的 Agent"，而是"**把 DeepSeek 成本做到极致**的 Agent"——预算敏感、长会话、高频迭代场景是它的甜区。
+> 核心要点：Reasonix 的价值主张不是"DeepSeek 上最好的 Agent"，而是"**把 DeepSeek 成本做到极致**的 Agent"——预算敏感、长会话、高频迭代场景是它的甜区。
 
 ---
 

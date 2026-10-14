@@ -39,7 +39,7 @@ async def root():
 # 启动：uvicorn main:app --reload
 ```
 
-> 💡 FastAPI 由 Sebastian Ramirez（tiangolo）于 2018 年创建，当前是 GitHub 上星标最高的 Python Web 框架之一。
+> FastAPI 由 Sebastian Ramirez（tiangolo）于 2018 年创建，当前是 GitHub 上星标最高的 Python Web 框架之一。
 
 ### 1.2 FastAPI 与 Flask / Django 的区别
 
@@ -53,7 +53,7 @@ async def root():
 | **学习曲线** | 中等（类型注解 + 异步） | 低（入门简单） | 高（框架庞大） |
 | **适用场景** | AI 服务 / 微服务 / 高并发 API | 小型项目 / 原型 | 企业级全栈应用 |
 
-> 🎯 面试亮点：新项目无历史包袱的优先选 FastAPI。AI 场景下 FastAPI + `httpx.AsyncClient` 是调用 LLM 的最佳组合。
+> 面试亮点：新项目无历史包袱的优先选 FastAPI。AI 场景下 FastAPI + `httpx.AsyncClient` 是调用 LLM 的最佳组合。
 
 ### 1.3 路径参数 vs 查询参数 vs 请求体
 
@@ -130,7 +130,7 @@ class User(BaseModel):
         }
 ```
 
-> 💡 `from_attributes=True` 允许从 ORM 模型（SQLAlchemy/Tortoise）直接创建 Pydantic 实例，替代早期版本的 `orm_mode=True`。
+> `from_attributes=True` 允许从 ORM 模型（SQLAlchemy/Tortoise）直接创建 Pydantic 实例，替代早期版本的 `orm_mode=True`。
 
 ### 1.5 响应模型（response_model）
 
@@ -173,7 +173,7 @@ def list_users():
 | `response_model_exclude` | 排除指定字段 |
 | `response_model_by_alias` | 按别名返回 |
 
-> ⚠️ `response_model` 是**类型过滤**而非数据转换。敏感字段在模型中不存在就不会被返回，比手动过滤更安全。
+> `response_model` 是**类型过滤**而非数据转换。敏感字段在模型中不存在就不会被返回，比手动过滤更安全。
 
 ### 1.6 异步路由与同步路由
 
@@ -201,7 +201,7 @@ async def read_async():
 | `def` | 线程池（ThreadPool） | CPU 密集型、同步 I/O |
 | `async def` | 事件循环（Event Loop） | 异步 I/O、数据库查询、网络请求 |
 
-> 💡 绝大多数场景用 `async def`。内部调用同步库时也可以用 `def`，FastAPI 会自动用线程池执行。
+> 绝大多数场景用 `async def`。内部调用同步库时也可以用 `def`，FastAPI 会自动用线程池执行。
 
 ### 1.7 表单数据处理
 
@@ -234,7 +234,7 @@ def upload_multiple(files: list[UploadFile] = File(...)):
     return {"count": len(files)}
 ```
 
-> ⚠️ `UploadFile` 使用 SpooledTmpFile，小文件在内存，大文件在磁盘，比直接 `bytes` 更高效。
+> `UploadFile` 使用 SpooledTmpFile，小文件在内存，大文件在磁盘，比直接 `bytes` 更高效。
 
 ### 1.8 Request 对象直接访问
 
@@ -330,7 +330,7 @@ def register(email: str, tasks: BackgroundTasks):
     return {"message": "Registration successful, email sending in background"}
 ```
 
-> 💡 `BackgroundTasks` 适合轻量级任务（发送邮件、写日志）。重量级任务应使用 Celery / RabbitMQ 等消息队列。
+> `BackgroundTasks` 适合轻量级任务（发送邮件、写日志）。重量级任务应使用 Celery / RabbitMQ 等消息队列。
 
 ### 1.11 静态文件服务
 
@@ -365,7 +365,7 @@ async def lifespan(app: FastAPI):
 app = FastAPI(lifespan=lifespan)
 ```
 
-> ⚠️ `@app.on_event("startup"/"shutdown")` 方式在 FastAPI 新版本中已标记为 deprecated，推荐使用 `lifespan` 上下文管理器。
+> `@app.on_event("startup"/"shutdown")` 方式在 FastAPI 新版本中已标记为 deprecated，推荐使用 `lifespan` 上下文管理器。
 
 ### 1.13 WebSocket 支持
 
@@ -504,7 +504,7 @@ def create_item(item: Item):
     return item
 ```
 
-> 🎯 FastAPI 自动从类型注解、docstring、`response_model` 生成完整的 OpenAPI 3.0 规范文档，无需手动编写 YAML/JSON。
+> FastAPI 自动从类型注解、docstring、`response_model` 生成完整的 OpenAPI 3.0 规范文档，无需手动编写 YAML/JSON。
 
 ### 1.18 分页查询实现
 
@@ -612,7 +612,7 @@ def search(params: CommonQueryParams = Depends()):
     return {"query": params.q, "page": params.page}
 ```
 
-> 🎯 面试亮点：FastAPI 的 DI 比 Spring Boot 的 `@Autowired` 更轻量、更透明。DI 系统还支持 `Global Dependencies`（在 `app` 或 `APIRouter` 级别添加依赖）。
+> 面试亮点：FastAPI 的 DI 比 Spring Boot 的 `@Autowired` 更轻量、更透明。DI 系统还支持 `Global Dependencies`（在 `app` 或 `APIRouter` 级别添加依赖）。
 
 ### 2.2 Pydantic v2 核心特性
 
@@ -707,7 +707,7 @@ app.add_middleware(LoggingMiddleware)
 Request → Middleware 1 (入) → Middleware 2 (入) → Route Handler → Middleware 2 (出) → Middleware 1 (出) → Response
 ```
 
-> 💡 中间件中修改请求/响应是常见需求：请求日志记录、性能监控、请求ID注入、统一错误处理。
+> 中间件中修改请求/响应是常见需求：请求日志记录、性能监控、请求ID注入、统一错误处理。
 
 ### 2.4 CORS 跨域配置
 
@@ -787,8 +787,8 @@ async def create_user(name: str, email: str, db: AsyncSession = Depends(get_db))
     return user
 ```
 
-> 💡 SQLAlchemy 2.0 推荐 `select()` 语法替代旧版 `Query API`。异步会话必须用 `async with` 管理。
-> ⚠️ `expire_on_commit=False` 避免提交后对象过期导致后续访问触发同步查询。
+> SQLAlchemy 2.0 推荐 `select()` 语法替代旧版 `Query API`。异步会话必须用 `async with` 管理。
+> `expire_on_commit=False` 避免提交后对象过期导致后续访问触发同步查询。
 
 ### 2.6 Tortoise ORM（异步 ORM）
 
@@ -966,7 +966,7 @@ async def read_users_me(current_user: User = Depends(get_current_user)):
     return current_user
 ```
 
-> 💡 `OAuth2PasswordBearer` 自动从请求头提取 `Authorization: Bearer <token>`，失败返回 401。
+> `OAuth2PasswordBearer` 自动从请求头提取 `Authorization: Bearer <token>`，失败返回 401。
 
 ### 2.9 FastAPI 性能优化策略
 
@@ -1055,7 +1055,7 @@ async def dashboard():
     return {"users": users, "stats": stats}
 ```
 
-> 💡 `httpx.AsyncClient` 是 FastAPI 生态中最常用的异步 HTTP 客户端，支持连接池复用。
+> `httpx.AsyncClient` 是 FastAPI 生态中最常用的异步 HTTP 客户端，支持连接池复用。
 
 ### 2.11 FastAPI 测试（TestClient）
 
@@ -1095,7 +1095,7 @@ def test_auth_required():
     assert response.status_code == 401
 ```
 
-> ⚠️ `TestClient` 基于 `httpx`，异步路由在测试中也可直接调用。使用 `pytest` 运行测试。
+> `TestClient` 基于 `httpx`，异步路由在测试中也可直接调用。使用 `pytest` 运行测试。
 
 ### 2.12 FastAPI 项目结构规范
 
@@ -2368,7 +2368,7 @@ app.include_router(router_v1)
 app.include_router(router_v2)
 ```
 
-> 💡 推荐使用 URL 路径版本（`/api/v1/`、`/api/v2/`），最直观、最容易缓存、无需自定义 Header。保持 v1 和 v2 共存，给客户端迁移时间。
+> 推荐使用 URL 路径版本（`/api/v1/`、`/api/v2/`），最直观、最容易缓存、无需自定义 Header。保持 v1 和 v2 共存，给客户端迁移时间。
 
 ---
 
@@ -2601,4 +2601,4 @@ app.include_router(router_v2)
 
 ---
 
-> 🎯 **面试核心策略**：FastAPI 面试的核心亮点在于**异步性能 + Pydantic 类型安全 + 自动文档 + 依赖注入**四个关键词。准备 1-2 个完整项目（AI 对话 API、电商订单系统、文件上传服务），可以现场讲解架构设计，展现对 FastAPI 生态的深入理解和工程化实践经验。
+> **面试核心策略**：FastAPI 面试的核心亮点在于**异步性能 + Pydantic 类型安全 + 自动文档 + 依赖注入**四个关键词。准备 1-2 个完整项目（AI 对话 API、电商订单系统、文件上传服务），可以现场讲解架构设计，展现对 FastAPI 生态的深入理解和工程化实践经验。

@@ -1,7 +1,7 @@
 # 06-MCP 协议集成
 > Model Context Protocol 在 Spring AI 2.0 的原生实现：@McpTool 编程模型、Client/Server 双角色、传输层与安全
 
-## 📚 目录
+## 目录
 1. [MCP 是什么：协议三要素](#1-mcp-是什么协议三要素)
 2. [Spring AI 的 MCP 实现方式](#2-spring-ai-的-mcp-实现方式)
 3. [作为 MCP Client：接入外部工具](#3-作为-mcp-client接入外部工具)
@@ -29,7 +29,7 @@ MCP（Model Context Protocol，Anthropic 提出、开源协议）让 LLM 应用�
 └─────────────┘             └─────────────┘
 ```
 
-> 💡 **定位**：MCP 是"LLM 的 USB-C 接口"——一次接入，任何支持 MCP 的客户端都能用你的工具；Spring AI 把 MCP 做成一等公民，本地 `@Tool` 与 MCP 远程工具共用同一个 `ToolCallback` 抽象。
+> **定位**：MCP 是"LLM 的 USB-C 接口"——一次接入，任何支持 MCP 的客户端都能用你的工具；Spring AI 把 MCP 做成一等公民，本地 `@Tool` 与 MCP 远程工具共用同一个 `ToolCallback` 抽象。
 
 ## 2. Spring AI 的 MCP 实现方式
 
@@ -117,7 +117,7 @@ public class McpToolConfiguration {
 | 双角色 | 该应用既可为自己的 ChatClient 服务，也可被其他应用当作外部 MCP 调用 |
 | 集成 | 与 Spring Batch、Cloud Config 等组合，构建企业 MCP 服务 |
 
-> 🎯 **核心要点**：`@McpTool` 与 `@Tool` 的差别是**暴露范围**——`@Tool` 只服务本应用 ChatClient；`@McpTool` 把能力发布为协议服务，任何 MCP 客户端（其他 Spring AI 应用、Claude 桌面端、自研 Agent）都能调用。
+> **核心要点**：`@McpTool` 与 `@Tool` 的差别是**暴露范围**——`@Tool` 只服务本应用 ChatClient；`@McpTool` 把能力发布为协议服务，任何 MCP 客户端（其他 Spring AI 应用、Claude 桌面端、自研 Agent）都能调用。
 
 ## 5. 传输层：Streamable HTTP 与 STDIO
 
@@ -134,7 +134,7 @@ spring:
         transport: http    # http | stdio（默认 http）
 ```
 
-> ⚠️ **迁移警告**：1.x 配置的 SSE 传输端点（`/mcp/sse`）已弃用，2.0 客户端默认连 Streamable HTTP 端点——老 MCP Server 若只支持 SSE，客户端需显式配置或升级 Server。
+> **迁移警告**：1.x 配置的 SSE 传输端点（`/mcp/sse`）已弃用，2.0 客户端默认连 Streamable HTTP 端点——老 MCP Server 若只支持 SSE，客户端需显式配置或升级 Server。
 
 ## 6. 工具命名、过滤与安全
 
@@ -164,7 +164,7 @@ spring:
 
 ## 8. 核心要点
 
-> 🎯 **核心要点**：
+> **核心要点**：
 > - MCP 三要素：Tools（执行）、Resources（数据）、Prompts（模板），Spring AI 全支持；
 > - `@McpTool` 发布能力（Server），`mcp-servers.json` 接入能力（Client），双角色可并存；
 > - 2.0 传输层内移：Streamable HTTP 默认，SSE 弃用，STDIO 留给本地；

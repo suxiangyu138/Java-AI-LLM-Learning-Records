@@ -1,7 +1,7 @@
 # Anthropic Messages API 协议基础
 > Anthropic Messages API 是 Anthropic 定义的 RESTful 接口格式，已成为第三方服务商的事实兼容标准
 
-## 📚 目录
+## 目录
 1. [请求格式](#1-请求格式)
 2. [响应格式](#2-响应格式)
 3. [流式输出 (SSE)](#3-流式输出-sse)
@@ -38,18 +38,18 @@ anthropic-version: 2023-06-01
 
 | 字段 | 类型 | 必需 | 说明 |
 |------|------|:---:|------|
-| `model` | string | ✅ | 模型名称 |
-| `messages` | array | ✅ | 对话消息数组 |
-| `max_tokens` | int | ⚠️ | 最大输出 token（部分兼容服务改为可选） |
-| `system` | string/array | ❌ | 系统提示词（Anthropic 特有，非 `messages` 内） |
-| `temperature` | float | ❌ | 采样温度 (0-2)，默认 1.0 |
-| `top_p` | float | ❌ | 核采样，默认 1.0 |
-| `top_k` | int | ❌ | Top-K 采样 |
-| `stop_sequences` | array | ❌ | 停止词数组 |
-| `stream` | bool | ❌ | 是否流式输出 |
-| `metadata` | object | ❌ | 用户标识等元数据 |
-| `tools` | array | ❌ | 工具定义数组 |
-| `tool_choice` | object | ❌ | 工具选择策略 |
+| `model` | string | ✓ | 模型名称 |
+| `messages` | array | ✓ | 对话消息数组 |
+| `max_tokens` | int | | 最大输出 token（部分兼容服务改为可选） |
+| `system` | string/array | ✗ | 系统提示词（Anthropic 特有，非 `messages` 内） |
+| `temperature` | float | ✗ | 采样温度 (0-2)，默认 1.0 |
+| `top_p` | float | ✗ | 核采样，默认 1.0 |
+| `top_k` | int | ✗ | Top-K 采样 |
+| `stop_sequences` | array | ✗ | 停止词数组 |
+| `stream` | bool | ✗ | 是否流式输出 |
+| `metadata` | object | ✗ | 用户标识等元数据 |
+| `tools` | array | ✗ | 工具定义数组 |
+| `tool_choice` | object | ✗ | 工具选择策略 |
 
 ### 1.3 消息格式
 
@@ -74,7 +74,7 @@ anthropic-version: 2023-06-01
 }
 ```
 
-> 💡 **兼容要点**：第三方服务通常将 `system` 参数映射为内部 system prompt 或拼接为首条 user 消息。部分服务不支持 `top_k`、`metadata` 等字段。
+> **兼容要点**：第三方服务通常将 `system` 参数映射为内部 system prompt 或拼接为首条 user 消息。部分服务不支持 `top_k`、`metadata` 等字段。
 
 ---
 
@@ -169,7 +169,7 @@ event: message_stop
 data: {"type":"message_stop"}
 ```
 
-> 💡 **兼容要点**：第三方服务的流式格式可能略有差异。部分服务（如 DeepSeek）将 `thinking` block 映射为 `reasoning_content` 字段。建议使用 SDK 层的 stream 解析，而非手动解析 SSE。
+> **兼容要点**：第三方服务的流式格式可能略有差异。部分服务（如 DeepSeek）将 `thinking` block 映射为 `reasoning_content` 字段。建议使用 SDK 层的 stream 解析，而非手动解析 SSE。
 
 ---
 
@@ -235,7 +235,7 @@ data: {"type":"message_stop"}
 }
 ```
 
-> 💡 **兼容要点**：并非所有兼容服务都支持 Tool Use。DeepSeek V3/V4、OpenAI 兼容端点支持；部分轻量服务可能不支持。检查服务商文档确认。
+> **兼容要点**：并非所有兼容服务都支持 Tool Use。DeepSeek V3/V4、OpenAI 兼容端点支持；部分轻量服务可能不支持。检查服务商文档确认。
 
 ---
 
@@ -262,11 +262,11 @@ Authorization: Bearer sk-xxxxxxxxx
 x-api-key: sk-xxxxxxxxx
 ```
 
-> 💡 部分网关（如 one-api）支持同时接受 `x-api-key`、`Authorization` 或自定义 Header。
+> 部分网关（如 one-api）支持同时接受 `x-api-key`、`Authorization` 或自定义 Header。
 
 ---
 
-> 🎯 **核心要点**：Anthropic Messages API 的核心差异在于 `system` 独立于 `messages`、`content` 为 block 数组、以及独特的 SSE 流式事件体系。兼容服务通常简化或映射这些特性，SDK 级别的 base_url 切换是最佳实践。
+> **核心要点**：Anthropic Messages API 的核心差异在于 `system` 独立于 `messages`、`content` 为 block 数组、以及独特的 SSE 流式事件体系。兼容服务通常简化或映射这些特性，SDK 级别的 base_url 切换是最佳实践。
 
 ---
 

@@ -1,5 +1,5 @@
 # 10-浏览器DevTools调试
-> 🎯 后端开发者的前端调试利器 — 掌握Network面板读懂请求全过程、Console查看前端错误、Application检查存储状态
+> 后端开发者的前端调试利器 — 掌握Network面板读懂请求全过程、Console查看前端错误、Application检查存储状态
 
 ---
 
@@ -23,7 +23,7 @@
 │                                         │
 │  Elements → 看DOM结构、CSS样式          │
 │  Console  → 看JS日志和错误              │
-│  Network  → 看所有HTTP请求 ⭐最关键      │
+│  Network  → 看所有HTTP请求 ★最关键      │
 │  Sources  → 看JS源码、打断点            │
 │  Application → 看Cookie/localStorage    │
 │                                         │
@@ -32,11 +32,11 @@
 
 | 面板 | 后端使用频率 | 用途 |
 |------|:---:|------|
-| **Network** | ⭐⭐⭐⭐⭐ | 排查接口问题 |
-| **Console** | ⭐⭐⭐⭐ | 看前端报错 |
-| **Application** | ⭐⭐⭐ | 检查Cookie/Token存储 |
-| **Elements** | ⭐⭐ | 看页面结构 |
-| **Sources** | ⭐ | 断点调试JS（调前端才用） |
+| **Network** | ★★★★★ | 排查接口问题 |
+| **Console** | ★★★★ | 看前端报错 |
+| **Application** | ★★★ | 检查Cookie/Token存储 |
+| **Elements** | ★★ | 看页面结构 |
+| **Sources** | ★ | 断点调试JS（调前端才用） |
 
 ---
 
@@ -96,7 +96,7 @@ Content Download 长 → 响应体太大（返回数据太多，需要分页）
 ### 3.1 常见前端错误
 
 ```javascript
-// ❌ 前端常见的报错（在Console中看到的）
+// ✗ 前端常见的报错（在Console中看到的）
 
 // 1. 接口404
 GET http://localhost:8080/api/user 404 (Not Found)
@@ -151,8 +151,8 @@ fetch('/api/users/1')
 ```text
 1. 打开 Application → Local Storage → http://localhost:3000
 2. 查找 Key: token / access_token / auth
-3. 如果找到了 → 前端把Token存在localStorage（⚠️ 有XSS风险）
-4. 如果没找到 → 看Cookies → 看Token是否在HttpOnly Cookie中（✅ 更安全）
+3. 如果找到了 → 前端把Token存在localStorage（有XSS风险）
+4. 如果没找到 → 看Cookies → 看Token是否在HttpOnly Cookie中（✓ 更安全）
 ```
 
 ---
@@ -193,4 +193,4 @@ Network面板 → 勾选 Disable cache
 
 ---
 
-> 🎯 **后端学DevTools的最小集合**：Network面板能看懂请求的完整生命周期 + 能从Console错误信息判断是前端问题还是后端问题。
+> **后端学DevTools的最小集合**：Network面板能看懂请求的完整生命周期 + 能从Console错误信息判断是前端问题还是后端问题。

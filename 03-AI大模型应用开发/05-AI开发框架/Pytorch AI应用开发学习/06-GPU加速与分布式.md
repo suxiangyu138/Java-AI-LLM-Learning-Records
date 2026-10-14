@@ -2,7 +2,7 @@
 
 > 训练提速三件套：CUDA 设备管理（to(device)）、AMP 混合精度（FP16 显存减半+提速）、DDP 多卡并行——单卡到多卡的标准路径。
 
-## 📚 目录
+## 目录
 
 1. [GPU 设备管理](#1-gpu-设备管理)
 2. [显存优化基础](#2-显存优化基础)
@@ -247,7 +247,7 @@ torch.cuda.memory_summary() # 分配明细
 
 > "单卡到多卡的标准路径：先 AMP（显存减半 + 1.5-3 倍提速，损失必须 GradScaler 处理），再 DDP（torchrun 启动 + DistributedSampler 分片 + 只在主卡保存）。显存不够的顺序：AMP → 降 batch → 梯度累积——不要一上来就换卡。官方明确 DataParallel 已不推荐，新代码用 DDP。"
 
-> 🎯 核心要点：GPU 三件套（to(device)/AMP/DDP）；AMP = FP16 计算 + FP32 主权重 + GradScaler（显存减半）；DDP 取代 DP（torchrun + DistributedSampler + 主卡保存）；显存优化顺序（AMP→batch→累积→检查点）；大模型显存公式（训练 18B/参、推理 2B/参）；利用率低先查数据瓶颈。
+> 核心要点：GPU 三件套（to(device)/AMP/DDP）；AMP = FP16 计算 + FP32 主权重 + GradScaler（显存减半）；DDP 取代 DP（torchrun + DistributedSampler + 主卡保存）；显存优化顺序（AMP→batch→累积→检查点）；大模型显存公式（训练 18B/参、推理 2B/参）；利用率低先查数据瓶颈。
 
 ---
 

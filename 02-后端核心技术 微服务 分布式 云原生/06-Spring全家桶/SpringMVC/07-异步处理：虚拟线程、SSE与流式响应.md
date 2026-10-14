@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [Boot 4 虚拟线程：异步的新默认答案](#1-boot-4-虚拟线程异步的新默认答案)
 2. [SSE：Server-Sent Events 实时推送](#2-sseserver-sent-events-实时推送)
@@ -46,7 +46,7 @@ spring:
    - 监控工具需适配虚拟线程
 ```
 
-> 🎯 **核心要点**：虚拟线程默认化后，"异步接口"（DeferredResult/Callable）的意义从"不占线程"变为"满足协议需求"（SSE/长连接/流式）——**同步代码重新成为首选**。
+> **核心要点**：虚拟线程默认化后，"异步接口"（DeferredResult/Callable）的意义从"不占线程"变为"满足协议需求"（SSE/长连接/流式）——**同步代码重新成为首选**。
 
 ## 2. SSE：Server-Sent Events 实时推送
 
@@ -121,12 +121,12 @@ public SseEmitter subscribe(@RequestHeader(value = "Last-Event-ID", required = f
 |------|:---:|:---:|
 | 方向 | 服务端单向 | 双向 |
 | 协议 | 普通 HTTP | 独立协议（握手升级） |
-| 自动重连 | ✅ 内建 | ❌ 需自建 |
-| 穿透性 | ✅ 友好（HTTP） | 需网关/代理支持升级 |
+| 自动重连 | ✓ 内建 | ✗ 需自建 |
+| 穿透性 | ✓ 友好（HTTP） | 需网关/代理支持升级 |
 | 负载均衡 | 天然兼容 | 需处理连接粘滞 |
 | 适用 | 通知/进度/行情推送 | 聊天/协作/双向交互 |
 
-> 🎯 **选型口诀**："服务端要往客户端推" → SSE（简单可靠）；"客户端也要发" → WebSocket。**多数通知类场景 SSE 就够**，且运维成本远低于 WebSocket。
+> **选型口诀**："服务端要往客户端推" → SSE（简单可靠）；"客户端也要发" → WebSocket。**多数通知类场景 SSE 就够**，且运维成本远低于 WebSocket。
 
 ## 4. 流式响应：StreamingResponseBody
 
@@ -160,7 +160,7 @@ public ResponseEntity<StreamingResponseBody> exportUsers() {
 | flush | 每批 flush 客户端才能渐进看到 |
 | 超时 | 流式接口**不适合长超时等待**——配合异步/虚拟线程 |
 
-> ⚠️ **注意**：同步 StreamingResponseBody 在容器线程上执行（长时间流式占线程）；Boot 4 虚拟线程下无碍，平台线程模式下可用 `Callable<StreamingResponseBody>` 或 DeferredResult 外包。
+> **注意**：同步 StreamingResponseBody 在容器线程上执行（长时间流式占线程）；Boot 4 虚拟线程下无碍，平台线程模式下可用 `Callable<StreamingResponseBody>` 或 DeferredResult 外包。
 
 ## 5. DeferredResult 与 Callable
 
@@ -190,7 +190,7 @@ public DeferredResult<String> asyncTask() {
 | `SseEmitter` | SSE 推送 | 实时推送 |
 | `StreamingResponseBody` | 流式写 | 大结果导出 |
 
-> 💡 **虚拟线程时代的定位**：DeferredResult/Callable 的"不占线程"动机被虚拟线程取代；**保留价值在消息驱动场景**（MQ 回调完成 HTTP 请求）与长轮询。
+> **虚拟线程时代的定位**：DeferredResult/Callable 的"不占线程"动机被虚拟线程取代；**保留价值在消息驱动场景**（MQ 回调完成 HTTP 请求）与长轮询。
 
 ## 6. 异步场景的拦截器与异常处理
 
@@ -264,7 +264,7 @@ public class SseHub {
 }
 ```
 
-> 🎯 **核心要点**：Boot 4 虚拟线程默认化后，同步代码回归首选，异步 API 聚焦协议需求（SSE 推送、流式导出、消息驱动）。SSE 三件套：心跳防断、断点续传（Last-Event-ID）、连接管理（上限+清理）；流式响应三件套：分批取数、逐批 flush、超时兜底。
+> **核心要点**：Boot 4 虚拟线程默认化后，同步代码回归首选，异步 API 聚焦协议需求（SSE 推送、流式导出、消息驱动）。SSE 三件套：心跳防断、断点续传（Last-Event-ID）、连接管理（上限+清理）；流式响应三件套：分批取数、逐批 flush、超时兜底。
 
 ---
 

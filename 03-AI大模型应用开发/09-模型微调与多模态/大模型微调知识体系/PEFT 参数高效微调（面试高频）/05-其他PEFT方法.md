@@ -64,7 +64,7 @@
 
 **默认**：LoRA（绝大多数场景，效果/成本/生产友好度综合最优）；**单卡大模型**：QLoRA（06 篇）；**极端省参 + NLU 分类**：Prompt Tuning；**生成任务 + 层级引导**：Prefix Tuning；**模块隔离优先且接受延迟**：Adapter；**极低资源 + 简单任务**：BitFit/IA3；**小数据快速实验**：BitFit——**"其他方法"的定位是 LoRA 不合适的特定场景**，不是与 LoRA 竞争通用地位。
 
-> 🎯 **核心要点**：五方法各解决一个场景——Prompt Tuning（输入层软提示，NLU 分类 + 极端省参）、Prefix Tuning（每层前缀，生成任务但占上下文）、Adapter（瓶颈 MLP，模块化但 +10-20% 延迟不可合并——模块化优势被 LoRA 覆盖）、IA3（激活缩放，极低资源）、BitFit（bias-only，小数据惊喜）；FLAN-T5-XL 基准——低资源时 LoRA/BitFit 反超全量、无普适最优；选型 = LoRA 默认 + 特定场景换方法——"其他方法"不是 LoRA 的竞争者，是补充者。
+> **核心要点**：五方法各解决一个场景——Prompt Tuning（输入层软提示，NLU 分类 + 极端省参）、Prefix Tuning（每层前缀，生成任务但占上下文）、Adapter（瓶颈 MLP，模块化但 +10-20% 延迟不可合并——模块化优势被 LoRA 覆盖）、IA3（激活缩放，极低资源）、BitFit（bias-only，小数据惊喜）；FLAN-T5-XL 基准——低资源时 LoRA/BitFit 反超全量、无普适最优；选型 = LoRA 默认 + 特定场景换方法——"其他方法"不是 LoRA 的竞争者，是补充者。
 
 ---
 

@@ -1,7 +1,7 @@
 # 02 API 协议全解
 > 事实标准的完整形态：tools 声明、tool_calls 响应、参数全解、流式增量与三家协议对照
 
-## 📚 目录
+## 目录
 1. [请求侧：tools 声明的完整形态](#1-请求侧tools-声明的完整形态)
 2. [响应侧：tool_calls 的完整形态](#2-响应侧tool_calls-的完整形态)
 3. [执行结果回传：tool 消息](#3-执行结果回传tool-消息)
@@ -76,7 +76,7 @@ resp = client.chat.completions.create(
 | `description` | 给模型看的说明 | **写"做什么 + 什么时候用"**（04 章） |
 | `parameters` | JSON Schema | 越精确调用越准 |
 
-> 💡 工具定义每个请求都要发送（OpenAI Chat Completions 无服务端注册），**每个工具定义 ≈ 100-200 输入 token/请求**——这是成本与缓存优化的核心对象（09 章）。
+> 工具定义每个请求都要发送（OpenAI Chat Completions 无服务端注册），**每个工具定义 ≈ 100-200 输入 token/请求**——这是成本与缓存优化的核心对象（09 章）。
 
 ## 2. 响应侧：tool_calls 的完整形态
 
@@ -87,11 +87,11 @@ resp = client.chat.completions.create(
 
 message = resp.choices[0].message
 if message.tool_calls:
-    for tc in message.tool_calls:        # ⭐ 必须循环！可能有多个
+    for tc in message.tool_calls:        # ★ 必须循环！可能有多个
         fn = tc.function
         print(tc.id)                     # 调用 ID（回传结果时用）
         print(fn.name)                   # 工具名
-        print(fn.arguments)              # ⚠️ 参数是 JSON 字符串，需自己解析
+        print(fn.arguments)              # 参数是 JSON 字符串，需自己解析
 else:
     print(message.content)
 ```
@@ -127,7 +127,7 @@ else:
 }
 ```
 
-> ⚠️ **两个经典坑**：(1) `arguments` 是 **JSON 字符串**不是对象——直接 `arguments["city"]` 会崩，必须 `json.loads`；(2) `tool_calls` 是**数组**——永远循环处理，只取 `[0]` 的代码在复合问题触发并行调用时直接崩溃（OpenAI 官方文档明确建议：假设一定会有多个调用）。
+> **两个经典坑**：(1) `arguments` 是 **JSON 字符串**不是对象——直接 `arguments["city"]` 会崩，必须 `json.loads`；(2) `tool_calls` 是**数组**——永远循环处理，只取 `[0]` 的代码在复合问题触发并行调用时直接崩溃（OpenAI 官方文档明确建议：假设一定会有多个调用）。
 
 ## 3. 执行结果回传：tool 消息
 
@@ -139,7 +139,7 @@ for tc in message.tool_calls:
     result = execute_tool(fn.name, json.loads(fn.arguments))   # 你的执行器
     results.append({
         "role": "tool",
-        "tool_call_id": tc.id,          # ⭐ 用调用 ID 与 tool_calls 配对
+        "tool_call_id": tc.id,          # ★ 用调用 ID 与 tool_calls 配对
         "content": json.dumps(result, ensure_ascii=False),     # 结果转 JSON 字符串
     })
 
@@ -162,7 +162,7 @@ resp2 = client.chat.completions.create(
 | `tool` | 工具执行结果 | 与 `tool_call_id` 配对，**一个调用一条结果** |
 | `system` | 系统指令 | 可选，放最前 |
 
-> 🎯 **核心要点**：循环的"记忆" = **消息历史**。每一轮都要把"assistant 的调用指令 + tool 的执行结果"追加进 messages 再请求——**任何一条不配对（多结果/漏结果/错 id）都会导致 400 或模型困惑**。
+> **核心要点**：循环的"记忆" = **消息历史**。每一轮都要把"assistant 的调用指令 + tool 的执行结果"追加进 messages 再请求——**任何一条不配对（多结果/漏结果/错 id）都会导致 400 或模型困惑**。
 
 ## 4. 参数全解：tool_choice 与 parallel_tool_calls
 
@@ -189,14 +189,14 @@ resp = client.chat.completions.create(
 resp = client.chat.completions.create(..., tool_choice="none")
 ```
 
-> 💡 **选型原则（OpenAI 官方）**：选任务允许的**最紧**设置——留的自由度越多，模型越可能误用。提取类任务永远强制指定工具，查询类任务用 required，纯聊天才用 auto。
+> **选型原则（OpenAI 官方）**：选任务允许的**最紧**设置——留的自由度越多，模型越可能误用。提取类任务永远强制指定工具，查询类任务用 required，纯聊天才用 auto。
 
 ### 4.2 parallel_tool_calls
 
 | 值 | 行为 | 适用 |
 |----|------|------|
 | `True`（默认） | 一次响应返回多个 tool_calls | 独立查询（天气+股价） |
-| `False` | 一次只调一个 | ⚠️ 有依赖的步骤、strict 严格模式、危险操作 |
+| `False` | 一次只调一个 | 有依赖的步骤、strict 严格模式、危险操作 |
 
 **必须关掉并行的三个场景**：
 
@@ -204,7 +204,7 @@ resp = client.chat.completions.create(..., tool_choice="none")
 2. **strict 严格模式**：OpenAI 官方明确——**严格模式的结构保证在并行调用下不成立**；
 3. **副作用/危险操作**：冻结卡片、取消订阅、退款——绝不能三连发，要"确认-执行"模式（05 章）。
 
-> ⚠️ 注意：并非所有模型接受 `parallel_tool_calls` 参数（部分老模型会报错）；推理模型（o 系列）对工具调用的处理与其内部推理循环耦合，先查模型文档。
+> 注意：并非所有模型接受 `parallel_tool_calls` 参数（部分老模型会报错）；推理模型（o 系列）对工具调用的处理与其内部推理循环耦合，先查模型文档。
 
 ## 5. 流式：增量 chunk 的组装
 
@@ -235,7 +235,7 @@ for chunk in stream:
 | `name` 只出现在首个 chunk | 不能假设每 chunk 都有 |
 | 边流边执行 | 可先等 arguments 拼完再执行（07 章流式专题） |
 
-> ⚠️ 流式 + tool_calls 的坑：**有的实现（如某些推理模型）先出 reasoning 再出 tool_calls**；`finish_reason="tool_calls"` 是"该结束拼装了"的信号。流式组装务必以 index 维度聚合（07 章完整代码）。
+> 流式 + tool_calls 的坑：**有的实现（如某些推理模型）先出 reasoning 再出 tool_calls**；`finish_reason="tool_calls"` 是"该结束拼装了"的信号。流式组装务必以 index 维度聚合（07 章完整代码）。
 
 ## 6. Anthropic Tool Use 协议对照
 
@@ -254,14 +254,14 @@ resp = client.messages.create(
         {
             "name": "get_weather",
             "description": "获取城市天气",
-            "input_schema": {                     # ⚠️ 字段名是 input_schema 不是 parameters
+            "input_schema": {                     # 字段名是 input_schema 不是 parameters
                 "type": "object",
                 "properties": {
                     "city": {"type": "string", "description": "城市名"},
                 },
                 "required": ["city"],
             },
-            "cache_control": {"type": "ephemeral"},   # ⭐ 工具定义缓存断点（09 章）
+            "cache_control": {"type": "ephemeral"},   # ★ 工具定义缓存断点（09 章）
         }
     ],
 )
@@ -269,7 +269,7 @@ resp = client.messages.create(
 # 响应：content 块数组，其中 type="tool_use" 的块是调用
 for block in resp.content:
     if block.type == "tool_use":
-        print(block.id, block.name, block.input)    # ⚠️ input 已是 dict，不需要 json.loads
+        print(block.id, block.name, block.input)    # input 已是 dict，不需要 json.loads
         # 执行...
         tool_result = {
             "role": "user",
@@ -293,7 +293,7 @@ for block in resp.content:
 | 严格模式 | 有（strict） | 无（靠提示 + 校验） |
 | 工具缓存 | 自动（prompt caching 自动生效） | 显式 `cache_control` 断点 |
 
-> 🎯 **核心要点**：两家协议**概念一一对应，命名各不相同**。统一封装层（LLM-API/09 已有）是跨平台标准做法——把"解析调用/执行/回传"抽象成接口，平台差异收敛在适配器里。
+> **核心要点**：两家协议**概念一一对应，命名各不相同**。统一封装层（LLM-API/09 已有）是跨平台标准做法——把"解析调用/执行/回传"抽象成接口，平台差异收敛在适配器里。
 
 ## 7. Responses API 形态（OpenAI 新范式）
 
@@ -333,9 +333,9 @@ resp2 = client.responses.create(
 | 配对键 | `tool_call_id` | `call_id` |
 | 结果消息 | `role: "tool"` | `function_call_output` 块 |
 | 内置工具 | 无 | 原生（web_search、code_interpreter 等） |
-| 状态 | 兼容维护 | ⭐ 新功能主阵地 |
+| 状态 | 兼容维护 | ★ 新功能主阵地 |
 
-> 💡 2026 新项目建议：OpenAI 生态直接用 **Responses API**；DeepSeek/Qwen/国产模型用 **Chat Completions**（它们兼容的是 Chat 格式）；两者并存时封装层按供应商分发。
+> 2026 新项目建议：OpenAI 生态直接用 **Responses API**；DeepSeek/Qwen/国产模型用 **Chat Completions**（它们兼容的是 Chat 格式）；两者并存时封装层按供应商分发。
 
 ## 8. 核心要点
 

@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [组件一句话定位](#1-组件一句话定位)
 2. [版本现状（2026-08）](#2-版本现状2026-08)
@@ -62,20 +62,20 @@
 | 多实例分配 | 无（全打一个） | 轮询/权重/区域智能分配 |
 | 灰度 | 无 | Hint/权重/子集分流 |
 
-> 🎯 判断标准一句话：**"代码里有没有写死别的服务 IP？"**——有，就该用 LoadBalancer；微服务生态（Feign/Gateway/WebClient）里它是标配底座，几乎隐式生效。
+> 判断标准一句话：**"代码里有没有写死别的服务 IP？"**——有，就该用 LoadBalancer；微服务生态（Feign/Gateway/WebClient）里它是标配底座，几乎隐式生效。
 
 ### 1.2 适用与不适用场景
 
 | 场景 | 适合？ | 说明 |
 |------|:---:|------|
-| 服务间 HTTP 调用（Feign/RestTemplate/WebClient） | ✅ | 主战场 |
-| 网关 lb:// 转发 | ✅ | Gateway 的底层实现 |
-| 按权重/区域/灰度分流 | ✅ | 策略 supplier 组合 |
-| 外部固定地址 API | ❌ | 无注册中心，直接 http:// 调用 |
-| 服务端负载均衡（对外入口） | ❌ | 那是 Nginx/Gateway 的职责 |
-| 数据库读写分离 | ❌ | 那是数据层中间件的领域 |
+| 服务间 HTTP 调用（Feign/RestTemplate/WebClient） | ✓ | 主战场 |
+| 网关 lb:// 转发 | ✓ | Gateway 的底层实现 |
+| 按权重/区域/灰度分流 | ✓ | 策略 supplier 组合 |
+| 外部固定地址 API | ✗ | 无注册中心，直接 http:// 调用 |
+| 服务端负载均衡（对外入口） | ✗ | 那是 Nginx/Gateway 的职责 |
+| 数据库读写分离 | ✗ | 那是数据层中间件的领域 |
 
-> ⚠️ **最大认知误区**：把 LoadBalancer 当"独立的负载均衡服务器"——**它是客户端进程内的算法库**（选实例的逻辑在调用方），与 Nginx 的"入口分发器"是两种不同层级的负载均衡（[08 篇](08-生产实践与选型避坑.md) 对比表）。
+> **最大认知误区**：把 LoadBalancer 当"独立的负载均衡服务器"——**它是客户端进程内的算法库**（选实例的逻辑在调用方），与 Nginx 的"入口分发器"是两种不同层级的负载均衡（[08 篇](08-生产实践与选型避坑.md) 对比表）。
 
 ### 1.3 与负载均衡方案对照
 
@@ -87,7 +87,7 @@
 | Spring Cloud Gateway | 服务端 | 独立网关 | lb:// 走 LoadBalancer | 官方 Cloud |
 | Nacos 负载均衡（SCA） | 客户端 | 调用方进程内 | 权重/集群感知（Nacos 驱动） | SCA |
 
-> 🎯 面试必答：**"Ribbon 为什么被弃，替代方案是什么？"**——Ribbon 2018 年停止维护（Netflix 全家桶退出 Spring Cloud），官方替代是 **Spring Cloud LoadBalancer**：**响应式 API（ReactiveLoadBalancer）、策略用 ServiceInstanceListSupplier 组合式装配（比 Ribbon 的 rule 更灵活）、默认带 Caffeine 缓存**；国内 SCA 生态则常直接用 Nacos 自带的负载均衡（权重/集群感知更强）。
+> 面试必答：**"Ribbon 为什么被弃，替代方案是什么？"**——Ribbon 2018 年停止维护（Netflix 全家桶退出 Spring Cloud），官方替代是 **Spring Cloud LoadBalancer**：**响应式 API（ReactiveLoadBalancer）、策略用 ServiceInstanceListSupplier 组合式装配（比 Ribbon 的 rule 更灵活）、默认带 Caffeine 缓存**；国内 SCA 生态则常直接用 Nacos 自带的负载均衡（权重/集群感知更强）。
 
 ## 2. 版本现状（2026-08）
 
@@ -100,7 +100,7 @@
 | 3.x | 老存量 | Spring Cloud 2021.0/2022.0、Boot 2.6-3.1 |
 | 2.x | 废弃 | 2020.0 时代（Ribbon 并存期） |
 
-> ⚠️ **版本策略（2026 起）**：**新项目 Boot 4.x + Cloud 2025.1.x + LoadBalancer 5.0.x**；存量 Boot 3.5 用 4.3.x（**OSS 已 EOL**）；版本由 spring-cloud-commons BOM 管理（LoadBalancer 代码在 commons 项目里，[01 篇](01-模块清单与版本矩阵.md)）。
+> **版本策略（2026 起）**：**新项目 Boot 4.x + Cloud 2025.1.x + LoadBalancer 5.0.x**；存量 Boot 3.5 用 4.3.x（**OSS 已 EOL**）；版本由 spring-cloud-commons BOM 管理（LoadBalancer 代码在 commons 项目里，[01 篇](01-模块清单与版本矩阵.md)）。
 
 ### 2.1 5.0 关键变化（4.3.x → 5.0.x 迁移要点）
 
@@ -148,7 +148,7 @@
 | 熔断降级 | CircuitBreaker（SCCB） | 选实例 ≠ 保护调用（配合使用） |
 | 限流 | 网关/Sentinel | 与 LB 无关 |
 
-> ⚠️ **常见归因错误**：实例挂了还被打，怪 LoadBalancer"没感知"——**排查路径："注册中心实例是否摘除 → 实例列表缓存（TTL 35s）是否过期 → 健康检查是否配置 → 策略是否过滤"**——LB 的感知速度受缓存 TTL 限制，不是实时（[08 篇](08-生产实践与选型避坑.md) 坑位表）。
+> **常见归因错误**：实例挂了还被打，怪 LoadBalancer"没感知"——**排查路径："注册中心实例是否摘除 → 实例列表缓存（TTL 35s）是否过期 → 健康检查是否配置 → 策略是否过滤"**——LB 的感知速度受缓存 TTL 限制，不是实时（[08 篇](08-生产实践与选型避坑.md) 坑位表）。
 
 ## 4. 与对照体系的映射
 
@@ -160,7 +160,7 @@
 | 05-缓存 | [Caffeine（缓存）](../../../../../01-底层根基-Java核心底座/)（缓存实现） |
 | 07-5.0 特性 | [Spring 框架核心](../../../../Spring框架核心/)（Framework 7 HTTP 客户端） |
 
-> 💡 分工约定：**本系列回答"实例怎么选、策略怎么配、缓存怎么调、Ribbon 怎么迁"**；服务注册发现本身在 [Nacos 系列](../Spring Cloud Alibaba（阿里实现，属于 Spring Cloud 生态实现）/Nacos：注册中心 + 配置中心/00-Nacos知识体系总览.md)，网关侧的 lb:// 在 [Gateway 系列](../Spring Cloud Gateway/00-Spring Cloud Gateway知识体系总览.md)。
+> 分工约定：**本系列回答"实例怎么选、策略怎么配、缓存怎么调、Ribbon 怎么迁"**；服务注册发现本身在 [Nacos 系列](../Spring Cloud Alibaba（阿里实现，属于 Spring Cloud 生态实现）/Nacos：注册中心 + 配置中心/00-Nacos知识体系总览.md)，网关侧的 lb:// 在 [Gateway 系列](../Spring Cloud Gateway/00-Spring Cloud Gateway知识体系总览.md)。
 
 ## 5. 快速上手 3 步
 
@@ -213,7 +213,7 @@ spring:
       configurations: weighted # 权重策略（默认轮询）
 ```
 
-> 🎯 跑通即及格：**① 注册中心有 payment-service 两个实例；② 调接口多次，日志/监控看到请求分发到两个实例（轮询）；③ 停掉一个实例（等缓存过期后）请求自动只打存活实例**——三件事都通，主链路打通（[02 篇](02-快速开始与核心API速查.md)）。
+> 跑通即及格：**① 注册中心有 payment-service 两个实例；② 调接口多次，日志/监控看到请求分发到两个实例（轮询）；③ 停掉一个实例（等缓存过期后）请求自动只打存活实例**——三件事都通，主链路打通（[02 篇](02-快速开始与核心API速查.md)）。
 
 ### 5.1 三步验证与排障起点
 
@@ -223,7 +223,7 @@ spring:
 | ② 轮询分发 | 连续调 N 次 | 两个实例交替收到（近似均匀） |
 | ③ 故障规避 | 停一个实例，等 TTL | 请求只打存活实例（不报错） |
 
-> 💡 排障起点：**先查注册中心实例列表（实例在不在）→ 再查 LB 缓存（TTL 是否过期）→ 最后查策略（是否被过滤）**——"打到了已下线的实例"大概率是缓存没过期（[08 篇](08-生产实践与选型避坑.md) 排错表）。
+> 排障起点：**先查注册中心实例列表（实例在不在）→ 再查 LB 缓存（TTL 是否过期）→ 最后查策略（是否被过滤）**——"打到了已下线的实例"大概率是缓存没过期（[08 篇](08-生产实践与选型避坑.md) 排错表）。
 
 ## 6. 速查导航
 

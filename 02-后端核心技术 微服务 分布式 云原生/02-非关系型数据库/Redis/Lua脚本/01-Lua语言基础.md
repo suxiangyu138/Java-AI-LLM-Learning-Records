@@ -1,7 +1,7 @@
 # Lua 语言基础
 > Redis 内嵌 Lua 5.1 的速成课：类型系统、table、函数、控制流、字符串与模块——只讲写 Redis 脚本用得上的部分，半小时上手
 
-## 📚 目录
+## 目录
 1. [Lua 是什么：5.1 的定位](#1-lua-是什么51-的定位)
 2. [类型系统](#2-类型系统)
 3. [变量与作用域](#3-变量与作用域)
@@ -20,7 +20,7 @@
 | 与 Redis 的结合 | Redis 把 Lua 解释器嵌入进程（deps/lua），EVAL 传脚本即执行 |
 | 定位 | 嵌入式脚本语言（游戏配置/Redis 脚本/Wireshark） |
 
-> 🎯 学习心态：**别按"一门完整语言"学 Lua**——写 Redis 脚本只用到：table、函数、字符串操作、if/for、redis.call。30 分钟即可上手。
+> 学习心态：**别按"一门完整语言"学 Lua**——写 Redis 脚本只用到：table、函数、字符串操作、if/for、redis.call。30 分钟即可上手。
 
 ## 2. 类型系统
 
@@ -44,7 +44,7 @@ print(1 == "1")  --> false（数字与字符串不自动相等）
 | string | 与 Redis 交互的主要类型 |
 | table | 数组从 **1 开始**（不是 0！） |
 
-> ⚠️ **索引从 1 开始是最大新手坑**：`local t = {"a","b"}` 中 `t[1]` 是 `"a"`，`t[0]` 是 nil。写 Redis 脚本时 KEYS[1]/ARGV[1] 同样是 1 起始。
+> **索引从 1 开始是最大新手坑**：`local t = {"a","b"}` 中 `t[1]` 是 `"a"`，`t[0]` 是 nil。写 Redis 脚本时 KEYS[1]/ARGV[1] 同样是 1 起始。
 
 ## 3. 变量与作用域
 
@@ -62,7 +62,7 @@ local function myHelper()
 end
 ```
 
-> ⚠️ **全局变量在 Redis 7.0+ 已不可用**（安全加固，CVE 修复）：脚本里一切变量/函数必须 `local` 声明——老教程里的全局写法在新版本直接报错，迁移注意（详见 [03-原子性与执行语义](03-原子性与执行语义.md) §5）。
+> **全局变量在 Redis 7.0+ 已不可用**（安全加固，CVE 修复）：脚本里一切变量/函数必须 `local` 声明——老教程里的全局写法在新版本直接报错，迁移注意（详见 [03-原子性与执行语义](03-原子性与执行语义.md) §5）。
 
 ## 4. table：一切皆 table
 
@@ -94,7 +94,7 @@ for k, v in pairs(map) do print(k, v) end        -- 字典：无序
 | `ipairs()` | 按序遍历数组（1..n） |
 | `pairs()` | 遍历全部键值（无序） |
 
-> 💡 与 Redis 的对应：`redis.call('HGETALL', k)` 返回的数组 table 就是 `{field1, val1, field2, val2, ...}`——用 `for i = 1, #t, 2 do` 成对读取。
+> 与 Redis 的对应：`redis.call('HGETALL', k)` 返回的数组 table 就是 `{field1, val1, field2, val2, ...}`——用 `for i = 1, #t, 2 do` 成对读取。
 
 ## 5. 函数与闭包
 
@@ -121,7 +121,7 @@ local inc = function()
 end
 ```
 
-> 🎯 Redis 脚本里的函数用法：**把公共逻辑抽成 local 函数**（如"校验并扣减"），一个 EVAL 内多次调用——Lua 脚本内代码可复用，但脚本之间不能互相调用（这是 Function 的改进点，见 [05](05-Redis-Function机制.md)）。
+> Redis 脚本里的函数用法：**把公共逻辑抽成 local 函数**（如"校验并扣减"），一个 EVAL 内多次调用——Lua 脚本内代码可复用，但脚本之间不能互相调用（这是 Function 的改进点，见 [05](05-Redis-Function机制.md)）。
 
 ## 6. 控制流
 
@@ -159,9 +159,9 @@ until n == 0
 | if/elseif/else | 条件分支（核心） |
 | for i = a, b | 固定次数（限流窗口遍历等） |
 | for k, v in pairs/ipairs | 遍历哈希/列表 |
-| while/repeat | 循环（⚠️ 注意脚本执行时间限制，见 03 §5） |
+| while/repeat | 循环（注意脚本执行时间限制，见 03 §5） |
 
-> ⚠️ 无限循环是脚本最大杀手：`lua-time-limit`（默认 5 秒）触发后脚本被强制终止（详见 [03 §5](03-原子性与执行语义.md)）——**循环必须有退出条件，且别遍历超大集合**。
+> 无限循环是脚本最大杀手：`lua-time-limit`（默认 5 秒）触发后脚本被强制终止（详见 [03 §5](03-原子性与执行语义.md)）——**循环必须有退出条件，且别遍历超大集合**。
 
 ## 7. 字符串与常用标准库
 
@@ -201,7 +201,7 @@ data.count = data.count + 1
 redis.call('SET', KEYS[1], cjson.encode(data))
 ```
 
-> 🎯 **cjson 是 Redis 脚本的"秘密武器"**：很多"脚本做不到"其实只是不知道 cjson——在脚本内编解码 JSON，配合 HASH 可做出复杂的业务结构。
+> **cjson 是 Redis 脚本的"秘密武器"**：很多"脚本做不到"其实只是不知道 cjson——在脚本内编解码 JSON，配合 HASH 可做出复杂的业务结构。
 
 ## 8. 写 Redis 脚本的 Lua 速查
 

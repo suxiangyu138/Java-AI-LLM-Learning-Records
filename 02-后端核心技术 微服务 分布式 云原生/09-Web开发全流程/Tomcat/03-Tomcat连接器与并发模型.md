@@ -2,7 +2,7 @@
 
 > 定位：Coyote 连接器、NIO 线程模型、线程池与 Executor、HTTP/2、虚拟线程——Tomcat 并发与性能核心
 
-## 📚 目录
+## 目录
 
 1. [连接器 Coyote](#1-连接器-coyote)
 2. [IO 模型演进](#2-io-模型演进)
@@ -30,7 +30,7 @@ Coyote = Tomcat 的连接器组件（通信层）
   HTTPS（HTTP + TLS）
   AJP（与 Apache/Nginx 通信）
 
-⚠️ 面试必答：
+面试必答：
 "Coyote 是连接器——管'通信'不管'业务'；
  支持 HTTP/HTTPS/AJP 三种协议；
  与 Catalina（容器）解耦。"
@@ -49,12 +49,12 @@ Coyote = Tomcat 的连接器组件（通信层）
 | NIO2 | Tomcat 8.5+ | 异步 IO（AIO） |
 
 ```
-⚠️ BIO vs NIO：
+BIO vs NIO：
   BIO：每连接一个线程 → 线程数 = 连接数 → 高并发线程爆炸
   NIO：少量线程处理大量连接（Selector 事件驱动）
   → NIO 是默认与推荐的唯一选择
 
-⚠️ 面试必答：
+面试必答：
 "BIO 一连接一线程（C10K 崩溃）、
  NIO 用 Selector 事件驱动（少量线程
  处理海量连接）——Tomcat 8+ 默认 NIO。"
@@ -73,7 +73,7 @@ Tomcat 的 NIO 角色分工：
   Poller 线程：监听事件（Selector）
   Worker 线程：执行 Servlet（线程池）
 
-⚠️ 面试必答：
+面试必答：
 "NIO = Channel/Buffer/Selector 三件套——
  Tomcat 里 Acceptor 收连接、Poller 轮询
  事件、Worker 池执行业务。"
@@ -94,7 +94,7 @@ Tomcat 的 NIO 角色分工：
 连接数 >> 线程数（非阻塞的威力）：
   10 万连接 ≈ 几百个线程即可服务
 
-⚠️ 面试必答：
+面试必答：
 "NIO 三线程——Acceptor 收连接、
  Poller 轮询事件、Worker 池执行业务；
  线程数与连接数解耦（连接数可远大于线程数）。"
@@ -142,7 +142,7 @@ IO 密集（Web 应用常见）：
 CPU 密集：
   线程数 = CPU 核数 + 1
 
-⚠️ 面试必答：
+面试必答：
 "线程数 = 核数 × (1 + 等待/计算比)——Web 应用
  IO 密集等待多，线程数取核数 2-4 倍；
  实际靠压测调优（ab/JMeter）。"
@@ -157,7 +157,7 @@ Tomcat Executor 饱和策略：
   ③ 满 → 进队列（maxQueueSize）
   ④ 队列满 → 拒绝（Connection refused）
 
-⚠️ 面试必答：
+面试必答：
 "线程池四级——常驻 → 扩容 → 排队 → 拒绝。
  队列打满时新连接被拒（表现为连接失败），
  这是高并发下的典型瓶颈信号。"
@@ -179,7 +179,7 @@ Tomcat 支持：
   HTTP/2 需 TLS（h2）或明文升级（h2c）
   <Connector ... upgradeProtocol="h2c" />
 
-⚠️ 面试必答：
+面试必答：
 "HTTP/2 的核心是多路复用——一个 TCP
  连接并行多个请求（解决队头阻塞）；
  Tomcat 11 对 HTTP/2 改进（畸形消息
@@ -193,11 +193,11 @@ AJP = Apache JServ Protocol
   用途：Tomcat 与 Apache/Nginx 通信
   场景：Nginx 做静态/负载均衡 → AJP 转发到 Tomcat
 
-⚠️ 安全警告：
+安全警告：
   AJP 无认证（暴露 8009 端口有风险）
   生产仅内网使用或禁用
 
-⚠️ 面试必答：
+面试必答：
 "AJP 是 Tomcat 与 Web 服务器（Apache/Nginx）
  的专用协议——现代架构多用 HTTP 反向代理
  替代（Nginx proxy_pass），AJP 渐少。"
@@ -218,7 +218,7 @@ Tomcat 11 + 虚拟线程：
   每请求一个虚拟线程（类似 BIO 模型）
   但无线程爆炸问题（虚拟线程极轻）
 
-⚠️ 面试必答：
+面试必答：
 "虚拟线程让'每请求一线程'回归——
  Java 21 的虚拟线程阻塞不占资源，
  Tomcat 11 支持后高并发吞吐提升、
@@ -239,11 +239,11 @@ Tomcat 11 + 虚拟线程：
 | 线程数 | 有限（200 左右） | 百万级 |
 | 适用 | 传统稳定 | Java 21+ 新项目 |
 
-> 🎯 **要点**：2026 并发趋势——**虚拟线程是 NIO 的优雅替代**（同步代码 + 海量线程）。Spring Boot 3.2+ / Tomcat 11 均支持；面试表达"虚拟线程阻塞不占资源"即可。
+> **要点**：2026 并发趋势——**虚拟线程是 NIO 的优雅替代**（同步代码 + 海量线程）。Spring Boot 3.2+ / Tomcat 11 均支持；面试表达"虚拟线程阻塞不占资源"即可。
 
 ---
 
-> 🎯 **核心要点**：连接器与并发 = **Coyote**（通信层）+ **NIO 三线程**（Acceptor/Poller/Worker）+ **线程池四级**（常驻/扩容/排队/拒绝）+ **HTTP/2 多路复用** + **虚拟线程**（Java 21 新范式）。并发模型演进：BIO → NIO → 虚拟线程是 Tomcat 性能面试主线。
+> **核心要点**：连接器与并发 = **Coyote**（通信层）+ **NIO 三线程**（Acceptor/Poller/Worker）+ **线程池四级**（常驻/扩容/排队/拒绝）+ **HTTP/2 多路复用** + **虚拟线程**（Java 21 新范式）。并发模型演进：BIO → NIO → 虚拟线程是 Tomcat 性能面试主线。
 
 ---
 

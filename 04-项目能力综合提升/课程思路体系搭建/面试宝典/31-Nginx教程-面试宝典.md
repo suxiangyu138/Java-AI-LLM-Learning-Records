@@ -24,7 +24,7 @@ Nginx (engine-x) 是一款轻量级、高性能的 HTTP 和反向代理 Web 服�
 | 核心优势 | 高并发、低内存、高稳定性 |
 | 主要用途 | 静态资源服务、反向代理、负载均衡、API 网关 |
 
-> 💡 Nginx 的设计哲学：**少即是多** — 通过精巧的架构设计而非堆砌资源来解决问题。
+> Nginx 的设计哲学：**少即是多** — 通过精巧的架构设计而非堆砌资源来解决问题。
 
 ### 1.2 What's the difference between Nginx and Apache? Nginx 与 Apache 的区别？
 | 对比维度 | Nginx | Apache |
@@ -59,7 +59,7 @@ Nginx 启动后包含一个 master 进程和多个 worker 进程：
           Worker  Worker  Worker  (多个 worker 进程)
 ```
 
-> 💡 Worker 进程之间通过共享内存（如 ngx_http_shm）通信，每个 worker 独立处理请求，互不阻塞。
+> Worker 进程之间通过共享内存（如 ngx_http_shm）通信，每个 worker 独立处理请求，互不阻塞。
 
 ### 1.5 How does Nginx handle signals? Nginx 的信号控制？
 | 信号 | 含义 | 用途 |
@@ -121,7 +121,7 @@ http {
 }
 ```
 
-> ⚠️ 配置文件结构顺序：**全局块 > events > http > server > location**，外层的指令会继承到内层。
+> 配置文件结构顺序：**全局块 > events > http > server > location**，外层的指令会继承到内层。
 
 ### 1.7 What directives are in the global block? 全局块有哪些常用指令？
 | 指令 | 作用 | 示例 |
@@ -140,7 +140,7 @@ http {
 | `multi_accept` | 是否一次接受多个新连接 | `on` |
 | `accept_mutex` | 互斥锁避免惊群 | `on` |
 
-> 💡 `worker_connections` + `worker_processes` 决定了 Nginx 的最大并发能力：`max_clients = worker_processes * worker_connections / 2`（HTTP 请求一半用于接收，一半用于发送）。
+> `worker_connections` + `worker_processes` 决定了 Nginx 的最大并发能力：`max_clients = worker_processes * worker_connections / 2`（HTTP 请求一半用于接收，一半用于发送）。
 
 ### 1.9 What are listen and server_name? listen 和 server_name 的配置？
 **listen** — 监听端口和地址：
@@ -174,7 +174,7 @@ location [=|~|~*|^~] /uri/ { ... }
 | `~*` | 正则匹配（不区分大小写） | 中 |
 | 无 | 普通前缀匹配 | 低 |
 
-> 🎯 **匹配顺序**：精确匹配 > 前缀匹配（带 `^~`）> 正则匹配（按配置顺序）> 最长前缀匹配
+> **匹配顺序**：精确匹配 > 前缀匹配（带 `^~`）> 正则匹配（按配置顺序）> 最长前缀匹配
 
 ```nginx
 location / {                    # 兜底规则
@@ -210,13 +210,13 @@ location /images/ {
     alias /var/www/images/;   # 实际路径: /var/www/images/
 }
 
-# ⚠️ 错误用法 - alias 不能这样用
+# 错误用法 - alias 不能这样用
 location /images/ {
     alias /var/www/;          # 实际路径: /var/www/a.jpg ✓
 }
 ```
 
-> ⚠️ `alias` 末尾必须加 `/`，而 `root` 末尾不加 `/`。另外，`alias` 不支持在 `location /`（根路径）中使用。
+> `alias` 末尾必须加 `/`，而 `root` 末尾不加 `/`。另外，`alias` 不支持在 `location /`（根路径）中使用。
 
 ### 1.12 How to configure error pages? 如何配置错误页面？
 ```nginx
@@ -271,7 +271,7 @@ location /api/ {
 | `X-Forwarded-For` | 代理链路（可追加） |
 | `X-Forwarded-Proto` | 原始协议（http/https） |
 
-> 💡 `proxy_pass` 带 `/` 和不带 `/` 的区别是**高频面试题**：带 `/` 会截断匹配路径，不带 `/` 会将完整路径转发。
+> `proxy_pass` 带 `/` 和不带 `/` 的区别是**高频面试题**：带 `/` 会截断匹配路径，不带 `/` 会将完整路径转发。
 
 ```nginx
 location /api/ {
@@ -329,7 +329,7 @@ upstream backend {
 }
 ```
 
-> 🎯 面试追问：`max_fails=0` 表示不检查失败，该服务器永不标记为不可用。
+> 面试追问：`max_fails=0` 表示不检查失败，该服务器永不标记为不可用。
 
 ### 1.17 How to configure Gzip compression? 如何配置 Gzip 压缩？
 ```nginx
@@ -343,7 +343,7 @@ gzip_buffers 32 4k;              # 压缩缓冲区
 gzip_proxied any;                # 对代理请求也压缩
 ```
 
-> 💡 `gzip_static` — 预压缩静态文件（需要 ngx_http_gzip_static_module）：
+> `gzip_static` — 预压缩静态文件（需要 ngx_http_gzip_static_module）：
 ```nginx
 gzip_static on;    # 优先发送 .gz 预压缩文件，减少 CPU 开销
 ```
@@ -392,7 +392,7 @@ location /api/ {
 }
 ```
 
-> ⚠️ 面试常问：简单请求（GET/POST + 特定 Content-Type）不会发 OPTIONS；复杂请求（自定义头、PUT/DELETE）先发 OPTIONS 预检。
+> 面试常问：简单请求（GET/POST + 特定 Content-Type）不会发 OPTIONS；复杂请求（自定义头、PUT/DELETE）先发 OPTIONS 预检。
 
 ### 1.20 How to prevent hotlinking? 如何配置防盗链？
 ```nginx
@@ -435,7 +435,7 @@ Nginx 使用异步、非阻塞事件驱动模型。与传统线程模型不同�
 Nginx 模型： 请求 → Event Loop → 非阻塞处理 → 回调 → 响应
 ```
 
-> 💡 正是因为这种架构，Nginx 才能用很少的 worker 进程处理海量并发。对比：Apache 每个连接需要独立进程/线程，Nginx 只需少量 worker。
+> 正是因为这种架构，Nginx 才能用很少的 worker 进程处理海量并发。对比：Apache 每个连接需要独立进程/线程，Nginx 只需少量 worker。
 
 ### 2.2 How does Nginx implement hot reload (HUP signal)? Nginx 热部署原理（HUP 信号）？
 当执行 `nginx -s reload` 或发送 `HUP` 信号时：
@@ -498,7 +498,7 @@ upstream backend {
 - 每次选择：所有 peer 的 `current_weight += effective_weight`
 - 选择 `current_weight` 最大的 peer，令其 `current_weight -= total_weight`
 
-> 💡 这种算法保证了在权重数组不变的情况下，总请求能均匀分配，不会出现"短时间连续请求打到同一台服务器"的问题。
+> 这种算法保证了在权重数组不变的情况下，总请求能均匀分配，不会出现"短时间连续请求打到同一台服务器"的问题。
 
 ### 2.6 What is the keepalive mechanism in Nginx? Nginx 的 keepalive 机制？
 客户端 keepalive（client → nginx）：
@@ -515,7 +515,7 @@ upstream backend {
 }
 ```
 
-> 🎯 **面试追问**：客户端 keepalive 减少了三次握手开销；上游 keepalive 减少了 Nginx 到后端服务器的连接建立开销。两者配合能显著提升吞吐量。
+> **面试追问**：客户端 keepalive 减少了三次握手开销；上游 keepalive 减少了 Nginx 到后端服务器的连接建立开销。两者配合能显著提升吞吐量。
 
 ### 2.7 How does Nginx handle SSL/TLS? Nginx SSL/TLS 握手流程？
 1. Client Hello → 客户端发送支持的 SSL 版本、加密套件
@@ -538,7 +538,7 @@ server {
 }
 ```
 
-> 💡 `ssl_session_cache` 能显著减少重复 SSL 握手开销，在高并发场景下极其重要。
+> `ssl_session_cache` 能显著减少重复 SSL 握手开销，在高并发场景下极其重要。
 
 ### 2.8 What is the difference between 4-layer and 7-layer load balancing? 四层和七层负载均衡的区别？
 | 维度 | 四层负载均衡（L4） | 七层负载均衡（L7） |
@@ -577,7 +577,7 @@ access_log /var/log/nginx/access.log main buffer=32k flush=5s;
 error_log  /var/log/nginx/error.log warn;
 ```
 
-> 💡 `buffer=32k flush=5s` — 启用日志缓冲区，每 5 秒或 32KB 写入一次，减少磁盘 I/O。
+> `buffer=32k flush=5s` — 启用日志缓冲区，每 5 秒或 32KB 写入一次，减少磁盘 I/O。
 
 日志切割常用方案：
 ```bash
@@ -634,7 +634,7 @@ server {
 }
 ```
 
-> ⚠️ 注意：rewrite 指令默认在内部重定向中最多循环 10 次，通过 `rewrite_log on;` 可查看循环次数。
+> 注意：rewrite 指令默认在内部重定向中最多循环 10 次，通过 `rewrite_log on;` 可查看循环次数。
 
 ### 2.12 How does the ngx_http_static_module handle static files? 静态资源处理模块的工作机制？
 ```
@@ -680,7 +680,7 @@ server {
 }
 ```
 
-> 💡 `try_files $uri $uri/ /index.html` 是 SPA 部署的标配，保证前端路由刷新不 404。
+> `try_files $uri $uri/ /index.html` 是 SPA 部署的标配，保证前端路由刷新不 404。
 
 ### 3.2 配置一个域名跳转（www 跳转裸域 或 反之）
 ```nginx
@@ -773,7 +773,7 @@ server {
 }
 ```
 
-> ⚠️ 正向代理需要 `resolver` 指令，否则 Nginx 不会解析 upstream 中的域名。
+> 正向代理需要 `resolver` 指令，否则 Nginx 不会解析 upstream 中的域名。
 
 ### 3.6 配置动静分离
 ```nginx
@@ -890,7 +890,7 @@ server {
 ### 4.1 手写一个完整的 nginx.conf
 要求：包含全局配置、events、http、gzip、反向代理、负载均衡、HTTPS、日志。
 
-> 💡 面试官想看你对配置结构的整体把握，注意注释规范。
+> 面试官想看你对配置结构的整体把握，注意注释规范。
 
 ```nginx
 user nginx;
@@ -1195,7 +1195,7 @@ server {
 Nginx 文档明确建议**避免在 location 块中使用 `if`**，因为 if 指令在 Nginx 中存在很多奇怪的 bug 和不可预期的行为。
 
 ```nginx
-# ❌ 错误的 if 用法
+# ✗ 错误的 if 用法
 location / {
     if ($request_method = "DELETE") {
         return 405;
@@ -1203,7 +1203,7 @@ location / {
     proxy_pass http://backend;
 }
 
-# ✅ 正确做法：使用 more_set_headers 或限制方法
+# ✓ 正确做法：使用 more_set_headers 或限制方法
 limit_except GET POST {
     deny all;
 }
@@ -1227,11 +1227,11 @@ location /api/ {
 
 ### 6.3 server_name 与 listen 指令混淆
 ```nginx
-# ❌ 错误：认为指定了域名就能只响应这个域名
+# ✗ 错误：认为指定了域名就能只响应这个域名
 listen 80;                # 监听所有 IP 的 80 端口
 server_name example.com;
 
-# ✅ server_name 只是判断虚拟主机的依据，listen 控制监听地址
+# ✓ server_name 只是判断虚拟主机的依据，listen 控制监听地址
 listen 192.168.1.1:80;    # 绑定到特定 IP
 server_name example.com;
 ```
@@ -1291,4 +1291,4 @@ server_name example.com;
 
 ---
 
-> 🎯 **总结**：Nginx 基础面试的核心是**架构理解 + 配置实操**。掌握 master-worker 模型、配置文件层级结构、location 匹配规则、reverse proxy 和 load balancing 配置，基本能应对 80% 的中级面试题。建议在实际服务器上反复练习配置，理解每个指令背后的原理。
+> **总结**：Nginx 基础面试的核心是**架构理解 + 配置实操**。掌握 master-worker 模型、配置文件层级结构、location 匹配规则、reverse proxy 和 load balancing 配置，基本能应对 80% 的中级面试题。建议在实际服务器上反复练习配置，理解每个指令背后的原理。

@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [环境全景](#1-环境全景)
 2. [Python 与版本选择](#2-python-与版本选择)
@@ -154,7 +154,7 @@ pip uninstall pandas && pip install pandas==3.0.3   # 指定版本（锁版本�
 - ☐ 在 Jupyter 里 `import pandas as pd; pd.DataFrame({"a":[1,2]})` 能显示表格
 - ☐ `requirements.txt` 已记录版本
 
-> 🎯 **核心要点**：环境四件套 = Python 3.14.6 + 虚拟环境（venv/uv）+ 三件套（NumPy 2.5.1/Pandas 3.0.3/Matplotlib ≥3.10）+ JupyterLab ≥4.5——**项目级隔离是环境第一原则**；2026-08 基线：Python 3.15 将于 2026-10 发布（PEP 686 UTF-8 默认）、pandas 3.0 是 2026 大版本——**"环境装好且可复现 = 第一课通过"**。
+> **核心要点**：环境四件套 = Python 3.14.6 + 虚拟环境（venv/uv）+ 三件套（NumPy 2.5.1/Pandas 3.0.3/Matplotlib ≥3.10）+ JupyterLab ≥4.5——**项目级隔离是环境第一原则**；2026-08 基线：Python 3.15 将于 2026-10 发布（PEP 686 UTF-8 默认）、pandas 3.0 是 2026 大版本——**"环境装好且可复现 = 第一课通过"**。
 
 ---
 

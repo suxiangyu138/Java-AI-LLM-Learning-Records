@@ -1,10 +1,10 @@
 # macOS 文件系统、进程与安全
 
-> 🗄️ APFS 不只是"新一代文件系统"，时光机器快照、空间克隆、原生加密 —— 理解 macOS 底层存储、launchd 服务管理和多层安全机制
+> APFS 不只是"新一代文件系统"，时光机器快照、空间克隆、原生加密 —— 理解 macOS 底层存储、launchd 服务管理和多层安全机制
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [APFS 文件系统](#1-apfs-文件系统)
 2. [Bundle 与文件结构](#2-bundle-与文件结构)
@@ -24,7 +24,7 @@
 | **HFS+** (Mac OS Extended) | 1998-2017 | 日志、别名、压缩 |
 | **APFS** (Apple File System) | 2017-现在 | 快照、克隆、加密、空间共享 |
 
-> 💡 **关键节点**：macOS 10.13 High Sierra 开始迁移到 APFS，SSD 必须使用 APFS；macOS 10.15 Catalina 后系统盘强制 APFS。
+> **关键节点**：macOS 10.13 High Sierra 开始迁移到 APFS，SSD 必须使用 APFS；macOS 10.15 Catalina 后系统盘强制 APFS。
 
 ### 1.2 APFS 核心特性
 
@@ -222,7 +222,7 @@ csrutil status
 # 重启按住 Cmd+R → 终端 → csrutil disable
 ```
 
-> ⚠️ **强烈建议不要关闭 SIP**。大部分开发需求可以通过权限授权或使用 `/usr/local/` / `/opt/homebrew/` 替代。
+> **强烈建议不要关闭 SIP**。大部分开发需求可以通过权限授权或使用 `/usr/local/` / `/opt/homebrew/` 替代。
 
 ---
 

@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [dig 实战：DNS 的瑞士军刀](#1-dig-实战dns-的瑞士军刀)
 2. [dig 输出全解读](#2-dig-输出全解读)
@@ -111,7 +111,7 @@ systemctl reload named               # 或 rndc reload
 dig @127.0.0.1 example.com A +noall +answer   # 本地验证
 ```
 
-> ⚠️ **最高频配置错误**：相对名 vs 绝对名——`www IN A 1.2.3.4` 是 `www.example.com`，但 `api IN CNAME www.example.com.`（目标必须 FQDN 带点）；SOA 里两个名字也必须是 FQDN。
+> **最高频配置错误**：相对名 vs 绝对名——`www IN A 1.2.3.4` 是 `www.example.com`，但 `api IN CNAME www.example.com.`（目标必须 FQDN 带点）；SOA 里两个名字也必须是 FQDN。
 
 ## 4. K8s 与 CoreDNS
 
@@ -192,7 +192,7 @@ CoreDNS 解析三类域名：
 
 ## 7. 核心要点与思考题
 
-> 🎯 **本章三句话总结**：
+> **本章三句话总结**：
 > 1. dig 排障三视角：@公共递归（用户所见）、@权威（真相）、+trace（链路）——aa 标志与 TTL 剩余是判断关键；
 > 2. Zone 文件易错：相对名/绝对名、serial 递增、NS 必须 FQDN；改完 named-checkzone 验证；
 > 3. K8s 解析靠 CoreDNS（集群域权威 + 外部转发 + 缓存），排障先分"集群域/外部域"再动手。

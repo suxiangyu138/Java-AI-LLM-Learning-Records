@@ -2,7 +2,7 @@
 
 > 定位：格式保证的天花板——strict 模式原理、五条硬约束、Pydantic 集成 `.parse()`、refusal 处理（2026-08 基准）
 
-## 📚 目录
+## 目录
 
 1. [原理：约束解码在服务端](#1-原理约束解码在服务端)
 2. [strict 模式的五条硬约束](#2-strict-模式的五条硬约束)
@@ -28,7 +28,7 @@ strict:    schema → 状态机 → 每个位置只允许合法 token → 违规
 | prompt 式"请输出 JSON"的失效概率 | ~0.4%（2026 前沿模型，满负载） |
 | 首 token 延迟开销 | ~5-8%（schema 编译，之后缓存） |
 
-> 🎯 **核心要点**：strict 的保证是**结构性的**——模型"想"输出坏 JSON 也做不到。但注意：**结构合规 ≠ 语义正确**（模型可以在合法 schema 里填错值），语义校验仍是你的责任。
+> **核心要点**：strict 的保证是**结构性的**——模型"想"输出坏 JSON 也做不到。但注意：**结构合规 ≠ 语义正确**（模型可以在合法 schema 里填错值），语义校验仍是你的责任。
 
 ## 2. strict 模式的五条硬约束
 
@@ -119,7 +119,7 @@ else:
     report = msg.parsed
 ```
 
-> ⚠️ **常见误解**：strict 只保证"输出符合 schema"，**不保证模型一定按你的意图输出**——拒绝/截断必须显式检查。
+> **常见误解**：strict 只保证"输出符合 schema"，**不保证模型一定按你的意图输出**——拒绝/截断必须显式检查。
 
 ## 5. 工具参数也用 strict
 
@@ -149,7 +149,7 @@ tools = [pydantic_function_tool(GetWeatherParams, name="get_weather",
 | Anthropic | 无单开关；用"单工具 + tool_choice 强制" ~99% | 服务端约束 + 解析兜底 |
 | Gemini | `response_schema`（strict 保证较弱，2026 路线图对齐中） | 保守使用 + 校验 |
 
-> 💡 **跨供应商铁律**：schema 能跑通 OpenAI strict，不代表其它家一致——**迁移每家跑一次评估**（见阶段 4 评估篇）。
+> **跨供应商铁律**：schema 能跑通 OpenAI strict，不代表其它家一致——**迁移每家跑一次评估**（见阶段 4 评估篇）。
 
 ## 7. 生产最佳实践清单
 
@@ -161,7 +161,7 @@ tools = [pydantic_function_tool(GetWeatherParams, name="get_weather",
 | 评估 | 不只报 schema 合规率——**schema_validity × semantic_quality** 双指标（约束解码可能把细微差别折叠进 enum 默认值：合法但语义错） |
 | 场景 | 创意/自由文本、未知 schema、>40-50 字段的巨型 schema → 不用 strict（拆解） |
 
-> 🎯 **核心要点**：Structured Output 的正确姿势 = **strict 保证结构 + 校验链保证语义 + refusal 显式处理**。三层缺一不可——"结构对了就万事大吉"是 2026 年最常见的踩坑心态。
+> **核心要点**：Structured Output 的正确姿势 = **strict 保证结构 + 校验链保证语义 + refusal 显式处理**。三层缺一不可——"结构对了就万事大吉"是 2026 年最常见的踩坑心态。
 
 ---
 

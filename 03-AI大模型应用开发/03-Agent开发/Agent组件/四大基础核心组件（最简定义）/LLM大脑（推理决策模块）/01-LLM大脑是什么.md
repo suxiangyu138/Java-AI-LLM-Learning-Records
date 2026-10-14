@@ -21,7 +21,7 @@ LLM 大脑 = Agent 中负责"想"的部分：接收感知输入与记忆，进�
 
 ## 2026 一句话认知
 
-> 🎯 **"LLM 大脑 = 推理模型（thinking tokens）+ 决策循环（ReAct 模式）"**——thinking 让单步更准，循环让多步能成；两者缺一，Agent 不完整。
+> **"LLM 大脑 = 推理模型（thinking tokens）+ 决策循环（ReAct 模式）"**——thinking 让单步更准，循环让多步能成；两者缺一，Agent 不完整。
 
 ## 面试速记
 

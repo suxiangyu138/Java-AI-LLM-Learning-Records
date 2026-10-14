@@ -25,7 +25,7 @@
 - **Why**: 传统 LLM 无法直接访问外部数据源和工具。MCP 统一了 LLM 与外部系统的通信方式，类似 "USB-C for AI"。
 - 解决了 M 个 LLM × N 个工具的集成爆炸问题（M×N → M+N）。
 
-> 💡 MCP = 大模型的 USB-C 接口，统一所有工具和数据的接入标准。
+> MCP = 大模型的 USB-C 接口，统一所有工具和数据的接入标准。
 
 ### Q2: MCP 的三种 Transport（传输层）是什么？
 
@@ -35,7 +35,7 @@
 | **SSE** (Server-Sent Events) | 服务端推送事件，HTTP 长连接 | 远程服务、实时通知场景 |
 | **Streamable HTTP** (2025.05 新标准化) | 基于 HTTP POST，支持流式和非流式统一 | 生产级远程部署，取代纯 SSE |
 
-> ⚠️ Streamable HTTP 是 2025 年 5 月后推荐的生产环境传输方式，兼容性和可观测性优于纯 SSE。
+> Streamable HTTP 是 2025 年 5 月后推荐的生产环境传输方式，兼容性和可观测性优于纯 SSE。
 
 ### Q3: MCP 的三大核心原语（Primitives）是什么？
 
@@ -99,7 +99,7 @@ JSON Schema 描述了工具的**输入参数结构**，LLM 通过它自动理解
 }
 ```
 
-> 💡 LLM 通过 `description` 字段理解工具用途，通过 `inputSchema` 生成正确的调用参数。
+> LLM 通过 `description` 字段理解工具用途，通过 `inputSchema` 生成正确的调用参数。
 
 ### Q8: MCP Server 有哪几种实现方式？
 
@@ -133,7 +133,7 @@ Host 层面的安全控制，决定 LLM 能否调用特定工具：
 - **Prompt-approve**: 每次调用询问用户
 - **Deny**: 完全禁止
 
-> ⚠️ 生产环境中应对文件写入、网络请求等敏感工具设置 prompt-approve 级别。
+> 生产环境中应对文件写入、网络请求等敏感工具设置 prompt-approve 级别。
 
 ### Q11: Cursor 如何集成 MCP？
 
@@ -221,7 +221,7 @@ Sampling 允许 MCP Server 反过来请求 Host 调用 LLM 生成文本。这是
 | 实现成本 | 极低，任何语言 50 行可实现 | 中等 | 高（Protobuf 编译链） |
 | LLM 适配度 | JSON 结构天然可被 LLM 解析和生成 | 需要开发者编码组装 | 对 LLM 不友好 |
 
-> 💡 MCP 选 JSON-RPC 的核心原因：LLM 本身就是 JSON 理解和生成的专家，JSON-RPC 的消息格式让 LLM 零成本理解协议。
+> MCP 选 JSON-RPC 的核心原因：LLM 本身就是 JSON 理解和生成的专家，JSON-RPC 的消息格式让 LLM 零成本理解协议。
 
 ### Q20: MCP 的 initialize 握手过程发生了什么？
 
@@ -259,7 +259,7 @@ Client → Server: { "method": "notifications/initialized" }
 5. Feedback:   LLM 根据结果生成最终回复给用户
 ```
 
-> 🎯 关键设计点：LLM 通过自然语言理解工具描述，通过 Schema 生成参数，不需要预编码调用逻辑。
+> 关键设计点：LLM 通过自然语言理解工具描述，通过 Schema 生成参数，不需要预编码调用逻辑。
 
 ### Q22: 如何实现 MCP Server 的 Tool 结果的流式返回？
 
@@ -465,7 +465,7 @@ MCP 遵循 JSON-RPC 2.0 的错误标准，定义了标准错误码：
 @server.tool()
 async def query_database(sql: str) -> str:
     """执行数据库查询并返回结果"""
-    # ⚠️ 安全防护：只允许 SELECT 语句
+    # 安全防护：只允许 SELECT 语句
     if not sql.strip().upper().startswith("SELECT"):
         return "Error: Only SELECT queries are allowed"
     async with db_pool.acquire() as conn:
@@ -473,7 +473,7 @@ async def query_database(sql: str) -> str:
         return json.dumps([dict(row) for row in result], ensure_ascii=False, default=str)
 ```
 
-> ⚠️ 生产环境必须限制 SQL 权限，防止注入和写操作。
+> 生产环境必须限制 SQL 权限，防止注入和写操作。
 
 ### Q32: 如果需要 MCP Server 调用第三方 REST API，如何设计？
 
@@ -535,7 +535,7 @@ MCP 协议支持 Host 同时连接多个 Server：
 2. LLM 调用 `search_server` 的 `web_search` 工具获取结果
 3. LLM 调用 `storage_server` 的 `save_to_file` 工具保存结果
 
-> 💡 LLM 自动跨 Server 编排工具调用，不需要开发者编写编排代码。
+> LLM 自动跨 Server 编排工具调用，不需要开发者编写编排代码。
 
 ### Q35: 生产环境中 MCP Server 应该以什么方式部署？
 
@@ -1267,7 +1267,7 @@ class ConcurrentMCPServer(Server):
                 self._metrics["active_requests"] -= 1
 ```
 
-> 💡 核心原则：无状态 + 异步 + 限流 + 优雅降级。
+> 核心原则：无状态 + 异步 + 限流 + 优雅降级。
 
 ---
 
@@ -1366,7 +1366,7 @@ class ConcurrentMCPServer(Server):
 | **典型场景** | 让 LLM 使用数据库、API、文件 | 让 AI Agent 互相委托任务 |
 | **互补关系** | MCP 处理"工具接入" | A2A 处理"Agent 协作" |
 
-> 🎯 **一句话总结**: MCP 让 LLM 能用工具，A2A 让 Agent 能互相聊天。两者是互补关系，不是竞争关系。在实际架构中，一个 Agent 可以通过 MCP 接入工具，再通过 A2A 与其他 Agent 协作。
+> **一句话总结**: MCP 让 LLM 能用工具，A2A 让 Agent 能互相聊天。两者是互补关系，不是竞争关系。在实际架构中，一个 Agent 可以通过 MCP 接入工具，再通过 A2A 与其他 Agent 协作。
 
 ---
 
@@ -1390,4 +1390,4 @@ class ConcurrentMCPServer(Server):
 
 ---
 
-> 📝 **最后提醒**：面试时注意结合自己的实际项目经验回答，不要只背概念。特别是手动实现过 MCP Server 的经验、遇到的安全问题、排查过的坑，这些才是面试官最看重的部分。祝面试顺利！
+> **最后提醒**：面试时注意结合自己的实际项目经验回答，不要只背概念。特别是手动实现过 MCP Server 的经验、遇到的安全问题、排查过的坑，这些才是面试官最看重的部分。祝面试顺利！

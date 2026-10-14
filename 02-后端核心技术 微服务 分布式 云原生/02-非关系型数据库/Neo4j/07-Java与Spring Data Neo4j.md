@@ -3,7 +3,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [官方驱动](#1-官方驱动)
 2. [Spring Data Neo4j](#2-spring-data-neo4j)
@@ -379,7 +379,7 @@ Java 侧 GraphRAG 的组件：
   自定义 Cypher（图检索工具）
 ```
 
-> 🎯 **核心要点**：Java 集成 = 官方驱动（Bolt + 参数化 + 函数事务）+ Spring Data Neo4j（@Node 映射 + Repository）+ 事务/批量管理。向量与 AI：驱动 v6.0+ 支持原生 Vector 与 SEARCH 语法；LangChain4j/Spring AI 提供向量存储与 RAG 抽象。工程纪律：**参数化查询防注入、DTO 而非实体返回、批量分批事务、SEARCH + MATCH 混合检索**。
+> **核心要点**：Java 集成 = 官方驱动（Bolt + 参数化 + 函数事务）+ Spring Data Neo4j（@Node 映射 + Repository）+ 事务/批量管理。向量与 AI：驱动 v6.0+ 支持原生 Vector 与 SEARCH 语法；LangChain4j/Spring AI 提供向量存储与 RAG 抽象。工程纪律：**参数化查询防注入、DTO 而非实体返回、批量分批事务、SEARCH + MATCH 混合检索**。
 
 ---
 

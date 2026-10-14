@@ -26,7 +26,7 @@
 | 网络 | `http`、`net` 模块 | `fetch`、`XMLHttpRequest` |
 | 包管理 | npm / yarn / pnpm | CDN 引入 |
 
-> 💡 Node.js 是 **服务端 JavaScript 运行时**，基于 Chrome V8 引擎和 libuv 事件循环库，提供非阻塞 I/O 能力。
+> Node.js 是 **服务端 JavaScript 运行时**，基于 Chrome V8 引擎和 libuv 事件循环库，提供非阻塞 I/O 能力。
 
 ### 1.2 Node.js 事件循环（Event Loop）的执行顺序
 
@@ -55,7 +55,7 @@
 └─────────────────┘
 ```
 
-> ⚠️ **关键区别**：Node.js 将 `process.nextTick()` 和微任务（Promise.then）放在每个阶段之间执行，**先清空 nextTick 队列，再清空微任务队列**。
+> **关键区别**：Node.js 将 `process.nextTick()` 和微任务（Promise.then）放在每个阶段之间执行，**先清空 nextTick 队列，再清空微任务队列**。
 
 ### 1.3 CommonJS 模块化核心
 
@@ -89,7 +89,7 @@ npm ci                 # 基于 lockfile 精确安装（CI 环境）
 npx create-react-app   # 无需全局安装直接运行
 ```
 
-> 💡 `package-lock.json` 锁定依赖树版本，保证生产环境一致性。
+> `package-lock.json` 锁定依赖树版本，保证生产环境一致性。
 
 ### 1.5 Express 路由与中间件
 
@@ -167,7 +167,7 @@ async function query() {
 }
 ```
 
-> 💡 使用 `?` 占位符防止 SQL 注入，mysql2 默认返回 Promise 支持 async/await。
+> 使用 `?` 占位符防止 SQL 注入，mysql2 默认返回 Promise 支持 async/await。
 
 ### 1.9 Buffer 与 Stream
 
@@ -309,7 +309,7 @@ Promise.resolve().then(() => console.log('promise'));
 // timeout 或 immediate（取决于系统性能）
 ```
 
-> 💡 `process.nextTick()` 优先级最高，在当前操作结束后立即执行，**可能造成 I/O 饥饿**。Node.js 文档建议多数场景使用 `setImmediate()`。
+> `process.nextTick()` 优先级最高，在当前操作结束后立即执行，**可能造成 I/O 饥饿**。Node.js 文档建议多数场景使用 `setImmediate()`。
 
 ### 2.2 CommonJS 模块加载机制
 
@@ -334,7 +334,7 @@ function require(filePath) {
 }
 ```
 
-> ⚠️ **循环依赖陷阱**：当 A -> B -> A 时，B 拿到的 A.exports 是**未完成的 partial 对象**，可能导致 undefined 引用。
+> **循环依赖陷阱**：当 A -> B -> A 时，B 拿到的 A.exports 是**未完成的 partial 对象**，可能导致 undefined 引用。
 
 ### 2.3 Express 中间件执行机制
 
@@ -360,7 +360,7 @@ app.get('/', (req, res) => {
 });
 ```
 
-> 💡 Express 是**线性请求-响应模型**，中间件按 `use()` 顺序依次执行。Koa 才是真正的**洋葱模型**，支持 async/await 中间件。
+> Express 是**线性请求-响应模型**，中间件按 `use()` 顺序依次执行。Koa 才是真正的**洋葱模型**，支持 async/await 中间件。
 
 ### 2.4 Stream 背压机制
 
@@ -450,7 +450,7 @@ if (cluster.isMaster) {
 }
 ```
 
-> 💡 cluster 模式使用**轮询策略**分发请求到 worker 进程，适合 CPU 密集型场景。I/O 密集型场景用 PM2 的 cluster 模式更便捷。
+> cluster 模式使用**轮询策略**分发请求到 worker 进程，适合 CPU 密集型场景。I/O 密集型场景用 PM2 的 cluster 模式更便捷。
 
 ### 2.8 EventEmitter 自定义事件
 

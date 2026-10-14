@@ -1,7 +1,7 @@
 # BeautifulSoup 解析实战
 > 解析器选择、find/find_all 搜索、select 选择器、遍历导航与提取——"从 HTML 树里摘数据"的主力 API
 
-## 📚 目录
+## 目录
 1. [BeautifulSoup 定位与解析器](#1-beautifulsoup-定位与解析器)
 2. [基础导航：对象模型](#2-基础导航对象模型)
 3. [find/find_all：搜索](#3-findfind_all搜索)
@@ -31,11 +31,11 @@ soup = BeautifulSoup(resp.text, "lxml")      # 爬虫标准姿势
 
 # 解析器对比：
 #   html.parser   ：内置零依赖，慢
-#   lxml          ：快、容错强、支持 XPath（⚠️ 需 pip install lxml）
+#   lxml          ：快、容错强、支持 XPath（需 pip install lxml）
 #   html5lib      ：最符合标准，最慢（极少用）
 ```
 
-> 🎯 规则：**爬虫一律 `BeautifulSoup(html, "lxml")`**——lxml 后端是性能与容错的平衡点（坏标签/不闭合也能忍）。与 [04-lxml 解析](04-lxml与XPath解析.md) 的关系：bs4 用 lxml 当引擎，也可以直接用 lxml 的原生 API。
+> 规则：**爬虫一律 `BeautifulSoup(html, "lxml")`**——lxml 后端是性能与容错的平衡点（坏标签/不闭合也能忍）。与 [04-lxml 解析](04-lxml与XPath解析.md) 的关系：bs4 用 lxml 当引擎，也可以直接用 lxml 的原生 API。
 
 ## 2. 基础导航：对象模型
 
@@ -57,7 +57,7 @@ div.text                          # '标题内容'（全部文本拼接）
 div.get_text(separator=" ")       # '标题 内容'（可指定分隔符）
 ```
 
-> ⚠️ 两个坑：**① `soup.div` 只拿第一个 div**（要全部用 find_all/select）；**② `attrs['class']` 是列表**（多 class 元素）——取值用 `div.get("class", [])`。
+> 两个坑：**① `soup.div` 只拿第一个 div**（要全部用 find_all/select）；**② `attrs['class']` 是列表**（多 class 元素）——取值用 `div.get("class", [])`。
 
 ## 3. find/find_all：搜索
 
@@ -69,7 +69,7 @@ soup.find("a")                        # 第一个 a
 soup.find_all("a")                    # 所有 a（列表）
 
 # ═══ 按属性（class/id 高频）═══
-soup.find_all("a", class_="news-title")     # ⚠️ class_ 带下划线！
+soup.find_all("a", class_="news-title")     # class_ 带下划线！
 soup.find("div", id="header")               # id 直接参数
 soup.find_all("a", href=True)               # 有 href 的 a
 soup.find_all("a", href="/news/")           # href 精确匹配
@@ -90,7 +90,7 @@ soup.find("div", class_="card").find_all("a")  # 容器内搜索
 | `find_all()` | 列表 | 批量提取（主力） |
 | `find_parents/find_next_siblings` | 反向/旁路 | 复杂导航 |
 
-> ⚠️ **`class_` 是 Python 关键字避让**（class 是保留字）——这是 bs4 新手第一坑；但 CSS `select(".title")` 里就不用管。
+> **`class_` 是 Python 关键字避让**（class 是保留字）——这是 bs4 新手第一坑；但 CSS `select(".title")` 里就不用管。
 
 ## 4. select：CSS 选择器
 
@@ -108,9 +108,9 @@ soup.select("div.card > h2")             # 子代
 soup.select_one(".news-title")           # 单个元素
 soup.select_one("a")["href"]             # 直接链式取属性
 
-# ⚠️ 找不到时的行为：
+# 找不到时的行为：
 #   select()    → []（空列表，安全）
-#   select_one()→ None（⚠️ 再取 .text 会 AttributeError！）
+#   select_one()→ None（再取 .text 会 AttributeError！）
 ```
 
 | 选择方式 | 场景 |
@@ -120,7 +120,7 @@ soup.select_one("a")["href"]             # 直接链式取属性
 | `find_all()` | 需要按属性/文本复杂过滤时 |
 | 组合 | `select_one` 容器 + `select` 内部（§7 模式） |
 
-> 🎯 选择器选型：**80% 场景 `select`/`select_one` 够用**（与阶段 1 学的 CSS 语法无缝衔接）；属性模糊匹配/按文本找才用 `find_all` 的 kwargs/lambda。
+> 选择器选型：**80% 场景 `select`/`select_one` 够用**（与阶段 1 学的 CSS 语法无缝衔接）；属性模糊匹配/按文本找才用 `find_all` 的 kwargs/lambda。
 
 ## 5. 提取内容：文本与属性
 
@@ -129,11 +129,11 @@ soup.select_one("a")["href"]             # 直接链式取属性
 title = item.select_one("h2.title")
 title.text                      # 全部文本（含子元素）
 title.get_text(strip=True)      # 去首尾空白（推荐）
-title.string                    # ⚠️ 仅当元素只有一个文本子节点时可用！
+title.string                    # 仅当元素只有一个文本子节点时可用！
 
 # ═══ 属性提取 ═══
 a = item.select_one("a")
-a["href"]                       # ⚠️ 属性不存在会 KeyError！
+a["href"]                       # 属性不存在会 KeyError！
 a.get("href")                   # 安全：不存在返回 None（推荐）
 a.get("href", "")               # 带默认值
 
@@ -155,7 +155,7 @@ def extract_item(item):
     }
 ```
 
-> ⚠️ 空元素三连坑：**`select_one` 可能返回 None → 再取 `.text` 报 AttributeError**——生产代码每个提取都要判空（`if el`）或用 `.get()` 安全取值。列表页偶发缺字段是常态，判空是必修课。
+> 空元素三连坑：**`select_one` 可能返回 None → 再取 `.text` 报 AttributeError**——生产代码每个提取都要判空（`if el`）或用 `.get()` 安全取值。列表页偶发缺字段是常态，判空是必修课。
 
 ## 6. 遍历与导航
 
@@ -183,7 +183,7 @@ for tag in soup.find_all(True):       # 所有标签
     pass
 ```
 
-> 💡 遍历优先级：**能 select/find 就别手动遍历**——`find_next_sibling("div")` 这类"导向导航"比 `next_sibling.next_sibling` 跳空白可靠得多；手动游走是最后手段。
+> 遍历优先级：**能 select/find 就别手动遍历**——`find_next_sibling("div")` 这类"导向导航"比 `next_sibling.next_sibling` 跳空白可靠得多；手动游走是最后手段。
 
 ## 7. 实战模式：容器先行
 
@@ -216,7 +216,7 @@ return results
 内部子选择器写相对定位——改版时先看容器，再调内部。
 ```
 
-> 🎯 本阶段解析能力的验收：**拿到任意静态页面 → 3 分钟内写出容器 + 提取代码并跑通**。下一个能力是"用 XPath 解决 CSS 搞不定的场景"（[04-lxml与XPath解析](04-lxml与XPath解析.md)）。
+> 本阶段解析能力的验收：**拿到任意静态页面 → 3 分钟内写出容器 + 提取代码并跑通**。下一个能力是"用 XPath 解决 CSS 搞不定的场景"（[04-lxml与XPath解析](04-lxml与XPath解析.md)）。
 
 ---
 

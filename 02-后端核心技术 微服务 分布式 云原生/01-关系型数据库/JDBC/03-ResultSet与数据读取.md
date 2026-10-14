@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [ResultSet 的本质：游标](#1-resultset-的本质游标)
 2. [遍历模式](#2-遍历模式)
@@ -41,7 +41,7 @@ try (ResultSet rs = ps.executeQuery()) {
 }
 ```
 
-> 🎯 **核心要点**：ResultSet = "**游标（指向一行的指针）**"——**"next() 先下移再取值"是核心心智模型**；默认单向游标（大数据量流式处理的限制，见第 6 节）。
+> **核心要点**：ResultSet = "**游标（指向一行的指针）**"——**"next() 先下移再取值"是核心心智模型**；默认单向游标（大数据量流式处理的限制，见第 6 节）。
 
 ---
 
@@ -76,7 +76,7 @@ rs.getRow();           // 当前行号
 ④ 尽早处理：ResultSet 持有数据库游标（长时间不消费 = 连接占用）
 ```
 
-> 🎯 **核心要点**：遍历 = "**while(next) 标准 + isBeforeFirst 判空 + 可滚动是特例**"——**"可滚动牺牲性能"与"ResultSet 持有游标要尽快消费"**两个注意点是生产细节。
+> **核心要点**：遍历 = "**while(next) 标准 + isBeforeFirst 判空 + 可滚动是特例**"——**"可滚动牺牲性能"与"ResultSet 持有游标要尽快消费"**两个注意点是生产细节。
 
 ---
 
@@ -98,7 +98,7 @@ rs.getRow();           // 当前行号
 **null 的陷阱**（重要）：
 
 ```java
-// ⚠️ getInt 对 NULL 返回 0（不是 null！）
+// getInt 对 NULL 返回 0（不是 null！）
 int age = rs.getInt("age");       // 数据库 NULL → 0（无法区分）
 boolean flag = rs.getBoolean("flag");  // NULL → false
 
@@ -109,10 +109,10 @@ if (rs.wasNull()) {               // wasNull：检查上一列是否 NULL
 }
 
 // 引用类型（getString/getBigDecimal）本身返回 null（无此问题）
-String name = rs.getString("name");    // NULL → null ✅
+String name = rs.getString("name");    // NULL → null ✓
 ```
 
-> 🎯 **核心要点**：类型映射 = "**基本类型 getXxx 对 NULL 返回默认值（0/false）+ wasNull 判断**"——**"getInt 取到 0 不一定是 0"是经典坑**；金额用 getBigDecimal（配合 scale）、时间用 getObject（JDBC 4.2）。
+> **核心要点**：类型映射 = "**基本类型 getXxx 对 NULL 返回默认值（0/false）+ wasNull 判断**"——**"getInt 取到 0 不一定是 0"是经典坑**；金额用 getBigDecimal（配合 scale）、时间用 getObject（JDBC 4.2）。
 
 ---
 
@@ -120,7 +120,7 @@ String name = rs.getString("name");    // NULL → null ✅
 
 ```java
 // 两种取列方式
-rs.getLong("id");              // ① 列名（可读 ✅ 推荐）
+rs.getLong("id");              // ① 列名（可读 ✓ 推荐）
 rs.getLong(1);                 // ② 列索引（从 1 开始！）
 
 // 列名的优势：
@@ -141,7 +141,7 @@ rs.getString("user_name");     // 按列名（MySQL 默认不区分大小写）
    → 用别名区分（AS user_id）
 ```
 
-> 🎯 **核心要点**：取列 = "**列名可读（推荐）+ 索引从 1 开始**"——**"索引 0 是数组思维、JDBC 从 1"是高频小坑**；重复列名用别名（ORM 结果映射的常见来源）。
+> **核心要点**：取列 = "**列名可读（推荐）+ 索引从 1 开始**"——**"索引 0 是数组思维、JDBC 从 1"是高频小坑**；重复列名用别名（ORM 结果映射的常见来源）。
 
 ---
 
@@ -179,7 +179,7 @@ while (rs.next()) {
 // → 这就是 MyBatis resultType="map" 的 JDBC 底层！
 ```
 
-> 🎯 **核心要点**：元数据 = "**结果集的列结构（列名/类型/精度）**"——**"getColumnLabel（别名）+ getObject 通用取列 → 通用结果映射"**是手写 ORM 的入门钥匙（MyBatis 的 map 结果底层）。
+> **核心要点**：元数据 = "**结果集的列结构（列名/类型/精度）**"——**"getColumnLabel（别名）+ getObject 通用取列 → 通用结果映射"**是手写 ORM 的入门钥匙（MyBatis 的 map 结果底层）。
 
 ---
 
@@ -219,7 +219,7 @@ ps.setObject(2, LocalDateTime.now());
 // 替代旧：rs.getDate().toLocalDate() / ps.setTimestamp(Timestamp.valueOf(...))
 ```
 
-> 🎯 **核心要点**：大字段与时间 = "**BLOB 流式 + setFetchSize 流式查询（防 OOM）**"——**"getObject(列, LocalDate.class) 是现代时间读取"**（JDBC 4.2 替代 Date/Timestamp 转换）；大结果集必须流式。
+> **核心要点**：大字段与时间 = "**BLOB 流式 + setFetchSize 流式查询（防 OOM）**"——**"getObject(列, LocalDate.class) 是现代时间读取"**（JDBC 4.2 替代 Date/Timestamp 转换）；大结果集必须流式。
 
 ---
 
@@ -253,7 +253,7 @@ ResultSet 核心认知：
   大结果集流式（setFetchSize）
 ```
 
-> 🎯 **核心要点**：读取速查 11 项 = "**ResultSet 的完整操作清单**"——**"wasNull 判断 + getObject 时间 + 流式防 OOM"三个现代细节**是框架时代也要掌握的 JDBC 底层能力。
+> **核心要点**：读取速查 11 项 = "**ResultSet 的完整操作清单**"——**"wasNull 判断 + getObject 时间 + 流式防 OOM"三个现代细节**是框架时代也要掌握的 JDBC 底层能力。
 
 ---
 

@@ -1,10 +1,10 @@
 # Postman 前置与测试脚本
 
-> 📝 Pre-request Script 动态构建请求 + Tests 脚本断言响应 —— `pm.*` API 全家桶、Chai 断言库、常用脚本模板
+> Pre-request Script 动态构建请求 + Tests 脚本断言响应 —— `pm.*` API 全家桶、Chai 断言库、常用脚本模板
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [脚本执行时机](#1-脚本执行时机)
 2. [pm 对象 API 详解](#2-pm-对象-api-详解)
@@ -308,7 +308,7 @@ pm.collectionVariables.set("savedData", JSON.stringify(response));
 
 ---
 
-> 🎯 **核心要点**：`pm.test()` 做断言、`pm.expect()` 做校验、`pm.variables.set()` 做链式传参——三个 API 组合起来实现完整的自动化测试。
+> **核心要点**：`pm.test()` 做断言、`pm.expect()` 做校验、`pm.variables.set()` 做链式传参——三个 API 组合起来实现完整的自动化测试。
 
 ---
 

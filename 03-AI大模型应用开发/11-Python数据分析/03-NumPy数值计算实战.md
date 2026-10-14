@@ -1,6 +1,6 @@
 # 03 - NumPy 数值计算实战
 
-> 🎯 NumPy 是 Python 数据科学的基石——没有它就没有 Pandas、scikit-learn、TensorFlow。理解 ndarray 的广播、切片、向量化操作，是写出高效数据分析代码的前提
+> NumPy 是 Python 数据科学的基石——没有它就没有 Pandas、scikit-learn、TensorFlow。理解 ndarray 的广播、切片、向量化操作，是写出高效数据分析代码的前提
 
 ---
 
@@ -110,12 +110,12 @@ import time
 # 对比：计算 100 万个数的平方
 arr = np.random.randn(1_000_000)
 
-# ❌ Python 循环（慢）
+# ✗ Python 循环（慢）
 start = time.time()
 result_loop = [x**2 for x in arr]
 print(f"循环: {time.time() - start:.4f}s")  # ~0.2s
 
-# ✅ NumPy 向量化（快）
+# ✓ NumPy 向量化（快）
 start = time.time()
 result_vec = arr ** 2
 print(f"向量化: {time.time() - start:.4f}s")  # ~0.002s → 快 100x

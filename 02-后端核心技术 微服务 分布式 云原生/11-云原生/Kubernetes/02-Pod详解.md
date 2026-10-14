@@ -1,5 +1,5 @@
 # 02-Pod详解
-> 🎯 Pod是K8s中最小的部署和调度单元 — 理解Pod的本质（共享网络/存储/IPC命名空间）、生命周期、多容器协作模式、资源QoS与调度策略，是掌握K8s的基石
+> Pod是K8s中最小的部署和调度单元 — 理解Pod的本质（共享网络/存储/IPC命名空间）、生命周期、多容器协作模式、资源QoS与调度策略，是掌握K8s的基石
 
 ---
 
@@ -33,7 +33,7 @@ K8s没有直接调度单个容器，而是调度Pod这一层抽象。Pod是**一
   └─────────────────┘
 ```
 
-> 💡 **Pod不是一组进程"捆在一起"的产物，而是"这些进程协同工作，需要共享同一环境"的产物。** 类比：Pod相当于一台"逻辑主机"，其内容器相当于这台主机上的进程。
+> **Pod不是一组进程"捆在一起"的产物，而是"这些进程协同工作，需要共享同一环境"的产物。** 类比：Pod相当于一台"逻辑主机"，其内容器相当于这台主机上的进程。
 
 ### 1.2 共享资源
 
@@ -63,7 +63,7 @@ spec:
       # ↑ sidecar通过localhost访问app容器的80端口
 ```
 
-> 💡 同一Pod内容器间使用localhost通信，不同Pod间必须使用Service或Pod IP。这是K8s网络模型的基本原则。
+> 同一Pod内容器间使用localhost通信，不同Pod间必须使用Service或Pod IP。这是K8s网络模型的基本原则。
 
 ### 1.3 Pod vs Docker Compose Service 对比
 
@@ -145,7 +145,7 @@ spec:
 7. Pod从etcd中删除
 ```
 
-> ⚠️ **Pod的优雅关闭是生产环境的必选项**。如果应用不处理SIGTERM信号，默认30s后会被SIGKILL强杀，可能导致请求丢失或数据不一致。
+> **Pod的优雅关闭是生产环境的必选项**。如果应用不处理SIGTERM信号，默认30s后会被SIGKILL强杀，可能导致请求丢失或数据不一致。
 
 ### 2.4 Pod的restartPolicy
 
@@ -155,7 +155,7 @@ spec:
 | **OnFailure** | exit code != 0时重启 | Job、批处理任务 |
 | **Never** | 永不重启 | 一次性的数据迁移任务 |
 
-> 💡 restartPolicy作用于Pod内的所有容器。Deployment管理的Pod默认`restartPolicy: Always`。
+> restartPolicy作用于Pod内的所有容器。Deployment管理的Pod默认`restartPolicy: Always`。
 
 ---
 
@@ -226,7 +226,7 @@ kubectl exec -it <name> -- sh            # 进入容器排查
 | RunContainerError | Running | 容器运行时错误 | 检查entrypoint、挂载卷权限 |
 | Unknown | Unknown | Node失联 | 排查网络、kubelet健康状态 |
 
-> 💡 **CrashLoopBackOff** = 容器启动失败后K8s自动重试，但每次重试时间指数增长（10s→20s→40s→80s→...→300s max），这是保护机制防止反复重启打垮系统。
+> **CrashLoopBackOff** = 容器启动失败后K8s自动重试，但每次重试时间指数增长（10s→20s→40s→80s→...→300s max），这是保护机制防止反复重启打垮系统。
 
 ---
 
@@ -313,7 +313,7 @@ spec:
           value: "elasticsearch.logging:9200"
 ```
 
-> 💡 **Sidecar是"零侵入增强"的最佳实践**。不修改主容器的代码或镜像，通过附加容器实现日志、监控、网络治理等横切关注点。Istio的Envoy代理是Sidecar模式最成功的工业实践。
+> **Sidecar是"零侵入增强"的最佳实践**。不修改主容器的代码或镜像，通过附加容器实现日志、监控、网络治理等横切关注点。Istio的Envoy代理是Sidecar模式最成功的工业实践。
 
 ### 4.3 Ambassador模式
 
@@ -404,7 +404,7 @@ spec:
 | 格式转换 | Adapter Pattern | 本地文件读取更高效 |
 | 独立微服务 | 独立Pod | 不同的生命周期、独立伸缩、独立版本 |
 
-> ⚠️ **不要把所有相关的容器都塞到一个Pod里**。多容器Pod适用于"紧密协作、共享同一生命周期"的场景。如果两个服务可以独立升级、独立伸缩，就应该用独立Pod + Service。
+> **不要把所有相关的容器都塞到一个Pod里**。多容器Pod适用于"紧密协作、共享同一生命周期"的场景。如果两个服务可以独立升级、独立伸缩，就应该用独立Pod + Service。
 
 ---
 
@@ -511,7 +511,7 @@ spec:
           mountPath: /data
 ```
 
-> 💡 **Init Container是串行执行的**，所以如果Init1耗时30s，Init2耗时10s，Pod的Pending时间至少40s。如果Pending时间异常长，要排查Init Container的日志。
+> **Init Container是串行执行的**，所以如果Init1耗时30s，Init2耗时10s，Pod的Pending时间至少40s。如果Pending时间异常长，要排查Init Container的日志。
 
 ### 5.3 Init Container 的高级用法
 
@@ -532,7 +532,7 @@ initContainers:
       runAsNonRoot: true
 ```
 
-> ⚠️ **如果任何一个Init Container失败，K8s会根据restartPolicy决定是否重启整个Pod**。如果restartPolicy=Always，Init容器失败会重启Pod（重新从头执行所有Init容器）。这是常见陷阱：认为Always只影响主容器。
+> **如果任何一个Init Container失败，K8s会根据restartPolicy决定是否重启整个Pod**。如果restartPolicy=Always，Init容器失败会重启Pod（重新从头执行所有Init容器）。这是常见陷阱：认为Always只影响主容器。
 
 ---
 
@@ -579,7 +579,7 @@ Memory:
   常见写法：256Mi, 512Mi, 1Gi, 2Gi
 ```
 
-> 💡 **生产环境建议使用Mi/Gi（二进制单位）**，因为操作系统内存分配以2的幂为单位。1G = 1000MB，而1Gi = 1024Mi，差~7%，在集群规模下是大量资源。
+> **生产环境建议使用Mi/Gi（二进制单位）**，因为操作系统内存分配以2的幂为单位。1G = 1000MB，而1Gi = 1024Mi，差~7%，在集群规模下是大量资源。
 
 ### 6.3 QoS三等级
 
@@ -648,7 +648,7 @@ spec:
            → Guaranteed Pod最后被驱逐
 ```
 
-> ⚠️ **BestEffort Pod在内存压力下会直接被OOM Kill，且不保证任何资源。生产环境的Java应用至少设置为Burstable，最好设置为Guaranteed。** Java的JVM Heap设置要考虑容器limits，使用`-XX:MaxRAMPercentage=70.0`而非-Xmx。
+> **BestEffort Pod在内存压力下会直接被OOM Kill，且不保证任何资源。生产环境的Java应用至少设置为Burstable，最好设置为Guaranteed。** Java的JVM Heap设置要考虑容器limits，使用`-XX:MaxRAMPercentage=70.0`而非-Xmx。
 
 ### 6.4 JVM容器适配
 
@@ -685,11 +685,11 @@ spec:
 
 | JVM版本 | 容器内存感知 |
 |---------|-------------|
-| Java 8u131- | ❌ 不感知，看到的是宿主机内存 |
-| Java 8u131+ | ✅ 实验性：-XX:+UseCGroupMemoryLimitForHeap |
-| Java 8u191+ | ✅ 默认开启：-XX:+UseContainerSupport |
-| Java 10+ | ✅ 默认支持UseContainerSupport |
-| Java 17+ | ✅ 最佳支持，建议使用 |
+| Java 8u131- | ✗ 不感知，看到的是宿主机内存 |
+| Java 8u131+ | ✓ 实验性：-XX:+UseCGroupMemoryLimitForHeap |
+| Java 8u191+ | ✓ 默认开启：-XX:+UseContainerSupport |
+| Java 10+ | ✓ 默认支持UseContainerSupport |
+| Java 17+ | ✓ 最佳支持，建议使用 |
 
 ---
 
@@ -743,7 +743,7 @@ kubectl label node node-01 gpu=true
 kubectl label node node-02 disk=ssd
 ```
 
-> 💡 nodeSelector是**精确匹配**，不能做"或"、"非"、"in"等逻辑。需要更复杂逻辑时使用nodeAffinity。
+> nodeSelector是**精确匹配**，不能做"或"、"非"、"in"等逻辑。需要更复杂逻辑时使用nodeAffinity。
 
 ### 7.4 nodeAffinity
 
@@ -796,7 +796,7 @@ spec:
 | **Gt** | 值大于（数值比较） | `key Gt 100` |
 | **Lt** | 值小于（数值比较） | `key Lt 50` |
 
-> 💡 **Remember后缀**：`requiredDuringScheduling` = 硬要求，`preferredDuringScheduling` = 软偏好。后半段`IgnoredDuringExecution` = 调度后即使标签变化也不重新调度，这是K8s 1.x的默认行为。`RequiredDuringExecution`还在alpha阶段。
+> **Remember后缀**：`requiredDuringScheduling` = 硬要求，`preferredDuringScheduling` = 软偏好。后半段`IgnoredDuringExecution` = 调度后即使标签变化也不重新调度，这是K8s 1.x的默认行为。`RequiredDuringExecution`还在alpha阶段。
 
 ### 7.5 Taint和Toleration
 
@@ -1138,4 +1138,4 @@ spec:
 
 ---
 
-> 🎯 **掌握Pod就是掌握K8s的原子单元**。理解Pod的共享资源模型（为什么需要pause容器）、生命周期阶段（Pending里面包含多少事情）、QoS等级（Guaranteed不等于永远不会被杀死）、以及多容器模式（Sidecar是服务网格的基础），才能在生产环境中写出健壮的Pod定义。下一章：[03-Deployment与滚动更新](03-Deployment与滚动更新.md)将介绍如何通过Deployment管理Pod的期望状态和发布策略。
+> **掌握Pod就是掌握K8s的原子单元**。理解Pod的共享资源模型（为什么需要pause容器）、生命周期阶段（Pending里面包含多少事情）、QoS等级（Guaranteed不等于永远不会被杀死）、以及多容器模式（Sidecar是服务网格的基础），才能在生产环境中写出健壮的Pod定义。下一章：[03-Deployment与滚动更新](03-Deployment与滚动更新.md)将介绍如何通过Deployment管理Pod的期望状态和发布策略。

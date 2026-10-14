@@ -1,7 +1,7 @@
 # 02-JSP 与 Servlet 的关系及 MVC
 > 面试核心："JSP 本质是 Servlet"、翻译机制、MVC 模式演进——"理解 JSP 原理比会写 JSP 更重要"
 
-## 📚 目录
+## 目录
 1. [JSP 的本质：Servlet](#1-jsp-的本质servlet)
 2. [翻译机制](#2-翻译机制)
 3. [JSP 与 Servlet 对比](#3-jsp-与-servlet-对比)
@@ -22,7 +22,7 @@
   index_jsp.class       ← 编译后的类（继承 HttpJspBase → HttpServlet）
 ```
 
-> 🎯 **一句话原理**：**JSP = 以页面形式书写的 Servlet**——容器把 JSP 翻译成 Servlet（`_jspService` 方法），再走 Servlet 生命周期。
+> **一句话原理**：**JSP = 以页面形式书写的 Servlet**——容器把 JSP 翻译成 Servlet（`_jspService` 方法），再走 Servlet 生命周期。
 
 ## 2. 翻译机制
 
@@ -58,7 +58,7 @@ public final class index_jsp extends HttpJspBase {
 | `<%= 表达式 %>` | 表达式 | `out.print(expr)` |
 | `<%! %>` | 声明 | 成为类的成员 |
 
-> 💡 **了解翻译机制的价值**：① 理解"首次访问慢"；② 排错看翻译后的 Java（JSP 报错行号对应 .java）；③ 面试讲原理有深度。
+> **了解翻译机制的价值**：① 理解"首次访问慢"；② 排错看翻译后的 Java（JSP 报错行号对应 .java）；③ 面试讲原理有深度。
 
 ## 3. JSP 与 Servlet 对比
 
@@ -81,7 +81,7 @@ Servlet 处理完：request.setAttribute("users", list);
 JSP 读取：${users} 渲染列表
 ```
 
-> 🎯 **MVC 分工记忆**：**Servlet 管"干什么"（Controller）、JSP 管"长什么样"（View）、JavaBean 管"数据"（Model）**——三者各司其职。
+> **MVC 分工记忆**：**Servlet 管"干什么"（Controller）、JSP 管"长什么样"（View）、JavaBean 管"数据"（Model）**——三者各司其职。
 
 ## 4. JavaWeb 的 MVC 演进
 
@@ -103,7 +103,7 @@ JSP 读取：${users} 渲染列表
 | Boot 时代 | Thymeleaf | 服务端模板现代版 |
 | 2026 主流 | 前后端分离 | 彻底解耦 |
 
-> 🎯 **演进主线是面试亮点**：能讲出"从 JSP 脚本到前后端分离的演进逻辑 = 逻辑与视图分离"——比只会用 JSP 高一个层次。
+> **演进主线是面试亮点**：能讲出"从 JSP 脚本到前后端分离的演进逻辑 = 逻辑与视图分离"——比只会用 JSP 高一个层次。
 
 ## 5. 面试必答
 
@@ -127,7 +127,7 @@ A：request/response/session/application/pageContext/out/config/page/exception
 
 ## 6. 核心要点
 
-> 🎯 **核心要点**：
+> **核心要点**：
 > - **JSP 本质是 Servlet**（翻译机制：HTML→write、脚本→嵌入、表达式→print）；
 > - 首次访问慢的原因 = 翻译+编译；
 > - MVC 分工：Servlet=Controller、JSP=View、Bean=Model；

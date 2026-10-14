@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [参数全景分组](#1-参数全景分组)
 2. [结构参数：r / alpha / dropout / bias](#2-结构参数r--alpha--dropout--bias)
@@ -135,7 +135,7 @@ LoraConfig(
 4. finetuning_type 能选哪些值？各自一句话定位？
 5. 过拟合/欠拟合/收敛慢/显存紧四类信号各调什么参数？
 
-> 🎯 **核心要点**：LoraConfig = **五个参数组**（结构/目标层/方法/初始化/量化）；日常 `r=16, alpha=32, target=q/k/v/o`，方法切换靠 v0.18 的 `finetuning_type` 一个开关；**"容量看 r，强度看 α/r，高秩配 rslora，QLoRA 配 loftq"**——这就是全部选型心法。
+> **核心要点**：LoraConfig = **五个参数组**（结构/目标层/方法/初始化/量化）；日常 `r=16, alpha=32, target=q/k/v/o`，方法切换靠 v0.18 的 `finetuning_type` 一个开关；**"容量看 r，强度看 α/r，高秩配 rslora，QLoRA 配 loftq"**——这就是全部选型心法。
 
 ---
 

@@ -1,6 +1,6 @@
 # 06 - MCP Client 开发实战
 
-> 🎯 MCP Client 是连接 LLM 和 Server 的桥梁 — 管理多 Server 连接、Session 生命周期、工具发现与路由、重连与容错
+> MCP Client 是连接 LLM 和 Server 的桥梁 — 管理多 Server 连接、Session 生命周期、工具发现与路由、重连与容错
 
 ---
 
@@ -254,10 +254,10 @@ public class ToolSchemaConverter {
         // 附加 Annotations 信息
         if (tool.annotations() != null) {
             if (tool.annotations().readOnlyHint()) {
-                desc.append("\n⚠️ 只读操作，无副作用");
+                desc.append("\n只读操作，无副作用");
             }
             if (tool.annotations().destructiveHint()) {
-                desc.append("\n🔴 破坏性操作！执行前需用户确认");
+                desc.append("\n破坏性操作！执行前需用户确认");
             }
         }
 
@@ -313,9 +313,9 @@ class MultiServerMCPClient:
 
         for cfg, result in zip(configs, results):
             if isinstance(result, Exception):
-                print(f"❌ Server '{cfg.name}' 连接失败: {result}")
+                print(f"✗ Server '{cfg.name}' 连接失败: {result}")
             else:
-                print(f"✅ Server '{cfg.name}' 连接成功，{result} 个工具")
+                print(f"✓ Server '{cfg.name}' 连接成功，{result} 个工具")
 
     async def _connect_one(self, config: ServerConfig) -> int:
         """连接单个 Server 并注册工具"""
@@ -448,9 +448,9 @@ class McpClientManager {
     results.forEach((result, i) => {
       const name = configs[i].name;
       if (result.status === "fulfilled") {
-        console.log(`✅ ${name}: ${result.value} tools`);
+        console.log(`✓ ${name}: ${result.value} tools`);
       } else {
-        console.error(`❌ ${name}: ${result.reason}`);
+        console.error(`✗ ${name}: ${result.reason}`);
       }
     });
   }
@@ -673,7 +673,7 @@ public class McpToolCallback implements ToolCallback {
 }
 ```
 
-> 🎯 **核心要点**：Client 的核心职责 = 多 Server 连接池 + 工具发现聚合 + 名称路由 + LLM 格式适配。关键是工具名冲突处理和连接故障隔离
+> **核心要点**：Client 的核心职责 = 多 Server 连接池 + 工具发现聚合 + 名称路由 + LLM 格式适配。关键是工具名冲突处理和连接故障隔离
 
 ---
 

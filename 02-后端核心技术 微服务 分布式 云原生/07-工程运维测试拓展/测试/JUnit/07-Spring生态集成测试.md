@@ -2,7 +2,7 @@
 
 > Spring 测试体系以 SpringExtension 桥接 Jupiter，@SpringBootTest 全量启动 + 切片测试定点加载 + Testcontainers 真实依赖，构成 2026 年（Spring Boot 4 + JUnit 6）的标准测试栈。
 
-## 📚 目录
+## 目录
 
 1. [Spring 测试体系架构](#1)
 2. [单元级：SpringExtension](#2)
@@ -110,7 +110,7 @@ class RepoTest {
 }
 ```
 
-> ⚠️ **@Transactional 的局限**：只回滚事务型 DAO 的写入；异步任务、消息消费、独立线程中的写入不回滚；HTTP 调用场景下 MockMvc 请求在**同一线程**执行才在事务内——`RANDOM_PORT` 真实服务器模式不受事务保护。
+> **@Transactional 的局限**：只回滚事务型 DAO 的写入；异步任务、消息消费、独立线程中的写入不回滚；HTTP 调用场景下 MockMvc 请求在**同一线程**执行才在事务内——`RANDOM_PORT` 真实服务器模式不受事务保护。
 
 ## 4. 切片测试
 
@@ -144,7 +144,7 @@ class OrderControllerSliceTest {
 }
 ```
 
-> ⚠️ Boot 4 注意：切片注解所在包已调整（`org.springframework.boot.test.autoconfigure.*` 迁移），`@WebMvcTest` 未显式指定 Controller 时可能因 Bean 不完整失败——切片测试**必须显式声明被测切片**，且只测「本层契约」，不要期望它覆盖跨层逻辑。
+> Boot 4 注意：切片注解所在包已调整（`org.springframework.boot.test.autoconfigure.*` 迁移），`@WebMvcTest` 未显式指定 Controller 时可能因 Bean 不完整失败——切片测试**必须显式声明被测切片**，且只测「本层契约」，不要期望它覆盖跨层逻辑。
 
 ## 5. Mock 集成：@MockitoBean
 
@@ -216,7 +216,7 @@ class OrderRepositoryIT {
 | 容器复用（`withReuse(true)`） | 本地开发提速，CI 中关闭 |
 | 多容器（`GenericContainer` 组合） | 全链路（PG + Redis + Kafka）冒烟 |
 
-> ⚠️ 注意：Testcontainers 需要 Docker 守护进程——CI 上必须配置 Docker 环境（GitHub Actions 内置），无 Docker 环境用嵌入式替代并显式标注降级策略。
+> 注意：Testcontainers 需要 Docker 守护进程——CI 上必须配置 Docker 环境（GitHub Actions 内置），无 Docker 环境用嵌入式替代并显式标注降级策略。
 
 ## 7. 上下文缓存与性能
 
@@ -237,7 +237,7 @@ Spring TestContext 按「配置组合」缓存上下文（`ApplicationContext` �
 | 并行执行 + 上下文预热 | `junit.jupiter.execution.parallel.*` 配合切片分层 |
 | `@MockitoBean` 只 mock 外部边界 | 减少容器内 Bean 数量，缩短启动 |
 
-> 🎯 **核心要点**：Spring 测试分三层——SpringExtension 验证装配、切片测试验证单层契约、@SpringBootTest + Testcontainers 验证真实集成；2026 年的正确姿势是「**切片测试为主力、容器集成做验收**」，并牢记 Boot 4 三大迁移点：JUnit 6 默认、@MockBean → @MockitoBean、Vintage 移除。
+> **核心要点**：Spring 测试分三层——SpringExtension 验证装配、切片测试验证单层契约、@SpringBootTest + Testcontainers 验证真实集成；2026 年的正确姿势是「**切片测试为主力、容器集成做验收**」，并牢记 Boot 4 三大迁移点：JUnit 6 默认、@MockBean → @MockitoBean、Vintage 移除。
 
 ---
 

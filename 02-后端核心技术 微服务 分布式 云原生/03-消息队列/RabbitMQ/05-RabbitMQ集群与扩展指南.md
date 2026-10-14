@@ -21,7 +21,7 @@ RabbitMQ 集群基于 Erlang 分布式能力，节点分为两种类型：
 | **磁盘节点 (Disc)** | 所有元数据 + 消息 | 完全恢复 | 生产必用 |
 | **内存节点 (RAM)** | 仅内存 | 重启后依赖磁盘节点 | 性能优化 |
 
-> ⚠️ 生产环境所有节点都应为磁盘节点。建议 3 个节点的奇数组合，避免脑裂。
+> 生产环境所有节点都应为磁盘节点。建议 3 个节点的奇数组合，避免脑裂。
 
 ### 1.2 集群架构图
 ```text
@@ -174,7 +174,7 @@ rabbitmqctl clear_policy ha-all
 | `ha-sync-mode` | `automatic` / `manual` | 同步方式 |
 | `ha-promote-on-shutdown` | `always` / `when-synced` | 宕机时主队列提升策略 |
 
-> 💡 `ha-mode=exactly` 配合 `ha-params=2` 实现 2 副本，兼顾可用性与性能。
+> `ha-mode=exactly` 配合 `ha-params=2` 实现 2 副本，兼顾可用性与性能。
 
 ### 2.6 镜像队列状态监控
 ```bash
@@ -696,4 +696,4 @@ rabbitmqctl list_queues name synchronised_slave_pids unsynchronised_slave_pids
 tail -n 100 /var/log/rabbitmq/rabbitmq.log | grep -i "error\|alarm\|partition"
 ```
 
-> 🎯 **核心要点**：集群保奇数节点+自动修复，元数据保备份+定期，跨地域用联邦，插件必测试再上线。
+> **核心要点**：集群保奇数节点+自动修复，元数据保备份+定期，跨地域用联邦，插件必测试再上线。

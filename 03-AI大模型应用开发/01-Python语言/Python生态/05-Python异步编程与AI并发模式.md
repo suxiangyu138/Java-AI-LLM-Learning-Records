@@ -1,6 +1,6 @@
 # 05 - Python 异步编程与 AI 并发模式
 
-> 🎯 LLM API 调用是 IO 密集型 — asyncio 能让你同时发 100 个请求而不用等任何一个。本章覆盖 asyncio + LLM 并发调用的实战模式：semaphore 限流、gather 并发、流式处理回退方案
+> LLM API 调用是 IO 密集型 — asyncio 能让你同时发 100 个请求而不用等任何一个。本章覆盖 asyncio + LLM 并发调用的实战模式：semaphore 限流、gather 并发、流式处理回退方案
 
 ---
 
@@ -146,6 +146,6 @@ async def batch(prompts: list[str]):
 
 ---
 
-> 🎯 **核心要点**：AI 应用的 Python 并发三件套 — **① asyncio.gather 并发 ② Semaphore 限流（防 API 限流/爆内存）③ FastAPI 异步端点（不阻塞其他请求）**。所有 LLM SDK（openai/anthropic）都提供 async 客户端，务必用 `AsyncOpenAI` 而不是在同步方法里 `asyncio.run()`。
+> **核心要点**：AI 应用的 Python 并发三件套 — **① asyncio.gather 并发 ② Semaphore 限流（防 API 限流/爆内存）③ FastAPI 异步端点（不阻塞其他请求）**。所有 LLM SDK（openai/anthropic）都提供 async 客户端，务必用 `AsyncOpenAI` 而不是在同步方法里 `asyncio.run()`。
 
 **下一模块**：[06-AI应用评估与可观测性](06-AI应用评估与可观测性.md) / **返回总览**：[00-生态总览](00-Python生态知识体系总览.md)

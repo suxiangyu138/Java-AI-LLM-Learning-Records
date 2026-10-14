@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [一句话定位](#1-一句话定位)
 2. [SimpleDirectoryReader：本地文件](#2-simpledirectoryreader本地文件)
@@ -162,7 +162,7 @@ for batch in chunks(file_list, 500):
 
 **验收动作**：① 用 SimpleDirectoryReader 加载 10 个本地文件并打印 Document 数量与元数据；② 查 LlamaHub 确认自己数据源有没有现成 reader；③ 理解 LlamaParse 四档定位——**"加载器 = RAG 的第一道质量关卡"**。
 
-> 🎯 **核心要点**：**加载三路（本地/LlamaHub/LlamaParse）**；**LlamaParse 四档按版式复杂度选**；**2026 新包 llama-cloud（llama-parse 弃用）**；**解析失败扣配额要重试**——"别自己写解析——300+ 现成轮子 + 云解析兜底"。
+> **核心要点**：**加载三路（本地/LlamaHub/LlamaParse）**；**LlamaParse 四档按版式复杂度选**；**2026 新包 llama-cloud（llama-parse 弃用）**；**解析失败扣配额要重试**——"别自己写解析——300+ 现成轮子 + 云解析兜底"。
 
 ---
 

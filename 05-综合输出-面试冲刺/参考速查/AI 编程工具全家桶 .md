@@ -36,7 +36,7 @@
 claude
 ```
 
-> ⚠️ **注意**：Claude Code 原生只支持 Anthropic API，不直接支持 DeepSeek。如需使用 DeepSeek，请用 Aider 或 LangChain。
+> **注意**：Claude Code 原生只支持 Anthropic API，不直接支持 DeepSeek。如需使用 DeepSeek，请用 Aider 或 LangChain。
 
 ### 2. Cursor — AI-first IDE
 
@@ -72,7 +72,7 @@ claude
 | `Tab` | 接受补全 |
 | `Ctrl+→` | 逐词接受 |
 
-> ℹ️ 需要 GitHub 账号 + 订阅。
+> 需要 GitHub 账号 + 订阅。
 
 ### 5. Augment Code (v0.859.7) — 大上下文 AI
 
@@ -82,7 +82,7 @@ claude
 
 ### 6. 通义灵码 (v2.6.2) — 阿里云，中文生态
 
-> ℹ️ 需要阿里云账号登录。
+> 需要阿里云账号登录。
 
 ---
 
@@ -102,7 +102,7 @@ aider --model deepseek/deepseek-reasoner
 |------|-----|
 | 模型 | `deepseek/deepseek-chat`（已配置） |
 | 配置文件 | `D:\AI-Tools\.aider.conf.yml` |
-| 测试状态 | ✅ 已验证连通（费用 $0.00065/次） |
+| 测试状态 | ✓ 已验证连通（费用 $0.00065/次） |
 
 **常用命令**：
 
@@ -254,14 +254,14 @@ uv add 包名            # 添加依赖
 
 | 工具 | 状态 | 说明 |
 |------|------|------|
-| Aider | ✅ 直接可用 | — |
-| LangChain | ✅ 代码配置 | — |
-| CrewAI | ✅ 代码配置 | — |
-| AutoGen | ✅ 代码配置 | — |
-| Pydantic AI | ✅ 代码配置 | — |
-| OpenAI SDK | ✅ 代码配置 | — |
-| Claude Code | ⚠️ 原生不支持 | 用 Aider 替代 |
-| Cursor | ⚠️ 需手动配置 | Settings 中添加 |
+| Aider | ✓ 直接可用 | — |
+| LangChain | ✓ 代码配置 | — |
+| CrewAI | ✓ 代码配置 | — |
+| AutoGen | ✓ 代码配置 | — |
+| Pydantic AI | ✓ 代码配置 | — |
+| OpenAI SDK | ✓ 代码配置 | — |
+| Claude Code | 原生不支持 | 用 Aider 替代 |
+| Cursor | 需手动配置 | Settings 中添加 |
 
 ---
 

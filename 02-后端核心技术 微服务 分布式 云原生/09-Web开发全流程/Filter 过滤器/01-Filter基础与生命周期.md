@@ -1,7 +1,7 @@
 # 01-Filter 基础与生命周期
 > Filter 接口三方法、生命周期、执行时机、第一个 Filter——"请求进出的统一关卡"
 
-## 📚 目录
+## 目录
 1. [Filter 接口](#1-filter-接口)
 2. [生命周期三阶段](#2-生命周期三阶段)
 3. [doFilter 的执行时机](#3-dofilter-的执行时机)
@@ -32,7 +32,7 @@ public interface Filter {
 | `doFilter` | 每次请求 | N 次 | 拦截逻辑 |
 | `destroy` | 容器关闭 | 1 次 | 释放资源 |
 
-> 🎯 **三方法记忆**：**init 一次、doFilter 每次、destroy 一次**——与 Servlet 生命周期同构（容器管理）。
+> **三方法记忆**：**init 一次、doFilter 每次、destroy 一次**——与 Servlet 生命周期同构（容器管理）。
 
 ## 2. 生命周期三阶段
 
@@ -55,7 +55,7 @@ public interface Filter {
 | doFilter | 每次请求 | 核心逻辑在这 |
 | destroy | 容器关闭 | 释放连接/资源 |
 
-> 💡 Filter 是**单例**：init/destroy 只执行一次——**实例变量注意线程安全**（共享状态要小心，与 Servlet 同规则）。
+> Filter 是**单例**：init/destroy 只执行一次——**实例变量注意线程安全**（共享状态要小心，与 Servlet 同规则）。
 
 ## 3. doFilter 的执行时机
 
@@ -83,7 +83,7 @@ public void doFilter(ServletRequest request, ServletResponse response,
 }
 ```
 
-> 🎯 **三位置语义**：前置（拦截判断）、放行（必须调用）、后置（收尾统计）——**不调 chain.doFilter = 请求到此为止**（登录校验 Filter 的拦截就是这么实现的）。
+> **三位置语义**：前置（拦截判断）、放行（必须调用）、后置（收尾统计）——**不调 chain.doFilter = 请求到此为止**（登录校验 Filter 的拦截就是这么实现的）。
 
 ## 4. 第一个 Filter 实战
 
@@ -151,11 +151,11 @@ url-pattern 匹配规则：
 | 指定后缀 | `*.do` |
 | 精确路径 | `/login` |
 
-> ⚠️ **匹配纪律**：`/*` 会拦截静态资源（CSS/JS/图片）——静态资源通常不经过业务 Filter（或 Filter 内放行静态路径）。
+> **匹配纪律**：`/*` 会拦截静态资源（CSS/JS/图片）——静态资源通常不经过业务 Filter（或 Filter 内放行静态路径）。
 
 ## 6. 核心要点
 
-> 🎯 **核心要点**：
+> **核心要点**：
 > - 三方法：init 一次 / doFilter 每次 / destroy 一次（容器管理生命周期）；
 > - doFilter 三位置：前置（拦截）、放行（chain.doFilter 必须调）、后置（收尾）；
 > - **不调 chain.doFilter = 拦截**（登录校验的实现基础）；

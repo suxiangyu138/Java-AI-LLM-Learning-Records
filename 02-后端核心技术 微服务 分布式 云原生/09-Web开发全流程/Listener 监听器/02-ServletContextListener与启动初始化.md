@@ -1,7 +1,7 @@
 # 02-ServletContextListener 与启动初始化
 > 最常用的监听器：应用启动/关闭回调、初始化任务（缓存预热/配置加载/定时任务）、context 共享——"启动时把该准备的准备好"
 
-## 📚 目录
+## 目录
 1. [ServletContextListener 是什么](#1-servletcontextlistener-是什么)
 2. [contextInitialized：启动回调](#2-contextinitialized启动回调)
 3. [contextDestroyed：关闭回调](#3-contextdestroyed关闭回调)
@@ -23,7 +23,7 @@
   最常用的 Listener（启动初始化标配）
 ```
 
-> 🎯 **定位**：ServletContextListener = **"应用启动与关闭的钩子"**——Spring Boot 的 `ApplicationRunner`/启动事件也做类似的事（见第 6 节对比）。
+> **定位**：ServletContextListener = **"应用启动与关闭的钩子"**——Spring Boot 的 `ApplicationRunner`/启动事件也做类似的事（见第 6 节对比）。
 
 ## 2. contextInitialized：启动回调
 
@@ -70,7 +70,7 @@ public class AppInitListener implements ServletContextListener {
 | 资源初始化 | 连接池/线程池 |
 | 数据字典 | 字典表加载到内存 |
 
-> 🎯 **启动回调的职责**：**"应用准备好对外服务前，把该准备的准备好"**——全局配置、缓存预热、定时任务都在这里做。
+> **启动回调的职责**：**"应用准备好对外服务前，把该准备的准备好"**——全局配置、缓存预热、定时任务都在这里做。
 
 ## 3. contextDestroyed：关闭回调
 
@@ -102,7 +102,7 @@ public class AppShutdownListener implements ServletContextListener {
 | 关闭连接池 | 释放数据库连接 |
 | 持久化内存状态 | 关前保存 |
 
-> ⚠️ **关闭回调的价值**：**优雅停机**——先停调度、再关资源；现代框架（Spring）有更完善的优雅停机（见[Spring Boot 体系](../../../06-Spring全家桶/SpringBoot/00-SpringBoot知识体系总览.md)），Listener 是传统方式。
+> **关闭回调的价值**：**优雅停机**——先停调度、再关资源；现代框架（Spring）有更完善的优雅停机（见[Spring Boot 体系](../../../06-Spring全家桶/SpringBoot/00-SpringBoot知识体系总览.md)），Listener 是传统方式。
 
 ## 4. 初始化任务实战
 
@@ -140,7 +140,7 @@ public class AppInitListener implements ServletContextListener {
 }
 ```
 
-> 💡 **初始化任务设计要点**：初始化失败要**快速失败**（启动即报错，别带病运行）；定期刷新与启动预热配合（数据不会永远不变）。
+> **初始化任务设计要点**：初始化失败要**快速失败**（启动即报错，别带病运行）；定期刷新与启动预热配合（数据不会永远不变）。
 
 ## 5. ServletContext 共享数据
 
@@ -160,7 +160,7 @@ Map<String, String> dict = (Map<String, String>) context.getAttribute("dictCache
 | HttpSession | 会话 | 单用户 |
 | Request | 请求 | 单请求 |
 
-> ⚠️ **全局数据纪律**：context 存的是"全局共享且只读/线程安全"的数据（字典/配置）——**可变状态放全局要线程安全**（并发读写问题）。
+> **全局数据纪律**：context 存的是"全局共享且只读/线程安全"的数据（字典/配置）——**可变状态放全局要线程安全**（并发读写问题）。
 
 ## 6. 与 Spring Boot 启动事件的对比
 
@@ -176,7 +176,7 @@ Map<String, String> dict = (Map<String, String>) context.getAttribute("dictCache
 public class AppInitRunner implements ApplicationRunner {
 
     @Autowired
-    private DictService dictService;      // ✅ 可注入
+    private DictService dictService;      // ✓ 可注入
 
     @Override
     public void run(ApplicationArguments args) {
@@ -185,11 +185,11 @@ public class AppInitRunner implements ApplicationRunner {
 }
 ```
 
-> 🎯 **选型结论**：**Spring Boot 项目用 ApplicationRunner/启动事件**（可注入 Bean、容器就绪）；ServletContextListener 是**传统 JavaWeb 方式**（Spring 容器未就绪，无法注入）——老项目看懂，新项目用 Spring 方式。
+> **选型结论**：**Spring Boot 项目用 ApplicationRunner/启动事件**（可注入 Bean、容器就绪）；ServletContextListener 是**传统 JavaWeb 方式**（Spring 容器未就绪，无法注入）——老项目看懂，新项目用 Spring 方式。
 
 ## 7. 核心要点
 
-> 🎯 **核心要点**：
+> **核心要点**：
 > - ServletContextListener = 应用启动/关闭钩子（只触发一次）；
 > - 启动回调：全局配置、缓存预热、定时任务启动（"对外服务前准备好"）；
 > - 关闭回调：优雅停机（停调度/关资源）；

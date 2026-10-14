@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [三种触发模式与执行语义](#1-三种触发模式与执行语义)
 2. [cron 表达式全解](#2-cron-表达式全解)
@@ -48,7 +48,7 @@ fixedRate（固定频率）：
     多线程调度器下：B 与 A 可能同时运行（叠加执行！）
 ```
 
-> 🎯 **要点**：fixedRate 在"任务耗时 > 间隔"时的行为取决于调度器线程数——单线程=错过不补、多线程=并发叠加。**对执行时长没有严格上界的任务，用 fixedDelay 更安全**（永不叠加）。
+> **要点**：fixedRate 在"任务耗时 > 间隔"时的行为取决于调度器线程数——单线程=错过不补、多线程=并发叠加。**对执行时长没有严格上界的任务，用 fixedDelay 更安全**（永不叠加）。
 
 ## 2. cron 表达式全解
 
@@ -94,7 +94,7 @@ fixedRate（固定频率）：
 | `0 0 0 ? * MON` | 每周一零点 |
 | `0 15 10 ? * MON-FRI` | 工作日 10:15 |
 
-> ⚠️ **日与周互斥**：cron 中"日"与"周"不能同时指定具体值，必须一方为 `?`（如 `0 0 0 1 * MON` 非法）。这是最常见的 cron 语法错误。
+> **日与周互斥**：cron 中"日"与"周"不能同时指定具体值，必须一方为 `?`（如 `0 0 0 1 * MON` 非法）。这是最常见的 cron 语法错误。
 
 ## 3. 常用属性：时区、initialDelay 与占位符
 
@@ -114,7 +114,7 @@ public void morningReport() { ... }
 | `initialDelayString` | 占位符形式 | `${task.delay:60000}` |
 | 占位符 | 全部属性支持 `${...}` | 配置中心化、可带默认值 |
 
-> 💡 **启动风暴**：应用启动瞬间所有 @Scheduled 任务同时触发（尤其整点 cron）——用 `initialDelay` 或随机延迟错峰；数据库连接池也要扛住首波。
+> **启动风暴**：应用启动瞬间所有 @Scheduled 任务同时触发（尤其整点 cron）——用 `initialDelay` 或随机延迟错峰；数据库连接池也要扛住首波。
 
 ## 4. 执行语义陷阱：重叠、错过与阻塞
 
@@ -149,7 +149,7 @@ public class SyncTask {
 }
 ```
 
-> 🎯 **要点**：多实例部署时 `AtomicBoolean` 只能防"本实例重叠"，跨实例重叠需分布式锁（08 篇）。
+> **要点**：多实例部署时 `AtomicBoolean` 只能防"本实例重叠"，跨实例重叠需分布式锁（08 篇）。
 
 ## 5. 自调用与代理失效
 
@@ -161,7 +161,7 @@ public class TaskRunner {
 
     @Scheduled(fixedDelay = 1000)
     public void trigger() {
-        // ✅ 正常：@Scheduled 由 BeanPostProcessor 直接注册，this 调用不受影响
+        // ✓ 正常：@Scheduled 由 BeanPostProcessor 直接注册，this 调用不受影响
         // （@Scheduled 的注册不依赖 AOP 代理，扫描器直接拿方法注册）
         doWork();
     }
@@ -172,11 +172,11 @@ public class TaskRunner {
 
 | 注解 | 自调用是否失效 | 原因 |
 |------|:---:|------|
-| @Scheduled | ❌ 不失效 | 扫描器直接注册方法，不走代理 |
-| @Async | ✅ **失效** | 走 AOP 代理（04 篇） |
-| @Transactional | ✅ **失效** | 走 AOP 代理 |
+| @Scheduled | ✗ 不失效 | 扫描器直接注册方法，不走代理 |
+| @Async | ✓ **失效** | 走 AOP 代理（04 篇） |
+| @Transactional | ✓ **失效** | 走 AOP 代理 |
 
-> 💡 **易混点**：很多人以为 @Scheduled 也有自调用问题——其实没有。真正会失效的是**任务内部调用的 @Async/@Transactional 方法**（代理跨类才生效）。
+> **易混点**：很多人以为 @Scheduled 也有自调用问题——其实没有。真正会失效的是**任务内部调用的 @Async/@Transactional 方法**（代理跨类才生效）。
 
 ## 6. 任务取消与生命周期管理
 
@@ -205,9 +205,9 @@ public class SwitchableTask {
 }
 ```
 
-> ⚠️ **优雅关闭注意**：默认关闭时容器直接打断调度线程——正在执行的任务可能被中断。生产务必配置 `waitForTasksToCompleteOnShutdown=true` + `awaitTerminationSeconds`（05 篇）。
+> **优雅关闭注意**：默认关闭时容器直接打断调度线程——正在执行的任务可能被中断。生产务必配置 `waitForTasksToCompleteOnShutdown=true` + `awaitTerminationSeconds`（05 篇）。
 
-> 🎯 **核心要点**：@Scheduled 的三个语义武器——fixedDelay（结束起算，安全）、fixedRate（开始起算，准时但有叠加风险）、cron（日历语义，配 zone）。写任务的纪律：耗时不可控用 fixedDelay、跨时区必配 zone、启动错峰用 initialDelay、防重叠加运行中标记。
+> **核心要点**：@Scheduled 的三个语义武器——fixedDelay（结束起算，安全）、fixedRate（开始起算，准时但有叠加风险）、cron（日历语义，配 zone）。写任务的纪律：耗时不可控用 fixedDelay、跨时区必配 zone、启动错峰用 initialDelay、防重叠加运行中标记。
 
 ---
 

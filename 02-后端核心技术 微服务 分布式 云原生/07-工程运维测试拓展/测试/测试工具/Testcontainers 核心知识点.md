@@ -50,10 +50,10 @@ Testcontainers 方案
 ┌─────────────────────────────────────────────────┐
 │ 方案：测试 = 真实 Docker 容器 = 生产环境          │
 │                                                   │
-│   ✅ 每次测试启动真实的 MySQL 容器                 │
-│   ✅ 完全一致的 SQL 行为和索引行为                 │
-│   ✅ 用完自动销毁，无残留                          │
-│   ✅ CI/CD 环境中一样运行                          │
+│   ✓ 每次测试启动真实的 MySQL 容器                 │
+│   ✓ 完全一致的 SQL 行为和索引行为                 │
+│   ✓ 用完自动销毁，无残留                          │
+│   ✓ CI/CD 环境中一样运行                          │
 └─────────────────────────────────────────────────┘
 ```
 
@@ -256,7 +256,7 @@ Integer port = redis.getFirstMappedPort();
 // Jedis jedis = new Jedis(host, port);
 ```
 
-> 💡 RedisContainer 提供了 `getRedisURI()` 方法，直接返回 `redis://host:port` 格式的 URI。
+> RedisContainer 提供了 `getRedisURI()` 方法，直接返回 `redis://host:port` 格式的 URI。
 
 ### 4.5 Kafka 容器
 
@@ -332,7 +332,7 @@ String connectionString = mongodb.getConnectionString();
 // 返回: mongodb://localhost:32790/test
 ```
 
-> 💡 MongoDBContainer 自动创建 `test` 数据库，可直接使用。
+> MongoDBContainer 自动创建 `test` 数据库，可直接使用。
 
 ---
 
@@ -364,7 +364,7 @@ class SharedContainerTest {
 }
 ```
 
-> 💡 `static` + `@Container`：在测试类初始化时启动一次，所有测试方法共享。
+> `static` + `@Container`：在测试类初始化时启动一次，所有测试方法共享。
 
 **方式二：实例字段 -- 每个测试方法独立容器**
 
@@ -383,7 +383,7 @@ class PerTestContainerTest {
 }
 ```
 
-> ⚠️ 实例字段会在每个测试方法执行前启动新容器，测试结束后销毁。**仅在需要隔离的场景下使用**，性能开销较大。
+> 实例字段会在每个测试方法执行前启动新容器，测试结束后销毁。**仅在需要隔离的场景下使用**，性能开销较大。
 
 ### 5.3 手动管理生命周期
 
@@ -474,7 +474,7 @@ class UserServiceTest extends AbstractIntegrationTest {
 }
 ```
 
-> 🎯 单例模式是**最佳实践**：所有容器在测试套件开始时启动一次，全部测试运行结束后才销毁，大幅缩短测试执行时间。
+> 单例模式是**最佳实践**：所有容器在测试套件开始时启动一次，全部测试运行结束后才销毁，大幅缩短测试执行时间。
 
 ---
 
@@ -526,7 +526,7 @@ static void configureProperties(DynamicPropertyRegistry registry) {
 }
 ```
 
-> 💡 `DynamicPropertyRegistry` 接收的是 `Supplier<String>` 或 `Supplier<Integer>`，所以需要使用 Lambda 或方法引用。
+> `DynamicPropertyRegistry` 接收的是 `Supplier<String>` 或 `Supplier<Integer>`，所以需要使用 Lambda 或方法引用。
 
 ---
 
@@ -650,7 +650,7 @@ Integer redisPort = environment.getServicePort("cache", 6379);
 Integer kafkaPort = environment.getServicePort("queue", 9092);
 ```
 
-> 💡 `DockerComposeContainer` 适用于需要精确复现生产环境的复杂多服务场景，比单容器组合更贴近真实部署拓扑。
+> `DockerComposeContainer` 适用于需要精确复现生产环境的复杂多服务场景，比单容器组合更贴近真实部署拓扑。
 
 ---
 
@@ -712,7 +712,7 @@ GenericContainer<?> container = new GenericContainer<>("my-app:latest")
     });
 ```
 
-> ⚠️ 合理的等待策略是避免测试不稳定（Flaky Test）的关键。避免使用固定 `Thread.sleep()`，应始终使用标准的 Wait Strategy。
+> 合理的等待策略是避免测试不稳定（Flaky Test）的关键。避免使用固定 `Thread.sleep()`，应始终使用标准的 Wait Strategy。
 
 ---
 
@@ -754,7 +754,7 @@ class ContainerNetworkTest {
 .withEnv("KAFKA_BOOTSTRAP", "kafka-host:9092");
 ```
 
-> 💡 使用 `withNetworkAliases()` 结合自定义网络，可以模拟生产环境中的容器间服务发现行为，且不依赖宿主机端口映射。
+> 使用 `withNetworkAliases()` 结合自定义网络，可以模拟生产环境中的容器间服务发现行为，且不依赖宿主机端口映射。
 
 ---
 
@@ -848,7 +848,7 @@ static MySQLContainer<?> mysql = new MySQLContainer<>("mysql:8.0")
     .withReuse(true);  // 测试结束后不销毁，下次复用
 ```
 
-> ⚠️ `withReuse(true)` 仅用于本地开发环境。CI 环境中不应启用复用，以避免容器状态污染。
+> `withReuse(true)` 仅用于本地开发环境。CI 环境中不应启用复用，以避免容器状态污染。
 
 ### 14.2 镜像选择策略
 
@@ -1372,7 +1372,7 @@ class UserServiceIntegrationTest extends AbstractIntegrationTest {
 }
 ```
 
-> 🎯 这个完整示例展示了 Testcontainers 在实际 SpringBoot 项目中的最佳实践：单例容器基类 + PostgreSQL / Redis / Kafka 三种中间件同时测试 + 完整的 Create-Read-Update-Delete 工作流验证。
+> 这个完整示例展示了 Testcontainers 在实际 SpringBoot 项目中的最佳实践：单例容器基类 + PostgreSQL / Redis / Kafka 三种中间件同时测试 + 完整的 Create-Read-Update-Delete 工作流验证。
 
 ---
 
@@ -1382,15 +1382,15 @@ class UserServiceIntegrationTest extends AbstractIntegrationTest {
 
 | 特性 | Testcontainers | H2 / HSQLDB | Embedded PostgreSQL | Docker Compose (手动) |
 |------|---------------|-------------|-------------------|----------------------|
-| **SQL 一致性** | ✅ 100% 一致 | ❌ 方言差异 | ✅ 一致（仅 PG） | ✅ 一致 |
-| **启动速度** | ⚡ 中等（首次需拉取） | 🚀 极快 | 🚀 较快 | 🐢 手动操作 |
-| **自动清理** | ✅ Ryuk 自动清理 | ✅ JVM 退出清理 | ✅ 进程退出清理 | ❌ 手动清理 |
-| **中间件支持** | ✅ 任意 Docker 镜像 | ❌ 仅数据库 | ❌ 仅 PostgreSQL | ✅ 任意服务 |
-| **并行测试** | ✅ 各测试独立容器 | ✅ 独立数据库 | ❌ 单实例 | ❌ 手动配置 |
-| **CI/CD 适配** | ✅ 极佳（TC Cloud） | ✅ 无需 Docker | ❌ 需要 native lib | ⚠️ 需 DIND |
-| **网络模拟** | ✅ Toxiproxy 集成 | ❌ | ❌ | ❌ |
-| **版本一致性** | ✅ Docker 标签固定 | ❌ H2 版本独立 | ⚠️ 依赖库版本 | ✅ Docker 标签 |
-| **学习成本** | ⚠️ 中等 | 🟢 低 | 🟢 低 | ⚠️ 需 Docker 经验 |
+| **SQL 一致性** | ✓ 100% 一致 | ✗ 方言差异 | ✓ 一致（仅 PG） | ✓ 一致 |
+| **启动速度** | 中等（首次需拉取） | 极快 | 较快 | 手动操作 |
+| **自动清理** | ✓ Ryuk 自动清理 | ✓ JVM 退出清理 | ✓ 进程退出清理 | ✗ 手动清理 |
+| **中间件支持** | ✓ 任意 Docker 镜像 | ✗ 仅数据库 | ✗ 仅 PostgreSQL | ✓ 任意服务 |
+| **并行测试** | ✓ 各测试独立容器 | ✓ 独立数据库 | ✗ 单实例 | ✗ 手动配置 |
+| **CI/CD 适配** | ✓ 极佳（TC Cloud） | ✓ 无需 Docker | ✗ 需要 native lib | 需 DIND |
+| **网络模拟** | ✓ Toxiproxy 集成 | ✗ | ✗ | ✗ |
+| **版本一致性** | ✓ Docker 标签固定 | ✗ H2 版本独立 | 依赖库版本 | ✓ Docker 标签 |
+| **学习成本** | 中等 | 低 | 低 | 需 Docker 经验 |
 
 ### 18.2 选择建议
 
@@ -1417,7 +1417,7 @@ class UserServiceIntegrationTest extends AbstractIntegrationTest {
 ### 19.2 最佳实践速查
 
 ```
-✅ DO:
+✓ DO:
 ├── 使用静态 `@Container` 字段（单例模式）
 ├── 定义抽象 `AbstractIntegrationTest` 基类
 ├── 使用 Alpine 基础镜像（更小更快）
@@ -1427,7 +1427,7 @@ class UserServiceIntegrationTest extends AbstractIntegrationTest {
 ├── 测试方法前 `@BeforeEach` 清理数据
 └── CI 中预热 Docker 镜像
 
-❌ DON'T:
+✗ DON'T:
 ├── 实例字段 `@Container`（每个测试都启动新容器）
 ├── 使用 `mysql:latest` 等未锁定版本标签
 ├── 在测试中使用 `Thread.sleep()` 等待
@@ -1443,4 +1443,4 @@ class UserServiceIntegrationTest extends AbstractIntegrationTest {
 - **多语言生态扩展**：Python / Go / .NET 版本持续成熟，统一跨语言集成测试体验
 - **Kubernetes 支持**：Testcontainers 正在实验性支持在 K8s 中启动容器
 
-> 🎯 Testcontainers 已经从一个 "方便的工具" 演变为 **Java 集成测试的事实标准**。它用最优雅的方式解决了软件工程中一个老大难问题——"在我机器上能跑"的环境差异。任何涉及外部依赖的测试，都值得优先考虑 Testcontainers。
+> Testcontainers 已经从一个 "方便的工具" 演变为 **Java 集成测试的事实标准**。它用最优雅的方式解决了软件工程中一个老大难问题——"在我机器上能跑"的环境差异。任何涉及外部依赖的测试，都值得优先考虑 Testcontainers。

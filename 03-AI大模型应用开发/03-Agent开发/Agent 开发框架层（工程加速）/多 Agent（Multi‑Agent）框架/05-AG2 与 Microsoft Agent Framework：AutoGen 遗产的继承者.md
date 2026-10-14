@@ -2,7 +2,7 @@
 
 > 定位：框架深潜第三站——AutoGen 三分裂后两位继承者的机制与选型：AG2（社区 fork，事件驱动重构）与 Microsoft Agent Framework（官方继任者，1.0 GA）（2026-08 基准）
 
-## 📚 目录
+## 目录
 
 1. [AutoGen 遗产回顾：为什么它值得了解](#1-autogen-遗产回顾为什么它值得了解)
 2. [两位继承者的定位](#2-两位继承者的定位)
@@ -25,7 +25,7 @@ AutoGen 是多 Agent 对话模式的**开创者**（2023 年发布），贡献�
 2026 Q3     预期 AutoGen 经典 API 弃用
 ```
 
-> ⚠️ **对学习者的意义**：经典 AutoGen 的**概念遗产**（对话式多 Agent、GroupChat、HumanProxy）仍值得学——它定义的问题被所有后继者继承；但**新项目一律不要用经典 AutoGen**。
+> **对学习者的意义**：经典 AutoGen 的**概念遗产**（对话式多 Agent、GroupChat、HumanProxy）仍值得学——它定义的问题被所有后继者继承；但**新项目一律不要用经典 AutoGen**。
 
 ## 2. 两位继承者的定位
 
@@ -39,7 +39,7 @@ AutoGen 是多 Agent 对话模式的**开创者**（2023 年发布），贡献�
 | 适合 | 存量 AutoGen 用户无缝续接、研究 | Azure/.NET 企业新项目 |
 | 生态数据 | ~4.3k stars，维护者少 | 微软官方支持 |
 
-> 🎯 **选型一句话**：想要 AutoGen 风格的延续 → AG2；想要微软官方支持的生产级 SDK → MAF。
+> **选型一句话**：想要 AutoGen 风格的延续 → AG2；想要微软官方支持的生产级 SDK → MAF。
 
 ## 3. AG2：事件驱动的开源 AgentOS
 
@@ -132,11 +132,11 @@ await chat.run("客户咨询套餐")
 □ 成本模型（群聊 20+ 调用/交互 —— 重构时评估是否真需要多 Agent）
 ```
 
-> 💡 **最重要的建议**：存量 AutoGen 迁移的**第一问不是"迁到哪个框架"，而是"这个交互真的需要多 Agent 吗"**——AutoGen 群聊单交互 20+ LLM 调用，多数场景单 Agent + 工具链更划算。
+> **最重要的建议**：存量 AutoGen 迁移的**第一问不是"迁到哪个框架"，而是"这个交互真的需要多 Agent 吗"**——AutoGen 群聊单交互 20+ LLM 调用，多数场景单 Agent + 工具链更划算。
 
 ## 8. 核心要点
 
-> 🎯 **核心要点**：
+> **核心要点**：
 > 1. AutoGen 遗产 = 对话式多 Agent 范式（群聊/辩论/HumanProxy）——概念值得学，代码别用
 > 2. **AG2** = 原班人马社区 fork，事件驱动重构（MemoryStream），`pip install autogen` 已指向它，存量用户无缝续接
 > 3. **MAF** = 官方继任者（AutoGen + Semantic Kernel），1.0 GA（2026-04-03），MIT，Azure/.NET 企业首选

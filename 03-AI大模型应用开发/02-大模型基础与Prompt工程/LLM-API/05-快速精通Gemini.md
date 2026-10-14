@@ -1,4 +1,4 @@
-# 🚀 快速精通 Gemini（Google DeepMind）
+# 快速精通 Gemini（Google DeepMind）
 
 > **核心摘要**：Gemini 是 Google DeepMind 打造的原生多模态大模型系列，拥有 1M 超长上下文、联网搜索、代码执行等一站式能力。本文涵盖模型全景、API 完整实战、多模态处理、超长上下文、成本优化与 GPT 迁移指南。
 

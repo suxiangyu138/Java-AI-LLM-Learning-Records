@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [IService / ServiceImpl 设计](#1-iservice--serviceimpl-设计)
 2. [API 全景：查询与写入](#2-api-全景查询与写入)
@@ -49,7 +49,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
 | 链式 | `lambdaQuery()` / `lambdaUpdate()` 链式调用 |
 | 封装 | `saveOrUpdate`、`getByWrapper` 等组合语义 |
 
-> 🎯 **核心要点**：**Controller 层依赖 Service 接口而非 Mapper**——IService 消灭 Service 层样板（save/list/count 直接继承），自定义业务方法再往里加。**分层规范**：Controller → IService → BaseMapper，三层各有职责。
+> **核心要点**：**Controller 层依赖 Service 接口而非 Mapper**——IService 消灭 Service 层样板（save/list/count 直接继承），自定义业务方法再往里加。**分层规范**：Controller → IService → BaseMapper，三层各有职责。
 
 ---
 
@@ -90,7 +90,7 @@ public class UserController {
 }
 ```
 
-> 🎯 **核心要点**：IService 的查询方法 = BaseMapper 的"业务化包装"——`getOne` 的抛异常语义、`exists` 的优化、`page` 的 Page 对象，都是业务视角的设计。**Controller 只碰 IService，不碰 Mapper**。
+> **核心要点**：IService 的查询方法 = BaseMapper 的"业务化包装"——`getOne` 的抛异常语义、`exists` 的优化、`page` 的 Page 对象，都是业务视角的设计。**Controller 只碰 IService，不碰 Mapper**。
 
 ---
 
@@ -105,7 +105,7 @@ boolean ok = userService.saveOrUpdate(user);
 // 批量版
 userService.saveOrUpdateBatch(list);
 
-// ⚠️ 注意：update 分支走"非 null 更新"语义 —— 想置 null 的字段不更新（见 03 模块）
+// 注意：update 分支走"非 null 更新"语义 —— 想置 null 的字段不更新（见 03 模块）
 ```
 
 **链式调用（lambdaQuery / lambdaUpdate）**——不用再写 Wrapper 变量：
@@ -130,7 +130,7 @@ userService.lambdaUpdate()
         .remove();
 ```
 
-> 🎯 **核心要点**：链式调用 = "**Wrapper + Service 方法合一**"——`lambdaQuery()...list()` 一段式完成"条件+执行"，Service 层代码密度再次减半。**更新/删除链式先写定位条件**（防全表）。
+> **核心要点**：链式调用 = "**Wrapper + Service 方法合一**"——`lambdaQuery()...list()` 一段式完成"条件+执行"，Service 层代码密度再次减半。**更新/删除链式先写定位条件**（防全表）。
 
 ---
 
@@ -171,7 +171,7 @@ saveBatch → SqlSession 批量模式（ExecutorType.BATCH）
 ③ saveBatch 的 INSERT 默认不包含 null 字段（同 insert 语义）
 ```
 
-> 🎯 **核心要点**：**批量写一律 saveBatch/updateBatchById**——提升 5-10 倍是基线；"循环里调 MP 方法"是性能红线（N+1 提交）。超大数据量（百万级）再考虑 JDBC 批处理或分批+多线程。
+> **核心要点**：**批量写一律 saveBatch/updateBatchById**——提升 5-10 倍是基线；"循环里调 MP 方法"是性能红线（N+1 提交）。超大数据量（百万级）再考虑 JDBC 批处理或分批+多线程。
 
 ---
 
@@ -204,7 +204,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order>
 | 批量与回滚 | saveBatch 内部是同一个 SqlSession——事务回滚时批量操作一起回滚 |
 | 隔离与锁 | 批量导入时目标表用 `@Transactional` + 合理隔离级别（或乐观锁） |
 
-> 🎯 **核心要点**：**"批量 + 事务"是标配**——saveBatch 的性能收益要建立在"要么全成功要么全回滚"的语义上；`rollbackFor = Exception.class` 是工程标准（受检异常默认不回滚，见 Spring 事务模块）。
+> **核心要点**：**"批量 + 事务"是标配**——saveBatch 的性能收益要建立在"要么全成功要么全回滚"的语义上；`rollbackFor = Exception.class` 是工程标准（受检异常默认不回滚，见 Spring 事务模块）。
 
 ---
 
@@ -244,7 +244,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order>
 }
 ```
 
-> 🎯 **核心要点**：**IService 消灭的是"样板"，不是"业务"**——组合逻辑、校验、跨 Service 协作永远要自己写。规范比例：**80% 直接继承方法，20% 自定义方法（事务内组合）**——与 08 模块的"80/20 原则"一脉相承。
+> **核心要点**：**IService 消灭的是"样板"，不是"业务"**——组合逻辑、校验、跨 Service 协作永远要自己写。规范比例：**80% 直接继承方法，20% 自定义方法（事务内组合）**——与 08 模块的"80/20 原则"一脉相承。
 
 ---
 

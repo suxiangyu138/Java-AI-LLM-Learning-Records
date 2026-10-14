@@ -6,7 +6,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [码点与平面体系](#1-码点与平面体系)
 2. [BMP 与补充平面](#2-bmp-与补充平面)
@@ -46,7 +46,7 @@
 
 ### 2.1 平面划分
 
-> 🎯 **Unicode 分 17 个平面**——每个平面 65536 个码点：
+> **Unicode 分 17 个平面**——每个平面 65536 个码点：
 
 ```text
 17 个平面（Plane）
@@ -76,7 +76,7 @@ Emoji 的特殊性（编程常见坑）
 ├── ② Java char（16 位）无法直接表示 → 需代理对
 ├── ③ String.length() 对 Emoji 返回 2（不是 1！）
 ├── ④ String.substring 可能切开 Emoji（乱码/断裂）
-├── ⑤ 组合 Emoji（👨👩👧 由多个码点组合）更复杂
+├── ⑤ 组合 Emoji（由多个码点组合）更复杂
 └── ⑥ 处理原则：用 code point API（见第 6 节）
 ```
 
@@ -95,23 +95,23 @@ Emoji 的特殊性（编程常见坑）
 ├── 计算：码点 - 0x10000 → 拆成 10 位 + 10 位
 │   ├── 高 10 位 + 0xD800 = 高位代理
 │   └── 低 10 位 + 0xDC00 = 低位代理
-├── 示例：😊 = U+1F60A
+├── 示例：= U+1F60A
 │   ├── 0x1F60A - 0x10000 = 0xF60A = 0000111101 1000001010
 │   ├── 高位：0xD83D（0000111101 + 0xD800）
 │   └── 低位：0xDE0A（1000001010 + 0xDC00）
-└── Java 中 "😊" = 😊
+└── Java 中 "" = 
 
 代理区保留
 ├── U+D800-U+DFFF 不是有效字符（只用于代理）
 ├── 单独出现的高/低位代理 = 非法 Unicode
-└── ⚠️ 安全校验：不可信输入需检查孤立代理（潜在攻击向量）
+└── 安全校验：不可信输入需检查孤立代理（潜在攻击向量）
 ```
 
 ### 3.2 代理对的编程含义
 
 ```java
 // Java 中代理对的实际影响
-String emoji = "😊";              // 实际是 2 个 char
+String emoji = "";              // 实际是 2 个 char
 emoji.length();                   // 2（不是 1！）
 emoji.charAt(0);                  // '\uD83D'（高位代理——单独无意义）
 emoji.charAt(1);                  // '\uDE0A'（低位代理）
@@ -138,7 +138,7 @@ UTF-8 变长编码（1-4 字节）
 │ U+0000-007F  │ 0xxxxxxx                │ A → 41   │
 │ U+0080-07FF  │ 110xxxxx 10xxxxxx       │ é → C3 A9│
 │ U+0800-FFFF  │ 1110xxxx 10xxxxxx 10xxxxxx │ 中 → E4 B8 AD│
-│ U+10000-10FFFF│ 11110xxx 10xxxxxx ×3    │ 😊 → F0 9F 98 8A│
+│ U+10000-10FFFF│ 11110xxx 10xxxxxx ×3    │ → F0 9F 98 8A│
 └──────────────┴─────────────────────────┴──────────┘
 
 规则
@@ -163,7 +163,7 @@ try {
     // 非法 UTF-8（拒绝/清理）
 }
 
-// ⚠️ 安全要点：
+// 安全要点：
 // ① 非法 UTF-8 字节序列（如过长的编码/孤立代理）可能被用于攻击
 // ② 用户输入必须先校验编码再处理（06 篇详述）
 // ③ 替换策略：onMalformedInput(REPLACE) 用 U+FFFD 替换
@@ -181,25 +181,25 @@ Java 的字符模型（关键认知）
 ├── String 内部：char[]（Java 9+ Compact Strings 优化为 byte[]）
 ├── BMP 内字符：1 个 char（如 '中'）
 ├── BMP 外字符（Emoji）：2 个 char（代理对）
-├── ⚠️ char 不等于「一个字符」——char 是「一个 UTF-16 单元」
+├── char 不等于「一个字符」——char 是「一个 UTF-16 单元」
 └── 现代 Java 推荐：用 code point 处理字符（int 表示）
 
 Java 默认编码演进
 ├── Java 1-17：平台默认（Windows GBK/Linux UTF-8——坑！）
-├── Java 18+：默认 UTF-8（JEP 400）✅
+├── Java 18+：默认 UTF-8（JEP 400）✓
 └── 遗留系统：-Dfile.encoding=UTF-8 显式指定
 ```
 
 ### 5.2 字符串操作的正确姿势
 
 ```java
-// ❌ 错误（char 级操作——Emoji 会坏）
-String text = "你好😊";
-text.length();                    // 4（2+2——😊 算 2 个）
-text.substring(0, 3);             // "你好" + 半个😊（乱码！）
+// ✗ 错误（char 级操作——Emoji 会坏）
+String text = "你好";
+text.length();                    // 4（2+2——算 2 个）
+text.substring(0, 3);             // "你好" + 半个（乱码！）
 
-// ✅ 正确（code point 级操作）
-String text = "你好😊";
+// ✓ 正确（code point 级操作）
+String text = "你好";
 text.codePointCount(0, text.length());  // 3（真正的字符数）
 
 // 遍历字符（code point 安全）
@@ -288,14 +288,14 @@ String normalized = Normalizer.normalize(input, Normalizer.Form.NFC);
 ├── 不同语言排序规则不同（中文拼音/笔画、德文 ß 位置）
 ├── Java：Collator.getInstance(locale)
 ├── 数据库：排序规则（utf8mb4_general_ci/zh 等）
-└── ⚠️ 简单 compareTo 是码点序（不是语言序！）
+└── 简单 compareTo 是码点序（不是语言序！）
 ```
 
 ---
 
 ## 8. 核心要点
 
-> 🎯 **核心要点**：
+> **核心要点**：
 > 1. Unicode 17 平面：BMP（常见字符）与补充平面（Emoji）——**Emoji 是「跨出 BMP」的典型**
 > 2. 代理对：UTF-16 双单元表示 BMP 外字符——**Java char ≠ 一个字符**
 > 3. UTF-8 字节模式（1-4 字节 + 自同步）——从任意字节可正确解析

@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [一次典型的 pinning 事故](#1-一次典型的-pinning-事故)
 2. [机制剖析：为什么 synchronized 会 pin](#2-机制剖析为什么-synchronized-会-pin)
@@ -41,7 +41,7 @@ class InventoryService {
 - 期间第 9 个虚拟线程**完全无法被调度**（没有空闲载入线程）；
 - 锁竞争越激烈、阻塞时间越长，吞吐雪崩越严重——虚拟线程吞吐直接退化到"平台线程数 × 1 任务"。
 
-> 🎯 **核心要点**：pinning = 虚拟线程阻塞时**无法卸载**，载入线程被它占住。不是死锁，但效果类似"8 车道高速上 8 辆车同时抛锚，其他百万辆车全堵在入口"。
+> **核心要点**：pinning = 虚拟线程阻塞时**无法卸载**，载入线程被它占住。不是死锁，但效果类似"8 车道高速上 8 辆车同时抛锚，其他百万辆车全堵在入口"。
 
 ## 2. 机制剖析：为什么 synchronized 会 pin
 
@@ -64,7 +64,7 @@ HotSpot 的 synchronized 实现（轻量锁 + 膨胀锁）把**监视器所有�
 情形 3：Object.wait() / wait(timeout) 等待通知            ← JDK 21 也 pin
 ```
 
-> ⚠️ **容易误判**：`ReentrantLock` 系列（JUC 锁）不走监视器，**从第一天起就支持虚拟线程卸载**——这是 JDK 21 官方建议"synchronized 换成 ReentrantLock"的原因。
+> **容易误判**：`ReentrantLock` 系列（JUC 锁）不走监视器，**从第一天起就支持虚拟线程卸载**——这是 JDK 21 官方建议"synchronized 换成 ReentrantLock"的原因。
 
 ## 3. JDK 21 的限制与临时对策
 
@@ -129,7 +129,7 @@ unmount（冻结）时：                        remount（解冻）时：
 | JDK 21 | **~31.8 秒** |
 | JDK 24 | **~0.454 秒**（约 70 倍提升） |
 
-> 💡 **归因**：并行度=1 时 JDK 21 每次 pin 都是串行等 5ms——5000 × 5ms ≈ 25s 量级；JDK 24 下虚拟线程 sleep 即卸载，单载入线程可以全速推进所有任务。
+> **归因**：并行度=1 时 JDK 21 每次 pin 都是串行等 5ms——5000 × 5ms ≈ 25s 量级；JDK 24 下虚拟线程 sleep 即卸载，单载入线程可以全速推进所有任务。
 
 ## 5. 修复后仍存在的 pin 场景
 
@@ -149,7 +149,7 @@ java -XX:StartFlightRecording=filename=app.jfr,dumponexit=true app.jar
 jfr print --events jdk.VirtualThreadPinned app.jfr
 ```
 
-> ⚠️ **版本注意**：JDK 21/22/23 的 pinning 行为与本文不同（synchronized 内阻塞均 pin）。若你仍在这些版本，回看 3.2 节对策。
+> **版本注意**：JDK 21/22/23 的 pinning 行为与本文不同（synchronized 内阻塞均 pin）。若你仍在这些版本，回看 3.2 节对策。
 
 ## 6. 诊断：JFR 事件与转储
 
@@ -162,7 +162,7 @@ jfr print --events jdk.VirtualThreadPinned app.jfr
 | `jdk.VirtualThreadPinned` | 发生 pinning（默认阈值：**pin 超过 20ms** 才记录） | **定位 pin 场景** |
 | `jdk.VirtualThreadSubmitFailed` | 提交到调度器失败 | 调度器过载告警 |
 
-> 💡 **JFR 阈值的意义**：短于 20ms 的 pin 不值得报（吞吐损失可忽略）；默认阈值过滤噪音，聚焦真正的"载入线程被长时间钉住"问题。
+> **JFR 阈值的意义**：短于 20ms 的 pin 不值得报（吞吐损失可忽略）；默认阈值过滤噪音，聚焦真正的"载入线程被长时间钉住"问题。
 
 ### 6.2 JDK 24 后 `tracePinnedThreads` 已移除
 
@@ -207,7 +207,7 @@ JEP 491 之后，"换锁避免 pinning"的理由消失了，但锁选型仍有�
 
 ## 8. 核心要点与思考题
 
-> 🎯 **本章三句话总结**：
+> **本章三句话总结**：
 > 1. pinning 是 JDK 21 虚拟线程的已知限制：监视器所有权绑在物理线程上，synchronized 内阻塞无法卸载 → 载入线程被钉死；
 > 2. JDK 24（JEP 491）从 JVM 底层修复：LockStack 随 Continuation 迁移、`_owner` 改记 `tid`、监视器阻塞/`Object.wait()` 支持卸载——实测吞吐提升约 70 倍；
 > 3. 剩余 pin 仅剩原生回调、类初始化、符号解析三类场景，用 `jdk.VirtualThreadPinned` JFR 事件定位；锁选型回归"功能需求驱动"。

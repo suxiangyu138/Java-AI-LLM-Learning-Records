@@ -1,10 +1,10 @@
 # Postman Mock 与 API 监控
 
-> 🎭 前端无后端也能联调 —— Mock Server；24/7 自动检测 API 健康 —— Monitor 监控告警
+> 前端无后端也能联调 —— Mock Server；24/7 自动检测 API 健康 —— Monitor 监控告警
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [Mock Server](#1-mock-server)
 2. [Mock 实战场景](#2-mock-实战场景)
@@ -21,9 +21,9 @@
 Mock Server = 模拟真实 API 的假服务器
 
 使用场景：
-  ✅ 后端接口还没开发完 → 前端先用 Mock 数据联调
-  ✅ 第三方 API 有调用次数限制 → 测试时用 Mock
-  ✅ 需要模拟各种边界情况（超时、错误码、慢响应）
+  ✓ 后端接口还没开发完 → 前端先用 Mock 数据联调
+  ✓ 第三方 API 有调用次数限制 → 测试时用 Mock
+  ✓ 需要模拟各种边界情况（超时、错误码、慢响应）
 
 创建方式：
   1. 选中 Collection → 右键 "Mock Collection"
@@ -130,10 +130,10 @@ Collection: User Mock API
 Monitor = 定时运行的 API 测试 + 异常告警
 
 使用场景：
-  ✅ 生产环境 API 健康检查（每 5 分钟一次）
-  ✅ SLA 监控（P99 响应时间 > 500ms → 告警）
-  ✅ 核心业务流程定期回归（每小时跑一遍）
-  ✅ 第三方 API 可用性监控
+  ✓ 生产环境 API 健康检查（每 5 分钟一次）
+  ✓ SLA 监控（P99 响应时间 > 500ms → 告警）
+  ✓ 核心业务流程定期回归（每小时跑一遍）
+  ✓ 第三方 API 可用性监控
 
 Monitor 会：
   1. 按设定频率运行 Collection
@@ -165,11 +165,11 @@ Monitor 会：
 Monitor 结果指标：
 
   ├── 请求成功率
-  │   ├── All tests passed → ✅ Healthy
-  │   └── Any test failed  → ❌ Unhealthy
+  │   ├── All tests passed → ✓ Healthy
+  │   └── Any test failed  → ✗ Unhealthy
   │
   ├── 响应时间变化
-  │   └── 平均值显著上升 → ⚠️ 性能退化
+  │   └── 平均值显著上升 → 性能退化
   │
   └── 虚拟用户数（从不同区域模拟并发）
 
@@ -201,7 +201,7 @@ Postman 支持的告警通知渠道：
 ```text
 构建生产环境健康检查 Collection：
 
-  📋 Health Check Collection
+  Health Check Collection
   ├── GET /actuator/health     → Status 200 + {"status":"UP"}
   ├── GET /api/v1/users?size=1  → Status 200 + 非空数据
   ├── POST /api/v1/auth/login   → Status 200 + 返回 token
@@ -214,7 +214,7 @@ Postman 支持的告警通知渠道：
 
 ---
 
-> 🎯 **核心要点**：Mock Server 让前后端并行开发，Monitor 让 API 问题早于用户发现。Mock + Monitor 构成了开发到运维的 API 全生命周期保障。
+> **核心要点**：Mock Server 让前后端并行开发，Monitor 让 API 问题早于用户发现。Mock + Monitor 构成了开发到运维的 API 全生命周期保障。
 
 ---
 

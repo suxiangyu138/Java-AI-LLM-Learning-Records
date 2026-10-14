@@ -1,6 +1,6 @@
 # 03 - 单点登录 SSO 与 OAuth2 社交登录
 
-> 🎯 单点登录（SSO）和社交登录（微信/Google）都基于 Token 机制 — SSO 是同组织内的统一认证，OAuth2 是跨组织的授权协议
+> 单点登录（SSO）和社交登录（微信/Google）都基于 Token 机制 — SSO 是同组织内的统一认证，OAuth2 是跨组织的授权协议
 
 ---
 
@@ -29,11 +29,11 @@ SSO 核心流程（JWT 方案）：
 SSO Token 传递方案：
 
 方案1：重定向 URL 参数
-  app1.example.com?token=xxx  ← ⚠️ Token 暴露在 URL（不安全）
+  app1.example.com?token=xxx  ← Token 暴露在 URL（不安全）
 
 方案2：SSO 中心 Set-Cookie（同域名）
   SSO → Set-Cookie: token=xxx; Domain=.example.com
-  → app1.example.com 和 app2.example.com 都能读取 ← ⭐ 推荐同域名
+  → app1.example.com 和 app2.example.com 都能读取 ← ★ 推荐同域名
 
 方案3：OAuth2 Authorization Code
   标准流程，适合跨域名场景
@@ -96,8 +96,8 @@ public ResponseEntity<?> oauthCallback(@PathVariable String provider,
 |------|---------|-----------------|
 | 工作方式 | Token 自包含（客户端持有） | Ticket 票据（服务端验证） |
 | 认证中心压力 | 低（发 Token 后不管） | 高（每次需验证 Ticket） |
-| 单点退出 | 困难（Token 无法主动失效） | ✅ 容易（中心化控制） |
-| 横向扩展 | ✅ 无状态易扩展 | ⚠️ 中心节点压力 |
+| 单点退出 | 困难（Token 无法主动失效） | ✓ 容易（中心化控制） |
+| 横向扩展 | ✓ 无状态易扩展 | 中心节点压力 |
 | 适用 | 微服务/前后端分离 | 传统单体/内网系统 |
 
 ```text
@@ -113,4 +113,4 @@ JWT 本身无法主动失效 → 需要配合 Redis 黑名单
   → 虽然 Token 签名仍有效，但网关层拦截
 ```
 
-> 🎯 **选型**：内部微服务 SSO → JWT + 双Token + Redis 黑名单；跨组织授权 → OAuth2 标准流程；传统内网系统 → CAS（已有基础设施）。社交登录本质上就是 OAuth2。
+> **选型**：内部微服务 SSO → JWT + 双Token + Redis 黑名单；跨组织授权 → OAuth2 标准流程；传统内网系统 → CAS（已有基础设施）。社交登录本质上就是 OAuth2。

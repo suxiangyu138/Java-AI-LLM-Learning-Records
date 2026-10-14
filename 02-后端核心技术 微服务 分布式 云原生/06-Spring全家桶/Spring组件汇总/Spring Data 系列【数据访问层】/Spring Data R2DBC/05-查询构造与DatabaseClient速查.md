@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [DatabaseClient：SQL 直写入口](#1-databaseclientsql-直写入口)
 2. [R2dbcEntityTemplate：实体级模板](#2-r2dbcentitytemplate实体级模板)
@@ -66,7 +66,7 @@ public class ReportService {
 | 插入回填 | `.sql("insert ...").then()` | 自增 id 回填走实体模板更顺 |
 | 事务 | `.inTransaction(...)` / 配合 @Transactional | [06 篇](06-响应式事务与并发控制速查.md) |
 
-> 🎯 **什么时候用 DatabaseClient**：多表 join、复杂聚合、报表、动态 SQL、以及"实体映射器管不了"的类型（JSON 列）——**R2DBC 的哲学是"复杂查询直接写 SQL"**，这与 JPA（@Query 是逃生舱）正好相反：SQL 直写是 R2DBC 的第一公民。
+> **什么时候用 DatabaseClient**：多表 join、复杂聚合、报表、动态 SQL、以及"实体映射器管不了"的类型（JSON 列）——**R2DBC 的哲学是"复杂查询直接写 SQL"**，这与 JPA（@Query 是逃生舱）正好相反：SQL 直写是 R2DBC 的第一公民。
 
 ## 2. R2dbcEntityTemplate：实体级模板
 
@@ -109,7 +109,7 @@ public class ProductDao {
 | 插入 | `insert(entity)` / `insertAll(list)` | 自增 id 回填 |
 | 事务 | 方法级 @Transactional 包住 | [06 篇](06-响应式事务与并发控制速查.md) |
 
-> 💡 与 MongoTemplate 的对照：R2dbcEntityTemplate ≈ MongoTemplate 的"实体级"那一半；区别是 MongoDB 的模板还管聚合/索引，R2DBC 的实体模板只管 CRUD——**复杂查询请去 DatabaseClient**。
+> 与 MongoTemplate 的对照：R2dbcEntityTemplate ≈ MongoTemplate 的"实体级"那一半；区别是 MongoDB 的模板还管聚合/索引，R2DBC 的实体模板只管 CRUD——**复杂查询请去 DatabaseClient**。
 
 ## 3. Criteria 与 Update：类型安全条件（4.1）
 
@@ -151,7 +151,7 @@ Update u = Update.update(Product::getPrice, newPrice)
 // 传统：Update.update("price", newPrice).set("updatedAt", ...)
 ```
 
-> 🎯 升级价值点：**4.1 类型安全属性路径 = 数据库字段重构时的编译期安全网**——把高频查询的字符串条件换成 `PropertyPath` 写法，字段改名即编译报错（与 JPA 的 Criteria 元模型同理，但免注解处理器）。
+> 升级价值点：**4.1 类型安全属性路径 = 数据库字段重构时的编译期安全网**——把高频查询的字符串条件换成 `PropertyPath` 写法，字段改名即编译报错（与 JPA 的 Criteria 元模型同理，但免注解处理器）。
 
 ## 4. 参数绑定与 RowMapper
 
@@ -171,7 +171,7 @@ client.sql("select * from product where id in (:ids)")
         .bind("ids", List.of(1L, 2L, 3L));  // 驱动自动展开成 (1,2,3)
 ```
 
-> ⚠️ **参数安全红线**：**永远用 bind，禁止字符串拼接**（SQL 注入）；DatabaseClient 的 bind 是预编译占位（`?`），与 JDBC PreparedStatement 同安全等级。
+> **参数安全红线**：**永远用 bind，禁止字符串拼接**（SQL 注入）；DatabaseClient 的 bind 是预编译占位（`?`），与 JDBC PreparedStatement 同安全等级。
 
 ### 4.2 RowMapper 三种姿势
 
@@ -195,7 +195,7 @@ client.sql("select * from product where id in (:ids)")
 | record 投影 | 新代码首选（简洁不可变） |
 | Bean 自动 | 列名与属性名完全一致 |
 
-> 💡 映射规则：**列名 → 属性名默认按驼峰转换**（`order_no` → `orderNo`）；不一致时用 SQL 别名对齐（`select ... as xxx`）或 lambda 手动取。
+> 映射规则：**列名 → 属性名默认按驼峰转换**（`order_no` → `orderNo`）；不一致时用 SQL 别名对齐（`select ... as xxx`）或 lambda 手动取。
 
 ## 5. 事务内直写与执行链路
 
@@ -215,7 +215,7 @@ public Mono<Void> transfer(Long from, Long to, BigDecimal amt) {
 }
 ```
 
-> ⚠️ **事务内直写的注意**：① 必须保持**同一响应式管道**（事务连接靠 Reactor Context 传播，跨 `.subscribe()`/换线程池即断，[06 篇](06-响应式事务与并发控制速查.md) 失效清单）；② DatabaseClient 与 Repository 混用在同一事务时，二者都走同一 ConnectionFactory 的事务上下文，**可以混用**。
+> **事务内直写的注意**：① 必须保持**同一响应式管道**（事务连接靠 Reactor Context 传播，跨 `.subscribe()`/换线程池即断，[06 篇](06-响应式事务与并发控制速查.md) 失效清单）；② DatabaseClient 与 Repository 混用在同一事务时，二者都走同一 ConnectionFactory 的事务上下文，**可以混用**。
 
 ### 5.2 执行链路
 
@@ -229,20 +229,20 @@ public Mono<Void> transfer(Long from, Long to, BigDecimal amt) {
   → Mono/Flux 交还给调用方（全程无阻塞等待）
 ```
 
-> 🎯 面试必答：**"DatabaseClient 和 JdbcTemplate 什么区别？"**——JdbcTemplate 是阻塞的（每个查询占一个线程等 IO）；DatabaseClient 是响应式的（**同一个线程可以同时处理多个查询**——IO 等待期间线程去干别的）；API 上 DatabaseClient 全部返回 Mono/Flux、参数用 bind（占位符安全绑定）、映射用 RowMapper（同 JdbcTemplate 概念）。
+> 面试必答：**"DatabaseClient 和 JdbcTemplate 什么区别？"**——JdbcTemplate 是阻塞的（每个查询占一个线程等 IO）；DatabaseClient 是响应式的（**同一个线程可以同时处理多个查询**——IO 等待期间线程去干别的）；API 上 DatabaseClient 全部返回 Mono/Flux、参数用 bind（占位符安全绑定）、映射用 RowMapper（同 JdbcTemplate 概念）。
 
 ## 6. 模板 vs Repository 选型
 
 | 维度 | Repository | R2dbcEntityTemplate | DatabaseClient |
 |------|-----------|--------------------:|----------------|
 | 学习成本 | 低（声明式） | 中 | 中高（SQL 直写） |
-| 动态条件 | 派生方法难表达 | ✅ Criteria 动态 | ✅ 手拼 SQL（小心注入） |
-| 多表 join | @Query | ❌ | ✅ **主战场** |
-| 复杂聚合 | @Query | ❌ | ✅ |
-| 类型安全 | 方法名解析 | ✅ 4.1 属性路径 | SQL 文本（bind 安全） |
+| 动态条件 | 派生方法难表达 | ✓ Criteria 动态 | ✓ 手拼 SQL（小心注入） |
+| 多表 join | @Query | ✗ | ✓ **主战场** |
+| 复杂聚合 | @Query | ✗ | ✓ |
+| 类型安全 | 方法名解析 | ✓ 4.1 属性路径 | SQL 文本（bind 安全） |
 | 适用 | 常规 CRUD（**默认首选**） | 动态条件 CRUD | **复杂查询/报表/特殊类型** |
 
-> 🎯 工程惯例：**CRUD 走 Repository（可读可测），动态条件走实体模板（Criteria），复杂查询走 DatabaseClient（SQL 直写）**——三件套按查询复杂度递进，SQL 直写绝不用于简单 CRUD（重复造轮子）。
+> 工程惯例：**CRUD 走 Repository（可读可测），动态条件走实体模板（Criteria），复杂查询走 DatabaseClient（SQL 直写）**——三件套按查询复杂度递进，SQL 直写绝不用于简单 CRUD（重复造轮子）。
 
 ---
 

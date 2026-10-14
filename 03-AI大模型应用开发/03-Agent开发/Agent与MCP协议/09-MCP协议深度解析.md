@@ -1,6 +1,6 @@
 # 09 - MCP 协议深度解析
 
-> 🎯 MCP = Model Context Protocol = LLM 的"USB 协议" — 让 LLM 以标准方式连接任意数据源和工具，是 Anthropic 提出的 Agent 基础设施标准
+> MCP = Model Context Protocol = LLM 的"USB 协议" — 让 LLM 以标准方式连接任意数据源和工具，是 Anthropic 提出的 Agent 基础设施标准
 
 ---
 

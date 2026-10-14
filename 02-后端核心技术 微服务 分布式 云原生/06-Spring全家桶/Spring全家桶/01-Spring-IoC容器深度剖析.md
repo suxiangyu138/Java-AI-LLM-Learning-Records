@@ -1,5 +1,5 @@
 # 01-Spring IoC容器深度剖析
-> 🎯 Spring全家桶根基中的根基 — 掌握IoC容器原理、Bean生命周期、依赖注入机制、循环依赖三级缓存，是理解整个Spring生态的起点
+> Spring全家桶根基中的根基 — 掌握IoC容器原理、Bean生命周期、依赖注入机制、循环依赖三级缓存，是理解整个Spring生态的起点
 
 ---
 
@@ -24,7 +24,7 @@
 
 ### 1.1 知识定位
 - **归属**：Spring Framework 核心 → 层级1 P0核心必学
-- **重要性**：⭐⭐⭐⭐⭐（Spring全家桶一切组件的根基）
+- **重要性**：★★★★★（Spring全家桶一切组件的根基）
 
 ### 1.2 前置依赖
 - Java反射机制（`Class.forName`、`Constructor.newInstance`）
@@ -59,7 +59,7 @@ IoC容器
 
 ### 2.1 什么是IoC（控制反转）
 
-> 💡 **一句话**：把对象的创建、管理权从程序员手中"反转"给Spring容器。
+> **一句话**：把对象的创建、管理权从程序员手中"反转"给Spring容器。
 
 **传统方式 vs IoC方式**：
 
@@ -129,12 +129,12 @@ public class UserService {
 
 | 注入方式 | 实现 | 优点 | 缺点 | 推荐度 |
 |----------|------|------|------|--------|
-| **构造器注入** | `@Autowired` 在构造器上 | 不可变性、强制依赖、便于测试 | 参数多时代码长 | ⭐⭐⭐⭐⭐ |
-| **Setter注入** | `@Autowired` 在setter上 | 可选依赖、可重新配置 | 对象可能处于不完整状态 | ⭐⭐⭐ |
-| **字段注入** | `@Autowired` 在字段上 | 代码简洁 | 无法final、难测试、隐藏依赖 | ⭐⭐ |
+| **构造器注入** | `@Autowired` 在构造器上 | 不可变性、强制依赖、便于测试 | 参数多时代码长 | ★★★★★ |
+| **Setter注入** | `@Autowired` 在setter上 | 可选依赖、可重新配置 | 对象可能处于不完整状态 | ★★★ |
+| **字段注入** | `@Autowired` 在字段上 | 代码简洁 | 无法final、难测试、隐藏依赖 | ★★ |
 
 ```java
-// ✅ 推荐：构造器注入（Spring 4.3+ 单构造器可省略@Autowired）
+// ✓ 推荐：构造器注入（Spring 4.3+ 单构造器可省略@Autowired）
 @Service
 public class OrderService {
     private final UserService userService;
@@ -146,7 +146,7 @@ public class OrderService {
     }
 }
 
-// ⚠️ 字段注入（不推荐，但大量遗留代码使用）
+// 字段注入（不推荐，但大量遗留代码使用）
 @Service
 public class OrderService {
     @Autowired
@@ -195,7 +195,7 @@ private PaymentService paymentService;
 | **session** | 每个HTTP会话一个实例 | 会话结束销毁 | 用户登录信息 |
 | **application** | ServletContext级别单例 | 随Web应用生命周期 | Web应用全局数据 |
 
-> ⚠️ **关键陷阱**：singleton Bean中注入prototype Bean时，prototype只会被注入一次！因为singleton只初始化一次。
+> **关键陷阱**：singleton Bean中注入prototype Bean时，prototype只会被注入一次！因为singleton只初始化一次。
 
 ```java
 // 解决方案：使用@Lookup或ApplicationContext获取
@@ -210,7 +210,7 @@ public abstract class SingletonBean {
 
 ## 5. Bean生命周期完整流程
 
-> 🎯 这是Spring面试最高频考点之一，必须完整掌握每一步。
+> 这是Spring面试最高频考点之一，必须完整掌握每一步。
 
 ### 5.1 生命周期流程图
 ```
@@ -287,7 +287,7 @@ public class UserService implements BeanNameAware, InitializingBean, DisposableB
 
 ## 6. 循环依赖与三级缓存
 
-> 🔥 面试最常问：Spring如何解决循环依赖？三级缓存分别存什么？
+> 面试最常问：Spring如何解决循环依赖？三级缓存分别存什么？
 
 ### 6.1 什么是循环依赖
 
@@ -327,7 +327,7 @@ A创建 → 实例化A → 将A的ObjectFactory放入三级缓存
 → A放入一级缓存，删除二三级缓存
 ```
 
-> ⚠️ **无法解决的场景**：
+> **无法解决的场景**：
 > 1. **构造器循环依赖**：A的构造器需要B，B的构造器需要A → 抛出`BeanCurrentlyInCreationException`
 > 2. **prototype作用域的循环依赖**：prototype Bean不经过缓存 → 无法解决
 >
@@ -375,7 +375,7 @@ protected Object getSingleton(String beanName, boolean allowEarlyReference) {
 |----------|------|------|--------|
 | XML配置 | Spring 1.x-3.x | 集中管理、修改无需重编译 | 遗留项目维护 |
 | 注解配置 | Spring 2.5+ | `@Component`/`@Autowired`，分散配置 | 与JavaConfig配合 |
-| JavaConfig | Spring 3.0+ | `@Configuration`+`@Bean`，类型安全 | ⭐⭐⭐⭐⭐ 现代标准 |
+| JavaConfig | Spring 3.0+ | `@Configuration`+`@Bean`，类型安全 | ★★★★★ 现代标准 |
 
 ### 7.2 JavaConfig示例
 
@@ -413,10 +413,10 @@ public class Application {
 
 ## 8. 高频踩坑与误区
 
-### ⚠️ 坑1：`@Autowired`注入为null
+### 坑1：`@Autowired`注入为null
 
 ```java
-// ❌ 错误：在构造器中直接使用@Autowired的字段，此时还未注入
+// ✗ 错误：在构造器中直接使用@Autowired的字段，此时还未注入
 @Service
 public class UserService {
     @Autowired
@@ -427,7 +427,7 @@ public class UserService {
     }
 }
 
-// ✅ 正确：在@PostConstruct或构造器注入中使用
+// ✓ 正确：在@PostConstruct或构造器注入中使用
 @Service
 public class UserService {
     private final OrderService orderService;
@@ -439,7 +439,7 @@ public class UserService {
 }
 ```
 
-### ⚠️ 坑2：多个同类型Bean报错
+### 坑2：多个同类型Bean报错
 
 ```
 Field paymentService in OrderService required a single bean, but 2 were found
@@ -447,10 +447,10 @@ Field paymentService in OrderService required a single bean, but 2 were found
 
 > 解决方案：`@Qualifier`、`@Primary`、或使用`Map<String, BeanType>`收集所有实现
 
-### ⚠️ 坑3：`@Configuration`中的`@Bean`方法被多次调用
+### 坑3：`@Configuration`中的`@Bean`方法被多次调用
 
 ```java
-// ❌ 错误认识：认为每次调用beanB()都创建新实例
+// ✗ 错误认识：认为每次调用beanB()都创建新实例
 @Configuration
 public class AppConfig {
     @Bean
@@ -486,7 +486,7 @@ public class AppConfig {
 
 ## 10. 章节综合实操案例
 
-> 💻 场景：搭建一个简易的依赖注入示例
+> 场景：搭建一个简易的依赖注入示例
 
 ```java
 // === 实体类 ===

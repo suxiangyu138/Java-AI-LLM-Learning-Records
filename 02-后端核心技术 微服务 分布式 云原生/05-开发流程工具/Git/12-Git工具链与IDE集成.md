@@ -1,7 +1,7 @@
 # 12-Git 工具链与 IDE 集成
 > Git 生态五层结构：桌面客户端、VS Code/GitLens/JetBrains、终端工具（tig/delta/lazygit）、推荐的完整工具箱
 
-## 📚 目录
+## 目录
 1. [Git 生态五层结构](#1-git-生态五层结构)
 2. [四大桌面客户端对比](#2-四大桌面客户端对比)
 3. [GitHub Desktop / GitKraken](#3-github-desktop--gitkraken)
@@ -45,11 +45,11 @@
 |------|:---:|:---:|:---:|:---:|
 | 价格 | 免费 | 免费(基础)/付费 | 免费 | 付费(一次买断) |
 | 平台 | Win/Mac | Win/Mac/Linux | Win/Mac | Win/Mac |
-| 学习曲线 | ⭐ 最简单 | ⭐⭐ | ⭐⭐⭐ | ⭐⭐ |
-| 历史可视化 | 基础 | ⭐⭐⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐⭐ |
-| 冲突解决 | 基础 | ⭐⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐⭐ |
-| GitHub 集成 | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐ | ⭐⭐⭐ |
-| 性能(大仓库) | ⭐⭐ | ⭐⭐⭐ | ⭐⭐ | ⭐⭐⭐⭐ |
+| 学习曲线 | ★ 最简单 | ★★ | ★★★ | ★★ |
+| 历史可视化 | 基础 | ★★★★★ | ★★★ | ★★★★ |
+| 冲突解决 | 基础 | ★★★★ | ★★★ | ★★★★ |
+| GitHub 集成 | ★★★★★ | ★★★★ | ★★ | ★★★ |
+| 性能(大仓库) | ★★ | ★★★ | ★★ | ★★★★ |
 | 适合谁 | 新手、GitHub 用户 | 全面手 | 爱折腾的 | Mac 专业户 |
 
 ## 3. GitHub Desktop / GitKraken
@@ -82,7 +82,7 @@ brew install --cask gitkraken       # Mac
 | Interactive Rebase GUI | 右键 → 拖拽排序 → Squash/Drop/Reword → Apply |
 | Boards/Timelines | 内置看板与团队时间线 |
 
-> ⚠️ 免费版不支持私有仓库。
+> 免费版不支持私有仓库。
 
 ## 4. Sourcetree / Fork
 
@@ -123,7 +123,7 @@ brew install --cask sourcetree         # Mac
 | CI/CD 自动化 | **命令行** |
 | .gitignore / config | **命令行**或直接编辑文件 |
 
-> 🎯 混合使用建议：客户端看历史/diff；命令行做复杂操作（rebase -i、cherry-pick、bisect run）；配置别名简化常用命令；**不依赖客户端**（万一只有终端也会操作）。一句话选型：新手→GitHub Desktop；追求可视化→GitKraken；边学边用→Sourcetree；Mac+大仓库→Fork。
+> 混合使用建议：客户端看历史/diff；命令行做复杂操作（rebase -i、cherry-pick、bisect run）；配置别名简化常用命令；**不依赖客户端**（万一只有终端也会操作）。一句话选型：新手→GitHub Desktop；追求可视化→GitKraken；边学边用→Sourcetree；Mac+大仓库→Fork。
 
 ## 6. VS Code 内置 Git
 
@@ -163,7 +163,7 @@ code --install-extension eamodio.gitlens
 | Commit 详情悬浮框 | Commit/Author/Date/Message/Changes |
 | Line History | 选中行右键 → Show Line History（只看一行代码的历史） |
 
-> 💡 GitLens 免费版够用；Commit Graph 是付费功能，用 Git Graph 免费替代。
+> GitLens 免费版够用；Commit Graph 是付费功能，用 Git Graph 免费替代。
 
 ### 7.2 Git Graph（免费的 Commit 图）
 
@@ -204,16 +204,16 @@ Git 集成业界最强，无需额外插件（IntelliJ/WebStorm/PyCharm 通用�
 
 | 功能 | VS Code 内置 | VS Code + GitLens | JetBrains |
 |------|:---:|:---:|:---:|
-| Stage / Commit / Push | ✅ | ✅ | ✅ |
-| Diff 视图 | ✅ | ✅ | ✅ |
-| 冲突解决 | ✅ | ✅ | ✅ |
-| 分支管理 | ✅ | ✅ | ✅ |
-| Blame | ❌ | ✅⭐ | ✅⭐ |
-| File History | ❌ | ✅ | ✅ |
-| Commit Graph | ❌ | ✅(Git Graph) | ✅ |
-| Line History | ❌ | ✅ | ✅ |
-| Shelve (部分 Stash) | ❌ | ❌ | ✅ |
-| PR/MR 集成 | 基础 | ✅(GitHub) | ✅ |
+| Stage / Commit / Push | ✓ | ✓ | ✓ |
+| Diff 视图 | ✓ | ✓ | ✓ |
+| 冲突解决 | ✓ | ✓ | ✓ |
+| 分支管理 | ✓ | ✓ | ✓ |
+| Blame | ✗ | ✓★ | ✓★ |
+| File History | ✗ | ✓ | ✓ |
+| Commit Graph | ✗ | ✓(Git Graph) | ✓ |
+| Line History | ✗ | ✓ | ✓ |
+| Shelve (部分 Stash) | ✗ | ✗ | ✓ |
+| PR/MR 集成 | 基础 | ✓(GitHub) | ✓ |
 
 | 方案 | 组合 | 适合 |
 |------|------|------|
@@ -287,7 +287,7 @@ winget install lazygit    # 或 brew install lazygit
 
 ## 12. 核心要点
 
-> 🎯 **核心要点**：
+> **核心要点**：
 > - Git 生态五层：核心引擎 → 托管平台 → 桌面客户端 → IDE → 扩展工具；
 > - 客户端选型：新手 GitHub Desktop / 可视化 GitKraken / 学命令 Sourcetree / 大仓库 Fork；
 > - IDE 标配：VS Code + GitLens + Git Graph（免费零成本）；JetBrains 内置即最强；

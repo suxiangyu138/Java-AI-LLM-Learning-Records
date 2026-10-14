@@ -1,5 +1,5 @@
 # 04-Spring MVC Web层框架
-> 🎯 Java Web开发的标准框架 — 掌握DispatcherServlet核心调度流程、RESTful接口设计、拦截器/过滤器、全局异常处理，是SpringBoot Web开发的直接基础
+> Java Web开发的标准框架 — 掌握DispatcherServlet核心调度流程、RESTful接口设计、拦截器/过滤器、全局异常处理，是SpringBoot Web开发的直接基础
 
 ---
 
@@ -288,7 +288,7 @@ spring:
 | **规范** | Servlet规范（javax.servlet / jakarta.servlet） | Spring MVC框架特有 |
 | **容器** | Servlet容器（Tomcat）管理 | Spring IOC容器管理 |
 | **拦截范围** | 所有进入容器的请求 | 进入DispatcherServlet后的请求 |
-| **能获取Bean** | ❌ 不能直接注入Spring Bean | ✅ 可以注入Spring Bean |
+| **能获取Bean** | ✗ 不能直接注入Spring Bean | ✓ 可以注入Spring Bean |
 | **执行顺序** | Filter先执行 → 再经过拦截器链 | 在Filter之后执行 |
 | **适用场景** | 编码设置、CORS、安全过滤、XSS防护 | 登录校验、权限控制、日志记录 |
 

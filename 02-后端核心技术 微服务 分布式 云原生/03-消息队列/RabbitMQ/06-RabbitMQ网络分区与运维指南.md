@@ -127,7 +127,7 @@ cluster_partition_handling = ignore
 - 需要人工通过 `rabbitmqctl stop_app` / `join_cluster` 恢复
 - 适用场景：需要评估数据后再合并的生产环境
 
-> ⚠️ ignore 策略风险最高，分区期间各分区数据会产生分歧，手动合并时可能丢失消息。
+> ignore 策略风险最高，分区期间各分区数据会产生分歧，手动合并时可能丢失消息。
 
 ---
 
@@ -594,4 +594,4 @@ rabbitmqctl status | grep -E "memory|disk"
 echo "连接数: $(rabbitmqctl list_connections -q | wc -l)"
 ```
 
-> 🎯 **运维核心**：稳定 + 可靠 + 安全。日常巡检看四项指标，分区做到自动合并+多地址连接，备份保异地+定期。
+> **运维核心**：稳定 + 可靠 + 安全。日常巡检看四项指标，分区做到自动合并+多地址连接，备份保异地+定期。

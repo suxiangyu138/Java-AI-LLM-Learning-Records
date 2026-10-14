@@ -6,7 +6,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [API 架构：Pattern 与 Matcher](#1-api-架构pattern-与-matcher)
 2. [Pattern 预编译实践](#2-pattern-预编译实践)
@@ -46,7 +46,7 @@ Pattern 与 Matcher 的分工
 | 维度 | Pattern | Matcher |
 |------|:---:|:---:|
 | 可变性 | 不可变 | 有状态 |
-| 线程安全 | ✅ 可共享 | ❌ 每次独立 |
+| 线程安全 | ✓ 可共享 | ✗ 每次独立 |
 | 生命周期 | 长（应用级） | 短（单次匹配） |
 | 创建开销 | 高（编译） | 低（包装输入） |
 | 复用方式 | 静态字段缓存 | reset() 换输入 |
@@ -69,7 +69,7 @@ Pattern.compile 的开销
 ### 2.2 预编译最佳实践
 
 ```java
-// ✅ 正确：静态常量预编译（一次编译全局复用）
+// ✓ 正确：静态常量预编译（一次编译全局复用）
 public class RegexConstants {
     public static final Pattern EMAIL =
             Pattern.compile("[\\w.]+@[\\w.]+\\.[a-z]{2,}");
@@ -79,12 +79,12 @@ public class RegexConstants {
             Pattern.compile("(\\d{4})-(\\d{2})-(\\d{2})");
 }
 
-// ✅ 使用
+// ✓ 使用
 if (RegexConstants.EMAIL.matcher(email).matches()) { ... }
 
-// ❌ 错误：每次调用重新编译
+// ✗ 错误：每次调用重新编译
 public boolean isValidEmail(String email) {
-    return Pattern.compile("[\\w.]+@[\\w.]+\\.[a-z]{2,}")  // ❌ 热循环编译
+    return Pattern.compile("[\\w.]+@[\\w.]+\\.[a-z]{2,}")  // ✗ 热循环编译
                   .matcher(email).matches();
 }
 ```
@@ -98,7 +98,7 @@ public class PatternCache {
 
     public Pattern get(String regex) {
         return cache.computeIfAbsent(regex, Pattern::compile);
-        // ⚠️ 注意：不可信正则需沙箱化（见 04 篇）
+        // 注意：不可信正则需沙箱化（见 04 篇）
     }
 }
 ```
@@ -125,16 +125,16 @@ public class PatternCache {
 
 ```java
 // matches()：整个输入必须完全匹配
-Pattern.compile("\\d+").matcher("123").matches();      // ✅ true
-Pattern.compile("\\d+").matcher("abc123").matches();  // ❌ false（不是全部）
+Pattern.compile("\\d+").matcher("123").matches();      // ✓ true
+Pattern.compile("\\d+").matcher("abc123").matches();  // ✗ false（不是全部）
 
 // find()：只要包含子串就匹配（隐式循环！）
-Pattern.compile("\\d+").matcher("abc123").find();     // ✅ true（找到 123）
+Pattern.compile("\\d+").matcher("abc123").find();     // ✓ true（找到 123）
 
 // lookingAt()：从开头匹配前缀（不要求到结尾）
-Pattern.compile("\\d+").matcher("123abc").lookingAt(); // ✅ true
+Pattern.compile("\\d+").matcher("123abc").lookingAt(); // ✓ true
 
-// ⚠️ 业务选择：校验用 matches（全匹配），提取用 find（子串）
+// 业务选择：校验用 matches（全匹配），提取用 find（子串）
 ```
 
 ### 3.3 find 的迭代陷阱（性能与逻辑）
@@ -149,10 +149,10 @@ while (m.find()) {
     // 333 @ 6
 }
 
-// ⚠️ 陷阱 1：忘写循环 → 只匹配第一次
-// ⚠️ 陷阱 2：find() 隐式 O(N) 扫描 → 配合复杂模式可能 O(N²)
+// 陷阱 1：忘写循环 → 只匹配第一次
+// 陷阱 2：find() 隐式 O(N) 扫描 → 配合复杂模式可能 O(N²)
 //   （JEP 8260688 指出：单纯占有量词不足以解决）
-// ⚠️ 陷阱 3：循环中修改输入 → 位置错乱
+// 陷阱 3：循环中修改输入 → 位置错乱
 ```
 
 ### 3.4 分组提取的完整模式
@@ -207,7 +207,7 @@ Pattern p4 = Pattern.compile("(?i)error");      // 忽略大小写
 Pattern p5 = Pattern.compile("(?i)error(?-i)WARN");  // 局部开关
 Pattern p6 = Pattern.compile("(?s)<.*>");       // 内联 DOTALL
 
-// ⚠️ 区别：编译标志全局生效；内联标志可局部控制
+// 区别：编译标志全局生效；内联标志可局部控制
 ```
 
 ### 4.3 标志的坑
@@ -234,7 +234,7 @@ Pattern p6 = Pattern.compile("(?s)<.*>");       // 内联 DOTALL
 "123-456".replaceAll("(\\d{3})-(\\d{3})", "$1$2");  // 正则替换
 "abc".replaceFirst("a", "x");              // 首个替换
 
-// ⚠️ 性能注意：这三个方法每次调用内部都编译 Pattern！
+// 性能注意：这三个方法每次调用内部都编译 Pattern！
 // 热循环中应改用预编译 Pattern（见第 2 节）
 ```
 
@@ -247,8 +247,8 @@ Pattern p6 = Pattern.compile("(?s)<.*>");       // 内联 DOTALL
 // replaceAll(String, String)：正则替换
 "a.b.c".replaceAll("\\.", "/");   // → a/b/c（正则需转义）
 
-// ⚠️ 关键区别：想替换字面字符用 replace（免转义、更快）
-// ⚠️ 陷阱：replaceAll 的第一个参数是正则——"." 会匹配所有字符！
+// 关键区别：想替换字面字符用 replace（免转义、更快）
+// 陷阱：replaceAll 的第一个参数是正则——"." 会匹配所有字符！
 "a.b.c".replaceAll(".", "/");     // → /////（灾难！每个字符都被替换）
 ```
 
@@ -258,14 +258,14 @@ Pattern p6 = Pattern.compile("(?s)<.*>");       // 内联 DOTALL
 // split 的边界行为（易错点）
 "a,b,c".split(",");               // [a, b, c]
 "a,,c".split(",");                // [a, , c]（空元素保留？）
-"a,b,".split(",");                // [a, b]（⚠️ 尾部分隔符被丢弃！）
+"a,b,".split(",");                // [a, b]（尾部分隔符被丢弃！）
 "a,b,".split(",", -1);            // [a, b, ]（-1 保留所有空元素）
 
 // 正则特殊字符作为分隔符
 "a.b.c".split("\\.");             // 正则转义（[a, b, c]）
 "a|b|c".split("\\|");             // 竖线转义
 "a$b".split("\\$");               // 美元转义
-// ⚠️ 简单方案：split(Pattern.quote(".")) 按字面分割
+// 简单方案：split(Pattern.quote(".")) 按字面分割
 ```
 
 ---
@@ -276,12 +276,12 @@ Pattern p6 = Pattern.compile("(?s)<.*>");       // 内联 DOTALL
 
 ```text
 Java 正则线程安全
-├── Pattern：不可变 → 线程安全 → 可静态共享 ✅
-├── Matcher：有状态 → 非线程安全 → 每次 new/reset ⚠️
+├── Pattern：不可变 → 线程安全 → 可静态共享 ✓
+├── Matcher：有状态 → 非线程安全 → 每次 new/reset 
 ├── 错误用法：静态共享 Matcher（多线程并发调用）→ 数据错乱
 └── 正确用法：静态共享 Pattern + 每线程独立 Matcher
 
-// ✅ 正确
+// ✓ 正确
 public class Validator {
     private static final Pattern EMAIL = Pattern.compile("...");  // 共享安全
     public boolean check(String s) {
@@ -289,7 +289,7 @@ public class Validator {
     }
 }
 
-// ❌ 错误
+// ✗ 错误
 private static Matcher SHARED_MATCHER = ...;   // 多线程并发 → 错乱
 ```
 
@@ -332,7 +332,7 @@ boolean r2 = Character.isDigit('1');            // 原生：零开销
 ```java
 // 陷阱 6 示例：零宽匹配死循环
 Matcher m = Pattern.compile("(?=a)").matcher("aaa");
-while (m.find()) { ... }   // ⚠️ 零宽匹配：位置不前进 → 死循环！
+while (m.find()) { ... }   // 零宽匹配：位置不前进 → 死循环！
 // 解法：循环内检查 m.end() == m.start() 时手动前进
 
 // 陷阱 7 示例：group 越界
@@ -344,7 +344,7 @@ Matcher m = Pattern.compile("(\\d+)").matcher("123");
 
 ## 8. 核心要点
 
-> 🎯 **核心要点**：
+> **核心要点**：
 > 1. 双层 API：Pattern（不可变线程安全共享）+ Matcher（有状态每次新建）——**静态共享 Pattern 是标准实践**
 > 2. 预编译是最大性能收益：热循环重复编译 = 100 倍性能损失
 > 3. matches（全匹配校验）vs find（子串提取）vs lookingAt（前缀）语义要分清

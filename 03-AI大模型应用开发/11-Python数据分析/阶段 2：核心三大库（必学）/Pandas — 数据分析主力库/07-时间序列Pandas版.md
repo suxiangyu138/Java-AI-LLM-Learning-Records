@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [时间列的准备](#1-时间列的准备)
 2. [dt 访问器](#2-dt-访问器)
@@ -136,7 +136,7 @@ df["sales_ma7"] = df["sales"].rolling(7, min_periods=3).mean()  # 至少 3 个�
 
 **验收动作**：造 90 天销售数据——① 时间准备三步（to_datetime/排序/设索引）；② dt 提取年月周末三列；③ resample 月度聚合（sum/mean 对比）；④ shift + pct_change 算环比变化率；⑤ rolling(7) 移动平均并画图对比原始线（`../Matplotlib  Seaborn — 数据可视化/` 的折线 + 平滑线）——**"五步全做 = 时间层通过"**——**练习纪律**：时间列先体检（NaT 计数）再分析——"时间脏了全盘皆错"。
 
-> 🎯 **核心要点**：时间准备（to_datetime coerce/排序铁律/设时间索引）；dt 访问器（年/月/星期/周末——groupby 的时间维度）；resample = groupby 时间版（频率符号速记——3.0 用 "ME"——聚合函数按业务选）；shift/diff/pct_change（环比基准/变化率/周同比——shift(-1) 构造预测标签）；rolling 移动窗口（均线平滑趋势——min_periods 处理窗口不满）——**"时间序列 = 数据 + 日历——重采样是时间分析的第一个动作"**。
+> **核心要点**：时间准备（to_datetime coerce/排序铁律/设时间索引）；dt 访问器（年/月/星期/周末——groupby 的时间维度）；resample = groupby 时间版（频率符号速记——3.0 用 "ME"——聚合函数按业务选）；shift/diff/pct_change（环比基准/变化率/周同比——shift(-1) 构造预测标签）；rolling 移动窗口（均线平滑趋势——min_periods 处理窗口不满）——**"时间序列 = 数据 + 日历——重采样是时间分析的第一个动作"**。
 
 ---
 

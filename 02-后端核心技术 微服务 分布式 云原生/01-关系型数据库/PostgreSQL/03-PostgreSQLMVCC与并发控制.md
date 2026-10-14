@@ -2,7 +2,7 @@
 
 > 定位：PG 独有的 MVCC 实现——元组版本链（无回滚段）、VACUUM 死元组清理、隔离级别、锁体系——与 MySQL 最大的底层差异
 
-## 📚 目录
+## 目录
 
 1. [MVCC 实现对比（PG vs MySQL）](#1-mvcc-实现对比pg-vs-mysql)
 2. [元组版本链与可见性](#2-元组版本链与可见性)
@@ -23,7 +23,7 @@ MySQL 的 MVCC：undo log 回滚段
   更新 = 修改数据 + undo log 记录旧值
   旧值在独立回滚段
 
-⚠️ 面试必答：
+面试必答：
 "PG MVCC = 多版本存在表空间（VACUUM 回收）；
  MySQL MVCC = undo log 版本链；
  PG 无回滚段 → 不会出现'undo log 膨胀'问题，
@@ -54,7 +54,7 @@ PG 每行隐藏字段（系统列）：
   版本可见 ⟺ xmin 已提交且（xmax 为空或 xmax 未提交）
   → 事务只能看到提交时间在自己快照之前的版本
 
-⚠️ 面试必答：
+面试必答：
 "PG 元组版本链 = xmin/xmax 标记 +
  ctid 物理定位——可见性靠事务快照判断
  （非 undo 回滚段串链）。"
@@ -75,7 +75,7 @@ HOT（Heap Only Tuple）更新：
   ① 索引列被更新的行 → 无法 HOT（必须新索引条目）
   ② 页面空间不足 → 回退普通更新
 
-⚠️ 面试必答：
+面试必答：
 "HOT = 索引列不变时同页内更新，
  免索引写 + 防索引膨胀；
  高频更新场景检查 n_tup_hot_upd 占比。"
@@ -120,7 +120,7 @@ PG 用「冻结」（freeze）解决：
   VACUUM 把足够旧的事务 xmin 标记为 Frozen（特殊值 2）
   → 所有事务都可见它，永不失效
 
-⚠️ 危险：回绕接近时 PG 会强制进入单用户/只读模式！
+危险：回绕接近时 PG 会强制进入单用户/只读模式！
   监控命令：
 ```
 
@@ -139,7 +139,7 @@ ORDER BY xact_start LIMIT 5;
 VACUUM FREEZE VERBOSE ANALYZE;
 ```
 
-> 💡 **实战经验**：`idle in transaction` 会话是 VACUUM 与回绕的头号敌人——用 `idle_in_transaction_session_timeout = '5min'` 兜底，Spring 事务里避免长事务/嵌套事务。
+> **实战经验**：`idle in transaction` 会话是 VACUUM 与回绕的头号敌人——用 `idle_in_transaction_session_timeout = '5min'` 兜底，Spring 事务里避免长事务/嵌套事务。
 
 ---
 
@@ -154,7 +154,7 @@ VACUUM = 回收死元组（被删除/更新后的旧版本）
   ① VACUUM（普通）：标记死元组空间可复用（不归还 OS）
   ② VACUUM FULL：物理清理 + 紧缩表（锁定表！）
 
-⚠️ 面试必答：
+面试必答：
 "VACUUM 是 PG 的生命线——不清理死元组
  会导致表膨胀 + 索引膨胀；
  Autovacuum 是默认守护进程。"
@@ -171,7 +171,7 @@ autovacuum = on
 autovacuum_vacuum_threshold = 50        -- 死元组阈值
 autovacuum_analyze_threshold = 50
 
--- ⚠️ PG 18 新增：
+-- PG 18 新增：
 autovacuum_vacuum_max_threshold = 100000000   -- 死元组硬上限（防止超大表等太久）
 -- PG 18 新：autovacuum_max_workers 动态扩展（无需重启）
 -- PG 17 新：eager freezing（VACUUM 时主动冻结旧元组，防回绕更从容）
@@ -191,7 +191,7 @@ autovacuum_freeze_max_age       = 400000000
 ```
 
 ```sql
--- ⚠️ 关键技巧：按表覆盖（大表/热表单独调，别全局一刀切）
+-- 关键技巧：按表覆盖（大表/热表单独调，别全局一刀切）
 ALTER TABLE orders SET (
     autovacuum_vacuum_scale_factor    = 0.01,
     autovacuum_vacuum_threshold       = 50,
@@ -211,7 +211,7 @@ ORDER BY n_dead_tup DESC LIMIT 10;
 ```
 
 ```
-⚠️ 面试必答：
+面试必答：
 "Autovacuum 调优三招 = 按表覆盖（大表低 scale_factor）
  + 硬上限 max_threshold（PG 18）
  + 监控 n_dead_tup；
@@ -232,12 +232,12 @@ ORDER BY n_dead_tup DESC LIMIT 10;
 | Serializable | 不可能 | 不可能 | 不可能 | 不可能 |
 
 ```
-⚠️ PG vs MySQL：
+PG vs MySQL：
   PG 默认 Read Committed（SQL 标准默认）
   MySQL 默认 Repeatable Read
   PG 的 RR 通过 SSI（Serializable Snapshot Isolation）实现
 
-⚠️ 面试必答：
+面试必答：
 "PG 默认 RC（MySQL 默认 RR）——
  PG 的 RR 是真正的可序列化快照隔离，
  不牺牲并发但性能开销可控。"
@@ -291,10 +291,10 @@ PG 表级锁（轻 → 重，冲突矩阵简表）：
   Exclusive               RowShare/RowExclusive/…    REFRESH MAT VIEW
   AccessExclusiveLock     ALL（含 AccessShare）      ALTER TABLE/DROP/TRUNCATE
 
-⚠️ 读写不互斥：SELECT 不阻塞 UPDATE
+读写不互斥：SELECT 不阻塞 UPDATE
   （MVCC 快照读天然非阻塞）——但 SELECT 与 ALTER TABLE 互斥
 
-⚠️ 面试必答：
+面试必答：
 "PG 锁轻到重八级——读写不互斥（MVCC 天然）、
  ALTER TABLE 要 AccessExclusiveLock
  （唯一会阻塞读的操作）。"
@@ -330,7 +330,7 @@ PG 死锁：自动检测（等待图）+ deadlock_timeout（默认 1s）
 ```
 
 ```
-⚠️ 面试必答：
+面试必答：
 "PG 死锁自动检测（deadlock_timeout 默认 1s 扫等待图）
  + 代价最小牺牲；
  业务侧：统一加锁顺序 + 短事务 + 捕获 40P01 重试。"
@@ -338,7 +338,7 @@ PG 死锁：自动检测（等待图）+ deadlock_timeout（默认 1s）
 
 ---
 
-> 🎯 **核心要点**：PG MVCC = **多版本存在表空间**（xmin/xmax 标记 + HOT 同页更新 + VACUUM 回收）+ **快照隔离**（xip 列表判断）+ **事务 ID 冻结防回绕** + **Autovacuum 守护**（按表覆盖调优）+ **默认 RC**（SSI 防幻读）+ **八级锁读写不互斥**。对比 MySQL：PG 无回滚段但需 VACUUM，这是**最大的结构差异**。
+> **核心要点**：PG MVCC = **多版本存在表空间**（xmin/xmax 标记 + HOT 同页更新 + VACUUM 回收）+ **快照隔离**（xip 列表判断）+ **事务 ID 冻结防回绕** + **Autovacuum 守护**（按表覆盖调优）+ **默认 RC**（SSI 防幻读）+ **八级锁读写不互斥**。对比 MySQL：PG 无回滚段但需 VACUUM，这是**最大的结构差异**。
 
 ---
 

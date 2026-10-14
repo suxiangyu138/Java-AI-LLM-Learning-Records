@@ -1,4 +1,4 @@
-# 🚀 大模型 API 调用实践
+# 大模型 API 调用实践
 
 > **核心摘要**：掌握 OpenAI 兼容 API 的标准化调用方式，覆盖 DeepSeek、通义千问、智谱 AI 等主流平台。本文从 HTTP 协议基础到生产级封装（重试、流式输出、Key 安全、Java 后端集成），提供可直接复用的完整代码。
 
@@ -297,14 +297,14 @@ class LLMService:
 ## 五、API Key 安全管理
 
 ```python
-# ❌ 永远不要把 Key 硬编码在代码里
+# ✗ 永远不要把 Key 硬编码在代码里
 API_KEY = "sk-xxxxxxxx"  # 危险！
 
-# ✅ 使用环境变量
+# ✓ 使用环境变量
 import os
 api_key = os.environ.get("DEEPSEEK_API_KEY")
 
-# ✅ 使用 .env 文件 + python-dotenv
+# ✓ 使用 .env 文件 + python-dotenv
 # .env 文件：
 # DEEPSEEK_API_KEY=sk-xxxxxxxx
 # DEEPSEEK_BASE_URL=https://api.deepseek.com/v1

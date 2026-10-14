@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [Lambda 的工程使用边界](#1-lambda-的工程使用边界)
 2. [策略模式与规则表](#2-策略模式与规则表)
@@ -43,7 +43,7 @@ private boolean eligibleForPromotion(User user, Instant now) {
 }
 ```
 
-> 🎯 代码短不等于设计好；Lambda 的价值是把变化点作为参数传入，而不是隐藏业务复杂度。
+> 代码短不等于设计好；Lambda 的价值是把变化点作为参数传入，而不是隐藏业务复杂度。
 
 ---
 
@@ -420,7 +420,7 @@ Map<String, Long> rejectionCounts = results.stream()
         .collect(Collectors.groupingBy(ProcessResult::reason, Collectors.counting()));
 ```
 
-> 🎯 **模块结论**：Lambda 是“变化行为”的载体；Stream 是数据流水线，Optional 是缺失值表达，CompletableFuture 是异步编排。把状态、资源、异常和线程边界留在可命名的组件中，代码才可维护。
+> **模块结论**：Lambda 是“变化行为”的载体；Stream 是数据流水线，Optional 是缺失值表达，CompletableFuture 是异步编排。把状态、资源、异常和线程边界留在可命名的组件中，代码才可维护。
 
 ---
 

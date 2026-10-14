@@ -1,7 +1,7 @@
 # 迭代器模式与 Java 集合迭代
 > Iterator 解耦遍历与容器——for-each 语法糖背后的设计模式与 fail-fast 陷阱
 
-## 📚 目录
+## 目录
 1. [迭代器模式](#1-迭代器模式)
 2. [for-each 语法糖](#2-for-each-语法糖)
 3. [Iterator 与 ListIterator](#3-iterator-与-listiterator)
@@ -41,7 +41,7 @@ public interface Iterator<T> {
 }
 ```
 
-> 💡 集合框架里 ArrayList/LinkedList/HashSet 都实现 `Iterable`，所以全部能用 for-each——这就是迭代器模式"统一遍历"的威力。
+> 集合框架里 ArrayList/LinkedList/HashSet 都实现 `Iterable`，所以全部能用 for-each——这就是迭代器模式"统一遍历"的威力。
 
 ## 2. for-each 语法糖
 
@@ -66,7 +66,7 @@ for (Iterator<String> it = list.iterator(); it.hasNext(); ) {
 | Iterable 集合 | Iterator + hasNext/next | 走迭代器模式 |
 | 流/其他 | 视对象而定 | 自定义 Iterable 也适用 |
 
-⚠️ 三个注意点：
+三个注意点：
 
 ```
 ① 遍历中删除元素会抛 ConcurrentModificationException（见 §4）
@@ -86,7 +86,7 @@ while (it.hasNext()) {        // 先判断，再取值
     String s = it.next();
     System.out.println(s);
 }
-// ⚠️ 无 hasNext 保护直接 next()：游标越过末尾 → NoSuchElementException
+// 无 hasNext 保护直接 next()：游标越过末尾 → NoSuchElementException
 ```
 
 ### 3.2 ListIterator：双向迭代
@@ -105,11 +105,11 @@ while (it.hasPrevious()) {
 
 | 能力 | Iterator | ListIterator |
 |------|:---:|:---:|
-| 正向遍历 | ✅ | ✅ |
-| 反向遍历 | ❌ | ✅ |
-| 替换元素 | ❌ | ✅ |
-| 插入元素 | ❌ | ✅ |
-| 获取索引 | ❌ | ✅ |
+| 正向遍历 | ✓ | ✓ |
+| 反向遍历 | ✗ | ✓ |
+| 替换元素 | ✗ | ✓ |
+| 插入元素 | ✗ | ✓ |
+| 获取索引 | ✗ | ✓ |
 | 适用范围 | 所有集合 | 仅 List |
 
 ## 4. fail-fast 与遍历中删除
@@ -127,11 +127,11 @@ fail-fast（快速失败）：
 ```
 
 ```java
-// ❌ 经典错误：for-each 中直接删除 → CME
+// ✗ 经典错误：for-each 中直接删除 → CME
 List<String> list = new ArrayList<>(List.of("a", "b", "c"));
 for (String s : list) {
     if (s.equals("b")) {
-        list.remove(s);        // ⚠️ 结构修改 → 下次 next() 抛 CME
+        list.remove(s);        // 结构修改 → 下次 next() 抛 CME
     }
 }
 ```
@@ -139,21 +139,21 @@ for (String s : list) {
 ### 4.2 三种正确删除姿势
 
 ```java
-// ✅ 方式一：迭代器自己的 remove（同步维护 modCount）
+// ✓ 方式一：迭代器自己的 remove（同步维护 modCount）
 Iterator<String> it = list.iterator();
 while (it.hasNext()) {
     if (it.next().equals("b")) it.remove();
 }
 
-// ✅ 方式二：removeIf（Java 8+，内部也是迭代器）
+// ✓ 方式二：removeIf（Java 8+，内部也是迭代器）
 list.removeIf(s -> s.equals("b"));
 
-// ✅ 方式三：倒序索引遍历（只适合支持随机访问的 List）
+// ✓ 方式三：倒序索引遍历（只适合支持随机访问的 List）
 for (int i = list.size() - 1; i >= 0; i--) {
     if (list.get(i).equals("b")) list.remove(i);
 }
 
-// ⚠️ 注意：iterator.remove() 前必须先 next()，且只能调一次
+// 注意：iterator.remove() 前必须先 next()，且只能调一次
 ```
 
 | 场景 | 正确做法 | 错误做法 |
@@ -215,7 +215,7 @@ public class LinkedListIterator<T> implements Iterator<T> {
     }
 }
 // 使用：for (T x : new IterableLinkedList(head)) { ... }
-// ⚠️ 面试要点：游标语义（next() 返回"当前"并前进，不返回"下一个"）
+// 面试要点：游标语义（next() 返回"当前"并前进，不返回"下一个"）
 ```
 
 ### 6.2 无限序列迭代器（惰性求值）
@@ -240,10 +240,10 @@ public class FibonacciIterator implements Iterator<Integer> {
     }
 }
 // 配合 Stream：StreamSupport.stream(...) 或手写 while 取前 N 个
-// ⚠️ 价值：把"状态机"封装成迭代器，调用方无需关心内部状态
+// 价值：把"状态机"封装成迭代器，调用方无需关心内部状态
 ```
 
-> 💡 手写迭代器的面试话术："迭代器把游标状态封装在内部，调用方只依赖 hasNext/next 两个方法——这就是迭代器模式的解耦价值。"
+> 手写迭代器的面试话术："迭代器把游标状态封装在内部，调用方只依赖 hasNext/next 两个方法——这就是迭代器模式的解耦价值。"
 
 ## 7. 迭代器 vs 索引遍历
 
@@ -256,18 +256,18 @@ public class FibonacciIterator implements Iterator<Integer> {
 | 语义 | 依赖"支持随机访问" | 只依赖"可迭代" |
 
 ```java
-// ❌ 链表用索引遍历：每次 get(i) 都是 O(n) 从头扫描 → 整体 O(n²)
+// ✗ 链表用索引遍历：每次 get(i) 都是 O(n) 从头扫描 → 整体 O(n²)
 for (int i = 0; i < linkedList.size(); i++) {
     process(linkedList.get(i));
 }
 
-// ✅ 链表用迭代器/for-each：O(n) 顺序推进
+// ✓ 链表用迭代器/for-each：O(n) 顺序推进
 for (String s : linkedList) {
     process(s);
 }
 ```
 
-> 🎯 **核心要点**：迭代器模式 = **遍历与容器解耦**（GoF 行为型）。for-each 是编译成 Iterator 的语法糖；**遍历中删除必须用 `iterator.remove()` 或 `removeIf`**，否则触发 fail-fast 抛 CME；手写迭代器要把握"游标 + hasNext/next"语义；LinkedList 用索引遍历是 O(n²) 陷阱，迭代器才是正确姿势。
+> **核心要点**：迭代器模式 = **遍历与容器解耦**（GoF 行为型）。for-each 是编译成 Iterator 的语法糖；**遍历中删除必须用 `iterator.remove()` 或 `removeIf`**，否则触发 fail-fast 抛 CME；手写迭代器要把握"游标 + hasNext/next"语义；LinkedList 用索引遍历是 O(n²) 陷阱，迭代器才是正确姿势。
 
 ---
 

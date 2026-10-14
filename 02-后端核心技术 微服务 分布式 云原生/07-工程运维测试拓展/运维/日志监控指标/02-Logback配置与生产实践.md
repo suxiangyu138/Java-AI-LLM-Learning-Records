@@ -1,7 +1,7 @@
 # 02-Logback 配置与生产实践
 > 生产级 Logback：Pattern 设计、滚动策略、异步日志、MDC 链路、条件配置、JSON 结构化日志——从"能打日志"到"日志好用"
 
-## 📚 目录
+## 目录
 1. [配置结构速览](#1-配置结构速览)
 2. [Pattern 设计](#2-pattern-设计)
 3. [滚动策略](#3-滚动策略)
@@ -38,16 +38,16 @@ logback.xml 三要素：
 | 占位符 | 含义 | 生产建议 |
 |--------|------|---------|
 | `%d{...}` | 时间 | 带毫秒：`yyyy-MM-dd HH:mm:ss.SSS` |
-| `%-5level` | 级别（左对齐 5 位） | ✅ |
-| `%thread` | 线程名 | ✅（定位并发问题） |
-| `%logger{36}` | 类名（截断） | ✅ |
-| `%msg` / `%n` | 消息 / 换行 | ✅ |
-| `%X{traceId}` | MDC 值 | ✅ 必须（链路关联） |
-| `%X{userId}` | 业务上下文 | ✅ 建议 |
-| `%caller{1}` | 调用位置 | ❌ 性能昂贵 |
-| `%L` | 行号 | ❌ 性能昂贵（生产禁） |
+| `%-5level` | 级别（左对齐 5 位） | ✓ |
+| `%thread` | 线程名 | ✓（定位并发问题） |
+| `%logger{36}` | 类名（截断） | ✓ |
+| `%msg` / `%n` | 消息 / 换行 | ✓ |
+| `%X{traceId}` | MDC 值 | ✓ 必须（链路关联） |
+| `%X{userId}` | 业务上下文 | ✓ 建议 |
+| `%caller{1}` | 调用位置 | ✗ 性能昂贵 |
+| `%L` | 行号 | ✗ 性能昂贵（生产禁） |
 
-> ⚠️ 生产 Pattern 铁律：**含 `%X{traceId}`**（链路关联）；**禁 `%caller`/`%L`**（反射定位，性能杀手）。
+> 生产 Pattern 铁律：**含 `%X{traceId}`**（链路关联）；**禁 `%caller`/`%L`**（反射定位，性能杀手）。
 
 ## 3. 滚动策略
 
@@ -78,9 +78,9 @@ logback.xml 三要素：
 | `maxHistory` | 保留天数 | 30 天（按合规调整） |
 | `totalSizeCap` | 总容量上限（防磁盘爆） | 20GB |
 | `charset` | 编码 | **UTF-8（中文乱码元凶）** |
-| `.gz` | 压缩历史文件 | ✅ |
+| `.gz` | 压缩历史文件 | ✓ |
 
-> 💡 滚动策略 = 磁盘安全三件套：**按天滚动 + 大小上限 + 总量上限**。
+> 滚动策略 = 磁盘安全三件套：**按天滚动 + 大小上限 + 总量上限**。
 
 ## 4. 异步日志
 
@@ -101,7 +101,7 @@ logback.xml 三要素：
 | `discardingThreshold` | 20% | 队列剩余 20% 时丢弃 TRACE/DEBUG/INFO |
 | `includeCallerData` | false | 收集调用位置（性能昂贵，保持 false） |
 
-> ⚠️ **异步日志风险**：队列积压、应用异常退出时**可能丢日志**。核心业务/审计日志不宜只靠异步——重要日志同步落盘 + 常规日志异步。
+> **异步日志风险**：队列积压、应用异常退出时**可能丢日志**。核心业务/审计日志不宜只靠异步——重要日志同步落盘 + 常规日志异步。
 
 ## 5. MDC：上下文注入
 
@@ -128,10 +128,10 @@ try {
 ### 5.2 线程池场景（易错点）
 
 ```java
-// ❌ 线程池内日志丢失 traceId（MDC 是 ThreadLocal）
+// ✗ 线程池内日志丢失 traceId（MDC 是 ThreadLocal）
 executor.submit(() -> log.info("异步任务"));   // 无 traceId！
 
-// ✅ 方案 1：TaskDecorator 传递
+// ✓ 方案 1：TaskDecorator 传递
 @Bean
 public Executor taskExecutor() {
     ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
@@ -145,10 +145,10 @@ public Executor taskExecutor() {
     return executor;
 }
 
-// ✅ 方案 2：TransmittableThreadLocal（阿里 TTL）
+// ✓ 方案 2：TransmittableThreadLocal（阿里 TTL）
 ```
 
-> 🎯 **MDC 铁律**：入口 put → finally remove；线程池用 TaskDecorator/TTL 传递——否则异步日志全部"无主"。
+> **MDC 铁律**：入口 put → finally remove；线程池用 TaskDecorator/TTL 传递——否则异步日志全部"无主"。
 
 ## 6. 条件配置与多环境
 
@@ -177,7 +177,7 @@ public Executor taskExecutor() {
 | `logback.xml` + `<if>` 条件 | 按属性判断（需 janino 依赖） |
 | `application.yml` 配置 `logging.*` | 简单场景（级别/文件路径） |
 
-> 💡 文件名注意：**`logback-spring.xml` 才支持 `springProfile`**；`logback.xml` 不支持 Spring 扩展。
+> 文件名注意：**`logback-spring.xml` 才支持 `springProfile`**；`logback.xml` 不支持 Spring 扩展。
 
 ## 7. JSON 结构化日志
 
@@ -203,7 +203,7 @@ public Executor taskExecutor() {
  "message":"创建订单","orderId":"SO-1001"}
 ```
 
-> 💡 **JSON 日志的价值**：采集平台（Loki/ES）无需解析文本 Pattern——字段天然结构化，查询/聚合/告警全部直接可用。**上集中式平台前先改 JSON 日志**（详见 [03](03-日志采集与集中式平台.md)）。
+> **JSON 日志的价值**：采集平台（Loki/ES）无需解析文本 Pattern——字段天然结构化，查询/聚合/告警全部直接可用。**上集中式平台前先改 JSON 日志**（详见 [03](03-日志采集与集中式平台.md)）。
 
 ## 8. 生产级完整配置模板
 
@@ -255,7 +255,7 @@ public Executor taskExecutor() {
 
 ## 9. 核心要点
 
-> 🎯 **核心要点**：
+> **核心要点**：
 > - Pattern 铁律：`%X{traceId}` 必带、`%caller`/`%L` 生产禁；
 > - 滚动三件套：按天 + 单文件 500MB + 总量 20GB，charset=UTF-8；
 > - 异步四参数：queueSize 1024-2048、neverBlock=true、discardingThreshold 权衡、includeCallerData=false；**审计日志不异步**；

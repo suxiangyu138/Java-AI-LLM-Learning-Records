@@ -1,6 +1,6 @@
 # 02 - Spring Boot 启动流程与自动配置内核
 
-> 🎯 Spring Boot 的"魔法"不是黑盒 — SpringApplication.run 五阶段 + 自动配置加载链路 + @Conditional 条件树。Boot 4 的关键变化：ImportCandidates 取代 spring.factories、@AutoConfiguration 注解、AOT 静态化
+> Spring Boot 的"魔法"不是黑盒 — SpringApplication.run 五阶段 + 自动配置加载链路 + @Conditional 条件树。Boot 4 的关键变化：ImportCandidates 取代 spring.factories、@AutoConfiguration 注解、AOT 静态化
 
 ---
 
@@ -239,6 +239,6 @@ java -jar app.jar --spring.autoconfigure.exclude=... # 排除自动配置
 
 ---
 
-> 🎯 **核心要点**：Boot 启动 = 构造期（类型推断 + 加载初始化器/监听器）→ 环境构建 → 创建 Context → **refresh 12 步**（自动配置 + Web 服务器在这里起作用）→ 发布就绪事件。自动配置的加载链路 = `@Import → AutoConfigurationImportSelector → ImportCandidates 读 .imports → @Conditional 过滤`。Boot 4 的关键改动：`.imports 文件取代 spring.factories`。
+> **核心要点**：Boot 启动 = 构造期（类型推断 + 加载初始化器/监听器）→ 环境构建 → 创建 Context → **refresh 12 步**（自动配置 + Web 服务器在这里起作用）→ 发布就绪事件。自动配置的加载链路 = `@Import → AutoConfigurationImportSelector → ImportCandidates 读 .imports → @Conditional 过滤`。Boot 4 的关键改动：`.imports 文件取代 spring.factories`。
 
 **下一模块**：[03-循环依赖与三级缓存深度剖析](03-循环依赖与三级缓存深度剖析.md) / **返回总览**：[00-深度剖析总览](00-Spring生态深度剖析总览.md)

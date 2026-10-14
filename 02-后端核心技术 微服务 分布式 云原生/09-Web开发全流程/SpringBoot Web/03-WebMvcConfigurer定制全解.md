@@ -1,7 +1,7 @@
 # WebMvcConfigurer 定制全解
 > MVC 定制的唯一入口：拦截器、CORS、静态资源、消息转换器、参数解析器、格式化器、路径匹配——一个接口十几个方法，全部吃透
 
-## 📚 目录
+## 目录
 1. [WebMvcConfigurer 全景](#1-webmvcconfigurer-全景)
 2. [拦截器注册 addInterceptors](#2-拦截器注册-addinterceptors)
 3. [CORS：addCorsMappings vs 全局 CorsFilter](#3-corsaddcorsmappings-vs-全局-corsfilter)
@@ -38,7 +38,7 @@ public class WebConfig implements WebMvcConfigurer {
 | `configureAsyncSupport` | 异步支持配置 | - |
 | `addArgumentResolvers` | 参数解析器 | §6 |
 
-> 🎯 黄金法则：**只覆盖你需要的方法**——实现接口但空覆盖，或覆盖后不调用 super，会**破坏自动配置的默认行为**（典型翻车点见 §5）。
+> 黄金法则：**只覆盖你需要的方法**——实现接口但空覆盖，或覆盖后不调用 super，会**破坏自动配置的默认行为**（典型翻车点见 §5）。
 
 ## 2. 拦截器注册 addInterceptors
 
@@ -65,7 +65,7 @@ public class WebConfig implements WebMvcConfigurer {
 | 白名单遗漏 | 忘记 exclude 登录接口 → 登录死循环（经典故障） |
 | 静态资源 | Interceptor 默认**不拦截**静态资源（若请求走 ResourceHttpRequestHandler） |
 
-> ⚠️ 对比 Filter 的拦截范围：Filter 用 `addMappingForUrlPatterns` 且**会拦静态资源**；Interceptor 面向"已路由到 Controller"的请求。鉴权放 Filter 还是 Interceptor，见 [04-Filter与Interceptor注册与顺序](04-Filter与Interceptor注册与顺序.md) 的三层分工表。
+> 对比 Filter 的拦截范围：Filter 用 `addMappingForUrlPatterns` 且**会拦静态资源**；Interceptor 面向"已路由到 Controller"的请求。鉴权放 Filter 还是 Interceptor，见 [04-Filter与Interceptor注册与顺序](04-Filter与Interceptor注册与顺序.md) 的三层分工表。
 
 ## 3. CORS：addCorsMappings vs 全局 CorsFilter
 
@@ -99,9 +99,9 @@ public CorsFilter corsFilter() {
 | 覆盖范围 | Controller 路由 | 所有请求（含静态/错误页） |
 | 预检处理 | MVC 自动 | Filter 层自动 |
 | 与安全框架协作 | Spring Security 需放行预检 | 需在 Security Filter 前 |
-| 生产推荐 | ✅ 业务接口 | 网关/静态资源混合场景 |
+| 生产推荐 | ✓ 业务接口 | 网关/静态资源混合场景 |
 
-> 🎯 配套结论：**跨域规则放网关层（Nginx/网关）与应用层二选一**，别两层都配导致预检重复/冲突——与 [Nginx 体系](../Nginx/00-Nginx知识体系总览.md) 的 CORS 章节同理。
+> 配套结论：**跨域规则放网关层（Nginx/网关）与应用层二选一**，别两层都配导致预检重复/冲突——与 [Nginx 体系](../Nginx/00-Nginx知识体系总览.md) 的 CORS 章节同理。
 
 ## 4. 静态资源 addResourceHandlers
 
@@ -131,7 +131,7 @@ public void addResourceHandlers(ResourceHandlerRegistry registry) {
 ## 5. 消息转换器 configureMessageConverters
 
 ```java
-// ⚠️ 两大陷阱先记住：
+// 两大陷阱先记住：
 // ① configureMessageConverters 是"整体替换"——不调 super 会丢掉默认转换器！
 // ② 正确姿势：extendMessageConverters（追加）或 Boot 4 的 Customizer Bean
 
@@ -155,7 +155,7 @@ public ServerHttpMessageConvertersCustomizer customJsonConverter() {
 }
 ```
 
-> ⚠️ **configureMessageConverters 是替换语义**：覆盖它且不调 `super.configureMessageConverters(converters)` → 默认转换器全丢 → JSON 返回 406。**能 extend 就不 configure**，Boot 4 直接上 Customizer。
+> **configureMessageConverters 是替换语义**：覆盖它且不调 `super.configureMessageConverters(converters)` → 默认转换器全丢 → JSON 返回 406。**能 extend 就不 configure**，Boot 4 直接上 Customizer。
 
 ## 6. 参数解析器与返回值处理器
 
@@ -188,7 +188,7 @@ public class WebConfig implements WebMvcConfigurer {
 public UserVO me(@LoginUser User user) { return ...; }
 ```
 
-> 💡 原理：自定义解析器插入 `HandlerMethodArgumentResolver` 链，在默认解析器之前/之后按序尝试（`supportsParameter` 决定谁能处理）。**这是"@LoginUser 注入"这类框架手法的标准实现**。
+> 原理：自定义解析器插入 `HandlerMethodArgumentResolver` 链，在默认解析器之前/之后按序尝试（`supportsParameter` 决定谁能处理）。**这是"@LoginUser 注入"这类框架手法的标准实现**。
 
 ## 7. 格式化器与数据绑定
 
@@ -213,7 +213,7 @@ public class StatusEnumFormatter implements Formatter<StatusEnum> {
 }
 ```
 
-> 💡 数据绑定三层：**格式化器（字符串↔对象）→ 转换器（Converter，类型↔类型）→ 绑定器（WebDataBinder）**。Controller 参数绑定、@ModelAttribute 表单绑定都走这条链。
+> 数据绑定三层：**格式化器（字符串↔对象）→ 转换器（Converter，类型↔类型）→ 绑定器（WebDataBinder）**。Controller 参数绑定、@ModelAttribute 表单绑定都走这条链。
 
 ## 8. 路径匹配与视图控制器
 
@@ -221,7 +221,7 @@ public class StatusEnumFormatter implements Formatter<StatusEnum> {
 // 路径匹配（Boot 4 / Framework 7）
 @Override
 public void configurePathMatch(PathMatchConfigurer configurer) {
-    // ⚠️ setUseTrailingSlashMatch 已在 Framework 7 移除！
+    // setUseTrailingSlashMatch 已在 Framework 7 移除！
     // /foo 与 /foo/ 不再等价；需旧行为 → UrlHandlerFilter
     configurer.setPathMatcher(new AntPathMatcher());   // 降级 Ant（默认 PathPattern）
     // configurer.addPathPrefix("/api", c -> c.isAnnotationPresent(RestController.class));  // 批量前缀
@@ -240,7 +240,7 @@ public void addViewControllers(ViewControllerRegistry registry) {
 | Boot 3（Framework 6） | PathPatternParser | `/foo` == `/foo/`（可配置） |
 | **Boot 4（Framework 7）** | PathPatternParser | **`/foo` ≠ `/foo/`（配置项已移除）** |
 
-> ⚠️ Boot 3 → 4 的典型 404 根因：旧客户端/网关习惯性带尾斜杠请求 → Boot 4 直接 404。迁移方案：客户端去掉尾斜杠，或加 `UrlHandlerFilter` 兼容。
+> Boot 3 → 4 的典型 404 根因：旧客户端/网关习惯性带尾斜杠请求 → Boot 4 直接 404。迁移方案：客户端去掉尾斜杠，或加 `UrlHandlerFilter` 兼容。
 
 ## 9. 常见定制场景速查表
 
@@ -257,7 +257,7 @@ public void addViewControllers(ViewControllerRegistry registry) {
 | 内容协商（xml/json 按 Accept） | configureContentNegotiation |
 | 异步超时/线程池 | configureAsyncSupport |
 
-> 🎯 **面试一句话**：WebMvcConfigurer 是"**自动配置的门户**"——Boot 的 WebMvcAutoConfiguration 检测到自定义 WebMvcConfigurer 后，把默认配置与自定义配置合并（`WebMvcConfigurerComposite` 组合模式），所以只覆盖需要的方法、其余默认保留。
+> **面试一句话**：WebMvcConfigurer 是"**自动配置的门户**"——Boot 的 WebMvcAutoConfiguration 检测到自定义 WebMvcConfigurer 后，把默认配置与自定义配置合并（`WebMvcConfigurerComposite` 组合模式），所以只覆盖需要的方法、其余默认保留。
 
 ---
 

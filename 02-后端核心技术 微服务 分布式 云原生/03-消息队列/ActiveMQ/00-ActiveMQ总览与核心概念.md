@@ -2,7 +2,7 @@
 
 > 定位：ActiveMQ 知识体系入口——JMS 标准、Classic vs Artemis 深度对比、与其他 MQ 选型矩阵、协议体系、模块导航
 
-## 📚 目录
+## 目录
 
 1. [ActiveMQ 是什么](#1-activemq-是什么)
 2. [Classic vs Artemis 深度对比](#2-classic-vs-artemis-深度对比)
@@ -28,7 +28,7 @@ ActiveMQ = Apache 开源消息中间件（JMS 1.1 / 2.0 标准实现）
   多协议支持（OpenWire/AMQP/MQTT/STOMP）
   与 Spring JMS 深度集成
 
-⚠️ 面试必答：
+面试必答：
 "ActiveMQ = JMS 标准的开源参考实现——
  Classic 是历史积累（存量规模大）、
  Artemis 是下一代（多协议 + 高性能）。"
@@ -51,20 +51,20 @@ ActiveMQ = Apache 开源消息中间件（JMS 1.1 / 2.0 标准实现）
 | 大消息 | 需配置 Blob | **原生流式** |
 | 性能（吞吐） | ~10K msg/s | ~50K+ msg/s |
 | Java 版本 | 8+ | 11+ |
-| 新项目推荐 | ❌ 不推荐 | ✅ 首选 |
+| 新项目推荐 | ✗ 不推荐 | ✓ 首选 |
 
 ### 2.2 何时迁移到 Artemis
 
 ```
 Artemis 适合：
-  ✅ 新项目（性能 + 多协议）
-  ✅ 需要 AMQP/MQTT（异构语言客户端接入）
-  ✅ 需要高吞吐（接近 Kafka 级别）
+  ✓ 新项目（性能 + 多协议）
+  ✓ 需要 AMQP/MQTT（异构语言客户端接入）
+  ✓ 需要高吞吐（接近 Kafka 级别）
 
 Classic 继续适合：
-  ✅ 存量系统（迁移成本高）
-  ✅ 小规模（< 10K msg/s）
-  ✅ 团队熟悉 JMS/ActiveMQ 5.x
+  ✓ 存量系统（迁移成本高）
+  ✓ 小规模（< 10K msg/s）
+  ✓ 团队熟悉 JMS/ActiveMQ 5.x
 
 迁移方案：
   Artemis 内置 OpenWire 协议桥 → 可以 X.classic 客户端连接 Artemis Broker
@@ -112,14 +112,14 @@ STOMP：Web 端（WebSocket + STOMP over WS）
 | 延迟 | 中 | **低（ms 级）** | 高（批量） |
 | 消息顺序 | 单消费者 | 单队列 | **分区内** |
 | 持久化 | Journal + 复制 | 磁盘 + 镜像队列 | **磁盘 + 副本** |
-| 事务 | ✅ JMS 事务 | ✅ AMQP TX | ❌ |
+| 事务 | ✓ JMS 事务 | ✓ AMQP TX | ✗ |
 | Spring | JMS Starter | AMQP Starter | Kafka Starter |
 | 伸缩 | 集群 | 集群 + 镜像 | **分区**（天然） |
 | 场景 | JMS 生态/混合 | 业务通用 | 大数据流/日志 |
 | 运维复杂度 | 中 | 低 | **高** |
 
 ```
-⚠️ 面试必答选型决策树：
+面试必答选型决策树：
   Java 内部 + JMS 标准 → ActiveMQ
   微服务解耦 + 低延迟 → RabbitMQ
   大数据管道 + 高吞吐 → Kafka
@@ -151,12 +151,12 @@ ConnectionFactory → Connection → Session
 
 消息类型：
   TextMessage：JSON 字符串（最常用）
-  ObjectMessage：序列化对象（⚠️ 跨语言不兼容）
+  ObjectMessage：序列化对象（跨语言不兼容）
   BytesMessage：二进制（文件/图片）
   MapMessage：键值对
   StreamMessage：流式数据
 
-⚠️ 面试必答：
+面试必答：
 "JMS 六接口 + 五消息类型——
  TextMessage（JSON）是生产标准；
  ObjectMessage 有跨语言风险（限制 Java）。"
@@ -176,7 +176,7 @@ conn.close();
 JMSContext ctx = factory.createContext();          // 自动管理 Connection+ Session
 ctx.createProducer().send(ctx.createQueue("q"), "msg");
 ctx.close();                                       // 自动关闭
-// ⚠️ 减少了 50% 样板代码，与 Spring JMS 的 JmsTemplate 理念一致
+// 减少了 50% 样板代码，与 Spring JMS 的 JmsTemplate 理念一致
 ```
 
 ---
@@ -193,7 +193,7 @@ ctx.close();                                       // 自动关闭
 
 ---
 
-> 🎯 **本体系学习建议**：ActiveMQ 以 **JMS 标准**为主线——先了解协议与模型（00），深入可靠性（01），再学 Spring 集成（02-03），最后运维（04）。面试最大价值 = JMS 标准理解 + Spring JMS 实战 + 与 RabbitMQ/Kafka 的选型对比。
+> **本体系学习建议**：ActiveMQ 以 **JMS 标准**为主线——先了解协议与模型（00），深入可靠性（01），再学 Spring 集成（02-03），最后运维（04）。面试最大价值 = JMS 标准理解 + Spring JMS 实战 + 与 RabbitMQ/Kafka 的选型对比。
 
 ---
 

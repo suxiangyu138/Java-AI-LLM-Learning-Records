@@ -1,6 +1,6 @@
 # 04 - Tool Use 工具调用
 
-> 🎯 Claude 的 Tool Use = LLM 不执行工具，而是返回 `tool_use` 指令 → 客户端执行 → 回传结果。这是 Agent 循环的核心引擎，支持并行调用、服务端内置工具
+> Claude 的 Tool Use = LLM 不执行工具，而是返回 `tool_use` 指令 → 客户端执行 → 回传结果。这是 Agent 循环的核心引擎，支持并行调用、服务端内置工具
 
 ---
 
@@ -282,6 +282,6 @@ response = client.messages.create(
 
 ---
 
-> 🎯 **核心要点**：Tool Use 三法则 — **① `stop_reason == "tool_use"` → 执行工具 → `tool_result` 回传（`tool_use_id` 必须匹配）② Agent 循环上限 8 轮 + 工具 Allowlist 分发 ③ Adaptive Thinking + effort xhigh 是最强 Agent 组合**。生产 Agent 必须加：工具白名单校验、轮次上限、is_error 标记（让 Claude 知道失败）。
+> **核心要点**：Tool Use 三法则 — **① `stop_reason == "tool_use"` → 执行工具 → `tool_result` 回传（`tool_use_id` 必须匹配）② Agent 循环上限 8 轮 + 工具 Allowlist 分发 ③ Adaptive Thinking + effort xhigh 是最强 Agent 组合**。生产 Agent 必须加：工具白名单校验、轮次上限、is_error 标记（让 Claude 知道失败）。
 
 **下一模块**：[05-流式输出与Computer-Use](05-流式输出与Computer-Use.md) / **返回总览**：[00-总览](00-Claude-API知识体系总览.md)

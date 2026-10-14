@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [组件一句话定位](#1-组件一句话定位)
 2. [版本现状（2026-08）](#2-版本现状2026-08)
@@ -37,7 +37,7 @@
     └── 可观测（Micrometer + OTel）
 ```
 
-> 🎯 **一句话**：Spring Boot = "把 Spring 的复杂度打包进约定与自动配置"——写代码前零配置，写完后生产可观测。
+> **一句话**：Spring Boot = "把 Spring 的复杂度打包进约定与自动配置"——写代码前零配置，写完后生产可观测。
 
 ## 2. 版本现状（2026-08）
 
@@ -57,7 +57,7 @@
 - **Log4j 滚动升级**：新增按大小/时间/组合/Cron 四种轮转策略；
 - 含 4.0.7 全部修复与安全补丁。
 
-> ⚠️ **4.0 → 4.1 升级注意**：4.0 中废弃的类/方法/属性在 4.1 **全部移除**；`layertools` jar 模式移除（用 `tools`）；**Apache Derby 弃用**（建议迁 H2/HSQL）；`-DskipTests` 不再跳过 AOT 测试处理（用 `maven.test.skip`）；jOOQ 3.20 需 Java 21+。
+> **4.0 → 4.1 升级注意**：4.0 中废弃的类/方法/属性在 4.1 **全部移除**；`layertools` jar 模式移除（用 `tools`）；**Apache Derby 弃用**（建议迁 H2/HSQL）；`-DskipTests` 不再跳过 AOT 测试处理（用 `maven.test.skip`）；jOOQ 3.20 需 Java 21+。
 
 ## 3. 能力地图
 
@@ -82,7 +82,7 @@
 | 03 配置属性 | [02-SpringBoot配置体系](../../SpringBoot/02-SpringBoot配置体系.md) | 配置优先级与绑定机制 |
 | 04 集成地图 | [07-SpringBoot生产运维与可观测](../../SpringBoot/07-SpringBoot生产运维与可观测.md) | Actuator 与生产实践 |
 
-> ⚠️ **版本桥接**：深度体系（2026-07 校验）以 **Boot 3.5.x** 为主——阅读时注意 4.x 差异：虚拟线程默认、@Proxyable、spring-boot 模块化、layertools→tools；本卡片的版本现状（4.1.0）以 2026-08 检索为准。
+> **版本桥接**：深度体系（2026-07 校验）以 **Boot 3.5.x** 为主——阅读时注意 4.x 差异：虚拟线程默认、@Proxyable、spring-boot 模块化、layertools→tools；本卡片的版本现状（4.1.0）以 2026-08 检索为准。
 
 ## 5. 快速上手 3 步
 
@@ -107,7 +107,7 @@ class HelloController {
 }
 ```
 
-> 💡 运行即得：内嵌 Tomcat 自动起（8080）；Actuator 加 `spring-boot-starter-actuator` 即暴露 `/actuator/health`。
+> 运行即得：内嵌 Tomcat 自动起（8080）；Actuator 加 `spring-boot-starter-actuator` 即暴露 `/actuator/health`。
 
 ## 6. 速查导航
 
@@ -141,6 +141,6 @@ class HelloController {
 
 ---
 
-> 🎯 **核心要点**：Spring Boot = 约定优于配置 + 自动配置 + starter 生态 + 生产能力四件套；2026-08 版本窗口是 **4.1.0 当前主线、4.0 年底到期、3.5 收官**；升级 4.1 先清"4.0 已废弃 API + layertools + Derby"。
+> **核心要点**：Spring Boot = 约定优于配置 + 自动配置 + starter 生态 + 生产能力四件套；2026-08 版本窗口是 **4.1.0 当前主线、4.0 年底到期、3.5 收官**；升级 4.1 先清"4.0 已废弃 API + layertools + Derby"。
 
 **下一模块**：[01-模块清单](01-模块清单.md)

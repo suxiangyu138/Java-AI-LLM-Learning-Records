@@ -1,6 +1,6 @@
 # 05 - Grafana 安装与仪表盘
 
-> 🎯 Grafana 是 Prometheus 数据的最佳可视化平台 — 从数据源配置到面板设计、从 Dashboard 变量到告警通道，将冷冰冰的指标数据转化为一眼可读的业务洞察
+> Grafana 是 Prometheus 数据的最佳可视化平台 — 从数据源配置到面板设计、从 Dashboard 变量到告警通道，将冷冰冰的指标数据转化为一眼可读的业务洞察
 
 ---
 
@@ -47,7 +47,7 @@ domain = monitor.example.com
 root_url = https://monitor.example.com/
 
 [auth.anonymous]
-enabled = false          # ⚠️ 禁止匿名访问
+enabled = false          # 禁止匿名访问
 
 [dashboards]
 default_home_dashboard_path = /etc/grafana/dashboards/home.json
@@ -132,7 +132,7 @@ Thresholds:
 
 ## 5. 变量与模板化
 
-> 💡 Dashboard 变量让一个仪表盘适配多环境/多应用，核心价值。
+> Dashboard 变量让一个仪表盘适配多环境/多应用，核心价值。
 
 ### 5.1 变量类型
 
@@ -227,4 +227,4 @@ Annotations:
 | Slack | 内置集成 |
 | PagerDuty | 内置集成 |
 
-> 💡 **Grafana 内置告警 vs AlertManager**：简单场景用 Grafana 告警就够了；复杂路由/分组/静默需求用 AlertManager。两者可共存。
+> **Grafana 内置告警 vs AlertManager**：简单场景用 Grafana 告警就够了；复杂路由/分组/静默需求用 AlertManager。两者可共存。

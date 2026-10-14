@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [生命周期全景时序](#1-生命周期全景时序)
 2. [Aware 接口家族](#2-aware-接口家族)
@@ -43,7 +43,7 @@
        @PreDestroy → DisposableBean.destroy → 自定义 destroyMethod
 ```
 
-> 🎯 **核心要点（背诵版）**：实例化 → 属性填充 → Aware → Before 初始化 → **初始化三写法** → After 初始化（代理）→ 使用 → 销毁三写法。AOP 代理在 ⑦ 之后，所以代理对象才是容器暴露的"Bean"。
+> **核心要点（背诵版）**：实例化 → 属性填充 → Aware → Before 初始化 → **初始化三写法** → After 初始化（代理）→ 使用 → 销毁三写法。AOP 代理在 ⑦ 之后，所以代理对象才是容器暴露的"Bean"。
 
 ### 1.1 时序与源码方法对照（面试默写版）
 
@@ -55,7 +55,7 @@
 | ⑤⑥⑦ 初始化 | `initializeBean` | Aware → Before → 初始化三写法 → After |
 | ⑧ 销毁登记 | `registerDisposableBeanIfNecessary` | 单例才登记（原型不登记，见第 5 节） |
 
-> 🎯 记忆口诀：**resolve → create → populate → initialize → register**——五个动词对应 `doCreateBean` 主干，面试手写生命周期按这个骨架展开，不丢步骤。
+> 记忆口诀：**resolve → create → populate → initialize → register**——五个动词对应 `doCreateBean` 主干，面试手写生命周期按这个骨架展开，不丢步骤。
 
 ### 1.2 销毁阶段的细节
 
@@ -63,7 +63,7 @@
 - `@PreDestroy` 抛异常：**不阻断**其他 Bean 的销毁，只记日志——资源释放失败要单独处理；
 - 单例销毁 = 容器关闭时；原型从不销毁（容器不跟踪）；request/session 由 Web 容器跟踪销毁。
 
-> ⚠️ 生产坑：自定义线程池 Bean 若 `destroyMethod` 未配，容器关闭时线程池不会优雅关闭——显式 `destroyMethod = "shutdown"` 或实现 `DisposableBean`；重启发版时线程泄漏最隐蔽。
+> 生产坑：自定义线程池 Bean 若 `destroyMethod` 未配，容器关闭时线程池不会优雅关闭——显式 `destroyMethod = "shutdown"` 或实现 `DisposableBean`；重启发版时线程泄漏最隐蔽。
 
 ### 1.3 面试追问：初始化抛异常会怎样？
 
@@ -93,7 +93,7 @@ public class SelfAwareService implements ApplicationContextAware {
 }
 ```
 
-> ⚠️ **不推荐滥用**：Aware 把 Bean 和容器耦死，破坏可测试性；99% 的"需要容器"场景可用 `ObjectProvider` 或构造器注入替代。注入自身代理解决自调用问题：`ObjectProvider<SelfService>` 或 `@Resource` 自己。
+> **不推荐滥用**：Aware 把 Bean 和容器耦死，破坏可测试性；99% 的"需要容器"场景可用 `ObjectProvider` 或构造器注入替代。注入自身代理解决自调用问题：`ObjectProvider<SelfService>` 或 `@Resource` 自己。
 
 ### 2.1 Aware 回调的实现机制
 
@@ -116,7 +116,7 @@ initializeBean → postProcessBeforeInitialization
 | 时机 | 属性填充后、初始化前 | 构造时 |
 | 适用 | 框架扩展点实现 | 业务代码 |
 
-> 💡 面试加分：`BeanNameAware` / `BeanFactoryAware` 由 `AbstractAutowireCapableBeanFactory` 自身处理，`ApplicationContextAware` 系由 `ApplicationContextAwareProcessor` 处理——**归属不同**，前者在 beans 层，后者在 context 层。
+> 面试加分：`BeanNameAware` / `BeanFactoryAware` 由 `AbstractAutowireCapableBeanFactory` 自身处理，`ApplicationContextAware` 系由 `ApplicationContextAwareProcessor` 处理——**归属不同**，前者在 beans 层，后者在 context 层。
 
 ### 2.2 Aware 家族选型：什么时候真的需要
 
@@ -127,7 +127,7 @@ initializeBean → postProcessBeforeInitialization
 | 框架扩展（自定义 BPP） | Aware 是正规途径 |
 | 业务代码拿资源 | `@Value` / `ResourceLoader` 注入（Lite 化） |
 
-> 🎯 结论：**业务代码远离 Aware，扩展代码拥抱 Aware**——判断标准是"这份代码是业务逻辑还是框架机制"。
+> 结论：**业务代码远离 Aware，扩展代码拥抱 Aware**——判断标准是"这份代码是业务逻辑还是框架机制"。
 
 ## 3. 初始化/销毁的三种写法与优先级
 
@@ -153,7 +153,7 @@ public class Connector implements InitializingBean, DisposableBean {
 }
 ```
 
-> 💡 现代推荐：纯 `@PostConstruct`/`@PreDestroy`（无接口侵入）；`@Bean` 的 `destroyMethod` 注意默认推断陷阱（见 [04-配置属性速查](04-配置属性速查.md)）。
+> 现代推荐：纯 `@PostConstruct`/`@PreDestroy`（无接口侵入）；`@Bean` 的 `destroyMethod` 注意默认推断陷阱（见 [04-配置属性速查](04-配置属性速查.md)）。
 
 ### 3.1 三种写法的细节与冲突
 
@@ -173,19 +173,19 @@ public class Connector implements InitializingBean, DisposableBean {
 | 依赖方向 | JDK/jakarta 标准 | Spring 专属 |
 | 多回调 | 可标多个方法（顺序不定，少用） | 单方法 |
 | 调试 | 方法名清晰 | `afterPropertiesSet` 语义隐晦 |
-| 结论 | ✅ 首选 | 历史写法，兼容用 |
+| 结论 | ✓ 首选 | 历史写法，兼容用 |
 
-> 💡 反向思考：InitializingBean 的优势是**编译期强制**（接口不实现就编译不过）——框架级 Bean（如内置组件）用它保证回调必实现；业务代码不需要这种强制，注解更轻。
+> 反向思考：InitializingBean 的优势是**编译期强制**（接口不实现就编译不过）——框架级 Bean（如内置组件）用它保证回调必实现；业务代码不需要这种强制，注解更轻。
 
 ## 4. 五大作用域详解
 
 | 作用域 | 生命周期归属 | 默认 | 使用要点 |
 |--------|------------|:---:|---------|
-| `singleton` | 容器级（**容器销毁才销毁**） | ✅ | 默认；无状态服务 |
-| `prototype` | 获取即新实例，**不随容器销毁** | ❌ | 有状态/昂贵且隔离对象 |
-| `request` | 单次 HTTP 请求 | ❌ | Web 环境（Spring MVC） |
-| `session` | 单个 HTTP 会话 | ❌ | Web 环境（登录态对象） |
-| `application` / `websocket` | ServletContext / WebSocket | ❌ | Web 环境 |
+| `singleton` | 容器级（**容器销毁才销毁**） | ✓ | 默认；无状态服务 |
+| `prototype` | 获取即新实例，**不随容器销毁** | ✗ | 有状态/昂贵且隔离对象 |
+| `request` | 单次 HTTP 请求 | ✗ | Web 环境（Spring MVC） |
+| `session` | 单个 HTTP 会话 | ✗ | Web 环境（登录态对象） |
+| `application` / `websocket` | ServletContext / WebSocket | ✗ | Web 环境 |
 
 ```java
 @Bean
@@ -203,7 +203,7 @@ public UserContext userContext() { return new UserContext(); }
 | session | 登录态、购物车 | 大对象（内存随会话膨胀） |
 | application | ServletContext 级全局数据 | 有状态热数据 |
 
-> ⚠️ **proxyMode 必配**：非 singleton 作用域注入单例 Bean 时，需要 `ScopedProxyMode` 生成代理，否则注入的是"创建时的固定实例"；同样，singleton 注入 prototype 见 5。
+> **proxyMode 必配**：非 singleton 作用域注入单例 Bean 时，需要 `ScopedProxyMode` 生成代理，否则注入的是"创建时的固定实例"；同样，singleton 注入 prototype 见 5。
 
 ### 4.1 作用域的实现原理
 
@@ -234,7 +234,7 @@ ConfigurableBeanFactory bf = (ConfigurableBeanFactory) ctx.getAutowireCapableBea
 bf.registerScope("thread", new ThreadScope());
 ```
 
-> 💡 面试追问"能自定义作用域吗"：实现 `Scope` 接口 + `registerScope` 注册——"每请求追踪 ID"、"每租户实例"等场景都可以这么做；注册表在 `ConfigurableBeanFactory`，属于 beans 层能力。
+> 面试追问"能自定义作用域吗"：实现 `Scope` 接口 + `registerScope` 注册——"每请求追踪 ID"、"每租户实例"等场景都可以这么做；注册表在 `ConfigurableBeanFactory`，属于 beans 层能力。
 
 ### 4.2 proxyMode 的两种代理模式
 
@@ -243,7 +243,7 @@ bf.registerScope("thread", new ThreadScope());
 | `ScopedProxyMode.INTERFACES` | JDK 动态代理 | 作用域 Bean 有接口时 |
 | `ScopedProxyMode.TARGET_CLASS` | CGLIB | 具体类；Boot 默认 CGLIB |
 
-> ⚠️ CGLIB 代理要求类**非 final**、方法非 final 非私有——final 类配 `TARGET_CLASS` 启动即报错；用接口 + `INTERFACES` 可避开；Lombok 的 `@Value`（不可变类）配 CGLIB 也会踩坑。
+> CGLIB 代理要求类**非 final**、方法非 final 非私有——final 类配 `TARGET_CLASS` 启动即报错；用接口 + `INTERFACES` 可避开；Lombok 的 `@Value`（不可变类）配 CGLIB 也会踩坑。
 
 ### 4.3 面试追问：request Bean 的代理对象会怎样工作？
 
@@ -257,13 +257,13 @@ bf.registerScope("thread", new ThreadScope());
 @Service
 public class SingletonService {
     @Autowired
-    private PrototypeBean proto;   // ❌ 只在创建时注入一次，之后不变
+    private PrototypeBean proto;   // ✗ 只在创建时注入一次，之后不变
 }
 ```
 
 | 解决方案 | 写法 | 适用 |
 |---------|------|------|
-| `ObjectProvider` | `protoProvider.getObject()` | ✅ 首选，显式取新实例 |
+| `ObjectProvider` | `protoProvider.getObject()` | ✓ 首选，显式取新实例 |
 | `@Lookup` | `@Lookup public PrototypeBean getProto() { return null; }` | 方法级取用 |
 | `ScopedProxy` | 原型配 `proxyMode = TARGET_CLASS` | 每次调用经代理重取 |
 | `ApplicationContext.getBean` | 手动取 | 不推荐（容器耦合） |
@@ -283,18 +283,18 @@ public class SingletonService {
 }
 ```
 
-> 🎯 **核心要点**：作用域不匹配时"注入值快照"是根源——单例在启动时固定一次，所有跨作用域注入都要用 Provider/代理打破快照。
+> **核心要点**：作用域不匹配时"注入值快照"是根源——单例在启动时固定一次，所有跨作用域注入都要用 Provider/代理打破快照。
 
 ### 5.1 四种解决方案的取舍对比
 
 | 方案 | 每次取新实例 | 侵入性 | 性能 | 推荐度 |
 |------|:---:|:---:|:---:|:---:|
-| `ObjectProvider.getObject()` | ✅ | 低（构造器注入） | 好 | ★★★ |
-| `@Lookup` 方法 | ✅ | 中（方法需可重写） | 好（CGLIB 子类） | ★★ |
-| `ScopedProxy` | ✅（经代理） | 低（透明） | 略差（每次代理调用） | ★★ |
-| `ctx.getBean()` | ✅ | 高（容器耦合） | 好 | ★ |
+| `ObjectProvider.getObject()` | ✓ | 低（构造器注入） | 好 | ★★★ |
+| `@Lookup` 方法 | ✓ | 中（方法需可重写） | 好（CGLIB 子类） | ★★ |
+| `ScopedProxy` | ✓（经代理） | 低（透明） | 略差（每次代理调用） | ★★ |
+| `ctx.getBean()` | ✓ | 高（容器耦合） | 好 | ★ |
 
-> ⚠️ @Lookup 的两个前提：类可 CGLIB 化（非 final）+ 方法可重写（非 final/private）——与"自调用不走代理"同源；方法体写什么都行（容器用生成子类覆盖），但习惯上返回 null 表意。
+> @Lookup 的两个前提：类可 CGLIB 化（非 final）+ 方法可重写（非 final/private）——与"自调用不走代理"同源；方法体写什么都行（容器用生成子类覆盖），但习惯上返回 null 表意。
 
 ### 5.2 原型 Bean 的其他边界
 
@@ -303,7 +303,7 @@ public class SingletonService {
 - 原型 + AOP：代理基于类生成，原型每次创建都过一遍后处理器（性能按需评估）；
 - 原型 Bean 内再注入原型：每次创建原型 A 时，注入的原型 B 是**当时新创建的**（不是同一实例，也不是缓存的旧实例）。
 
-> 💡 生产建议：**默认全单例，只有"必须隔离状态"才用原型**——原型 Bean 数量少、生命周期短，滥用原型会放大创建开销与 GC 压力。
+> 生产建议：**默认全单例，只有"必须隔离状态"才用原型**——原型 Bean 数量少、生命周期短，滥用原型会放大创建开销与 GC 压力。
 
 ## 6. 生命周期扩展点选型
 
@@ -316,7 +316,7 @@ public class SingletonService {
 | `Aware` 家族 | 每个实现者 | 拿容器能力 | ★（慎用） |
 | `@PostConstruct` | 每个标注方法 | 业务初始化 | ★★★ |
 
-> 💡 面试延伸：实现自己的 `BeanPostProcessor` 时注意**它本身也是 Bean**——容器要先创建后处理器再处理其余 Bean；而"处理后处理器的后处理器"由框架内部注册，不存在此问题。
+> 面试延伸：实现自己的 `BeanPostProcessor` 时注意**它本身也是 Bean**——容器要先创建后处理器再处理其余 Bean；而"处理后处理器的后处理器"由框架内部注册，不存在此问题。
 
 ### 6.0 扩展点触发范围对比（补充）
 
@@ -328,7 +328,7 @@ public class SingletonService {
 | SmartInitializingSingleton | 全量后一次 | 同上 | 启动失败 |
 | Aware | 每个实现者一次 | 固定顺序 | 该 Bean 失败 |
 
-> 💡 扩展点不是越多越好：**触发频率越高的扩展点，越要轻量**——BPP 对每个 Bean 执行，重逻辑会被放大 N 倍；能放 `SmartInitializingSingleton` 的一次性收尾，就不要放 BPP。
+> 扩展点不是越多越好：**触发频率越高的扩展点，越要轻量**——BPP 对每个 Bean 执行，重逻辑会被放大 N 倍；能放 `SmartInitializingSingleton` 的一次性收尾，就不要放 BPP。
 
 ### 6.1 自定义 BeanPostProcessor 实战：初始化耗时埋点
 
@@ -367,7 +367,7 @@ public class TimingBeanPostProcessor implements BeanPostProcessor {
 | 避免重操作 | BPP 对**每个 Bean** 执行，重逻辑放大 N 倍 |
 | 有状态 BPP 谨慎 | 并发创建时注意线程安全 |
 
-> 🎯 选型一句话：**观察用 BPP，改造图纸用 BFPP，业务初始化用 @PostConstruct，一次性收尾用 SmartInitializingSingleton**——先按目的定扩展点，再动手。
+> 选型一句话：**观察用 BPP，改造图纸用 BFPP，业务初始化用 @PostConstruct，一次性收尾用 SmartInitializingSingleton**——先按目的定扩展点，再动手。
 
 ### 6.2.5 生命周期各阶段失败排查对照
 
@@ -379,7 +379,7 @@ public class TimingBeanPostProcessor implements BeanPostProcessor {
 | 代理 | `BeanCreationException`（AOP 相关） | 切点表达式错误、代理类型不兼容 |
 | 销毁 | 日志告警（不中断） | 资源释放失败、线程未关闭 |
 
-> ⚠️ 排错要点：`BeanCreationException` 的 **caused by** 才是根因——栈顶往往只是"创建失败"的壳；先看 caused by 链，再对表定位阶段，一次到位。
+> 排错要点：`BeanCreationException` 的 **caused by** 才是根因——栈顶往往只是"创建失败"的壳；先看 caused by 链，再对表定位阶段，一次到位。
 
 ### 6.3 生命周期面试问答对照表
 
@@ -401,7 +401,7 @@ public class TimingBeanPostProcessor implements BeanPostProcessor {
 | 容器体系全景 | [Spring框架核心-01](../../../Spring框架核心/01-容器体系-BeanFactory与ApplicationContext.md) |
 | 生命周期与作用域深潜 | [Spring框架核心-04](../../../Spring框架核心/04-Bean生命周期与作用域.md) |
 
-> 💡 速查表命中后，需要"为什么"的答案时按此表跳深挖——速查负责"是什么"，深度体系负责"为什么"。
+> 速查表命中后，需要"为什么"的答案时按此表跳深挖——速查负责"是什么"，深度体系负责"为什么"。
 
 ---
 

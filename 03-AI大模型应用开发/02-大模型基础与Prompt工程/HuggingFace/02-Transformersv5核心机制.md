@@ -1,7 +1,7 @@
 # 02 Transformers v5 核心机制
 > 五年最大重构：模块化架构、统一 Rust 分词、动态权重加载、破坏性变更与迁移
 
-## 📚 目录
+## 目录
 1. [v5.0.0 版本全景](#1-v500-版本全景)
 2. [模块化模型设计](#2-模块化模型设计)
 3. [统一分词系统](#3-统一分词系统)
@@ -29,7 +29,7 @@
 | 注意力 | 各架构自实现 | **统一 AttentionInterface** |
 | 发布节奏 | 5 周一个 minor | **每周 minor** |
 
-> 🎯 **核心要点**：v5 的主题 = "**互操作 + 模块化**"。Transformers 不再试图"全包"（训练有 PEFT、服务有 vLLM），而是做**模型定义的权威来源**——其他工具都从它这里读模型，它自己提供一条龙（serve）兜底。
+> **核心要点**：v5 的主题 = "**互操作 + 模块化**"。Transformers 不再试图"全包"（训练有 PEFT、服务有 vLLM），而是做**模型定义的权威来源**——其他工具都从它这里读模型，它自己提供一条龙（serve）兜底。
 
 ## 2. 模块化模型设计
 
@@ -51,7 +51,7 @@ v5：共享模块 + 架构差异点
 | 新架构接入快 | 积木式组合，社区贡献提速 |
 | 学习曲线友好 | 看懂一个架构 ≈ 看懂一族 |
 
-> 💡 学习价值：**v5 让"读模型代码"变得可行**——架构差异集中在少量文件，研究新模型（如 DeepSeek v3 MoE）时可以"基座 + 差异点"的方式理解，而不是啃整套实现。
+> 学习价值：**v5 让"读模型代码"变得可行**——架构差异集中在少量文件，研究新模型（如 DeepSeek v3 MoE）时可以"基座 + 差异点"的方式理解，而不是啃整套实现。
 
 ## 3. 统一分词系统
 
@@ -85,7 +85,7 @@ encoded = tokenizer.apply_chat_template(messages, tokenize=True)   # BatchEncodi
 output = model.generate(**encoded)
 ```
 
-> ⚠️ 迁移重点：`encode_plus` 已弃用（用 `__call__`/`apply_chat_template`）；`apply_chat_template` 返回 BatchEncoding 对象；image-text-to-text 需要图片内嵌到 chat 的 content 字段。**老代码这三处最常踩坑**。
+> 迁移重点：`encode_plus` 已弃用（用 `__call__`/`apply_chat_template`）；`apply_chat_template` 返回 BatchEncoding 对象；image-text-to-text 需要图片内嵌到 chat 的 content 字段。**老代码这三处最常踩坑**。
 
 ## 4. 动态权重加载（WeightConverter）
 
@@ -114,7 +114,7 @@ model = AutoModel.from_pretrained(
 | 并行加载 | 多线程转换，大模型启动更快 |
 | 与量化叠加 | 加载时同时量化，无需二次转换 |
 
-> 🎯 **核心要点**：v5 的加载不再是"把权重搬到显存"这么简单——**加载即优化**（融合/量化/分片一次完成）。老教程里的"加载 → 手动 fuse → 手动量化"三步流程，v5 里 `from_pretrained` 一步到位。
+> **核心要点**：v5 的加载不再是"把权重搬到显存"这么简单——**加载即优化**（融合/量化/分片一次完成）。老教程里的"加载 → 手动 fuse → 手动量化"三步流程，v5 里 `from_pretrained` 一步到位。
 
 ## 5. 注意力与量化一等公民
 
@@ -154,7 +154,7 @@ model = AutoModel.from_pretrained("Qwen/Qwen2.5-7B-Instruct",
 | TorchAO 支持 | 官方协作的量化路径 |
 | 加载时量化 | 与 WeightConverter 叠加 |
 
-> 💡 生产含义：v5 之前"量化 = 特殊路径"（很多功能不兼容）；v5 之后**量化是默认能力**——单卡跑 70B、微调大模型都走量化路径（06 章 QLoRA 实战）。
+> 生产含义：v5 之前"量化 = 特殊路径"（很多功能不兼容）；v5 之后**量化是默认能力**——单卡跑 70B、微调大模型都走量化路径（06 章 QLoRA 实战）。
 
 ## 6. 破坏性变更与迁移清单
 
@@ -171,7 +171,7 @@ model = AutoModel.from_pretrained("Qwen/Qwen2.5-7B-Instruct",
 | `hf_transfer` → `hf_xet` | `HF_HUB_ENABLE_HF_TRANSFER` | xet 默认加速 | 下载加速 |
 | huggingface_hub | <1.0 | **≥1.0.0**（HTTP 用 httpx） | 依赖升级 |
 
-> ⚠️ **迁移三步**：① 官方迁移指南逐条对照；② 重点回归三处代码（tokenizer 调用/chat template/Trainer 参数）；③ 环境变量改 `HF_HOME`。老教程（2025 及以前）的 v4 写法大多仍兼容（弃用而非删除），但新项目直接用 v5 写法。
+> **迁移三步**：① 官方迁移指南逐条对照；② 重点回归三处代码（tokenizer 调用/chat template/Trainer 参数）；③ 环境变量改 `HF_HOME`。老教程（2025 及以前）的 v4 写法大多仍兼容（弃用而非删除），但新项目直接用 v5 写法。
 
 ## 7. v5 定位：互操作中枢
 
@@ -195,7 +195,7 @@ v5 的官方定位（interoperability）：
 | 微调 | PEFT/TRL | 参数高效 |
 | 研究/改架构 | Transformers 源码 | 权威实现 |
 
-> 🎯 **核心要点**：2026 年选型的正确心智 = **"Transformers 做定义与兜底，专项工具做专项"**。小流量/开发用 `transformers serve` 足够；生产并发大（>100 QPS）上 vLLM（04 章对比）。
+> **核心要点**：2026 年选型的正确心智 = **"Transformers 做定义与兜底，专项工具做专项"**。小流量/开发用 `transformers serve` 足够；生产并发大（>100 QPS）上 vLLM（04 章对比）。
 
 ## 8. 核心要点
 

@@ -1,7 +1,7 @@
 # 04 Item Pipeline 与数据落地
 > 数据的最后一道工序：管道机制 + 校验清洗去重 + MySQL 入库 + 图片媒体下载
 
-## 📚 目录
+## 目录
 1. [Pipeline 机制与执行模型](#1-pipeline-机制与执行模型)
 2. [数据落库：MySQL 连接生命周期](#2-数据落库mysql-连接生命周期)
 3. [去重与增量：Pipeline 层的幂等设计](#3-去重与增量pipeline-层的幂等设计)
@@ -54,7 +54,7 @@ ITEM_PIPELINES = {
 }
 ```
 
-> 🎯 **核心要点**：Pipeline 是**有序的流水线**——校验(100) → 清洗(200) → 入库(300)。顺序编号用 100/200/300 间隔，给将来插入新管道留空间；**任何"对 item 的横切处理"都优先考虑 Pipeline，而不是塞进 Spider**。
+> **核心要点**：Pipeline 是**有序的流水线**——校验(100) → 清洗(200) → 入库(300)。顺序编号用 100/200/300 间隔，给将来插入新管道留空间；**任何"对 item 的横切处理"都优先考虑 Pipeline，而不是塞进 Spider**。
 
 ## 2. 数据落库：MySQL 连接生命周期
 
@@ -74,7 +74,7 @@ class MysqlPipeline:
             user=spider.settings.get("MYSQL_USER"),
             password=spider.settings.get("MYSQL_PASSWORD"),
             database=spider.settings.get("MYSQL_DB"),
-            charset="utf8mb4",            # ⚠️ 必配，否则 emoji/生僻字报错
+            charset="utf8mb4",            # 必配，否则 emoji/生僻字报错
         )
         self.conn.autocommit(True)        # 生产按需关闭改批量提交（§2.3）
 
@@ -111,7 +111,7 @@ MYSQL_DB = os.environ.get("CRAWLER_MYSQL_DB", "crawler")
 | 方式 | 1 万条耗时（量级） | 适用 |
 |------|:---:|------|
 | 单条 INSERT（autocommit） | 慢 10 倍+ | 小数据/调试 |
-| executemany 分批（如 500 条/批） | 快 5-10 倍 | ⭐ 生产标准 |
+| executemany 分批（如 500 条/批） | 快 5-10 倍 | ★ 生产标准 |
 | LOAD DATA INFILE | 最快 | 超大文件导入 |
 
 ```python
@@ -129,7 +129,7 @@ class BulkMysqlPipeline:
         return item
 
     def close_spider(self, spider):
-        self._flush()                 # ⚠️ 关闭时必 flush 剩余
+        self._flush()                 # 关闭时必 flush 剩余
         self.conn.close()
 
     def _flush(self):
@@ -143,7 +143,7 @@ class BulkMysqlPipeline:
         self.buffer.clear()
 ```
 
-> ⚠️ 批量管道三个坑：(1) `close_spider` 忘了 flush → 最后一批丢失；(2) 中途异常时 buffer 里数据丢 → 用 try/finally 兜底 flush；(3) 高并发下单连接串行执行有瓶颈 → 需要时用**连接池**（DBUtils，阶段 3 已讲）或并发分片。
+> 批量管道三个坑：(1) `close_spider` 忘了 flush → 最后一批丢失；(2) 中途异常时 buffer 里数据丢 → 用 try/finally 兜底 flush；(3) 高并发下单连接串行执行有瓶颈 → 需要时用**连接池**（DBUtils，阶段 3 已讲）或并发分片。
 
 ## 3. 去重与增量：Pipeline 层的幂等设计
 
@@ -175,7 +175,7 @@ class UpsertPipeline:
 2. **INSERT IGNORE / ON DUPLICATE**：重复数据幂等，断点重跑不重复；
 3. **crawled_at / updated_at**：时间戳字段支撑增量判断（"今天抓没抓过"）与数据新鲜度监控。
 
-> 🎯 **核心要点**：**爬虫必须幂等**——同一 URL 跑十遍，数据库里还是一份数据。请求层去重防"重复下载"，数据层幂等防"重复入库"，两层都做才算工程级爬虫。
+> **核心要点**：**爬虫必须幂等**——同一 URL 跑十遍，数据库里还是一份数据。请求层去重防"重复下载"，数据层幂等防"重复入库"，两层都做才算工程级爬虫。
 
 ## 4. 媒体下载：ImagesPipeline 与文件管道
 
@@ -222,7 +222,7 @@ class CustomImagesPipeline(ImagesPipeline):
         return item
 ```
 
-> ⚠️ 媒体管道注意：`image_urls` 字段名**必须**与 settings 配置匹配（或用 `FILES_URLS_FIELD` 等自定义字段名）；媒体下载失败只影响单条 item（图片字段为空），**不会**中断爬取——所以下游要容忍 `images` 为空。
+> 媒体管道注意：`image_urls` 字段名**必须**与 settings 配置匹配（或用 `FILES_URLS_FIELD` 等自定义字段名）；媒体下载失败只影响单条 item（图片字段为空），**不会**中断爬取——所以下游要容忍 `images` 为空。
 
 ## 5. 管道组合与顺序设计
 
@@ -245,7 +245,7 @@ ITEM_PIPELINES = {
 }
 ```
 
-> 💡 设计原则：**"丢弃优先、加工居中、落地最后"**——校验丢得越早，浪费越少；入库永远最后，保证进入数据库的一定是成品。
+> 设计原则：**"丢弃优先、加工居中、落地最后"**——校验丢得越早，浪费越少；入库永远最后，保证进入数据库的一定是成品。
 
 ## 6. 常见坑与调试
 
@@ -259,7 +259,7 @@ ITEM_PIPELINES = {
 | 6 | DropItem 没日志 | 数据莫名少、无法定位 | DropItem 里写原因字符串 |
 | 7 | 管道异常影响整次爬取 | 一个 item 异常爬虫报错 | 用 try/except 包住易错段，记 ERROR 不中断 |
 
-> 💡 调试三板斧：(1) `scrapy crawl xxx -L DEBUG` 看 Pipeline 日志；(2) 只跑一页验证管道（`scrapy crawl xxx -a start_url=...` 或临时限制 start_urls）；(3) `item_scraped_count` / `item_dropped_count` 统计对比（08 章）。
+> 调试三板斧：(1) `scrapy crawl xxx -L DEBUG` 看 Pipeline 日志；(2) 只跑一页验证管道（`scrapy crawl xxx -a start_url=...` 或临时限制 start_urls）；(3) `item_scraped_count` / `item_dropped_count` 统计对比（08 章）。
 
 ## 7. 核心要点
 

@@ -2,7 +2,7 @@
 
 > JVM 排查工具是 Java 后端处理线上问题的核心武器：jps/jstack/jstat/jmap/MAT/jinfo + Arthas，覆盖进程、线程、GC、堆、在线诊断全链路。从命令到实战，一章掌握。
 
-## 📚 目录
+## 目录
 
 1. [jps —— 查看 Java 进程](#1-jps-查看-java-进程)
 2. [jstack —— 线程栈分析](#2-jstack-线程栈分析)

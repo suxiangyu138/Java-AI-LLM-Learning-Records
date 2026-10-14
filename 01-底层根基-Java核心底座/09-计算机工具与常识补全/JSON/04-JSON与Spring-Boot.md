@@ -2,7 +2,7 @@
 
 > Spring Boot 将 Jackson 无缝丝滑地融入 Web 层——理解自动配置原理，才能游刃有余地定制和排错
 
-## 📚 目录
+## 目录
 
 1. [Spring Boot Jackson 自动配置](#1)
 2. [application.yml 配置大全](#2)
@@ -211,7 +211,7 @@ public class JacksonConfig {
 }
 ```
 
-> ⚠️ **注意**：替换 ObjectMapper Bean 会绕过 Spring Boot 的 `spring.jackson.*` 配置。推荐用 **方式一**（Customizer），保留 Boot 的自动配置。
+> **注意**：替换 ObjectMapper Bean 会绕过 Spring Boot 的 `spring.jackson.*` 配置。推荐用 **方式一**（Customizer），保留 Boot 的自动配置。
 
 ### 3.3 方式三：注入 Module Bean
 
@@ -592,7 +592,7 @@ public class Fastjson2Config {
 }
 ```
 
-> ⚠️ **警告**：替换默认 Jackson 会增加维护成本——第三方库可能隐式依赖 Jackson。除非有明确的性能 SLA 要求，否则不建议替换。
+> **警告**：替换默认 Jackson 会增加维护成本——第三方库可能隐式依赖 Jackson。除非有明确的性能 SLA 要求，否则不建议替换。
 
 ---
 

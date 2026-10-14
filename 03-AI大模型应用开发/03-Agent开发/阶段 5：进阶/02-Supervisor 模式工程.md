@@ -2,7 +2,7 @@
 
 > 定位：2026 企业最常用多 Agent 模式的完整实现——官方迁移路径（工具包裹子 Agent）、Command 路由、状态设计（2026-08 基准）
 
-## 📚 目录
+## 目录
 
 1. [2026 官方推荐：工具包裹子 Agent](#1-2026-官方推荐工具包裹子-agent)
 2. [完整实现代码](#2-完整实现代码)
@@ -14,13 +14,13 @@
 
 ## 1. 2026 官方推荐：工具包裹子 Agent
 
-> ⚠️ **2026 重要变更**：`langgraph-supervisor` 包**已停止维护**。官方迁移路径：
+> **2026 重要变更**：`langgraph-supervisor` 包**已停止维护**。官方迁移路径：
 
 ```text
-❌ 旧方式（langgraph-supervisor）：
+✗ 旧方式（langgraph-supervisor）：
 create_supervisor(...)           # 子 Agent 作为图节点 + handoff 工具
 
-✅ 新方式（官方推荐）：
+✓ 新方式（官方推荐）：
 子 Agent 包装成 @tool 函数 → 监督者用 create_agent 调用它们
 ```
 
@@ -32,7 +32,7 @@ create_supervisor(...)           # 子 Agent 作为图节点 + handoff 工具
 | 嵌套 | 复杂 | 天然支持（工具里套工具） |
 | HITL | 需专门处理 | interrupt 在工具层自动上抛 |
 
-> 🎯 **核心要点**：**"子 Agent 即工具"**——把阶段 3 的 create_agent 整个当成一个 @tool。监督者"调工具"就是"委托子任务"。统一模型：一切皆工具，工具可嵌套。
+> **核心要点**：**"子 Agent 即工具"**——把阶段 3 的 create_agent 整个当成一个 @tool。监督者"调工具"就是"委托子任务"。统一模型：一切皆工具，工具可嵌套。
 
 ## 2. 完整实现代码
 
@@ -176,7 +176,7 @@ class SupervisorState(TypedDict):
 | current_agent | 调试/可观测 | 覆盖（每步更新） |
 | plan | 任务分解 | 覆盖 |
 
-> 💡 **累加器陷阱**：results 用 operator.add 才不会"后一个覆盖前一个"——多 Agent 收集结果的标准姿势。
+> **累加器陷阱**：results 用 operator.add 才不会"后一个覆盖前一个"——多 Agent 收集结果的标准姿势。
 
 ## 5. 弃用迁移：langgraph-supervisor → create_agent
 
@@ -196,7 +196,7 @@ class SupervisorState(TypedDict):
 ④ 需要节点级控制时：手动 StateGraph + Command
 ```
 
-> ⚠️ **判断过时资料的试金石（多 Agent 版）**：教程还在教 `create_supervisor` / `langgraph-supervisor` → 2026 已过时。
+> **判断过时资料的试金石（多 Agent 版）**：教程还在教 `create_supervisor` / `langgraph-supervisor` → 2026 已过时。
 
 ## 6. 与阶段 4 生产化融合
 
@@ -208,7 +208,7 @@ class SupervisorState(TypedDict):
 | HITL | interrupt 在子 Agent 工具内上抛到监督者层 |
 | 成本 | 监督者 + 全部子 Agent 成本汇总（预算按会话） |
 
-> ⚠️ **多 Agent 的成本陷阱**：一次用户请求 = 监督者 1 轮 + 子 Agent N 轮——成本翻倍起步。预算熔断必须按"整棵调用树"计算，不是单个 Agent。
+> **多 Agent 的成本陷阱**：一次用户请求 = 监督者 1 轮 + 子 Agent N 轮——成本翻倍起步。预算熔断必须按"整棵调用树"计算，不是单个 Agent。
 
 ## 7. 常见坑速查
 
@@ -222,7 +222,7 @@ class SupervisorState(TypedDict):
 | 依赖弃用包 | create_supervisor 报错/停更 | 迁移到工具包裹（第 5 节） |
 | 路由失败无兜底 | 监督者乱派 | 路由决策校验 + 默认回退分支 |
 
-> 🎯 **核心要点**：Supervisor 工程 = **"子 Agent 即工具"的 create_agent 组合**。2026 的简化让多 Agent 不再需要专用库——你阶段 3 学的 create_agent 就是全部基础。状态、路由、熔断、成本是四个最容易翻车的点。
+> **核心要点**：Supervisor 工程 = **"子 Agent 即工具"的 create_agent 组合**。2026 的简化让多 Agent 不再需要专用库——你阶段 3 学的 create_agent 就是全部基础。状态、路由、熔断、成本是四个最容易翻车的点。
 
 ---
 

@@ -1,6 +1,6 @@
 # 06 - LangChain4j 核心原理
 
-> 🎯 LangChain4j = LangChain 的 Java 实现 — 如果你熟悉 Python LangChain，这就是你在 Java 世界的"家"。本章覆盖架构分层、AiServices 代理原理、ChatMemory、多模型切换、流式输出
+> LangChain4j = LangChain 的 Java 实现 — 如果你熟悉 Python LangChain，这就是你在 Java 世界的"家"。本章覆盖架构分层、AiServices 代理原理、ChatMemory、多模型切换、流式输出
 
 ---
 
@@ -266,6 +266,6 @@ langchain4j:
 
 ---
 
-> 🎯 **核心要点**：LangChain4j 的两个"灵魂"—— **① AiServices 声明式接口**（JDK 动态代理自动编排工具/记忆/RAG/流式）② **ChatMemory 自动记忆管理**（滑动窗口 + Provider 多用户隔离 + Redis 持久化）**。换模型只需改 Adapter 或配置文件，上层 AiServices 零修改。生产配置三件套：**环境变量存 API Key + temperature 0.3（Agent）+ maxMessages 20**。
+> **核心要点**：LangChain4j 的两个"灵魂"—— **① AiServices 声明式接口**（JDK 动态代理自动编排工具/记忆/RAG/流式）② **ChatMemory 自动记忆管理**（滑动窗口 + Provider 多用户隔离 + Redis 持久化）**。换模型只需改 Adapter 或配置文件，上层 AiServices 零修改。生产配置三件套：**环境变量存 API Key + temperature 0.3（Agent）+ maxMessages 20**。
 
 **下一模块**：[07-LangChain4j RAG实战](07-LangChain4j-RAG实战.md) / **返回总览**：[00-总览](00-Java-AI开发框架体系总览.md)

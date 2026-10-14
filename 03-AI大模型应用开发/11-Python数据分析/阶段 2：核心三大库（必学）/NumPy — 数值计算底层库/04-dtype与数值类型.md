@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [dtype 是什么](#1-dtype-是什么)
 2. [dtype 家族](#2-dtype-家族)
@@ -139,7 +139,7 @@ np.isinf(arr)       # 找 inf
 
 **验收动作**：① 建三个数组（int64/float32/bool）打印 nbytes 对比；② `astype` 三连（int→float、float→int 看截断、str→float 看报错）；③ `np.isclose` 验证 `0.1+0.2`；④ 造含 nan 数组用 `np.nanmean` 对比 `mean`——**"账本会算 + 精度陷阱亲眼见 = 类型层通过"**——**练习纪律**：精度实验（isclose 对比 ==）亲手做一遍——**"亲眼见过 0.1+0.2 的尾巴，才会记得用 isclose"**——nbytes 账本题算完打印验证（"算的"和"跑的"一致才算对）。
 
-> 🎯 **核心要点**：dtype = 数组合同（同质是快的根源）；家族速查（int64/float64 默认——object 出现 = 失去向量化）；内存账本（size × 字节——int32/float32 省一半——先看精度再看省）；astype 复制转换（float→int 截断不四舍五入）；精度陷阱（浮点 == 必用 isclose/allclose——大数吞小数）；nan/inf（nan 传染用 nan* 家族——isnan 是唯一判断）——**"dtype 决定内存与精度——选错类型是隐性 bug"**。
+> **核心要点**：dtype = 数组合同（同质是快的根源）；家族速查（int64/float64 默认——object 出现 = 失去向量化）；内存账本（size × 字节——int32/float32 省一半——先看精度再看省）；astype 复制转换（float→int 截断不四舍五入）；精度陷阱（浮点 == 必用 isclose/allclose——大数吞小数）；nan/inf（nan 传染用 nan* 家族——isnan 是唯一判断）——**"dtype 决定内存与精度——选错类型是隐性 bug"**。
 
 ---
 

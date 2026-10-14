@@ -52,11 +52,11 @@
 
 | JDK 版本 | LTS | 发布时间 | 主流使用情况 | 企业建议 |
 |---------|-----|---------|-------------|---------|
-| JDK 8 | ✅ | 2014.03 | 🟡 大量遗留项目仍在使用 | 尽快迁移 |
-| JDK 11 | ✅ | 2018.09 | 🟡 过渡版本 | 已选则可保留 |
-| JDK 17 | ✅ | 2021.09 | 🟢 当前企业主流 LTS | **推荐首选** |
-| JDK 21 | ✅ | 2023.09 | 🟢 新一代 LTS | **新项目强烈推荐** |
-| JDK 25 | ✅ | 2025.09 | 🔵 最新 LTS | 评估中 |
+| JDK 8 | ✓ | 2014.03 | 大量遗留项目仍在使用 | 尽快迁移 |
+| JDK 11 | ✓ | 2018.09 | 过渡版本 | 已选则可保留 |
+| JDK 17 | ✓ | 2021.09 | 当前企业主流 LTS | **推荐首选** |
+| JDK 21 | ✓ | 2023.09 | 新一代 LTS | **新项目强烈推荐** |
+| JDK 25 | ✓ | 2025.09 | 最新 LTS | 评估中 |
 
 ```
 Spring Boot 3.x → 要求 JDK 17+
@@ -352,10 +352,10 @@ public class Child extends Parent {
 
 | 实现类 | 底层结构 | 初始容量 | 扩容机制 | 线程安全 | 随机访问 | 增删效率 |
 |--------|---------|---------|---------|---------|---------|---------|
-| **ArrayList** | Object[] | 10 | old × 1.5 | ❌ | O(1) | O(n) |
-| **LinkedList** | 双向链表 | 无 | 无 | ❌ | O(n) | O(1) |
-| **Vector** | Object[] | 10 | old × 2 | ✅(synchronized) | O(1) | O(n) |
-| **CopyOnWriteArrayList** | Object[] | 0 | +1(复制) | ✅(ReentrantLock) | O(1) | O(n) 且复制 |
+| **ArrayList** | Object[] | 10 | old × 1.5 | ✗ | O(1) | O(n) |
+| **LinkedList** | 双向链表 | 无 | 无 | ✗ | O(n) | O(1) |
+| **Vector** | Object[] | 10 | old × 2 | ✓(synchronized) | O(1) | O(n) |
+| **CopyOnWriteArrayList** | Object[] | 0 | +1(复制) | ✓(ReentrantLock) | O(1) | O(n) 且复制 |
 
 ```
 ArrayList 扩容细节：
@@ -376,11 +376,11 @@ ArrayList 扩容细节：
 
 | 实现类 | 底层 | 初始容量 | 扩容 | 线程安全 | null key | null value | 有序性 | JDK |
 |--------|------|---------|------|---------|----------|----------|--------|-----|
-| **HashMap** | 数组+链表+红黑树 | 16 | 翻倍 | ❌ | ✅(1个) | ✅ | ❌ | 1.2 |
-| **Hashtable** | 数组+链表 | 11 | ×2+1 | ✅(synchronized) | ❌ | ❌ | ❌ | 1.0(过时) |
-| **LinkedHashMap** | HashMap+双向链表 | 16 | 翻倍 | ❌ | ✅ | ✅ | 插入/访问序 | 1.4 |
-| **TreeMap** | 红黑树 | 无 | 无 | ❌ | ❌ | ✅ | 自然序 | 1.2 |
-| **ConcurrentHashMap** | 同HashMap+同步 | 16 | 翻倍 | ✅(CAS+synchronized) | ❌ | ❌ | ❌ | 1.5 |
+| **HashMap** | 数组+链表+红黑树 | 16 | 翻倍 | ✗ | ✓(1个) | ✓ | ✗ | 1.2 |
+| **Hashtable** | 数组+链表 | 11 | ×2+1 | ✓(synchronized) | ✗ | ✗ | ✗ | 1.0(过时) |
+| **LinkedHashMap** | HashMap+双向链表 | 16 | 翻倍 | ✗ | ✓ | ✓ | 插入/访问序 | 1.4 |
+| **TreeMap** | 红黑树 | 无 | 无 | ✗ | ✗ | ✓ | 自然序 | 1.2 |
+| **ConcurrentHashMap** | 同HashMap+同步 | 16 | 翻倍 | ✓(CAS+synchronized) | ✗ | ✗ | ✗ | 1.5 |
 
 ### 4.4 HashMap 源码剖析
 
@@ -612,15 +612,15 @@ public class GlobalExceptionHandler {
 }
 
 // 5. 异常处理的反模式（千万不要这样做！）
-// ❌ 吞掉异常
+// ✗ 吞掉异常
 try { doSomething(); } catch (Exception e) { }
-// ❌ 只打印不处理
+// ✗ 只打印不处理
 try { doSomething(); } catch (Exception e) { e.printStackTrace(); }
-// ❌ 异常用在流程控制
+// ✗ 异常用在流程控制
 try { user = findUser(id); } catch (UserNotFoundException e) { return null; }
 // → 应该用 Optional<User> 或专门的 exists() 方法
 
-// ✅ 正确做法
+// ✓ 正确做法
 try {
     doSomething(); // 尝试
 } catch (SpecificException e) {
@@ -677,20 +677,20 @@ System.out.println(intList.getClass() == strList.getClass());  // true! 同是 A
 
 // 类型擦除带来的限制：
 // 1. 不能 new 泛型类型
-// T t = new T();  // ❌ 编译错误
+// T t = new T();  // ✗ 编译错误
 
 // 2. 不能 instanceof 泛型类型
-// if (obj instanceof List<String>) { }  // ❌ 编译错误
+// if (obj instanceof List<String>) { }  // ✗ 编译错误
 
 // 3. 不能创建泛型数组
-// T[] arr = new T[10];  // ❌ 编译错误
+// T[] arr = new T[10];  // ✗ 编译错误
 
 // 4. 泛型类不能继承 Throwable
-// class MyException<T> extends Exception { }  // ❌ 编译错误
+// class MyException<T> extends Exception { }  // ✗ 编译错误
 
 // 5. 静态方法中不能使用类的泛型参数
 // class MyClass<T> {
-//     static T field;  // ❌ 编译错误
+//     static T field;  // ✗ 编译错误
 // }
 
 // 绕过类型擦除的技巧：
@@ -884,11 +884,11 @@ Map<String, Map<Integer, List<User>>> deptAgeGroups = users.stream()
     .collect(Collectors.groupingBy(User::getDeptName,
                 Collectors.groupingBy(User::getAge)));
 
-// ⚠️ 注意事项：
+// 注意事项：
 // 1. 流不能重复使用
 Stream<String> stream = list.stream();
 stream.forEach(...);  // OK
-stream.collect(...);  // ❌ IllegalStateException: stream has already been operated
+stream.collect(...);  // ✗ IllegalStateException: stream has already been operated
 
 // 2. Lambda 中使用的局部变量必须是「事实上的 final」
 int x = 10;
@@ -1104,7 +1104,7 @@ CompletableFuture.supplyAsync(() -> fetchUser())
     .exceptionally(e -> { log.error("error", e); return null; });
 ```
 
-### 9.5 虚拟线程（Virtual Threads，Java 21） ⭐
+### 9.5 虚拟线程（Virtual Threads，Java 21） ★
 
 ```java
 // 虚拟线程是 Java 21 最重要的新特性
@@ -1136,11 +1136,11 @@ try (ExecutorService executor = Executors.newVirtualThreadPerTaskExecutor()) {
 }
 
 // 适用场景：
-// ✅ IO 密集型任务（HTTP 请求、数据库查询、文件操作）
-// ✅ 需要大量并发线程的场景
-// ✅ 替代 CompletableFuture 的异步回调地狱（代码更像同步）
-// ❌ CPU 密集型任务（计算密集，虚拟线程帮不上忙）
-// ❌ 需要固定线程控制并发数（虚拟线程擅长大量并发）
+// ✓ IO 密集型任务（HTTP 请求、数据库查询、文件操作）
+// ✓ 需要大量并发线程的场景
+// ✓ 替代 CompletableFuture 的异步回调地狱（代码更像同步）
+// ✗ CPU 密集型任务（计算密集，虚拟线程帮不上忙）
+// ✗ 需要固定线程控制并发数（虚拟线程擅长大量并发）
 
 // 企业实践：
 // Spring Boot 3.2+ 支持虚拟线程

@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [EventLoop：串行无锁的并发模型](#1-eventloop串行无锁的并发模型)
 2. [Pipeline：事件处理的流水线](#2-pipeline事件处理的流水线)
@@ -65,7 +65,7 @@ Netty 文档里的"零拷贝"有四种含义，面试常混（内核零拷贝的
 
 Netty 的 API 全解、编解码器、与 Spring 集成见 [Netty 体系](../../../02-后端核心技术%20微服务%20分布式%20云原生/09-Web开发全流程/Netty/00-Netty知识体系总览.md)。一句话总结定位：**Netty 把"并发正确性"用线程模型解决，把"内存效率"用内存池解决，把"CPU 效率"用零拷贝解决**——三个维度互不替代。
 
-> 🎯 **核心要点**：EventLoop 串行无锁是 Netty 高并发的第一来源，一个 Channel 永远只被一个线程处理，跨线程通信走 execute()；EventLoop 内禁止阻塞；内存池（arena 分片 + thread-local 缓存 + buddy 大块）让 ByteBuf 分配近乎零 GC，4.2 的 AdaptiveByteBuf 与 io_uring 是 2026 两大升级；零拷贝四形态分清逻辑零拷贝与内核零拷贝（FileRegion）；4.2.15 安全版本必须升级。
+> **核心要点**：EventLoop 串行无锁是 Netty 高并发的第一来源，一个 Channel 永远只被一个线程处理，跨线程通信走 execute()；EventLoop 内禁止阻塞；内存池（arena 分片 + thread-local 缓存 + buddy 大块）让 ByteBuf 分配近乎零 GC，4.2 的 AdaptiveByteBuf 与 io_uring 是 2026 两大升级；零拷贝四形态分清逻辑零拷贝与内核零拷贝（FileRegion）；4.2.15 安全版本必须升级。
 
 ---
 

@@ -48,9 +48,9 @@
 
 | 类型 | 可变性 | 线程安全 | 性能 | 场景 |
 |------|:---:|:------:|:---:|------|
-| String | ❌ | — | 低 | 少量不频繁修改 |
-| StringBuffer | ✅ | ✅（synchronized） | 中 | 多线程拼接 |
-| StringBuilder | ✅ | ❌ | 高 | 单线程拼接（首选） |
+| String | ✗ | — | 低 | 少量不频繁修改 |
+| StringBuffer | ✓ | ✓（synchronized） | 中 | 多线程拼接 |
+| StringBuilder | ✓ | ✗ | 高 | 单线程拼接（首选） |
 
 ---
 
@@ -60,26 +60,26 @@
 
 | 实现类 | 底层 | 查询 | 增删 | 线程安全 | 扩容 |
 |--------|------|:--:|:--:|:------:|------|
-| ArrayList | 动态数组 | O(1) | O(n) | ❌ | 1.5 倍 |
-| LinkedList | 双向链表 | O(n) | O(1) | ❌ | — |
-| Vector | 动态数组 | O(1) | O(n) | ✅ | 2 倍 |
+| ArrayList | 动态数组 | O(1) | O(n) | ✗ | 1.5 倍 |
+| LinkedList | 双向链表 | O(n) | O(1) | ✗ | — |
+| Vector | 动态数组 | O(1) | O(n) | ✓ | 2 倍 |
 
 ### Set
 
 | 实现类 | 底层 | 有序 | 去重原理 |
 |--------|------|:--:|----------|
-| HashSet | HashMap 的 key | ❌ | hashCode + equals |
-| LinkedHashSet | LinkedHashMap 的 key | ✅（插入序） | 同 HashSet |
-| TreeSet | 红黑树 | ✅（排序） | Comparable/Comparator |
+| HashSet | HashMap 的 key | ✗ | hashCode + equals |
+| LinkedHashSet | LinkedHashMap 的 key | ✓（插入序） | 同 HashSet |
+| TreeSet | 红黑树 | ✓（排序） | Comparable/Comparator |
 
 ### Map
 
 | 实现类 | 底层（JDK 8+） | 线程安全 | key/null |
 |--------|------|:------:|:------:|
-| HashMap | 数组+链表+红黑树 | ❌ | 允许 |
-| ConcurrentHashMap | CAS + synchronized 节点锁 | ✅ | ❌ |
-| HashTable | 哈希表 + synchronized | ✅ | ❌ |
-| TreeMap | 红黑树 | ❌ | ❌ |
+| HashMap | 数组+链表+红黑树 | ✗ | 允许 |
+| ConcurrentHashMap | CAS + synchronized 节点锁 | ✓ | ✗ |
+| HashTable | 哈希表 + synchronized | ✓ | ✗ |
+| TreeMap | 红黑树 | ✗ | ✗ |
 
 ---
 
@@ -92,7 +92,7 @@
 | **堆** | 对象实例、数组，GC 主战场 | 共享 | OOM |
 | **方法区**（元空间） | 类信息、常量池、静态变量 | 共享 | OOM |
 | 虚拟机栈 | 栈帧（局部变量表/操作数栈） | 私有 | StackOverflow / OOM |
-| 程序计数器 | 字节码行号 | 私有 | ❌ |
+| 程序计数器 | 字节码行号 | 私有 | ✗ |
 | 本地方法栈 | Native 方法 | 私有 | StackOverflow |
 
 ### GC 算法
@@ -135,9 +135,9 @@
 | 维度 | synchronized | Lock |
 |------|:-----------:|:----:|
 | 释放 | 自动 | 手动（finally） |
-| 中断 | ❌ | ✅ |
-| 超时 | ❌ | ✅ |
-| 公平锁 | ❌ | ✅ |
+| 中断 | ✗ | ✓ |
+| 超时 | ✗ | ✓ |
+| 公平锁 | ✗ | ✓ |
 
 ---
 
@@ -182,10 +182,10 @@
 
 | 级别 | 脏读 | 不可重复读 | 幻读 |
 |:--|:--:|:-----:|:--:|
-| Read Uncommitted | ✅ | ✅ | ✅ |
-| Read Committed | ❌ | ✅ | ✅ |
-| **Repeatable Read**（MySQL 默认） | ❌ | ❌ | ✅（MVCC 解决） |
-| Serializable | ❌ | ❌ | ❌ |
+| Read Uncommitted | ✓ | ✓ | ✓ |
+| Read Committed | ✗ | ✓ | ✓ |
+| **Repeatable Read**（MySQL 默认） | ✗ | ✗ | ✓（MVCC 解决） |
+| Serializable | ✗ | ✗ | ✗ |
 
 ---
 

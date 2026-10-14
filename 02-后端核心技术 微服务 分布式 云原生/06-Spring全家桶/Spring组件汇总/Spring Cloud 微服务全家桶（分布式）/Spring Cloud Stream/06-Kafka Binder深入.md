@@ -1,7 +1,7 @@
 # 06-Kafka Binder 深入
 > Kafka Binder 全维度剖析：Topic/分区/Offset 映射、消费组语义、批量、事务、响应式 Binder（Reactor Kafka）、Kafka Streams Binder（5.0 新控制项）
 
-## 📚 目录
+## 目录
 1. [Kafka Binder 架构](#1-kafka-binder-架构)
 2. [Topic 与分区映射](#2-topic-与分区映射)
 3. [消费组与 Offset 语义](#3-消费组与-offset-语义)
@@ -40,7 +40,7 @@ Spring Cloud Stream 应用
 | 分区数 | producer `partition-count`（默认 3） |
 | `binder.replication-factor` | 副本数（生产 ≥ 3；本地 1） |
 
-> ⚠️ 生产环境建议关闭 `auto-create-topics`，由 DBA/平台统一建 Topic（含权限、副本、清理策略），否则容量与权限难以管控。
+> 生产环境建议关闭 `auto-create-topics`，由 DBA/平台统一建 Topic（含权限、副本、清理策略），否则容量与权限难以管控。
 
 ### 2.2 分区键与分区选择
 
@@ -67,7 +67,7 @@ spring:
             partitioned: true
 ```
 
-> 💡 同一条订单的创建/支付/取消事件用 `orderId` 做分区键，保证该订单的全生命周期事件进同一分区，消费端按分区串行处理——这是事件溯源类场景的标准姿势。
+> 同一条订单的创建/支付/取消事件用 `orderId` 做分区键，保证该订单的全生命周期事件进同一分区，消费端按分区串行处理——这是事件溯源类场景的标准姿势。
 
 ## 3. 消费组与 Offset 语义
 
@@ -88,7 +88,7 @@ spring:
 | `consumer.enable-dlq` | false | 启用死信 Topic（**必须显式 group**） |
 | `consumer.reset-offsets` | - | 显式重置偏移（`spring.cloud.stream.kafka.bindings.<b>.consumer.reset-offsets`，开发排障用） |
 
-> ⚠️ **至少一次 vs 恰好一次**：默认自动提交 + 处理后提交 = 可能重复消费（处理成功后提交前崩溃）。业务处理必须幂等（幂等键、DB 唯一约束、状态机防重入）。恰好一次需 Kafka 事务 + 读-写同一事务（幂等生产者），Stream 提供事务支持（见第 7 节）。
+> **至少一次 vs 恰好一次**：默认自动提交 + 处理后提交 = 可能重复消费（处理成功后提交前崩溃）。业务处理必须幂等（幂等键、DB 唯一约束、状态机防重入）。恰好一次需 Kafka 事务 + 读-写同一事务（幂等生产者），Stream 提供事务支持（见第 7 节）。
 
 ## 4. 生产者配置（Kafka 专属）
 
@@ -100,7 +100,7 @@ spring:
 | `configuration.<kafka-any-property>` | 透传任意 Kafka producer 配置（`acks`、`retries`、`linger.ms`） |
 | `required-groups`（公共） | 等消费组就绪再发（防丢消息） |
 
-> ⚠️ **4.x 已知问题**：绑定级 `configuration.*` 的 producer 属性在 4.x 运行时**不生效**（仅 binder 级 `spring.cloud.stream.kafka.binder.configuration.*` 生效，Stack Overflow 实证），5.x 官方确认修复多绑定问题（#3173）——使用前先验证目标版本的生效范围，必要时把通用项提到 binder 级。
+> **4.x 已知问题**：绑定级 `configuration.*` 的 producer 属性在 4.x 运行时**不生效**（仅 binder 级 `spring.cloud.stream.kafka.binder.configuration.*` 生效，Stack Overflow 实证），5.x 官方确认修复多绑定问题（#3173）——使用前先验证目标版本的生效范围，必要时把通用项提到 binder 级。
 
 ## 5. 消费者配置（Kafka 专属）
 
@@ -145,7 +145,7 @@ public Function<List<OrderEvent>, List<OrderEvent>> batchNormalize() {
 | 头结构 | 批量头按消息粒度嵌套（`kafka_batchConvertedHeaders`），转换失败时批缩小而头数量不变 |
 | 事务联动 | 批量 + 事务时整体提交，单条失败走 `AfterRollbackProcessor` |
 
-> ⚠️ 批量模式 + DLQ 时**无重试**（直接进 DLQ），且失败消息无法单独回滚处理——吞吐优先的场景接受该权衡，正确性优先用单条模式。
+> 批量模式 + DLQ 时**无重试**（直接进 DLQ），且失败消息无法单独回滚处理——吞吐优先的场景接受该权衡，正确性优先用单条模式。
 
 ## 7. Kafka 事务支持
 
@@ -171,7 +171,7 @@ spring:
 | 恰好一次 | 与幂等生产者配合实现端到端恰好一次语义 |
 | 重试交互 | 事务开启后 `retryable-exceptions` / `default-retryable` **被忽略**——binder 配置 `AfterRollbackProcessor` 仅用 `BackOff` 控制回滚重试 |
 
-> ⚠️ **事务 + 重试陷阱**：事务模式下错误重试由 `AfterRollbackProcessor` 接管，`max-attempts` 等属性表现不同（Stack Overflow #79309828 实证）。先确认目标版本的事务重试语义再配置，别指望两套机制叠加生效。
+> **事务 + 重试陷阱**：事务模式下错误重试由 `AfterRollbackProcessor` 接管，`max-attempts` 等属性表现不同（Stack Overflow #79309828 实证）。先确认目标版本的事务重试语义再配置，别指望两套机制叠加生效。
 
 ### 7.3 事务与外部系统
 
@@ -194,7 +194,7 @@ public Function<Flux<OrderEvent>, Flux<PaymentEvent>> reactiveOrderProcessor() {
 }
 ```
 
-> ⚠️ **响应式限制（官方实证 issue #2557）**：`StreamBridge` 目前**不是响应式**的（`send` 为同步），响应式 Kafka 与 StreamBridge 混用时需要变通（如通过 sink Flux 桥接）。WebFlux 场景若消息量不大，优先用普通 binder 避免复杂度。
+> **响应式限制（官方实证 issue #2557）**：`StreamBridge` 目前**不是响应式**的（`send` 为同步），响应式 Kafka 与 StreamBridge 混用时需要变通（如通过 sink Flux 桥接）。WebFlux 场景若消息量不大，优先用普通 binder 避免复杂度。
 
 ## 9. Kafka Streams Binder（流处理）
 
@@ -221,11 +221,11 @@ spring:
               logging-enabled: false    # changelog 日志（5.0+）
 ```
 
-> 🎯 **定位辨析**：普通 Kafka Binder = 消息传递（Producer/Consumer 语义）；Kafka Streams Binder = 流计算（状态化、窗口、聚合）。需要"单词计数/会话窗口/事件 join"时选 Streams，否则别引入。
+> **定位辨析**：普通 Kafka Binder = 消息传递（Producer/Consumer 语义）；Kafka Streams Binder = 流计算（状态化、窗口、聚合）。需要"单词计数/会话窗口/事件 join"时选 Streams，否则别引入。
 
 ## 10. 核心要点
 
-> 🎯 **核心要点**：
+> **核心要点**：
 > - Kafka Binder 把 Topic/分区/offset/group.id 全部映射到 Stream 逻辑模型，业务零感知；
 > - 有序性 = 分区键（稳定字段）；并行度 = 分区数；幂等 = 业务侧必做（至少一次语义）；
 > - 事务 = 消费+生产原子（恰好一次），但与重试配置有冲突，事务模式重试走 AfterRollbackProcessor；

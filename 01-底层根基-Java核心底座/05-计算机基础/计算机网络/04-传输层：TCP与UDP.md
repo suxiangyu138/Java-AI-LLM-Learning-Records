@@ -822,7 +822,7 @@ netstat -an | findstr "TIME_WAIT"
 netstat -an | findstr "LISTEN"
 ```
 
-> **⚠️ TIME_WAIT和端口耗尽警告**：
+> **TIME_WAIT和端口耗尽警告**：
 > 在高并发短连接场景（如HTTP/1.0、短连接HTTP客户端），主动关闭方会产生大量TIME_WAIT状态连接。单个端口在2MSL（约1~4分钟）内不可重用，临时端口范围有限（默认约28232个），极限QPS下可能耗尽端口。
 >
 > **优化方案**：
@@ -831,12 +831,12 @@ netstat -an | findstr "LISTEN"
 > 3. Linux调整`net.ipv4.tcp_tw_reuse`和`net.ipv4.tcp_tw_recycle`参数
 > 4. 增大临时端口范围：`net.ipv4.ip_local_port_range`
 
-> **💡 TCP_NODELAY低延迟优化**：
+> **TCP_NODELAY低延迟优化**：
 > 默认Nagle算法会等待缓冲区积累到MSS或收到ACK后才发送数据，这在交互式应用中会造成明显的延迟。对于实时通信、游戏、高频交易等低延迟场景，应通过`setTcpNoDelay(true)`禁用Nagle算法，让每次write()立即发送。
 >
 > Java设置：`socket.setTcpNoDelay(true)` 或 Netty中 `ChannelOption.TCP_NODELAY, true`
 
-> **🎯 传输层核心要义**：
+> **传输层核心要义**：
 > - TCP：面向连接、可靠、字节流——支付、核心业务接口必须使用TCP
 > - UDP：无连接、快速、数据报——实时通信、日志收集、DNS查询选择UDP
 > - 三次握手建立连接，四次挥手关闭连接，TIME_WAIT/CLOSE_WAIT是排查重点

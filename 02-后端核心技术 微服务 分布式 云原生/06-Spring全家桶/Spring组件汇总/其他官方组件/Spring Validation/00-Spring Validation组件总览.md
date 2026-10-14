@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [组件一句话定位](#1-组件一句话定位)
 2. [版本现状（2026-08）](#2-版本现状2026-08)
@@ -39,7 +39,7 @@
     └── 编程式校验：Validator/ValidationUtils 手动 validate
 ```
 
-> 🎯 **一句话**：Spring Validation = "框架的校验总闸"——注解写约束、框架跑校验、异常统一接，业务代码零 try-catch。
+> **一句话**：Spring Validation = "框架的校验总闸"——注解写约束、框架跑校验、异常统一接，业务代码零 try-catch。
 
 ## 2. 版本现状（2026-08）
 
@@ -57,7 +57,7 @@
 - **7.0 全面 Jakarta**：Spring Validation 只认 `jakarta.validation`；老的 javax 系注解/依赖在 SF 7 直接失效；
 - **Boot 4**：`spring-boot-starter-validation` 仍是标准入口（内含 Hibernate Validator + Jakarta EL）。
 
-> 💡 写代码注意：**约束注解用 `jakarta.validation.constraints.*`；@Valid 用 `jakarta.validation.Valid`；@Validated 用 `org.springframework.validation.annotation.Validated`**——三者的包名别混。
+> 写代码注意：**约束注解用 `jakarta.validation.constraints.*`；@Valid 用 `jakarta.validation.Valid`；@Validated 用 `org.springframework.validation.annotation.Validated`**——三者的包名别混。
 
 ## 3. 能力地图
 
@@ -81,7 +81,7 @@
 | 04 集成地图 | [SpringMVC 深度体系](../../../SpringMVC/00-SpringMVC知识体系总览.md)（若有）| MVC 参数校验的异常处理链路 |
 | 02 核心类 | [Spring Batch 深度体系-05 ItemProcessor 与 ItemWriter](../../../Spring Batch/05-ItemProcessor与ItemWriter体系.md) | Batch 的 ValidatingItemProcessor 正是这套校验抽象在批处理中的应用 |
 
-> 💡 Spring Validation 生态位：它是**框架内置能力而非独立组件**——每个 Spring 应用都隐式拥有；本仓库暂无独立深度体系，深入以 [Spring Framework 官方文档 Validation 章节](https://docs.spring.io/spring-framework/reference/core/validation.html) 为准。
+> Spring Validation 生态位：它是**框架内置能力而非独立组件**——每个 Spring 应用都隐式拥有；本仓库暂无独立深度体系，深入以 [Spring Framework 官方文档 Validation 章节](https://docs.spring.io/spring-framework/reference/core/validation.html) 为准。
 
 ## 5. 快速上手 3 步
 
@@ -110,7 +110,7 @@ ResponseEntity<?> onBadBody(MethodArgumentNotValidException ex) {
 }
 ```
 
-> 💡 运行即得：Boot 4 自动配置 LocalValidatorFactoryBean（classpath 有 validator 时）；DTO 用 **record** 时约束注解加在组件上，校验与构造天然一体。
+> 运行即得：Boot 4 自动配置 LocalValidatorFactoryBean（classpath 有 validator 时）；DTO 用 **record** 时约束注解加在组件上，校验与构造天然一体。
 
 ## 6. 速查导航
 
@@ -144,6 +144,6 @@ Web 应用校验：00 → 02（异常体系）→ 04（MVC/WebFlux 集成）
 
 ---
 
-> 🎯 **核心要点**：Spring Validation 不是独立组件而是框架内置抽象——记住三对关系：**@Valid（触发）vs @Validated（触发+分组+方法级）、MethodArgumentNotValidException（参数对象）vs HandlerMethodValidationException（方法约束）、jakarta 包名（SF 7 唯一）**。
+> **核心要点**：Spring Validation 不是独立组件而是框架内置抽象——记住三对关系：**@Valid（触发）vs @Validated（触发+分组+方法级）、MethodArgumentNotValidException（参数对象）vs HandlerMethodValidationException（方法约束）、jakarta 包名（SF 7 唯一）**。
 
 **下一模块**：[01-模块清单](01-模块清单.md)

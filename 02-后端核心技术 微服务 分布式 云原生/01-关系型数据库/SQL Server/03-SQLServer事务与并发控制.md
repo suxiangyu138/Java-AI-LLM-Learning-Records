@@ -2,7 +2,7 @@
 
 > 定位：隔离级别（含 Snapshot）、锁升级、死锁图、乐观并发——SQL Server 并发模型与企业实践
 
-## 📚 目录
+## 目录
 
 1. [隔离级别体系](#1-隔离级别体系)
 2. [Snapshot 隔离](#2-snapshot-隔离)
@@ -24,11 +24,11 @@
 | SERIALIZABLE | 不可能 | 不可能 | 不可能 |
 
 ```
-⚠️ SQL Server 默认 READ COMMITTED（与 PG 一致、与 MySQL RR 不同）
+SQL Server 默认 READ COMMITTED（与 PG 一致、与 MySQL RR 不同）
   SNAPSHOT 是 SQL Server 最大亮点
   （基于行版本控制，读写互不阻塞）
 
-⚠️ 面试必答：
+面试必答：
 "SQL Server 默认 RC + 可选 Snapshot 隔离——
  开启 RCSI 后读写不互斥，
  是 SQL Server 并发优化的第一手段。"
@@ -42,10 +42,10 @@
 | READ COMMITTED | 行级 S 锁（读完即放） | — | 低 |
 | REPEATABLE READ | 行级 S 锁（持有到事务结束） | — | 中 |
 | SNAPSHOT | 行版本（事务快照） | 更新冲突检测 | 中（tempdb） |
-| SERIALIZABLE | Range 锁（键 + 范围） | ✅ 范围锁 | 高（阻塞最重） |
+| SERIALIZABLE | Range 锁（键 + 范围） | ✓ 范围锁 | 高（阻塞最重） |
 
 ```
-⚠️ 面试必答：
+面试必答：
 "SQL Server 的 RR 不防幻读（无间隙锁概念，
  要防幻读上 SERIALIZABLE 或 SNAPSHOT）；
  这点与 MySQL RR 默认防幻读不同——
@@ -61,7 +61,7 @@
 ```sql
 -- ① 开启 RCSI（最推荐的并发优化）
 ALTER DATABASE MyDB SET READ_COMMITTED_SNAPSHOT ON;
--- ⚠️ 开启后：SELECT 不再被 UPDATE/DELETE 阻塞！
+-- 开启后：SELECT 不再被 UPDATE/DELETE 阻塞！
 
 -- ② RCSI vs 普通 RC
 --   普通 RC：SELECT 等写锁释放（阻塞）
@@ -79,10 +79,10 @@ ALTER DATABASE MyDB SET READ_COMMITTED_SNAPSHOT ON;
 ```sql
 -- Snapshot 事务级（严格要求时）
 SET TRANSACTION ISOLATION LEVEL SNAPSHOT;
--- ⚠️ 代价比 RCSI 大（需先开启 ALLOW_SNAPSHOT_ISOLATION）
+-- 代价比 RCSI 大（需先开启 ALLOW_SNAPSHOT_ISOLATION）
 ```
 
-> 🎯 **要点**：RCSI = SQL Server 并发的"一键优化"——开启后读写互不阻塞。与 PG 的 MVCC 理念相似但实现为 tempdb 行版本存储。
+> **要点**：RCSI = SQL Server 并发的"一键优化"——开启后读写互不阻塞。与 PG 的 MVCC 理念相似但实现为 tempdb 行版本存储。
 
 ### 2.3 RCSI 原理与代价（源码级）
 
@@ -127,7 +127,7 @@ SQL Server 锁粒度（自动选择）：
   行锁数 ≥ 5000 → 自动升级为表锁
   → 可能导致阻塞范围扩大
 
-⚠️ 面试必答：
+面试必答：
 "'锁升级'是 SQL Server 独有机制——
  行锁太多自动升表锁减少开销，
  但可能导致意外大范围阻塞。"
@@ -155,11 +155,11 @@ SET LOCK_TIMEOUT 5000;   -- 5 秒超时
 ```
 锁兼容矩阵（行 = 已持有，列 = 请求）：
           S    U    X   IS   IX
-  S       ✅   ✅   ❌   ✅   ❌
-  U       ✅   ❌   ❌   ✅   ❌
-  X       ❌   ❌   ❌   ❌   ❌
-  IS      ✅   ✅   ❌   ✅   ✅
-  IX      ❌   ❌   ❌   ✅   ✅
+  S       ✓   ✓   ✗   ✓   ✗
+  U       ✓   ✗   ✗   ✓   ✗
+  X       ✗   ✗   ✗   ✗   ✗
+  IS      ✓   ✓   ✗   ✓   ✓
+  IX      ✗   ✗   ✗   ✓   ✓
 ```
 
 ```
@@ -194,7 +194,7 @@ SQL Server 死锁：
   等待图检测（默认），选 deadlock priority 低者回滚
   图形化：SSMS → 扩展事件 → Deadlock Graph
 
-⚠️ 比 MySQL 更强大：SQL Server 有 Deadlock Graph
+比 MySQL 更强大：SQL Server 有 Deadlock Graph
   可视化死锁参与者的 SQL 语句与锁资源
 ```
 
@@ -231,10 +231,10 @@ SET DEADLOCK_PRIORITY HIGH;   -- 本会话优先存活
 ### 4.2 预防措施
 
 ```
-✅ 事务按相同顺序访问资源（防环）
-✅ 开启 RCSI（SELECT 不加锁 → 减少死锁）
-✅ 缩短事务（不在事务中做耗时操作）
-✅ 合适索引（减少扫描范围 → 少加锁）
+✓ 事务按相同顺序访问资源（防环）
+✓ 开启 RCSI（SELECT 不加锁 → 减少死锁）
+✓ 缩短事务（不在事务中做耗时操作）
+✓ 合适索引（减少扫描范围 → 少加锁）
 ```
 
 ---
@@ -249,13 +249,13 @@ CREATE TABLE products (
     id INT PRIMARY KEY,
     name NVARCHAR(50),
     price DECIMAL(10,2),
-    rowver ROWVERSION              -- ⚠️ 乐观并发标记
+    rowver ROWVERSION              -- 乐观并发标记
 );
 
 -- 更新时校验版本
 UPDATE products SET price = 99.99
 WHERE id = 1 AND rowver = 0x0123;   -- 版本匹配才更新
--- ⚠️ 版本不匹配 → 0 行更新 → 被其他人改过
+-- 版本不匹配 → 0 行更新 → 被其他人改过
 ```
 
 ### 5.2 乐观并发完整实现（存储过程实战）
@@ -289,13 +289,13 @@ END;
 | 乐观 | 版本号/时间戳校验 | 低冲突 |
 | RCSI | 行版本快照读 | 通用（推荐） |
 
-> 🎯 **要点**：ROWVERSION + RCSI = SQL Server 乐观并发的标配组合——读不加锁 + 写校验版本。对比 MySQL（乐观锁需手动 `version INT`）、PG 的 xmin 可实现类似效果。
+> **要点**：ROWVERSION + RCSI = SQL Server 乐观并发的标配组合——读不加锁 + 写校验版本。对比 MySQL（乐观锁需手动 `version INT`）、PG 的 xmin 可实现类似效果。
 
 ---
 
 ## 6. SQL Server 2025 并发增强
 
-> 💡 SQL Server 2025（2025-11 发布）的锁与并发改进，2026 生产逐步落地。
+> SQL Server 2025（2025-11 发布）的锁与并发改进，2026 生产逐步落地。
 
 ### 6.1 Optimized Locking（优化锁）
 
@@ -306,7 +306,7 @@ SQL Server 2025 Optimized Locking（默认开启）：
   ② 阻塞减少：锁占用与等待显著降低
   ③ 兼容性：现有应用无需改动（默认行为）
 
-⚠️ 注意：
+注意：
   部分场景可回退（ALTER DATABASE 关闭 optimized locking）
   监控：sys.dm_tran_locks 视图仍可用（行为一致）
 ```
@@ -320,11 +320,11 @@ SQL Server 2025 Optimized Locking（默认开启）：
 | Always On 更快故障转移 | 诊断 + 重连路径优化（容灾 RTO 缩短） |
 | 自动执行计划修正 | 性能回归自动回退计划（Query Store 增强） |
 
-> 🎯 **要点**：2025 的并发主线 = **Optimized Locking 默认开**（降锁开销）+ **tempdb 治理**（防版本存储膨胀）+ **计划自动修正**（稳定性兜底）——DBA 关注点从"调锁"转向"调版本存储与计划"。
+> **要点**：2025 的并发主线 = **Optimized Locking 默认开**（降锁开销）+ **tempdb 治理**（防版本存储膨胀）+ **计划自动修正**（稳定性兜底）——DBA 关注点从"调锁"转向"调版本存储与计划"。
 
 ---
 
-> 🎯 **核心要点**：SQL Server 并发 = **RCSI**（tempdb 行版本，读写不互斥，第一推荐）+ **锁兼容矩阵与意向锁**（阻塞排查）+ **Lock Monitor 死锁检测**（1205 重试）+ **ROWVERSION 乐观并发**（版本校验）+ **2025 Optimized Locking**（锁内存/阻塞大降）。"RCSI 开启 + 索引优化 = SQL Server 并发基础优化"是企业 DBA 标准操作。
+> **核心要点**：SQL Server 并发 = **RCSI**（tempdb 行版本，读写不互斥，第一推荐）+ **锁兼容矩阵与意向锁**（阻塞排查）+ **Lock Monitor 死锁检测**（1205 重试）+ **ROWVERSION 乐观并发**（版本校验）+ **2025 Optimized Locking**（锁内存/阻塞大降）。"RCSI 开启 + 索引优化 = SQL Server 并发基础优化"是企业 DBA 标准操作。
 
 ---
 

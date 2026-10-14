@@ -1,6 +1,6 @@
 # 08 - MyBatis 性能优化
 
-> 🎯 MyBatis 的性能问题通常不在框架本身，而在 SQL 写法和使用方式。批量操作、N+1 问题、延迟加载——这三个问题是 90% 的性能瓶颈所在
+> MyBatis 的性能问题通常不在框架本身，而在 SQL 写法和使用方式。批量操作、N+1 问题、延迟加载——这三个问题是 90% 的性能瓶颈所在
 
 ---
 
@@ -15,12 +15,12 @@
 ## 1. 批量操作优化
 
 ```java
-// ❌ 逐条插入：1000 条 = 1000 次 SQL
+// ✗ 逐条插入：1000 条 = 1000 次 SQL
 for (User user : users) {
     mapper.insert(user);
 }
 
-// ✅ 批量插入：一条 SQL 插入 1000 条
+// ✓ 批量插入：一条 SQL 插入 1000 条
 // XML:
 // INSERT INTO users (name, email) VALUES
 // <foreach collection="list" item="u" separator=",">
@@ -30,7 +30,7 @@ for (User user : users) {
 // MyBatis-Plus:
 userService.saveBatch(users, 500);  // 每 500 条一个批次
 
-// ✅ SqlSession Batch 模式（最高性能）
+// ✓ SqlSession Batch 模式（最高性能）
 try (SqlSession session = sqlSessionFactory.openSession(ExecutorType.BATCH)) {
     UserMapper mapper = session.getMapper(UserMapper.class);
     for (User user : users) {
@@ -61,13 +61,13 @@ N+1 问题：查 1 次主表 → 查 N 次关联表
 ```
 
 ```xml
-<!-- ❌ 嵌套查询：导致 N+1 -->
+<!-- ✗ 嵌套查询：导致 N+1 -->
 <resultMap id="orderMap" type="Order">
     <association property="user" column="user_id"
         select="com.example.UserMapper.findById"/>   <!-- N 次查询！ -->
 </resultMap>
 
-<!-- ✅ 嵌套结果：一条 JOIN SQL 搞定 -->
+<!-- ✓ 嵌套结果：一条 JOIN SQL 搞定 -->
 <resultMap id="orderMap" type="Order">
     <association property="user" javaType="User">
         <id property="id" column="user_id"/>

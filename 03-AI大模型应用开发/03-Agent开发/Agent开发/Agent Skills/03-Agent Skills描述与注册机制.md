@@ -1,6 +1,6 @@
 # 03 - Agent Skills 描述与注册机制
 
-> 🎯 Skill 的"自我介绍"决定 Agent 能否选对它。描述质量 = 选择准确率，注册机制 = 系统的可扩展性
+> Skill 的"自我介绍"决定 Agent 能否选对它。描述质量 = 选择准确率，注册机制 = 系统的可扩展性
 
 ---
 
@@ -133,26 +133,26 @@ skill:
 好的 Schema 设计 = LLM 能正确填参 + 人能理解约束
 
 原则 1：description 是给 LLM 的 Prompt
-  ❌ "page": { "type": "integer" }
-  ✅ "page": {
+  ✗ "page": { "type": "integer" }
+  ✓ "page": {
        "type": "integer",
        "description": "分页页码，从1开始。如果不确定要哪一页，传1"
      }
 
 原则 2：枚举值必须描述含义
-  ❌ "sort": { "enum": ["asc", "desc"] }
-  ✅ "sort": {
+  ✗ "sort": { "enum": ["asc", "desc"] }
+  ✓ "sort": {
        "enum": ["asc", "desc"],
        "description": "排序方向：asc=升序(旧→新)，desc=降序(新→旧)"
      }
 
 原则 3：提供合理的 default 值
-  ❌ 所有参数都 required
-  ✅ 常用参数设 default，减少 LLM 决策负担
+  ✗ 所有参数都 required
+  ✓ 常用参数设 default，减少 LLM 决策负担
 
 原则 4：约束要明确可验证
-  ❌ "name": { "type": "string" }
-  ✅ "name": {
+  ✗ "name": { "type": "string" }
+  ✓ "name": {
        "type": "string",
        "minLength": 1,
        "maxLength": 100,
@@ -229,16 +229,16 @@ description = [Skill做什么] + [何时使用] + [输入输出] + [注意事项
 
 示例对比：
 
-❌ 太模糊：
+✗ 太模糊：
   "search_code" → "搜索代码"
   → LLM 不知道何时用、怎么用
 
-❌ 太啰嗦：
+✗ 太啰嗦：
   "search_code" → "本技能用于在代码库中进行全文搜索，使用 ripgrep 引擎，
   支持正则表达式，可以指定文件类型过滤..."
   → 占 Token，本质信息密度低
 
-✅ 刚刚好：
+✓ 刚刚好：
   "search_code" → "在代码库中搜索匹配的代码片段。
   适用：查找函数定义、类引用、特定模式的代码、API使用示例。
   输入：搜索模式(支持正则)、文件类型过滤(可选)、搜索路径(可选)。
@@ -367,9 +367,9 @@ Agent 决策流程：如何选择正确的 Skill
   │ Step 2: Context Matching            │
   │ 读取 when_to_use/when_not_to_use     │
   │ 结合上下文：用户有未提交的代码变更    │
-  │ → code_review ✅ 匹配                │
-  │ → security_scan ❌ 范围太窄           │
-  │ → style_check ❌ 范围太窄             │
+  │ → code_review ✓ 匹配                │
+  │ → security_scan ✗ 范围太窄           │
+  │ → style_check ✗ 范围太窄             │
   └──────────────┬──────────────────────┘
                  │
                  ▼
@@ -479,7 +479,7 @@ public class HotReloadableSkillRegistry implements SkillRegistry {
 }
 ```
 
-> 🎯 **核心要点**：Skill 描述是 Agent 正确选择的唯一依据 — description 要精确、when_to_use 要明确、Schema 要带约束。注册中心要支持静态+动态+远程三种发现方式
+> **核心要点**：Skill 描述是 Agent 正确选择的唯一依据 — description 要精确、when_to_use 要明确、Schema 要带约束。注册中心要支持静态+动态+远程三种发现方式
 
 ---
 

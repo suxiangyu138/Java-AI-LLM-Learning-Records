@@ -1,10 +1,10 @@
 # 01 - Linux 操作系统基础与文件系统
 
-> 🎯 Linux 文件系统是"一切皆文件"哲学的实现载体 — 从根目录结构到 inode 原理、从硬链接到虚拟文件系统，理解这些是"用 Linux 而不是背命令"的分水岭
+> Linux 文件系统是"一切皆文件"哲学的实现载体 — 从根目录结构到 inode 原理、从硬链接到虚拟文件系统，理解这些是"用 Linux 而不是背命令"的分水岭
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [Linux 操作系统架构](#1-linux-操作系统架构)
 2. [一切皆文件](#2-一切皆文件)
@@ -67,7 +67,7 @@ lsb_release -a              # Ubuntu
 
 ## 2. 一切皆文件
 
-> 💡 Linux 的核心理念：**Everything is a file** — 普通文件、目录、设备、套接字、管道，都以文件的形式呈现，统一用 `open/read/write/close` 操作。
+> Linux 的核心理念：**Everything is a file** — 普通文件、目录、设备、套接字、管道，都以文件的形式呈现，统一用 `open/read/write/close` 操作。
 
 ### 2.1 七种文件类型
 
@@ -130,7 +130,7 @@ dd if=/dev/zero of=test.log bs=1M count=100
 
 ## 3. FHS 文件系统层次标准
 
-> 🎯 FHS (Filesystem Hierarchy Standard) 定义了 Linux 目录布局。Java 后端要能说出每个目录放什么，排查问题时知道去哪里找。
+> FHS (Filesystem Hierarchy Standard) 定义了 Linux 目录布局。Java 后端要能说出每个目录放什么，排查问题时知道去哪里找。
 
 ### 3.1 根目录结构速览
 
@@ -140,13 +140,13 @@ dd if=/dev/zero of=test.log bs=1M count=100
 ├── /sbin                # 系统管理命令（fdisk, mount 等），→ /usr/sbin
 ├── /boot                # 内核文件 + GRUB 引导加载器
 ├── /dev                 # 设备文件（/dev/sda, /dev/null, /dev/tty）
-├── /etc                 # 系统级配置文件（⭐ 最常操作）
+├── /etc                 # 系统级配置文件（★ 最常操作）
 ├── /home                # 普通用户家目录（/home/appuser/.bashrc）
 ├── /root                # root 用户家目录
 ├── /lib /lib64          # 系统库文件（libc.so 等），→ /usr/lib
 ├── /media /mnt          # 临时挂载点（U盘、NFS、数据盘）
-├── /opt                 # 第三方软件安装目录（⭐ 手动安装的 JDK/Maven）
-├── /proc                # 进程与内核信息虚拟文件系统（⭐ 排查必用）
+├── /opt                 # 第三方软件安装目录（★ 手动安装的 JDK/Maven）
+├── /proc                # 进程与内核信息虚拟文件系统（★ 排查必用）
 ├── /run                 # 运行时临时文件（PID、socket），重启清空
 ├── /srv                 # 服务数据目录（/srv/www, /srv/ftp）
 ├── /sys                 # 内核设备模型虚拟文件系统
@@ -156,8 +156,8 @@ dd if=/dev/zero of=test.log bs=1M count=100
 │   ├── /usr/lib         # 库文件
 │   ├── /usr/local       # 本地编译安装的软件
 │   └── /usr/share       # 架构无关的数据（文档、图标）
-└── /var                 # 可变数据（⭐ 日志、缓存、数据库文件）
-    ├── /var/log         # 系统与应用日志（⭐ 最频繁操作）
+└── /var                 # 可变数据（★ 日志、缓存、数据库文件）
+    ├── /var/log         # 系统与应用日志（★ 最频繁操作）
     ├── /var/lib         # 持久化状态数据（MySQL 数据库、Docker 数据）
     ├── /var/spool       # 队列任务（cron、邮件）
     └── /var/run         # → /run（运行时数据）
@@ -183,7 +183,7 @@ dd if=/dev/zero of=test.log bs=1M count=100
 /etc/hostname           # 主机名
 /etc/resolv.conf        # DNS 服务器配置
 /etc/sysctl.conf        # 内核参数
-/etc/security/limits.conf  # 资源限制（⭐ ulimit 配置）
+/etc/security/limits.conf  # 资源限制（★ ulimit 配置）
 
 # ═══ 用户与权限 ═══
 /etc/passwd             # 用户账户信息
@@ -249,7 +249,7 @@ ldd /usr/bin/java | head -5
 
 ## 5. inode 与数据块
 
-> 💡 **inode (索引节点)** 是文件系统的核心概念 — 每个文件有且仅有一个 inode，存储文件的元数据（权限、大小、时间戳、数据块指针），但不存储文件名。文件名存在目录的数据块中。
+> **inode (索引节点)** 是文件系统的核心概念 — 每个文件有且仅有一个 inode，存储文件的元数据（权限、大小、时间戳、数据块指针），但不存储文件名。文件名存在目录的数据块中。
 
 ### 5.1 inode 存储的内容
 
@@ -258,9 +258,9 @@ inode 包含：
 ├── 文件类型和权限 (rwx)
 ├── Owner / Group (UID / GID)
 ├── 文件大小 (bytes)
-├── 时间戳（⭐ 三个时间）
+├── 时间戳（★ 三个时间）
 │   ├── atime: 最后访问时间
-│   ├── mtime: 最后修改内容时间（⭐ 最常用）
+│   ├── mtime: 最后修改内容时间（★ 最常用）
 │   └── ctime: 最后修改 inode 时间
 ├── 链接计数 (硬链接数)
 └── 数据块指针（指向磁盘上实际数据的位置）
@@ -286,7 +286,7 @@ stat app.jar
 ls -i app.jar
 # 12345678 app.jar
 
-# 查看分区的 inode 使用情况（⭐ 小文件太多会耗尽 inode）
+# 查看分区的 inode 使用情况（★ 小文件太多会耗尽 inode）
 df -i
 # Filesystem      Inodes   IUsed   IFree IUse% Mounted on
 # /dev/sda1      6553600  123456 6430144    2% /
@@ -298,7 +298,7 @@ for i in /*; do echo "$(find $i | wc -l) $i"; done | sort -rn | head -10
 ### 5.3 inode 耗尽问题
 
 ```bash
-# ⚠️ 典型场景：磁盘空间没满但无法创建文件
+# 典型场景：磁盘空间没满但无法创建文件
 df -h        # 磁盘还有空间
 df -i        # 但 inode 已耗尽！
 
@@ -350,8 +350,8 @@ ls -ld testdir
 |------|-------------------|----------------------|
 | 本质 | 同一个 inode 的多个目录入口 | 指向目标路径的独立文件 |
 | inode | **相同** inode | **不同** inode，存的是路径字符串 |
-| 跨文件系统 | ❌ 不可以 | ✅ 可以 |
-| 链接目录 | ❌ 不可以（防循环） | ✅ 可以 |
+| 跨文件系统 | ✗ 不可以 | ✓ 可以 |
+| 链接目录 | ✗ 不可以（防循环） | ✓ 可以 |
 | 原文件删除后 | 数据仍在（链接计数 > 1） | **断链**（悬空链接，红色显示） |
 | 文件大小 | 不占额外空间（仅目录条目） | 占少量空间（路径字符串长度） |
 | `ls -l` 显示 | 普通文件，链接数 > 1 | `lrwxrwxrwx file -> target` |
@@ -420,7 +420,7 @@ ln -snf /opt/myapp/versions/v1.1 /opt/myapp/current
 
 ## 7. 虚拟文件系统：/proc 与 /sys
 
-> 💡 `/proc` 和 `/sys` 不是真实磁盘文件，而是内核向用户空间暴露信息的接口。读取它们是零开销的内核数据获取方式。
+> `/proc` 和 `/sys` 不是真实磁盘文件，而是内核向用户空间暴露信息的接口。读取它们是零开销的内核数据获取方式。
 
 ### 7.1 /proc — 进程与系统信息
 
@@ -444,7 +444,7 @@ cat /proc/partitions                 # 分区信息
 cat /proc/mounts                     # 当前挂载信息
 ```
 
-### 7.2 /proc/<pid>/ — 进程信息（⭐ Java 排查必用）
+### 7.2 /proc/<pid>/ — 进程信息（★ Java 排查必用）
 
 | 路径 | 内容 | JVM 排查场景 |
 |------|------|-------------|
@@ -519,7 +519,7 @@ mount -t ext4 /dev/sdb1 /mnt/data
 UUID=xxx        /data     xfs     defaults           0      2
 tmpfs           /dev/shm  tmpfs   defaults,size=8G   0      0
 
-# noatime: 不更新访问时间，减少磁盘 IO（⭐ 推荐）
+# noatime: 不更新访问时间，减少磁盘 IO（★ 推荐）
 # nodiratime: 目录也不更新访问时间
 
 # 验证并挂载
@@ -531,7 +531,7 @@ umount -l /mnt/data        # 懒卸载（繁忙时强制，进程释放后完成
 fuser -mv /mnt/data        # 查看谁在使用该挂载点
 ```
 
-### 8.3 tmpfs 与 /dev/shm（⭐ Java 后端加速）
+### 8.3 tmpfs 与 /dev/shm（★ Java 后端加速）
 
 ```bash
 # /dev/shm 是内存文件系统，读写速度远快于磁盘
@@ -541,14 +541,14 @@ df -h /dev/shm
 
 # Java 后端场景：将临时计算文件写入 /dev/shm
 # 例如：大量 CSV 文件排序合并的中间结果
-# ⚠️ 注意：/dev/shm 默认是内存的 50%，写满会影响系统！
+# 注意：/dev/shm 默认是内存的 50%，写满会影响系统！
 ```
 
 ---
 
 ## 9. Linux 启动流程
 
-> 🎯 理解启动流程有助于排查服务起不来、磁盘挂载失败、内核参数不生效等问题。
+> 理解启动流程有助于排查服务起不来、磁盘挂载失败、内核参数不生效等问题。
 
 ### 9.1 启动步骤
 
@@ -574,7 +574,7 @@ df -h /dev/shm
 |--------|:---:|------|
 | `poweroff.target` | 0 | 关机 |
 | `rescue.target` | 1 | 单用户救援模式 |
-| `multi-user.target` | 3 | 多用户文本模式（⭐ 服务器默认） |
+| `multi-user.target` | 3 | 多用户文本模式（★ 服务器默认） |
 | `graphical.target` | 5 | 图形界面 |
 | `reboot.target` | 6 | 重启 |
 
@@ -598,9 +598,9 @@ systemd-analyze blame | head -10     # 各服务启动耗时排名
 ### 10.1 应用部署的标准目录布局
 
 ```bash
-# ⭐ 推荐的生产级 Java 应用目录结构
+# ★ 推荐的生产级 Java 应用目录结构
 /opt/myapp/
-├── current -> versions/v1.1/        # 软链接 → 当前版本（⭐ 原子切换）
+├── current -> versions/v1.1/        # 软链接 → 当前版本（★ 原子切换）
 ├── versions/
 │   ├── v1.0/
 │   │   ├── bin/                     # 启动/停止脚本

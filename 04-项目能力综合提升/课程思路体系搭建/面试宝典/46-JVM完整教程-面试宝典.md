@@ -77,7 +77,7 @@ public void unsafeMethod(String s) {
 }
 ```
 
-> 💡 判断线程安全的简单方法：方法的局部变量（包括对象引用）若不返回、不赋值给静态变量、不存入集合，则是线程安全的。
+> 判断线程安全的简单方法：方法的局部变量（包括对象引用）若不返回、不赋值给静态变量、不存入集合，则是线程安全的。
 
 ### 1.5 堆内存溢出诊断（jmap/jconsole/jvisualvm）
 
@@ -118,7 +118,7 @@ public class HeapOOMDemo {
 - 永久代是 HotSpot 特有的实现，与 JRockit 合并时需统一。
 - 元空间使用本地内存，由操作系统管理，大项目不易 OOM。
 
-> ⚠️ 元空间虽无上限，但最好设置 `-XX:MaxMetaspaceSize` 防止无限增长导致进程崩溃。
+> 元空间虽无上限，但最好设置 `-XX:MaxMetaspaceSize` 防止无限增长导致进程崩溃。
 
 ### 1.7 常量池与运行时常量池
 
@@ -193,7 +193,7 @@ public class InternDiffDemo {
 jcmd <pid> VM.stringtable
 ```
 
-> 💡 如果系统中字符串数量巨大（如 JSON key 大量重复），增大 StringTableSize 可减少哈希冲突，提升性能。G1 还支持 `-XX:+UseStringDeduplication` 对重复字符串去重。
+> 如果系统中字符串数量巨大（如 JSON key 大量重复），增大 StringTableSize 可减少哈希冲突，提升性能。G1 还支持 `-XX:+UseStringDeduplication` 对重复字符串去重。
 
 ### 1.11 直接内存（Direct Memory）
 
@@ -244,7 +244,7 @@ Cleaner.create(this, new Deallocator(address, size));
 //    最终执行 Unsafe.freeMemory(address) 释放堆外内存
 ```
 
-> ⚠️ `-XX:+DisableExplicitGC` 禁用 `System.gc()` 后，会延迟直接内存回收，因 Full GC 能加速 Cleaner 处理。推荐使用 `-XX:+ExplicitGCInvokesConcurrent` 替代完全禁用。
+> `-XX:+DisableExplicitGC` 禁用 `System.gc()` 后，会延迟直接内存回收，因 Full GC 能加速 Cleaner 处理。推荐使用 `-XX:+ExplicitGCInvokesConcurrent` 替代完全禁用。
 
 ### 1.13 垃圾判断：引用计数法 vs 可达性分析
 
@@ -377,7 +377,7 @@ public class BigObjectDemo {
 }
 ```
 
-> 💡 G1 中没有 `PretenureSizeThreshold` 参数，而是通过 Region 大小的 50% 判断是否作为 Humongous 对象直接分配到连续 H-Region 中。
+> G1 中没有 `PretenureSizeThreshold` 参数，而是通过 Region 大小的 50% 判断是否作为 Humongous 对象直接分配到连续 H-Region 中。
 
 ### 1.18 串行、吞吐量优先、响应时间优先回收器
 
@@ -729,7 +729,7 @@ public class HotDeployClassLoader extends ClassLoader {
 }
 ```
 
-> 💡 **热部署原理**：每次创建新的 ClassLoader 实例加载修改后的类（不同 ClassLoader 加载的同名类视为不同类）。Tomcat 就是通过为每个 WebApp 创建独立的 ClassLoader 实例实现的热部署。
+> **热部署原理**：每次创建新的 ClassLoader 实例加载修改后的类（不同 ClassLoader 加载的同名类视为不同类）。Tomcat 就是通过为每个 WebApp 创建独立的 ClassLoader 实例实现的热部署。
 
 ### 2.10 JIT 编译——逃逸分析与方法内联
 
@@ -795,7 +795,7 @@ public class ReflectionDemo {
 }
 ```
 
-> 💡 反射优化说明 JIT 对反射也做了深度优化，但相比直接调用仍有约 5-10 倍性能差距。
+> 反射优化说明 JIT 对反射也做了深度优化，但相比直接调用仍有约 5-10 倍性能差距。
 
 ### 2.12 JMM 可见性与 volatile
 
@@ -1208,7 +1208,7 @@ public class LockOptimizationDemo {
 }
 ```
 
-> 💡 **锁消除验证**：在 `-XX:+PrintCompilation` 日志中查看是否出现 `eliminated lock` 字样，说明 JIT 成功消除锁。
+> **锁消除验证**：在 `-XX:+PrintCompilation` 日志中查看是否出现 `eliminated lock` 字样，说明 JIT 成功消除锁。
 
 ### 3.10 CAS 自旋优化——LongAdder 原理
 
@@ -1906,14 +1906,14 @@ public class GJVMElasticTuner {
 
 ### 6.4 最佳实践总结
 
-> 💡 **多线程安全编码规范**：
+> **多线程安全编码规范**：
 > 1. 优先使用不可变对象（`final` 字段 + 不提供 setter）。
 > 2. 使用 `java.util.concurrent` 包而非 `synchronized` 裸锁。
 > 3. 优先 `LongAdder` 而非 `AtomicLong`（高并发场景）。
 > 4. 使用 `CopyOnWriteArrayList` 替代 `Collections.synchronizedList()`（读多写少场景）。
 > 5. String 拼接使用 `StringBuilder` 而非 `StringBuffer`（不需要线程安全）。
 
-> 🎯 **JVM 调优黄金法则**：
+> **JVM 调优黄金法则**：
 > 1. 先看代码，再看 JVM 参数。90% 的性能问题可以通过优化代码解决。
 > 2. GC 日志是调优的基础——永远在生产环境中开启。
 > 3. 一次只改一个参数，观察效果后再调下一个。
@@ -2080,4 +2080,4 @@ G1 的工作周期分为：**Young GC**（年轻代回收，STW）→ **并发�
 
 ---
 
-> 🎯 **总结**：JVM 面试三大层次——**字节码/JMM 层**（理解 Java 程序到底如何执行）、**GC 层**（理解内存自动管理的原理和调优）、**工具层**（具备实战排障能力）。建议将每个知识点结合自己项目中的实际案例准备，使用 STAR 法则（情景、任务、行动、结果）组织回答，让面试官感受到你的实战经验而不是背诵八股文。
+> **总结**：JVM 面试三大层次——**字节码/JMM 层**（理解 Java 程序到底如何执行）、**GC 层**（理解内存自动管理的原理和调优）、**工具层**（具备实战排障能力）。建议将每个知识点结合自己项目中的实际案例准备，使用 STAR 法则（情景、任务、行动、结果）组织回答，让面试官感受到你的实战经验而不是背诵八股文。

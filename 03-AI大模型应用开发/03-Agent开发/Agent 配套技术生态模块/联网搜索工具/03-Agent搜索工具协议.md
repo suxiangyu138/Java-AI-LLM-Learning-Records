@@ -12,7 +12,7 @@
 | `web_search_20260318` | 2026-03 | 新增 `response_inclusion` 参数 |
 | `web_fetch_2026xxxx` | 配套 | 抓取工具同版本演进 |
 
-> 💡 动态过滤基准（Sonnet 4.6 / Opus 4.6）：BrowseComp Sonnet 33.3%→46.6%、Opus 45.3%→61.6%；DeepsearchQA F1 Sonnet 52.6%→59.4%、Opus 69.8%→77.3%——**准确率平均 +11%，输入 token -24%**。
+> 动态过滤基准（Sonnet 4.6 / Opus 4.6）：BrowseComp Sonnet 33.3%→46.6%、Opus 45.3%→61.6%；DeepsearchQA F1 Sonnet 52.6%→59.4%、Opus 69.8%→77.3%——**准确率平均 +11%，输入 token -24%**。
 
 ### 1.2 核心参数
 
@@ -33,7 +33,7 @@
 | 流式 | 搜索期间发出事件并暂停 |
 | 错误 | **HTTP 200 + 体内错误对象**：`too_many_requests` / `invalid_tool_input` / `max_uses_exceeded` / `query_too_long` / `request_too_large` / `unavailable` |
 
-> ⚠️ 服务端工具限流与模型 token 限流是**两套独立配额**——`too_many_requests` 出现在响应体内，客户端重试无效，需退避等待。
+> 服务端工具限流与模型 token 限流是**两套独立配额**——`too_many_requests` 出现在响应体内，客户端重试无效，需退避等待。
 
 ### 1.4 限制与生态
 

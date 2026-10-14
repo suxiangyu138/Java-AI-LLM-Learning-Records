@@ -1,7 +1,7 @@
 # 01-小程序与UniAPP是什么
 > 定位：小程序是「移动端的轻应用生态」，UniAPP 是「一套代码多端编译」的跨端框架——2026 年技术栈是 uni-app 4.x + Vue3 + Vite，下一代 uni-app x 用原生渲染冲击 App 性能天花板。
 
-## 📚 目录
+## 目录
 1. [小程序生态](#1-小程序生态)
 2. [UniAPP 的定位](#2-uniapp-的定位)
 3. [2026 基线](#3-2026-基线)
@@ -70,7 +70,7 @@ UniAPP（DCloud 出品）是**跨端开发框架**——**「一套 Vue 代码�
 4. uni-app x 的核心突破（uts/蒸汽模式）与选型建议？
 5. 与 Taro/Flutter 的选型判断？
 
-> 🎯 **核心要点**：小程序 = 双线程模型的轻应用生态（setData 约束）；UniAPP = 一套 Vue 代码编译多端（跨端是编译器差异）；2026 技术栈 uni-app 4.x + Vue3 + Vite + Pinia；Vue2 已淘汰；uni-app x 用 uts + 蒸汽模式原生渲染（App 商用推荐）；选型按场景——小程序多端选 uni-app、App 性能优先选 x。
+> **核心要点**：小程序 = 双线程模型的轻应用生态（setData 约束）；UniAPP = 一套 Vue 代码编译多端（跨端是编译器差异）；2026 技术栈 uni-app 4.x + Vue3 + Vite + Pinia；Vue2 已淘汰；uni-app x 用 uts + 蒸汽模式原生渲染（App 商用推荐）；选型按场景——小程序多端选 uni-app、App 性能优先选 x。
 
 ---
 

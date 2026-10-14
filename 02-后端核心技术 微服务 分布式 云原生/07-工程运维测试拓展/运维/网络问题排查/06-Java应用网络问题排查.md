@@ -1,7 +1,7 @@
 # 06-Java 应用网络问题排查
 > 网络问题在 Java 应用侧的落地：连接池、超时配置、Socket/SSL 异常、jstack/Arthas 定位——"异常信息"到"根因"的翻译表
 
-## 📚 目录
+## 目录
 1. [Java 网络异常信息翻译表](#1-java-网络异常信息翻译表)
 2. [连接池问题](#2-连接池问题)
 3. [HTTP 客户端配置](#3-http-客户端配置)
@@ -26,7 +26,7 @@
 | `NoRouteToHostException` | 路由不可达 | 网络层/防火墙 |
 | `Too many open files` | 文件句柄耗尽 | **连接泄漏**（CLOSE_WAIT 堆积） |
 
-> 🎯 **异常信息即线索**：Java 异常类型直接对应排查方向——"read timed out"查服务端处理，"reset"查连接生命周期，"refused"查端口监听。
+> **异常信息即线索**：Java 异常类型直接对应排查方向——"read timed out"查服务端处理，"reset"查连接生命周期，"refused"查端口监听。
 
 ## 2. 连接池问题
 
@@ -66,7 +66,7 @@ spring:
       keepalive-time: 300000           # 空闲保活探测（5 分钟）
 ```
 
-> 💡 **池参数铁律**：`max-lifetime` < 服务端/防火墙连接超时；`keepalive-time` 防空闲被回收；`connection-test-query` 防复用坏连接——三件套防"偶发 reset"。
+> **池参数铁律**：`max-lifetime` < 服务端/防火墙连接超时；`keepalive-time` 防空闲被回收；`connection-test-query` 防复用坏连接——三件套防"偶发 reset"。
 
 ## 3. HTTP 客户端配置
 
@@ -91,7 +91,7 @@ HttpRequest request = HttpRequest.newBuilder(uri)
 | 重试 | 幂等才重试 | 见 [05](05-HTTP层问题排查.md) |
 | 日志 | 记录 URL/耗时/状态码 | 排障基本盘 |
 
-> ⚠️ **JDK HttpClient 默认不重试**（除幂等 GET 的连接级重试）——需要业务重试自己实现（有限次 + 退避 + 幂等键）。
+> **JDK HttpClient 默认不重试**（除幂等 GET 的连接级重试）——需要业务重试自己实现（有限次 + 退避 + 幂等键）。
 
 ## 4. 数据库连接池网络问题
 
@@ -109,7 +109,7 @@ SHOW STATUS LIKE 'Threads_connected';  -- 当前连接数
 SHOW PROCESSLIST;                      -- 连接状态与慢查询
 ```
 
-> 💡 数据库连接池网络问题 = 池参数与 MySQL 超时参数的"对齐问题"：**应用侧 max-lifetime < MySQL wait_timeout**，否则空闲连接被服务端回收，复用时报错。
+> 数据库连接池网络问题 = 池参数与 MySQL 超时参数的"对齐问题"：**应用侧 max-lifetime < MySQL wait_timeout**，否则空闲连接被服务端回收，复用时报错。
 
 ## 5. SSL/HTTPS 异常
 
@@ -131,7 +131,7 @@ keytool -importcert -alias api-cert \
 java -Djavax.net.debug=ssl:handshake -jar app.jar
 ```
 
-> ⚠️ **生产纪律**：不用 `--verify=no`/禁用校验解决问题——正确做法是**把证书导入 truststore**（自签名内部证书的标准姿势）。
+> **生产纪律**：不用 `--verify=no`/禁用校验解决问题——正确做法是**把证书导入 truststore**（自签名内部证书的标准姿势）。
 
 ## 6. jstack / Arthas 定位
 
@@ -166,7 +166,7 @@ trace com.demo.OrderService create
 vmoption | grep -i network
 ```
 
-> 🎯 **组合拳**：`ss -tnp`（连接状态）+ `jstack`（线程在等什么）——"连接在但请求慢"用 jstack 看线程是否卡在 read/池等待。
+> **组合拳**：`ss -tnp`（连接状态）+ `jstack`（线程在等什么）——"连接在但请求慢"用 jstack 看线程是否卡在 read/池等待。
 
 ## 7. Java 常见框架网络参数速查
 
@@ -179,11 +179,11 @@ vmoption | grep -i network
 | Redis（Lettuce） | `spring.data.redis.timeout` / 池参数 | application.yml |
 | Kafka | `request.timeout.ms` / `connections.max.idle.ms` | producer/consumer 配置 |
 
-> 💡 排查前先查"当前配置值"：很多"网络问题"其实是**默认超时参数与业务不匹配**（如 OkHttp 默认 readTimeout 10s，下游偶发慢即超时）。
+> 排查前先查"当前配置值"：很多"网络问题"其实是**默认超时参数与业务不匹配**（如 OkHttp 默认 readTimeout 10s，下游偶发慢即超时）。
 
 ## 8. 核心要点
 
-> 🎯 **核心要点**：
+> **核心要点**：
 > - 异常翻译表是第一步：refused/timeout/reset/handshake 各有明确指向；
 > - 连接池三件套：max-lifetime < 服务端超时、keepalive 防回收、验证查询防坏连接；
 > - 池耗尽先查泄漏（归还逻辑）再谈扩容；

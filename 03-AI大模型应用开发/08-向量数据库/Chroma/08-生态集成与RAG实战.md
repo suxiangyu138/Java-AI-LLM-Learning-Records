@@ -151,7 +151,7 @@ List<Document> retrieve(String question) {
 
 评估闭环落在可量化的指标上，别停留在"看起来不错"：**命中率**（标注好的问答对里，正确答案是否出现在 top-5 结果中——召回质量的底线指标）与 **MRR**（正确答案的排名倒数均值——衡量排序质量）。评估流程三步：准备 100-200 条标注问答对 → 用同一批 query_texts 跑检索，统计命中率与 MRR → 用 Forking 建新集合对比（换 embedding 模型 / 调 HNSW 参数 / 改切分策略），指标提升才上线。**指标低于预期时先查数据问题**（embedding 写读不一致、脏数据、切分粒度），再动模型与参数——顺序反了会在错误方向调很久。
 
-> 🎯 **核心要点**：Java 接 Chroma = Spring AI 一条 starter + VectorStore 接口，换库零改动；集成铁律"embedding 写读同源、命名空间一致、distance 按 space 语义转换"；Sync 管同步入库、Context-1 管多轮检索意图、RAG 链路五决策点把前面各篇串成一条线。
+> **核心要点**：Java 接 Chroma = Spring AI 一条 starter + VectorStore 接口，换库零改动；集成铁律"embedding 写读同源、命名空间一致、distance 按 space 语义转换"；Sync 管同步入库、Context-1 管多轮检索意图、RAG 链路五决策点把前面各篇串成一条线。
 
 ---
 

@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [算法库：'找相似'的计算引擎](#1-算法库找相似的计算引擎)
 2. [解决什么问题](#2-解决什么问题)
@@ -67,7 +67,7 @@ FAISS（Facebook AI Similarity Search）是 **Meta（Facebook）AI 研究团队�
 4. 与 annoy/scikit-learn/Chroma/Milvus 的选型判断？
 5. 五个边界分别是什么？"学 FAISS = 学一切向量库的底牌"怎么理解？
 
-> 🎯 **核心要点**：FAISS = **Meta 开源的相似度检索算法库（Index 对象 + add/search）+ 索引家族（Flat/IVF/PQ/HNSW）+ PQ 压缩 + GPU**；2026 年 1.14.3、周下载 350 万——**"向量检索的事实标准内核：数据库管存储，FAISS 管'找相似'本身——外围自己搭，内核天下第一"**。
+> **核心要点**：FAISS = **Meta 开源的相似度检索算法库（Index 对象 + add/search）+ 索引家族（Flat/IVF/PQ/HNSW）+ PQ 压缩 + GPU**；2026 年 1.14.3、周下载 350 万——**"向量检索的事实标准内核：数据库管存储，FAISS 管'找相似'本身——外围自己搭，内核天下第一"**。
 
 ---
 

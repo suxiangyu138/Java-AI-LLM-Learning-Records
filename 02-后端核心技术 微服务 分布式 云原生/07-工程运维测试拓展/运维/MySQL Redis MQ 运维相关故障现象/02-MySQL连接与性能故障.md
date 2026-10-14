@@ -1,7 +1,7 @@
 # 02-MySQL 连接与性能故障
 > 连接数满、慢查询、CPU 高、连接泄漏——"数据库最先挂的四个场景"的现象、命令与解决
 
-## 📚 目录
+## 目录
 1. [故障一：连接数满（Too many connections）](#1-故障一连接数满too-many-connections)
 2. [故障二：慢查询](#2-故障二慢查询)
 3. [故障三：CPU 飙高](#3-故障三cpu-飙高)
@@ -42,7 +42,7 @@ ss -tnp | grep 3306 | wc -l
 | 突发流量 | 曲线陡升 | 临时调大 max_connections + 限流 |
 | 连接风暴 | 应用重启集体建连 | 池预热/错峰 |
 
-> ⚠️ **调大 max_connections 是缓解不是根治**：默认 151 是保守值，但**连接数满的本质是"连接被占着不还"**——先查泄漏与慢查询，再考虑扩容。
+> **调大 max_connections 是缓解不是根治**：默认 151 是保守值，但**连接数满的本质是"连接被占着不还"**——先查泄漏与慢查询，再考虑扩容。
 
 ## 2. 故障二：慢查询
 
@@ -93,7 +93,7 @@ EXPLAIN SELECT * FROM orders WHERE user_id = 123 AND status = 'PAID';
 | 函数导致索引失效 | 避免 `WHERE DATE(col) = ...` |
 | 锁等待 | 见 [03](03-MySQL锁与复制故障.md) |
 
-> 🎯 **慢查询优化主线**：EXPLAIN 三列（type/rows/key）→ 索引/分页/改写——**90% 的慢 SQL 是缺索引或写法问题**。
+> **慢查询优化主线**：EXPLAIN 三列（type/rows/key）→ 索引/分页/改写——**90% 的慢 SQL 是缺索引或写法问题**。
 
 ## 3. 故障三：CPU 飙高
 
@@ -123,7 +123,7 @@ WHERE command != 'Sleep' ORDER BY time DESC;
 | 大事务 | 长事务 + 锁等待 | 拆分事务 |
 | 备份/分析任务 | 定时任务撞车 | 错峰调度 |
 
-> 💡 **CPU 高的排查要点**：CPU 是"结果"，慢 SQL/无索引/风暴是"原因"——**抓 processlist 快照是定位高消耗 SQL 的第一现场**。
+> **CPU 高的排查要点**：CPU 是"结果"，慢 SQL/无索引/风暴是"原因"——**抓 processlist 快照是定位高消耗 SQL 的第一现场**。
 
 ## 4. 故障四：连接泄漏
 
@@ -154,7 +154,7 @@ SELECT command, COUNT(*) FROM information_schema.processlist GROUP BY command;
   连接池 max-lifetime/validation（复用前验证）
 ```
 
-> ⚠️ **泄漏的本质**：连接"借了不还"——MySQL 只是受害者。**连接池监控（active 持续占满）是早期信号**，等 MySQL 连接数满已经晚了。
+> **泄漏的本质**：连接"借了不还"——MySQL 只是受害者。**连接池监控（active 持续占满）是早期信号**，等 MySQL 连接数满已经晚了。
 
 ## 5. 综合排查命令集
 
@@ -189,7 +189,7 @@ SHOW ENGINE INNODB STATUS\G          -- 事务/锁全景
 
 ## 6. 核心要点
 
-> 🎯 **核心要点**：
+> **核心要点**：
 > - 连接数满三查：Threads_connected 趋势 + processlist 分布 + max_connections 对比；
 > - 连接数满的本质是"占着不还"：先查泄漏与慢查询，调参是缓解；
 > - 慢查询主线：EXPLAIN 三列（type/rows/key）→ 索引/分页/改写；

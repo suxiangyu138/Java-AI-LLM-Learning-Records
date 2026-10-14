@@ -1,6 +1,6 @@
 # 08 - Nginx 集群与高可用
 
-> 🎯 单台 Nginx 是单点故障的定时炸弹 — Keepalived + VRRP 实现主备自动切换、Ansible 批量管理多节点配置
+> 单台 Nginx 是单点故障的定时炸弹 — Keepalived + VRRP 实现主备自动切换、Ansible 批量管理多节点配置
 
 ---
 

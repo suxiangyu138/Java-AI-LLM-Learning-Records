@@ -42,7 +42,7 @@ PR 完整生命周期：
 ├──────────────────────┬──────────────────────────────┤
 │ Conversation 标签     │  Files Changed 标签           │
 │                      │                              │
-│ ● CI 状态（绿 ✅）    │  修改文件列表 + Diff 视图      │
+│ ● CI 状态（绿 ✓）    │  修改文件列表 + Diff 视图      │
 │ ● Reviewers 审批状态  │  逐行评论 + 代码建议          │
 │ ● 讨论线程            │                              │
 │ ● 合并按钮            │                              │
@@ -71,42 +71,42 @@ chore: update dependency versions
 perf: optimize database query in search endpoint
 
 # ═══ 标题最佳实践 ═══
-✅ 包含类型前缀（feat/fix/docs/refactor/test/chore）
-✅ 使用英文祈使句（add / fix / update）
-✅ 50 字符以内
-✅ 首字母小写
-❌ 不要用"修复了一个Bug"这种模糊描述
+✓ 包含类型前缀（feat/fix/docs/refactor/test/chore）
+✓ 使用英文祈使句（add / fix / update）
+✓ 50 字符以内
+✓ 首字母小写
+✗ 不要用"修复了一个Bug"这种模糊描述
 ```
 
 ### 2.2 PR 描述模板
 
 ```markdown
-## 📝 变更描述
+## 变更描述
 实现了用户 JWT 登录功能，包括 access token 和 refresh token 的双 token 机制。
 
-## 🎯 关联 Issue
+## 关联 Issue
 Closes #35
 
-## 📋 变更清单
+## 变更清单
 - [x] 新增 JwtUtil 工具类（生成/验证 token）
 - [x] 新增 /api/auth/login 接口
 - [x] 新增 /api/auth/refresh 刷新 token 接口
 - [x] 添加 RefreshToken 实体与持久化
 - [x] 单元测试覆盖（JwtUtil + AuthService）
 
-## 🧪 测试说明
+## 测试说明
 - 运行 `mvn test` 全部通过
 - 手动测试步骤：
   1. POST /api/auth/login → 获取 access_token + refresh_token
   2. GET /api/users（Header: Bearer {access_token}）→ 正常返回
   3. POST /api/auth/refresh → 获取新 access_token
 
-## 📸 截图（如涉及 UI）
+## 截图（如涉及 UI）
 | 登录页 | 错误提示 |
 |--------|---------|
 | ![login](url) | ![error](url) |
 
-## ⚠️ 注意事项
+## 注意事项
 - 数据库新增 `refresh_tokens` 表，需要执行迁移脚本
 - 环境变量新增 `JWT_SECRET`
 ```
@@ -115,13 +115,13 @@ Closes #35
 
 | PR 大小 | 代码行数 | Review 体验 | 建议 |
 |---------|---------|------------|------|
-| **XS** | < 50 行 | 秒审 | ✅ 最佳 |
-| **S** | 50~200 行 | 几分钟 | ✅ 推荐 |
-| **M** | 200~500 行 | 需投入时间 | ✅ 可接受 |
-| **L** | 500~1000 行 | 费劲 | ⚠️ 尽量拆分 |
-| **XL** | > 1000 行 | 灾难 | ❌ 必须拆分 |
+| **XS** | < 50 行 | 秒审 | ✓ 最佳 |
+| **S** | 50~200 行 | 几分钟 | ✓ 推荐 |
+| **M** | 200~500 行 | 需投入时间 | ✓ 可接受 |
+| **L** | 500~1000 行 | 费劲 | 尽量拆分 |
+| **XL** | > 1000 行 | 灾难 | ✗ 必须拆分 |
 
-> 💡 大功能拆分为多个小 PR：先发接口定义 → 再发实现 → 再发测试。用 Draft PR 或 Feature Flag 保证未完成功能不影响主分支。
+> 大功能拆分为多个小 PR：先发接口定义 → 再发实现 → 再发测试。用 Draft PR 或 Feature Flag 保证未完成功能不影响主分支。
 
 ---
 
@@ -130,7 +130,7 @@ Closes #35
 ### 3.1 作者的责任（提 PR 的人）
 
 ```
-✅ 提交前自查：
+✓ 提交前自查：
   1. 代码能编译/运行
   2. 所有测试通过
   3. 没有调试代码（console.log/System.out.println）
@@ -138,13 +138,13 @@ Closes #35
   5. 提交信息清晰
   6. PR 描述完整
 
-✅ Review 中：
-  1. 对所有评论回复（即使只是 👍）
+✓ Review 中：
+  1. 对所有评论回复（即使只是 ）
   2. 修改后标记对话为 Resolved
   3. 不要 force push（破坏 Review 上下文）
   4. 如需要，补充解释设计决策
 
-❌ 不要：
+✗ 不要：
   1. 提交 5000 行的 PR
   2. 忽略 Review 意见
   3. 不写测试
@@ -154,7 +154,7 @@ Closes #35
 ### 3.2 Reviewer 的责任（审查代码的人）
 
 ```
-✅ 审查时关注：
+✓ 审查时关注：
   1. 设计：整体方案是否合理？有没有更简单的方式？
   2. 功能：是否符合需求？边界条件处理了吗？
   3. 复杂度：有没有过度设计？能否更简洁？
@@ -164,18 +164,18 @@ Closes #35
   7. 安全：SQL注入、XSS、敏感信息泄漏？
   8. 性能：不必要的循环、N+1查询？
 
-❌ 不要：
+✗ 不要：
   1. 纠结代码风格（交给 Linter）
   2. "这样也行"的主观意见（标记为 nit/suggestion）
   3. 人身攻击/居高临下
   4. 阻塞PR等待非关键的修改
 
-💡 Review 评论规范：
+Review 评论规范：
   [blocking] — 必须修改才能合并
   [suggestion] — 建议修改，不阻塞
   [nit] — 小细节，改不改都行
   [question] — 不理解，请解释
-  [praise] — 👍 写得好！
+  [praise] — 写得好！
 ```
 
 ### 3.3 代码建议（Suggested Change）
@@ -240,20 +240,20 @@ gh pr create --draft --title "feat: WIP user dashboard"
 gh pr ready 42
 
 # ═══ Draft PR 的特点 ═══
-# ✅ 可以触发 CI（Actions 只跑 build/test，不部署）
-# ✅ Reviewers 可以提前看代码给反馈
-# ❌ 不能合并（Merge 按钮不可用）
-# ❌ CODEOWNERS 不会自动请求 Review
+# ✓ 可以触发 CI（Actions 只跑 build/test，不部署）
+# ✓ Reviewers 可以提前看代码给反馈
+# ✗ 不能合并（Merge 按钮不可用）
+# ✗ CODEOWNERS 不会自动请求 Review
 ```
 
 ### 5.2 何时用 Draft PR
 
 | 场景 | 是否用 Draft | 原因 |
 |------|-------------|------|
-| 方案不确定，想提前讨论 | ✅ Draft | 明确表示"别合并，先看思路" |
-| 功能完成 80%，等依赖 | ✅ Draft | 避免误合并 |
-| 拆分为多个小 PR，先发第一个 | ❌ 正常 PR | 每个子 PR 独立完整可合并 |
-| 完全完成，只是等 Review | ❌ 正常 PR | Draft 会让 Reviewer 犹豫 |
+| 方案不确定，想提前讨论 | ✓ Draft | 明确表示"别合并，先看思路" |
+| 功能完成 80%，等依赖 | ✓ Draft | 避免误合并 |
+| 拆分为多个小 PR，先发第一个 | ✗ 正常 PR | 每个子 PR 独立完整可合并 |
+| 完全完成，只是等 Review | ✗ 正常 PR | Draft 会让 Reviewer 犹豫 |
 
 ---
 
@@ -281,7 +281,7 @@ git remote -v
 # upstream  https://github.com/original/repo.git (fetch)
 # upstream  https://github.com/original/repo.git (push)
 
-# 4. 同步 Upstream 最新代码⭐
+# 4. 同步 Upstream 最新代码★
 git checkout main
 git fetch upstream
 git merge upstream/main
@@ -302,7 +302,7 @@ git push origin fix/typo-in-readme
 
 ### 6.2 Allow Edits from Maintainers
 
-> ⭐ 创建跨仓库 PR 时，勾选 **"Allow edits from maintainers"** —— 允许上游维护者直接修改你的 PR 分支。开源社区的标准做法。
+> ★ 创建跨仓库 PR 时，勾选 **"Allow edits from maintainers"** —— 允许上游维护者直接修改你的 PR 分支。开源社区的标准做法。
 
 ---
 
@@ -349,7 +349,7 @@ git rebase --continue  # 如果用 rebase
 
 # 5. 推送到远端
 git push origin feature/mywork --force-with-lease
-# ⚠️ force push 会更新 PR 的提交历史，但 Review 评论会保留
+# force push 会更新 PR 的提交历史，但 Review 评论会保留
 ```
 
 ```bash
@@ -422,11 +422,11 @@ numberOfReviewers: 2
 # PR 合并前必须通过的检查（在 Branch Protection 中配置）
 #
 # 常见集成（通过 GitHub Marketplace Apps）：
-# ✅ GitHub Actions CI/CD
-# ✅ Codecov（代码覆盖率）
-# ✅ SonarCloud（代码质量门禁）
-# ✅ Netlify / Vercel（预览部署）
-# ✅ Renovate / Dependabot（依赖更新）
+# ✓ GitHub Actions CI/CD
+# ✓ Codecov（代码覆盖率）
+# ✓ SonarCloud（代码质量门禁）
+# ✓ Netlify / Vercel（预览部署）
+# ✓ Renovate / Dependabot（依赖更新）
 ```
 
 ---

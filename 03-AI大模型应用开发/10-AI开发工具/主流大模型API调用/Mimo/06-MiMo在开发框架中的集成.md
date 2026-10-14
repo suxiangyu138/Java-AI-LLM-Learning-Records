@@ -1,6 +1,6 @@
 # 06 - MiMo 在开发框架中的集成
 
-> 🎯 MiMo 兼容 OpenAI 协议 = 所有主流框架零成本接入 — LangChain4j、Spring AI、Python LangChain、OpenClaw 全部改 baseUrl 即用。1M 上下文让"整库加载"成为框架级能力
+> MiMo 兼容 OpenAI 协议 = 所有主流框架零成本接入 — LangChain4j、Spring AI、Python LangChain、OpenClaw 全部改 baseUrl 即用。1M 上下文让"整库加载"成为框架级能力
 
 ---
 
@@ -145,10 +145,10 @@ print(response.content)
 }
 ```
 
-> 💡 **OpenClaw + MiMo 的组合优势：** OpenClaw 长链路 Agent 的上下文管理 + MiMo 的 1M 窗口（整库加载）+ 缓存命中极低价（¥0.025/百万）— 长链路 Agent 的成本最优解之一。
+> **OpenClaw + MiMo 的组合优势：** OpenClaw 长链路 Agent 的上下文管理 + MiMo 的 1M 窗口（整库加载）+ 缓存命中极低价（¥0.025/百万）— 长链路 Agent 的成本最优解之一。
 
 ---
 
-> 🎯 **核心要点**：MiMo 集成一句话 — **"OpenAI 兼容 = 所有框架零成本接入"**。所有框架只需改 `baseUrl`（api.xiaomimimo.com/v1）+ `model`（MiMo-V2.5-Pro）。杀手级用法：1M 上下文的框架级"直接整库加载" — 无需 RAG 基础设施，长文档/代码库场景框架代码最简。
+> **核心要点**：MiMo 集成一句话 — **"OpenAI 兼容 = 所有框架零成本接入"**。所有框架只需改 `baseUrl`（api.xiaomimimo.com/v1）+ `model`（MiMo-V2.5-Pro）。杀手级用法：1M 上下文的框架级"直接整库加载" — 无需 RAG 基础设施，长文档/代码库场景框架代码最简。
 
 **下一模块**：[07-MiMo选型与生态对比](07-MiMo选型与生态对比.md) / **返回总览**：[00-总览](00-Mimo-API知识体系总览.md)

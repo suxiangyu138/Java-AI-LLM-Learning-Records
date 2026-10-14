@@ -1,6 +1,6 @@
 # 04 - Grok API 开发实战
 
-> 🎯 Grok API 完全兼容 OpenAI 协议 — 改 base_url 即用。本章覆盖快速接入、对话/流式、函数调用、实时搜索工具、价格与免费额度
+> Grok API 完全兼容 OpenAI 协议 — 改 base_url 即用。本章覆盖快速接入、对话/流式、函数调用、实时搜索工具、价格与免费额度
 
 ---
 
@@ -36,7 +36,7 @@ response = client.chat.completions.create(
 print(response.choices[0].message.content)
 ```
 
-> 💡 也可通过聚合网关 `https://api.ofox.ai/v1` 一个 Key 访问 Grok/Claude/GPT 等 100+ 模型。
+> 也可通过聚合网关 `https://api.ofox.ai/v1` 一个 Key 访问 Grok/Claude/GPT 等 100+ 模型。
 
 ---
 
@@ -185,6 +185,6 @@ print(estimate_cost("grok-4-1-fast", 100_000, 20_000))  # ≈ $0.03/天
 
 ---
 
-> 🎯 **核心要点**：Grok API 三件事 — **① OpenAI 兼容（base_url: api.x.ai/v1）② 函数调用同构（改两行配置即用）③ 独家 X 搜索工具（舆情监控/实时分析）**。省钱秘诀：2M 超长文档用 4.1 Fast（$0.20），比 DeepSeek 同级还低。
+> **核心要点**：Grok API 三件事 — **① OpenAI 兼容（base_url: api.x.ai/v1）② 函数调用同构（改两行配置即用）③ 独家 X 搜索工具（舆情监控/实时分析）**。省钱秘诀：2M 超长文档用 4.1 Fast（$0.20），比 DeepSeek 同级还低。
 
 **下一模块**：[05-Grok多智能体与Agent能力](05-Grok多智能体与Agent能力.md) / **返回总览**：[00-总览](00-Grok-API知识体系总览.md)

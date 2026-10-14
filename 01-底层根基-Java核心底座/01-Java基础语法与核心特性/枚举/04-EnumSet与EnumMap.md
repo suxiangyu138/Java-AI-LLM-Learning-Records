@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [EnumSet：位向量实现的集合](#1-enumset位向量实现的集合)
 2. [EnumSet 的操作与组合](#2-enumset-的操作与组合)
@@ -39,7 +39,7 @@ EnumSet<Day> workdays = EnumSet.range(Day.MONDAY, Day.FRIDAY);  // 连续范围
 EnumSet<Day> complement = EnumSet.complementOf(weekend);         // 补集
 ```
 
-> 🎯 **核心要点**：EnumSet = "**枚举集合的位向量优化**"——**枚举序（ordinal）即 bit 位**，所有操作降维为位运算；创建只能用静态工厂（无 public 构造器）。
+> **核心要点**：EnumSet = "**枚举集合的位向量优化**"——**枚举序（ordinal）即 bit 位**，所有操作降维为位运算；创建只能用静态工厂（无 public 构造器）。
 
 ---
 
@@ -76,7 +76,7 @@ public Set<Day> getAvailableDays() {
 }
 ```
 
-> 🎯 **核心要点**：EnumSet 的集合运算 = "**位运算级性能**"（并/交/差都是 `|` `&` `&~`）——**API 与 Set 完全一致**（零学习成本），性能与内存是白送的优化。
+> **核心要点**：EnumSet 的集合运算 = "**位运算级性能**"（并/交/差都是 `|` `&` `&~`）——**API 与 Set 完全一致**（零学习成本），性能与内存是白送的优化。
 
 ---
 
@@ -111,9 +111,9 @@ Map<Day, String> fromMap = new EnumMap<>(existingMap);
 | get/put | **O(1) 数组下标** | O(1) 哈希（有计算） |
 | 迭代顺序 | 枚举声明序（确定） | 无保证 |
 | 内存 | 极低（无 Node 对象） | 高（Node + 哈希结构） |
-| null 键 | ❌ 禁止 | ✅ 允许 |
+| null 键 | ✗ 禁止 | ✓ 允许 |
 
-> 🎯 **核心要点**：EnumMap = "**枚举键的数组映射**"——**键的枚举序即数组下标**（O(1) 且无哈希开销）；迭代顺序天然是枚举声明序（确定性）；**枚举键场景无脑用 EnumMap**。
+> **核心要点**：EnumMap = "**枚举键的数组映射**"——**键的枚举序即数组下标**（O(1) 且无哈希开销）；迭代顺序天然是枚举声明序（确定性）；**枚举键场景无脑用 EnumMap**。
 
 ---
 
@@ -140,7 +140,7 @@ HashMap：hash + 桶 + 节点对象访问
 EnumMap：array[ordinal]（一次内存访问，无计算）
 ```
 
-> 🎯 **核心要点**：性能对比结论 = "**枚举集合用 Enum 家族，别用 Hash 家族**"——**快 5-10 倍 + 内存少 30 倍**是"位运算 vs 哈希"的物理差距；选择零成本（API 相同），性能白赚。
+> **核心要点**：性能对比结论 = "**枚举集合用 Enum 家族，别用 Hash 家族**"——**快 5-10 倍 + 内存少 30 倍**是"位运算 vs 哈希"的物理差距；选择零成本（API 相同），性能白赚。
 
 ---
 
@@ -178,7 +178,7 @@ handlers.put(OrderStatus.PAID, new PaidHandler());
 // 使用：handlers.get(status).handle(order)  ← 数组下标级查找
 ```
 
-> 🎯 **核心要点**：典型场景 = "**权限组合（位标记）+ 状态集合（快速 contains）+ 处理器注册表（EnumMap）**"——**"有限状态 + 组合/查询/映射"三件事全是枚举集合的主场**。
+> **核心要点**：典型场景 = "**权限组合（位标记）+ 状态集合（快速 contains）+ 处理器注册表（EnumMap）**"——**"有限状态 + 组合/查询/映射"三件事全是枚举集合的主场**。
 
 ---
 
@@ -199,7 +199,7 @@ handlers.put(OrderStatus.PAID, new PaidHandler());
 public Set<Day> getDays() { return EnumSet.noneOf(Day.class); }   // 返回接口
 ```
 
-> 🎯 **核心要点**：边界 = "**枚举专属 + 静态工厂 + 禁 null 键/元素 + 声明序迭代**"——**声明返回类型用 Set/Map 接口**（内部实现可换 JumboEnumSet 等）；并发场景按需同步。
+> **核心要点**：边界 = "**枚举专属 + 静态工厂 + 禁 null 键/元素 + 声明序迭代**"——**声明返回类型用 Set/Map 接口**（内部实现可换 JumboEnumSet 等）；并发场景按需同步。
 
 ---
 

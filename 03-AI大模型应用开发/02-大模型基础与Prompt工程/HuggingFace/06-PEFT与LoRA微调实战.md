@@ -1,7 +1,7 @@
 # 06 PEFT 与 LoRA 微调实战
 > 单卡微调大模型的标准姿势：LoRA/QLoRA 原理、PEFT 集成、训练与合并全流程
 
-## 📚 目录
+## 目录
 1. [为什么 LoRA 是 2026 微调默认](#1-为什么-lora-是-2026-微调默认)
 2. [LoRA 原理与超参数](#2-lora-原理与超参数)
 3. [QLoRA：4bit + LoRA 单卡微调](#3-qlora4bit--lora-单卡微调)
@@ -35,7 +35,7 @@ QLoRA = 原权重 4bit 量化 + LoRA 适配层（bf16）
   → 显存省 70% 的同时还能微调
 ```
 
-> 🎯 **核心要点**：LoRA = "**冻结大模型，训练小补丁**"——效果接近全量、成本低两个量级、切换任务零成本（换 adapter 文件即可，模型本体不动）。**2026 年微调 7B+ 模型的默认选择，没有之一**。
+> **核心要点**：LoRA = "**冻结大模型，训练小补丁**"——效果接近全量、成本低两个量级、切换任务零成本（换 adapter 文件即可，模型本体不动）。**2026 年微调 7B+ 模型的默认选择，没有之一**。
 
 ## 2. LoRA 原理与超参数
 
@@ -65,7 +65,7 @@ model.print_trainable_parameters()
 | `target_modules` | 挂载层 | 注意力全部 + MLP（Qwen/LLaMA 标准集） |
 | `task_type` | 任务类型 | CAUSAL_LM（对话）/ SEQ2SEQ / 其他 |
 
-> 💡 `r` 不是越大越好：**r=64 与 r=8 效果差异通常 <2%，但参数量差 8 倍**。先 r=16 起步，效果不够再加大；target_modules 少挂 MLP 层可省显存（掉一点点效果）。
+> `r` 不是越大越好：**r=64 与 r=8 效果差异通常 <2%，但参数量差 8 倍**。先 r=16 起步，效果不够再加大；target_modules 少挂 MLP 层可省显存（掉一点点效果）。
 
 ## 3. QLoRA：4bit + LoRA 单卡微调
 
@@ -103,7 +103,7 @@ training_args = TrainingArguments(
     output_dir="./qlora-out",
     per_device_train_batch_size=2,     # 显存紧张就 1-2
     gradient_accumulation_steps=8,     # 等效 batch 16-32
-    learning_rate=1e-4,                # ⭐ LoRA 用 1e-4 量级（比全量高）
+    learning_rate=1e-4,                # ★ LoRA 用 1e-4 量级（比全量高）
     bf16=True,
     logging_steps=10,
     save_steps=500, save_total_limit=3,
@@ -122,7 +122,7 @@ trainer.train()
 | 冻结 | get_peft_model 自动冻结原模型（只训 0.1%） |
 | v5 兼容 | 量化一等公民，QLoRA 是标准路径 |
 
-> 🎯 **核心要点**：QLoRA = **"10GB 显存微调 7B、24G 卡微调 13B"**——笔记本/单卡工作站就能干 2022 年需要多卡集群的活。学习率记住：**全量 2e-5、LoRA 1e-4**。
+> **核心要点**：QLoRA = **"10GB 显存微调 7B、24G 卡微调 13B"**——笔记本/单卡工作站就能干 2022 年需要多卡集群的活。学习率记住：**全量 2e-5、LoRA 1e-4**。
 
 ## 4. PEFT 与 Trainer 集成
 
@@ -160,7 +160,7 @@ model = PeftModel.from_pretrained(base, "./lora-adapter")
 | 合并导出 | 需要时把适配器合进底座（§5） |
 | 训练/推理同构 | 加载/保存/切换 API 一致 |
 
-> 💡 **适配器即产品**：LoRA 产物就是一个小文件——分发/版本/AB 试验都围绕 adapter 做，底座模型人人共享一份。这是 PEFT 生态的商业模式（HF 上大量 adapter 共享）。
+> **适配器即产品**：LoRA 产物就是一个小文件——分发/版本/AB 试验都围绕 adapter 做，底座模型人人共享一份。这是 PEFT 生态的商业模式（HF 上大量 adapter 共享）。
 
 ## 5. 训练完成：合并与导出
 
@@ -176,7 +176,7 @@ base = AutoModelForCausalLM.from_pretrained(
     "Qwen/Qwen2.5-7B-Instruct", torch_dtype=torch.bfloat16, device_map="cpu")
 model = PeftModel.from_pretrained(base, "./lora-adapter")
 
-merged = model.merge_and_unload()          # ⭐ 合并适配层 → 完整权重
+merged = model.merge_and_unload()          # ★ 合并适配层 → 完整权重
 merged.save_pretrained("./qwen-cs-full")   # 14GB 完整模型
 tokenizer.save_pretrained("./qwen-cs-full")
 
@@ -190,7 +190,7 @@ tokenizer.save_pretrained("./qwen-cs-full")
 | 部署推理 | 合并成完整模型 | 无 peft 依赖、推理略快 |
 | 对比实验 | 各 adapter 独立 | 同一底座多版本 |
 
-> ⚠️ 合并注意：**合并后权重变成"底座 + 增量"的完整 bf16 模型**（显存回到原大小）；合并过程在 CPU 做（省显存）；合并结果要重新跑一遍冒烟测试（推理质量确认）。
+> 合并注意：**合并后权重变成"底座 + 增量"的完整 bf16 模型**（显存回到原大小）；合并过程在 CPU 做（省显存）；合并结果要重新跑一遍冒烟测试（推理质量确认）。
 
 ## 6. 实战案例：Qwen 客服模型微调
 
@@ -215,7 +215,7 @@ after  = merged_model.generate("用户说：货还没到，很生气") # 客服�
 
 **验收标准**：微调后模型在该领域回答的**语气/格式/专有名词**明显贴合训练数据；通用能力不应大幅退化（回测 MMLU 等基准，LoRA 通常退化 <1-2%）。
 
-> 🎯 **核心要点**：完整实战闭环 = **数据 → QLoRA 训练 → 评估对比 → 合并部署**。别跳过"微调前 vs 微调后"的对比验收——**微调失败（数据问题）最常见信号就是"训完没变化"或"通用能力崩了"**。
+> **核心要点**：完整实战闭环 = **数据 → QLoRA 训练 → 评估对比 → 合并部署**。别跳过"微调前 vs 微调后"的对比验收——**微调失败（数据问题）最常见信号就是"训完没变化"或"通用能力崩了"**。
 
 ## 7. LoRA 调参与常见坑
 

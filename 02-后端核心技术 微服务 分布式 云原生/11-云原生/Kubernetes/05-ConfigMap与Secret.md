@@ -1,5 +1,5 @@
 # 05-ConfigMap与Secret
-> 🎯 配置与代码分离是云原生的第一原则 — 掌握ConfigMap（非敏感配置）和Secret（敏感配置）的创建、挂载、热更新，让SpringBoot在K8s中灵活切换环境
+> 配置与代码分离是云原生的第一原则 — 掌握ConfigMap（非敏感配置）和Secret（敏感配置）的创建、挂载、热更新，让SpringBoot在K8s中灵活切换环境
 
 ---
 
@@ -18,11 +18,11 @@
 | 维度 | ConfigMap | Secret |
 |------|-----------|--------|
 | 用途 | 非敏感配置 | 敏感信息（密码/Token/证书） |
-| 存储方式 | 明文存储 | Base64编码（⚠️ 非加密！） |
+| 存储方式 | 明文存储 | Base64编码（非加密！） |
 | 大小限制 | 1MB | 1MB |
 | 典型内容 | application.yml、nginx.conf | DB密码、API Key、TLS证书 |
 
-> ⚠️ Secret只是Base64编码，**不是加密**！`echo "root123" | base64` ≈ `cm9vdDEyMwo=`，任何人都能解码。生产环境需配合K8s加密插件或Vault。
+> Secret只是Base64编码，**不是加密**！`echo "root123" | base64` ≈ `cm9vdDEyMwo=`，任何人都能解码。生产环境需配合K8s加密插件或Vault。
 
 ---
 
@@ -176,9 +176,9 @@ spec:
 
 | 方式 | 适用 | 热更新 | 注意 |
 |------|------|:---:|------|
-| 环境变量 | 简单KV配置 | ❌ 需重启Pod | 无法更新已运行的进程 |
-| Volume挂载 | 配置文件 | ✅ 自动同步(~1min) | SpringBoot需要`@RefreshScope`或`spring.cloud.kubernetes.reload` |
-| SubPath挂载 | 替换已有文件 | ❌ | 不覆盖整个目录 |
+| 环境变量 | 简单KV配置 | ✗ 需重启Pod | 无法更新已运行的进程 |
+| Volume挂载 | 配置文件 | ✓ 自动同步(~1min) | SpringBoot需要`@RefreshScope`或`spring.cloud.kubernetes.reload` |
+| SubPath挂载 | 替换已有文件 | ✗ | 不覆盖整个目录 |
 
 ---
 
@@ -258,4 +258,4 @@ metadata:
 
 ---
 
-> 🎯 **K8s配置管理核心原则**：凡是不敏感的→ConfigMap；凡是密码/Token/证书→Secret；凡是运行环境特有的→K8s管理；凡是通用的→JAR内默认值。
+> **K8s配置管理核心原则**：凡是不敏感的→ConfigMap；凡是密码/Token/证书→Secret；凡是运行环境特有的→K8s管理；凡是通用的→JAR内默认值。

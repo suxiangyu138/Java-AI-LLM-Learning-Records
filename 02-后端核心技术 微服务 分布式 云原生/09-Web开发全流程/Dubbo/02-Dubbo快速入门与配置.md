@@ -1,13 +1,13 @@
 # 02 - Dubbo 快速入门与配置
 
-> 🎯 从 XML 到注解、从 API 到 Spring Boot Starter — 三种方式接入 Dubbo，跑通第一个 Provider-Consumer 调用
+> 从 XML 到注解、从 API 到 Spring Boot Starter — 三种方式接入 Dubbo，跑通第一个 Provider-Consumer 调用
 
 ---
 
 ## 目录
 
 1. [环境准备](#1-环境准备)
-2. [Spring Boot Starter 方式（⭐ 推荐）](#2-spring-boot-starter-方式-推荐)
+2. [Spring Boot Starter 方式（★ 推荐）](#2-spring-boot-starter-方式-推荐)
 3. [核心配置项](#3-核心配置项)
 4. [多协议暴露](#4-多协议暴露)
 5. [多注册中心](#5-多注册中心)
@@ -41,7 +41,7 @@
 
 ---
 
-## 2. Spring Boot Starter 方式（⭐ 推荐）
+## 2. Spring Boot Starter 方式（★ 推荐）
 
 ### 2.1 公共 API 模块
 
@@ -53,7 +53,7 @@ public interface UserService {
 }
 
 @Data
-public class User implements Serializable {   // ⚠️ 必须序列化
+public class User implements Serializable {   // 必须序列化
     private Long id;
     private String name;
     private Integer age;
@@ -87,7 +87,7 @@ dubbo:
 ```
 
 ```java
-@DubboService   // ⭐ Dubbo 3.x 注解，替代 @Service
+@DubboService   // ★ Dubbo 3.x 注解，替代 @Service
 public class UserServiceImpl implements UserService {
     @Override
     public User getUser(Long id) {
@@ -119,7 +119,7 @@ dubbo:
 @RestController
 public class UserController {
 
-    @DubboReference   // ⭐ Dubbo 3.x 注解，替代 @Reference
+    @DubboReference   // ★ Dubbo 3.x 注解，替代 @Reference
     private UserService userService;
 
     @GetMapping("/user/{id}")
@@ -206,4 +206,4 @@ dubbo:
 public class UserServiceImpl implements UserService { }
 ```
 
-> 🎯 **最佳实践**：新项目统一用 `@DubboService` + `@DubboReference`（Dubbo 3.x 标准注解），配置文件用 YAML，注册中心优先 Nacos（注册+配置二合一）。
+> **最佳实践**：新项目统一用 `@DubboService` + `@DubboReference`（Dubbo 3.x 标准注解），配置文件用 YAML，注册中心优先 Nacos（注册+配置二合一）。

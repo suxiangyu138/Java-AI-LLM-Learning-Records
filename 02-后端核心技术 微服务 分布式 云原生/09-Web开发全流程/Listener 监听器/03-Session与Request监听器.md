@@ -1,7 +1,7 @@
 # 03-Session 与 Request 监听器
 > 会话创建/销毁监听（在线统计）、请求监听（访问日志）、属性监听（数据变化）——"监听器的高频业务场景"
 
-## 📚 目录
+## 目录
 1. [HttpSessionListener：在线人数统计](#1-httpsessionlistener在线人数统计)
 2. [会话销毁的触发时机](#2-会话销毁的触发时机)
 3. [ServletRequestListener：访问日志](#3-servletrequestlistener访问日志)
@@ -43,7 +43,7 @@ public class OnlineUserListener implements HttpSessionListener {
 在线人数：<%= application.getAttribute("onlineCount") %>
 ```
 
-> 🎯 **在线统计的原理**：**会话创建 +1、销毁 -1**——但注意"会话 ≠ 在线用户"（同一用户多个会话）；精确统计需结合用户维度（见第 5 节）。
+> **在线统计的原理**：**会话创建 +1、销毁 -1**——但注意"会话 ≠ 在线用户"（同一用户多个会话）；精确统计需结合用户维度（见第 5 节）。
 
 ## 2. 会话销毁的触发时机
 
@@ -53,17 +53,17 @@ sessionDestroyed 触发时机：
   ② 主动失效：session.invalidate()（登出）
   ③ 服务器关闭：全部会话销毁
 
-⚠️ 不触发：浏览器关闭（只删 Cookie，服务器 Session 等超时）
+不触发：浏览器关闭（只删 Cookie，服务器 Session 等超时）
 ```
 
 | 销毁方式 | 触发监听 | 场景 |
 |----------|:---:|------|
-| 超时 | ✅ | 自然过期 |
-| invalidate（登出） | ✅ | 主动登出 |
-| 浏览器关闭 | ❌（等超时） | 需等待 |
-| 服务器关闭 | ✅ | 全量销毁 |
+| 超时 | ✓ | 自然过期 |
+| invalidate（登出） | ✓ | 主动登出 |
+| 浏览器关闭 | ✗（等超时） | 需等待 |
+| 服务器关闭 | ✓ | 全量销毁 |
 
-> ⚠️ **在线统计的误差来源**：浏览器关闭不立即触发销毁——在线数会"虚高"直到超时；**会话超时时间越长，统计越滞后**（联动 [会话体系](../Cookie%20%26%20Session（会话技术）/00-会话技术总览.md)）。
+> **在线统计的误差来源**：浏览器关闭不立即触发销毁——在线数会"虚高"直到超时；**会话超时时间越长，统计越滞后**（联动 [会话体系](../Cookie%20%26%20Session（会话技术）/00-会话技术总览.md)）。
 
 ## 3. ServletRequestListener：访问日志
 
@@ -98,7 +98,7 @@ public class AccessLogListener implements ServletRequestListener {
 | 请求计数 | QPS 统计 |
 | 资源清理 | 请求结束清理（ThreadLocal 等） |
 
-> 💡 **Listener vs Filter 做日志**：RequestListener 是"容器事件级"（更底层）；Filter 能控制放行——**日志统计用哪个都行，Filter 更常用**（可结合拦截逻辑）。
+> **Listener vs Filter 做日志**：RequestListener 是"容器事件级"（更底层）；Filter 能控制放行——**日志统计用哪个都行，Filter 更常用**（可结合拦截逻辑）。
 
 ## 4. 属性监听器：数据变化感知
 
@@ -137,7 +137,7 @@ public class LoginAttrListener implements HttpSessionAttributeListener {
 | 审计 | 属性变化记录 |
 | 同步 | 属性变化触发其他动作 |
 
-> 🎯 **属性监听的经典用途**：**监听 Session 的 user 属性变化实现"登录/登出事件"**——传统 JavaWeb 的"登录事件"机制（Spring Security 有更完善方案）。
+> **属性监听的经典用途**：**监听 Session 的 user 属性变化实现"登录/登出事件"**——传统 JavaWeb 的"登录事件"机制（Spring Security 有更完善方案）。
 
 ## 5. 综合实战：在线用户管理
 
@@ -182,11 +182,11 @@ public class OnlineUserListener
 }
 ```
 
-> ⚠️ **并发安全**：全局在线列表必须用 `ConcurrentHashMap`（多会话并发登录）——Listener 是并发回调，共享数据线程安全是必修课。
+> **并发安全**：全局在线列表必须用 `ConcurrentHashMap`（多会话并发登录）——Listener 是并发回调，共享数据线程安全是必修课。
 
 ## 6. 核心要点
 
-> 🎯 **核心要点**：
+> **核心要点**：
 > - HttpSessionListener：在线统计（创建 +1、销毁 -1）——注意"会话≠用户"与统计滞后；
 > - 销毁时机：超时/invalidate/服务器关闭；**浏览器关闭不立即触发**；
 > - ServletRequestListener：访问日志/耗时（比 Filter 更底层）；

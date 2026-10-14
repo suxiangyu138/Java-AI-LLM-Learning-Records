@@ -2,7 +2,7 @@
 
 > SDK 的运行三件套：Agent 定义"做什么"（指令+工具+护栏）、Runner 决定"怎么跑"（循环+流式+追踪）、工具提供"能做什么"（函数/MCP/子 Agent）。
 
-## 📚 目录
+## 目录
 
 1. [核心组件总览](#1-核心组件总览)
 2. [Agent：指令 + 工具 + 护栏](#2-agent指令--工具--护栏)
@@ -105,7 +105,7 @@ result = Runner.run_sync(
 )
 ```
 
-> ⚠️ 托管循环不设上限 = 无底洞——max_turns 是 SDK 的第一生产纪律。
+> 托管循环不设上限 = 无底洞——max_turns 是 SDK 的第一生产纪律。
 
 ## 4. 工具：三类形态
 
@@ -244,7 +244,7 @@ session = 对话状态（跨运行持久化）
 | "context 会持久化" | 每次运行传入（不持久） |
 | "max_turns 可省" | 生产必设（第一纪律） |
 
-> 🎯 核心要点：Agent 定义（指令/工具/护栏/交接）+ Runner 托管（循环/工具/流式/追踪）+ 工具三形态（@tool/MCP/子 Agent）；循环机制 = Function Calling 的托管版；终止三方式（自然/max_turns/tripwire）；max_turns 是第一生产纪律；context（应用级，不持久）vs session（对话级，持久化）要分清；RunResult 的 last_response_id 是会话续接关键。
+> 核心要点：Agent 定义（指令/工具/护栏/交接）+ Runner 托管（循环/工具/流式/追踪）+ 工具三形态（@tool/MCP/子 Agent）；循环机制 = Function Calling 的托管版；终止三方式（自然/max_turns/tripwire）；max_turns 是第一生产纪律；context（应用级，不持久）vs session（对话级，持久化）要分清；RunResult 的 last_response_id 是会话续接关键。
 
 ---
 

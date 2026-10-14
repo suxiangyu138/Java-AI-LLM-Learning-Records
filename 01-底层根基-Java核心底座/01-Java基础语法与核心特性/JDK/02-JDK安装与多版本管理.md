@@ -2,7 +2,7 @@
 
 > 一台机器装5个JDK版本是后端开发的日常——掌握多版本管理，告别"在我电脑上能跑"
 
-## 📚 目录
+## 目录
 
 1. [Windows 安装详解](#1-windows-安装详解)
 2. [macOS 安装详解](#2-macos-安装详解)
@@ -28,7 +28,7 @@
 | Amazon Corretto | https://aws.amazon.com/corretto/ | AWS 长期支持版本 |
 | Azul Zulu | https://www.azul.com/downloads/ | 支持平台最多 |
 
-> 💡 **推荐选择**：开发环境优先使用 **Eclipse Temurin (Adoptium)** 或 **Amazon Corretto**，生产环境使用对应云厂商的JDK构建。
+> **推荐选择**：开发环境优先使用 **Eclipse Temurin (Adoptium)** 或 **Amazon Corretto**，生产环境使用对应云厂商的JDK构建。
 
 **安装步骤：**
 
@@ -62,7 +62,7 @@ echo %JAVA_HOME%
 4. 系统变量 → 新建 → 变量名: CLASSPATH → 变量值: .;%JAVA_HOME%\lib\dt.jar;%JAVA_HOME%\lib\tools.jar
 ```
 
-> ⚠️ **权限问题**：如果遇到 "拒绝访问" 或无法保存环境变量，请以管理员身份运行。修改系统变量需要管理员权限，修改用户变量则不需要。
+> **权限问题**：如果遇到 "拒绝访问" 或无法保存环境变量，请以管理员身份运行。修改系统变量需要管理员权限，修改用户变量则不需要。
 
 ### 1.2 使用 Chocolatey 包管理器安装
 
@@ -85,7 +85,7 @@ choco list --local-only
 choco uninstall temurin17
 ```
 
-> 💡 **Chocolatey 优势**：自动配置环境变量、自动处理依赖、版本切换方便。适合团队统一开发环境标准化。
+> **Chocolatey 优势**：自动配置环境变量、自动处理依赖、版本切换方便。适合团队统一开发环境标准化。
 
 ### 1.3 Windows 安装常见问题
 
@@ -98,7 +98,7 @@ choco uninstall temurin17
 | 无法安装 .msi | 权限不足 | 右键 → 以管理员身份运行 |
 | javac 找不到但 java 可以 | 只配置了 JRE 而非 JDK | 安装完整 JDK，重新配置 JAVA_HOME |
 
-> ⚠️ **Windows 路径优先级**：系统变量 Path > 用户变量 Path。如果系统变量中有 Oracle Java 路径（如 `C:\Program Files\Common Files\Oracle\Java\javapath`），它会被最先搜索到。解决方法：将 `%JAVA_HOME%\bin` 移到 Path 最顶部，或删除 Oracle 自动添加的路径。
+> **Windows 路径优先级**：系统变量 Path > 用户变量 Path。如果系统变量中有 Oracle Java 路径（如 `C:\Program Files\Common Files\Oracle\Java\javapath`），它会被最先搜索到。解决方法：将 `%JAVA_HOME%\bin` 移到 Path 最顶部，或删除 Oracle 自动添加的路径。
 
 ---
 
@@ -164,7 +164,7 @@ source ~/.zshrc
 export JAVA_HOME=$(/usr/libexec/java_home -v 17)
 ```
 
-> 💡 `java_home` 是 macOS 独有的 JDK 路径查询工具，它会扫描 `/Library/Java/JavaVirtualMachines/` 目录下的所有 JDK，按版本号排序返回最匹配的路径。
+> `java_home` 是 macOS 独有的 JDK 路径查询工具，它会扫描 `/Library/Java/JavaVirtualMachines/` 目录下的所有 JDK，按版本号排序返回最匹配的路径。
 
 ### 2.4 macOS 常见问题
 
@@ -175,7 +175,7 @@ export JAVA_HOME=$(/usr/libexec/java_home -v 17)
 | macOS 升级后 Java 不可用 | 系统更新删除了 JDK 符号链接 | 重新安装 JDK 或重建符号链接 |
 | Apple Silicon (M1/M2/M3) 兼容性 | ARM 架构 JDK 支持不足 | 使用 Azul Zulu 或 Adoptium 的 ARM 版本；Rosetta 2 可运行 x86 JDK |
 
-> ⚠️ **macOS 安全提示**：如果安装后提示 "无法验证开发者"，请前往 **系统设置 → 隐私与安全性 → 仍要打开**，或使用 `sudo spctl --master-disable` 临时关闭 Gatekeeper（不推荐长期关闭）。
+> **macOS 安全提示**：如果安装后提示 "无法验证开发者"，请前往 **系统设置 → 隐私与安全性 → 仍要打开**，或使用 `sudo spctl --master-disable` 临时关闭 Gatekeeper（不推荐长期关闭）。
 
 ---
 
@@ -249,7 +249,7 @@ sudo update-alternatives --set javac /usr/lib/jvm/java-17-openjdk-amd64/bin/java
 update-alternatives --display java
 ```
 
-> ⚠️ **重要提示**：`update-alternatives` 管理的只是符号链接。如果需要全面切换 JDK，还需要同步更新 `JAVA_HOME` 环境变量。建议配合 `~/.bashrc` 中的别名使用。
+> **重要提示**：`update-alternatives` 管理的只是符号链接。如果需要全面切换 JDK，还需要同步更新 `JAVA_HOME` 环境变量。建议配合 `~/.bashrc` 中的别名使用。
 
 ### 3.4 服务器无 GUI 安装最佳实践
 
@@ -281,7 +281,7 @@ FROM amazoncorretto:17-alpine
 | JDK 8 Headless | openjdk-8-jdk-headless | java-1.8.0-openjdk-headless | 120 MB |
 | JDK 17 Headless | openjdk-17-jdk-headless | java-17-openjdk-headless | 150 MB |
 
-> 💡 **服务器推荐**：生产环境使用 **Headless** 版本（无 GUI 依赖），配合 **Docker** 容器化部署。使用 `jlink` 定制最小 JRE 可将镜像体积进一步缩减至 40-60 MB。
+> **服务器推荐**：生产环境使用 **Headless** 版本（无 GUI 依赖），配合 **Docker** 容器化部署。使用 `jlink` 定制最小 JRE 可将镜像体积进一步缩减至 40-60 MB。
 
 ---
 
@@ -353,7 +353,7 @@ sdk env init    # 创建 .sdkmanrc 文件
 sdk config  # 设置 sdkman_auto_env=true
 ```
 
-> 💡 **SDKMAN! 优势**：自动管理 PATH 和 JAVA_HOME，无需手动配置；支持 40+ 种 JDK 发行版；支持项目级版本自动切换；还可管理 Maven/Gradle/Grails 等工具。
+> **SDKMAN! 优势**：自动管理 PATH 和 JAVA_HOME，无需手动配置；支持 40+ 种 JDK 发行版；支持项目级版本自动切换；还可管理 Maven/Gradle/Grails 等工具。
 
 ### 4.2 jEnv（按项目自动切换 JDK 版本）
 
@@ -395,7 +395,7 @@ cat .java-version  # 内容：17.0
 | 当前 shell | `jenv shell 11.0` | 中 |
 | 项目目录 | `jenv local 17.0` | 最高 |
 
-> ⚠️ **jEnv 注意点**：jEnv 管理的仅仅是 JAVA_HOME，不会安装 JDK 本身，需要提前通过 brew 或其他方式安装 JDK。某些场景下需要启用 `jenv enable-plugin export` 来确保 JAVA_HOME 变量被正确设置。
+> **jEnv 注意点**：jEnv 管理的仅仅是 JAVA_HOME，不会安装 JDK 本身，需要提前通过 brew 或其他方式安装 JDK。某些场景下需要启用 `jenv enable-plugin export` 来确保 JAVA_HOME 变量被正确设置。
 
 ### 4.3 Windows 手动环境变量切换 + 批处理脚本
 
@@ -467,7 +467,7 @@ Write-Host "JDK 已切换至：$newHome" -ForegroundColor Green
 java -version
 ```
 
-> 💡 **Windows 最佳实践**：保留 JDK 安装包在特定目录（如 `C:\Java\`），通过修改 JAVA_HOME 和 Path 实现切换。配合 IDEA 的 Project SDK 功能，每个项目可独立指定 JDK。
+> **Windows 最佳实践**：保留 JDK 安装包在特定目录（如 `C:\Java\`），通过修改 JAVA_HOME 和 Path 实现切换。配合 IDEA 的 Project SDK 功能，每个项目可独立指定 JDK。
 
 ### 4.4 IntelliJ IDEA 多 JDK 配置
 
@@ -509,7 +509,7 @@ File → Settings → Build, Execution, Deployment → Build Tools → Maven
   → Runner → JRE
 ```
 
-> 💡 **多版本同时开发技巧**：在 IDEA 中同时打开多个项目，每个项目配置不同的 JDK。使用 `File → Settings → Build Tools → Gradle → Gradle JVM` 为 Gradle 守护进程指定独立的 JDK，避免与项目 JDK 冲突。
+> **多版本同时开发技巧**：在 IDEA 中同时打开多个项目，每个项目配置不同的 JDK。使用 `File → Settings → Build Tools → Gradle → Gradle JVM` 为 Gradle 守护进程指定独立的 JDK，避免与项目 JDK 冲突。
 
 ---
 
@@ -570,7 +570,7 @@ mvn clean compile -Dmaven.compiler.release=17 -Djava.home=C:\Java\jdk-17
 mvn clean compile -X
 ```
 
-> ⚠️ **source/target 陷阱**：设置 `source=8` 但运行时 JDK 版本包含了高版本 API，编译不会报错但运行时可能出错。推荐使用 `release` 参数（Java 9+），它同时限制了 API 调用。
+> **source/target 陷阱**：设置 `source=8` 但运行时 JDK 版本包含了高版本 API，编译不会报错但运行时可能出错。推荐使用 `release` 参数（Java 9+），它同时限制了 API 调用。
 
 ### 5.2 Gradle Java Toolchain
 
@@ -637,7 +637,7 @@ gradle -q javaToolchains
 #     | Is JDK: true
 ```
 
-> 💡 **Toolchain 优势**：项目内部声明式指定 JDK 版本，CI/CD 环境无需前置安装 JDK（Gradle 可以自动下载），团队成员无需手动切换本地 JDK。
+> **Toolchain 优势**：项目内部声明式指定 JDK 版本，CI/CD 环境无需前置安装 JDK（Gradle 可以自动下载），团队成员无需手动切换本地 JDK。
 
 ### 5.3 编译版本 vs 运行版本全景对比
 
@@ -657,7 +657,7 @@ javac -source 8 -target 8 -bootclasspath /path/to/jdk8/rt.jar MyApp.java
 javac --release 8 MyApp.java
 ```
 
-> 🎯 **核心要点**：开发环境使用 JDK 17+，生产环境使用 JDK 17 LTS 或 21 LTS。编译时指定 target 版本不高于运行时的 JVM 版本。推荐使用 Gradle Toolchain 或 Maven Toolchain 实现构建工具与 JDK 解耦。
+> **核心要点**：开发环境使用 JDK 17+，生产环境使用 JDK 17 LTS 或 21 LTS。编译时指定 target 版本不高于运行时的 JVM 版本。推荐使用 Gradle Toolchain 或 Maven Toolchain 实现构建工具与 JDK 解耦。
 
 ---
 
@@ -699,7 +699,7 @@ JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
 $JAVA_HOME/bin     # 推荐放在 PATH 最前面：export PATH=$JAVA_HOME/bin:$PATH
 ```
 
-> ⚠️ **PATH 顺序陷阱**：`PATH` 中 `%JAVA_HOME%\bin` 的位置决定了哪个 Java 被优先使用。如果系统自带 Java 的路径在你的配置之前，`java -version` 可能显示不期望的版本。**解决方案**：将 `%JAVA_HOME%\bin` 或 `$JAVA_HOME/bin` 置于 PATH 最前面。
+> **PATH 顺序陷阱**：`PATH` 中 `%JAVA_HOME%\bin` 的位置决定了哪个 Java 被优先使用。如果系统自带 Java 的路径在你的配置之前，`java -version` 可能显示不期望的版本。**解决方案**：将 `%JAVA_HOME%\bin` 或 `$JAVA_HOME/bin` 置于 PATH 最前面。
 
 **CLASSPATH：**
 
@@ -713,7 +713,7 @@ javac -cp lib/*:. MyApp.java
 java -cp lib/*:. MyApp
 ```
 
-> 💡 **为什么现代 Java 不推荐 CLASSPATH？** Java 5+ 支持 `-cp` 和 `-classpath` 参数，IDE 和构建工具（Maven/Gradle）自动管理 classpath。全局 CLASSPATH 反而容易导致版本冲突和类加载问题。**最佳实践**：不设置 `CLASSPATH` 系统变量，在项目中用构建工具管理依赖。
+> **为什么现代 Java 不推荐 CLASSPATH？** Java 5+ 支持 `-cp` 和 `-classpath` 参数，IDE 和构建工具（Maven/Gradle）自动管理 classpath。全局 CLASSPATH 反而容易导致版本冲突和类加载问题。**最佳实践**：不设置 `CLASSPATH` 系统变量，在项目中用构建工具管理依赖。
 
 ### 6.3 各操作系统环境变量配置对比
 
@@ -812,7 +812,7 @@ ls -la /usr/bin/java*   # macOS/Linux
 5. 运行 mvn -version / gradle -v → 确认构建工具自身 JDK
 ```
 
-> 🎯 **核心要点**：一台机器管理多个 JDK 版本的标准流程：
+> **核心要点**：一台机器管理多个 JDK 版本的标准流程：
 > 1. 使用 SDKMAN!（Mac/Linux）或手动批处理脚本（Windows）管理 JDK 安装和切换
 > 2. 构建工具使用 Gradle Toolchain 或 Maven Toolchain 声明式指定 JDK 版本
 > 3. IDE 中为每个项目独立配置 Project SDK

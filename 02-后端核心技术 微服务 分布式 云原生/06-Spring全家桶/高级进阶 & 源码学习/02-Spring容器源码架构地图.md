@@ -1,7 +1,7 @@
 # 02-Spring 容器源码架构地图
 > Spring 容器源码的"导航图"：BeanFactory 层级、ApplicationContext 体系、Environment/类型转换/资源加载的类图索引与入口速查
 
-## 📚 目录
+## 目录
 1. [地图怎么用](#1-地图怎么用)
 2. [BeanFactory 接口层级](#2-beanfactory-接口层级)
 3. [ApplicationContext 体系](#3-applicationcontext-体系)
@@ -20,7 +20,7 @@
 | 查归属 | 遇到"这个类是什么"→ 查接口层级定位 |
 | 配合深挖 | 机制细节（生命周期/循环依赖）→ 引用「Spring生态深度剖析」01~06 |
 
-> 💡 本文件是**索引不是教程**：每节给出类图骨架 + 关键方法 + 一句话职责，深读时用 IDEA 在对应类上打断点。
+> 本文件是**索引不是教程**：每节给出类图骨架 + 关键方法 + 一句话职责，深读时用 IDEA 在对应类上打断点。
 
 ## 2. BeanFactory 接口层级
 
@@ -43,7 +43,7 @@ BeanFactory（最底层：getBean/containsBean）
 | `AbstractAutowireCapableBeanFactory` | `createBean` → `doCreateBean` | **实例化三阶段**（构造/属性/初始化） |
 | `DefaultListableBeanFactory` | `preInstantiateSingletons` | 启动时预实例化入口 |
 
-> 🎯 **读法锚点**：面试"Spring 怎么创建 Bean"的源码路径 = `AbstractApplicationContext.refresh` → `finishBeanFactoryInitialization` → `DefaultListableBeanFactory.preInstantiateSingletons` → `AbstractAutowireCapableBeanFactory.doCreateBean`（详见「Spring生态深度剖析」01/03）。
+> **读法锚点**：面试"Spring 怎么创建 Bean"的源码路径 = `AbstractApplicationContext.refresh` → `finishBeanFactoryInitialization` → `DefaultListableBeanFactory.preInstantiateSingletons` → `AbstractAutowireCapableBeanFactory.doCreateBean`（详见「Spring生态深度剖析」01/03）。
 
 ## 3. ApplicationContext 体系
 
@@ -83,7 +83,7 @@ BeanDefinition（Bean 图纸：class/scope/lazy/initMethod/属性值...）
 | `@Import` | `ConfigurationClassParser` | 由 ImportSelector/Registrar 决定 |
 | 编程注册 | `BeanDefinitionRegistry` 直接调用 | GenericBeanDefinition |
 
-> 💡 **读法锚点**：三种注册路径汇聚到同一个 `DefaultListableBeanFactory`，这是"所有 Bean 都在一个注册表"的源码事实。
+> **读法锚点**：三种注册路径汇聚到同一个 `DefaultListableBeanFactory`，这是"所有 Bean 都在一个注册表"的源码事实。
 
 ## 5. Environment 与配置体系
 
@@ -107,7 +107,7 @@ Environment
 | `PropertySourcesPlaceholderConfigurer` | `${...}` 占位符解析（BeanFactoryPostProcessor） |
 | `ConfigDataEnvironmentPostProcessor` | Boot 加载 application.yml 的核心 |
 
-> ⚠️ 读配置优先级问题的正确姿势：断点打在 `PropertySourcesPropertyResolver.getProperty`，看 `propertySources` 的**顺序**——源码顺序即优先级。
+> 读配置优先级问题的正确姿势：断点打在 `PropertySourcesPropertyResolver.getProperty`，看 `propertySources` 的**顺序**——源码顺序即优先级。
 
 ## 6. 类型转换与 BeanWrapper
 
@@ -156,11 +156,11 @@ AbstractApplicationContext#refresh（7.0 版本，与 Boot 4 对齐）
 | ⑪ | 单例创建主战场（循环依赖在此解决） |
 | ⑫ | `ContextRefreshedEvent`（应用启动后事件） |
 
-> 💡 完整逐行分析见「Spring生态深度剖析」02/06；本文件只做**步骤索引**。
+> 完整逐行分析见「Spring生态深度剖析」02/06；本文件只做**步骤索引**。
 
 ## 8. 核心要点
 
-> 🎯 **核心要点**：
+> **核心要点**：
 > - 三张地图：BeanFactory 层级（能力）、ApplicationContext 体系（入口）、refresh 十二步（时序）；
 > - 所有 Bean 汇聚 `DefaultListableBeanFactory` 两个注册表（BeanDefinition + 单例）；
 > - 配置优先级 = `PropertySources` 列表顺序（断点看顺序）；

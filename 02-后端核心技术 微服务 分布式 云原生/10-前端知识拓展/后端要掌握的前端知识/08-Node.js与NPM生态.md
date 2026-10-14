@@ -1,5 +1,5 @@
 # 08-Node.js与NPM生态
-> 🎯 前端工程化的基石 — 理解Node.js运行时、NPM包管理、构建工具和脚手架，为什么前端项目需要"编译"才能运行
+> 前端工程化的基石 — 理解Node.js运行时、NPM包管理、构建工具和脚手架，为什么前端项目需要"编译"才能运行
 
 ---
 
@@ -26,9 +26,9 @@
   Vite      ≈ Maven/Gradle插件（构建工具）
 
 前端需要Node.js不是因为"前端用Node写服务"，而是因为：
-  ✅ 前端构建工具(Vite/Webpack)运行在Node.js上
-  ✅ 前端依赖管理通过NPM
-  ✅ 前端开发服务器(Vite dev server)基于Node.js
+  ✓ 前端构建工具(Vite/Webpack)运行在Node.js上
+  ✓ 前端依赖管理通过NPM
+  ✓ 前端开发服务器(Vite dev server)基于Node.js
 ```
 
 ### 1.2 Node.js版本管理
@@ -105,22 +105,22 @@ package-lock.json ≈ Maven的依赖树锁定文件
 前端开发：.vue/.js/.css → 构建工具(Vite) → .html/.js/.css → 放到CDN
 
 构建过程做了什么：
-  ✅ JS压缩(uglify)：变量名缩短、删除空格注释 → 文件更小
-  ✅ CSS处理：Sass/Less → CSS、自动加浏览器前缀
-  ✅ Tree Shaking：删除未使用的代码（类似ProGuard）
-  ✅ 代码分割：按路由拆分JS文件（按需加载）
-  ✅ Hot Module Replacement(HMR)：改代码浏览器自动刷新
+  ✓ JS压缩(uglify)：变量名缩短、删除空格注释 → 文件更小
+  ✓ CSS处理：Sass/Less → CSS、自动加浏览器前缀
+  ✓ Tree Shaking：删除未使用的代码（类似ProGuard）
+  ✓ 代码分割：按路由拆分JS文件（按需加载）
+  ✓ Hot Module Replacement(HMR)：改代码浏览器自动刷新
 ```
 
 ### 3.2 Vite vs Webpack
 
 | 维度 | Vite | Webpack |
 |------|------|---------|
-| 开发启动速度 | ⚡ 秒级 | 🐢 分钟级（大项目） |
-| HMR速度 | ⚡ 即时 | 🐢 较慢 |
-| 构建速度 | ⚡ 快（Rollup） | 🐢 较慢 |
+| 开发启动速度 | 秒级 | 分钟级（大项目） |
+| HMR速度 | 即时 | 较慢 |
+| 构建速度 | 快（Rollup） | 较慢 |
 | 生态 | 新，快速成长 | 成熟，插件丰富 |
-| 推荐 | ✅ 新项目首选 | 兼容老项目 |
+| 推荐 | ✓ 新项目首选 | 兼容老项目 |
 
 ```bash
 # 创建Vite + Vue项目（前端脚手架 ≈ Spring Initializr）
@@ -183,4 +183,4 @@ npm update                  # 更新依赖
 rm -rf node_modules && npm install  # 清理重装（类似 mvn clean install）
 ```
 
-> 🎯 **后端学Node.js/NPM的最小集合**：理解Node.js是前端工具链的运行时 → 能读懂`package.json` → 知道`npm install`和`npm run dev`是做什么的 → 能自己启动前端项目。
+> **后端学Node.js/NPM的最小集合**：理解Node.js是前端工具链的运行时 → 能读懂`package.json` → 知道`npm install`和`npm run dev`是做什么的 → 能自己启动前端项目。

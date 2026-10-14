@@ -2,7 +2,7 @@
 
 > 定位：SQL Server 知识体系入口——定位与适用场景、版本演进与选型、vs MySQL/PostgreSQL 深度对比、核心概念与数据库结构、模块导航
 
-## 📚 目录
+## 目录
 
 1. [SQL Server 是什么](#1-sql-server-是什么)
 2. [版本演进与选型](#2-版本演进与选型)
@@ -29,7 +29,7 @@ JDBC 交互：
   MSSQL JDBC Driver（Microsoft 官方，开源）
   Spring Boot 集成：与 MySQL 同接口（jdbc:sqlserver://）
 
-⚠️ 面试必答：
+面试必答：
 "SQL Server 在国内政务/国企/金融场景
  占有率高——Windows 生态绑定 + 企业级服务；
  核心差异：T-SQL 扩展 + SSMS 图形化管理 +
@@ -46,7 +46,7 @@ JDBC 交互：
 | Oracle | 商业 + 企业 | 大型核心系统 |
 
 ```
-⚠️ 面试必答：
+面试必答：
 "数据库选型看生态而非单点性能——
  SQL Server 赢在微软全家桶（Windows/AD/.NET/SSMS）、
  MySQL 赢在互联网普及、PG 赢在功能与扩展。"
@@ -64,7 +64,7 @@ JDBC 交互：
 | SQL Server 2012 | 2012 | Always On、列存储索引 |
 | SQL Server 2014 | 2014 | 内存 OLTP（Hekaton） |
 | SQL Server 2016 | 2016 | Query Store、JSON 支持 |
-| SQL Server 2017 | 2017 | ✅ 首个 Linux 版 |
+| SQL Server 2017 | 2017 | ✓ 首个 Linux 版 |
 | SQL Server 2019 | 2019 | 智能查询处理、UTF-8 |
 | SQL Server 2022 | 2022 | 云集成、Ledger 防篡改 |
 | Azure SQL | 持续 | 云托管（PaaS） |
@@ -79,7 +79,7 @@ JDBC 交互：
 | 云化 | Azure SQL（托管，免运维） |
 
 ```
-⚠️ 版本注意：
+版本注意：
   ① 2022 是当前主流（云集成 + Ledger）
   ② Linux 版 2017+ 打破 Windows 独占（容器部署可行）
   ③ Express 免费但 10GB 限制（小项目够用）
@@ -123,7 +123,7 @@ JDBC 交互：
   └─ 预算受限 → MySQL / PostgreSQL（开源）
 ```
 
-> 🎯 **要点**：选型 = 生态 + 场景 + 成本三角——**Java 后端最常见的是 MySQL（互联网）与 SQL Server（政企）**，PG 是后起之秀（分析/AI 向量）。
+> **要点**：选型 = 生态 + 场景 + 成本三角——**Java 后端最常见的是 MySQL（互联网）与 SQL Server（政企）**，PG 是后起之秀（分析/AI 向量）。
 
 ---
 
@@ -150,7 +150,7 @@ Schema = 数据库内的命名空间（默认 dbo）
 | 系统库 | 用途 |
 |--------|------|
 | master | 实例级元数据（登录/配置） |
-| tempdb | 临时对象（⚠️ 频繁操作需独立盘） |
+| tempdb | 临时对象（频繁操作需独立盘） |
 | model | 新库模板 |
 | msdb | Agent 作业/备份历史 |
 
@@ -162,7 +162,7 @@ SELECT name, database_id, state_desc FROM sys.databases;
 SELECT name, type_desc FROM sys.filegroups;
 ```
 
-> 🎯 **要点**：**Schema 在 SQL Server 中不是库**（是 Database 内的命名空间）——与 MySQL 的"库即命名空间"不同、与 PG 类似。这是跨库迁移的第一认知差异。
+> **要点**：**Schema 在 SQL Server 中不是库**（是 Database 内的命名空间）——与 MySQL 的"库即命名空间"不同、与 PG 类似。这是跨库迁移的第一认知差异。
 
 ---
 
@@ -192,7 +192,7 @@ GRANT SELECT ON SCHEMA::sales TO sales_user;
 | 共享表 + 租户 ID | 弱 | 轻 | 小租户 |
 
 ```
-⚠️ 面试必答：
+面试必答：
 "SQL Server 多租户三方案——独立库（强隔离）、
  Schema 隔离（中隔离，SQL Server 推荐做法）、
  共享表（弱隔离，成本最低）；
@@ -214,7 +214,7 @@ GRANT SELECT ON SCHEMA::sales TO sales_user;
 
 ---
 
-> 🎯 **本体系学习建议**：SQL Server 体系面向"政务/国企/金融场景的 Java 后端"。先了解定位差异（00），再学 T-SQL 特有语法（01），深入索引/事务（02-03），最后实战（04-05）。面试核心 = T-SQL 差异 + RCSI + Always On + Query Store 四大记忆点。
+> **本体系学习建议**：SQL Server 体系面向"政务/国企/金融场景的 Java 后端"。先了解定位差异（00），再学 T-SQL 特有语法（01），深入索引/事务（02-03），最后实战（04-05）。面试核心 = T-SQL 差异 + RCSI + Always On + Query Store 四大记忆点。
 
 ---
 

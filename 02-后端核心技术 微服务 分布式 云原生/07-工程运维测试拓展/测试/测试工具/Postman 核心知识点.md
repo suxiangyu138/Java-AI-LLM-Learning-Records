@@ -56,7 +56,7 @@ API 全生命周期管理
 | **Postman CLI / Newman** | 命令行运行器，用于 CI/CD 集成 |
 | **Postman Cloud** | 云端 Workspace、Monitors、Mock Server |
 
-> 💡 2026 年 Postman 已全面接入 AI（Postbot），支持自然语言生成测试脚本、Mock 数据和响应解读。
+> 2026 年 Postman 已全面接入 AI（Postbot），支持自然语言生成测试脚本、Mock 数据和响应解读。
 
 ---
 
@@ -102,7 +102,7 @@ pm.environment.set("token", res.json().accessToken);
 // 设置: Authorization → OAuth 2.0 → Get New Access Token
 ```
 
-> 💡 Postman 自动保存 Token 到当前环境变量，过期自动刷新。
+> Postman 自动保存 Token 到当前环境变量，过期自动刷新。
 
 ---
 
@@ -114,22 +114,22 @@ Collections 是 Postman 的核心组织单元，建议按以下方式分层：
 
 ```
 Project Name
-├── 📁 Auth
+├── Auth
 │   ├── POST Login
 │   └── POST Refresh Token
-├── 📁 Users
+├── Users
 │   ├── GET List Users
 │   ├── POST Create User
 │   ├── GET Get User By ID
 │   ├── PUT Update User
 │   └── DELETE Delete User
-├── 📁 Orders
+├── Orders
 │   ├── GET List Orders
 │   ├── POST Create Order
 │   └── GET Get Order Detail
-├── 📁 Reports
+├── Reports
 │   └── GET Generate Report
-└── 📁 Health
+└── Health
     └── GET Health Check
 ```
 
@@ -159,7 +159,7 @@ pm.collectionVariables.get("defaultPageSize");
 pm.collectionVariables.unset("defaultPageSize");
 ```
 
-> 💡 **最佳实践：** 集合变量存储集合级别的固定参数（如默认分页大小、API 版本号）；环境变量存储环境差异值（域名、Token）；全局变量存储跨集合共享值。
+> **最佳实践：** 集合变量存储集合级别的固定参数（如默认分页大小、API 版本号）；环境变量存储环境差异值（域名、Token）；全局变量存储跨集合共享值。
 
 ### 3.4 集合描述与文档
 
@@ -241,7 +241,7 @@ pm.variables.replaceIn("{{key}}"); // 字符串中的变量替换
 }
 ```
 
-> ⚠️ **安全提示：** 敏感变量（密码、Token、Secret Key）设置 `type: "secret"`，在 Postman UI 中会被隐藏显示。切勿将生产环境凭据提交到版本控制。
+> **安全提示：** 敏感变量（密码、Token、Secret Key）设置 `type: "secret"`，在 Postman UI 中会被隐藏显示。切勿将生产环境凭据提交到版本控制。
 
 ---
 
@@ -293,7 +293,7 @@ pm.request.headers.add({
 });
 ```
 
-> 💡 在 Pre-request 中使用 `pm.request.headers.add()` 动态添加 HTTP Header，比在 UI 中写死更灵活。
+> 在 Pre-request 中使用 `pm.request.headers.add()` 动态添加 HTTP Header，比在 UI 中写死更灵活。
 
 ### 5.3 自动获取并刷新 Token
 
@@ -547,7 +547,7 @@ Postman 内置动态变量，在请求 URL、Headers、Body 中直接使用：
 | `{{$randomHex}}` | `a3f2c8` | 随机十六进制字符串 |
 | `{{$randomNationalID}}` | `123-45-6789` | 随机身份证号格式 |
 
-> 💡 动态变量在 Pre-request、URL、Body、Headers 中均可使用，每次发送请求时重新生成。
+> 动态变量在 Pre-request、URL、Body、Headers 中均可使用，每次发送请求时重新生成。
 
 ---
 
@@ -703,7 +703,7 @@ Mock Server 记录所有请求日志，可在 Postman 控制台查看：
 - 响应状态码和延迟时间
 - 未匹配的请求（返回 404）
 
-> 💡 **Mock Server 最佳实践：** 每个 API 请求至少保存 2 个 Example（成功响应 + 错误响应），Mock 时会根据请求参数自动匹配最合适的 Example。
+> **Mock Server 最佳实践：** 每个 API 请求至少保存 2 个 Example（成功响应 + 错误响应），Mock 时会根据请求参数自动匹配最合适的 Example。
 
 ---
 
@@ -772,7 +772,7 @@ Monitors 允许定时执行 Postman 集合，对生产 API 进行健康检查：
 | **数据完整性** | 定时检查关键数据是否正常返回 |
 | **SLA 达标** | 统计 API 响应时间分布 |
 
-> ⚠️ Monitors 在 Postman Cloud 运行，不会消耗本地资源。免费版每月 1000 次运行配额。
+> Monitors 在 Postman Cloud 运行，不会消耗本地资源。免费版每月 1000 次运行配额。
 
 ---
 
@@ -806,7 +806,7 @@ Block（块）→ 连线 → Flow（流程）
 5. [Output] 返回测试结果报告
 ```
 
-> 💡 Flows 适合自动化编排场景：数据同步、定时任务、多步骤 E2E 测试。
+> Flows 适合自动化编排场景：数据同步、定时任务、多步骤 E2E 测试。
 
 ---
 
@@ -1211,4 +1211,4 @@ pm.test("验证用户已删除", () => {
 - **实时协议：** WebSocket / Socket.IO / GraphQL 的全方位支持，覆盖现代微服务架构的多样化通信方式
 - **生态优势：** 2000+ 集成（Slack、Datadog、AWS、Azure 等）、200+ 语言代码生成、团队协作与权限管理
 
-> 🎯 Postman 已从简单的 HTTP 调试工具演变为 API 全生命周期管理平台，2026 年的 AI 能力（Postbot）进一步将其推向了新的高度。无论是个人开发者还是企业团队，Postman 都是 API 开发与测试的首选工具。
+> Postman 已从简单的 HTTP 调试工具演变为 API 全生命周期管理平台，2026 年的 AI 能力（Postbot）进一步将其推向了新的高度。无论是个人开发者还是企业团队，Postman 都是 API 开发与测试的首选工具。

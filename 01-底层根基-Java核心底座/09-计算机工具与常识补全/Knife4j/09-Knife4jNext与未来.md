@@ -1,6 +1,6 @@
 # 09 - Knife4j Next 与未来
 
-> 🎯 Knife4j Next 是社区 fork 的 5.x 分支（坐标 com.baizhukui）：更积极的维护节奏、跟进 Spring Boot 4 / Framework 7、保持 doc.html 与包名配置键全兼容。本章讲清 Next 的定位、迁移路径、与官方 4.x 的对比及生态全貌
+> Knife4j Next 是社区 fork 的 5.x 分支（坐标 com.baizhukui）：更积极的维护节奏、跟进 Spring Boot 4 / Framework 7、保持 doc.html 与包名配置键全兼容。本章讲清 Next 的定位、迁移路径、与官方 4.x 的对比及生态全貌
 
 ---
 
@@ -135,6 +135,6 @@ Knife4j 生态不只是 starter：
 
 ---
 
-> 🎯 **核心要点**：Next = 社区 fork（5.x，com.baizhukui），承诺"活跃维护 + Boot 4 兼容 + 使用习惯全兼容"，迁移通常只换坐标（清理残留依赖）。选型：Boot 3 用官方稳、Boot 4 用 Next、异构用 front、大微服务用 admin。风险：社区依赖需兜底评估。底层保障：OpenAPI 规范让文档数据可迁移，工具永远可替换。
+> **核心要点**：Next = 社区 fork（5.x，com.baizhukui），承诺"活跃维护 + Boot 4 兼容 + 使用习惯全兼容"，迁移通常只换坐标（清理残留依赖）。选型：Boot 3 用官方稳、Boot 4 用 Next、异构用 front、大微服务用 admin。风险：社区依赖需兜底评估。底层保障：OpenAPI 规范让文档数据可迁移，工具永远可替换。
 
 **下一模块**：[10-生产实战与自测](10-生产实战与自测.md) / **返回总览**：[00-总览](00-Knife4j知识体系总览.md)

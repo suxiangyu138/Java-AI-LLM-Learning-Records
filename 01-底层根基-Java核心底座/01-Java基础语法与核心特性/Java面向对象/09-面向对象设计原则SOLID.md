@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [设计原则总览](#1-设计原则总览)
 2. [S：单一职责原则 SRP](#2-s单一职责原则-srp)
@@ -28,7 +28,7 @@
 | **I**SP 接口隔离 | 客户端不应依赖它用不到的接口 | 接口庞大，实现类被迫实现空方法 | 细粒度接口 + 组合 |
 | **D**IP 依赖倒置 | 依赖抽象，不依赖具体实现 | 高层依赖底层细节，改动传导 | 接口注入、依赖注入容器 |
 
-> 🎯 **核心要点**：SOLID 是"如何应对变化"的五个可检查视角——S 管拆分、O 管扩展、L 管替换、I 管接口尺寸、D 管依赖方向。
+> **核心要点**：SOLID 是"如何应对变化"的五个可检查视角——S 管拆分、O 管扩展、L 管替换、I 管接口尺寸、D 管依赖方向。
 
 ---
 
@@ -66,7 +66,7 @@ public class EmailNotifier { }            // 职责：通知
 public class UserExporter { }             // 职责：导出
 ```
 
-> 💡 判断方法：给类写"这个类的变化理由是……"，能写出两个以上 → 拆。注意 SRP 不是"类越小越好"，过细会导致类爆炸，粒度到"内聚的职责"即可。
+> 判断方法：给类写"这个类的变化理由是……"，能写出两个以上 → 拆。注意 SRP 不是"类越小越好"，过细会导致类爆炸，粒度到"内聚的职责"即可。
 
 ---
 
@@ -105,7 +105,7 @@ public class HolidayDiscount implements Discount {
 }
 ```
 
-> 🎯 **核心要点**：OCP 的本质是"把变化点封装在抽象背后"——先识别哪里在变（折扣规则、支付渠道、报表格式），再让它们成为接口的实现。滥用则变成"过度抽象"，见 04 模块第 8 节的判断标准。
+> **核心要点**：OCP 的本质是"把变化点封装在抽象背后"——先识别哪里在变（折扣规则、支付渠道、报表格式），再让它们成为接口的实现。滥用则变成"过度抽象"，见 04 模块第 8 节的判断标准。
 
 ---
 
@@ -145,7 +145,7 @@ r.setHeight(10);
 | 不能改变方法的语义契约 | 重写 `contains` 却返回"不包含" |
 | 集合实现特例 | `Stack` 继承 `Vector`（Java 历史包袱）：Stack 禁止 add 到中间，替换 Vector 时行为违反契约 |
 
-> ⚠️ 现实提示：LSP 违反通常不是语法错误，而是**行为契约破坏**——所以重写前问自己：父类调用方的所有假设，子类都保持吗？`@Override` 只保证签名，不保证契约。
+> 现实提示：LSP 违反通常不是语法错误，而是**行为契约破坏**——所以重写前问自己：父类调用方的所有假设，子类都保持吗？`@Override` 只保证签名，不保证契约。
 
 ---
 
@@ -180,7 +180,7 @@ public class HumanWorker implements Workable, Feedable, Sleepable { }
 public class RobotWorker implements Workable { }          // 只需实现用得上的
 ```
 
-> 💡 ISP 与 SRP 的关系：SRP 管类，ISP 管接口；判断标准一致——"是不是同一个变化理由"。JDK 自身大量运用：`List` 与 `RandomAccess`、`Runnable` 与 `Callable` 分离。
+> ISP 与 SRP 的关系：SRP 管类，ISP 管接口；判断标准一致——"是不是同一个变化理由"。JDK 自身大量运用：`List` 与 `RandomAccess`、`Runnable` 与 `Callable` 分离。
 
 ---
 
@@ -219,7 +219,7 @@ public class OrderService {
 
 **依赖注入三形式**：构造器注入（推荐，保证依赖齐全）、setter 注入、接口注入。
 
-> 🎯 **核心要点**：DIP 就是"面向接口编程"的原则化表述——依赖方向永远指向抽象。Spring 的 Bean 容器、MyBatis 的 Mapper 接口代理、JDBC 的 `DriverManager` 都是 DIP 的教科书实现。
+> **核心要点**：DIP 就是"面向接口编程"的原则化表述——依赖方向永远指向抽象。Spring 的 Bean 容器、MyBatis 的 Mapper 接口代理、JDBC 的 `DriverManager` 都是 DIP 的教科书实现。
 
 ---
 
@@ -272,7 +272,7 @@ public class TaxCalculator {
 }
 ```
 
-> 💡 现代 Java 中，只有一个方法的策略接口直接用**函数式接口 + Lambda**（见 05 模块第 6 节）——`TaxStrategy` 可以就是 `Function<BigDecimal, BigDecimal>`。模式是思想，语法随时代演进。
+> 现代 Java 中，只有一个方法的策略接口直接用**函数式接口 + Lambda**（见 05 模块第 6 节）——`TaxStrategy` 可以就是 `Function<BigDecimal, BigDecimal>`。模式是思想，语法随时代演进。
 
 ---
 
@@ -305,7 +305,7 @@ public class Account {
 }
 ```
 
-> 🎯 **核心要点**：充血模型本质是"把封装做到位"——不变量保护、行为内聚。但充血对象被 MyBatis/JSON 重建时往往靠无参构造器 + setter，与"行为守卫状态"冲突，所以工程上常见"持久化用贫血 DTO + 领域用充血模型"的折中（DDD 的 Assembler 模式）。
+> **核心要点**：充血模型本质是"把封装做到位"——不变量保护、行为内聚。但充血对象被 MyBatis/JSON 重建时往往靠无参构造器 + setter，与"行为守卫状态"冲突，所以工程上常见"持久化用贫血 DTO + 领域用充血模型"的折中（DDD 的 Assembler 模式）。
 
 ---
 

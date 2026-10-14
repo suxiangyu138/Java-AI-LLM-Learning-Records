@@ -50,7 +50,7 @@ Comparator<String> c3 = Comparator.comparingInt(String::length);
 | Lambda | 简洁 | 中 | invokedynamic动态生成 |
 | 方法引用 | 极简 | 高 | 语法糖进一步简化 |
 
-> 💡 Lambda的本质是**行为参数化**——将函数/方法当作参数传递，实现策略模式的内联化。
+> Lambda的本质是**行为参数化**——将函数/方法当作参数传递，实现策略模式的内联化。
 
 ### 1.2 使用前提
 
@@ -93,7 +93,7 @@ BinaryOperator<Integer> safeDivide = (a, b) -> {
 };
 ```
 
-> ⚠️ 只有单行表达式才能省略 `{}`、`;` 和 `return`。多行语句三者均不可省略。
+> 只有单行表达式才能省略 `{}`、`;` 和 `return`。多行语句三者均不可省略。
 
 ---
 
@@ -128,7 +128,7 @@ interface Calculator {
 | 静态方法（static） | 允许任意数量，通过接口名调用 |
 | Object类方法 | `equals`、`hashCode`、`toString` 不计入抽象方法计数 |
 
-> 💡 判断函数式接口的标准：**接口中需要子类实现的方法是否只有一个**。默认/静态方法已有实现，不参与计数。
+> 判断函数式接口的标准：**接口中需要子类实现的方法是否只有一个**。默认/静态方法已有实现，不参与计数。
 
 ---
 
@@ -162,7 +162,7 @@ Supplier<Double> randomGen = () -> Math.random();
 | `BiConsumer<T, U>` | `void accept(T, U)` | 双参数消费 |
 | `BiPredicate<T, U>` | `boolean test(T, U)` | 双参数断言 |
 
-> 💡 基本类型有专用函数式接口（如 `IntPredicate`、`LongConsumer`），使用它们可避免自动装箱开销。
+> 基本类型有专用函数式接口（如 `IntPredicate`、`LongConsumer`），使用它们可避免自动装箱开销。
 
 ---
 
@@ -191,7 +191,7 @@ Runnable r2 = () -> {
 };
 ```
 
-> 🎯 **何时用匿名内部类而非Lambda**：需要实现多个抽象方法时、接口含多个方法时、需要创建带状态的实例时。
+> **何时用匿名内部类而非Lambda**：需要实现多个抽象方法时、接口含多个方法时、需要创建带状态的实例时。
 
 ---
 
@@ -235,7 +235,7 @@ public class VariableCapture {
 }
 ```
 
-> 💡 Lambda捕获局部变量本质上是**值拷贝**，设计为effectively final可避免并发修改的竞态条件。
+> Lambda捕获局部变量本质上是**值拷贝**，设计为effectively final可避免并发修改的竞态条件。
 
 ---
 
@@ -288,7 +288,7 @@ names.stream().map(s -> s.length()).collect(Collectors.toList());       // Lambd
 names.stream().map(String::length).collect(Collectors.toList());        // 方法引用
 ```
 
-> ⚠️ 方法引用不是必须的——Lambda体包含条件判断或复合操作时，应保留Lambda以保证可读性。
+> 方法引用不是必须的——Lambda体包含条件判断或复合操作时，应保留Lambda以保证可读性。
 
 ---
 
@@ -319,7 +319,7 @@ List<Person> people = names.stream()
     .collect(Collectors.toList());
 ```
 
-> 💡 编译器根据函数式接口方法签名自动选择匹配的构造器参数个数。
+> 编译器根据函数式接口方法签名自动选择匹配的构造器参数个数。
 
 ---
 
@@ -362,7 +362,7 @@ final class $$Lambda$1 implements Runnable {
 | JIT优化 | 每个匿名类独立编译优化 | 同一函数式接口复用同一策略 |
 | 内存占用 | 每实例持有外部类引用 | 更轻量，无额外元数据开销 |
 
-> 🎯 invokedynamic机制使Lambda在**性能**和**灵活性**上全面优于匿名内部类，是Java语言在JVM层面的重要进化。
+> invokedynamic机制使Lambda在**性能**和**灵活性**上全面优于匿名内部类，是Java语言在JVM层面的重要进化。
 
 ---
 
@@ -498,7 +498,7 @@ List<String> result = students.stream()
 - **小数据集**（<1000）：普通for循环可能更快
 - **并行流**：仅在**数据量大 + CPU密集型 + 无状态**时使用
 
-> ⚠️ 并行流并非万能——数据量小或涉及IO时，并行化的开销反而导致性能下降。
+> 并行流并非万能——数据量小或涉及IO时，并行化的开销反而导致性能下降。
 
 ---
 
@@ -546,4 +546,4 @@ Lambda 与方法引用
 └── 实战应用          Stream / 集合迭代 / 线程回调 / 策略模式
 ```
 
-> 🎯 Lambda表达式是Java函数式编程的基石，理解其语法、原理和最佳实践是掌握Stream API、CompletableFuture、Optional等Java 8+特性的前提。从匿名内部类到Lambda再到方法引用，是Java代码从"冗长"到"简洁"再到"优雅"的进化之路。
+> Lambda表达式是Java函数式编程的基石，理解其语法、原理和最佳实践是掌握Stream API、CompletableFuture、Optional等Java 8+特性的前提。从匿名内部类到Lambda再到方法引用，是Java代码从"冗长"到"简洁"再到"优雅"的进化之路。

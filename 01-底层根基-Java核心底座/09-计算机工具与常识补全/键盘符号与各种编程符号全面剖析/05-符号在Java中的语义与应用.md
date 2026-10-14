@@ -6,7 +6,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [Java 符号语义总表](#1-java-符号语义总表)
 2. [@ 注解符号](#2--注解符号)
@@ -73,10 +73,10 @@ public @interface RateLimit {
 
 ```text
 注解常见错误
-├── ⚠️ 注解拼写错误 → 编译错误（@Overrid 不是 @Override）
-├── ⚠️ @Override 忘写 → 重写方法没标记（可维护性问题）
-├── ⚠️ Spring 注解忘加依赖 → 启动失败（组件扫描不到）
-├── ⚠️ 注解参数类型错误 → 编译错误
+├── 注解拼写错误 → 编译错误（@Overrid 不是 @Override）
+├── @Override 忘写 → 重写方法没标记（可维护性问题）
+├── Spring 注解忘加依赖 → 启动失败（组件扫描不到）
+├── 注解参数类型错误 → 编译错误
 └── 排查：@ComponentScan 扫描范围 → 注解失效
 ```
 
@@ -129,10 +129,10 @@ Supplier<List<String>> s1 = ArrayList::new;   // = () -> new ArrayList<>()
 
 ```text
 Lambda 常见错误
-├── ⚠️ 捕获外部变量需 final/effectively final（不可变）
-├── ⚠️ this 语义：Lambda 内 this 是「外层对象」（匿名类是自身）
-├── ⚠️ 返回值类型：代码块 Lambda 需 return（{ return x*2; }）
-└── ⚠️ 与匿名类的区别：作用域与 this 不同（面试题）
+├── 捕获外部变量需 final/effectively final（不可变）
+├── this 语义：Lambda 内 this 是「外层对象」（匿名类是自身）
+├── 返回值类型：代码块 Lambda 需 return（{ return x*2; }）
+└── 与匿名类的区别：作用域与 this 不同（面试题）
 ```
 
 ---
@@ -159,11 +159,11 @@ List<? super Integer> ints;      // 下界（Integer 父类）
 
 ```text
 泛型常见错误
-├── ⚠️ raw type：List list = ...（裸类型——编译警告，丢失类型安全）
-├── ⚠️ 泛型数组：new T[10] 非法（类型擦除）
-├── ⚠️ 静态上下文：静态方法/字段不能引用类泛型
-├── ⚠️ instanceof 泛型：obj instanceof List<String> 非法（用 ? 通配）
-└── ⚠️ 菱形 <> 与比较 < > 混淆：泛型声明里的 < 不是小于
+├── raw type：List list = ...（裸类型——编译警告，丢失类型安全）
+├── 泛型数组：new T[10] 非法（类型擦除）
+├── 静态上下文：静态方法/字段不能引用类泛型
+├── instanceof 泛型：obj instanceof List<String> 非法（用 ? 通配）
+└── 菱形 <> 与比较 < > 混淆：泛型声明里的 < 不是小于
 ```
 
 ---
@@ -205,7 +205,7 @@ int x = 1;    // 行尾注释
  */
 public BigDecimal total(List<Order> orders) { ... }
 
-// ⚠️ 注释陷阱：
+// 注释陷阱：
 // ① 块注释不能嵌套（/* /* */ 提前结束）
 // ② 注释掉的代码 → Git 恢复（别留注释代码）
 // ③ Javadoc 的 @param/@return 标签与注解 @ 不同！
@@ -245,7 +245,7 @@ Java 符号使用规范（Checkstyle 常见规则）
 
 ## 7. 核心要点
 
-> 🎯 **核心要点**：
+> **核心要点**：
 > 1. 符号 → Java 语义映射：@ 注解 / -> Lambda / :: 方法引用 / <> 泛型 / ... 可变参数 / ? 通配符
 > 2. 注解是声明式编程的核心（Spring 全家桶靠 @ 驱动）——`@Override` 拼写错误是最高频注解错误
 > 3. Lambda 三易错：捕获变量 effectively final / this 语义 / 代码块需 return

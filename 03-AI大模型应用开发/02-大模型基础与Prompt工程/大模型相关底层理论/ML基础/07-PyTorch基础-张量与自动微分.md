@@ -1,6 +1,6 @@
 # 07 - PyTorch 基础：张量与自动微分
 
-> 🎯 PyTorch 是 LLM 时代的"普通话" — 微调、推理、实验全用它。张量是数据容器，Autograd 是自动求导引擎，GPU 是加速器
+> PyTorch 是 LLM 时代的"普通话" — 微调、推理、实验全用它。张量是数据容器，Autograd 是自动求导引擎，GPU 是加速器
 
 ---
 
@@ -189,7 +189,7 @@ scaler.update()
 | 维度 | PyTorch | TensorFlow/Keras |
 |------|---------|------------------|
 | **设计哲学** | 动态图（Define-by-Run） | 静态图→动态图（TF 2.x） |
-| **调试** | Python 原生调试 ✅ | 需要特殊工具 |
+| **调试** | Python 原生调试 ✓ | 需要特殊工具 |
 | **LLM 生态** | **统治地位** | 几乎没有 |
 | **学术圈** | 90%+ 论文使用 | 罕见 |
 | **工业界** | Meta/OpenAI/DeepMind | Google 内部 |

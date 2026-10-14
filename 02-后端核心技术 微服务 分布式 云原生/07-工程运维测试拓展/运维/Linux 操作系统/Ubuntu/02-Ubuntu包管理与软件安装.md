@@ -1,10 +1,10 @@
 # Ubuntu 包管理与软件安装
 
-> 📦 apt/dpkg/snap/AppImage 四种包管理方式 + JDK/Maven/Git/Docker/Nginx 安装实战
+> apt/dpkg/snap/AppImage 四种包管理方式 + JDK/Maven/Git/Docker/Nginx 安装实战
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [包管理方式对比](#1-包管理方式对比)
 2. [apt 最常用操作](#2-apt-最常用操作)
@@ -18,12 +18,12 @@
 
 | 方式 | 依赖处理 | 软件来源 | 更新 | 适合 |
 |------|:------:|------|:---:|------|
-| **apt** | ✅ 自动 | Ubuntu 官方源 | `apt upgrade` | 首选 90% 场景 |
-| **dpkg** | ❌ 手动 | 下载的 .deb 文件 | 手动 | 离线安装 |
-| **snap** | ✅ 自带 | Snap Store | 自动后台 | 沙盒应用 |
-| **AppImage** | ✅ 打包 | 官网下载 | 手动 | 免安装运行 |
-| **源码编译** | ❌ 手动 | GitHub/官网 | 手动 | 特定版本/自定义 |
-| **pip/npm** | ✅ 各自生态 | 各自仓库 | 各自命令 | 开发依赖 |
+| **apt** | ✓ 自动 | Ubuntu 官方源 | `apt upgrade` | 首选 90% 场景 |
+| **dpkg** | ✗ 手动 | 下载的 .deb 文件 | 手动 | 离线安装 |
+| **snap** | ✓ 自带 | Snap Store | 自动后台 | 沙盒应用 |
+| **AppImage** | ✓ 打包 | 官网下载 | 手动 | 免安装运行 |
+| **源码编译** | ✗ 手动 | GitHub/官网 | 手动 | 特定版本/自定义 |
+| **pip/npm** | ✓ 各自生态 | 各自仓库 | 各自命令 | 开发依赖 |
 
 ---
 
@@ -234,7 +234,7 @@ apt install 找不到的软件？按顺序尝试：
 
 ---
 
-> 🎯 **核心要点**：**apt install** 能搞定 90%，**SDKMAN** 管 Java 全家桶（JDK/Gradle/Maven），**Docker** 管中间件（MySQL/Redis/ES），**snap** 装桌面应用。
+> **核心要点**：**apt install** 能搞定 90%，**SDKMAN** 管 Java 全家桶（JDK/Gradle/Maven），**Docker** 管中间件（MySQL/Redis/ES），**snap** 装桌面应用。
 
 ---
 

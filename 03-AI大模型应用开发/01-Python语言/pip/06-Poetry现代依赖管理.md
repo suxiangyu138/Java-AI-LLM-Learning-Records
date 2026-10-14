@@ -1,6 +1,6 @@
 # 06 - Poetry 现代依赖管理
 
-> 🎯 Poetry 是 Python 依赖管理的现代化方案——一个 `pyproject.toml` 统一管理依赖+构建+发布，`poetry.lock` 精确锁定整个依赖树，告别 requirements.txt 的混乱
+> Poetry 是 Python 依赖管理的现代化方案——一个 `pyproject.toml` 统一管理依赖+构建+发布，`poetry.lock` 精确锁定整个依赖树，告别 requirements.txt 的混乱
 
 ---
 
@@ -18,14 +18,14 @@
 | 功能 | pip + venv | Poetry |
 |------|:---:|:---:|
 | 依赖管理 | requirements.txt | pyproject.toml |
-| 精确锁定 | 需 pip-tools 辅助 | ✅ poetry.lock 内置 |
-| 虚拟环境 | 需手动创建/激活 | ✅ 自动管理 |
-| 构建发布 | 需 setup.py/setup.cfg | ✅ 内置 `poetry build/publish` |
-| 依赖解析 | 基础（易冲突） | ✅ SAT solver（更智能） |
-| 脚本定义 | 无 | ✅ [tool.poetry.scripts] |
-| AI 项目适配 | ✅ | ⚠️ PyTorch/CUDA 需额外配置 |
+| 精确锁定 | 需 pip-tools 辅助 | ✓ poetry.lock 内置 |
+| 虚拟环境 | 需手动创建/激活 | ✓ 自动管理 |
+| 构建发布 | 需 setup.py/setup.cfg | ✓ 内置 `poetry build/publish` |
+| 依赖解析 | 基础（易冲突） | ✓ SAT solver（更智能） |
+| 脚本定义 | 无 | ✓ [tool.poetry.scripts] |
+| AI 项目适配 | ✓ | PyTorch/CUDA 需额外配置 |
 
-> 🎯 Poetry 适合纯 Python 项目和库的管理；重度 AI 项目（CUDA 依赖复杂）推荐 conda + pip 组合
+> Poetry 适合纯 Python 项目和库的管理；重度 AI 项目（CUDA 依赖复杂）推荐 conda + pip 组合
 
 ## 2. 快速上手
 

@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [一句话定位](#1-一句话定位)
 2. [Document：原始文档](#2-document原始文档)
@@ -171,7 +171,7 @@ async for chunk in stream.async_response_gen():
 
 **验收动作**：① 手写一个带元数据的 Document 并切分查看 Node 字段；② 配置 Settings 四件套；③ 验证元数据继承规则（显式传 vs 不传）——**"Document/Node/Metadata/Settings = 数据模型四件套——本体系的底层心智"**。
 
-> 🎯 **核心要点**：**Document 进、Node 出、Settings 管全局**；元数据三作用（**过滤/溯源/去重**）；**node_id 与 relationships 是溯源根基**；**Settings 四件套（llm/embed_model/node_parser/context_window）**——"数据不是字符串，是带元数据的对象"。
+> **核心要点**：**Document 进、Node 出、Settings 管全局**；元数据三作用（**过滤/溯源/去重**）；**node_id 与 relationships 是溯源根基**；**Settings 四件套（llm/embed_model/node_parser/context_window）**——"数据不是字符串，是带元数据的对象"。
 
 ---
 

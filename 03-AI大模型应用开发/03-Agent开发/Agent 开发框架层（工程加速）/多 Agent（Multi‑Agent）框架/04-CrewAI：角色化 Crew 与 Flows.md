@@ -2,7 +2,7 @@
 
 > 定位：框架深潜第二站——角色化多 Agent 框架代表：四大原语（Agent/Task/Crew/Process）、生产化 Flows、2026 checkpointing 与 A2A 增强；原型最快（2026-08 基准）
 
-## 📚 目录
+## 目录
 
 1. [定位与版本窗口](#1-定位与版本窗口)
 2. [四大原语：Agent / Task / Crew / Process](#2-四大原语agent--task--crew--process)
@@ -27,7 +27,7 @@
 | 依赖 | 独立于 LangChain；Python 3.10-3.13 |
 | 性能 | 第三方宣称 5.76x 快于 LangGraph（AWS 基准，方向性参考） |
 
-> 🎯 **一句话**：CrewAI = "给每个 Agent 一个角色，让角色们协作"——研究/写作/审查这类**内容流水线**场景的直觉化首选；2026 年补上 checkpointing、A2A、Flows 生产化后，从"原型工具"走向"生产可用"。
+> **一句话**：CrewAI = "给每个 Agent 一个角色，让角色们协作"——研究/写作/审查这类**内容流水线**场景的直觉化首选；2026 年补上 checkpointing、A2A、Flows 生产化后，从"原型工具"走向"生产可用"。
 
 ## 2. 四大原语：Agent / Task / Crew / Process
 
@@ -63,7 +63,7 @@ result = crew.kickoff()
 | sequential | 任务按声明顺序依次执行，前任务输出传后任务 | 流水线（Handoff 链） | 02 篇 Handoff 链 |
 | hierarchical | 自动创建 Manager Agent 分发任务给成员 | 需要主管协调 | 02 篇 Supervisor |
 
-> 💡 hierarchical 模式下 CrewAI 自动生成 Manager——省去手写编排者，但也意味着编排提示词由框架控制，可定制性弱于 LangGraph 显式图。
+> hierarchical 模式下 CrewAI 自动生成 Manager——省去手写编排者，但也意味着编排提示词由框架控制，可定制性弱于 LangGraph 显式图。
 
 ## 4. Flows：2026 生产推荐
 
@@ -116,7 +116,7 @@ v1.14.2+ 加入（对齐 LangGraph 的持久化能力）：
 | 版本 | checkpoint 内嵌 `crewai_version`，带迁移框架 |
 | 范围 | 扩展至 standalone agents + checkpoint 生命周期事件 |
 
-> 💡 **对齐信号**：CrewAI 2026 补 checkpointing 说明"持久化/恢复"已从 LangGraph 的差异化能力变成多 Agent 框架的**基线能力**。
+> **对齐信号**：CrewAI 2026 补 checkpointing 说明"持久化/恢复"已从 LangGraph 的差异化能力变成多 Agent 框架的**基线能力**。
 
 ## 6. A2A 与协议支持
 
@@ -138,7 +138,7 @@ v1.14.2+ 加入（对齐 LangGraph 的持久化能力）：
 - LLM 驱动的统一记忆；第一方向量库集成
 - 2026 新增：LLM token 追踪增强（reasoning tokens + cache creation tokens）
 
-> ⚠️ 行业共识（2026）：**没有任何框架的长期记忆达到生产级**（含语义检索与剪枝）——跨框架的未解问题，生产上需自行设计记忆策略。
+> 行业共识（2026）：**没有任何框架的长期记忆达到生产级**（含语义检索与剪枝）——跨框架的未解问题，生产上需自行设计记忆策略。
 
 ## 8. 安全与认证
 
@@ -149,7 +149,7 @@ v1.14.2+ 加入（对齐 LangGraph 的持久化能力）：
 | 安全修复 | 代码解释器沙箱逃逸（路径穿越）、NL2SQLTool 加固（只读默认/参数化） |
 | 漏洞治理 | pypdf/requests/cryptography/transformers 等依赖链修复 |
 
-> ⚠️ 使用代码解释器/Crew Studio 时确认沙箱版本——2026 年修复过沙箱逃逸 CVE 类问题，升级到最新版。
+> 使用代码解释器/Crew Studio 时确认沙箱版本——2026 年修复过沙箱逃逸 CVE 类问题，升级到最新版。
 
 ## 9. Crew Studio 与 Discovery
 
@@ -168,11 +168,11 @@ v1.14.2+ 加入（对齐 LangGraph 的持久化能力）：
 | 性能数据 | 5.76x 等为第三方基准 | 用真实工作流实测 |
 | 层级 Manager | 编排提示词由框架控制，可定制弱 | 需要显式编排时用 LangGraph |
 
-> 🎯 **适用结论**：CrewAI = **快速原型 + 内容流水线**（数小时出活）；验证通过后若进入长流程/复杂状态/强可观测需求，按 09 篇迁移路线评估是否迁 LangGraph——CrewAI 自身也提供"Flows 生产化"路径作为留在原框架的选项。
+> **适用结论**：CrewAI = **快速原型 + 内容流水线**（数小时出活）；验证通过后若进入长流程/复杂状态/强可观测需求，按 09 篇迁移路线评估是否迁 LangGraph——CrewAI 自身也提供"Flows 生产化"路径作为留在原框架的选项。
 
 ## 11. 核心要点
 
-> 🎯 **核心要点**：
+> **核心要点**：
 > 1. 四大原语：Agent / Task / Crew / Process（sequential / hierarchical）
 > 2. 2026 主张：**生产用 Flows（确定性事件流），探索用 Crews（自主协作）**
 > 3. v1.14.2+ checkpointing/forking 补齐持久化；A2A/MCP 原生支持跨厂商互操作

@@ -1,6 +1,6 @@
 # 08 - AI 编码 Prompt 工程
 
-> 🎯 同样的 AI 工具，好的 Prompt vs 差的 Prompt → 代码质量差 3-5 倍。Prompt 是你和 AI 之间的"编程语言"
+> 同样的 AI 工具，好的 Prompt vs 差的 Prompt → 代码质量差 3-5 倍。Prompt 是你和 AI 之间的"编程语言"
 
 ## 1. 基础定义
 

@@ -1,7 +1,7 @@
 # 03-模型加载与Auto类
 > 定位：`from_pretrained` 是 transformers 的门面——模型类选型、加载参数、设备分发、缓存治理四个维度决定「模型能不能加载、加载到哪、花多少显存」。
 
-## 📚 目录
+## 目录
 1. [Auto 类家族选型](#1-auto-类家族选型)
 2. [from_pretrained 参数全解](#2-from_pretrained-参数全解)
 3. [device_map：设备分发](#3-device_map设备分发)
@@ -112,7 +112,7 @@ model = AutoModelForCausalLM.from_pretrained(
 4. 权重复合（WeightConverter）解决了什么问题？
 5. 离线部署三件套的完整命令与参数是什么？
 
-> 🎯 **核心要点**：任务头决定 Auto 类选型，生成必选 CausalLM；torch_dtype + device_map + attn_implementation 三参数决定「多快多省」；加载是五步流水线，峰值内存要治理；离线 = snapshot_download + HF_HUB_OFFLINE + local_files_only。
+> **核心要点**：任务头决定 Auto 类选型，生成必选 CausalLM；torch_dtype + device_map + attn_implementation 三参数决定「多快多省」；加载是五步流水线，峰值内存要治理；离线 = snapshot_download + HF_HUB_OFFLINE + local_files_only。
 
 ---
 

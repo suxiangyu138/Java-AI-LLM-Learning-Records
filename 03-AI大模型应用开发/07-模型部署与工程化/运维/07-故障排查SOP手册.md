@@ -1,6 +1,6 @@
 # 07 - 故障排查 SOP 手册
 
-> 🎯 凌晨三点 LLM 服务挂了 — 这时候靠的不是智商，是 SOP。每个故障一个 Runbook，照着做就行
+> 凌晨三点 LLM 服务挂了 — 这时候靠的不是智商，是 SOP。每个故障一个 Runbook，照着做就行
 
 ## 1. CUDA Out of Memory
 

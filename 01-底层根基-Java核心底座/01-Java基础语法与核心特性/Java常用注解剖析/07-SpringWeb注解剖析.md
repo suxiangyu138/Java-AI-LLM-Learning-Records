@@ -2,7 +2,7 @@
 
 > Web 层注解把「HTTP 请求到 Java 方法的映射协议」声明化：@RestController 注册处理器、@GetMapping 声明路由、@RequestParam 绑定参数、@ControllerAdvice 接管异常。2026 年 Spring 7 的主线变化是 API 版本化注解（@ApiVersion）进入框架与 Jackson 3 默认化
 
-## 📚 目录
+## 目录
 
 1. [控制器与映射：@RestController / @RequestMapping 六变体](#1-控制器与映射restcontroller--requestmapping-六变体)
 2. [参数绑定五注解：@RequestParam / @PathVariable / @RequestBody](#2-参数绑定五注解requestparam--pathvariable--requestbody)

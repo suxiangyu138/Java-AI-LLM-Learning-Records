@@ -32,7 +32,7 @@
 | 分布式事务 | 无 | Seata |
 | 消息驱动 | Spring Cloud Stream | RocketMQ |
 
-> 💡 **面试点**：Spring Cloud Alibaba已经是国内微服务事实标准，Nacos替代Eureka + Config，Sentinel替代Hystrix。
+> **面试点**：Spring Cloud Alibaba已经是国内微服务事实标准，Nacos替代Eureka + Config，Sentinel替代Hystrix。
 
 ### 3. Eureka的自我保护机制是什么？
 当Eureka Server在短时间内（默认15分钟内）丢失超过85%的客户端心跳时，会进入自我保护模式。在此模式下，Eureka不再剔除任何服务实例，而是保留所有注册信息等待网络恢复。这是基于AP设计理念的容错机制——优先保证可用性和分区容错性，牺牲一致性。生产环境中通常建议保留自我保护机制，避免网络抖动导致大规模误剔除。
@@ -40,7 +40,7 @@
 ### 4. Nacos的CP/AP切换原理是什么？
 Nacos支持在CP（一致性）和AP（可用性）两种模式之间动态切换，核心取决于集群中注册的是临时实例还是持久化实例。当所有实例都是临时实例时，Nacos采用AP模式，使用Distro协议保证最终一致性；当注册了持久化实例时，Nacos自动切换到CP模式，采用Raft协议保证强一致性。配置方式是通过`spring.cloud.nacos.discovery.ephemeral=true/false`控制。
 
-> ⚠️ 默认值为true（临时实例），绝大多数生产场景使用AP模式。
+> 默认值为true（临时实例），绝大多数生产场景使用AP模式。
 
 ### 5. Nacos与Eureka的核心区别有哪些？
 
@@ -87,7 +87,7 @@ RabbitMQ支持五种消息模型：**1）简单队列**（一个生产者一个�
 ### 13. CAP定理在分布式系统中的含义是什么？
 CAP定理由Eric Brewer提出，指分布式系统最多只能同时满足三个特性中的两个：**一致性（Consistency）**——所有节点在同一时刻看到相同数据；**可用性（Availability）**——每个请求都能获得非错误响应；**分区容错性（Partition Tolerance）**——系统在网络分区时仍能正常工作。由于网络分区在分布式系统中不可避免，实际上必须在C和A之间权衡。典型选择：Eureka放弃C选择AP，ZooKeeper放弃A选择CP，Nacos支持CP/AP动态切换。
 
-> 🎯 **面试重点**：不能笼统说"选CA"或"选CP"，要结合具体业务场景分析，比如支付系统偏CP、内容系统偏AP。
+> **面试重点**：不能笼统说"选CA"或"选CP"，要结合具体业务场景分析，比如支付系统偏CP、内容系统偏AP。
 
 ### 14. Redis三种高可用方案的区别
 | 方案 | 原理 | 自动故障转移 | 数据一致性 | 适用场景 |
@@ -122,7 +122,7 @@ public class Cluster {
 }
 ```
 
-> 💡 多级存储配合Nacos的权重路由，可以实现精细化的灰度发布——给新版本实例设置较小权重，逐步放量。
+> 多级存储配合Nacos的权重路由，可以实现精细化的灰度发布——给新版本实例设置较小权重，逐步放量。
 
 ### 2. Nacos心跳机制与健康检查
 
@@ -169,7 +169,7 @@ NodeSelectorSlot(资源入口构建)
 
 每个Slot都有`entry()`和`exit()`两个方法，在请求进入和退出时执行相应逻辑。开发者可以通过SPI机制自定义Slot插入到链中任意位置，实现扩展。
 
-> 🎯 **面试常考**：FlowSlot中流控规则的判断逻辑——调用FlowRuleChecker.checkFlow()，从clusterConfig中获取统计的Node，然后比较当前QPS与设定的阈值。
+> **面试常考**：FlowSlot中流控规则的判断逻辑——调用FlowRuleChecker.checkFlow()，从clusterConfig中获取统计的Node，然后比较当前QPS与设定的阈值。
 
 ### 5. Sentinel滑动窗口算法实现流控
 
@@ -216,7 +216,7 @@ rule.setMaxQueueingTimeMs(500);        // 最大排队等待时间
 
 当请求到达时，Sentinel计算期望通过时间（当前时间 + 1000/QPS），如果期望时间超过当前时间 + maxQueueingTimeMs，则拒绝该请求；否则让请求等待到期望时间再通过。
 
-> 💡 漏桶算法适合保护下游系统不被突发流量冲垮，比如保护数据库写入接口。令牌桶（`CONTROL_BEHAVIOR_WARM_UP`）则适合应对突发流量场景。
+> 漏桶算法适合保护下游系统不被突发流量冲垮，比如保护数据库写入接口。令牌桶（`CONTROL_BEHAVIOR_WARM_UP`）则适合应对突发流量场景。
 
 ### 7. Seata AT模式两阶段实现
 
@@ -328,7 +328,7 @@ public class DistroConsistencyServiceImpl implements KonsulConsistencyService {
 }
 ```
 
-> 🎯 Distro协议的定位是**高吞吐的注册中心**，适用于AP场景。对比CP协议（如Raft），Distro牺牲了强一致性换取了更高的写性能。
+> Distro协议的定位是**高吞吐的注册中心**，适用于AP场景。对比CP协议（如Raft），Distro牺牲了强一致性换取了更高的写性能。
 
 ### 12. Gateway过滤器链的执行顺序
 
@@ -392,7 +392,7 @@ public class ConfigController {
 }
 ```
 
-> 💡 @RefreshScope的原理是Spring在配置变更后，会销毁并重新创建被该注解标注的Bean实例，从而实现配置热更新。未标注@RefreshScope的Bean无法自动刷新。
+> @RefreshScope的原理是Spring在配置变更后，会销毁并重新创建被该注解标注的Bean实例，从而实现配置热更新。未标注@RefreshScope的Bean无法自动刷新。
 
 ---
 
@@ -1383,7 +1383,7 @@ PUT /product
                                          └─ Aggregation(品牌、分类聚合)
 ```
 
-> 💡 **搜索质量优化**：使用`function_score`结合销量、评分、时效性计算综合排序分数；使用`synonym_graph`同义词过滤器处理"手机=手机通讯"等场景。
+> **搜索质量优化**：使用`function_score`结合销量、评分、时效性计算综合排序分数；使用`synonym_graph`同义词过滤器处理"手机=手机通讯"等场景。
 
 ### 4. 设计一个分布式日志收集系统
 
@@ -1481,7 +1481,7 @@ output {
 总：通过这套微服务架构，系统支撑了日均百万级订单量，核心接口可用性达到99.99%。
 ```
 
-> 🎯 **加分点**：主动提到踩过的坑和解决方案——如Feign链式调用的超时问题、热key导致Redis缓存击穿。
+> **加分点**：主动提到踩过的坑和解决方案——如Feign链式调用的超时问题、热key导致Redis缓存击穿。
 
 ### 模板2："Nacos架构设计及为什么选择它而不是Eureka"
 
@@ -1687,4 +1687,4 @@ public void handle(Message message, Channel channel) {
 
 ---
 
-> 🎯 **最后提醒**：面试中回答技术问题要用 **STAR法则**（Situation-Task-Action-Result）组织语言，先说结论再展开，配合画图和代码示例。面试官考察的不只是你会不会用，而是你**理解了多少**、**踩过多少坑**、**有没有自己的思考**。
+> **最后提醒**：面试中回答技术问题要用 **STAR法则**（Situation-Task-Action-Result）组织语言，先说结论再展开，配合画图和代码示例。面试官考察的不只是你会不会用，而是你**理解了多少**、**踩过多少坑**、**有没有自己的思考**。

@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [环境准备与依赖](#1-环境准备与依赖)
 2. [接入方式一：@LoadBalanced RestTemplate](#2-接入方式一loadbalanced-resttemplate)
@@ -40,7 +40,7 @@
 <!-- 或 Eureka / Consul / Zookeeper discovery starter -->
 ```
 
-> 💡 Feign/Gateway 项目通常已含 loadbalancer 传递依赖——`mvn dependency:tree | grep loadbalancer` 确认后再加。
+> Feign/Gateway 项目通常已含 loadbalancer 传递依赖——`mvn dependency:tree | grep loadbalancer` 确认后再加。
 
 ## 2. 接入方式一：@LoadBalanced RestTemplate
 
@@ -80,7 +80,7 @@ public class PaymentCaller {
 多个 RestTemplate：只有标 @LoadBalanced 的支持服务名调用（未标的不处理）
 ```
 
-> 🎯 面试必答：**"@LoadBalanced 做了什么？"**——**标记 + 拦截器**：Spring 检测到该注解就给 RestTemplate 装配 `LoadBalancerInterceptor`，拦截器把请求 URL 里的**服务名解析成选中的实例地址**（LoadBalancer 选实例 → 替换 host）——没有它，RestTemplate 会把服务名当域名去 DNS 解析（必失败）。
+> 面试必答：**"@LoadBalanced 做了什么？"**——**标记 + 拦截器**：Spring 检测到该注解就给 RestTemplate 装配 `LoadBalancerInterceptor`，拦截器把请求 URL 里的**服务名解析成选中的实例地址**（LoadBalancer 选实例 → 替换 host）——没有它，RestTemplate 会把服务名当域名去 DNS 解析（必失败）。
 
 ### 2.3 RestClient（RestTemplate 的继任者）
 
@@ -148,7 +148,7 @@ Feign + LoadBalancer 集成（FeignBlockingLoadBalancerClient）：
   └── 无需任何额外注解（starter-openfeign 自动装配）
 ```
 
-> 💡 Feign 用户零成本：**@FeignClient 的 name 天然走 LB**——LoadBalancer 对 Feign 是隐式能力（[OpenFeign 系列](../Spring Cloud OpenFeign/)）。
+> Feign 用户零成本：**@FeignClient 的 name 天然走 LB**——LoadBalancer 对 Feign 是隐式能力（[OpenFeign 系列](../Spring Cloud OpenFeign/)）。
 
 ## 5. 接入方式四：编程式 API（ReactiveLoadBalancer）
 
@@ -187,7 +187,7 @@ public class CustomLbConfig {
 // 应用：@LoadBalancerClient(name = "payment-service", configuration = CustomLbConfig.class)
 ```
 
-> 💡 编程式场景：**动态选择实例（AB 测试/自研框架）、测试模拟、不走 HTTP 的 RPC**——大部分业务用不到，但理解它 = 理解 LB 的完整调用链。
+> 编程式场景：**动态选择实例（AB 测试/自研框架）、测试模拟、不走 HTTP 的 RPC**——大部分业务用不到，但理解它 = 理解 LB 的完整调用链。
 
 ## 6. BlockingLoadBalancerClient 与请求变换器
 
@@ -221,7 +221,7 @@ public class MyTransformer implements LoadBalancerRequestTransformer {
 | 改写路径 | 变换器改 URI |
 | 鉴权补充 | 变换器加认证头 |
 
-> 💡 变换器 vs 过滤器：**变换器只作用于 LB 解析后的请求（一次调用），网关过滤器作用于网关整体**——LB 变换器是"调用点定制"。
+> 变换器 vs 过滤器：**变换器只作用于 LB 解析后的请求（一次调用），网关过滤器作用于网关整体**——LB 变换器是"调用点定制"。
 
 ## 7. 三步验证与排障
 
@@ -244,7 +244,7 @@ public class MyTransformer implements LoadBalancerRequestTransformer {
 | 策略没生效 | configurations 写错 / 实例 metadata 缺失 | 核对配置键与 metadata（[03 篇](03-负载均衡策略全解.md)） |
 | 轮询不均匀 | 高并发瞬时（随机抖动）或缓存影响 | 长周期观察，不必追求精确 50/50 |
 
-> 💡 排障第一招：**先 curl 注册中心确认实例列表 → 再开 `logging.level.org.springframework.cloud.loadbalancer=DEBUG` 看选择日志**（打印每个实例的挑选过程）（[08 篇](08-生产实践与选型避坑.md) 也有）。
+> 排障第一招：**先 curl 注册中心确认实例列表 → 再开 `logging.level.org.springframework.cloud.loadbalancer=DEBUG` 看选择日志**（打印每个实例的挑选过程）（[08 篇](08-生产实践与选型避坑.md) 也有）。
 
 ---
 

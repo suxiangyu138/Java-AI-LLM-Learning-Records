@@ -1,6 +1,6 @@
 # 12 - Spring AI 项目实战：RAG 问答系统
 
-> 🎯 从零搭建一个生产级 RAG 知识库问答系统 — 完整项目结构、Maven 配置、应用代码、Docker Compose 部署。Spring Boot 4.1 + Spring AI 2.0 + Java 21 + PostgreSQL/pgvector + Redis
+> 从零搭建一个生产级 RAG 知识库问答系统 — 完整项目结构、Maven 配置、应用代码、Docker Compose 部署。Spring Boot 4.1 + Spring AI 2.0 + Java 21 + PostgreSQL/pgvector + Redis
 
 ---
 
@@ -380,16 +380,16 @@ volumes:
 
 | 增强项 | 方案 | 状态 |
 |--------|------|:---:|
-| 会话记忆持久化 | `RedisChatMemory`（按 sessionId 隔离） | ✅ |
-| 分布式限流 | Redis + Lua 脚本（按 IP/用户/全局） | ✅ |
-| 异步任务处理 | Redis Stream 处理耗时向量化任务 | ⬜ |
-| 多模型路由 | 简单问题→DeepSeek（省钱）、复杂→Claude（精确） | ⬜ |
-| 监控告警 | Prometheus + Grafana（Token 消耗/延迟/QPS） | ⬜ |
+| 会话记忆持久化 | `RedisChatMemory`（按 sessionId 隔离） | ✓ |
+| 分布式限流 | Redis + Lua 脚本（按 IP/用户/全局） | ✓ |
+| 异步任务处理 | Redis Stream 处理耗时向量化任务 | □ |
+| 多模型路由 | 简单问题→DeepSeek（省钱）、复杂→Claude（精确） | □ |
+| 监控告警 | Prometheus + Grafana（Token 消耗/延迟/QPS） | □ |
 | 向量库升级 | pgvector（起步）→ Milvus（千万级以上向量） | 按需 |
-| CI/CD | GitHub Actions + setup-uv + Docker 多阶段构建 | ⬜ |
+| CI/CD | GitHub Actions + setup-uv + Docker 多阶段构建 | □ |
 
 ---
 
-> 🎯 **核心要点**：Spring AI RAG 项目的六步流水线 — **文档上传 → Tika 解析 → TokenTextSplitter 分块 → Embedding 向量化 → pgvector 入库 → ChatClient + QuestionAnswerAdvisor 检索问答**。生产落地三件套：**Redis 会话记忆 + Redis+Lua 分布式限流 + Docker Compose 一键部署**。
+> **核心要点**：Spring AI RAG 项目的六步流水线 — **文档上传 → Tika 解析 → TokenTextSplitter 分块 → Embedding 向量化 → pgvector 入库 → ChatClient + QuestionAnswerAdvisor 检索问答**。生产落地三件套：**Redis 会话记忆 + Redis+Lua 分布式限流 + Docker Compose 一键部署**。
 
 **下一模块**：[13-LangChain4j项目实战-Agent系统](13-LangChain4j项目实战-Agent系统.md) / **返回总览**：[00-总览](00-Java-AI开发框架体系总览.md)

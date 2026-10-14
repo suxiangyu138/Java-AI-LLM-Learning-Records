@@ -78,7 +78,7 @@ Nacos (Dynamic Naming and Configuration Service) 是阿里巴巴开源的一站�
 
 #### 2.2.1 环境准备
 
-> 💡 Nacos 依赖 JDK 1.8+ 和 MySQL 5.7+（生产环境必须使用 MySQL 作为外部存储）。
+> Nacos 依赖 JDK 1.8+ 和 MySQL 5.7+（生产环境必须使用 MySQL 作为外部存储）。
 
 | 组件 | 版本要求 | 说明 |
 |------|---------|------|
@@ -165,7 +165,7 @@ vi nacos/conf/cluster.conf
 sh startup.sh
 ```
 
-> ⚠️ 集群模式必须配置 MySQL 数据源，Nacos 默认的内嵌 Derby 数据库不支持多节点数据一致。
+> 集群模式必须配置 MySQL 数据源，Nacos 默认的内嵌 Derby 数据库不支持多节点数据一致。
 
 ### 2.3 服务注册 —— 客户端集成
 
@@ -239,7 +239,7 @@ public class UserServiceApplication {
 }
 ```
 
-> 💡 `@EnableDiscoveryClient` 是 Spring Cloud 的通用注解，底层通过 `spring.factories` 中的 `DiscoveryClient` 实现自动适配。使用 Nacos 时，会自动加载 `NacosDiscoveryClient` 实现。从 Spring Cloud Edgware 开始，`@EnableDiscoveryClient` 可以省略（只要 classpath 中存在 discovery 实现类就自动启用），但建议显式标注以增强可读性。
+> `@EnableDiscoveryClient` 是 Spring Cloud 的通用注解，底层通过 `spring.factories` 中的 `DiscoveryClient` 实现自动适配。使用 Nacos 时，会自动加载 `NacosDiscoveryClient` 实现。从 Spring Cloud Edgware 开始，`@EnableDiscoveryClient` 可以省略（只要 classpath 中存在 discovery 实现类就自动启用），但建议显式标注以增强可读性。
 
 #### 2.3.4 注册流程时序
 
@@ -467,7 +467,7 @@ spring:
 | 数据存储 | 内存存储，不落盘 | 写入数据库持久化 |
 | 典型场景 | 普通微服务实例 | 网关、数据库代理等长期稳定节点 |
 
-> 💡 绝大多数微服务场景使用临时实例 (`ephemeral: true`)，心跳机制确保了实例列表的实时性。
+> 绝大多数微服务场景使用临时实例 (`ephemeral: true`)，心跳机制确保了实例列表的实时性。
 
 ### 2.7 AP 与 CP 模式切换
 
@@ -518,7 +518,7 @@ POST /nacos/v1/ns/instance
 }
 ```
 
-> ⚠️ 不建议修改 Nacos 服务端默认的 AP/CP 模式，Nacos 会自动根据实例类型选择。如需强制修改，可在 `application.properties` 中设置 `nacos.naming.distro.protocol.enable=false`，但此操作不推荐生产使用。
+> 不建议修改 Nacos 服务端默认的 AP/CP 模式，Nacos 会自动根据实例类型选择。如需强制修改，可在 `application.properties` 中设置 `nacos.naming.distro.protocol.enable=false`，但此操作不推荐生产使用。
 
 #### 2.7.3 AP/CP 对比
 
@@ -551,7 +551,7 @@ POST /nacos/v1/ns/instance
 | **社区活跃度** | 非常活跃 | 已停止维护 | 活跃 |
 | **生产案例** | 阿里、滴滴、饿了么 | 传统 Spring Cloud 项目 | 国外大型企业 |
 
-> 🎯 **选型建议**：新项目首选 Nacos（服务注册 + 配置管理二合一，社区活跃，国内生态完善）；K8s 原生项目考虑 Consul；Eureka 已停止维护，不建议新项目使用。
+> **选型建议**：新项目首选 Nacos（服务注册 + 配置管理二合一，社区活跃，国内生态完善）；K8s 原生项目考虑 Consul；Eureka 已停止维护，不建议新项目使用。
 
 ### 2.9 保护阈值
 
@@ -590,7 +590,7 @@ spring:
         └── 缺点：部分请求会失败（需要调用方做容错）
 ```
 
-> 💡 保护阈值适用于流量突增且大量实例不可用的场景，提供"尽力而为"的服务能力。建议设置为 `0.3 ~ 0.5`，具体数值需根据业务容错能力调整。
+> 保护阈值适用于流量突增且大量实例不可用的场景，提供"尽力而为"的服务能力。建议设置为 `0.3 ~ 0.5`，具体数值需根据业务容错能力调整。
 
 ### 2.10 Nacos 集群部署详解
 
@@ -662,7 +662,7 @@ spring:
         # server-addr: nacos.example.com:8848
 ```
 
-> ⚠️ 集群模式下务必确保所有节点使用同一个 MySQL 数据库，否则各节点的服务列表不一致。Nacos 2.x 使用 gRPC 端口（默认 9848、9849），需确保防火墙放行。
+> 集群模式下务必确保所有节点使用同一个 MySQL 数据库，否则各节点的服务列表不一致。Nacos 2.x 使用 gRPC 端口（默认 9848、9849），需确保防火墙放行。
 
 ---
 
@@ -675,13 +675,13 @@ spring:
 **根源**：调用方未添加 `@LoadBalanced` 注解，`RestTemplate` 无法解析服务名。
 
 ```java
-// ❌ 错误：未加 @LoadBalanced
+// ✗ 错误：未加 @LoadBalanced
 @Bean
 public RestTemplate restTemplate() {
     return new RestTemplate();
 }
 
-// ✅ 正确：添加 @LoadBalanced
+// ✓ 正确：添加 @LoadBalanced
 @Bean
 @LoadBalanced
 public RestTemplate restTemplate() {
@@ -696,18 +696,18 @@ public RestTemplate restTemplate() {
 **根源**：服务器有多块网卡（Docker / VPN / 虚拟网卡），Nacos 客户端获取了错误的 IP 地址。
 
 ```yaml
-# ✅ 方案一：指定注册 IP
+# ✓ 方案一：指定注册 IP
 spring:
   cloud:
     nacos:
       discovery:
         ip: 192.168.1.100   # 显式指定本机对外 IP
 
-# ✅ 方案二：指定网卡名称
+# ✓ 方案二：指定网卡名称
 # application.properties
 nacos.naming.network.interface.eth0=true
 
-# ✅ 方案三：在 bootstrap.yml 中配置
+# ✓ 方案三：在 bootstrap.yml 中配置
 spring:
   cloud:
     inetutils:
@@ -729,7 +729,7 @@ spring:
 | 7848 | HTTP | Jraft 通信端口 |
 
 ```yaml
-# ✅ 解决：确保防火墙放行 gRPC 端口
+# ✓ 解决：确保防火墙放行 gRPC 端口
 # 每个端口占用 +1000 偏移
 # 如果 server.port=8848 则 gRPC 端口为 9848
 spring:
@@ -746,7 +746,7 @@ spring:
 
 **根源**：Nacos 默认对服务名做了大小写转换处理，实际存储的服务名可能全小写。
 
-> 💡 Nacos 1.x 对服务名做了大写处理，Nacos 2.x 默认不做转换。建议消费者的 `@FeignClient` 名称与提供者 `spring.application.name` 完全一致，统一使用小写字母和连字符。
+> Nacos 1.x 对服务名做了大写处理，Nacos 2.x 默认不做转换。建议消费者的 `@FeignClient` 名称与提供者 `spring.application.name` 完全一致，统一使用小写字母和连字符。
 
 ### 3.5 健康实例数显示为 0
 
@@ -755,7 +755,7 @@ spring:
 **根源**：服务的健康检查端口和业务端口不一致，或者健康检查路径不存在。
 
 ```yaml
-# ✅ 正确配置健康检查
+# ✓ 正确配置健康检查
 spring:
   cloud:
     nacos:
@@ -779,7 +779,7 @@ spring:
 **根源**：服务启动时未指定 `server.port`，两个实例端口冲突，第二个实例虽然启动但注册信息错误。
 
 ```yaml
-# ✅ 开发环境使用随机端口避免冲突
+# ✓ 开发环境使用随机端口避免冲突
 server:
   port: 0  # 随机端口
 
@@ -788,7 +788,7 @@ spring:
     name: user-service
 ```
 
-> ⚠️ 生产环境不要使用随机端口，应通过配置中心统一管理端口分配，或在启动参数中指定 `--server.port=8081`。
+> 生产环境不要使用随机端口，应通过配置中心统一管理端口分配，或在启动参数中指定 `--server.port=8081`。
 
 ---
 
@@ -1544,7 +1544,7 @@ public class NacosServiceRegistryAutoConfiguration {
 | `nacos.naming.cleaner.trigger-ms` | 30000ms | 过期实例清理间隔 |
 | `nacos.core.auth.plugin.nacos.token.secret.key` | 自定义密钥 | 生产环境必配权限认证 |
 
-> 🎯 本章学习了 Nacos 作为注册中心的核心能力：服务注册与发现的完整流程、心跳机制的三个时间窗口、AP/CP 模式切换原理、保护阈值防止雪崩。掌握这些知识后，你可以设计高可用的微服务注册中心架构。
+> 本章学习了 Nacos 作为注册中心的核心能力：服务注册与发现的完整流程、心跳机制的三个时间窗口、AP/CP 模式切换原理、保护阈值防止雪崩。掌握这些知识后，你可以设计高可用的微服务注册中心架构。
 
 ---
 

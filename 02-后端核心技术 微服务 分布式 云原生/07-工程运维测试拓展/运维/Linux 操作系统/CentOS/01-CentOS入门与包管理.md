@@ -1,10 +1,10 @@
 # CentOS 入门与包管理
 
-> 🔴 RHEL 版图变迁、CentOS Stream/Rocky/Alma 选型、dnf 完整操作手册、rpm 底层、EPEL/第三方源、Java 工具链安装
+> RHEL 版图变迁、CentOS Stream/Rocky/Alma 选型、dnf 完整操作手册、rpm 底层、EPEL/第三方源、Java 工具链安装
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [RHEL 生态与版本选择](#1-rhel-生态与版本选择)
 2. [CentOS vs Ubuntu 对比](#2-centos-vs-ubuntu-对比)
@@ -22,10 +22,10 @@ RHEL 家族演变（2020→2026）：
   Fedora（社区版，每 6 月）→ CentOS Stream（滚动版）→ RHEL（付费）
   
   兼容 RHEL 的免费复刻：
-  ├── Rocky Linux → CentOS 创始人重建 ⭐ 生产首选
+  ├── Rocky Linux → CentOS 创始人重建 ★ 生产首选
   └── AlmaLinux   → CloudLinux 赞助
 
-  ⚠️ CentOS 7 (2024.06 EOL) / CentOS 8 (2021.12 EOL) → 已死，别用！
+  CentOS 7 (2024.06 EOL) / CentOS 8 (2021.12 EOL) → 已死，别用！
   推荐：Rocky Linux 9 / AlmaLinux 9 / CentOS Stream 9
 ```
 
@@ -178,7 +178,7 @@ sudo alternatives --config javac
 
 ---
 
-> 🎯 **速记**：`dnf search/info/install/remove/upgrade` 日常，`dnf history undo` 后悔药，`rpm -qa/-ql/-qf` 查包，`dnf autoremove` 清理。CentOS 7→8/9 最大变化：**yum→dnf、iptables→firewalld**。
+> **速记**：`dnf search/info/install/remove/upgrade` 日常，`dnf history undo` 后悔药，`rpm -qa/-ql/-qf` 查包，`dnf autoremove` 清理。CentOS 7→8/9 最大变化：**yum→dnf、iptables→firewalld**。
 
 ---
 

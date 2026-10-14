@@ -1,6 +1,6 @@
 # 02 - Messages API 核心协议
 
-> 🎯 Messages API 是 Claude 的唯一对话端点 — `POST /v1/messages`，稳定的两角色交替结构。本章覆盖请求/响应全参数、多轮对话、系统提示、Token 计数、多模型支持
+> Messages API 是 Claude 的唯一对话端点 — `POST /v1/messages`，稳定的两角色交替结构。本章覆盖请求/响应全参数、多轮对话、系统提示、Token 计数、多模型支持
 
 ---
 
@@ -53,7 +53,7 @@ response = client.messages.create(
     ],
     # ===== 可选参数 =====
     temperature=0.7,                    # ⑤ 采样温度（0-1）
-    # ⚠️ Opus 4.7 不支持 temperature/top_p/top_k → 400 错误
+    # Opus 4.7 不支持 temperature/top_p/top_k → 400 错误
     stop_sequences=["END"],             # ⑥ 停止序列（最多 5 个）
     stream=False                        # ⑦ 是否流式
 )
@@ -74,7 +74,7 @@ print(response.content[0].text)
 | 参数 | 类型 | 默认 | 说明 |
 |------|------|------|------|
 | `system` | string/array | — | 系统提示（支持文本和 content block） |
-| `temperature` | float | 0 | 采样温度。⚠️ **Opus 4.7 移除此参数（400 报错）** |
+| `temperature` | float | 0 | 采样温度。**Opus 4.7 移除此参数（400 报错）** |
 | `stop_sequences` | array | — | 最多 5 个停止序列 |
 | `stream` | bool | false | 是否启用 SSE 流式 |
 | `metadata` | object | — | 自定义元数据（`user_id` 用于监控） |
@@ -96,8 +96,8 @@ print(response.content[0].text)
 ]}
 
 # ③ 必须是 user/assistant 交替
-# ❌ 两个连续的 user 消息 → 400 错误
-# ✅ user → assistant → user → assistant
+# ✗ 两个连续的 user 消息 → 400 错误
+# ✓ user → assistant → user → assistant
 ```
 
 ---
@@ -206,6 +206,6 @@ print(response.usage.cache_read_input_tokens) # 缓存命中量
 
 ---
 
-> 🎯 **核心要点**：Messages API 三个关键 — **① `max_tokens` 必填（必须 > thinking_tokens + 预期答案长度）② `stop_reason: "tool_use"` 触发工具循环 ③ Opus 4.7 移除了 temperature/top_p/top_k（设置→400 错误）**。
+> **核心要点**：Messages API 三个关键 — **① `max_tokens` 必填（必须 > thinking_tokens + 预期答案长度）② `stop_reason: "tool_use"` 触发工具循环 ③ Opus 4.7 移除了 temperature/top_p/top_k（设置→400 错误）**。
 
 **下一模块**：[03-Extended-Thinking深度思考](03-Extended-Thinking深度思考.md) / **返回总览**：[00-总览](00-Claude-API知识体系总览.md)

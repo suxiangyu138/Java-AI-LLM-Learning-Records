@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [task-per-thread：虚拟线程时代的执行模型](#1-task-per-thread虚拟线程时代的执行模型)
 2. [newVirtualThreadPerTaskExecutor 实现剖析](#2-newvirtualthreadpertaskexecutor-实现剖析)
@@ -38,22 +38,22 @@ try (var executor = Executors.newVirtualThreadPerTaskExecutor()) {
 
 | 池化的动机 | 虚拟线程下还成立吗 |
 |-----------|:---:|
-| 线程创建成本高 | ❌ 创建虚拟线程≈堆分配，纳秒~微秒级 |
-| 栈内存贵 | ❌ 堆上分块栈按需伸缩，用完随 GC 回收 |
-| 复用避免内核资源消耗 | ❌ 没有内核资源占用 |
-| **限流**（控制并发度） | ✅ **唯一成立的动机，但用 Semaphore 实现**（见第 5 节） |
+| 线程创建成本高 | ✗ 创建虚拟线程≈堆分配，纳秒~微秒级 |
+| 栈内存贵 | ✗ 堆上分块栈按需伸缩，用完随 GC 回收 |
+| 复用避免内核资源消耗 | ✗ 没有内核资源占用 |
+| **限流**（控制并发度） | ✓ **唯一成立的动机，但用 Semaphore 实现**（见第 5 节） |
 
-> ⚠️ **官方立场**：OpenJDK 维护者 2026-01 在 loom-dev 再次重申"不要池化虚拟线程"——JDK 自身甚至移除了若干假设线程池复用的 ThreadLocal 缓存（如 byte[] 缓冲），就是因为虚拟线程场景下缓存反而占用大量内存。
+> **官方立场**：OpenJDK 维护者 2026-01 在 loom-dev 再次重申"不要池化虚拟线程"——JDK 自身甚至移除了若干假设线程池复用的 ThreadLocal 缓存（如 byte[] 缓冲），就是因为虚拟线程场景下缓存反而占用大量内存。
 
 ### 1.3 常见的"假迁移"
 
 ```java
-// ❌ 反模式：虚拟线程套线程池——既没省线程数，又破坏了"用完即弃"
+// ✗ 反模式：虚拟线程套线程池——既没省线程数，又破坏了"用完即弃"
 ExecutorService pool = Executors.newFixedThreadPool(200);
 ThreadFactory tf = Thread.ofVirtual().factory();     // 每个工作线程是虚拟线程？
 pool = Executors.newFixedThreadPool(200, tf);        // 但只创建 200 个！本质是池化
 
-// ✅ 正确：直接使用每任务一线程执行器
+// ✓ 正确：直接使用每任务一线程执行器
 ExecutorService executor = Executors.newVirtualThreadPerTaskExecutor();
 ```
 
@@ -95,7 +95,7 @@ private static final class VirtualThreadPerTaskExecutor implements ExecutorServi
 | 空闲回收 | 60s | 立即（任务完即弃） |
 | 平台线程占用 | 高峰占用 N 个 OS 线程 | **始终只占用 CPU 核数个 OS 线程** |
 
-> 💡 **迁移直觉**：凡是"高并发 I/O 任务 + CachedThreadPool 或大固定池"的组合，几乎都可以直接换成 `newVirtualThreadPerTaskExecutor()`。
+> **迁移直觉**：凡是"高并发 I/O 任务 + CachedThreadPool 或大固定池"的组合，几乎都可以直接换成 `newVirtualThreadPerTaskExecutor()`。
 
 ## 3. 与固定线程池的全方位对比
 
@@ -110,7 +110,7 @@ private static final class VirtualThreadPerTaskExecutor implements ExecutorServi
 | 关闭语义 | shutdown 后等待 | 同（+close() 便捷） |
 | 适用任务类型 | CPU 密集、有界资源操作 | I/O 密集、无共享瓶颈 |
 
-> 🎯 **核心要点**：固定池的本质是"并发度硬上限 + 排队缓冲"；虚拟线程执行器的本质是"并发度无硬上限 + 无缓冲"。前者天然限流，后者**必须自己加限流**（第 5 节）。
+> **核心要点**：固定池的本质是"并发度硬上限 + 排队缓冲"；虚拟线程执行器的本质是"并发度无硬上限 + 无缓冲"。前者天然限流，后者**必须自己加限流**（第 5 节）。
 
 ## 4. 迁移决策树：哪些迁、哪些不迁
 
@@ -120,12 +120,12 @@ private static final class VirtualThreadPerTaskExecutor implements ExecutorServi
 现有 ExecutorService 迁移评估
 │
 ├─ 任务是否以阻塞 I/O 为主（网络、DB、文件、HTTP、MQ 消费）？
-│   ├─ 是 → 迁移 ✅（收益最大）
+│   ├─ 是 → 迁移 ✓（收益最大）
 │   │      └─ 是否依赖"池大小"做限流？
 │   │          ├─ 是 → 迁移 + Semaphore 限流（第 5 节）
 │   │          └─ 否 → 直接换执行器即可
 │   └─ 否（CPU 密集：计算、加解密、JSON/图像处理）
-│        └─ 不迁移 ⚠️（虚拟线程无收益，且有载入线程饥饿风险，见 08 章）
+│        └─ 不迁移 （虚拟线程无收益，且有载入线程饥饿风险，见 08 章）
 │
 └─ 任务是否持有原生资源 / 需要长时间驻留状态？
      └─ 是 → 谨慎：保留平台线程池（如连接池内部、JNI 组件）
@@ -137,7 +137,7 @@ private static final class VirtualThreadPerTaskExecutor implements ExecutorServi
 假设：8 核机器，每任务 80ms 阻塞 I/O + 20ms CPU，QPS 目标 10,000
 
 固定池（经验公式：线程数 = 核数 × (1 + 等待/计算) = 8 × 5 = 40 线程）
-    极限吞吐 ≈ 40 / 0.1s = 400 QPS ❌
+    极限吞吐 ≈ 40 / 0.1s = 400 QPS ✗
 
 虚拟线程（每任务一线程，阻塞不占载入线程）
     载入线程数 = 8，每载入线程每秒可推进 ≈ 8 个任务（80ms 阻塞期间换其他任务）
@@ -145,7 +145,7 @@ private static final class VirtualThreadPerTaskExecutor implements ExecutorServi
     8 核只能支撑 ≈ 400 QPS CPU —— 吞吐瓶颈从"线程数"转移到了"CPU"
 ```
 
-> 💡 **关键洞察**：虚拟线程迁移后，吞吐瓶颈从**线程数**变成**CPU 与外部系统**。如果 I/O 占比高（如 95%），同配置下吞吐可提升 10-50 倍；如果 CPU 占比高，提升几乎为 0——这就是决策树的依据。
+> **关键洞察**：虚拟线程迁移后，吞吐瓶颈从**线程数**变成**CPU 与外部系统**。如果 I/O 占比高（如 95%），同配置下吞吐可提升 10-50 倍；如果 CPU 占比高，提升几乎为 0——这就是决策树的依据。
 
 ### 4.3 框架级迁移（一行配置）
 
@@ -197,12 +197,12 @@ class VirtualThreadLimiter {
 
 | 限流维度 | 固定池 | Semaphore |
 |---------|-------|-----------|
-| 控制并发数 | ✅（隐式） | ✅（显式） |
+| 控制并发数 | ✓（隐式） | ✓（显式） |
 | 排队/拒绝策略 | 队列 + RejectedExecutionHandler | 可阻塞等待 / 可 tryAcquire 快速失败 |
 | 公平性 | 队列 FIFO | 可配置公平模式 |
-| 与虚拟线程配合 | 反模式 | ✅ 天然适配（阻塞在 semaphore 上会卸载） |
+| 与虚拟线程配合 | 反模式 | ✓ 天然适配（阻塞在 semaphore 上会卸载） |
 
-> 💡 **限流位置**：对**下游依赖**限流比全局限流更精细——例如 `Semaphore` 按目标服务拆多个（DB 50 并发、外部 API 20 并发），比"全局 500 并发"更能保护脆弱依赖。
+> **限流位置**：对**下游依赖**限流比全局限流更精细——例如 `Semaphore` 按目标服务拆多个（DB 50 并发、外部 API 20 并发），比"全局 500 并发"更能保护脆弱依赖。
 
 ## 6. 不可迁移的耦合点
 
@@ -231,11 +231,11 @@ class VirtualThreadLimiter {
 □ 7. 监控：线程转储脚本改为 json 格式；新增 jdk.VirtualThreadPinned 告警
 ```
 
-> 🎯 **迁移原则**：**只换执行器工厂，不动业务代码**——虚拟线程最大的工程红利就是 `ExecutorService` 接口兼容。改动面越小，回归风险越低。
+> **迁移原则**：**只换执行器工厂，不动业务代码**——虚拟线程最大的工程红利就是 `ExecutorService` 接口兼容。改动面越小，回归风险越低。
 
 ## 8. 核心要点与思考题
 
-> 🎯 **本章三句话总结**：
+> **本章三句话总结**：
 > 1. 虚拟线程时代的执行模型是 task-per-thread：每任务一线程、用完即弃、**禁止池化**；
 > 2. 迁移决策树的核心判据是"是否 I/O 密集"：是则迁（收益 10-50 倍吞吐），否则不迁（CPU 密集无收益且有饥饿风险）；
 > 3. 失去"池大小限流"后必须用 Semaphore 显式限流——虚拟线程的并发是软上限，保护下游靠显式控制。

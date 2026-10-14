@@ -32,7 +32,7 @@ Codex 是 OpenAI 基于 GPT-3 架构衍生出的代码生成模型，能够将�
 ### Q3: Claude Code 是什么？与 Codex 有什么异同？
 Claude Code 是 Anthropic 推出的终端内 AI 编程代理（Agent），直接运行在开发者终端中。与 Codex 作为 API 模型不同，Claude Code 是一个完整的 Agent 产品，具备文件系统访问、命令执行、代码编辑等主动能力。
 
-> 💡 **理解**：Codex 是模型（Model），Claude Code 是代理（Agent）。前者需要上层应用封装，后者开箱即用。
+> **理解**：Codex 是模型（Model），Claude Code 是代理（Agent）。前者需要上层应用封装，后者开箱即用。
 
 ### Q4: Codex 的核心能力有哪些？
 - **代码补全**：根据上下文自动补全代码行或函数体
@@ -53,7 +53,7 @@ Claude Code 是 Anthropic 推出的终端内 AI 编程代理（Agent），直接
 ### Q6: 什么是 Claude Code 的 CLAUDE.md？
 CLAUDE.md 是项目级指令文件，相当于 Claude Code 的"全局记忆核心"。它定义了项目规范、代码风格、常见任务的工作流和约束条件。Claude Code 在启动时会自动读取该文件，将其作为行为指南。
 
-> ⚠️ CLUADE.md 相当于 Codex 场景中的 System Prompt + 项目级上下文，是 Agent 行为的纲领性配置。
+> CLUADE.md 相当于 Codex 场景中的 System Prompt + 项目级上下文，是 Agent 行为的纲领性配置。
 
 ### Q7: 什么是 MCP（Model Context Protocol）？
 MCP 是由 Anthropic 提出的开放协议，用于标准化 AI 模型与外部工具/数据源之间的通信。它类似于"AI 世界的 USB 接口"，使得 Claude Code 可以统一接入文件系统、数据库、API 等外部工具。
@@ -108,7 +108,7 @@ Modes 是 Claude Code 按场景切换的工作模式，不同模式有不同的�
 ### Q18: Claude Code 的 Memory System 如何工作？
 Claude Code 的记忆系统维护跨会话的上下文信息，包括用户偏好、项目决策、已知问题等。记忆以结构化格式存储，可在后续会话中检索，提升一致性。
 
-> 🎯 **基础概念小结**：Codex 是模型核心，Claude Code 是 Agent 产品。MCP、Skills、CLAUDE.md、Memory System 共同构成了现代 AI 编程伴侣的四大支柱。
+> **基础概念小结**：Codex 是模型核心，Claude Code 是 Agent 产品。MCP、Skills、CLAUDE.md、Memory System 共同构成了现代 AI 编程伴侣的四大支柱。
 
 ---
 
@@ -220,7 +220,7 @@ Codex 在推理时采用的采样策略包括：
 - **Merge 策略**：每个 Agent 工作分支，最终合并
 - **冲突检测**：自动检测文件冲突并协调解决
 
-> 🎯 **深度原理小结**：Codex 本质是优化过代码场景的 Transformer 模型；Claude Code 是围绕大模型构建的完整 Agent 系统。理解底层机制有助于排查生成质量问题和设计优化策略。
+> **深度原理小结**：Codex 本质是优化过代码场景的 Transformer 模型；Claude Code 是围绕大模型构建的完整 Agent 系统。理解底层机制有助于排查生成质量问题和设计优化策略。
 
 ---
 
@@ -259,7 +259,7 @@ response = openai.ChatCompletion.create(
 print(response.choices[0].message.content)
 ```
 
-> 💡 使用 Temperature=0.1 确保迁移的一致性，并配合代码审查工具进行人工确认。
+> 使用 Temperature=0.1 确保迁移的一致性，并配合代码审查工具进行人工确认。
 
 ### Q2: 如何在 CI/CD 中集成 Claude Code 进行代码审查？
 **方案**：
@@ -327,7 +327,7 @@ Tests:
 """
 ```
 
-> ⚠️ 生成的测试需要人工审核，特别是 mock 和 fixture 的合理性。
+> 生成的测试需要人工审核，特别是 mock 和 fixture 的合理性。
 
 ### Q7: MCP 自定义工具的开发与集成案例。
 ```python
@@ -365,7 +365,7 @@ async def call_tool(name, args):
 - 设置 `stop` 序列防止生成危险代码片段
 - 配合 CodeQL 等静态分析工具做二次检测
 
-> 🎯 **实战场景小结**：从批量重构到 CI/CD 集成，从 Bug 修复到项目理解，核心是构建自动化工作流并将 LLM 深度嵌入开发流程。
+> **实战场景小结**：从批量重构到 CI/CD 集成，从 Bug 修复到项目理解，核心是构建自动化工作流并将 LLM 深度嵌入开发流程。
 
 ---
 
@@ -604,7 +604,7 @@ class MultiAgentOrchestrator:
         return await asyncio.gather(*coros)
 ```
 
-> 🎯 **手写代码小结**：面试中重点考察对 Codex API 的使用封装、错误处理、上下文管理，以及 Claude Code 的 Skills/MCP 开发能力。
+> **手写代码小结**：面试中重点考察对 Codex API 的使用封装、错误处理、上下文管理，以及 Claude Code 的 Skills/MCP 开发能力。
 
 ---
 
@@ -715,7 +715,7 @@ Source Code (Java)
 | 批处理 | 合并多个请求为一次调用 | 15-25% |
 | Token 预算 | 用户配额 + 上限控制 | 防止滥用 |
 
-> 🎯 **系统设计小结**：面试重点考察 Codex/Claude Code 在生产环境中如何安全、可控、高效地集成到现有研发流程。
+> **系统设计小结**：面试重点考察 Codex/Claude Code 在生产环境中如何安全、可控、高效地集成到现有研发流程。
 
 ---
 
@@ -737,7 +737,7 @@ Source Code (Java)
 | Skill 调用参数错误 | Skill 定义的参数规范不清晰 | 严格的输入 Schema + 参数校验 |
 | Headless 模式无错误反馈 | 非交互式运行难以定位问题 | 配置详细日志 + Slack/邮件告警 |
 
-> 💡 **黄金原则**：AI 生成代码永远不能直接上生产——必须经过代码审查、静态分析、单元测试三重验证。
+> **黄金原则**：AI 生成代码永远不能直接上生产——必须经过代码审查、静态分析、单元测试三重验证。
 
 ---
 
@@ -788,7 +788,7 @@ Source Code (Java)
 - [ ] [ ] 理解 Plugin/Automation 系统架构
 - [ ] [ ] 了解 Playwright MCP 在 Bug 修复中的应用
 
-> 🎯 **准备指南**：一面侧重基础概念速答（Q1-Q18），二面侧重深度原理（Q1-Q12）和手写代码（Q1-Q7），终面侧重系统设计（Q1-Q5）。建议先过 Checklist，再针对薄弱项重点复习。
+> **准备指南**：一面侧重基础概念速答（Q1-Q18），二面侧重深度原理（Q1-Q12）和手写代码（Q1-Q7），终面侧重系统设计（Q1-Q5）。建议先过 Checklist，再针对薄弱项重点复习。
 
 ---
 

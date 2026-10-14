@@ -23,7 +23,7 @@ Transformer由Encoder和Decoder两部分组成，每层包含：
 - **Residual Connection**：残差连接，缓解梯度消失
 - **Positional Encoding**：位置编码，为模型注入序列位置信息
 
-> 💡 Transformer的核心创新在于完全基于Attention机制，摒弃了RNN/CNN的序列建模方式，实现了并行计算和长距离依赖建模。
+> Transformer的核心创新在于完全基于Attention机制，摒弃了RNN/CNN的序列建模方式，实现了并行计算和长距离依赖建模。
 
 ### 1.2 Self-Attention的计算过程
 1. 输入序列 $X$ 通过三个权重矩阵 $W^Q, W^K, W^V$ 分别得到 Query、Key、Value
@@ -40,7 +40,7 @@ Transformer由Encoder和Decoder两部分组成，每层包含：
 | **RLHF** | Reward Model + PPO | 对齐人类偏好 |
 | **DPO** | 直接偏好优化（无Reward Model） | 简化RLHF，直接用偏好对优化 |
 
-> 🎯 DPO的核心公式：$\mathcal{L}_{DPO} = -\mathbb{E}_{(x,y_w,y_l)}\left[\log\sigma\left(\beta\log\frac{\pi_\theta(y_w|x)}{\pi_{ref}(y_w|x)} - \beta\log\frac{\pi_\theta(y_l|x)}{\pi_{ref}(y_l|x)}\right)\right]$
+> DPO的核心公式：$\mathcal{L}_{DPO} = -\mathbb{E}_{(x,y_w,y_l)}\left[\log\sigma\left(\beta\log\frac{\pi_\theta(y_w|x)}{\pi_{ref}(y_w|x)} - \beta\log\frac{\pi_\theta(y_l|x)}{\pi_{ref}(y_l|x)}\right)\right]$
 
 ### 1.4 LLM推理过程优化方法
 | 方法 | 原理 | 效果 |
@@ -74,7 +74,7 @@ Transformer由Encoder和Decoder两部分组成，每层包含：
 - **DARE**: 随机丢弃大部分Delta参数再缩放合并
 
 ### 1.7 KV Cache为什么重要？
-> ⚠️ **面试高频**：KV Cache是大模型推理优化的基石。
+> **面试高频**：KV Cache是大模型推理优化的基石。
 
 在自回归解码中，生成第 $t$ 个Token时，前 $t-1$ 个Token的 $K, V$ 矩阵已被计算过。若不缓存，每次需重新计算全部 $K, V$，复杂度 $O(n^3)$。KV Cache将复杂度降至 $O(n^2)$。
 
@@ -101,7 +101,7 @@ Transformer由Encoder和Decoder两部分组成，每层包含：
 - **Self-Verification**: 自我检查推理结果
 - **Aha Moment**: 模型自发学会重新评估初始思路，回溯纠正
 
-> 💡 DeepSeek-R1证明了纯强化学习可以激发出模型的深度推理能力，而不需要大量人工标注的思维链数据。
+> DeepSeek-R1证明了纯强化学习可以激发出模型的深度推理能力，而不需要大量人工标注的思维链数据。
 
 ### 1.10 Multi-GPU训练的并行策略
 | 策略 | 原理 | 适用场景 |
@@ -185,7 +185,7 @@ AI Agent = **LLM (大脑)** + **工具的循环调用**：
        → 检索时匹配最相关的chunk → 返回完整上下文
 ```
 
-> 💡 优势：解决了"检索到相关片段但缺乏上下文"的问题，常用于AI文档机器人和QA系统。
+> 优势：解决了"检索到相关片段但缺乏上下文"的问题，常用于AI文档机器人和QA系统。
 
 ---
 
@@ -229,7 +229,7 @@ MultiHead(Q, K, V) = Concat(head_1, ..., head_h) W^O
 | **RoPE (Rotary)** | 旋转矩阵变换Q、K | 相对位置编码，外推性好，LLaMA使用 |
 | **ALiBi** | 在Attention分数上加线性偏置 | 直接编码相对距离，训练稳定 |
 
-> ⚠️ RoPE是目前主流LLM（LLaMA、Mistral、DeepSeek）的首选位置编码方案。
+> RoPE是目前主流LLM（LLaMA、Mistral、DeepSeek）的首选位置编码方案。
 
 **RoPE数学原理**：
 ```
@@ -282,7 +282,7 @@ def swiglu(x, W, V):
 - 使信息直接在层间流动
 - 公式：$x_{l+1} = x_l + \text{Sublayer}(x_l)$
 
-> 🎯 残差连接 + LayerNorm + Attention + FFN 构成了Transformer的基础Building Block。
+> 残差连接 + LayerNorm + Attention + FFN 构成了Transformer的基础Building Block。
 
 ### 2.2 LLM完整训练流程
 
@@ -365,7 +365,7 @@ Phase 3: PPO — 用RM优化LLM
 最优参数 = 0.5 * FLOPs^{0.3}
 最优Tokens = 1.6 * FLOPs^{0.3}
 ```
-> 💡 LLaMA-1在Chinchilla之前训练（欠训练），LLaMA-3遵循Chinchilla法则。
+> LLaMA-1在Chinchilla之前训练（欠训练），LLaMA-3遵循Chinchilla法则。
 
 ### 2.4 KV Cache机制详解
 
@@ -1735,7 +1735,7 @@ DPO流程：
 
 ---
 
-> 🎯 **面试策略总结**：
+> **面试策略总结**：
 > 1. **基础题**（概念速答部分）：确保每个概念都能用1-2句话讲清楚
 > 2. **原理题**（深度剖析部分）：侧重公式推导和数学理解，面试官最喜欢追问"为什么这里要除以sqrt(d_k)"
 > 3. **代码题**（手写部分）：不仅要能写出Attention，还要能解释每行代码对应公式的哪一部分

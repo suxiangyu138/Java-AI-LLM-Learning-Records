@@ -2,7 +2,7 @@
 
 > "你了解CI/CD吗？会Docker吗？"——DevOps能力是区分初级和中级后端工程师的关键分水岭
 
-## 📚 目录
+## 目录
 
 1. [容器化 — Docker & Docker Compose](#1-容器化--docker--docker-compose)
 2. [容器编排 — Kubernetes (K8s)](#2-容器编排--kubernetes-k8s)
@@ -28,7 +28,7 @@
 └──────────┘              └──────────┘              └──────────┘
 ```
 
-> 💡 **核心价值**："It works on my machine"成为历史。Docker确保开发、测试、生产环境完全一致。
+> **核心价值**："It works on my machine"成为历史。Docker确保开发、测试、生产环境完全一致。
 
 **三大角色**：
 
@@ -221,7 +221,7 @@ networks:
     driver: bridge
 ```
 
-> 💡 **企业实践**：开发阶段使用Docker Compose统一管理所有中间件。每个新成员只需一条命令 `docker-compose up -d`，即可获得完整开发环境。
+> **企业实践**：开发阶段使用Docker Compose统一管理所有中间件。每个新成员只需一条命令 `docker-compose up -d`，即可获得完整开发环境。
 
 ---
 
@@ -236,10 +236,10 @@ networks:
 | **容器管理** | `docker ps -a` | 查看所有容器 |
 | | `docker run -d --name app -p 8080:8080 myapp` | 运行容器 |
 | | `docker stop $(docker ps -q)` | 停止所有容器 |
-| **进入容器** | `docker exec -it container_id sh` | 进入容器内部（⭐高频） |
+| **进入容器** | `docker exec -it container_id sh` | 进入容器内部（★高频） |
 | | `docker attach container_id` | 附加到容器 |
-| **查看日志** | `docker logs -f --tail 100 container_id` | 跟踪查看最近100行日志（⭐高频） |
-| **资源限制** | `docker run --memory=512m --cpus=1.0` | 限制内存和CPU（⭐高频） |
+| **查看日志** | `docker logs -f --tail 100 container_id` | 跟踪查看最近100行日志（★高频） |
+| **资源限制** | `docker run --memory=512m --cpus=1.0` | 限制内存和CPU（★高频） |
 | **网络** | `docker network ls` | 查看网络 |
 | | `docker network create --driver bridge my-net` | 创建网络 |
 | **数据卷** | `docker volume ls` | 查看数据卷 |
@@ -294,7 +294,7 @@ volumes:
     target: /tmp
 ```
 
-> 🎯 **核心要点**：Docker面试三连问——"Dockerfile怎么优化？"（多阶段构建+分层缓存）、"如何进入运行中的容器？"（`docker exec -it`）、"容器和宿主机怎么传文件？"（`docker cp`）。
+> **核心要点**：Docker面试三连问——"Dockerfile怎么优化？"（多阶段构建+分层缓存）、"如何进入运行中的容器？"（`docker exec -it`）、"容器和宿主机怎么传文件？"（`docker cp`）。
 
 ---
 
@@ -520,7 +520,7 @@ spec:
 
 ### 2.4 K8s中Java应用的内存/CPU配置
 
-> ⚠️ **关键问题**：K8s中Java应用感知的是容器内存还是宿主机内存？答案是——Java 10+ 通过 `UseContainerSupport` 默认感知Cgroup限制。
+> **关键问题**：K8s中Java应用感知的是容器内存还是宿主机内存？答案是——Java 10+ 通过 `UseContainerSupport` 默认感知Cgroup限制。
 
 ```yaml
 # JVM与容器资源协调
@@ -614,7 +614,7 @@ kubectl rollout pause deployment/myapp
 kubectl rollout resume deployment/myapp
 ```
 
-> 💡 **金丝雀发布（Canary Deployment）**：先更新少量实例，验证没问题后再全量更新。可以通过 `maxSurge: 0, maxUnavailable: 1` 配合Ingress流量比例实现。
+> **金丝雀发布（Canary Deployment）**：先更新少量实例，验证没问题后再全量更新。可以通过 `maxSurge: 0, maxUnavailable: 1` 配合Ingress流量比例实现。
 
 ---
 
@@ -634,7 +634,7 @@ kubectl rollout resume deployment/myapp
 | **社区生态** | - | Docker生态 | CNCF生态，最活跃 |
 | **推荐场景** | 小项目/传统企业 | 简单容器化 | 中大规模/云原生 |
 
-> 🎯 **核心要点**：K8s面试三连问——"Pod和Deployment的关系？"（Deployment管理Pod副本和更新策略）、"Service的类型？"（ClusterIP/NodePort/LoadBalancer/ExternalName）、"如何实现零宕机部署？"（readinessProbe + rollingUpdate maxUnavailable=0）。
+> **核心要点**：K8s面试三连问——"Pod和Deployment的关系？"（Deployment管理Pod副本和更新策略）、"Service的类型？"（ClusterIP/NodePort/LoadBalancer/ExternalName）、"如何实现零宕机部署？"（readinessProbe + rollingUpdate maxUnavailable=0）。
 
 ---
 
@@ -795,7 +795,7 @@ pipeline {
                 robot: 'devops-robot',
                 type: 'MARKDOWN',
                 title: "${APP_NAME} 构建成功",
-                text: "✅ 构建成功\n- 环境: ${params.ENV}\n- 镜像: ${IMAGE_TAG}\n- 触发者: ${env.BUILD_USER}"
+                text: "✓ 构建成功\n- 环境: ${params.ENV}\n- 镜像: ${IMAGE_TAG}\n- 触发者: ${env.BUILD_USER}"
             )
         }
         failure {
@@ -804,7 +804,7 @@ pipeline {
                 robot: 'devops-robot',
                 type: 'MARKDOWN',
                 title: "${APP_NAME} 构建失败",
-                text: "❌ 构建失败\n- 阶段: ${env.STAGE_NAME}\n- 查看: ${env.BUILD_URL}"
+                text: "✗ 构建失败\n- 阶段: ${env.STAGE_NAME}\n- 查看: ${env.BUILD_URL}"
             )
         }
     }
@@ -1026,7 +1026,7 @@ class OrderServiceIntegrationTest {
 }
 ```
 
-> 💡 **企业实践**：Harbor支持镜像复制（跨机房同步）、漏洞扫描（Trivy/Clair）、RBAC权限控制。是企业级镜像仓库的首选。
+> **企业实践**：Harbor支持镜像复制（跨机房同步）、漏洞扫描（Trivy/Clair）、RBAC权限控制。是企业级镜像仓库的首选。
 
 ---
 
@@ -1184,7 +1184,7 @@ Closes #123"
 - [ ] 边界用例是否测试？
 ```
 
-> 🎯 **核心要点**：Code Review不是"找茬"，而是知识共享和团队成长的机制。好的Review习惯是Java高级工程师的标志之一。
+> **核心要点**：Code Review不是"找茬"，而是知识共享和团队成长的机制。好的Review习惯是Java高级工程师的标志之一。
 
 ---
 
@@ -1281,12 +1281,12 @@ output.elasticsearch:
 
 | 工具 | 语言 | 协议 | 侵入性 | 存储 | 界面丰富度 |
 |------|------|------|--------|------|-----------|
-| **SkyWalking** | Java/Go/.NET | gRPC | 低（Java Agent） | H2/ES | ⭐⭐⭐⭐⭐ |
-| **Pinpoint** | Java/PHP | Thrift | 低（Java Agent） | HBase | ⭐⭐⭐⭐ |
-| **Jaeger** | 多语言 | OpenTelemetry | 中（SDK） | ES/Badger | ⭐⭐⭐ |
-| **Zipkin** | 多语言 | Brave/OpenTelemetry | 中（SDK） | ES/Cassandra | ⭐⭐⭐ |
+| **SkyWalking** | Java/Go/.NET | gRPC | 低（Java Agent） | H2/ES | ★★★★★ |
+| **Pinpoint** | Java/PHP | Thrift | 低（Java Agent） | HBase | ★★★★ |
+| **Jaeger** | 多语言 | OpenTelemetry | 中（SDK） | ES/Badger | ★★★ |
+| **Zipkin** | 多语言 | Brave/OpenTelemetry | 中（SDK） | ES/Cassandra | ★★★ |
 
-> 💡 **企业推荐**：Java技术栈首选 **SkyWalking**（无侵入Agent，自动增强Spring Cloud/dubbo/gRPC等框架）。
+> **企业推荐**：Java技术栈首选 **SkyWalking**（无侵入Agent，自动增强Spring Cloud/dubbo/gRPC等框架）。
 
 ```yaml
 # SkyWalking Agent配置
@@ -1424,7 +1424,7 @@ public class OrderMetrics {
 | **状态管理** | 状态文件（terraform.tfstate） | 无状态 |
 | **资源范围** | 基础设施（云资源/K8s） | 配置管理（软件/包/服务） |
 | **配置语言** | HCL | YAML |
-| **幂等性** | ✅ 天然 | ✅ 通过模块设计 |
+| **幂等性** | ✓ 天然 | ✓ 通过模块设计 |
 | **适用场景** | 创建/销毁云资源 | 服务器配置和编排 |
 
 ```hcl
@@ -1535,11 +1535,11 @@ resource "alicloud_db_instance" "mysql" {
 | **合规审计** | 所有变更记录在Git中，可追溯、可回滚 |
 | **知识沉淀** | 基础设施知识从"在某个运维工单里"变为"在代码仓库里" |
 
-> 💡 **IaC黄金法则**：永远不要手动修改生产环境。任何修改都应该通过代码变更 → Code Review → Pipeline 自动化应用。
+> **IaC黄金法则**：永远不要手动修改生产环境。任何修改都应该通过代码变更 → Code Review → Pipeline 自动化应用。
 
 ---
 
-> 🎯 **核心要点**：DevOps与云原生工具链是Java后端工程师从"会写代码"到"会交付"的进阶之路。掌握Docker容器化、K8s编排、CI/CD流水线、日志监控是面试的硬通货。IaC则是拉开"大厂工程师"和"传统开发"距离的关键能力。
+> **核心要点**：DevOps与云原生工具链是Java后端工程师从"会写代码"到"会交付"的进阶之路。掌握Docker容器化、K8s编排、CI/CD流水线、日志监控是面试的硬通货。IaC则是拉开"大厂工程师"和"传统开发"距离的关键能力。
 
 ---
 

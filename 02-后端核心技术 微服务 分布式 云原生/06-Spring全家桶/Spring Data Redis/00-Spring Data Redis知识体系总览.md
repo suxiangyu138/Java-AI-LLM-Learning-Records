@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [知识体系导图](#1-知识体系导图)
 2. [模块导航](#2-模块导航)
@@ -112,7 +112,7 @@ Spring Data Redis 知识体系
 
 **4）Redis 8.x 新命令与新 API 是差异化竞争力。** Redis 8.0 的 HGETDEL/HGETEX/HSETEX、Redis 8.4 的条件 SET/DEL（compare-and-set），在 Spring Data Redis 4.x 中以函数式 API 直接可用——用官方新能力替代"先 GET 再 SET"的两次往返，是 2026 年面试官期待听到的答案。
 
-> 🎯 **核心要点**：Spring Data Redis 不是"Redis 的 Java 客户端"，而是 Redis 在 Spring 世界中的**完整落地栈**——连接管理、序列化、类型化操作、缓存抽象、消息、Repository、可观测一应俱全。学它 = 学一条从"连上 Redis"到"生产可用"的全链路。
+> **核心要点**：Spring Data Redis 不是"Redis 的 Java 客户端"，而是 Redis 在 Spring 世界中的**完整落地栈**——连接管理、序列化、类型化操作、缓存抽象、消息、Repository、可观测一应俱全。学它 = 学一条从"连上 Redis"到"生产可用"的全链路。
 
 ## 4. 核心概念速查
 
@@ -180,7 +180,7 @@ Spring Data Redis 知识体系
 9. `@RedisListener(topic = "my-channel")` 是什么版本引入的？依赖哪些基础设施？
 10. Redis 8.4 的条件 SET 相比"先 GET 再 SET"省了几次往返？API 长什么样？
 
-> 💡 答不上的题，对应的模块序号就是你的学习优先级；答不出的答案全在本体系文档里。
+> 答不上的题，对应的模块序号就是你的学习优先级；答不出的答案全在本体系文档里。
 
 ---
 

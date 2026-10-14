@@ -1,7 +1,7 @@
 # lxml 与 XPath 解析
 > lxml 原生 API、XPath 提取实战、性能对比与 bs4 协同——"CSS 搞不定时，XPath 上"
 
-## 📚 目录
+## 目录
 1. [lxml 定位：bs4 的引擎也是独立武器](#1-lxml-定位bs4-的引擎也是独立武器)
 2. [lxml 基础用法](#2-lxml-基础用法)
 3. [XPath 提取实战](#3-xpath-提取实战)
@@ -24,7 +24,7 @@
   海量页面（性能敏感）→ lxml（快 5-10 倍）
 ```
 
-> 🎯 学习策略：**bs4 做日常、lxml 做攻坚**——两个都会，按场景选；本文件把 lxml 路线讲透。
+> 学习策略：**bs4 做日常、lxml 做攻坚**——两个都会，按场景选；本文件把 lxml 路线讲透。
 
 ## 2. lxml 基础用法
 
@@ -52,7 +52,7 @@ etree.tostring(tree, encoding="unicode")   # 看修复后的 HTML
 | `Element` | 元素对象（`xpath`/`find`/`.text`/`.get()`） |
 | `ElementTree` | 文档（少见直接用） |
 
-> 💡 lxml 是 **C 实现的解析器**（libxml2 绑定）——解析速度是纯 Python 的 bs4 数倍；代价是安装有二进制依赖（pip 已提供 wheel，基本无感）。
+> lxml 是 **C 实现的解析器**（libxml2 绑定）——解析速度是纯 Python 的 bs4 数倍；代价是安装有二进制依赖（pip 已提供 wheel，基本无感）。
 
 ## 3. XPath 提取实战
 
@@ -82,7 +82,7 @@ tree.xpath('//a[@class="more"]/parent::div')       # 链接的父容器
 tree.xpath('//div[contains(@class,"item")]/preceding-sibling::h2')  # 前面的标题
 
 # ═══ 条件与序号 ═══
-tree.xpath('//ul[@class="list"]/li[1]')            # 第一个 li（⚠️ XPath 从 1 开始）
+tree.xpath('//ul[@class="list"]/li[1]')            # 第一个 li（XPath 从 1 开始）
 tree.xpath('//ul[@class="list"]/li[last()]')       # 最后一个
 tree.xpath('//li[position()>1]')                   # 除第一个外
 tree.xpath('//a[@href and @target]')               # 多条件
@@ -100,7 +100,7 @@ tree.xpath('//a[@href and @target]')               # 多条件
 | `following-sibling::` / `preceding-sibling::` / `parent::` | 轴 |
 | `[1]` / `[last()]` | 位置（从 1 开始） |
 
-> ⚠️ 与 Python 索引的差异：**XPath 的 `[1]` 是第一个**（Python 列表是 `[0]`）——`xpath('//li[1]')` 与 `find_all('li')[0]` 等价。混用两种语法时最容易搞混。
+> 与 Python 索引的差异：**XPath 的 `[1]` 是第一个**（Python 列表是 `[0]`）——`xpath('//li[1]')` 与 `find_all('li')[0]` 等价。混用两种语法时最容易搞混。
 
 ## 4. 性能对比：什么时候用 lxml
 
@@ -123,7 +123,7 @@ tree.xpath('//a[@href and @target]')               # 多条件
 | 动态 class/文本定位 | lxml XPath | 能力需求 |
 | 混合 | bs4 解析 + lxml 后端 | 简单与性能兼顾 |
 
-> 🎯 性能决策：**"性能瓶颈出现前用 bs4（代码可读），出现后用 lxml（换引擎或换 API）"**——阶段 6 异步化后每页节省的时间 × 并发数 = 巨大收益，那时 lxml 是标配。
+> 性能决策：**"性能瓶颈出现前用 bs4（代码可读），出现后用 lxml（换引擎或换 API）"**——阶段 6 异步化后每页节省的时间 × 并发数 = 巨大收益，那时 lxml 是标配。
 
 ## 5. bs4 + lxml 协同模式
 
@@ -162,7 +162,7 @@ def parse_news_list(html_text):
     return results
 ```
 
-> 🎯 协同结论：**"XPath 定位容器，bs4 处理细节"或"lxml 一条龙"**——两种模式都生产可用；选型看团队熟悉度。XPath 的 `text()`/`@href` 提取天然返回列表，判空规则：`title[0] if title else ""`。
+> 协同结论：**"XPath 定位容器，bs4 处理细节"或"lxml 一条龙"**——两种模式都生产可用；选型看团队熟悉度。XPath 的 `text()`/`@href` 提取天然返回列表，判空规则：`title[0] if title else ""`。
 
 ---
 

@@ -1,6 +1,6 @@
 # 03 - Reasoning 推理控制
 
-> 🎯 GPT-5.6 的推理控制体系 — 六个 effort 等级、Sol 的 Max/Ultra 模式、Pro 质量优先模式。推理深度 = 质量 × 成本 × 延迟的三维权衡
+> GPT-5.6 的推理控制体系 — 六个 effort 等级、Sol 的 Max/Ultra 模式、Pro 质量优先模式。推理深度 = 质量 × 成本 × 延迟的三维权衡
 
 ---
 
@@ -146,6 +146,6 @@ response = client.responses.create(
 
 ---
 
-> 🎯 **核心要点**：推理控制的三个层次 — **① effort 六档（none→max）按任务难度分级 ② Sol 的 Max（验证）/Ultra（4-16 子 Agent）模式 ③ Pro 模式（任意层级质量优先）**。生产最优实践：按请求类型动态设置 effort，简单任务降档省 60% 成本。
+> **核心要点**：推理控制的三个层次 — **① effort 六档（none→max）按任务难度分级 ② Sol 的 Max（验证）/Ultra（4-16 子 Agent）模式 ③ Pro 模式（任意层级质量优先）**。生产最优实践：按请求类型动态设置 effort，简单任务降档省 60% 成本。
 
 **下一模块**：[04-Tools工具与多智能体](04-Tools工具与多智能体.md) / **返回总览**：[00-总览](00-GPT-API知识体系总览.md)

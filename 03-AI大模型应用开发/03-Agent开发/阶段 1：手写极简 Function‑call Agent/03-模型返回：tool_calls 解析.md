@@ -2,7 +2,7 @@
 
 > 定位：模型说"我要调工具"时返回了什么——tool_calls 结构解剖、消息追加铁律、并行调用（2026-08 基准）
 
-## 📚 目录
+## 目录
 
 1. [finish_reason：读懂模型的"结束语"](#1-finish_reason读懂模型的结束语)
 2. [tool_calls 结构解剖](#2-tool_calls-结构解剖)
@@ -23,7 +23,7 @@
 | `"length"` | 输出被 max_tokens 截断 | 视为异常：重试或报告 |
 | `"content_filter"` | 内容被过滤 | 报告（很少见） |
 
-> 🎯 **核心要点**：`finish_reason == "tool_calls"` 是"模型要工具"，`"stop"` 是"对话可结束"——循环的终止条件就是这二者的判断。
+> **核心要点**：`finish_reason == "tool_calls"` 是"模型要工具"，`"stop"` 是"对话可结束"——循环的终止条件就是这二者的判断。
 
 ## 2. tool_calls 结构解剖
 
@@ -78,7 +78,7 @@ messages 顺序（一次完整工具调用后）：
 | 2 | tool 消息必须带原样的 `tool_call_id` | `BadRequestError`：找不到对应调用 |
 | 3 | 每条 tool_calls 必须有对应 tool 消息 | 缺失对应关系直接报错 |
 
-> ⚠️ **tool_call_id 造假现场**：手写循环最常见的 bug 是拼接 id（如 `"call_" + name`）——**id 是服务端生成的，只能原样取用，绝不重建**。
+> **tool_call_id 造假现场**：手写循环最常见的 bug 是拼接 id（如 `"call_" + name`）——**id 是服务端生成的，只能原样取用，绝不重建**。
 
 ## 4. arguments 解析与防御
 
@@ -129,7 +129,7 @@ for tool_call in msg.tool_calls:
 | 工具结果按 id 一一配对 | 顺序错乱 = 张冠李戴 |
 | 有状态工具串行执行 | 并行执行会竞争（如"先建再删"） |
 
-> 💡 只读/无依赖工具可并行（省延迟）；有状态/有依赖的工具**串行**——阶段 1 全部串行执行，最简单可靠。
+> 只读/无依赖工具可并行（省延迟）；有状态/有依赖的工具**串行**——阶段 1 全部串行执行，最简单可靠。
 
 ## 6. 思考链：thinking 与 reasoning_content
 
@@ -155,7 +155,7 @@ msg = response.choices[0].message
 messages.append(msg)
 ```
 
-> ⚠️ **阶段 1 建议**：先把 thinking 关掉（默认 non-thinking）跑通主循环；thinking 模式留到循环跑通后再开。少一个变量，多一分可控。
+> **阶段 1 建议**：先把 thinking 关掉（默认 non-thinking）跑通主循环；thinking 模式留到循环跑通后再开。少一个变量，多一分可控。
 
 ## 7. 调试利器：打印原始响应
 
@@ -183,7 +183,7 @@ dump_response(response)
 ③ 打印每次循环轮次与 finish_reason（确认终止逻辑）
 ```
 
-> 🎯 **核心要点**：tool_calls 解析 = "读协议、原样回传"。三件套记忆：**id 原样、arguments 是字符串、assistant 消息必须追加**——三个都做对，循环就通了。
+> **核心要点**：tool_calls 解析 = "读协议、原样回传"。三件套记忆：**id 原样、arguments 是字符串、assistant 消息必须追加**——三个都做对，循环就通了。
 
 ---
 

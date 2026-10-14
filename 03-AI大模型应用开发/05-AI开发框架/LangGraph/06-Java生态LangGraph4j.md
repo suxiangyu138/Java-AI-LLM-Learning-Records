@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [Java 生态 LangGraph 方案对比](#1-java-生态-langgraph-方案对比)
 2. [langgraph4j 核心 API](#2-langgraph4j-核心-api)
@@ -23,33 +23,33 @@
   ├── API 接近 Python LangGraph
   ├── StateGraph, Node, Edge, Conditional Edge
   ├── 支持 MemorySaver, SqliteSaver
-  └── 成熟度：⭐⭐⭐（适合学习和原型）
+  └── 成熟度：★★★（适合学习和原型）
 
 方案 B：Java + Python LangGraph 混合（推荐生产）
   ├── Java Spring Boot 做主控
   ├── Python LangGraph 做 Agent 编排
   ├── 通信：REST API / gRPC / Redis Pub-Sub
-  └── 成熟度：⭐⭐⭐⭐⭐（生产验证）
+  └── 成熟度：★★★★★（生产验证）
 
 方案 C：Spring AI + 手动控制流
   ├── 纯 Java，零 Python 依赖
   ├── 在 Java 中手动实现图结构的控制流
   ├── 用 Spring AI 的 ChatClient 做 LLM 调用
-  └── 成熟度：⭐⭐⭐⭐（灵活但需手写控制流）
+  └── 成熟度：★★★★（灵活但需手写控制流）
 
 方案 D：LangChain4j AiServices
   ├── 纯 Java
   ├── AiServices 提供部分 Agent 能力
   ├── 但缺少图的循环/分支/持久化
-  └── 成熟度：⭐⭐⭐（适合简单 Agent）
+  └── 成熟度：★★★（适合简单 Agent）
 ```
 
 | 方案 | 语言 | Checkpoint | 复杂控制流 | 生产就绪 | 推荐场景 |
 |------|:---:|:---:|:---:|:---:|------|
-| langgraph4j | Java | ⚠️ 有限 | ✅ | ❌ | 学习/原型 |
-| Java + Python | 混合 | ✅ Postgres | ✅ | ✅ | **生产首选** |
-| Spring AI 手工 | Java | 需自建 | ⚠️ 手写 | ✅ | 简单 Agent |
-| LangChain4j | Java | ❌ | ❌ | ✅ | 链式 Agent |
+| langgraph4j | Java | 有限 | ✓ | ✗ | 学习/原型 |
+| Java + Python | 混合 | ✓ Postgres | ✓ | ✓ | **生产首选** |
+| Spring AI 手工 | Java | 需自建 | 手写 | ✓ | 简单 Agent |
+| LangChain4j | Java | ✗ | ✗ | ✓ | 链式 Agent |
 
 ---
 
@@ -73,7 +73,7 @@
 </dependency>
 ```
 
-> ⚠️ **注意**：langgraph4j 目前处于早期阶段，API 可能变化。生产环境建议用混合架构（方案 B）。
+> **注意**：langgraph4j 目前处于早期阶段，API 可能变化。生产环境建议用混合架构（方案 B）。
 
 ### 2.2 核心类映射
 
@@ -87,8 +87,8 @@ graph.add_conditional   →  builder.addConditionalEdges()
 graph.compile()         →  builder.compile()
 graph.invoke()          →  graph.invoke()
 graph.stream()          →  graph.stream()
-interrupt()             →  ⚠️ 尚不支持
-Command()               →  ⚠️ 尚不支持
+interrupt()             →  尚不支持
+Command()               →  尚不支持
 Checkpointer            →  MemorySaver（有限支持）
 ```
 
@@ -815,7 +815,7 @@ public class StateMachineAgent {
 
 ---
 
-> 🎯 **核心要点**：Java 生态中 LangGraph 的最优解是**混合架构**——Java 做业务逻辑、权限、API，Python 做 Agent 编排。langgraph4j 适合原型和学习。对于简单 Agent，Spring AI + 手动状态机完全可以胜任，不需要引入 Python。
+> **核心要点**：Java 生态中 LangGraph 的最优解是**混合架构**——Java 做业务逻辑、权限、API，Python 做 Agent 编排。langgraph4j 适合原型和学习。对于简单 Agent，Spring AI + 手动状态机完全可以胜任，不需要引入 Python。
 
 ---
 

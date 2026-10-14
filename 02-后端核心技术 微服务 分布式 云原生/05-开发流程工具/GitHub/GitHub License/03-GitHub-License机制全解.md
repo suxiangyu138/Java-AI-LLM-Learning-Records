@@ -1,7 +1,7 @@
 # 03-GitHub License 机制全解
 > GitHub 怎么检测许可证：Licensee 引擎的规则、仓库添加 LICENSE 的完整流程、License REST API 三端点
 
-## 📚 目录
+## 目录
 1. [Licensee 检测引擎](#1-licensee-检测引擎)
 2. [检测的文件命名规则](#2-检测的文件命名规则)
 3. [添加 LICENSE 的仓库流程](#3-添加-license-的仓库流程)
@@ -50,7 +50,7 @@ Licensee 用正则对根目录文件打分，识别以下命名（大小写不�
 | COPYING 系 | `COPYING`、`COPYING.txt`、`COPYRIGHT` |
 | 后缀变体 | `LICENSE-MIT`、`LICENSE-APACHE`、`UNLICENSE` |
 
-> ⚠️ **命名是硬规则**：用 `License.txt`、`LICENSE-file` 之外的自定义名（如 `licence.md` 是合法的，但 `legal/` 子目录下则**不会被检测**）——检测只扫**仓库根目录**。
+> **命名是硬规则**：用 `License.txt`、`LICENSE-file` 之外的自定义名（如 `licence.md` 是合法的，但 `legal/` 子目录下则**不会被检测**）——检测只扫**仓库根目录**。
 
 ## 3. 添加 LICENSE 的仓库流程
 
@@ -79,7 +79,7 @@ curl -s https://raw.githubusercontent.com/github/choosealicense.com/gh-pages/_li
 git add LICENSE && git commit -m "Add MIT license"
 ```
 
-> 💡 **生产建议**：LICENSE 放仓库根目录、文件名严格用 `LICENSE`/`LICENSE.md`、不放在子目录——检测与工具链（Licensee/SCA 扫描器）都按此约定工作。
+> **生产建议**：LICENSE 放仓库根目录、文件名严格用 `LICENSE`/`LICENSE.md`、不放在子目录——检测与工具链（Licensee/SCA 扫描器）都按此约定工作。
 
 ## 4. License REST API
 
@@ -128,11 +128,11 @@ curl https://api.github.com/licenses | jq '.[] | {key, spdx_id}'
 | 不检查依赖 | 检测的是**项目自身**许可证 | 依赖合规走 [04](04-开源合规与依赖许可证管理.md) |
 | 不检查文件头 | 源码注释里的版权头不参与 | 项目级检测与文件级 SPDX 头是两回事 |
 
-> 🎯 **核心要点**：GitHub 的 License 检测 = **根目录文件内容比对**，理解它的"看什么不看什么"（命名/内容/置信度），就能解释"为什么我的 LICENSE 没被识别"这类问题。
+> **核心要点**：GitHub 的 License 检测 = **根目录文件内容比对**，理解它的"看什么不看什么"（命名/内容/置信度），就能解释"为什么我的 LICENSE 没被识别"这类问题。
 
 ## 6. 核心要点
 
-> 🎯 **核心要点**：
+> **核心要点**：
 > - Licensee 流程：命名打分 → 内容比对 → 置信度阈值（98%）；CLI 可本地复现；
 > - 文件必须放**根目录**、用标准命名（LICENSE/COPYING 系）；
 > - 三端点 API：列表、详情、仓库检测（`spdx_id` 是核心信号）；

@@ -1,6 +1,6 @@
 # 07 - Kotlin DSL 与惰性配置
 
-> 🎯 Kotlin DSL（9.0 起默认）带来类型安全、自动补全与可靠重构；惰性配置（Provider/Property API）是 Gradle 配置阶段性能的核心——"配置避免"让只配置被请求的任务。理解这两者，构建脚本从"能跑"到"专业"
+> Kotlin DSL（9.0 起默认）带来类型安全、自动补全与可靠重构；惰性配置（Provider/Property API）是 Gradle 配置阶段性能的核心——"配置避免"让只配置被请求的任务。理解这两者，构建脚本从"能跑"到"专业"
 
 ---
 
@@ -115,10 +115,10 @@ Property 规则：**抽象 Property 由 Gradle 自动生成实现**（不用手�
 配置避免（Configuration Avoidance）的 API 选择：
 
 ```kotlin
-// ❌ create：立即创建并配置任务（配置阶段就执行配置块）
+// ✗ create：立即创建并配置任务（配置阶段就执行配置块）
 tasks.create("heavy") { doLast { ... } }
 
-// ✅ register：懒注册，配置延迟到任务被请求时
+// ✓ register：懒注册，配置延迟到任务被请求时
 tasks.register("heavy") { doLast { ... } }
 
 // 条件配置：只有执行相关任务时才配置
@@ -178,6 +178,6 @@ Kotlin DSL 的错误信息比 Groovy 友好（编译期暴露 + IDE 高亮），
 
 ---
 
-> 🎯 **核心要点**：Kotlin DSL = 类型安全 + 补全 + 重构；惰性配置 = Provider/Property（声明与计算分离），是配置缓存的前提；配置避免 = register/named/configureEach 优先。性能三板斧：配置缓存 + 并行 + 避免配置阶段 IO。Groovy 存量不强制迁移，新代码一律 Kotlin DSL。
+> **核心要点**：Kotlin DSL = 类型安全 + 补全 + 重构；惰性配置 = Provider/Property（声明与计算分离），是配置缓存的前提；配置避免 = register/named/configureEach 优先。性能三板斧：配置缓存 + 并行 + 避免配置阶段 IO。Groovy 存量不强制迁移，新代码一律 Kotlin DSL。
 
 **下一模块**：[08-构建缓存与性能优化](08-构建缓存与性能优化.md) / **返回总览**：[00-总览](00-Gradle知识体系总览.md)

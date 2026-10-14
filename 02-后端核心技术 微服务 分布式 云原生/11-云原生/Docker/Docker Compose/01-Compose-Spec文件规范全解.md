@@ -1,7 +1,7 @@
 # 01-Compose Spec 文件规范全解
 > Compose 文件的跨实现规范：顶层键、depends_on 三条件、profiles/extends/include、多文件合并规则——每个字段的精确语义
 
-## 📚 目录
+## 目录
 1. [文件命名与顶层键](#1-文件命名与顶层键)
 2. [services：唯一必填键](#2-services唯一必填键)
 3. [depends_on：三条件依赖控制](#3-depends_on三条件依赖控制)
@@ -24,15 +24,15 @@ compose.yaml（首选）> compose.yml > docker-compose.yaml > docker-compose.yml
 
 | 键 | 必填 | 用途 |
 |----|:---:|------|
-| `services` | ✅ | 定义应用的所有容器 |
-| `networks` | ❌ | 定义容器可连接的网络 |
-| `volumes` | ❌ | 定义持久化存储卷 |
-| `configs` | ❌ | 定义挂载的配置文件（只读） |
-| `secrets` | ❌ | 定义敏感数据（只读挂载） |
-| `include` | ❌ | 引入外部 Compose 文件 |
-| `name` | ❌ | 设置项目名（默认取目录名） |
-| `version` | ❌ | **已废弃**，仅向后兼容，可省略 |
-| `x-*` | ❌ | 用户自定义扩展（Compose 忽略） |
+| `services` | ✓ | 定义应用的所有容器 |
+| `networks` | ✗ | 定义容器可连接的网络 |
+| `volumes` | ✗ | 定义持久化存储卷 |
+| `configs` | ✗ | 定义挂载的配置文件（只读） |
+| `secrets` | ✗ | 定义敏感数据（只读挂载） |
+| `include` | ✗ | 引入外部 Compose 文件 |
+| `name` | ✗ | 设置项目名（默认取目录名） |
+| `version` | ✗ | **已废弃**，仅向后兼容，可省略 |
+| `x-*` | ✗ | 用户自定义扩展（Compose 忽略） |
 
 ```yaml
 # 现代写法：无 version 字段
@@ -56,7 +56,7 @@ volumes:
 | 字段 | 说明 |
 |------|------|
 | `image` / `build` | 指定镜像或从 Dockerfile 构建（二选一或组合） |
-| `container_name` | 容器名（⚠️ 指定后无法 scale 多副本） |
+| `container_name` | 容器名（指定后无法 scale 多副本） |
 | `ports` | 端口映射 `"宿主机:容器"`（短语法）或长语法（含 protocol 等） |
 | `expose` | 仅暴露给同网络服务，不映射宿主机 |
 | `environment` | 环境变量（列表或 map 两种写法） |
@@ -84,7 +84,7 @@ services:
       DB_PASSWORD: ${DB_PASSWORD}                              # 来自 .env
 ```
 
-> 💡 map 写法支持 `${VAR:-default}` 默认值语法与变量插值（详见 [04](04-多环境与配置管理.md)）。
+> map 写法支持 `${VAR:-default}` 默认值语法与变量插值（详见 [04](04-多环境与配置管理.md)）。
 
 ## 3. depends_on：三条件依赖控制
 
@@ -126,7 +126,7 @@ services:
     command: migrate
 ```
 
-> ⚠️ **两条铁律**：① `service_started` 只保证"容器启动了"，不保证"服务可用了"——Java 连接失败要用 `service_healthy`；② **`depends_on` 与 `extends` 不兼容**——有依赖的服务不能作为 `extends` 的基类。
+> **两条铁律**：① `service_started` 只保证"容器启动了"，不保证"服务可用了"——Java 连接失败要用 `service_healthy`；② **`depends_on` 与 `extends` 不兼容**——有依赖的服务不能作为 `extends` 的基类。
 
 ## 4. profiles：按需启用的可选服务
 
@@ -156,7 +156,7 @@ COMPOSE_PROFILES=dev docker compose watch     # 环境变量方式
 | 单一事实源 | 不需要多个近重复的 Compose 文件 |
 | 与 watch 配合 | `COMPOSE_PROFILES=dev docker compose watch` |
 
-> ⚠️ 陷阱：`up` 时忘记指定 profile，这些服务不会启动——需要重新带 profile 运行。
+> 陷阱：`up` 时忘记指定 profile，这些服务不会启动——需要重新带 profile 运行。
 
 ## 5. extends：配置复用
 
@@ -208,11 +208,11 @@ services:
 
 | 与 extends 的差异 | include | extends |
 |-------------------|:---:|:---:|
-| 引入的是完整文件 | ✅ | ❌（单个服务） |
-| 被引入服务可被 depends_on | ✅ | ❌ |
-| 被引入文件有独立项目名 | ✅（可配） | ❌ |
+| 引入的是完整文件 | ✓ | ✗（单个服务） |
+| 被引入服务可被 depends_on | ✓ | ✗ |
+| 被引入文件有独立项目名 | ✓（可配） | ✗ |
 
-> ⚠️ **安全提示**：`include` 与 OCI 制品存在路径穿越 CVE（CVE-2025-62725），**v2.40.2+ 已修复**——使用 include 请升级 Compose。
+> **安全提示**：`include` 与 OCI 制品存在路径穿越 CVE（CVE-2025-62725），**v2.40.2+ 已修复**——使用 include 请升级 Compose。
 
 ## 7. 多文件合并规则（-f）
 
@@ -252,7 +252,7 @@ services:
 docker compose -f base.yml -f prod.yml config   # 查看合并后的最终配置
 ```
 
-> 💡 验证神器：`docker compose config` 输出合并后的完整配置；`--no-env-resolution` 可查看未做变量替换的原始配置。
+> 验证神器：`docker compose config` 输出合并后的完整配置；`--no-env-resolution` 可查看未做变量替换的原始配置。
 
 ## 8. x-* 扩展字段
 
@@ -281,7 +281,7 @@ services:
 
 ## 9. 核心要点
 
-> 🎯 **核心要点**：
+> **核心要点**：
 > - 现代 Compose 无 `version:` 字段；`compose.yaml` 为推荐文件名；
 > - `depends_on` 三条件：started（顺序）/ healthy（就绪，生产必用）/ completed（一次性任务）；
 > - `profiles` 把可选服务（监控/调试/测试库）藏进 profile，一份文件管多场景；

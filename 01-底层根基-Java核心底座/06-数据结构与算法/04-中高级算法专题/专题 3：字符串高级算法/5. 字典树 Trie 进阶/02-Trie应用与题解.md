@@ -1,7 +1,7 @@
 # 02-Trie应用与题解
 > 一句话：211 单词搜索 II（Trie + DFS）、421 最大异或（位 Trie）、自动补全——Trie 从"字典"到"算法引擎"的应用延伸
 
-## 📚 目录
+## 目录
 1. [211 添加与搜索单词（通配符）](#1-211-添加与搜索单词通配符)
 2. [212 单词搜索 II（Trie + 网格 DFS）](#2-212-单词搜索-iitrie--网格-dfs)
 3. [421 数组中两个数的最大异或（位 Trie）](#3-421-数组中两个数的最大异或位-trie)
@@ -54,7 +54,7 @@ class WordDictionary {
         if (c != '.') {                          // ③ 普通字符
             return dfs(node.children[c - 'a'], word, index + 1);
         }
-        for (Node child : node.children) {       // ④ ⚠️ '.' → 遍历所有孩子
+        for (Node child : node.children) {       // ④ '.' → 遍历所有孩子
             if (child != null && dfs(child, word, index + 1)) return true;
         }
         return false;
@@ -62,10 +62,10 @@ class WordDictionary {
 }
 // 推演 addWord("bad") → search("b..") → 找到 "bad" ✓
 //   search("b.a") → true；search("b") → false（isEnd 判定）✓
-// ⚠️ '.' 的本质: 通配 → DFS 分支（把 Trie 查询变成搜索）
+// '.' 的本质: 通配 → DFS 分支（把 Trie 查询变成搜索）
 ```
 
-> 🎯 **211 的通配处理**："**'.' 把 Trie 查询从'沿路径走'升级为'DFS 分支搜索'**——普通字符走孩子、通配符遍历全部孩子。'isEnd 判定'在 DFS 结尾仍是关键。"
+> **211 的通配处理**："**'.' 把 Trie 查询从'沿路径走'升级为'DFS 分支搜索'**——普通字符走孩子、通配符遍历全部孩子。'isEnd 判定'在 DFS 结尾仍是关键。"
 
 ## 2. 212 单词搜索 II（Trie + 网格 DFS）
 
@@ -99,7 +99,7 @@ private void dfs(char[][] board, int i, int j, Node node,
     char c = board[i][j];
     if (c == '#') return;                        // ② 已访问
     int idx = c - 'a';
-    if (node.children[idx] == null) return;      // ③ ⚠️ Trie 剪枝: 前缀不存在
+    if (node.children[idx] == null) return;      // ③ Trie 剪枝: 前缀不存在
 
     Node next = node.children[idx];
     path.append(c);
@@ -118,11 +118,11 @@ private void dfs(char[][] board, int i, int j, Node node,
     path.deleteCharAt(path.length() - 1);
 }
 // 推演 board=[["o","a","a","n"],...], words=["oath","pea","eat","rain"] → ["oath","eat"] ✓
-// ⚠️ 为什么 Trie 快: 朴素 = 每词独立 DFS（O(词数 × 网格)）；
+// 为什么 Trie 快: 朴素 = 每词独立 DFS（O(词数 × 网格)）；
 //   Trie = 一次 DFS 同步剪枝（前缀不存在立即返回）——共享前缀剪枝
 ```
 
-> 🎯 **212 的剪枝价值**："**'网格 DFS 同步走 Trie'——字典不存在的路径立即剪掉，比逐个词搜索快一个数量级**。212 是 Trie + DFS + 剪枝的组合题，也是 Trie 面试的高频 hard。"
+> **212 的剪枝价值**："**'网格 DFS 同步走 Trie'——字典不存在的路径立即剪掉，比逐个词搜索快一个数量级**。212 是 Trie + DFS + 剪枝的组合题，也是 Trie 面试的高频 hard。"
 
 ## 3. 421 数组中两个数的最大异或（位 Trie）
 
@@ -170,11 +170,11 @@ public int findMaximumXOR(int[] nums) {
     return best;
 }
 // 推演 [3,10,5,25,2,8] → 28 ✓（5 ^ 25 = 28）
-// ⚠️ 位 Trie 的本质: 二进制前缀树——"逐位贪心选相反"
+// 位 Trie 的本质: 二进制前缀树——"逐位贪心选相反"
 //   复杂度 O(31n) ≈ O(n)（比 O(n²) 暴力快 n 倍）
 ```
 
-> 💡 **位 Trie 的通用性**："**421 = 位 Trie + 逐位贪心——'尽量走相反位'让异或最大**。位 Trie 还用于最大/最小异或、子数组异或问题，是 Trie 的'二进制形态'。"
+> **位 Trie 的通用性**："**421 = 位 Trie + 逐位贪心——'尽量走相反位'让异或最大**。位 Trie 还用于最大/最小异或、子数组异或问题，是 Trie 的'二进制形态'。"
 
 ## 4. 自动补全与词频统计
 
@@ -196,7 +196,7 @@ List<String> autocomplete(String prefix, int topK) {
     return candidates.subList(0, Math.min(topK, candidates.size()))
                      .stream().map(e -> e.word).toList();
 }
-// ⚠️ 工程要点: 词频存储（节点 count）+ topK 选择——
+// 工程要点: 词频存储（节点 count）+ topK 选择——
 //   自动补全 = Trie 前缀检索 + 词频排序
 ```
 
@@ -212,7 +212,7 @@ List<String> autocomplete(String prefix, int topK) {
 | 词典系统 | 集合组织 | 变体组合 |
 
 ```text
-⚠️ 家族规律:
+家族规律:
   "Trie 是'组织层'——查询（208/211）、剪枝（212）、
    位运算（421）、排序（补全）都是它的应用层"
 ```
@@ -239,13 +239,13 @@ List<String> autocomplete(String prefix, int topK) {
 ③ 复杂度: "插入/查询 O(L)，与数据量无关"
 ④ 与哈希对比: "前缀检索是 Trie vs 哈希的分水岭"
 
-⚠️ 高频追问: "Trie 和哈希表怎么选？"
+高频追问: "Trie 和哈希表怎么选？"
   → "哈希 O(1) 平均查询但不支持前缀；
     Trie O(L) 查询 + 天然前缀检索——
     需要前缀/自动补全/共享前缀剪枝 → Trie"
 ```
 
-> 🎯 **核心要点**：Trie 应用通关——**208（基础）+ 211（通配 DFS）+ 212（剪枝引擎）+ 421（位 Trie）**。四应用覆盖"查询/通配/剪枝/位运算"——"Trie 是组织层，应用层随意组合"，就是 Trie 家族的全部形态。
+> **核心要点**：Trie 应用通关——**208（基础）+ 211（通配 DFS）+ 212（剪枝引擎）+ 421（位 Trie）**。四应用覆盖"查询/通配/剪枝/位运算"——"Trie 是组织层，应用层随意组合"，就是 Trie 家族的全部形态。
 
 ---
 

@@ -1,10 +1,10 @@
 # 06 - Java 开发场景实战对比
 
-> 🎯 代码模型的排行榜是一回事，在真实的 Java 项目中"好不好用"是另一回事。本章用 6 个 Java 后端开发典型场景，实测 6 个主流代码模型的表现，给出场景化的评分和推荐
+> 代码模型的排行榜是一回事，在真实的 Java 项目中"好不好用"是另一回事。本章用 6 个 Java 后端开发典型场景，实测 6 个主流代码模型的表现，给出场景化的评分和推荐
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [测试方法说明](#1-测试方法说明)
 2. [场景一：Spring Boot CRUD 开发](#2-场景一spring-boot-crud-开发)
@@ -70,17 +70,17 @@
 
 ```text
 Claude Opus 5：完美平衡
-  ✅ 分页查询中正确使用了 MyBatis-Plus 的 LambdaQueryWrapper
-  ✅ 全局异常处理考虑了 4 类异常，Response 结构统一
-  ✅ 自动填充使用了 @TableField(fill = FieldFill.INSERT_UPDATE)
-  ✅ 参数校验加了自定义注解（订单状态枚举校验）
-  ⚠️ 唯一小瑕疵：未添加 @Version 乐观锁
+  ✓ 分页查询中正确使用了 MyBatis-Plus 的 LambdaQueryWrapper
+  ✓ 全局异常处理考虑了 4 类异常，Response 结构统一
+  ✓ 自动填充使用了 @TableField(fill = FieldFill.INSERT_UPDATE)
+  ✓ 参数校验加了自定义注解（订单状态枚举校验）
+  唯一小瑕疵：未添加 @Version 乐观锁
 
 Qwen3.7-Max：文档最完整
-  ✅ Swagger 注解最全面——每个字段都有 @Schema(description = "...")
-  ✅ 中文注释自然流畅
-  ✅ 考虑了订单号生成的分布式 ID 方案
-  ⚠️ Service 层稍显臃肿，未做接口抽象
+  ✓ Swagger 注解最全面——每个字段都有 @Schema(description = "...")
+  ✓ 中文注释自然流畅
+  ✓ 考虑了订单号生成的分布式 ID 方案
+  Service 层稍显臃肿，未做接口抽象
 ```
 
 ---
@@ -114,22 +114,22 @@ Qwen3.7-Max：文档最完整
 
 ```text
 DeepSeek V4 Pro：并发编程专长
-  ✅ 使用 ScopedValue 传递请求上下文（Java 21+ 新特性）
-  ✅ Redis Lua 脚本实现原子扣减 + 数据库异步批量同步
-  ✅ 虚拟线程使用 try-with-resources 管理 StructuredTaskScope
-  ✅ 压测方案包含了 JMH + JMeter 的对比建议
-  ⚠️ 分布式锁的续期机制（WatchDog）实现略显粗糙
+  ✓ 使用 ScopedValue 传递请求上下文（Java 21+ 新特性）
+  ✓ Redis Lua 脚本实现原子扣减 + 数据库异步批量同步
+  ✓ 虚拟线程使用 try-with-resources 管理 StructuredTaskScope
+  ✓ 压测方案包含了 JMH + JMeter 的对比建议
+  分布式锁的续期机制（WatchDog）实现略显粗糙
 
 MiniMax M3：并发 Bug 诊断最深
-  ✅ 正确识别了"先查再扣"的竞态条件
-  ✅ 给出了 3 种方案对比（乐观锁 / 悲观锁 / Redis 原子）
-  ✅ 死锁分析特别详细——标注了每个可能的锁等待链
-  ⚠️ 代码风格较"硬核"，缺少注释和设计模式
+  ✓ 正确识别了"先查再扣"的竞态条件
+  ✓ 给出了 3 种方案对比（乐观锁 / 悲观锁 / Redis 原子）
+  ✓ 死锁分析特别详细——标注了每个可能的锁等待链
+  代码风格较"硬核"，缺少注释和设计模式
 
 Claude Opus 5：工程质量最优
-  ✅ 代码结构最清晰——接口/实现分离，策略模式封装
-  ✅ 异常处理考虑周全——超时/重试/降级/熔断都有
-  ✅ 单元测试写得最完整——覆盖了超卖/并发/超时场景
+  ✓ 代码结构最清晰——接口/实现分离，策略模式封装
+  ✓ 异常处理考虑周全——超时/重试/降级/熔断都有
+  ✓ 单元测试写得最完整——覆盖了超卖/并发/超时场景
 ```
 
 ---
@@ -171,21 +171,21 @@ java.lang.NullPointerException
 
 ```text
 MiniMax M3：Bug 诊断最强（名不虚传！）
-  ✅ 准确定位：CompletableFuture 的 thenApplyAsync 使用了
+  ✓ 准确定位：CompletableFuture 的 thenApplyAsync 使用了
      commonPool，事务上下文（TransactionSynchronization）
      在异步线程中丢失，导致懒加载的关联对象为 null
-  ✅ "随机发生"的根因：commonPool 线程复用 + 线程本地变量
+  ✓ "随机发生"的根因：commonPool 线程复用 + 线程本地变量
      + GC 时机共同决定的竞态条件
-  ✅ 给出了 3 层修复方案：
+  ✓ 给出了 3 层修复方案：
      一层：使用自定义线程池 + 事务传播
      二层：主动 fetch 关联数据（避免懒加载）
      三层：添加防御性 null 检查 + 监控告警
-  ✅ 防范建议包括代码审查 Checklist 和静态分析规则
+  ✓ 防范建议包括代码审查 Checklist 和静态分析规则
 
 Claude Opus 5：修复代码最工程化
-  ✅ 修复代码考虑了向后兼容（新增重载方法，不改变现有接口）
-  ✅ 单元测试 + 集成测试双覆盖
-  ✅ 建议了 TransactionTemplate 替代 @Transactional 的方案
+  ✓ 修复代码考虑了向后兼容（新增重载方法，不改变现有接口）
+  ✓ 单元测试 + 集成测试双覆盖
+  ✓ 建议了 TransactionTemplate 替代 @Transactional 的方案
 ```
 
 ---
@@ -220,12 +220,12 @@ Claude Opus 5：修复代码最工程化
 
 ```text
 Claude Opus 5：重构方案最优
-  ✅ 识别的坏味道最全（7 种：上帝类/长方法/重复代码/
+  ✓ 识别的坏味道最全（7 种：上帝类/长方法/重复代码/
      特性依恋/数据泥团/中间人/循环依赖）
-  ✅ 方案合理：领域事件驱动 + Spring Modulith
+  ✓ 方案合理：领域事件驱动 + Spring Modulith
      （不是简单推荐 DDD，而是结合项目现状给务实方案）
-  ✅ 迁移步骤考虑了灰度发布和回滚方案
-  ✅ 给出"废弃标记 → 双写 → 切流 → 删除"的四阶段渐进重构
+  ✓ 迁移步骤考虑了灰度发布和回滚方案
+  ✓ 给出"废弃标记 → 双写 → 切流 → 删除"的四阶段渐进重构
 ```
 
 ---
@@ -263,19 +263,19 @@ Claude Opus 5：重构方案最优
 
 ```text
 Claude Opus 5：技术选型最前沿
-  ✅ 推荐 Spring Cloud Gateway (Reactive) + Spring Modulith（过渡期）
-  ✅ Saga 模式选择：订单→支付用 Choreography，库存用 Orchestration
-  ✅ 推荐了 2026 年最新的技术栈：
+  ✓ 推荐 Spring Cloud Gateway (Reactive) + Spring Modulith（过渡期）
+  ✓ Saga 模式选择：订单→支付用 Choreography，库存用 Orchestration
+  ✓ 推荐了 2026 年最新的技术栈：
      - Spring Boot 3.4 + Java 24 (Virtual Threads by default)
      - Apache Pulsar（替代 Kafka 用于高吞吐场景）
      - OpenTelemetry + Grafana Tempo（分布式追踪）
-  ✅ 对 Spring AI 在微服务中的集成提出了具体场景
+  ✓ 对 Spring AI 在微服务中的集成提出了具体场景
 
 Qwen3.7-Max：阿里生态理解最深
-  ✅ 推荐了 Spring Cloud Alibaba 2026 版全家桶
-  ✅ 对 RocketMQ 的事务消息机制理解深刻
-  ✅ Seata AT/TCC 模式的选择理由清晰
-  ⚠️ 技术选型过于偏阿里生态，对开源替代方案涉及较少
+  ✓ 推荐了 Spring Cloud Alibaba 2026 版全家桶
+  ✓ 对 RocketMQ 的事务消息机制理解深刻
+  ✓ Seata AT/TCC 模式的选择理由清晰
+  技术选型过于偏阿里生态，对开源替代方案涉及较少
 ```
 
 ---
@@ -313,16 +313,16 @@ Qwen3.7-Max：阿里生态理解最深
 
 | 排名 | 模型 | CRUD | 并发 | Bug修复 | 重构 | 微服务 | JVM | **总分** |
 |:---:|------|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
-| 🥇 | **Claude Opus 5** | 37.8 | 37.0 | 38.0 | 38.0 | 38.2 | 37.8 | **226.8** |
-| 🥈 | DeepSeek V4 Pro | 35.4 | 37.2 | 35.1 | 34.3 | 34.3 | 36.3 | 212.6 |
-| 🥉 | GPT-5.6 Sol | 36.4 | 36.0 | 36.2 | 36.9 | 36.8 | 36.2 | 218.5 |
+| | **Claude Opus 5** | 37.8 | 37.0 | 38.0 | 38.0 | 38.2 | 37.8 | **226.8** |
+| | DeepSeek V4 Pro | 35.4 | 37.2 | 35.1 | 34.3 | 34.3 | 36.3 | 212.6 |
+| | GPT-5.6 Sol | 36.4 | 36.0 | 36.2 | 36.9 | 36.8 | 36.2 | 218.5 |
 | 4 | Qwen3.7-Max | 37.3 | 35.1 | 35.3 | 36.4 | 37.2 | 34.6 | 215.9 |
 | 5 | Kimi K3 | 36.6 | 35.8 | 36.3 | 36.0 | 35.8 | 35.9 | 216.4 |
 | 6 | MiniMax M3 | 34.3 | 36.9 | **38.3** | 34.1 | 34.1 | — | — |
 
 ### 8.2 场景化最佳选择
 
-| 场景 | 🥇 首选 | 理由 |
+| 场景 | 首选 | 理由 |
 |------|------|------|
 | **日常 CRUD 开发** | Claude Opus 5 | 代码质量最高，Spring 生态理解最深 |
 | **复杂并发编程** | DeepSeek V4 Pro | 虚拟线程 + 并发模式最擅长 |
@@ -333,7 +333,7 @@ Qwen3.7-Max：阿里生态理解最深
 | **中文文档/注释** | Qwen3.7-Max | 阿里规范对齐，中文最自然 |
 | **极致性价比** | DeepSeek V4 Pro | 总分第三但价格 1/20，CPP 最高 |
 
-> 🎯 **核心要点**：Claude Opus 5 在 6 个 Java 场景中拿下 5 个第一，是 Java 后端开发的首选模型。但有两个场景被"专长生"超越——并发编程（DeepSeek V4 Pro）和 Bug 排查（MiniMax M3）。**最佳策略：Claude Opus 5 主力 + MiniMax M3 排 Bug + DeepSeek V4 Pro 省钱批量**。
+> **核心要点**：Claude Opus 5 在 6 个 Java 场景中拿下 5 个第一，是 Java 后端开发的首选模型。但有两个场景被"专长生"超越——并发编程（DeepSeek V4 Pro）和 Bug 排查（MiniMax M3）。**最佳策略：Claude Opus 5 主力 + MiniMax M3 排 Bug + DeepSeek V4 Pro 省钱批量**。
 
 ---
 

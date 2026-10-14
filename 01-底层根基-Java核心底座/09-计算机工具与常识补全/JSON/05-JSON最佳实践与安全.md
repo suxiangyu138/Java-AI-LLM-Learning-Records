@@ -2,7 +2,7 @@
 
 > JSON 反序列化是 Java 安全最危险的"入口"之一——一行 `readValue()` 可能触发 RCE。性能和安全，两手都要硬
 
-## 📚 目录
+## 目录
 
 1. [性能优化策略](#1)
 2. [安全防护全景](#2)
@@ -19,7 +19,7 @@
 这是最重要的性能规则——ObjectMapper 创建成本极高：
 
 ```java
-// ❌ 错误 —— 每次请求新建（极慢！）
+// ✗ 错误 —— 每次请求新建（极慢！）
 @RestController
 public class BadController {
     @GetMapping("/bad")
@@ -28,7 +28,7 @@ public class BadController {
     }
 }
 
-// ✅ 正确 —— 注入全局单例
+// ✓ 正确 —— 注入全局单例
 @RestController
 public class GoodController {
     @Autowired
@@ -54,16 +54,16 @@ public class GoodController {
  * 场景：处理 100MB JSON 文件
  */
 
-// ❌ 方式1：全量加载到 String —— 内存爆炸
+// ✗ 方式1：全量加载到 String —— 内存爆炸
 String json = Files.readString(Path.of("huge.json"));   // 100MB+ 内存
 User[] users = mapper.readValue(json, User[].class);     // 再 ×2~3
 
-// ⚠️ 方式2：数据绑定 —— 内存中构建完整数组
+// 方式2：数据绑定 —— 内存中构建完整数组
 try (InputStream is = new FileInputStream("huge.json")) {
     User[] users = mapper.readValue(is, User[].class);  // 比 String 好，但仍需全部加载
 }
 
-// ✅ 方式3：流式 API —— 恒量内存
+// ✓ 方式3：流式 API —— 恒量内存
 try (JsonParser parser = mapper.getFactory()
         .createParser(new File("huge.json"))) {
 
@@ -123,14 +123,14 @@ public class JacksonWarmUp implements ApplicationRunner {
 
 | 优化项 | 效果 | 难度 |
 |------|:---:|:---:|
-| ObjectMapper 单例 | 🟢 关键 | 低 |
-| 流式 API 处理大文件 | 🟢 关键 | 中 |
-| 启用 USE_FAST_DOUBLE_PARSER (2.18+) | 🟢 显著 | 低 |
-| 预热序列化器 | 🟡 有用 | 低 |
-| JsonInclude.NON_NULL 减少输出 | 🟡 有用 | 低 |
-| 避免深层嵌套 (>5 层) | 🟡 有用 | 设计层 |
-| 用 JMH 基准测试验证 | 🟡 推荐 | 中 |
-| GraalVM Native Image (AOT) | 🟢 显著 | 高 |
+| ObjectMapper 单例 | 关键 | 低 |
+| 流式 API 处理大文件 | 关键 | 中 |
+| 启用 USE_FAST_DOUBLE_PARSER (2.18+) | 显著 | 低 |
+| 预热序列化器 | 有用 | 低 |
+| JsonInclude.NON_NULL 减少输出 | 有用 | 低 |
+| 避免深层嵌套 (>5 层) | 有用 | 设计层 |
+| 用 JMH 基准测试验证 | 推荐 | 中 |
+| GraalVM Native Image (AOT) | 显著 | 高 |
 
 ---
 
@@ -154,20 +154,20 @@ public class JacksonWarmUp implements ApplicationRunner {
 
 ```java
 // ═══════════════════════════════════════
-// 🔴 绝对禁止的配置
+// 绝对禁止的配置
 // ═══════════════════════════════════════
 
-// ❌ 不要启用全局多态类型（极危险！）
+// ✗ 不要启用全局多态类型（极危险！）
 mapper.enableDefaultTyping();                          // 永不使用！
 mapper.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);
 
-// ❌ 不要对不受信任的输入使用这些
+// ✗ 不要对不受信任的输入使用这些
 mapper.enable(DeserializationFeature
     .FAIL_ON_INVALID_SUBTYPE);                        // 关闭类型检查
 
 
 // ═══════════════════════════════════════
-// ✅ 推荐的安全配置
+// ✓ 推荐的安全配置
 // ═══════════════════════════════════════
 ObjectMapper mapper = JsonMapper.builder()
     // 禁用默认类型推断
@@ -222,7 +222,7 @@ if (json.length() > MAX_JSON_SIZE) {
 
 // 1. 避免 GsonBuilder 中注册不受信任的类型适配器
 Gson gson = new GsonBuilder()
-    .registerTypeAdapter(Object.class, dangerousAdapter)  // ⚠️ 小心
+    .registerTypeAdapter(Object.class, dangerousAdapter)  // 小心
     .create();
 
 // 2. 输入大小限制（自行实现）
@@ -258,7 +258,7 @@ Gson gson = new GsonBuilder()
                          └─────────────────────┘
 ```
 
-> 🎯 **核心要点**：安全不能只靠 JSON 库——纵深防御才是正道。即使 Jackson/Gson 安全记录良好，也要在网关层限制请求大小、在应用层做 Schema 校验、在运行时层做容器隔离。
+> **核心要点**：安全不能只靠 JSON 库——纵深防御才是正道。即使 Jackson/Gson 安全记录良好，也要在网关层限制请求大小、在应用层做 Schema 校验、在运行时层做容器隔离。
 
 ### 2.6 依赖安全扫描
 
@@ -434,7 +434,7 @@ List<User> users = mapper.readValue(json, List.class);
 
 // ── 解决方案 ──
 List<User> users = mapper.readValue(json,
-    new TypeReference<List<User>>() {});   // ✅ 正确
+    new TypeReference<List<User>>() {});   // ✓ 正确
 ```
 
 ### 4.3 日期格式不一致
@@ -516,10 +516,10 @@ public class NumericBooleanDeserializer
 ## 团队 JSON 开发规范
 
 ### 1. 库选型
-- ✅ 统一使用 Jackson（Spring Boot 项目）
-- ✅ 版本在父 POM `<dependencyManagement>` 中统一管理
-- ❌ 禁止多个 JSON 库混用
-- 🚫 禁止使用 Fastjson 1.x
+- ✓ 统一使用 Jackson（Spring Boot 项目）
+- ✓ 版本在父 POM `<dependencyManagement>` 中统一管理
+- ✗ 禁止多个 JSON 库混用
+- 禁止使用 Fastjson 1.x
 
 ### 2. 配置规范
 - [ ] ObjectMapper 启用 JavaTimeModule
@@ -581,30 +581,30 @@ public class NumericBooleanDeserializer
 #!/bin/bash
 # json-standards-check.sh —— CI 中校验 JSON 相关规范
 
-echo "🔍 检查 JSON 安全配置..."
+echo "检查 JSON 安全配置..."
 
 # 1. 检查是否误用了 Fastjson 1.x（排除 fastjson2）
 if grep -r "com.alibaba:fastjson:" pom.xml */pom.xml 2>/dev/null |
    grep -v "fastjson2" | grep -v "compatible"; then
-    echo "❌ 项目中存在 Fastjson 1.x 依赖，请迁移到 Fastjson2！"
+    echo "✗ 项目中存在 Fastjson 1.x 依赖，请迁移到 Fastjson2！"
     exit 1
 fi
 
 # 2. 检查是否禁用了 enableDefaultTyping
 if grep -r "enableDefaultTyping\|enableDefaultTyping" src/ 2>/dev/null; then
-    echo "❌ 检测到 enableDefaultTyping，可能存在安全风险！"
+    echo "✗ 检测到 enableDefaultTyping，可能存在安全风险！"
     exit 1
 fi
 
 # 3. 检查 ObjectMapper 单例
 if grep -r "new ObjectMapper()" src/ 2>/dev/null; then
-    echo "⚠️  检测到 new ObjectMapper()，建议注入单例"
+    echo " 检测到 new ObjectMapper()，建议注入单例"
 fi
 
-echo "✅ JSON 安全检查通过"
+echo "✓ JSON 安全检查通过"
 ```
 
-> 🎯 **核心要点**：JSON 开发不是"能跑就行"——安全配置是底线，性能优化是加分项，Schema 校验是进化方向。在团队中建立规范、在 CI 中自动化检查，才能长治久安。
+> **核心要点**：JSON 开发不是"能跑就行"——安全配置是底线，性能优化是加分项，Schema 校验是进化方向。在团队中建立规范、在 CI 中自动化检查，才能长治久安。
 
 ---
 

@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [GIL 的本质](#1-gil-的本质)
 2. [三种并发模型选型](#2-三种并发模型选型)
@@ -98,7 +98,7 @@ if __name__ == "__main__":
 | I/O 密集 | 4.0s | **1.0s** | 1.0s（但开销大得多） |
 | numpy 大矩阵运算 | 4.0s | **1.2s**（C 层释放了 GIL） | 1.1s |
 
-> 🎯 **GIL 只锁字节码执行，不锁 I/O 等待，也不锁「已释放 GIL 的 C 代码」**。所以 numpy/PyTorch 的多线程是真并行——AI 场景里 GIL 的杀伤力远小于纯 Python 计算场景。
+> **GIL 只锁字节码执行，不锁 I/O 等待，也不锁「已释放 GIL 的 C 代码」**。所以 numpy/PyTorch 的多线程是真并行——AI 场景里 GIL 的杀伤力远小于纯 Python 计算场景。
 
 ---
 
@@ -125,8 +125,8 @@ if __name__ == "__main__":
 
 | 维度 | 多线程 | 多进程 | 协程（asyncio） |
 |------|-------|-------|---------------|
-| 并行 CPU | ❌（GIL） | ✅ | ❌ |
-| 并发 I/O | ✅ | ✅ | ✅✅ |
+| 并行 CPU | ✗（GIL） | ✓ | ✗ |
+| 并发 I/O | ✓ | ✓ | ✓✓ |
 | 单位内存 | ~8MB 栈 | ~30MB+ | **~KB 级** |
 | 创建开销 | 中 | 高 | 极低 |
 | 切换开销 | 中（OS 调度） | 高 | **极低（用户态）** |
@@ -137,7 +137,7 @@ if __name__ == "__main__":
 | 生态改造成本 | 低 | 低 | **高（需全链路 async 库）** |
 | 上限量级 | 数百 | 核数 × 2 | **数万** |
 
-> 💡 与 Java 对照：Java 线程是真并行（无 GIL），所以 Java 里「线程池打天下」；Python 里必须先分清任务类型。Java 21 的虚拟线程（Loom）在定位上最接近 asyncio 协程——都是「海量 I/O 并发、极低单位成本」，但虚拟线程对业务代码透明，Python 协程需要显式 `async/await`（即所谓「函数染色」问题）。
+> 与 Java 对照：Java 线程是真并行（无 GIL），所以 Java 里「线程池打天下」；Python 里必须先分清任务类型。Java 21 的虚拟线程（Loom）在定位上最接近 asyncio 协程——都是「海量 I/O 并发、极低单位成本」，但虚拟线程对业务代码透明，Python 协程需要显式 `async/await`（即所谓「函数染色」问题）。
 
 ---
 
@@ -162,7 +162,7 @@ print(t.is_alive(), threading.active_count(), threading.current_thread().name)
 ### 3.1 竞态条件与同步原语
 
 ```python
-# ❌ 竞态：count += 1 不是原子操作
+# ✗ 竞态：count += 1 不是原子操作
 count = 0
 def unsafe():
     global count
@@ -175,7 +175,7 @@ print(count)          # 期望 500000，实际常常更小
 ```
 
 ```python
-# ✅ 加锁
+# ✓ 加锁
 lock = threading.Lock()
 count = 0
 def safe():
@@ -237,15 +237,15 @@ for w in workers: w.join()
 print(sorted(result_q.queue))
 ```
 
-> 🎯 `Queue` 内部已加锁，是线程安全的。**能用 Queue 传递数据就不要用共享变量 + 锁**——这条原则和 Go 的「用 channel 通信」是一个道理。
+> `Queue` 内部已加锁，是线程安全的。**能用 Queue 传递数据就不要用共享变量 + 锁**——这条原则和 Go 的「用 channel 通信」是一个道理。
 
 ### 3.3 常见误区
 
 ```python
 # ① GIL 不保证复合操作的原子性
 d = {}
-d[k] = d.get(k, 0) + 1        # ❌ 非原子（三步）
-with lock: d[k] = d.get(k, 0) + 1     # ✅
+d[k] = d.get(k, 0) + 1        # ✗ 非原子（三步）
+with lock: d[k] = d.get(k, 0) + 1     # ✓
 # 单条 dict/list 方法（append/pop/update）本身是原子的
 
 # ② daemon 线程在主线程退出时被强杀，finally 可能不执行
@@ -273,7 +273,7 @@ import multiprocessing as mp
 
 def work(x): return x * x
 
-if __name__ == "__main__":                   # ⚠️ Windows/macOS 必须有这行
+if __name__ == "__main__":                   # Windows/macOS 必须有这行
     with mp.Pool(processes=4) as pool:
         print(pool.map(work, range(10)))                    # 阻塞、有序
         print(pool.imap_unordered(work, range(10)))         # 惰性、乱序（先到先出）
@@ -294,7 +294,7 @@ mp.set_start_method("spawn", force=True)     # 显式指定
 # Python 3.14 起 Linux 默认也改为 forkserver（fork 的线程安全隐患）
 ```
 
-> ⚠️ `spawn` 会重新 import 主模块，所以顶层代码必须放在 `if __name__ == "__main__":` 里，否则无限递归创建进程。目标函数和参数必须**可 pickle**（lambda 不行，用 `functools.partial` 或模块级函数）。
+> `spawn` 会重新 import 主模块，所以顶层代码必须放在 `if __name__ == "__main__":` 里，否则无限递归创建进程。目标函数和参数必须**可 pickle**（lambda 不行，用 `functools.partial` 或模块级函数）。
 
 ### 4.2 进程间通信
 
@@ -336,16 +336,16 @@ shm.close(); shm.unlink()
 ### 4.3 进程池的真实开销
 
 ```python
-# ❌ 反面教材：任务太细，序列化开销远超计算
+# ✗ 反面教材：任务太细，序列化开销远超计算
 with mp.Pool(4) as p:
     p.map(lambda x: x + 1, range(1_000_000))    # 还会因为 lambda 无法 pickle 直接报错
 
-# ✅ 用 chunksize 摊薄开销
+# ✓ 用 chunksize 摊薄开销
 with mp.Pool(4) as p:
     p.map(heavy_compute, range(1_000_000), chunksize=1000)
 ```
 
-> 🎯 进程池的成本 = 进程创建 + 参数 pickle + 结果 pickle + IPC。**单任务耗时必须显著大于这些开销**（经验值：> 10ms）才值得用多进程。传大 numpy 数组时优先 `shared_memory`，别让 pickle 拷两遍。
+> 进程池的成本 = 进程创建 + 参数 pickle + 结果 pickle + IPC。**单任务耗时必须显著大于这些开销**（经验值：> 10ms）才值得用多进程。传大 numpy 数组时优先 `shared_memory`，别让 pickle 拷两遍。
 
 ---
 
@@ -421,7 +421,7 @@ def batch_infer(prompts, workers=8):
     return results                            # 顺序与输入一致
 ```
 
-> 💡 `ThreadPoolExecutor` 默认 `max_workers = min(32, cpu_count + 4)`；`ProcessPoolExecutor` 默认 `cpu_count`。I/O 密集任务可以放心设成几十甚至上百，它不受 CPU 核数限制。
+> `ThreadPoolExecutor` 默认 `max_workers = min(32, cpu_count + 4)`；`ProcessPoolExecutor` 默认 `cpu_count`。I/O 密集任务可以放心设成几十甚至上百，它不受 CPU 核数限制。
 
 ---
 
@@ -440,10 +440,10 @@ async def fetch(name, delay):                # 协程函数
 
 async def main():
     t = time.perf_counter()
-    # ❌ 串行：一个 await 一个
+    # ✗ 串行：一个 await 一个
     # r1 = await fetch("A", 1); r2 = await fetch("B", 1)   → 2 秒
 
-    # ✅ 并发：gather
+    # ✓ 并发：gather
     r = await asyncio.gather(fetch("A", 1), fetch("B", 1), fetch("C", 1))
     print(r, f"{time.perf_counter() - t:.2f}s")            # → 1 秒
 
@@ -514,13 +514,13 @@ results = await asyncio.gather(*[limited_call(p) for p in prompts])
 ### 6.3 不要阻塞事件循环
 
 ```python
-# ❌ 致命错误：同步阻塞调用冻结整个事件循环
+# ✗ 致命错误：同步阻塞调用冻结整个事件循环
 async def bad():
     time.sleep(1)                            # 所有其他协程一起卡 1 秒
     requests.get(url)                        # 同上
     heavy_cpu_compute()                      # 同上
 
-# ✅ 正确做法
+# ✓ 正确做法
 async def good():
     await asyncio.sleep(1)                                  # 异步 sleep
     async with aiohttp.ClientSession() as s:                # 异步 HTTP
@@ -645,7 +645,7 @@ dis.dis(f)      # ... GET_AWAITABLE / SEND / YIELD_VALUE ...
 | **`TaskGroup` / `timeout` / `ExceptionGroup`** | 3.11 | 结构化并发 |
 | `eager_task_factory` | 3.12 | Task 首段同步执行，减少调度开销 |
 
-> 🎯 **`await` 只是「把控制权交回事件循环，并登记一个恢复条件」**。理解这一点就明白：await 之间的代码是原子的（单线程、无抢占），所以协程里几乎不需要锁；反过来，一个不带 await 的长循环会完全冻结事件循环。
+> **`await` 只是「把控制权交回事件循环，并登记一个恢复条件」**。理解这一点就明白：await 之间的代码是原子的（单线程、无抢占），所以协程里几乎不需要锁；反过来，一个不带 await 的长循环会完全冻结事件循环。
 
 ---
 
@@ -666,13 +666,13 @@ python3.14 -X gil=0 script.py        # 在支持的构建上运行时关闭
 
 | 影响 | 说明 |
 |------|------|
-| ✅ 纯 Python 多线程真并行 | CPU 密集任务终于能用线程扩展 |
-| ⚠️ 单线程性能下降 | 3.13t 约 -10%~-20%；3.14 已收窄，仍有开销 |
-| ⚠️ C 扩展需适配 | 必须声明 `Py_mod_gil = Py_MOD_GIL_NOT_USED`，否则自动重新启用 GIL |
-| ⚠️ **竞态问题暴露** | 以前被 GIL 掩盖的数据竞争会真实出现，必须补锁 |
+| ✓ 纯 Python 多线程真并行 | CPU 密集任务终于能用线程扩展 |
+| 单线程性能下降 | 3.13t 约 -10%~-20%；3.14 已收窄，仍有开销 |
+| C 扩展需适配 | 必须声明 `Py_mod_gil = Py_MOD_GIL_NOT_USED`，否则自动重新启用 GIL |
+| **竞态问题暴露** | 以前被 GIL 掩盖的数据竞争会真实出现，必须补锁 |
 | 内部改动 | 有偏引用计数、不朽对象、per-object 锁、mimalloc |
 
-> ⚠️ **别指望 free-threading 让老代码自动变快**。GIL 消失后，那些「依赖 GIL 保证 dict/list 操作原子性」的代码会开始出错。迁移时必须审计所有共享可变状态。
+> **别指望 free-threading 让老代码自动变快**。GIL 消失后，那些「依赖 GIL 保证 dict/list 操作原子性」的代码会开始出错。迁移时必须审计所有共享可变状态。
 
 ### 8.2 PEP 554/734：子解释器
 
@@ -690,9 +690,9 @@ interp.close()
 
 | 方案 | 并行 CPU | 内存开销 | 隔离性 | 成熟度（2026） |
 |------|:-------:|---------|-------|--------------|
-| 多进程 | ✅ | 高 | 完全 | 成熟 |
-| 子解释器 | ✅ | 中 | 较好（对象不共享） | 逐步可用 |
-| free-threading | ✅ | 低 | 无（需自己加锁） | 3.14 正式支持 |
+| 多进程 | ✓ | 高 | 完全 | 成熟 |
+| 子解释器 | ✓ | 中 | 较好（对象不共享） | 逐步可用 |
+| free-threading | ✓ | 低 | 无（需自己加锁） | 3.14 正式支持 |
 
 ### 8.3 绕开 GIL 的传统手段
 

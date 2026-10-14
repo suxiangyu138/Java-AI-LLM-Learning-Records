@@ -1,6 +1,6 @@
 # 01 - SPA 单页应用与前端路由原理
 
-> 🎯 SPA 是前后端分离的基础 — 理解"只有一个 HTML + JS 接管一切"和前端的 hash/history 路由模式，后端才知道 Nginx 为何要配 try_files
+> SPA 是前后端分离的基础 — 理解"只有一个 HTML + JS 接管一切"和前端的 hash/history 路由模式，后端才知道 Nginx 为何要配 try_files
 
 ---
 
@@ -34,8 +34,8 @@ SPA（Single-Page — Vue/React）：
 | 页面切换 | 整页刷新 | 局部更新（快） |
 | 服务端职责 | 渲染 HTML + 提供数据 | 仅提供数据 API |
 | 首屏速度 | 快（服务端渲染） | 慢（需加载 JS） |
-| SEO | ✅ 天然友好 | ❌ 需额外处理 |
-| 前后端 | 耦合（同一项目） | ⭐ 分离 |
+| SEO | ✓ 天然友好 | ✗ 需额外处理 |
+| 前后端 | 耦合（同一项目） | ★ 分离 |
 
 ---
 
@@ -59,8 +59,8 @@ SPA（Single-Page — Vue/React）：
 
 | 模式 | URL | 原理 | 刷新后 |
 |------|-----|------|:---:|
-| **Hash** | `/#/users` | `#` 后的内容不发送到服务端 | ✅ 正常 |
-| **History** | `/users` | HTML5 History API (`pushState`) | ❌ 404！需要 Nginx 配置 |
+| **Hash** | `/#/users` | `#` 后的内容不发送到服务端 | ✓ 正常 |
+| **History** | `/users` | HTML5 History API (`pushState`) | ✗ 404！需要 Nginx 配置 |
 
 ```javascript
 // Vue Router 配置
@@ -87,12 +87,12 @@ const router = createRouter({
     <router-link to="/">首页</router-link>
     <router-link to="/users">用户管理</router-link>
   </nav>
-  <router-view />    <!-- ⭐ 路由匹配的组件渲染在这里 -->
+  <router-view />    <!-- ★ 路由匹配的组件渲染在这里 -->
 </template>
 ```
 
 ```javascript
-// ⭐ 路由守卫 — 权限控制（类似后端 Filter）
+// ★ 路由守卫 — 权限控制（类似后端 Filter）
 router.beforeEach((to, from, next) => {
   const token = localStorage.getItem('accessToken');
   if (to.meta.requiresAuth && !token) {
@@ -120,18 +120,18 @@ const routes = [
 
 ## 4. 后端配合要点
 
-### ⚠️ History 模式需要 Nginx try_files
+### History 模式需要 Nginx try_files
 
 ```nginx
-# ❌ 没有 try_files → 刷新 /users → Nginx 找 /users 文件 → 404
-# ✅ 有 try_files → 所有路径返回 index.html → Vue Router 接管
+# ✗ 没有 try_files → 刷新 /users → Nginx 找 /users 文件 → 404
+# ✓ 有 try_files → 所有路径返回 index.html → Vue Router 接管
 
 server {
     listen 80;
     root /usr/share/nginx/html;
 
     location / {
-        try_files $uri $uri/ /index.html;   # ⭐ 关键：找不到文件返回 index.html
+        try_files $uri $uri/ /index.html;   # ★ 关键：找不到文件返回 index.html
     }
 
     location /api/ {
@@ -149,4 +149,4 @@ server {
 | **权限控制** | 前端路由守卫仅做 UI 控制，真正的权限校验在后端！ |
 | **页面刷新** | 确保 Nginx try_files 配置正确 |
 
-> 🎯 **后端记住**：SPA 只有一个 HTML，一切由 JS 接管。前端路由 ≠ 后端路由，History 模式必须配 Nginx `try_files`。前端路由守卫是 UI 层，真正的安全在后端。
+> **后端记住**：SPA 只有一个 HTML，一切由 JS 接管。前端路由 ≠ 后端路由，History 模式必须配 Nginx `try_files`。前端路由守卫是 UI 层，真正的安全在后端。

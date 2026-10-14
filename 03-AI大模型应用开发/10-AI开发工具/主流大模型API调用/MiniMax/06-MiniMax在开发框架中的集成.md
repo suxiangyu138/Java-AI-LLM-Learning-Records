@@ -1,6 +1,6 @@
 # 06 - MiniMax 在开发框架中的集成
 
-> 🎯 M3 双协议兼容 = 全生态零成本接入 — Anthropic 协议接 Claude 生态工具（Claude Code/Roo Code/Cline），OpenAI 协议接 OpenAI 生态。已接入 10+ 主流 AI 编程工具
+> M3 双协议兼容 = 全生态零成本接入 — Anthropic 协议接 Claude 生态工具（Claude Code/Roo Code/Cline），OpenAI 协议接 OpenAI 生态。已接入 10+ 主流 AI 编程工具
 
 ---
 
@@ -20,14 +20,14 @@
 M3 双协议 = 两个生态全覆盖：
 
 Anthropic 协议（推荐）：
-├── Claude Code ✅（已接入）
-├── Roo Code ✅
-├── Cline ✅
+├── Claude Code ✓（已接入）
+├── Roo Code ✓
+├── Cline ✓
 ├── LangChain4j AnthropicChatModel
 └── 所有 Claude 生态工具
 
 OpenAI 协议：
-├── Cursor ✅（已接入）
+├── Cursor ✓（已接入）
 ├── OpenClaw（openai-compatible）
 ├── Spring AI（openai starter）
 └── 所有 OpenAI 生态工具
@@ -175,10 +175,10 @@ claude                          # 用 M3 驱动 Claude Code！
 # 设置 → Models → OpenAI API Key → base URL 改为 MiniMax 端点
 ```
 
-> 💡 **M3 + Claude Code 组合**：用 MiniMax-M3 驱动 Claude Code 的 Agent 能力 — 享受 M3 的编程性能（SWE-Bench 59%）+ Claude Code 的工程化界面，成本仅为 Claude 的 1/15。
+> **M3 + Claude Code 组合**：用 MiniMax-M3 驱动 Claude Code 的 Agent 能力 — 享受 M3 的编程性能（SWE-Bench 59%）+ Claude Code 的工程化界面，成本仅为 Claude 的 1/15。
 
 ---
 
-> 🎯 **核心要点**：M3 集成一句话 — **"双协议兼容 = 全生态零成本接入"**。Anthropic 协议接 Claude 生态（Claude Code/Roo Code/Cline），OpenAI 协议接 OpenAI 生态（Cursor/OpenClaw/Spring AI）。最爽的用法：环境变量切换 `ANTHROPIC_BASE_URL` 让 Claude Code 跑 M3 模型（成本 1/15）。
+> **核心要点**：M3 集成一句话 — **"双协议兼容 = 全生态零成本接入"**。Anthropic 协议接 Claude 生态（Claude Code/Roo Code/Cline），OpenAI 协议接 OpenAI 生态（Cursor/OpenClaw/Spring AI）。最爽的用法：环境变量切换 `ANTHROPIC_BASE_URL` 让 Claude Code 跑 M3 模型（成本 1/15）。
 
 **下一模块**：[07-MiniMax选型与生态对比](07-MiniMax选型与生态对比.md) / **返回总览**：[00-总览](00-MiniMax-API知识体系总览.md)

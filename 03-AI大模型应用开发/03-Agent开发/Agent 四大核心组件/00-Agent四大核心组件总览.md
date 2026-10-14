@@ -2,7 +2,7 @@
 
 > 定位：Agent 的"解剖学"——把 Agent 拆成四大核心组件：LLM 大脑（推理决策）、规划反思、记忆、工具行动。与"范式"（行为模式）和"循环"（动态过程）互补，本体系讲"一个 Agent 由什么构成、组件之间怎么协作"。
 
-## 📚 目录
+## 目录
 
 1. [知识体系导图](#1-知识体系导图)
 2. [模块导航](#2-模块导航)
@@ -71,7 +71,7 @@ Agent 四大核心组件（解剖学视角）
 
 ## 5. 2026 生态基准
 
-> 📅 基准窗口：2026-08。版本与事实以各模块【参考来源】为准。
+> 基准窗口：2026-08。版本与事实以各模块【参考来源】为准。
 
 - **四组件共识确立**：2026 多份调查（Redis 架构博客、LLM Agents Survey 2026-07、arXiv 2601.01743）收敛为"规划 + 记忆 + 工具 + 反思/推理"，LLM 为底座；FutureAGI 给出六层模型（模型核心/记忆/工具/规划器/运行时/可观测）。
 - **Plan-Execute-Reflect 成生产标配**：OpenSearch ML Commons 注册 Agent 类型（Planner/Executor/Reflect 三角色预制提示词 + memory_id 追踪）；CloudWeGo Eino 官方实现"规划→执行→重规划"循环；Microsoft 给出 plan-then-act / act-then-reflect / iterative refinement 模式表。

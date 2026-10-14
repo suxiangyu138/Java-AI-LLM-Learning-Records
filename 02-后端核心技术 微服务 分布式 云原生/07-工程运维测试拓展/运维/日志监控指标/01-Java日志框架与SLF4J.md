@@ -1,7 +1,7 @@
 # 01-Java 日志框架与 SLF4J
 > 日志生态演进、SLF4J 门面机制、Logback vs Log4j2 选型、桥接包与死循环陷阱——"日志三问"：谁输出、怎么输出、输出到哪
 
-## 📚 目录
+## 目录
 1. [日志生态演进史](#1-日志生态演进史)
 2. [SLF4J：事实标准门面](#2-slf4j事实标准门面)
 3. [Logback vs Log4j2 选型](#3-logback-vs-log4j2-选型)
@@ -22,14 +22,14 @@ Log4j 1.x（2001）→ JUL（JDK 自带，简陋）→ Commons Logging（JCL，�
 
 | 框架 | 状态 | 说明 |
 |------|------|------|
-| Log4j 1.x | ❌ 废弃（2015 EOL） | 严重漏洞，**禁止新项目** |
-| JUL | ⚠️ 兜底 | JDK 自带，功能简陋 |
-| JCL（Commons Logging） | ⚠️ 淘汰中 | 动态查找实现，有 ClassLoader 问题 |
-| **SLF4J** | ✅ 事实标准门面 | 2.x 时代 |
-| **Logback** | ✅ 主力实现 | Spring Boot 默认 |
-| **Log4j2** | ✅ 高性能实现 | 异步吞吐王者，安全版本管控 |
+| Log4j 1.x | ✗ 废弃（2015 EOL） | 严重漏洞，**禁止新项目** |
+| JUL | 兜底 | JDK 自带，功能简陋 |
+| JCL（Commons Logging） | 淘汰中 | 动态查找实现，有 ClassLoader 问题 |
+| **SLF4J** | ✓ 事实标准门面 | 2.x 时代 |
+| **Logback** | ✓ 主力实现 | Spring Boot 默认 |
+| **Log4j2** | ✓ 高性能实现 | 异步吞吐王者，安全版本管控 |
 
-> 🎯 2026 结论：**门面必选 SLF4J**；实现二选一：常规项目 Logback（默认稳妥），极致高并发 Log4j2 异步（2.20.0+ 并管控安全）。
+> 2026 结论：**门面必选 SLF4J**；实现二选一：常规项目 Logback（默认稳妥），极致高并发 Log4j2 异步（2.20.0+ 并管控安全）。
 
 ## 2. SLF4J：事实标准门面
 
@@ -69,10 +69,10 @@ public class OrderService {
 ### 2.3 参数化日志的优势
 
 ```java
-// ❌ 字符串拼接：即使 level=INFO 不输出也执行拼接
+// ✗ 字符串拼接：即使 level=INFO 不输出也执行拼接
 log.debug("用户: " + user.getName() + ", 金额: " + amount);
 
-// ✅ 参数化：占位符延迟求值，未启用级别零开销
+// ✓ 参数化：占位符延迟求值，未启用级别零开销
 log.debug("用户: {}, 金额: {}", user.getName(), amount);
 ```
 
@@ -96,7 +96,7 @@ log.debug("用户: {}, 金额: {}", user.getName(), amount);
   审计/核心业务日志 → 同步 + 落库（异步有丢失风险）
 ```
 
-> ⚠️ **Log4j2 安全纪律**：如使用必须 `2.20.0+`；配置 `log4j2.formatMsgNoLookups=true`；禁用 JNDI（`log4j2.enableJndiLookup=false`）。
+> **Log4j2 安全纪律**：如使用必须 `2.20.0+`；配置 `log4j2.formatMsgNoLookups=true`；禁用 JNDI（`log4j2.enableJndiLookup=false`）。
 
 ## 4. 桥接包与统一日志
 
@@ -123,7 +123,7 @@ log.debug("用户: {}, 金额: {}", user.getName(), amount);
 
 ### 4.2 死循环陷阱（面试高频）
 
-> ⚠️ **绝不能同时引入** `log4j-over-slf4j` 与 `slf4j-log4j12`（或 Log4j2 的 `log4j-slf4j-impl`）——形成**双向桥接死循环**导致栈溢出。
+> **绝不能同时引入** `log4j-over-slf4j` 与 `slf4j-log4j12`（或 Log4j2 的 `log4j-slf4j-impl`）——形成**双向桥接死循环**导致栈溢出。
 
 ```text
 log4j-over-slf4j：Log4j API 调用 → 转发给 SLF4J
@@ -161,7 +161,7 @@ classpath 中只能有一个 SLF4J 实现绑定：
 | 不用 `printStackTrace` | System.out 不进日志系统 |
 | 级别策略 | 生产 INFO 起步，排查临时降 DEBUG |
 
-> 🎯 日志质量三问：**能否定位问题**（上下文）？**能否关联请求**（traceId）？**能否追溯业务**（业务 ID）？
+> 日志质量三问：**能否定位问题**（上下文）？**能否关联请求**（traceId）？**能否追溯业务**（业务 ID）？
 
 ## 6. 高频避坑清单
 
@@ -178,7 +178,7 @@ classpath 中只能有一个 SLF4J 实现绑定：
 
 ## 7. 核心要点
 
-> 🎯 **核心要点**：
+> **核心要点**：
 > - 2026 标配：SLF4J 2.x 门面 + Logback（默认）/ Log4j2 2.20+（高并发）；
 > - 门面解耦：换实现不改业务代码；参数化占位符是性能基本盘；
 > - 桥接三包（jcl/jul/log4j1 → slf4j）统一第三方日志；

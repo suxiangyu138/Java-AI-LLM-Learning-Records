@@ -1,5 +1,5 @@
 # 附录B-高频踩坑故障汇总手册
-> 🎯 覆盖Spring全家桶+微服务90%的线上常见底层问题，按组件分类，每个故障提供错误现象 → 根源分析 → 修复方案 → 长期规避规范
+> 覆盖Spring全家桶+微服务90%的线上常见底层问题，按组件分类，每个故障提供错误现象 → 根源分析 → 修复方案 → 长期规避规范
 
 ---
 
@@ -30,7 +30,7 @@ A依赖B，B依赖A，且是**构造器注入**。Spring三级缓存只能解决
 
 **修复方案**
 ```java
-// ❌ 错误：构造器循环依赖
+// ✗ 错误：构造器循环依赖
 @Service
 public class A {
     public A(B b) { } // A构造器依赖B
@@ -40,19 +40,19 @@ public class B {
     public B(A a) { } // B构造器依赖A → 死循环
 }
 
-// ✅ 方案1：改为setter注入
+// ✓ 方案1：改为setter注入
 @Service
 public class A {
     @Autowired private B b; // 先实例化A → 注入B时从三级缓存获取A的引用
 }
 
-// ✅ 方案2：@Lazy延迟加载
+// ✓ 方案2：@Lazy延迟加载
 @Service
 public class A {
     public A(@Lazy B b) { } // @Lazy使Spring先给代理，B在真正调用时才创建
 }
 
-// ✅ 方案3（推荐）：重构代码消除循环依赖
+// ✓ 方案3（推荐）：重构代码消除循环依赖
 // 引入中间层或事件机制解耦
 ```
 
@@ -70,14 +70,14 @@ public class A {
 
 **场景1：同类内部调用**
 ```java
-// ❌ this调用绕过代理
+// ✗ this调用绕过代理
 public void register() {
     doSave(); // this调用，@Transactional不生效
 }
 @Transactional
 public void doSave() { ... }
 
-// ✅ 拆分类或注入自己
+// ✓ 拆分类或注入自己
 @Autowired private UserService self;
 public void register() {
     self.doSave(); // 通过代理调用
@@ -106,7 +106,7 @@ public void register() {
 
 **修复方案**
 ```java
-// ✅ 构造器注入（字段在构造时已有值）
+// ✓ 构造器注入（字段在构造时已有值）
 private final UserService userService;
 public OrderService(UserService userService) {
     this.userService = userService;
@@ -135,11 +135,11 @@ public OrderService(UserService userService) {
 
 **原因**：使用`@RequestParam`接收JSON Body。
 ```java
-// ❌ 错误
+// ✗ 错误
 @PostMapping("/user")
 public void create(@RequestParam UserDTO dto) { } // JSON Body用@RequestParam
 
-// ✅ 正确
+// ✓ 正确
 @PostMapping("/user")
 public void create(@RequestBody UserDTO dto) { } // JSON Body用@RequestBody
 ```
@@ -182,20 +182,20 @@ logging:
 ### 4.1 JPA：N+1查询问题
 
 ```java
-// ❌ N+1：查1条Order → 100条OrderItem → 101次SQL
+// ✗ N+1：查1条Order → 100条OrderItem → 101次SQL
 @Entity public class Order {
     @OneToMany(fetch = FetchType.EAGER) // 默认EAGER，每次查Order都联查Item
     private List<OrderItem> items;
 }
 
-// ✅ 方案1：改为LAZY + @EntityGraph按需加载
+// ✓ 方案1：改为LAZY + @EntityGraph按需加载
 @OneToMany(fetch = FetchType.LAZY)
 private List<OrderItem> items;
 
 @EntityGraph(attributePaths = "items")
 List<Order> findAll(); // 仅在需要时联查
 
-// ✅ 方案2：使用JOIN FETCH JPQL
+// ✓ 方案2：使用JOIN FETCH JPQL
 @Query("SELECT o FROM Order o JOIN FETCH o.items WHERE o.userId = :userId")
 List<Order> findByUserId(@Param("userId") Long userId);
 ```
@@ -203,8 +203,8 @@ List<Order> findByUserId(@Param("userId") Long userId);
 ### 4.2 Redis：序列化乱码
 
 ```java
-// ❌ 默认JDK序列化 → Redis中存的是二进制乱码
-// ✅ 使用Jackson2JsonRedisSerializer或StringRedisSerializer
+// ✗ 默认JDK序列化 → Redis中存的是二进制乱码
+// ✓ 使用Jackson2JsonRedisSerializer或StringRedisSerializer
 @Bean
 public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory factory) {
     RedisTemplate<String, Object> template = new RedisTemplate<>();
@@ -380,4 +380,4 @@ HikariPool-1 - Connection is not available, request timed out after 30000ms
 
 ---
 
-> 🎯 **建议**：将此手册作为团队知识库，每个线上新增故障通过Post-Mortem流程补充进来，持续积累。
+> **建议**：将此手册作为团队知识库，每个线上新增故障通过Post-Mortem流程补充进来，持续积累。

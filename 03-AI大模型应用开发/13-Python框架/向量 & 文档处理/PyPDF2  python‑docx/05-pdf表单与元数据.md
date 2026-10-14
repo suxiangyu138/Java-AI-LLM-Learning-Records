@@ -1,7 +1,7 @@
 # 05-pdf表单与元数据
 > 定位：PDF 不止是文本容器——表单（AcroForm）可程序化填写、书签可读可建、元数据可查可改；这些「结构化信息」是把 PDF 当数据库用的基础。
 
-## 📚 目录
+## 目录
 1. [PDF 的结构化信息](#1-pdf-的结构化信息)
 2. [表单：读取与填写](#2-表单读取与填写)
 3. [书签：大纲结构](#3-书签大纲结构)
@@ -159,7 +159,7 @@ writer.write("watermarked.pdf")
 4. 书签树怎么转成 RAG 的分块边界？
 5. merge_page 的 over 参数语义是什么？
 
-> 🎯 **核心要点**：get_fields 读字段、update_page_form_field_values 填表、归档必展平；书签是 RAG 切分锚点；元数据是溯源字段；merge_page + scale_to 是水印与叠加的标准姿势。
+> **核心要点**：get_fields 读字段、update_page_form_field_values 填表、归档必展平；书签是 RAG 切分锚点；元数据是溯源字段；merge_page + scale_to 是水印与叠加的标准姿势。
 
 ---
 

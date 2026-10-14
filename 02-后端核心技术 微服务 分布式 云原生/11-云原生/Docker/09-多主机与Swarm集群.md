@@ -1,7 +1,7 @@
 # 09-多主机与 Swarm 集群
 > Docker Machine + Swarm 是 Java 微服务生产级多主机部署的"轻量化最优方案"（比 K8s 简单易维护，贴合中小型 Java 团队）——核心价值"简化部署、保障稳定、提升效率"
 
-## 📚 目录
+## 目录
 1. [多主机编排全景](#1-多主机编排全景)
 2. [Docker Machine：多主机统一管家](#2-docker-machine多主机统一管家)
 3. [Swarm 集群初始化与节点管理](#3-swarm-集群初始化与节点管理)
@@ -41,7 +41,7 @@ Docker Machine（前置环境搭建）→ 自定义 Registry（镜像分发）
 | Swarm 工作节点（Worker1） | 192.168.1.11 | Docker，加入 Swarm，能访问 Registry |
 | Swarm 工作节点（Worker2） | 192.168.1.12 | Docker，加入 Swarm，能访问 Registry |
 
-> ⚠️ 前置要求：所有主机网络互通；开放 Swarm 所需端口 **2377、7946、4789**；所有主机配置自定义 Registry 信任列表（避免 HTTP 推送/拉取失败）。
+> 前置要求：所有主机网络互通；开放 Swarm 所需端口 **2377、7946、4789**；所有主机配置自定义 Registry 信任列表（避免 HTTP 推送/拉取失败）。
 
 ## 2. Docker Machine：多主机统一管家
 
@@ -78,7 +78,7 @@ docker-machine inspect worker1 | grep -E "RegistryMirror|InsecureRegistry"   # �
 docker-machine rm worker2              # 移除主机节点
 ```
 
-> 💡 **Java 场景专属技巧**：批量创建可写 Shell 脚本循环执行；Machine 配置的环境（Registry 信任、镜像加速器）会同步到主机 Docker 配置文件，**无需手动修改每台主机的 daemon.json**；创建主机务必配 `--engine-insecure-registries`，避免 Swarm 部署时镜像拉取失败。
+> **Java 场景专属技巧**：批量创建可写 Shell 脚本循环执行；Machine 配置的环境（Registry 信任、镜像加速器）会同步到主机 Docker 配置文件，**无需手动修改每台主机的 daemon.json**；创建主机务必配 `--engine-insecure-registries`，避免 Swarm 部署时镜像拉取失败。
 
 ## 3. Swarm 集群初始化与节点管理
 
@@ -211,7 +211,7 @@ volumes:
   redis-data:
 ```
 
-> 💡 **Java 后端专属要点**：`deploy` 为 Swarm 专属配置（副本数量、节点调度、资源限制）；`placement.constraints` 指定节点角色（Java 服务不占管理节点资源、MySQL 主节点部署管理节点确保稳定）；镜像全部从自定义 Registry 拉取；overlay 网络实现多主机通信，Java 服务通过服务名（mysql-master、redis）直连无需写 IP。
+> **Java 后端专属要点**：`deploy` 为 Swarm 专属配置（副本数量、节点调度、资源限制）；`placement.constraints` 指定节点角色（Java 服务不占管理节点资源、MySQL 主节点部署管理节点确保稳定）；镜像全部从自定义 Registry 拉取；overlay 网络实现多主机通信，Java 服务通过服务名（mysql-master、redis）直连无需写 IP。
 
 ## 5. 服务部署与负载均衡验证
 
@@ -355,7 +355,7 @@ pipeline {
 
 ## 10. 核心要点
 
-> 🎯 **核心要点**：
+> **核心要点**：
 > - 四件套闭环：Machine（搭环境）→ Registry（分镜像）→ Compose（写配置）→ Swarm（做编排）；
 > - Machine 一键同步环境：镜像加速器 + Registry 信任列表自动下发，无需手改 daemon.json；
 > - Swarm 核心：`swarm init/join`（建群）→ `stack deploy`（部署）→ `service scale/update/rollback`（运维）；

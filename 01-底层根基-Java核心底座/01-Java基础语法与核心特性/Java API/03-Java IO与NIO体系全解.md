@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [I/O 体系全景](#1-io-体系全景)
 2. [字节流 InputStream / OutputStream](#2-字节流-inputstream--outputstream)
@@ -28,7 +28,7 @@ Java I/O 以四个抽象类为根基，所有流类都是从它们派生出来�
 | **输入** | `InputStream` | `Reader` | 数据流入程序（读操作） |
 | **输出** | `OutputStream` | `Writer` | 数据流出程序（写操作） |
 
-> 💡 口诀：**字节流处理 .class/.jpg/.zip 等二进制数据，字符流处理 .txt/.java/.xml 等文本数据**。用错类别会导致乱码或数据损坏。
+> 口诀：**字节流处理 .class/.jpg/.zip 等二进制数据，字符流处理 .txt/.java/.xml 等文本数据**。用错类别会导致乱码或数据损坏。
 
 ### 1.2 字节流 vs 字符流核心区别
 
@@ -41,7 +41,7 @@ Java I/O 以四个抽象类为根基，所有流类都是从它们派生出来�
 | 性能特点 | 适合大文件二进制流 | 适合字符密集型操作（搭配缓冲后性能佳） |
 | 底层关系 | — | **字符流底层依赖字节流**（通过 InputStreamReader/OutputStreamWriter 转换） |
 
-> 🎯 **核心要点**：字符流并不是"比字节流更高级"，而是"字节流 + 编码表"的封装。所有数据在磁盘和网络中本质都是字节，字符流是给人类看文本的便利层。
+> **核心要点**：字符流并不是"比字节流更高级"，而是"字节流 + 编码表"的封装。所有数据在磁盘和网络中本质都是字节，字符流是给人类看文本的便利层。
 
 ### 1.3 输入流 vs 输出流
 
@@ -53,7 +53,7 @@ Java I/O 以四个抽象类为根基，所有流类都是从它们派生出来�
 └─────────────┘                └─────────────┘                └─────────────┘
 ```
 
-> ⚠️ 常见误区："输入"和"输出"是**相对于程序（内存）而言**的。从文件读数据叫"输入流"（数据进入程序），往文件写数据叫"输出流"（数据从程序出去）。
+> 常见误区："输入"和"输出"是**相对于程序（内存）而言**的。从文件读数据叫"输入流"（数据进入程序），往文件写数据叫"输出流"（数据从程序出去）。
 
 ### 1.4 节点流 vs 处理流
 
@@ -78,7 +78,7 @@ Java I/O 库是**装饰器（Decorator）模式**最经典的教科书案例：
 - **Decorator（抽象装饰器）**：`FilterInputStream` / `FilterOutputStream` / `FilterReader` / `FilterWriter`
 - **ConcreteDecorator（具体装饰器）**：`BufferedInputStream` / `DataInputStream` / `PushbackInputStream`
 
-> 💡 **为什么叫装饰器？** 每一层包装都在原有的功能之上"装饰"了新能力——缓冲、类型读取、行号追踪——而不需要修改底层类的代码。组合的自由度是指数级的。
+> **为什么叫装饰器？** 每一层包装都在原有的功能之上"装饰"了新能力——缓冲、类型读取、行号追踪——而不需要修改底层类的代码。组合的自由度是指数级的。
 
 ---
 
@@ -106,7 +106,7 @@ public int available() throws IOException;
 public void close() throws IOException;
 ```
 
-> ⚠️ `available()` 返回的只是**估计值**，不要依赖它做精确控制。网络流可能总是返回 0。
+> `available()` 返回的只是**估计值**，不要依赖它做精确控制。网络流可能总是返回 0。
 
 ### 2.2 OutputStream 核心方法
 
@@ -155,7 +155,7 @@ try (FileInputStream in = new FileInputStream("data.bin");
 } // 自动 close
 ```
 
-> 🎯 **核心要点**：
+> **核心要点**：
 > - `FileInputStream(String name)` 接受文件路径字符串或 `File` 对象
 > - `FileOutputStream` 默认**覆盖**文件；使用 `FileOutputStream(f, true)` 追加写入
 > - 逐字节 `read()` 每次调用都陷入内核态，性能极差——始终用缓冲区
@@ -187,7 +187,7 @@ try (BufferedInputStream bis = new BufferedInputStream(
       ◀───────    (8KB)                只触发一次系统调用
 ```
 
-> 💡 **典型误区：** 很多人认为 `BufferedInputStream` 本身很快。它的价值是**减少系统调用次数**。如果上层已经用了 8KB 的 byte[] 读取，再套 `BufferedInputStream` 就收益有限了（双层缓冲）。
+> **典型误区：** 很多人认为 `BufferedInputStream` 本身很快。它的价值是**减少系统调用次数**。如果上层已经用了 8KB 的 byte[] 读取，再套 `BufferedInputStream` 就收益有限了（双层缓冲）。
 
 ### 2.5 DataInputStream / DataOutputStream
 
@@ -213,7 +213,7 @@ try (DataInputStream dis = new DataInputStream(
 }
 ```
 
-> ⚠️ **必须按写入顺序读取**，否则数据错乱。`DataInputStream` 没有"标记"能力，适合固定格式的记录。
+> **必须按写入顺序读取**，否则数据错乱。`DataInputStream` 没有"标记"能力，适合固定格式的记录。
 
 | 方法 | 写出字节数 | 说明 |
 |------|-----------|------|
@@ -250,7 +250,7 @@ byte[] result = baos.toByteArray();   // 获取所有写入的数据
 // 注意：ByteArrayOutputStream.close() 是空实现，不需要关闭也可以
 ```
 
-> 🎯 **常见用途**：
+> **常见用途**：
 > - 在不能直接写文件的 API 中暂存输出（如生成 CSV/JSON 后转为 String）
 > - 测试时模拟输入流，避免依赖真实文件
 > - `ByteArrayOutputStream.toString(StandardCharsets.UTF_8)` 直接取字符串
@@ -273,7 +273,7 @@ try (ObjectInputStream ois = new ObjectInputStream(
 }
 ```
 
-> ⚠️ 使用前提：目标类必须实现 `Serializable` 接口。具体序列化细节见 [第 7 节](#7-序列化概要)。
+> 使用前提：目标类必须实现 `Serializable` 接口。具体序列化细节见 [第 7 节](#7-序列化概要)。
 
 ---
 
@@ -303,7 +303,7 @@ public void close() throws IOException;
 ### 3.2 FileReader / FileWriter——编码陷阱
 
 ```java
-// ⚠️ 问题代码：FileReader 使用系统默认编码
+// 问题代码：FileReader 使用系统默认编码
 try (FileReader fr = new FileReader("data.txt")) {      // 默认编码：UTF-8?
     int ch;
     while ((ch = fr.read()) != -1) {
@@ -311,21 +311,21 @@ try (FileReader fr = new FileReader("data.txt")) {      // 默认编码：UTF-8?
     }
 }
 
-// ⚠️ FileWriter 同理
+// FileWriter 同理
 try (FileWriter fw = new FileWriter("output.txt")) {    // 默认编码写文件
     fw.write("中文内容");
 }
 ```
 
-> ⚠️ **FileReader/FileWriter 的最大问题：无法指定编码。** 它们永远使用 `Charset.defaultCharset()`（通常是操作系统编码，Windows 上可能是 GBK，Linux 上可能是 UTF-8）。这导致代码在不同平台上行为不一致。
+> **FileReader/FileWriter 的最大问题：无法指定编码。** 它们永远使用 `Charset.defaultCharset()`（通常是操作系统编码，Windows 上可能是 GBK，Linux 上可能是 UTF-8）。这导致代码在不同平台上行为不一致。
 
 ```text
-Windows 开发：     FileReader 读 UTF-8 文件 → 乱码 ❌
-Linux 部署：       FileReader 读 UTF-8 文件 → 正常 ✅
+Windows 开发：     FileReader 读 UTF-8 文件 → 乱码 ✗
+Linux 部署：       FileReader 读 UTF-8 文件 → 正常 ✓
 JVM 参数指定编码：  -Dfile.encoding=UTF-8 后改变 → 不可控
 ```
 
-> 🎯 **最佳实践：永远不要直接使用 FileReader / FileWriter 处理跨平台场景。** 使用 `InputStreamReader` 显式指定编码。
+> **最佳实践：永远不要直接使用 FileReader / FileWriter 处理跨平台场景。** 使用 `InputStreamReader` 显式指定编码。
 
 ### 3.3 BufferedReader / BufferedWriter
 
@@ -354,7 +354,7 @@ Files.write(Paths.get("output.txt"), lines, StandardCharsets.UTF_8);
 Files.readAllLines(Paths.get("input.txt"), StandardCharsets.UTF_8);
 ```
 
-> 💡 `BufferedReader.readLine()` 不包含换行符，且当返回 `null` 时表示到达文件末尾。`BufferedWriter.newLine()` 写入系统属性 `line.separator` 定义的换行符，跨平台友好。
+> `BufferedReader.readLine()` 不包含换行符，且当返回 `null` 时表示到达文件末尾。`BufferedWriter.newLine()` 写入系统属性 `line.separator` 定义的换行符，跨平台友好。
 
 ### 3.4 InputStreamReader / OutputStreamWriter——字节↔字符桥梁
 
@@ -395,7 +395,7 @@ new InputStreamReader(in, "UTF-8")     // 可能会抛 UnsupportedCharsetExcepti
 | `StandardCharsets.ISO_8859_1` | Latin-1 | 1（不支持中文） |
 | `StandardCharsets.US_ASCII` | ASCII | 1（仅 0~127） |
 
-> 🎯 **核心要点**：`InputStreamReader` 读字节时将其按指定编码解码为字符；`OutputStreamWriter` 写字符时将其按指定编码编码为字节。**现代代码中应当显式指定 `StandardCharsets.UTF_8`，而不是依赖默认编码。**
+> **核心要点**：`InputStreamReader` 读字节时将其按指定编码解码为字符；`OutputStreamWriter` 写字符时将其按指定编码编码为字节。**现代代码中应当显式指定 `StandardCharsets.UTF_8`，而不是依赖默认编码。**
 
 ### 3.5 StringReader / StringWriter
 
@@ -445,7 +445,7 @@ pw.checkError();    // 返回 true 表示之前有 I/O 错误，但不会抛异�
 | 符合 `PrintStream`（System.out）的惯用法 | 违反了"异常应当被及时处理"的原则 |
 | 适合日志等"尽力而为"的场景 | 不适合关键数据传输 |
 
-> 💡 **何时使用 PrintWriter：** 日志输出、控制台输出、生成文本报告等对错误容忍度高的场景。**何时避免：** 金融交易、文件传输等要求数据完整性的场景。
+> **何时使用 PrintWriter：** 日志输出、控制台输出、生成文本报告等对错误容忍度高的场景。**何时避免：** 金融交易、文件传输等要求数据完整性的场景。
 
 ---
 
@@ -485,10 +485,10 @@ new BufferedReader(
 ### 4.2 为什么不能 `new BufferedReader(new FileReader(f))` 指定编码？
 
 ```java
-// ❌ 无法指定编码——FileReader 内部调用的是系统默认编码
+// ✗ 无法指定编码——FileReader 内部调用的是系统默认编码
 FileReader fr = new FileReader("data.txt");
 
-// ❌ 即使套了 BufferedReader 也改不了编码
+// ✗ 即使套了 BufferedReader 也改不了编码
 BufferedReader br = new BufferedReader(new FileReader("data.txt"));
 // 编码仍然是默认的！
 ```
@@ -502,7 +502,7 @@ public FileReader(String fileName) throws FileNotFoundException {
 }
 ```
 
-> 🎯 **结论：只要涉及文本文件，一律使用 `InputStreamReader` + `FileInputStream` 组合来显式指定编码。`FileReader` 和 `FileWriter` 应当被标记为 deprecated 对待。**
+> **结论：只要涉及文本文件，一律使用 `InputStreamReader` + `FileInputStream` 组合来显式指定编码。`FileReader` 和 `FileWriter` 应当被标记为 deprecated 对待。**
 
 ### 4.3 常用装饰器组合速查
 
@@ -524,7 +524,7 @@ public FileReader(String fileName) throws FileNotFoundException {
 ### 5.1 传统 try-finally 的问题
 
 ```java
-// ❌ 传统方式：代码冗长、资源泄漏风险
+// ✗ 传统方式：代码冗长、资源泄漏风险
 InputStream in = null;
 OutputStream out = null;
 try {
@@ -536,7 +536,7 @@ try {
         out.write(buf, 0, len);
     }
 } finally {
-    // ⚠️ 如果 in.close() 抛异常，out.close() 就不会执行
+    // 如果 in.close() 抛异常，out.close() 就不会执行
     if (in != null) in.close();
     if (out != null) out.close();
 }
@@ -550,7 +550,7 @@ try {
 ### 5.2 try-with-resources 语法
 
 ```java
-// ✅ 标准写法（Java 7+）
+// ✓ 标准写法（Java 7+）
 try (InputStream in = new FileInputStream("src.txt");
      OutputStream out = new FileOutputStream("dst.txt")) {
     byte[] buf = new byte[8192];
@@ -610,7 +610,7 @@ public interface AutoCloseable {
 }
 ```
 
-> 💡 **实际使用中**：I/O 类都实现 `Closeable`。`AutoCloseable` 更通用，资源类（如 `Connection`、`Socket`）都可以实现它来使用 try-with-resources。
+> **实际使用中**：I/O 类都实现 `Closeable`。`AutoCloseable` 更通用，资源类（如 `Connection`、`Socket`）都可以实现它来使用 try-with-resources。
 
 ### 5.4 关闭顺序——后开先关
 
@@ -623,7 +623,7 @@ try (InputStream in = new FileInputStream("src.txt");
 // 关闭顺序：out 先关（后开），in 后关（先开）
 ```
 
-> 💡 **"后开先关"原则**：`out` 可能依赖 `in` 写入的数据，先关 `out` 确保数据全部 flush 到目标，再关 `in`。这是资源管理的通用原则。
+> **"后开先关"原则**：`out` 可能依赖 `in` 写入的数据，先关 `out` 确保数据全部 flush 到目标，再关 `in`。这是资源管理的通用原则。
 
 如果想显式控制，可以用嵌套：
 
@@ -668,7 +668,7 @@ try (MyResource r = new MyResource()) {
 2. 如果 `try` 块正常执行，但 `close()` 抛异常，则该异常直接抛出
 3. 如果 `try` 块和多个 `close()` 都抛异常，只有第一个 `close()` 异常被抑制，后续的 `close()` 异常被抑制到上一个异常中（形成抑制链）
 
-> 🎯 **核心要点：** try-with-resources 保证**原始异常不会丢失**，这是比传统 try-finally 最大的优势。排查问题时通过 `getSuppressed()` 检查被抑制的异常。
+> **核心要点：** try-with-resources 保证**原始异常不会丢失**，这是比传统 try-finally 最大的优势。排查问题时通过 `getSuppressed()` 检查被抑制的异常。
 
 ### 5.6 Java 9+ 的 effectively final 改进
 
@@ -680,7 +680,7 @@ try (BufferedReader br = new BufferedReader(...)) { ... }
 
 // Java 9+：可以引用外部变量（必须是 effectively final）
 BufferedReader br = new BufferedReader(new FileReader("data.txt"));
-try (br) {               // ✅ Java 9 支持
+try (br) {               // ✓ Java 9 支持
     String line;
     while ((line = br.readLine()) != null) { ... }
 }
@@ -689,12 +689,12 @@ try (br) {               // ✅ Java 9 支持
 // 更实用的场景：两个资源都用外部变量
 BufferedReader in = Files.newBufferedReader(Paths.get("a.txt"));
 BufferedWriter out = Files.newBufferedWriter(Paths.get("b.txt"));
-try (in; out) {         // ✅ 同时管理多个外部资源
+try (in; out) {         // ✓ 同时管理多个外部资源
     // 读写操作
 }
 ```
 
-> 💡 这使得可以从工厂方法返回资源对象，然后在调用方用 try-with-resources 管理生命周期，代码更灵活。
+> 这使得可以从工厂方法返回资源对象，然后在调用方用 try-with-resources 管理生命周期，代码更灵活。
 
 ---
 
@@ -781,7 +781,7 @@ try (Stream<String> stream = Files.lines(
 }
 ```
 
-> 🎯 **`Files.readAllLines()` vs `Files.lines()`：**
+> **`Files.readAllLines()` vs `Files.lines()`：**
 > - `readAllLines()` 一次性载入内存，适合小文件（<100MB）
 > - `Files.lines()` 返回 `Stream<String>`，惰性加载，适合大文件
 > - 注意：`Files.lines()` 返回的 Stream 包含一个已打开的底层资源，**必须用 try-with-resources 或 `stream.close()` 关闭**
@@ -946,7 +946,7 @@ long count = Files.walk(start)
     .count();
 ```
 
-> 💡 `Files.walk()` 返回的是 `Stream<Path>`，惰性求值，适合链式操作。但**必须使用 try-with-resources**，因为底层打开了一个目录流。
+> `Files.walk()` 返回的是 `Stream<Path>`，惰性求值，适合链式操作。但**必须使用 try-with-resources**，因为底层打开了一个目录流。
 
 ### 6.4 DirectoryStream 目录过滤
 
@@ -974,7 +974,7 @@ try (Stream<Path> stream = Files.list(Path.of("C:\\data"))) {
 }
 ```
 
-> ⚠️ `DirectoryStream` 不是 `Stream`，它实现了 `Iterable` 和 `Closeable`。Java 8 后推荐优先使用 `Files.list()` 返回的 `Stream<Path>`。
+> `DirectoryStream` 不是 `Stream`，它实现了 `Iterable` 和 `Closeable`。Java 8 后推荐优先使用 `Files.list()` 返回的 `Stream<Path>`。
 
 ### 6.5 FileAttribute 与文件属性
 
@@ -1042,7 +1042,7 @@ new Thread(() -> {
 }, "FileWatcher").start();
 ```
 
-> 💡 `WatchService` 适合**轻量级**文件监控，如配置文件热更新。不适用于海量文件监控或需要稳定生产级监控的场景，此时应考虑 Apache Commons VFS、JNotify 或操作系统原生 API（如 Windows 的 ReadDirectoryChangesW）。
+> `WatchService` 适合**轻量级**文件监控，如配置文件热更新。不适用于海量文件监控或需要稳定生产级监控的场景，此时应考虑 Apache Commons VFS、JNotify 或操作系统原生 API（如 Windows 的 ReadDirectoryChangesW）。
 
 ---
 
@@ -1059,7 +1059,7 @@ public class User implements Serializable {
 }
 ```
 
-> 💡 `Serializable` 是一个**标记接口**（Marker Interface），没有任何方法。实现它只是告诉 JVM："这个类的对象可以被序列化"。所有需要序列化的类**必须**实现它，否则会抛 `NotSerializableException`。
+> `Serializable` 是一个**标记接口**（Marker Interface），没有任何方法。实现它只是告诉 JVM："这个类的对象可以被序列化"。所有需要序列化的类**必须**实现它，否则会抛 `NotSerializableException`。
 
 ### 7.2 serialVersionUID 的作用与生成规则
 
@@ -1082,7 +1082,7 @@ private static final long serialVersionUID = 7832197352389174201L;
 3. 这意味着**旧版本序列化的数据无法反序列化到新版本的类**中
 4. 显式声明后，开发者可以控制版本兼容性
 
-> 🎯 **最佳实践：所有 Serializable 类都必须显式声明 `serialVersionUID`，并使用 `private static final long` 修饰。**
+> **最佳实践：所有 Serializable 类都必须显式声明 `serialVersionUID`，并使用 `private static final long` 修饰。**
 
 ### 7.3 transient 关键字
 
@@ -1151,7 +1151,7 @@ public class Period implements Serializable {
 }
 ```
 
-> 💡 **为什么要用序列化代理？** 普通序列化可以绕过构造器约束创建对象。代理模式确保反序列化也经过构造器校验，防止被恶意利用。对于包含约束（如时间范围检查）的类，序列化代理是标准的安全做法。
+> **为什么要用序列化代理？** 普通序列化可以绕过构造器约束创建对象。代理模式确保反序列化也经过构造器校验，防止被恶意利用。对于包含约束（如时间范围检查）的类，序列化代理是标准的安全做法。
 
 ### 7.5 Externalizable 接口
 
@@ -1206,11 +1206,11 @@ public class User implements Externalizable {
 
 | 方案 | 格式 | 性能 | 跨语言 | 适用场景 |
 |------|------|------|-------|---------|
-| **JSON** (Jackson/Gson) | 文本 | 中等 | ✅ 优秀 | REST API、日志、配置 |
-| **Protobuf** (Google) | 二进制 | 快（比 JSON 快 3-10 倍） | ✅ 优秀 | RPC、微服务间通信、高性能存储 |
-| **Avro** (Apache) | 二进制 | 快 | ✅ 好 | Hadoop 生态、大数据 |
+| **JSON** (Jackson/Gson) | 文本 | 中等 | ✓ 优秀 | REST API、日志、配置 |
+| **Protobuf** (Google) | 二进制 | 快（比 JSON 快 3-10 倍） | ✓ 优秀 | RPC、微服务间通信、高性能存储 |
+| **Avro** (Apache) | 二进制 | 快 | ✓ 好 | Hadoop 生态、大数据 |
 | **Kryo** | 二进制 | 极快 | 有限 | Java 内部 RPC、缓存 |
-| **Java 序列化** | 二进制 | 慢 | ❌ 仅 Java | 已不推荐，仅用于 RMI |
+| **Java 序列化** | 二进制 | 慢 | ✗ 仅 Java | 已不推荐，仅用于 RMI |
 
 ```java
 // ---------- 现代替代：Jackson JSON 序列化 ----------
@@ -1232,7 +1232,7 @@ byte[] data = user.toByteArray();
 UserProto.User parsed = UserProto.User.parseFrom(data);
 ```
 
-> 🎯 **核心要点：** 除非是遗留系统或 RMI 场景，**新系统不应使用 Java 原生序列化**。JSON 适合简单场景，Protobuf 适合高性能且需要跨语言的场景。
+> **核心要点：** 除非是遗留系统或 RMI 场景，**新系统不应使用 Java 原生序列化**。JSON 适合简单场景，Protobuf 适合高性能且需要跨语言的场景。
 
 ---
 
@@ -1264,45 +1264,45 @@ UserProto.User parsed = UserProto.User.parseFrom(data);
 ### 8.2 错误模式清单
 
 ```java
-// ❌ 错误 1：逐字节读取
+// ✗ 错误 1：逐字节读取
 FileInputStream in = new FileInputStream("big.txt");
 int b;
 while ((b = in.read()) != -1) { ... }    // 极慢！每次 read 都是系统调用
 
-// ✅ 正确：用缓冲区
+// ✓ 正确：用缓冲区
 byte[] buf = new byte[8192];
 int len;
 while ((len = in.read(buf)) != -1) { ... }
 
 
-// ❌ 错误 2：不指定编码
+// ✗ 错误 2：不指定编码
 FileReader fr = new FileReader("data.txt");    // 依赖系统默认编码
 
-// ✅ 正确：显式指定编码
+// ✓ 正确：显式指定编码
 new InputStreamReader(new FileInputStream("data.txt"), StandardCharsets.UTF_8);
 
 
-// ❌ 错误 3：不关闭流
+// ✗ 错误 3：不关闭流
 InputStream in = new FileInputStream("file");
 // 使用完后没调用 close() → 文件描述符泄漏
 
-// ✅ 正确：try-with-resources
+// ✓ 正确：try-with-resources
 try (InputStream in = new FileInputStream("file")) { ... }
 
 
-// ❌ 错误 4：用 File 做路径拼接
+// ✗ 错误 4：用 File 做路径拼接
 File dir = new File("C:\\data");
 File file = new File(dir, "subdir" + "\\" + "file.txt");
 
-// ✅ 正确：用 Path
+// ✓ 正确：用 Path
 Path path = Path.of("C:\\data").resolve("subdir").resolve("file.txt");
 
 
-// ❌ 错误 5：Files.lines() 没关闭
+// ✗ 错误 5：Files.lines() 没关闭
 Stream<String> lines = Files.lines(Paths.get("big.txt"));
 lines.filter(...).forEach(...);   // 流关闭了，但底层文件句柄没释放！
 
-// ✅ 正确：try-with-resources 包裹
+// ✓ 正确：try-with-resources 包裹
 try (Stream<String> lines = Files.lines(Paths.get("big.txt"))) {
     lines.filter(...).forEach(...);
 }
@@ -1340,7 +1340,7 @@ try (Stream<String> lines = Files.lines(Paths.get("big.txt"))) {
 
 ---
 
-> 🎯 **本章核心总结：**
+> **本章核心总结：**
 > 1. **I/O 选型三问**：数据是字节还是字符？文件大小是否适合一次性读入？是否可接受依赖默认编码？
 > 2. **永远指定编码**：`StandardCharsets.UTF_8` 应成为肌肉记忆
 > 3. **始终 try-with-resources**：Java 7+ 没有理由再写传统 try-finally

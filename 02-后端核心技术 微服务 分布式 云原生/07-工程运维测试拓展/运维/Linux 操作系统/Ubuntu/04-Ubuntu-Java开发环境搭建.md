@@ -1,10 +1,10 @@
 # Ubuntu Java 开发环境搭建
 
-> ☕ JDK 多版本管理、Maven/Gradle 配置、环境变量最佳实践、IntelliJ IDEA + VS Code —— 从零到可开发
+> JDK 多版本管理、Maven/Gradle 配置、环境变量最佳实践、IntelliJ IDEA + VS Code —— 从零到可开发
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [环境变量体系](#1-环境变量体系)
 2. [JDK 多版本共存](#2-jdk-多版本共存)
@@ -251,7 +251,7 @@ chmod +x check-env.sh
 
 ---
 
-> 🎯 **核心要点**：**SDKMAN** 管理 JDK/Maven/Gradle 多版本最灵活；**Maven 镜像**配阿里云加速依赖下载；**环境变量**放 ~/.bashrc；**IntelliJ IDEA** 用 snap 安装最省心。
+> **核心要点**：**SDKMAN** 管理 JDK/Maven/Gradle 多版本最灵活；**Maven 镜像**配阿里云加速依赖下载；**环境变量**放 ~/.bashrc；**IntelliJ IDEA** 用 snap 安装最省心。
 
 ---
 

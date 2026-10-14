@@ -25,7 +25,7 @@
 | 可解释性 | 回答可溯源到具体文档，满足审计要求 |
 | 部署成本 | 无需重新微调即可更新知识 |
 
-> 💡 面试常问："RAG 和 Fine-tuning 有什么区别？" RAG 更新知识无需训练，适合高频变化的场景；微调适合固定风格的深度定制。
+> 面试常问："RAG 和 Fine-tuning 有什么区别？" RAG 更新知识无需训练，适合高频变化的场景；微调适合固定风格的深度定制。
 
 ### 2. RAG 的完整工作流程是什么？
 > 一套标准的 RAG 流程包含 **Ingestion（数据摄入）→ Chunking（文本分割）→ Embedding（向量化）→ Indexing（索引构建）→ Retrieval（检索）→ Re-ranking（重排序）→ Generation（生成）** 七个核心步骤。
@@ -44,7 +44,7 @@
 | **Advanced RAG** | 检索前/后优化 | 层次索引、句子窗口、HyDE、查询重写、Prompt 压缩 | 高精度问答场景 |
 | **Modular RAG** | 可编排的工作流模式 | 顺序/条件/分支/迭代/递归/FLARE/TOC | 复杂业务逻辑 |
 
-> 🎯 面试高频："你在项目中用了哪种 RAG 架构？" 回答策略：先说 Naive RAG 的局限性（单轮检索精度不足），再引出 Advanced 和 Modular 的优化策略。
+> 面试高频："你在项目中用了哪种 RAG 架构？" 回答策略：先说 Naive RAG 的局限性（单轮检索精度不足），再引出 Advanced 和 Modular 的优化策略。
 
 ### 4. 什么是 Chunking？常见的分块策略有哪些？
 > Chunking（文本分割）是将长文档切分为便于检索的短文本块，直接决定检索精度。
@@ -69,7 +69,7 @@ splitter = RecursiveCharacterTextSplitter(
 chunks = splitter.split_text(document)
 ```
 
-> 💡 chunk_overlap 一般设置为 chunk_size 的 10%-20%，推荐 50-100 tokens。
+> chunk_overlap 一般设置为 chunk_size 的 10%-20%，推荐 50-100 tokens。
 
 ### 5. 什么是 Dense Embedding 和 Sparse Embedding？
 | 类型 | 代表模型 | 向量特点 | 优势 | 劣势 |
@@ -124,7 +124,7 @@ Rerank 阶段：Cross-Encoder 对 (query, doc) 打分（慢但精准，百毫秒
 | Java SDK | 官方支持 | 社区 | 官方支持 |
 | 适用场景 | 企业级知识库 | 快速原型 | 中等规模生产 |
 
-> 💡 Milvus 是企业级首选，Chroma 适合开发调试，Qdrant 是前两者的折中方案。
+> Milvus 是企业级首选，Chroma 适合开发调试，Qdrant 是前两者的折中方案。
 
 ### 9. 什么是 Self-RAG？什么是 Corrective RAG？
 | 类型 | 核心思想 | 特点 |
@@ -152,7 +152,7 @@ Rerank 阶段：Cross-Encoder 对 (query, doc) 打分（慢但精准，百毫秒
 | **DiskANN** | 基于 SSD 的图索引 | DiskANN | 亿级，低成本存储 |
 | **FLAT** | 暴力搜索（精确 KNN） | FLAT | 小数据量高精度 |
 
-> 🎯 面试必问：HNSW 参数 efConstruction（构建质量）、efSearch（搜索范围）、M（邻居数）。
+> 面试必问：HNSW 参数 efConstruction（构建质量）、efSearch（搜索范围）、M（邻居数）。
 
 ### 12. 什么是 Embedding 模型？主流模型有哪些？
 > Embedding 模型将文本映射到高维向量空间，语义相似的文本距离更近。
@@ -284,7 +284,7 @@ score = classifier(encoder(pair))  # [1, 1] 直接输出相似度分数
 # 不可预计算，推理慢，但精度远高于 Bi-Encoder
 ```
 
-> 🎯 面试回答："Bi-Encoder 用于第一阶段的候选召回（Top-100→Top-20），Cross-Encoder 用于第二阶段的精准排序（Top-20→Top-5），两者构成经典的检索→精排漏斗。"
+> 面试回答："Bi-Encoder 用于第一阶段的候选召回（Top-100→Top-20），Cross-Encoder 用于第二阶段的精准排序（Top-20→Top-5），两者构成经典的检索→精排漏斗。"
 
 ### 3. 向量数据库如何实现相似性搜索？K-means 与肘部法则
 > K-means 是向量数据库中 IVF（Inverted File）索引的基础。
@@ -334,7 +334,7 @@ docs = model.encode(["文档1内容", "文档2内容"], normalize_embeddings=Tru
 similarity = query @ docs.T
 ```
 
-> 💡 BGE 要求 Query 前加 "为这个句子生成向量：" 前缀，文档不需要，这是提升精度的关键细节。
+> BGE 要求 Query 前加 "为这个句子生成向量：" 前缀，文档不需要，这是提升精度的关键细节。
 
 ### 5. Embedding 模型微调：LlamaIndex 实践
 > 使用领域数据微调 Embedding 模型，可显著提升 RAG 在特定领域的召回率。
@@ -421,7 +421,7 @@ prompt = """
 输出排序后的文档索引，用逗号分隔："""
 ```
 
-> 💡 生产环境优先选择 Cross-Encoder Reranker（如 bge-reranker-v2-m3），RankGPT 可作为效果标杆但延迟过高。
+> 生产环境优先选择 Cross-Encoder Reranker（如 bge-reranker-v2-m3），RankGPT 可作为效果标杆但延迟过高。
 
 ### 9. 什么是 Prompt 压缩？为什么需要？
 > Prompt 压缩（如 LLMLingua、LongLLMLingua）减少注入 LLM 的检索上下文体积，保留关键信息。
@@ -499,7 +499,7 @@ Milvus 默认索引：
   - 超高维度: HNSW（低延迟高精度）
 ```
 
-> 🎯 面试重点："HNSW 为什么快？" 多层图的顶层稀疏连接（快速定位区域），底层密集连接（精确搜索），搜索时从顶层逐层下降。
+> 面试重点："HNSW 为什么快？" 多层图的顶层稀疏连接（快速定位区域），底层密集连接（精确搜索），搜索时从顶层逐层下降。
 
 ---
 
@@ -536,7 +536,7 @@ for element in elements:
         pass  # 图片描述提取或多模态处理
 ```
 
-> 💡 表格处理最佳实践：提取表格后转为 Markdown 格式，保留行列结构，再将其作为独立的 Document 存储。
+> 表格处理最佳实践：提取表格后转为 Markdown 格式，保留行列结构，再将其作为独立的 Document 存储。
 
 ### 2. 如何设计知识库的增量更新策略？
 > 企业知识库需要持续更新，不能每次都全量重建。
@@ -676,7 +676,7 @@ def process_long_document(pdf_path: str, chunk_size: int = 512):
 | 摘要/报告生成 | K=10~20 | 需要广泛信息覆盖 |
 | 代码/术语检索 | K=3~5 | 精确匹配为主 |
 
-> 💡 生产环境推荐：初检 K=20（粗筛），Rerank 后取 Top-5 送入 LLM（精排）。
+> 生产环境推荐：初检 K=20（粗筛），Rerank 后取 Top-5 送入 LLM（精排）。
 
 ### 7. 知识库问答系统中，用户查询意图不明确怎么办？
 > 用户提问可能模糊或缺少上下文，需要多轮交互或查询重写。
@@ -1520,22 +1520,22 @@ class RAGABTestFramework:
 
 ```text
 系统流程：
-1️⃣  Query 理解阶段
+1  Query 理解阶段
     - 结合历史上下文重写当前 Query
     - 识别 Query 类型（事实型/推理型/对比型）
     - 提取关键实体和意图
 
-2️⃣  检索策略选择阶段
+2  检索策略选择阶段
     - 事实型：单路检索（Top-3）
     - 推理型：多路检索 + Rerank（Top-5）
     - 对比型：子查询分解 + 合并
 
-3️⃣  上下文管理阶段
+3  上下文管理阶段
     - 历史窗口管理：保留最近 N 轮
     - Token 预算：Context = 检索结果 + 最近 3 轮 + 系统 Prompt
     - 长对话压缩：LLM 摘要历史
 
-4️⃣  生成与验证阶段
+4  生成与验证阶段
     - 基于检索上下文 + 对话历史生成回答
     - 答案与检索结果一致性校验
     - 引用标注：标记回答依据的文档 ID
@@ -1811,7 +1811,7 @@ Fine-tuning 适合：
 
 ---
 
-> 🎯 **备战要点总结**：
+> **备战要点总结**：
 > 1. **面试核心**：RAG 全链路流程概念、双路检索+Rerank原理、Embedding模型对比、手写Pipeline
 > 2. **高频代码**：RAG Pipeline、BM25、RRF融合、Milvus操作、Query重写
 > 3. **系统设计**：多租户权限、多轮对话、百万级检索、A/B测试

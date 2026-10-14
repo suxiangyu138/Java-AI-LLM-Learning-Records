@@ -1,7 +1,7 @@
 # JDK 集合源码视角
 > 数据结构在 JDK 里的「工程化答案」：ArrayList 扩容、HashMap 树化、LinkedHashMap 双重链表、PriorityQueue 堆化、TimSort、SequencedCollection（JDK 21+）——每个实现都回答了「理论结构怎么落地」
 
-## 📚 目录
+## 目录
 1. [ArrayList：动态数组的工程实现](#1-arraylist动态数组的工程实现)
 2. [HashMap：哈希表的工程实现](#2-hashmap哈希表的工程实现)
 3. [LinkedHashMap 与 SequencedCollection（JDK 21+）](#3-linkedhashmap-与-sequencedcollectionjdk-21)
@@ -24,10 +24,10 @@
 
 ```text
 扩容过程：10 → 15 → 22 → 33 → 49 → ...（1.5 倍）
-⚠️ 预分配：确定大小时用 ArrayList(n) 构造，省去多次扩容搬移
+预分配：确定大小时用 ArrayList(n) 构造，省去多次扩容搬移
 ```
 
-> 🎯 面试必答：**ArrayList 均摊 O(1) 的证明**——扩容搬移总代价 = 10 + 15 + 22 + ... ≤ 2n，摊到每次 add 上是 O(1)。
+> 面试必答：**ArrayList 均摊 O(1) 的证明**——扩容搬移总代价 = 10 + 15 + 22 + ... ≤ 2n，摊到每次 add 上是 O(1)。
 
 ### 1.1 扩容的均摊证明（面试口述版）
 
@@ -35,8 +35,8 @@
 容量按 1.5 倍增长：总搬移次数 ≈ 10 + 15 + 22 + ... 
 等比求和 < 2 × 最终容量 ≈ 2n
 n 次 add 总代价 = n 次赋值 + O(n) 搬移 = O(n)
-单次均摊 = O(1) ✅
-⚠️ 注意：单次 add 最坏仍是 O(n)（扩容那一次）——均摊 ≠ 最坏
+单次均摊 = O(1) ✓
+注意：单次 add 最坏仍是 O(n)（扩容那一次）——均摊 ≠ 最坏
 ```
 
 ---
@@ -121,7 +121,7 @@ Map.Entry<String, Integer> last  = map.lastEntry();   // "b"→2
 SequencedMap<String, Integer> rev = map.reversed();   // 逆序视图
 ```
 
-> 🎯 面试必答：**JDK 21 集合框架最大变革 = SequencedCollection 家族**——统一了有序集合的首尾操作 API；2025 年（JDK 25）已成标准实践。HashMap 仍不保证迭代顺序，需要顺序用 LinkedHashMap（SequencedMap）。
+> 面试必答：**JDK 21 集合框架最大变革 = SequencedCollection 家族**——统一了有序集合的首尾操作 API；2025 年（JDK 25）已成标准实践。HashMap 仍不保证迭代顺序，需要顺序用 LinkedHashMap（SequencedMap）。
 
 ---
 
@@ -137,7 +137,7 @@ SequencedMap<String, Integer> rev = map.reversed();   // 逆序视图
 | 性能 | 节点分配频繁 | **快（缓存友好）** |
 | 结论 | 几乎只用做 Deque 的替代品 | **JDK 推荐栈/队列默认实现** |
 
-> ⚠️ 工程结论：**Java 里「栈」用 `ArrayDeque` 而不是 `Stack`（Vector 遗留）**；「队列」用 `ArrayDeque` 或 `LinkedList`。
+> 工程结论：**Java 里「栈」用 `ArrayDeque` 而不是 `Stack`（Vector 遗留）**；「队列」用 `ArrayDeque` 或 `LinkedList`。
 
 ### 4.2 PriorityQueue：堆的工程实现
 
@@ -153,7 +153,7 @@ SequencedMap<String, Integer> rev = map.reversed();   // 逆序视图
 ```java
 // 大顶堆正确写法（防溢出）
 PriorityQueue<Integer> maxHeap = new PriorityQueue<>((a, b) -> Integer.compare(b, a));
-// ⚠️ 不能写 (a, b) -> b - a：a=MIN, b=MAX 时溢出为负，堆序反转
+// 不能写 (a, b) -> b - a：a=MIN, b=MAX 时溢出为负，堆序反转
 ```
 
 ### 4.3 为什么 O(n) 建堆（追问）
@@ -211,7 +211,7 @@ Collections.binarySearch：只对实现 RandomAccess 的 List 做索引二分
 | PriorityQueue 是稳定的吗？ | 不是——poll 只保证堆序 |
 | SequencedCollection 是什么？ | JDK 21（JEP 431）统一有序集合首尾 API |
 
-> 🎯 **核心要点**：JDK 源码是「数据结构理论 × 工程权衡」的最佳教材——**ArrayList 1.5 倍扩容、HashMap 0.75 负载 + 树化阈值、TimSort 稳定性、ArrayDeque 取代 LinkedList、SequencedCollection 统一顺序 API**，五个记忆点覆盖集合框架 80% 的面试追问。每个实现都回答同一个问题：理论结构在「内存、缓存、并发、稳定性」四重约束下怎么改。
+> **核心要点**：JDK 源码是「数据结构理论 × 工程权衡」的最佳教材——**ArrayList 1.5 倍扩容、HashMap 0.75 负载 + 树化阈值、TimSort 稳定性、ArrayDeque 取代 LinkedList、SequencedCollection 统一顺序 API**，五个记忆点覆盖集合框架 80% 的面试追问。每个实现都回答同一个问题：理论结构在「内存、缓存、并发、稳定性」四重约束下怎么改。
 
 ---
 

@@ -1,7 +1,7 @@
 # SDK 与工具生态
 > 利用 Anthropic 兼容接口，可以在不修改业务代码的前提下切换底层模型供应商
 
-## 📚 目录
+## 目录
 1. [Anthropic SDK 使用](#1-anthropic-sdk-使用)
 2. [统一 API 网关](#2-统一-api-网关)
 3. [前端工具集成](#3-前端工具集成)
@@ -137,7 +137,7 @@ def get_client(provider: str = "anthropic") -> Anthropic:
     return Anthropic(base_url=base_url, api_key=api_key)
 ```
 
-> 💡 **核心技巧**：所有兼容服务只需要修改 `base_url` 和 `api_key`，业务代码无需调整。
+> **核心技巧**：所有兼容服务只需要修改 `base_url` 和 `api_key`，业务代码无需调整。
 
 ---
 
@@ -155,10 +155,10 @@ def get_client(provider: str = "anthropic") -> Anthropic:
 
 | 输入格式 | 输出格式 | 转换能力 |
 |---------|---------|:--------:|
-| OpenAI | OpenAI | ✅ |
-| OpenAI | Anthropic | ✅ (渠道设置 → 返回格式选择) |
-| Anthropic | Anthropic | ✅ |
-| Anthropic | OpenAI | ✅ |
+| OpenAI | OpenAI | ✓ |
+| OpenAI | Anthropic | ✓ (渠道设置 → 返回格式选择) |
+| Anthropic | Anthropic | ✓ |
+| Anthropic | OpenAI | ✓ |
 
 **部署方式**：
 
@@ -246,10 +246,10 @@ DEEPSEEK_API_KEY=sk-xxx
 
 | 前端工具 | 原生 Anthropic 支持 | 兼容接口支持 | 推荐方式 |
 |---------|:------------------:|:-----------:|---------|
-| LobeChat | ✅ | ✅ | 直接配置兼容端点 |
-| NextChat | ✅ | ✅ | 直接配置兼容端点 |
-| Open WebUI | ❌ | 🔄 | one-api 转换 |
-| Claude Code (CLI) | ✅ | 有限 | 配置 `/model` 切换 |
+| LobeChat | ✓ | ✓ | 直接配置兼容端点 |
+| NextChat | ✓ | ✓ | 直接配置兼容端点 |
+| Open WebUI | ✗ | | one-api 转换 |
+| Claude Code (CLI) | ✓ | 有限 | 配置 `/model` 切换 |
 
 ---
 
@@ -287,7 +287,7 @@ AnthropicChatModel model = AnthropicChatModel.builder()
 String response = model.generate("Hello!");
 ```
 
-> 💡 LangChain4j 的 `AnthropicChatModel` 直接基于 Anthropic Messages API 实现，切换 base_url 即可连接兼容服务。
+> LangChain4j 的 `AnthropicChatModel` 直接基于 Anthropic Messages API 实现，切换 base_url 即可连接兼容服务。
 
 ### 4.3 Spring Boot 配置示例
 
@@ -306,7 +306,7 @@ anthropic:
 #   model: claude-sonnet-5-20251001
 ```
 
-> 🎯 **核心要点**：Anthropic 兼容接口的最大价值在于 SDK 层面的无缝切换——只需修改 `base_url` 配置即可切换底层模型。对于生产环境，推荐使用 one-api 网关统一管理多 Provider 的密钥、路由和配额。
+> **核心要点**：Anthropic 兼容接口的最大价值在于 SDK 层面的无缝切换——只需修改 `base_url` 配置即可切换底层模型。对于生产环境，推荐使用 one-api 网关统一管理多 Provider 的密钥、路由和配额。
 
 ---
 

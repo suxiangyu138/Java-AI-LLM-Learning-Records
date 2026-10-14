@@ -1,6 +1,6 @@
 # 05 - Curator 客户端实战
 
-> 🎯 Apache Curator 是 ZooKeeper 的"最佳拍档" — 封装了连接重试、Watch 反复注册、分布式锁等，生产环境永远用 Curator 而不是原生 ZK API
+> Apache Curator 是 ZooKeeper 的"最佳拍档" — 封装了连接重试、Watch 反复注册、分布式锁等，生产环境永远用 Curator 而不是原生 ZK API
 
 ---
 
@@ -36,13 +36,13 @@
 ## 2. 连接管理
 
 ```java
-// ⭐ 生产级连接配置
+// ★ 生产级连接配置
 CuratorFramework client = CuratorFrameworkFactory.builder()
     .connectString("zk1:2181,zk2:2181,zk3:2181")
     .sessionTimeoutMs(60000)           // Session 超时 60s
     .connectionTimeoutMs(15000)        // 连接超时 15s
     .retryPolicy(new ExponentialBackoffRetry(1000, 3))  // 重试：1s → 2s → 4s
-    .namespace("myapp")                // ⭐ 命名空间隔离（所有路径自动加 /myapp 前缀）
+    .namespace("myapp")                // ★ 命名空间隔离（所有路径自动加 /myapp 前缀）
     .build();
 
 client.start();
@@ -79,7 +79,7 @@ Stat stat = client.checkExists().forPath("/config");
 
 // ═══ 更新 ═══
 client.setData()
-    .withVersion(stat.getVersion())    // ⭐ 乐观锁（CAS）
+    .withVersion(stat.getVersion())    // ★ 乐观锁（CAS）
     .forPath("/config/db-url", newValue.getBytes());
 
 // ═══ 删除 ═══
@@ -125,4 +125,4 @@ async.getData().forPath("/config")
     .exceptionally(e -> { e.printStackTrace(); return null; });
 ```
 
-> 🎯 **Curator 三件套**：`namespace` 隔离应用、`creatingParentsIfNeeded` 省去创建父节点、`guaranteed` 保证删除成功。生产环境不要用原生 ZK API，Curator 是唯一选择。
+> **Curator 三件套**：`namespace` 隔离应用、`creatingParentsIfNeeded` 省去创建父节点、`guaranteed` 保证删除成功。生产环境不要用原生 ZK API，Curator 是唯一选择。

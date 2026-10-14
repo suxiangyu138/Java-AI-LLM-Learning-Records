@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [框架概览](#1-框架概览)
 2. [核心哲学对比](#2-核心哲学对比)
@@ -33,9 +33,9 @@
 
 | 框架 | 风险 | 等级 | 应对 |
 |------|------|:---:|------|
-| **Spring AI 1.x** | Spring Boot 3.5 将于 **2026 年 6 月 EOL** | 🔴 高 | 规划 2.0 迁移，新项目直接用 2.0 M4+ |
-| **LangChain4j** | 版本间 Breaking Change 较多 | 🟡 中 | 锁定版本，升级前阅读 Release Notes |
-| **Spring AI 2.0** | 正式版发布窗口仅 1 个月（5 月→6 月 EOL） | 🟡 中 | 提前在 M4 上验证兼容性 |
+| **Spring AI 1.x** | Spring Boot 3.5 将于 **2026 年 6 月 EOL** | 高 | 规划 2.0 迁移，新项目直接用 2.0 M4+ |
+| **LangChain4j** | 版本间 Breaking Change 较多 | 中 | 锁定版本，升级前阅读 Release Notes |
+| **Spring AI 2.0** | 正式版发布窗口仅 1 个月（5 月→6 月 EOL） | 中 | 提前在 M4 上验证兼容性 |
 
 ---
 
@@ -180,15 +180,15 @@ stream.subscribe(
 |---------|:---:|:---:|------|
 | **LLM 提供商** | 20+（国产模型支持好） | 20+（国际模型为主） | LangChain4j 国产模型更丰富 |
 | **向量存储** | 30+ | 15+ | LangChain4j 选择更多 |
-| **MCP Client** | ✅ 支持 | ✅ 支持 | 都有 |
-| **MCP Server** | ❌ 不支持 | ✅ 原生 Starters | **Spring AI 胜出** |
-| **A2A 协议** | ✅ 原生支持 | ❌ 不支持 | **LangChain4j 胜出** |
-| **多 Agent 编排** | ✅ 一级支持（agentic 模块） | ⚠️ 需自建 | **LangChain4j 胜出** |
+| **MCP Client** | ✓ 支持 | ✓ 支持 | 都有 |
+| **MCP Server** | ✗ 不支持 | ✓ 原生 Starters | **Spring AI 胜出** |
+| **A2A 协议** | ✓ 原生支持 | ✗ 不支持 | **LangChain4j 胜出** |
+| **多 Agent 编排** | ✓ 一级支持（agentic 模块） | 需自建 | **LangChain4j 胜出** |
 | **RAG 管道** | 细粒度组装 | Advisor 模式（开箱即用） | 各有优势 |
 | **可观测性** | 手动 Micrometer/OTel | Actuator + Micrometer 原生 | **Spring AI 胜出** |
 | **结构化输出** | @StructuredPrompt / AiServices | 直接映射 Java Record | 都成熟 |
-| **多模态** | ✅ 图片/音频/视频 | ✅ 基础多模态 | LangChain4j 更全面 |
-| **GraalVM 支持** | ✅（Quarkus） | ⚠️ 部分支持 | **LangChain4j 胜出** |
+| **多模态** | ✓ 图片/音频/视频 | ✓ 基础多模态 | LangChain4j 更全面 |
+| **GraalVM 支持** | ✓（Quarkus） | 部分支持 | **LangChain4j 胜出** |
 | **启动速度** | <100ms（Quarkus+GraalVM） | 200-400ms（Spring Boot） | **LangChain4j 胜出** |
 | **内存占用** | 50-100MB | 150-300MB | **LangChain4j 胜出** |
 | **企业安全集成** | 需手动 | Spring Security 原生 | **Spring AI 胜出** |
@@ -303,7 +303,7 @@ Spring AI RAG：Advisor 模式（开箱即用）
 ```text
 时间线：
   2026.05    Spring AI 2.0 GA 发布
-  2026.06    Spring Boot 3.5 EOL ← 🔴 仅 1 个月窗口！
+  2026.06    Spring Boot 3.5 EOL ← 仅 1 个月窗口！
   2026.??    Spring Boot 4.0 GA
 
 迁移清单：
@@ -317,7 +317,7 @@ Spring AI RAG：Advisor 模式（开箱即用）
 
 ### 6.2 直接 API → 框架迁移
 
-> ⚠️ **严重警告**：从直接 API 调用迁移到框架比从头用框架困难得多
+> **严重警告**：从直接 API 调用迁移到框架比从头用框架困难得多
 
 ```text
 为什么迁移成本高：
@@ -337,13 +337,13 @@ Spring AI RAG：Advisor 模式（开箱即用）
 ### 7.1 适用场景
 
 ```text
-✅ 适合直接 API 调用的场景（且仅在以下场景）：
+✓ 适合直接 API 调用的场景（且仅在以下场景）：
 ├── 单次文本补全（无对话、无工具、无 RAG）
 ├── 批处理（一次性处理大量文本后不再需要）
 ├── 嵌入式脚本（不想引入框架依赖）
 └── 学习和理解底层原理
 
-❌ 不适合的场景：
+✗ 不适合的场景：
 ├── 需要对话记忆
 ├── 需要工具调用（Function Calling）
 ├── 需要 RAG 检索
@@ -383,7 +383,7 @@ HttpResponse<String> response = client.send(request,
 
 ---
 
-> 🎯 **核心要点**：LangChain4j 和 Spring AI 不是零和博弈。**LangChain4j 胜在灵活性和 Agent 能力**（A2A、多 Agent 编排、国产模型），**Spring AI 胜在企业集成**（MCP Server、Security、Actuator）。企业级最佳实践是混合使用——核心链路用 Spring AI，创新服务用 LangChain4j。
+> **核心要点**：LangChain4j 和 Spring AI 不是零和博弈。**LangChain4j 胜在灵活性和 Agent 能力**（A2A、多 Agent 编排、国产模型），**Spring AI 胜在企业集成**（MCP Server、Security、Actuator）。企业级最佳实践是混合使用——核心链路用 Spring AI，创新服务用 LangChain4j。
 
 ---
 

@@ -2,7 +2,7 @@
 
 > 三种生产级 RAG 模式：标准链路、索引/查询管道分离、管道内嵌 Agent——PromptBuilder 管模板、Generator 管模型调用、模式选型管架构。
 
-## 📚 目录
+## 目录
 
 1. [Generator 生成组件](#1-generator-生成组件)
 2. [PromptBuilder 模板](#2-promptbuilder-模板)
@@ -271,7 +271,7 @@ qa.connect("prompt", "llm")
 | "Agent 化一定更好" | 简单问答用 Agent 是浪费 |
 | "换模型要改管道" | 换 Generator 配置即可 |
 
-> 🎯 核心要点：生成层 = Generator（模型）+ PromptBuilder（Jinja2 模板，强约束 + 来源标注）；三种模式（标准/分离/内嵌 Agent）——生产默认索引查询分离（解耦/扩展/增量/隔离四收益）；Agent 化 RAG 用 ComponentTool 把检索器变成工具；选型"原型一、生产二、复杂三"；模板与生成参数是幻觉防线，不能省。
+> 核心要点：生成层 = Generator（模型）+ PromptBuilder（Jinja2 模板，强约束 + 来源标注）；三种模式（标准/分离/内嵌 Agent）——生产默认索引查询分离（解耦/扩展/增量/隔离四收益）；Agent 化 RAG 用 ComponentTool 把检索器变成工具；选型"原型一、生产二、复杂三"；模板与生成参数是幻觉防线，不能省。
 
 ---
 

@@ -1,5 +1,5 @@
 # Maven 构建工具面试问答清单
-> 🎯 基于 Maven 必做项目清单，涵盖从依赖管理到企业级私服部署的面试高频问题与完美解答方案，帮助你在面试中脱颖而出。
+> 基于 Maven 必做项目清单，涵盖从依赖管理到企业级私服部署的面试高频问题与完美解答方案，帮助你在面试中脱颖而出。
 
 ## 目录
 1. [基础概念与核心原理](#1-基础概念与核心原理)
@@ -11,7 +11,7 @@
 
 ## 1. 基础概念与核心原理
 
-> 💡 面试官在这一环节考察你的基本功是否扎实
+> 面试官在这一环节考察你的基本功是否扎实
 
 ### Q1：Maven 的三大生命周期是什么？它们之间有什么关系？
 
@@ -53,7 +53,7 @@ mvn clean package
 mvn clean verify package  # 错误！phase 不能跨生命周期混合排序
 ```
 
-> 💡 **面试关键**：理解生命周期阶段顺序至关重要。比如 `mvn test` 会在测试之前自动执行 `compile`，所以不需要先手动执行 `mvn compile`。
+> **面试关键**：理解生命周期阶段顺序至关重要。比如 `mvn test` 会在测试之前自动执行 `compile`，所以不需要先手动执行 `mvn compile`。
 
 **延伸追问应对：** 面试官可能追问"`mvn install` 和 `mvn deploy` 的区别"，回答：install 是把产物安装到本地仓库（本机），deploy 是部署到远程仓库（服务器/私服），供团队其他成员使用。
 
@@ -146,7 +146,7 @@ mvn dependency:tree -Dincludes=com.fasterxml.jackson:jackson-core
 [INFO]    \- com.fasterxml.jackson:jackson-core:jar:2.13.0 (实际使用)
 ```
 
-> 🎯 **最佳实践**：父 POM 中通过 `dependencyManagement` 统一管理所有依赖版本，子模块只需声明 `groupId` 和 `artifactId`，不需要写 `version`。这样做到一处修改，全局生效。
+> **最佳实践**：父 POM 中通过 `dependencyManagement` 统一管理所有依赖版本，子模块只需声明 `groupId` 和 `artifactId`，不需要写 `version`。这样做到一处修改，全局生效。
 
 ---
 
@@ -273,13 +273,13 @@ my-project/
     pom.xml        (继承 parent + 依赖 service 模块)
 ```
 
-> 💡 **面试亮点**：聚合和继承并不互斥，优秀项目中往往**同时使用**。最外层的聚合 POM 同时扮演 parent 角色，通过 `<modules>` 组织模块，通过 `<dependencyManagement>` 管理依赖版本。
+> **面试亮点**：聚合和继承并不互斥，优秀项目中往往**同时使用**。最外层的聚合 POM 同时扮演 parent 角色，通过 `<modules>` 组织模块，通过 `<dependencyManagement>` 管理依赖版本。
 
 ---
 
 ## 2. 项目实战深度问答
 
-> 💡 面试官会深挖你的项目细节，验证你"真的做过"而不是"背过"
+> 面试官会深挖你的项目细节，验证你"真的做过"而不是"背过"
 
 ### Q4：如果一个 Java 项目从零开始，你怎么用 Maven 搭建它的构建体系？
 
@@ -400,7 +400,7 @@ my-project/
 </build>
 ```
 
-> 💡 **思路总结**：好的 Maven 构建体系有两个核心：一是**版本统一管理**（通过 `properties` + `dependencyManagement`），二是**插件标准化**（编译、测试、打包、检查都配好）。
+> **思路总结**：好的 Maven 构建体系有两个核心：一是**版本统一管理**（通过 `properties` + `dependencyManagement`），二是**插件标准化**（编译、测试、打包、检查都配好）。
 
 ---
 
@@ -494,7 +494,7 @@ mvn clean package -Pprod       # 生产环境
 # target/app-prod.jar
 ```
 
-> ⚠️ **安全警示**：生产环境的密码等敏感信息不应该写在 pom.xml 中，而是从环境变量或外部配置中心读取。我们的做法是 `${env.DB_PASSWORD}` 这种形式，CI/CD 流水线中通过环境变量注入。
+> **安全警示**：生产环境的密码等敏感信息不应该写在 pom.xml 中，而是从环境变量或外部配置中心读取。我们的做法是 `${env.DB_PASSWORD}` 这种形式，CI/CD 流水线中通过环境变量注入。
 
 ---
 
@@ -575,13 +575,13 @@ mvn clean package -Pprod       # 生产环境
 <!-- mvn deploy  # 自动上传到对应仓库 -->
 ```
 
-> 💡 **最佳实践**：公司级私服建议使用"阿里云 Maven 镜像"作为代理仓库的第一个源，因为国内访问速度快，而且 Jar 包更加完整。同时建议在私服上开启版本白名单，阻止使用已知有漏洞的依赖版本。
+> **最佳实践**：公司级私服建议使用"阿里云 Maven 镜像"作为代理仓库的第一个源，因为国内访问速度快，而且 Jar 包更加完整。同时建议在私服上开启版本白名单，阻止使用已知有漏洞的依赖版本。
 
 ---
 
 ## 3. 进阶与系统设计
 
-> 💡 这是拉开差距的环节，考察架构思维
+> 这是拉开差距的环节，考察架构思维
 
 ### Q7：Maven 和 Gradle 怎么选择？谈谈你的看法。
 
@@ -623,7 +623,7 @@ Android / Kotlin 项目
   -> 考虑 Gradle（增量构建可以节省 50%+ 的构建时间）
 ```
 
-> 🎯 **结论**：对大多数 Java 后端面试来说，**掌握 Maven 是必选项，了解 Gradle 是加分项**。Maven 在国内企业占据绝对主流，面试中的构建工具题几乎都是围绕 Maven 展开。
+> **结论**：对大多数 Java 后端面试来说，**掌握 Maven 是必选项，了解 Gradle 是加分项**。Maven 在国内企业占据绝对主流，面试中的构建工具题几乎都是围绕 Maven 展开。
 
 ---
 
@@ -717,7 +717,7 @@ public class HealthCheckMojo extends AbstractMojo {
 - **配置检查插件**：在 `compile` 阶段检查配置文件中是否有硬编码的环境信息
 - **部署插件**：在 `deploy` 阶段打包 Docker 镜像并推送到仓库
 
-> 💡 **理解**：Maven 插件的本质是一个在特定生命周期阶段执行的 Java 程序。如果你有需求需要在"编译之后，打包之前"做点什么，就可以写一个插件绑定到 `process-classes` 阶段。
+> **理解**：Maven 插件的本质是一个在特定生命周期阶段执行的 Java 程序。如果你有需求需要在"编译之后，打包之前"做点什么，就可以写一个插件绑定到 `process-classes` 阶段。
 
 ---
 
@@ -804,13 +804,13 @@ jobs:
           kubectl set image deployment/my-app my-app=registry.company.com/my-app:${{ github.sha }}
 ```
 
-> 💡 **关键收获**：Maven 在 CI/CD 中承担了两个角色——**构建工具**（编译、测试、打包）+ **制品管理**（版本号、私服部署）。配合 Docker 后，`mvn package` + `jib:build` 一步到位，从源代码到可运行镜像的全自动化。
+> **关键收获**：Maven 在 CI/CD 中承担了两个角色——**构建工具**（编译、测试、打包）+ **制品管理**（版本号、私服部署）。配合 Docker 后，`mvn package` + `jib:build` 一步到位，从源代码到可运行镜像的全自动化。
 
 ---
 
 ## 4. 场景题与故障排查
 
-> 💡 考察实际解决问题的能力
+> 考察实际解决问题的能力
 
 ### Q10：Maven 构建时出现 `ClassNotFoundException` 或 `NoSuchMethodError`，怎么排查？
 
@@ -880,7 +880,7 @@ grep -A 3 -B 3 "jackson" tree.txt
 </dependency>
 ```
 
-> ⚠️ **关键经验**：解决 Jar 冲突的核心不是"加了什么依赖"，而是"**删了什么依赖**"。先找到哪个传递依赖引入了冲突版本，再通过 `exclusions` 排除它。
+> **关键经验**：解决 Jar 冲突的核心不是"加了什么依赖"，而是"**删了什么依赖**"。先找到哪个传递依赖引入了冲突版本，再通过 `exclusions` 排除它。
 
 ---
 
@@ -949,7 +949,7 @@ java -version
 | Java 17 | 61 | 3.9+ |
 | Java 21 | 65 | 3.11+ |
 
-> 💡 **最佳实践**：推荐使用 Spring Boot Maven Plugin 自动管理编译插件和版本，它会根据 Spring Boot 版本自动选择合适的编译器配置。
+> **最佳实践**：推荐使用 Spring Boot Maven Plugin 自动管理编译插件和版本，它会根据 Spring Boot 版本自动选择合适的编译器配置。
 
 ---
 
@@ -1002,18 +1002,18 @@ mvn clean install -am                   # 同时构建依赖的模块
 </mirrors>
 ```
 
-> 🎯 **效果**：我们项目原来全量构建需要 8 分钟，经过"阿里云镜像 + -T 4 并行 + CI 中 cache Maven 仓库"三个优化后，构建时间降到了 2.5 分钟。
+> **效果**：我们项目原来全量构建需要 8 分钟，经过"阿里云镜像 + -T 4 并行 + CI 中 cache Maven 仓库"三个优化后，构建时间降到了 2.5 分钟。
 
 ---
 
-## 💎 面试加分金句
+## 面试加分金句
 - "Maven 的核心思想是'约定大于配置'——不需要告诉 Maven 源码在哪、测试在哪，只要按标准目录结构放好就行。"
 - "`dependencyManagement` 和 `dependencies` 的配合使用是我认为 Maven 最精妙的设计，它实现了集中管控和按需引用的平衡。"
 - "解决 Jar 冲突时，`mvn dependency:tree` 是最重要的分析工具，配合 `-Dincludes` 过滤参数可以精确定位冲突来源。"
 - "多模块项目的构建顺序不是手动指定的，Maven 会自动根据模块间的依赖关系计算出正确的构建顺序。"
 - "私服不仅仅是个缓存代理，它还是团队技术治理的起点——统一版本、统一规范、统一安全扫描。"
 
-## 📋 高频追问清单
+## 高频追问清单
 | 追问方向 | 应对策略 |
 |----------|----------|
 | `-SNAPSHOT` 版本和 Release 版本的区别？ | SNAPSHOT 是开发中的不稳定版，Release 是稳定版，SNAPSHOT 每次构建都会拉取最新 |
@@ -1023,7 +1023,7 @@ mvn clean install -am                   # 同时构建依赖的模块
 | `pom.xml` 中的 `<scope>import</scope>` 是什么？ | 用于 BOM 导入，在 dependencyManagement 中引入另一个 POM 的依赖管理 |
 | Maven 构建失败后如何跳过已成功的模块？ | `mvn -rf :module-name` 从失败模块重新构建 |
 
-## 🔗 关联知识点
+## 关联知识点
 - [Spring 7个必做项目面试问答](./Spring7个必做项目-面试问答.md)
 - [MyBatis 面试问答](./MyBatis必做项目清单-面试问答.md)
 - [SpringCloud 面试问答](./SpringCloud必做项目-面试问答.md)

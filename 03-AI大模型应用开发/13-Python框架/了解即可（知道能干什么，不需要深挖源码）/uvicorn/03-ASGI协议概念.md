@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [ASGI 协议的定位](#1-asgi-协议的定位)
 2. [三件套：scope/receive/send](#2-三件套scopereceivesend)
@@ -99,7 +99,7 @@ uvicorn 协议支持
 
 **验收动作**：① 给同学讲三件套（scope/receive/send——3 分钟）；② 画异步模型图（事件循环 + 等待让出）；③ 写一个 FastAPI WebSocket 端点并跑通（验证 uvicorn 的 WebSocket）；④ 默写协议边界——**"三件套 + 异步模型 + 边界 = 懂协议"**——**练习纪律**：报错里出现 scope/receive 术语时能对上号——"协议术语是排障的字典"。
 
-> 🎯 **核心要点**：ASGI = 服务器与应用的普通话（**写一次应用任何 ASGI 服务器能跑——协议的价值 = 生态通用性**）；**三件套（scope 名片/receive 耳朵/send 嘴巴——中间件的底层——lifespan 也是 ASGI 消息）**；**异步模型（事件循环——等待不占资源——单进程扛数千并发——IO 用 async/CPU 用 def 线程池）**；协议边界（**HTTP/1.1 + WebSocket 主场/HTTP/2 客场——Nginx 反代解决——流式/SSE/WebSocket 是异步服务器三特色菜**）——"理解三件套，就理解了 uvicorn 为什么存在"。
+> **核心要点**：ASGI = 服务器与应用的普通话（**写一次应用任何 ASGI 服务器能跑——协议的价值 = 生态通用性**）；**三件套（scope 名片/receive 耳朵/send 嘴巴——中间件的底层——lifespan 也是 ASGI 消息）**；**异步模型（事件循环——等待不占资源——单进程扛数千并发——IO 用 async/CPU 用 def 线程池）**；协议边界（**HTTP/1.1 + WebSocket 主场/HTTP/2 客场——Nginx 反代解决——流式/SSE/WebSocket 是异步服务器三特色菜**）——"理解三件套，就理解了 uvicorn 为什么存在"。
 
 ---
 

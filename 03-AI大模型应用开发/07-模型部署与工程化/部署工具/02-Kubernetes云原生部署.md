@@ -1,6 +1,6 @@
 # 02 - Kubernetes 云原生部署
 
-> 🎯 K8s 是 LLM 服务走向大规模、高可用的必经之路 — GPU 调度、HPA 自动扩缩、滚动更新零停机
+> K8s 是 LLM 服务走向大规模、高可用的必经之路 — GPU 调度、HPA 自动扩缩、滚动更新零停机
 
 ---
 
@@ -179,7 +179,7 @@ resources:
 | 模型存储 | PV 挂载模型（避免每次启动下载） |
 | 节点选择 | nodeSelector: gpu-type（A100/H100 分池） |
 
-> 🎯 **核心要点**：K8s GPU 部署 = "**device-plugin（资源上报）+ limits 声明 + PV 挂模型**"三件套——**GPU 场景的 HPA 别按 CPU 配**（模型加载慢，弹性滞后），滚动更新用 recreate 防显存双份。
+> **核心要点**：K8s GPU 部署 = "**device-plugin（资源上报）+ limits 声明 + PV 挂模型**"三件套——**GPU 场景的 HPA 别按 CPU 配**（模型加载慢，弹性滞后），滚动更新用 recreate 防显存双份。
 
 ---
 
@@ -220,4 +220,4 @@ kubectl top nodes                         # 资源使用（GPU 需额外插件�
 # ③ device-plugin 未部署 → DaemonSet 检查
 ```
 
-> 🎯 **核心要点**：K8s LLM 运维 = "**GPU 声明（limits）+ PV 挂模型 + 调度失败三查**"——**GPU 显存是硬限制**（不像 CPU 可超卖），调度失败排查三件套（节点/显存/插件）是标配。
+> **核心要点**：K8s LLM 运维 = "**GPU 声明（limits）+ PV 挂模型 + 调度失败三查**"——**GPU 显存是硬限制**（不像 CPU 可超卖），调度失败排查三件套（节点/显存/插件）是标配。

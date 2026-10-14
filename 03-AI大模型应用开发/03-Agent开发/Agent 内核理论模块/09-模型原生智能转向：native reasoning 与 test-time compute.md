@@ -2,7 +2,7 @@
 
 > 定位：前沿理论——2026 年 Agent 智能的理论转向：从外部编排工作流到模型原生 agentic（native reasoning、test-time compute、RL 驱动）、in-the-flow 优化与"开发智能而非应用智能"（2026-08 基准）
 
-## 📚 目录
+## 目录
 
 1. [理论转向：从工程智能到模型原生](#1-理论转向从工程智能到模型原生)
 2. [Native reasoning：推理成为模型原生能力](#2-native-reasoning推理成为模型原生能力)
@@ -26,7 +26,7 @@
 统一视角：LLM + RL + Task
 ```
 
-> 🎯 **一句话**：2026 的理论转向 = 智能从"工程脚手架"迁移到"模型本身"——外部框架的角色从"模拟认知"收缩为"路由/状态/环境执行"。
+> **一句话**：2026 的理论转向 = 智能从"工程脚手架"迁移到"模型本身"——外部框架的角色从"模拟认知"收缩为"路由/状态/环境执行"。
 
 ## 2. Native reasoning：推理成为模型原生能力
 
@@ -54,7 +54,7 @@ Native reasoning 的内部工作流（以 MAI-Thinking-1 为例）：
 | 自纠正 | 生成后自校验修正 |
 | 含义 | 外部"强制分步思考"脚手架（Plan-and-Execute 循环等）冗余化 |
 
-> 💡 **成本结构变化**：测试时计算 = 推理 token 计费——成本从"循环轮数"部分转移到"每轮推理深度"；总成本权衡仍是"少轮 × 贵轮 vs 多轮 × 廉轮"。
+> **成本结构变化**：测试时计算 = 推理 token 计费——成本从"循环轮数"部分转移到"每轮推理深度"；总成本权衡仍是"少轮 × 贵轮 vs 多轮 × 廉轮"。
 
 ## 4. RL 驱动：LLM + RL + Task
 
@@ -80,7 +80,7 @@ RL 驱动的意义：
 | 算法 | Flow-GRPO：把多轮优化转为可解的单轮策略更新（稀疏奖励信用分配） |
 | 结果 | 7B 规模超过 GPT-4o；搜索/agentic/数学基准 +14-15% |
 
-> 💡 **研究含义**：训练与推理的界限模糊——多轮循环中的执行反馈直接优化策略（在线学习），不再"训练完就冻结"。
+> **研究含义**：训练与推理的界限模糊——多轮循环中的执行反馈直接优化策略（在线学习），不再"训练完就冻结"。
 
 ## 6. 对外部框架的影响
 
@@ -91,7 +91,7 @@ RL 驱动的意义：
 | 规划模拟 | 收缩到"重规划/可审计"场景 |
 | 路由/状态/环境执行 | **保留且加强**（Harness 增厚） |
 
-> 🎯 **框架角色的 2026 定位**："orchestration layer's role is shifting to routing, state management, and environment execution rather than simulating cognition"——框架不再模拟认知，而是管路由/状态/环境。
+> **框架角色的 2026 定位**："orchestration layer's role is shifting to routing, state management, and environment execution rather than simulating cognition"——框架不再模拟认知，而是管路由/状态/环境。
 
 ## 7. 工程视角：仍要学的原理
 
@@ -109,7 +109,7 @@ RL 驱动的意义：
 
 ## 8. 核心要点
 
-> 🎯 **核心要点**：
+> **核心要点**：
 > 1. 理论转向：从"外部编排工作流"到"模型原生 agentic"——LLM + RL + Task
 > 2. Native reasoning：推理独立通道（thinking），prompt 式 Thought token 成历史
 > 3. Test-time compute：隐式分支/自纠正内化——外部分步思考脚手架冗余化

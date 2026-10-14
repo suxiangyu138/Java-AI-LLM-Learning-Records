@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [Runner 是什么](#1-runner-是什么)
 2. [三种类型与 Tags 路由](#2-三种类型与-tags-路由)
@@ -41,7 +41,7 @@ gpu-test:
 | Executor | 环境 | 适用 |
 |----------|------|------|
 | Shell | Runner 机器直接执行 | 简单/开发机 |
-| Docker | 每 job 一个容器（image 指定） | ⭐ 默认（隔离 + 可复现） |
+| Docker | 每 job 一个容器（image 指定） | ★ 默认（隔离 + 可复现） |
 | Kubernetes | 每 job 一个 pod | 规模化（K8s 集群已有） |
 | SSH | 连远程机器执行 | 远程部署 |
 
@@ -104,7 +104,7 @@ concurrent = 10              # 本 Runner 全局最大并发 job 数
 4. DinD 与 services 是什么？K8s executor 的价值？
 5. config.toml 三个关键参数？GitOps 部署模式？
 
-> 🎯 **核心要点**：Runner = **"GitLab 编排、Runner 干活"**——"**默认 Docker executor（隔离 + 可复现）、规模化 K8s executor、tags 精确路由、concurrent 按容量定**"；**GitOps 模式（CI 改仓库、Flux 同步）是 2026 部署审计链的标准答案**。
+> **核心要点**：Runner = **"GitLab 编排、Runner 干活"**——"**默认 Docker executor（隔离 + 可复现）、规模化 K8s executor、tags 精确路由、concurrent 按容量定**"；**GitOps 模式（CI 改仓库、Flux 同步）是 2026 部署审计链的标准答案**。
 
 ---
 

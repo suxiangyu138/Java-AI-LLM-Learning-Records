@@ -1,7 +1,7 @@
 # 02-核心架构与 ChatClient
 > Spring AI 分层架构、核心接口职责、ChatClient 流式 DSL：从一次 `call()` 出发理解整条调用链
 
-## 📚 目录
+## 目录
 1. [分层架构总览](#1-分层架构总览)
 2. [核心接口与职责](#2-核心接口与职责)
 3. [ChatClient：主 API](#3-chatclient主-api)
@@ -41,7 +41,7 @@
 | `ToolCallback` | HandlerMapping 的 Handler | 工具端点注册 |
 | Starter 自动配置 | Spring Boot 自动配置 | 依赖即服务 |
 
-> 🎯 **核心要点**：2.0 把 `ChatClient` 定为唯一主 API，`ChatModel` 降为底层构建块——业务代码永远写 `chatClient.prompt()...`，只有要造框架/深度定制模型行为才碰 `ChatModel`。
+> **核心要点**：2.0 把 `ChatClient` 定为唯一主 API，`ChatModel` 降为底层构建块——业务代码永远写 `chatClient.prompt()...`，只有要造框架/深度定制模型行为才碰 `ChatModel`。
 
 ## 2. 核心接口与职责
 
@@ -107,7 +107,7 @@ public Flux<String> stream(@RequestParam String question) {
 }
 ```
 
-> ⚠️ 流式 + 工具调用的交互：工具调用需要先收集完整响应再执行，`ToolCallingAdvisor` 内部做流聚合后递归——自定义流式场景时优先用官方 `ToolCallingAdvisor` 的扩展钩子，别手写循环。
+> 流式 + 工具调用的交互：工具调用需要先收集完整响应再执行，`ToolCallingAdvisor` 内部做流聚合后递归——自定义流式场景时优先用官方 `ToolCallingAdvisor` 的扩展钩子，别手写循环。
 
 ## 4. 一次 call() 的完整旅程
 
@@ -164,11 +164,11 @@ Advisor 链: A → B → C → ChatModel
 | 结构化输出重试 | 校验失败后带错误信息重试（默认 3 次） |
 | 评估循环 | 评估 Agent 的结果并反馈重试 |
 
-> ⚠️ 单工具 Advisor 不变量：`DefaultChatClient` 强制一条链中**只能有一个**工具 Advisor（`ToolAdvisor` 标记接口），防止工具执行双循环 bug。
+> 单工具 Advisor 不变量：`DefaultChatClient` 强制一条链中**只能有一个**工具 Advisor（`ToolAdvisor` 标记接口），防止工具执行双循环 bug。
 
 ## 6. 核心要点
 
-> 🎯 **核心要点**：
+> **核心要点**：
 > - 2.0 架构 = ChatClient（主 API） + Advisor 链（横切+递归） + ChatModel（底层）；
 > - Advisor 链是扩展总纲：记忆/工具/安全/校验全部是 Advisor，自定义能力也写 Advisor；
 > - 递归链（`CallAdvisorChain.copy`）是工具循环与校验重试的引擎，理解它才算懂 2.0；

@@ -1,6 +1,6 @@
 # 05 - Spring AI Alibaba Hooks 与 Interceptors
 
-> 🎯 Spring AI Alibaba 独创 Hooks + Interceptors 双层架构 — Hooks 管 Agent 高层流程节点（流程级控制），Interceptors 管模型/工具调用的底层数据交互（数据级修改）。与 LangChain Middleware、Spring AI Advisor 对照阅读
+> Spring AI Alibaba 独创 Hooks + Interceptors 双层架构 — Hooks 管 Agent 高层流程节点（流程级控制），Interceptors 管模型/工具调用的底层数据交互（数据级修改）。与 LangChain Middleware、Spring AI Advisor 对照阅读
 
 ---
 
@@ -179,6 +179,6 @@ public class ToolRetryInterceptor implements ToolInterceptor {
 
 ---
 
-> 🎯 **核心要点**：Spring AI Alibaba 把"流程控制"和"数据修改"拆成两个层 — Hooks 决定"要不要继续"（中断/跳转/审批）、Interceptors 决定"数据和结果"。双层分离的优势：Hook 的异常终止不影响 Interceptor 的数据处理逻辑，两者职责清晰，可独立测试。
+> **核心要点**：Spring AI Alibaba 把"流程控制"和"数据修改"拆成两个层 — Hooks 决定"要不要继续"（中断/跳转/审批）、Interceptors 决定"数据和结果"。双层分离的优势：Hook 的异常终止不影响 Interceptor 的数据处理逻辑，两者职责清晰，可独立测试。
 
 **下一模块**：[06-Agent Hooks生产实践与框架对比](06-Agent%20Hooks生产实践与框架对比.md) / **返回总览**：[00-Hook总览](00-Hook知识体系总览.md)

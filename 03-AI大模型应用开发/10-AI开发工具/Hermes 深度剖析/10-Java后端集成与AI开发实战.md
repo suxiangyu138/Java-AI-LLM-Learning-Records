@@ -1,6 +1,6 @@
 # 10 - Java 后端集成与 AI 开发实战
 
-> 🎯 将 Hermes 集成到 Java 生态中是用好它的"最后一公里"。本文覆盖 Spring AI 集成、LangChain4j 适配、Ollama Java Client、以及 Agent 开发的完整实战套路
+> 将 Hermes 集成到 Java 生态中是用好它的"最后一公里"。本文覆盖 Spring AI 集成、LangChain4j 适配、Ollama Java Client、以及 Agent 开发的完整实战套路
 
 ---
 
@@ -20,16 +20,16 @@
 ```text
 Java 后端集成 Hermes 的四种路径
 │
-├── 🟢 Spring AI (推荐)
+├── Spring AI (推荐)
 │   └── Spring 原生 + Ollama starter + 自动配置
 │
-├── 🔵 LangChain4j
+├── LangChain4j
 │   └── 更灵活的 LLM 编排 + 丰富的工具生态
 │
-├── 🟡 原生 HTTP Client
+├── 原生 HTTP Client
 │   └── Ollama OpenAI-compatible API + RestClient
 │
-└── 🟣 Hermes Java SDK (自建)
+└── Hermes Java SDK (自建)
     └── 封装 ChatML + Function Calling 协议
 ```
 
@@ -138,7 +138,7 @@ public String weatherAgent(@RequestBody String query) {
 }
 ```
 
-> 💡 Spring AI 的 `@Description` 注解自动生成 Function Schema，无需手写 JSON——开发体验接近 OpenAI SDK
+> Spring AI 的 `@Description` 注解自动生成 Function Schema，无需手写 JSON——开发体验接近 OpenAI SDK
 
 ### 2.4 流式输出（SSE）
 
@@ -211,7 +211,7 @@ public class HermesAgent {
 }
 ```
 
-> 🎯 LangChain4j 的 `AiServices` 会自动处理 Function Calling 的完整循环（用户提问 → 模型选工具 → 执行 → 回填 → 最终答案），无需手写递归逻辑
+> LangChain4j 的 `AiServices` 会自动处理 Function Calling 的完整循环（用户提问 → 模型选工具 → 执行 → 回填 → 最终答案），无需手写递归逻辑
 
 ## 4. Ollama Java 客户端
 

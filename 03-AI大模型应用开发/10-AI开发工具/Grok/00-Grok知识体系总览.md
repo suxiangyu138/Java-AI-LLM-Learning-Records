@@ -1,12 +1,12 @@
 # 00 - Grok 知识体系总览
 
-> 🎯 Grok 是 SpaceXAI（原 xAI，Elon Musk 创立）推出的 AI 大模型产品线——2026 年 7 月最新 Grok 4.5 以 1.5T MoE 参数、4.2× Token 效率优势、SWE Marathon 全球第一的成绩杀回牌桌。深度集成 X 平台 + Cursor 联合训练 + DeepSearch + Aurora，以"用最少的 Token 干最多的活"为 2026 年的核心竞争力
+> Grok 是 SpaceXAI（原 xAI，Elon Musk 创立）推出的 AI 大模型产品线——2026 年 7 月最新 Grok 4.5 以 1.5T MoE 参数、4.2× Token 效率优势、SWE Marathon 全球第一的成绩杀回牌桌。深度集成 X 平台 + Cursor 联合训练 + DeepSearch + Aurora，以"用最少的 Token 干最多的活"为 2026 年的核心竞争力
 
-> 🎯 本系列共 **11 篇高质量技术文档**，基于 **2026 年 7 月 28 日最新数据**，覆盖从 Grok-1 到 Grok 4.5 的完整进化史
+> 本系列共 **11 篇高质量技术文档**，基于 **2026 年 7 月 28 日最新数据**，覆盖从 Grok-1 到 Grok 4.5 的完整进化史
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [Grok 是什么](#1-grok-是什么)
 2. [发展历程速览（2023-2026）](#2-发展历程速览2023-2026)
@@ -28,8 +28,8 @@
 
 | 维度 | Grok 4.5 | 行业对标 |
 |------|------|------|
-| 代码 Agent | A-CODE-LLM 0.732 🥇 | 超越 Claude Sonnet 5 (0.707) |
-| SWE Marathon | **29.0%** 🥇 | 超越 Opus 4.8 (26.0%) 和 Fable 5 (24.0%) |
+| 代码 Agent | A-CODE-LLM 0.732 | 超越 Claude Sonnet 5 (0.707) |
+| SWE Marathon | **29.0%** | 超越 Opus 4.8 (26.0%) 和 Fable 5 (24.0%) |
 | Token 效率 | **4.2×** 优于 Opus 4.8 | SWE Bench Pro 平均 15,954 tokens vs 67,020 |
 | 定价 | $2/$6 per 1M | 60%+ 低于 Opus 4.8 |
 | 生态集成 | X + Cursor + API | 社交 + IDE + 开发者三端覆盖 |
@@ -59,25 +59,25 @@
 ```
 Grok 精通体系（11个文件）— 2026.07 最新版
 │
-├── 🏗️ 基础篇（01-03）
+├── 基础篇（01-03）
 │   ├── 01-Grok概述与发展历程.md          # xAI→SpaceXAI/Grok-1→4.5完整进化
 │   ├── 02-Grok底层架构与技术原理.md        # 1.5T MoE/GB300集群/Cursor联合训练
 │   └── 03-Grok核心能力深度解析.md          # 代码Agent/DeepSearch/多模态/Token效率
 │
-├── 🔧 平台篇（04-05）
+├── 平台篇（04-05）
 │   ├── 04-Grok平台与X生态深度集成.md       # X平台+Cursor+独立App三端
 │   └── 05-Grok-API与xAI开发实战.md         # Grok 4.5 API/$2/$6定价/FC
 │
-├── 🚀 进阶篇（06-08）
+├── 进阶篇（06-08）
 │   ├── 06-Grok-DeepSearch深度搜索解密.md    # DeepSearch架构+联网检索
 │   ├── 07-Grok图像生成与Aurora详解.md       # Aurora模型/文生图
 │   └── 08-Grok订阅与付费生态.md             # 免费/Premium+/SuperGrok/API四档
 │
-├── 📋 实战篇（09-10）
+├── 实战篇（09-10）
 │   ├── 09-Grok-Java后端集成实战.md          # Spring AI+Cursor+API集成
 │   └── 10-Grok与主流模型深度对比.md          # vs Claude Opus5/GPT-5.6/DeepSeek V4 Pro
 │
-└── 📌 冲刺篇（11）
+└── 冲刺篇（11）
     ├── 11-Grok面试题与前沿展望.md            # 20题+SpaceXAI战略+Grok 5.0展望
     └── 00-Grok知识体系总览.md               # ← 本文件
 ```
@@ -89,27 +89,27 @@ Grok 精通体系（11个文件）— 2026.07 最新版
 | # | 文件 | 核心内容 | 级别 |
 |---|------|----------|:---:|
 | 00 | 知识体系总览 | 2026.07 最新全景+路线+价格 | — |
-| 01 | 概述与发展历程 | xAI→SpaceXAI, Grok-1→4.5 完整进化 | ⭐⭐⭐ |
-| 02 | 底层架构与技术原理 | 1.5T MoE / GB300 / Cursor 联合训练 | ⭐⭐⭐⭐ |
-| 03 | 核心能力深度解析 | 代码Agent/SWE Marathon/Token效率 | ⭐⭐⭐⭐⭐ |
-| 04 | 平台与X生态集成 | X+Cursor+Grok Build 三端生态 | ⭐⭐⭐⭐ |
-| 05 | API与xAI开发实战 | Grok 4.5 API/$2/$6/FC | ⭐⭐⭐⭐ |
-| 06 | DeepSearch深度搜索 | 搜索架构+推理链 | ⭐⭐⭐⭐⭐ |
-| 07 | 图像生成与Aurora | Aurora+/文生图实战 | ⭐⭐⭐ |
-| 08 | 订阅与付费生态 | 四档方案对比 | ⭐⭐⭐ |
-| 09 | Java后端集成实战 | Spring AI+Cursor+Agent | ⭐⭐⭐⭐ |
-| 10 | 与主流模型对比 | Grok4.5 vs Opus5/Fable5/DeepSeek V4P | ⭐⭐⭐⭐⭐ |
-| 11 | 面试题与前沿展望 | 20题+Grok 5.0展望 | ⭐⭐⭐⭐ |
+| 01 | 概述与发展历程 | xAI→SpaceXAI, Grok-1→4.5 完整进化 | ★★★ |
+| 02 | 底层架构与技术原理 | 1.5T MoE / GB300 / Cursor 联合训练 | ★★★★ |
+| 03 | 核心能力深度解析 | 代码Agent/SWE Marathon/Token效率 | ★★★★★ |
+| 04 | 平台与X生态集成 | X+Cursor+Grok Build 三端生态 | ★★★★ |
+| 05 | API与xAI开发实战 | Grok 4.5 API/$2/$6/FC | ★★★★ |
+| 06 | DeepSearch深度搜索 | 搜索架构+推理链 | ★★★★★ |
+| 07 | 图像生成与Aurora | Aurora+/文生图实战 | ★★★ |
+| 08 | 订阅与付费生态 | 四档方案对比 | ★★★ |
+| 09 | Java后端集成实战 | Spring AI+Cursor+Agent | ★★★★ |
+| 10 | 与主流模型对比 | Grok4.5 vs Opus5/Fable5/DeepSeek V4P | ★★★★★ |
+| 11 | 面试题与前沿展望 | 20题+Grok 5.0展望 | ★★★★ |
 
 ---
 
 ## 5. 学习路线推荐
 
 ```text
-🟢 入门（30min）：01-概述 → 04-平台生态 → 08-订阅
-🔵 理解（1.5h）：02-架构 → 03-核心能力 → 06-DeepSearch
-🟣 进阶（1.5h）：05-API → 09-Java集成 → 10-竞品对比
-🟡 冲刺（30min）：11-面试题
+入门（30min）：01-概述 → 04-平台生态 → 08-订阅
+理解（1.5h）：02-架构 → 03-核心能力 → 06-DeepSearch
+进阶（1.5h）：05-API → 09-Java集成 → 10-竞品对比
+冲刺（30min）：11-面试题
 ```
 
 ---
@@ -150,4 +150,4 @@ Grok 精通体系（11个文件）— 2026.07 最新版
 | **Grok Build** | SpaceXAI 的开发者平台 |
 | **Colossus** | 超算集群，已升级至 GB300 GPU |
 
-> 🎯 **核心要点**：Grok 4.5 的竞争力不在"最强"，而在"最省"——**相同质量的任务，只需对手 1/4 的 Token 和 1/3 的成本**。2026 年的 Grok = Token 效率的革命者 + Cursor 生态的受益者 + SWE Marathon 全球第一。
+> **核心要点**：Grok 4.5 的竞争力不在"最强"，而在"最省"——**相同质量的任务，只需对手 1/4 的 Token 和 1/3 的成本**。2026 年的 Grok = Token 效率的革命者 + Cursor 生态的受益者 + SWE Marathon 全球第一。

@@ -1,6 +1,6 @@
 # 08 - LangChain4j Agent 与高级特性
 
-> 🎯 Agent = LLM + Tools + Memory + RAG 的四合一编排。LangChain4j 的 AiServices 让 Agent 开发变成"定义接口 → 注册能力 → 自动编排"。本章覆盖 Agent 模式、自定义 Chain、流式 Tool Calling、生产级 Agent 架构
+> Agent = LLM + Tools + Memory + RAG 的四合一编排。LangChain4j 的 AiServices 让 Agent 开发变成"定义接口 → 注册能力 → 自动编排"。本章覆盖 Agent 模式、自定义 Chain、流式 Tool Calling、生产级 Agent 架构
 
 ---
 
@@ -235,20 +235,20 @@ logging:
 
 | 特性 | LangChain4j | LangChain (Python) |
 |------|:---:|:---:|
-| 声明式 AiServices | ✅ **核心特色** | ❌ 需手动实现 |
-| Agent 编排 | ✅ Chain/Agent | ✅ **更成熟**（LangGraph） |
-| RAG | ✅ 完整 | ✅ **更丰富** |
+| 声明式 AiServices | ✓ **核心特色** | ✗ 需手动实现 |
+| Agent 编排 | ✓ Chain/Agent | ✓ **更成熟**（LangGraph） |
+| RAG | ✓ 完整 | ✓ **更丰富** |
 | 文档加载器 | 30+ | **80+** |
-| 社区活跃度 | ⭐⭐⭐ | ⭐⭐⭐⭐⭐ |
-| 版本稳定 | ⚠️ beta 迭代 | ✅ 1.x 稳定 |
-| Java/Spring 集成 | ✅ **原生** | ❌ |
+| 社区活跃度 | ★★★ | ★★★★★ |
+| 版本稳定 | beta 迭代 | ✓ 1.x 稳定 |
+| Java/Spring 集成 | ✓ **原生** | ✗ |
 | 生产案例 | 增长中 | **最多** |
-| MCP 支持 | ✅ | ✅ |
+| MCP 支持 | ✓ | ✓ |
 
-> 💡 LangChain4j 不追求 1:1 复刻 Python LangChain。它的 AiServices 声明式接口是 Python LangChain 没有的核心特色 — 利用 Java 的静态类型 + 动态代理实现"接口即服务"。
+> LangChain4j 不追求 1:1 复刻 Python LangChain。它的 AiServices 声明式接口是 Python LangChain 没有的核心特色 — 利用 Java 的静态类型 + 动态代理实现"接口即服务"。
 
 ---
 
-> 🎯 **核心要点**：LangChain4j Agent = **接口定义能力** + **AiServices 自动编排循环**。Agent 与 Chain 的分工：Agent 让 LLM 自主决策步骤（灵活）、Chain 让开发者显式控制步骤（可预测）。生产 Agent 的三个关键配置：**temperature 0.1-0.3（防幻象工具调用）+ maxMessages 20（控制 Token 成本）+ 工具独立超时（防单个工具卡死）**。
+> **核心要点**：LangChain4j Agent = **接口定义能力** + **AiServices 自动编排循环**。Agent 与 Chain 的分工：Agent 让 LLM 自主决策步骤（灵活）、Chain 让开发者显式控制步骤（可预测）。生产 Agent 的三个关键配置：**temperature 0.1-0.3（防幻象工具调用）+ maxMessages 20（控制 Token 成本）+ 工具独立超时（防单个工具卡死）**。
 
 **下一模块**：[09-SpringAI vs LangChain4j对比](09-SpringAI-vs-LangChain4j对比.md) / **返回总览**：[00-总览](00-Java-AI开发框架体系总览.md)

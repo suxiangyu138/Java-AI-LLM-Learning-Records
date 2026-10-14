@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [背景：为什么 5.0 新增 Framework Retry](#1-背景为什么-50-新增-framework-retry)
 2. [Spring Framework 7 原生 resilience 速览](#2-spring-framework-7-原生-resilience-速览)
@@ -70,7 +70,7 @@ String result = template.execute(context -> downstream.call());
 public String call() { return downstream.call(); }
 ```
 
-> 🎯 核心变化：**重试能力从"第三方库"变成"框架核心"**——新项目可以直接用 Framework 7 原生 API，不再需要 spring-retry 依赖；SCCB 的 Framework Retry 实现就是把"有状态熔断"叠加在这套原生重试之上。
+> 核心变化：**重试能力从"第三方库"变成"框架核心"**——新项目可以直接用 Framework 7 原生 API，不再需要 spring-retry 依赖；SCCB 的 Framework Retry 实现就是把"有状态熔断"叠加在这套原生重试之上。
 
 ## 3. Framework Retry 实现详解
 
@@ -136,7 +136,7 @@ public class CircuitBreakerConfig {
 | 统计口径 | **无百分比阈值**（有状态跟踪失败，无滑动窗口） | 滑动窗口 + 失败率阈值 |
 | 语义 | 仿 Spring Retry 的 CircuitBreakerRetryPolicy | 完整统计熔断 |
 
-> 🎯 关键差异：**Framework Retry 的熔断是"重试耗尽即熔断"，不是"失败率达标即熔断"**——没有滑动窗口/百分比概念；适合"重试为主、熔断兜底"的轻量语义，不适合需要精细统计的场景。
+> 关键差异：**Framework Retry 的熔断是"重试耗尽即熔断"，不是"失败率达标即熔断"**——没有滑动窗口/百分比概念；适合"重试为主、熔断兜底"的轻量语义，不适合需要精细统计的场景。
 
 ### 3.4 限制（官方明确）
 
@@ -144,10 +144,10 @@ public class CircuitBreakerConfig {
 
 | 限制 | 说明 |
 |------|------|
-| ❌ 响应式 | 不支持（无 reactor starter） |
-| ❌ 隔离/限流 | 无 Bulkhead/RateLimiter（只有重试+熔断） |
-| ❌ 超时 | 无 TimeLimiter（超时要靠 RetryPolicy 的 withMaxDuration 或业务层） |
-| ✅ 注解 | 可直接用 Framework 7 的 @Retryable（原生） |
+| ✗ 响应式 | 不支持（无 reactor starter） |
+| ✗ 隔离/限流 | 无 Bulkhead/RateLimiter（只有重试+熔断） |
+| ✗ 超时 | 无 TimeLimiter（超时要靠 RetryPolicy 的 withMaxDuration 或业务层） |
+| ✓ 注解 | 可直接用 Framework 7 的 @Retryable（原生） |
 
 ## 4. Spring Retry 实现（维护模式）
 
@@ -195,15 +195,15 @@ factory.addRetryTemplateCustomizers(template -> template.registerListener(
 |------|---------------------|---------------------|----------------------|
 | 版本 | 5.0.x 起全版本 | 3.0 起全版本 | **5.0 起（Boot 4 专属）** |
 | 熔断统计 | 滑动窗口+失败率/慢调用率 | 状态跟踪（重试耗尽） | 状态跟踪（重试耗尽） |
-| 重试 | ✅ Retry 模块 | ✅ 本职 | ✅ Framework 7 原生 |
-| 超时 | ✅ TimeLimiter | ⚠️ 需配 TimeoutRetryPolicy | ❌（靠业务/策略） |
-| 隔离 | ✅ Bulkhead | ❌ | ❌ |
-| 限流 | ✅ RateLimiter | ❌ | ❌ |
-| 响应式 | ✅ reactor starter | ❌ | ❌ |
-| 注解 | ✅（resilience4j-spring-boot3） | ✅（Spring Retry 注解） | ✅（Framework 7 @Retryable） |
+| 重试 | ✓ Retry 模块 | ✓ 本职 | ✓ Framework 7 原生 |
+| 超时 | ✓ TimeLimiter | 需配 TimeoutRetryPolicy | ✗（靠业务/策略） |
+| 隔离 | ✓ Bulkhead | ✗ | ✗ |
+| 限流 | ✓ RateLimiter | ✗ | ✗ |
+| 响应式 | ✓ reactor starter | ✗ | ✗ |
+| 注解 | ✓（resilience4j-spring-boot3） | ✓（Spring Retry 注解） | ✓（Framework 7 @Retryable） |
 | 配置方式 | yaml 属性 + Customizer | Customizer（编程式） | Customizer（编程式，无 yaml） |
 | 依赖重量 | 全家桶（最重） | spring-retry（轻） | **零依赖**（Framework 7 自带） |
-| 维护状态 | ✅ 活跃 | ⚠️ 维护模式 | ✅ 新秀 |
+| 维护状态 | ✓ 活跃 | 维护模式 | ✓ 新秀 |
 | 面试热度 | ★★★ | ★ | ★★（新特性） |
 
 ## 6. 选型决策树
@@ -220,7 +220,7 @@ factory.addRetryTemplateCustomizers(template -> template.registerListener(
   └── Boot 4 + Resilience4J → 维持（官方默认，无迁移压力）
 ```
 
-> 🎯 一句话结论：**默认 Resilience4J 永不出错；"极简主义"新项目（零依赖、只重试+熔断、纯阻塞）选 Framework Retry 是官方演进方向**——它吃掉的是 Spring Retry 的生态位，不是 Resilience4J 的。
+> 一句话结论：**默认 Resilience4J 永不出错；"极简主义"新项目（零依赖、只重试+熔断、纯阻塞）选 Framework Retry 是官方演进方向**——它吃掉的是 Spring Retry 的生态位，不是 Resilience4J 的。
 
 ---
 

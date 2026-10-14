@@ -1,6 +1,6 @@
 # 05 - ChatGPT API 开发实战
 
-> 🎯 OpenAI API = 所有 LLM API 的事实标准。一个 `chat.completions.create()` 打天下，流式+FC+JSON+Vision 四大增强模式
+> OpenAI API = 所有 LLM API 的事实标准。一个 `chat.completions.create()` 打天下，流式+FC+JSON+Vision 四大增强模式
 
 ---
 
@@ -153,4 +153,4 @@ String resp = rest.postForObject(
 );
 ```
 
-> 🎯 OpenAI API = 一个端点打天下。流式交互、FC 调工具、JSON Mode 结构化、Vision 看图片。代码→debug→审查全搞定。
+> OpenAI API = 一个端点打天下。流式交互、FC 调工具、JSON Mode 结构化、Vision 看图片。代码→debug→审查全搞定。

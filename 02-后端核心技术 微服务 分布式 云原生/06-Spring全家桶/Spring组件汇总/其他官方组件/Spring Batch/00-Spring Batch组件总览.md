@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [组件一句话定位](#1-组件一句话定位)
 2. [版本现状（2026-08）](#2-版本现状2026-08)
@@ -31,7 +31,7 @@
   JobRepository（元数据账本：BATCH_* 表，驱动重启/审计/监控）
 ```
 
-> 🎯 **一句话**：Spring Batch 不解决"分布式计算"（那是 Spark/Flink 的事），它解决"单 JVM 内把大数据量批处理做对"——可重启、可审计、可容错。
+> **一句话**：Spring Batch 不解决"分布式计算"（那是 Spark/Flink 的事），它解决"单 JVM 内把大数据量批处理做对"——可重启、可审计、可容错。
 
 ## 2. 版本现状（2026-08）
 
@@ -48,9 +48,9 @@
 - **容错换核**：retry 从 Spring Retry 迁到 Spring Framework 7 内置 Retry；skip 完全基于 SkipPolicy；
 - **并发重写**：生产者-消费者 + 有界队列背压（throttleLimit 移除）；
 - **运维升级**：CommandLineJobOperator 替代 CommandLineJobRunner、JobOperator.recover()、JFR 可观测事件；
-- ⚠️ **迁移警告**：5.x 遗留的 FAILED 实例无法在 6.0 续跑（JobParameters 序列化格式变化）；`BATCH_JOB_SEQ` 改名 `BATCH_JOB_INSTANCE_SEQ`。
+- **迁移警告**：5.x 遗留的 FAILED 实例无法在 6.0 续跑（JobParameters 序列化格式变化）；`BATCH_JOB_SEQ` 改名 `BATCH_JOB_INSTANCE_SEQ`。
 
-> 💡 写代码/面试一律以 6.0 API 为准——旧博客里的 JobBuilderFactory、`.chunk(n, tx)`、spring-retry 写法均已废弃或移除。
+> 写代码/面试一律以 6.0 API 为准——旧博客里的 JobBuilderFactory、`.chunk(n, tx)`、spring-retry 写法均已废弃或移除。
 
 ## 3. 能力地图
 
@@ -133,6 +133,6 @@ class HelloJobConfig {
 
 ---
 
-> 🎯 **核心要点**：Spring Batch 6.0 是"无库起步、构造注入、SF7 容错内核"的新时代；本卡片的深度版本在 `../Spring Batch/` 深度体系，生产落地前务必阅读其中的迁移清单与故障排查手册。
+> **核心要点**：Spring Batch 6.0 是"无库起步、构造注入、SF7 容错内核"的新时代；本卡片的深度版本在 `../Spring Batch/` 深度体系，生产落地前务必阅读其中的迁移清单与故障排查手册。
 
 **下一模块**：[01-模块清单](01-模块清单.md)

@@ -62,7 +62,7 @@ Optional<String> nonNull = Optional.of("Hello");            // 非空，传null�
 Optional<String> nullable = Optional.ofNullable(getData());  // 最常用，安全处理可能null
 ```
 
-> 💡 日常开发中`ofNullable`使用频率最高。
+> 日常开发中`ofNullable`使用频率最高。
 
 基本类型使用专门版本避免装箱开销：`OptionalInt`、`OptionalLong`、`OptionalDouble`。
 
@@ -71,7 +71,7 @@ OptionalInt optInt = OptionalInt.of(42);
 optInt.orElse(0);       // 默认值
 ```
 
-> ⚠️ 不要用`Optional<Integer>`，应使用`OptionalInt`。
+> 不要用`Optional<Integer>`，应使用`OptionalInt`。
 
 ---
 
@@ -131,11 +131,11 @@ if (opt.isPresent()) { /* JDK 8 */ }
 if (opt.isEmpty())   { /* JDK 11+ */ }
 ```
 
-> ⚠️ 频繁用`isPresent`+`get()`说明未充分利用Optional API，优先用`ifPresent`或`orElse`。
+> 频繁用`isPresent`+`get()`说明未充分利用Optional API，优先用`ifPresent`或`orElse`。
 
 ### 4.2 orElse vs orElseGet：惰性求值（重要陷阱）
 
-> 🎯 **核心考点**：`orElse`的默认值**始终计算**；`orElseGet`仅在Optional为空时计算。
+> **核心考点**：`orElse`的默认值**始终计算**；`orElseGet`仅在Optional为空时计算。
 
 ```java
 Optional<String> opt = Optional.of("有值");
@@ -173,16 +173,16 @@ Optional.ofNullable(getData()).orElseThrow();
 ### 5.1 正确用法
 
 ```java
-// ✅ 作为返回值
+// ✓ 作为返回值
 public Optional<Customer> findById(Long id) {
     return Optional.ofNullable(db.query(id));
 }
 
-// ✅ 链式安全调用
+// ✓ 链式安全调用
 return Optional.ofNullable(config).filter(Config::isActive)
     .map(Config::getValue).orElse("默认");
 
-// ✅ 与Stream结合（JDK 9+）
+// ✓ 与Stream结合（JDK 9+）
 List<String> vals = optionals.stream()
     .flatMap(Optional::stream).collect(Collectors.toList());
 ```
@@ -190,25 +190,25 @@ List<String> vals = optionals.stream()
 ### 5.2 反模式
 
 ```java
-// ❌ 不作为字段（Optional不可序列化）
-// ❌ 不作为方法参数（调用者可能传null）
-// ❌ 不调用get()而不判空
-// ❌ 不用Optional包装集合（空集合本身就是"空"的语义）
-// ❌ 不在集合中放Optional（直接filter null）
+// ✗ 不作为字段（Optional不可序列化）
+// ✗ 不作为方法参数（调用者可能传null）
+// ✗ 不调用get()而不判空
+// ✗ 不用Optional包装集合（空集合本身就是"空"的语义）
+// ✗ 不在集合中放Optional（直接filter null）
 ```
 
 ### 5.3 规范总结
 
 | 场景 | 推荐做法 |
 |------|----------|
-| 返回值可能为空 | ✅ `Optional<T>` 作为返回值 |
-| 方法参数可能为空 | ❌ 不用Optional参数；用重载或@Nullable |
-| 字段可能为空 | ❌ 不用Optional字段；直接用null |
-| 昂贵默认值 | ✅ `orElseGet` |
-| 简单默认值 | ✅ `orElse` |
-| 基本类型 | ✅ `OptionalInt`/`OptionalLong`/`OptionalDouble` |
+| 返回值可能为空 | ✓ `Optional<T>` 作为返回值 |
+| 方法参数可能为空 | ✗ 不用Optional参数；用重载或@Nullable |
+| 字段可能为空 | ✗ 不用Optional字段；直接用null |
+| 昂贵默认值 | ✓ `orElseGet` |
+| 简单默认值 | ✓ `orElse` |
+| 基本类型 | ✓ `OptionalInt`/`OptionalLong`/`OptionalDouble` |
 
-> 💡 **设计哲学**：Optional是**返回值包装器**，用于告诉调用者"结果可能为空，请优雅处理"，不应侵入类内部设计。
+> **设计哲学**：Optional是**返回值包装器**，用于告诉调用者"结果可能为空，请优雅处理"，不应侵入类内部设计。
 
 ---
 
@@ -247,7 +247,7 @@ date.setTime(0); // 违反不可变设计
 | 时区 | Calendar+TimeZone晦涩 | **ZoneId+ZonedDateTime清晰** |
 | 间隔 | 无直接API | **Duration/Period** |
 
-> ⚠️ **新项目强制使用java.time**，严禁Date/Calendar/SimpleDateFormat。
+> **新项目强制使用java.time**，严禁Date/Calendar/SimpleDateFormat。
 
 ---
 
@@ -265,7 +265,7 @@ date.setTime(0); // 违反不可变设计
 
 ### 7.2 创建与操作
 
-> 💡 所有操作返回**新对象**，原对象不可变，天然线程安全。
+> 所有操作返回**新对象**，原对象不可变，天然线程安全。
 
 ```java
 // ---- 创建 ----
@@ -369,7 +369,7 @@ Period.of(1, 6, 15); // 1年6个月15天
 
 ## 9. DateTimeFormatter格式化与解析
 
-> ✅ **线程安全**，可`static final`复用。`SimpleDateFormat`线程不安全，禁止static。
+> ✓ **线程安全**，可`static final`复用。`SimpleDateFormat`线程不安全，禁止static。
 
 ```java
 private static final DateTimeFormatter FMT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -390,7 +390,7 @@ LocalDateTime.parse("2024-03-15 14:30:00", FMT);
 | `yyyy/MM/dd` | `2024/03/15` | 斜杠 |
 | `yyyy年MM月dd日` | `2024年03月15日` | 中文 |
 
-> ⚠️ 年份用`yyyy`（非`YY`），月份用`MM`（非`mm`），小时用`HH`（24h，非`hh`）。
+> 年份用`yyyy`（非`YY`），月份用`MM`（非`mm`），小时用`HH`（24h，非`hh`）。
 
 ### 预定义与本地化格式
 
@@ -436,7 +436,7 @@ zdt.getOffset();              // +08:00
 | 数据库 | TIMESTAMP WITH TIME ZONE，存UTC |
 | 跨时区通信 | ISO-8601格式字符串（含偏移） |
 
-> 💡 **服务端间通信推荐Instant**，统一UTC，避免时区歧义。
+> **服务端间通信推荐Instant**，统一UTC，避免时区歧义。
 
 ---
 
@@ -530,4 +530,4 @@ public static String getCompanyName(Employee emp) {
 
 ---
 
-> 🎯 **核心总结**：Optional通过函数式链式调用（map/flatMap/filter + orElse/orElseGet）优雅解决NPE问题。java.time API以不可变设计、职责分离、线程安全格式化器彻底取代了传统Date/Calendar。**新项目禁止使用Date/Calendar/SimpleDateFormat，优先用Optional作为返回值类型。**
+> **核心总结**：Optional通过函数式链式调用（map/flatMap/filter + orElse/orElseGet）优雅解决NPE问题。java.time API以不可变设计、职责分离、线程安全格式化器彻底取代了传统Date/Calendar。**新项目禁止使用Date/Calendar/SimpleDateFormat，优先用Optional作为返回值类型。**

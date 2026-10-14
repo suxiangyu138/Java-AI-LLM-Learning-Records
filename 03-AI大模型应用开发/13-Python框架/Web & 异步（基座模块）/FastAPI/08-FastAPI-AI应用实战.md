@@ -1,6 +1,6 @@
 # 08 - FastAPI × AI 应用实战
 
-> 🎯 用 FastAPI 构建 AI 应用四大件：MCP Server、RAG API、Agent 后端、LLM 统一代理（OpenAI-Compatible API）
+> 用 FastAPI 构建 AI 应用四大件：MCP Server、RAG API、Agent 后端、LLM 统一代理（OpenAI-Compatible API）
 
 ---
 
@@ -90,7 +90,7 @@ MCP_TOOLS = [
     },
     {
         "name": "send_weather_alert",
-        "description": "发送天气预警通知。⚠️ 会向所有订阅用户推送通知！",
+        "description": "发送天气预警通知。会向所有订阅用户推送通知！",
         "inputSchema": {
             "type": "object",
             "properties": {
@@ -189,7 +189,7 @@ async def handle_call_tool(rpc: JSONRPCRequest) -> dict:
             "jsonrpc": "2.0",
             "id": rpc.id,
             "result": {
-                "content": [{"type": "text", "text": f"❌ 执行失败: {str(e)}"}],
+                "content": [{"type": "text", "text": f"✗ 执行失败: {str(e)}"}],
                 "isError": True,
             },
         }
@@ -223,7 +223,7 @@ async def send_weather_alert(args: dict) -> dict:
     level = args["level"]
     message = args["message"]
     # ... 发送通知
-    emoji = {"yellow": "⚠️", "orange": "🔶", "red": "🔴"}
+    emoji = {"yellow": "", "orange": "", "red": ""}
     return {
         "content": [{"type": "text", "text": f"{emoji[level]} 预警已发送到 {city}：{message}"}],
         "isError": False,
@@ -700,7 +700,7 @@ async def anthropic_handler(request, model):
 # 同理实现 DeepSeekAdapter、OpenAIAdapter...
 ```
 
-> 🎯 **核心要点**：FastAPI 在 AI 应用中的四大实战角色 — MCP Server（协议实现）、RAG API（检索+生成）、Agent 后端（状态机+SSE推送）、LLM 代理（多模型统一接入）。核心能力是异步流式 + Pydantic 模型校验 + SSE/WebSocket 实时通信
+> **核心要点**：FastAPI 在 AI 应用中的四大实战角色 — MCP Server（协议实现）、RAG API（检索+生成）、Agent 后端（状态机+SSE推送）、LLM 代理（多模型统一接入）。核心能力是异步流式 + Pydantic 模型校验 + SSE/WebSocket 实时通信
 
 ---
 

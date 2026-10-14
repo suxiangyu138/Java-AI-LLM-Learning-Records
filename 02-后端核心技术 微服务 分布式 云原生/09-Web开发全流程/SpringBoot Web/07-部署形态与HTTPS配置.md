@@ -1,7 +1,7 @@
 # 部署形态与 HTTPS 配置
 > Jar vs War、SpringBootServletInitializer、SSL 证书与 HTTPS/HTTP2、压缩与线程池调优、优雅停机——"写好代码"到"安全上线"的最后一段路
 
-## 📚 目录
+## 目录
 1. [部署形态：Jar vs War](#1-部署形态jar-vs-war)
 2. [SpringBootServletInitializer 外置部署](#2-springbootservletinitializer-外置部署)
 3. [HTTPS 与 SSL 配置](#3-https-与-ssl-配置)
@@ -18,11 +18,11 @@
 | 启动 | `java -jar app.jar` | 放入 Tomcat webapps |
 | 容器 | 内嵌（版本锁定） | 外部容器（版本环境相关） |
 | 部署粒度 | 单文件，可版本化 | 目录/文件 |
-| 环境一致性 | ✅ 完全一致 | 容器版本差异风险 |
-| 云原生 | ✅ 天然适合 | ❌ 与容器/K8s 理念冲突 |
+| 环境一致性 | ✓ 完全一致 | 容器版本差异风险 |
+| 云原生 | ✓ 天然适合 | ✗ 与容器/K8s 理念冲突 |
 | 适用 | **现代默认（2026）** | 存量企业规范/特殊运维要求 |
 
-> 🎯 结论：**除非有强制理由（如企业要求共用容器管理），一律用 Jar**——单文件部署 + 版本锁定 + 云原生就绪，War 已是遗留形态。
+> 结论：**除非有强制理由（如企业要求共用容器管理），一律用 Jar**——单文件部署 + 版本锁定 + 云原生就绪，War 已是遗留形态。
 
 ## 2. SpringBootServletInitializer 外置部署
 
@@ -94,7 +94,7 @@ curl -k https://localhost:8443/actuator/health
 openssl s_client -connect localhost:8443 -alpn h2   # 看 ALPN 协商出 h2
 ```
 
-> ⚠️ **生产 SSL 建议放网关层**（Nginx/TLS 终止 + 证书自动续期），应用层 SSL 仅适合直连/内网场景——证书续期、TLS 版本升级都集中在网关，应用只跑明文。见 [Nginx SSL 与安全加固](../Nginx/10-Nginx-SSL与安全加固.md)。
+> **生产 SSL 建议放网关层**（Nginx/TLS 终止 + 证书自动续期），应用层 SSL 仅适合直连/内网场景——证书续期、TLS 版本升级都集中在网关，应用只跑明文。见 [Nginx SSL 与安全加固](../Nginx/10-Nginx-SSL与安全加固.md)。
 
 ### 3.3 反代后的正确姿势
 
@@ -102,7 +102,7 @@ openssl s_client -connect localhost:8443 -alpn h2   # 看 ALPN 协商出 h2
 server:
   forward-headers-strategy: framework   # 信任代理传递的 X-Forwarded-*
   # 效果：request.getScheme()/isSecure()/getServerName() 返回客户端视角
-  # ⚠️ 只在信任的反代后开启，否则伪造 X-Forwarded-* 可绕过安全判断
+  # 只在信任的反代后开启，否则伪造 X-Forwarded-* 可绕过安全判断
 ```
 
 | 策略 | 说明 |
@@ -119,7 +119,7 @@ server:
 | h2c（明文升级） | `server.http2.enabled=true`（无 SSL） | 需客户端显式升级（内部 RPC 用） |
 | 网关场景 | 网关开 HTTP/2，应用可保持 HTTP/1.1 | 应用侧收益被网关截留 |
 
-> 🎯 HTTP/2 收益：多路复用（并发请求不排队）、头部压缩（HPACK）、服务端推送（已废弃，见 [Servlet 6.1 演进](../Servlet/01-规范演进史与版本矩阵.md)）。**内网高并发 API 场景收益有限，重点在前端聚合请求**。
+> HTTP/2 收益：多路复用（并发请求不排队）、头部压缩（HPACK）、服务端推送（已废弃，见 [Servlet 6.1 演进](../Servlet/01-规范演进史与版本矩阵.md)）。**内网高并发 API 场景收益有限，重点在前端聚合请求**。
 
 ## 5. 压缩与响应优化
 
@@ -139,7 +139,7 @@ server:
 | 流式 | 大结果用 StreamingResponseBody（见 02 §8） | 内存恒定 |
 | 静态缓存 | 见 [06 §3](06-静态资源与SPA路由.md) | 命中零流量 |
 
-> ⚠️ 压缩与缓存联动：带 `ETag` 的响应压缩后 ETag 必须基于**压缩后内容**计算（Tomcat 自动处理）；压缩对 SSE 流式响应无效（逐帧发，无整包可压）。
+> 压缩与缓存联动：带 `ETag` 的响应压缩后 ETag 必须基于**压缩后内容**计算（Tomcat 自动处理）；压缩对 SSE 流式响应无效（逐帧发，无整包可压）。
 
 ## 6. 线程池调优与虚拟线程
 
@@ -167,7 +167,7 @@ spring:
 | 何时上虚拟线程 | IO 密集 + JDK 21+（Boot 3.2+ 支持） |
 | 调参铁律 | 每次只改一个参数 + 压测验证；盲调 = 反优化 |
 
-> ⚠️ 线程池参数只是容器层；业务侧还有数据库连接池、HTTP 客户端连接池——**瓶颈通常在最短的木板**，先看慢调用再调线程。
+> 线程池参数只是容器层；业务侧还有数据库连接池、HTTP 客户端连接池——**瓶颈通常在最短的木板**，先看慢调用再调线程。
 
 ## 7. 优雅停机与平滑发布
 
@@ -195,7 +195,7 @@ spring:
 | 双端口 | 管理端口与业务端口分离（`management.server.port`） |
 | 发布顺序 | 先停流量 → 再停应用（K8s preStop hook 可配合） |
 
-> 🎯 关联：完整发布策略（滚动/蓝绿/金丝雀）见 [CI/CD 与灰度发布体系](../../07-工程运维基础/运维/CI%20CD灰度发布/00-CI-CD与灰度发布总览.md)；可观测配置见 [SpringBoot 生产运维体系](../../06-Spring全家桶/SpringBoot/07-SpringBoot生产运维与可观测.md)。
+> 关联：完整发布策略（滚动/蓝绿/金丝雀）见 [CI/CD 与灰度发布体系](../../07-工程运维基础/运维/CI%20CD灰度发布/00-CI-CD与灰度发布总览.md)；可观测配置见 [SpringBoot 生产运维体系](../../06-Spring全家桶/SpringBoot/07-SpringBoot生产运维与可观测.md)。
 
 ---
 

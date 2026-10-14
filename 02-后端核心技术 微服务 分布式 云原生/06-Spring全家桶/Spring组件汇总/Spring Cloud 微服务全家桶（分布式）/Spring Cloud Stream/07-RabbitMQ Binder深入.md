@@ -1,7 +1,7 @@
 # 07-RabbitMQ Binder 深入
 > RabbitMQ Binder 全维度剖析：Exchange/Queue 拓扑生成规则、生产者与消费者专属属性、重试与死信、延迟消息、批量发送
 
-## 📚 目录
+## 目录
 1. [RabbitMQ Binder 架构](#1-rabbitmq-binder-架构)
 2. [Exchange / Queue 拓扑规则](#2-exchange--queue-拓扑规则)
 3. [消费者专属属性](#3-消费者专属属性)
@@ -78,7 +78,7 @@ order-events.order-service (组队列)                    order-events-0/1/2 (�
 | `transacted` | - | 使用 Rabbit 本地事务（性能低于 confirm 模式） |
 | `max-attempts`（公共） | 3 | binder 级重试次数 |
 
-> ⚠️ **requeue-rejected 是"无限循环"开关**：默认 false（失败进 DLQ）；设 true 且未配 DLQ 时，失败消息会被无限重投——仅适合瞬时故障场景，且必须配合 `ImmediateAcknowledgeAmqpException` 主动放弃。
+> **requeue-rejected 是"无限循环"开关**：默认 false（失败进 DLQ）；设 true 且未配 DLQ 时，失败消息会被无限重投——仅适合瞬时故障场景，且必须配合 `ImmediateAcknowledgeAmqpException` 主动放弃。
 
 ## 4. 生产者专属属性
 
@@ -155,7 +155,7 @@ spring:
 | 放弃/确认丢弃 | 抛 `ImmediateAcknowledgeAmqpException` |
 | 重试次数跟踪 | 读取 `x-death` 头计数，达到上限后转停车场队列 |
 
-> ⚠️ **背压警告**：binder 级重试（RetryTemplate）在退避期间**挂起监听线程**——重试队列长、单条处理慢时阻塞后续消息。高吞吐场景把重试交给 DLQ+TTL 模式（Rabbit 原生能力，不占线程）。
+> **背压警告**：binder 级重试（RetryTemplate）在退避期间**挂起监听线程**——重试队列长、单条处理慢时阻塞后续消息。高吞吐场景把重试交给 DLQ+TTL 模式（Rabbit 原生能力，不占线程）。
 
 ### 5.4 DLQ 消费与回放
 
@@ -175,7 +175,7 @@ spring:
 | DLQ + TTL 回退 | 无需插件 | 第 5.3 节模式，天然支持"重试退避" |
 | 混合 | - | 延迟 Exchange 只做"一次性延迟投递"，重试用 DLQ+TTL |
 
-> 💡 场景选择：订单超时取消（一次性延迟）→ 延迟 Exchange；消费失败重试（多次回退）→ DLQ + TTL。前者延迟精准可重排，后者天然带失败信息。
+> 场景选择：订单超时取消（一次性延迟）→ 延迟 Exchange；消费失败重试（多次回退）→ DLQ + TTL。前者延迟精准可重排，后者天然带失败信息。
 
 ## 7. 批量发送与消费
 
@@ -184,7 +184,7 @@ spring:
 | 生产 | `producer.batching-enabled: true` + batch-size/batch-timeout | 积攒到阈值或超时后整批发送（吞吐优化） |
 | 消费 | `consumer.batch-mode: true`（公共） | 整批传入 `Function<List<T>, ...>`，头为 `amqp_batchedHeaders` |
 
-> ⚠️ 批量 + 死信交互：Rabbit 批量消费单条失败时整个批次行为取决于容器错误处理；与 Kafka 一样建议批量模式 + `max-attempts: 1` 简化语义，保证走 DLQ 兜底。
+> 批量 + 死信交互：Rabbit 批量消费单条失败时整个批次行为取决于容器错误处理；与 Kafka 一样建议批量模式 + `max-attempts: 1` 简化语义，保证走 DLQ 兜底。
 
 ## 8. 对接已有基础设施
 
@@ -211,11 +211,11 @@ spring:
 | 跨应用共享交换器 | 只关 `declare-exchange`，保留绑定 |
 | 自定义队列名 | `queue-name-group-only: true` |
 
-> ⚠️ **多 Rabbit Binder 冲突**：同一应用配置多个 rabbit binder（连接不同集群）时，需禁用 `RabbitAutoConfiguration`，否则自动配置的 ConnectionFactory 会与 binder 自定义的打架。
+> **多 Rabbit Binder 冲突**：同一应用配置多个 rabbit binder（连接不同集群）时，需禁用 `RabbitAutoConfiguration`，否则自动配置的 ConnectionFactory 会与 binder 自定义的打架。
 
 ## 9. 核心要点
 
-> 🎯 **核心要点**：
+> **核心要点**：
 > - 拓扑记忆：Exchange = destination；组队列 = `<dest>.<group>`；默认 topic 交换 + `#` 路由；
 > - 死信三件套：`auto-bind-dlq`（创建）、`republish-to-dlq`（带现场信息）、`dlq-ttl` + `dlq-dead-letter-exchange`（回退重试）；
 > - 重试两条路：binder RetryTemplate（挂线程、适合低频）vs DLQ+TTL（不占线程、适合高频/长退避）；

@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [@Scheduled 静态化的本质](#1-scheduled-静态化的本质)
 2. [SchedulingConfigurer + TriggerTask：动态化方案](#2-schedulingconfigurer--triggertask动态化方案)
@@ -27,12 +27,12 @@
 
 | 场景 | @Scheduled 是否够用 |
 |------|:---:|
-| cron 长期不变 | ✅ |
-| 上线后调整频率（配置中心改） | ❌ 必须重启 |
-| 灰度期间频繁调整 | ❌ |
-| 按业务数据动态算间隔 | ❌ 需要编程式 |
+| cron 长期不变 | ✓ |
+| 上线后调整频率（配置中心改） | ✗ 必须重启 |
+| 灰度期间频繁调整 | ✗ |
+| 按业务数据动态算间隔 | ✗ 需要编程式 |
 
-> 🎯 **要点**：判断标准一句话——"cron 会不会在运行时变"。会变，就上 SchedulingConfigurer。
+> **要点**：判断标准一句话——"cron 会不会在运行时变"。会变，就上 SchedulingConfigurer。
 
 ## 2. SchedulingConfigurer + TriggerTask：动态化方案
 
@@ -77,7 +77,7 @@ CronTrigger 的 nextExecutionTime() 在每次"安排下一次执行"时被调用
 | `triggerContext` | 上次执行上下文（上次实际执行时间） |
 | `new CronTrigger(cron).nextExecutionTime(ctx)` | **每次执行前重算**——动态的根源 |
 
-> 💡 更规范的做法是把 cron 读取封装成服务（`CronService.getCron("task.sync")`），配置类里只调服务——配置中心切换、缓存、日志全在服务里。
+> 更规范的做法是把 cron 读取封装成服务（`CronService.getCron("task.sync")`），配置类里只调服务——配置中心切换、缓存、日志全在服务里。
 
 ## 3. Trigger 接口与三种触发策略
 
@@ -107,7 +107,7 @@ registrar.addTriggerTask(task, context -> {
 });
 ```
 
-> 🎯 **要点**：Trigger 的接口只有一个方法——"给我上下文，告诉我下次什么时候"。**动态化的全部秘密就是"每次重算"**。
+> **要点**：Trigger 的接口只有一个方法——"给我上下文，告诉我下次什么时候"。**动态化的全部秘密就是"每次重算"**。
 
 ## 4. 配置中心/数据库驱动的 cron
 
@@ -152,7 +152,7 @@ public class DbCronTask implements SchedulingConfigurer {
 }
 ```
 
-> ⚠️ **DB 驱动注意**：每次触发查一次 DB 的开销可忽略，但**要加缓存 + 失败兜底**（查库失败用上次 cron 或默认值，不能让任务瘫痪）；配置管理台改 DB 后任务在**下一次触发点**生效（见下节）。
+> **DB 驱动注意**：每次触发查一次 DB 的开销可忽略，但**要加缓存 + 失败兜底**（查库失败用上次 cron 或默认值，不能让任务瘫痪）；配置管理台改 DB 后任务在**下一次触发点**生效（见下节）。
 
 ## 5. 动态生效时机与边界
 
@@ -173,7 +173,7 @@ Trigger 行为：在下一次"按旧 cron 算出的执行时间"到达后，
 | 日/周/月级调整 | **可能延迟到旧 cron 的下一次触发** | 修改后手动触发一次 |
 | 停止任务（cron 置空） | 需要"禁用"语义 | 用开关位而非空 cron |
 
-> ⚠️ **生产技巧**：动态 cron 变更后，管理台应提供"立即触发一次"按钮（调用 `taskRegistrar` 里的 Runnable）——解决"改月级任务要等一个月才生效"的尴尬。
+> **生产技巧**：动态 cron 变更后，管理台应提供"立即触发一次"按钮（调用 `taskRegistrar` 里的 Runnable）——解决"改月级任务要等一个月才生效"的尴尬。
 
 ### 5.2 边界与坑
 
@@ -217,7 +217,7 @@ public class TaskManagementConfig implements SchedulingConfigurer {
 2. **修改**：cron 热更新（配置中心/DB）；
 3. **触发**：手动立即执行一次（补跑/验证）。
 
-> 🎯 **核心要点**：动态化的本质是"把 Trigger 的创建从启动时搬到每次执行前"——`nextExecutionTime` 每次重算，cron 自然热更新。三大纪律：①配置读写封装成服务（含失败兜底）；②修改后提供手动触发（避免月级任务等一个月）；③Trigger 内代码必须 try-catch 防瘫痪。
+> **核心要点**：动态化的本质是"把 Trigger 的创建从启动时搬到每次执行前"——`nextExecutionTime` 每次重算，cron 自然热更新。三大纪律：①配置读写封装成服务（含失败兜底）；②修改后提供手动触发（避免月级任务等一个月）；③Trigger 内代码必须 try-catch 防瘫痪。
 
 ---
 

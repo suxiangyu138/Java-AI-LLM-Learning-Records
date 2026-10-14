@@ -47,7 +47,7 @@
                  └─────────────────────────────┘
 ```
 
-> 🎯 一句话定位：**Kibana 不存数据，它是 ES 的「前端」**——所有查询、聚合、可视化、告警最终都翻译成 ES REST API 请求执行。
+> 一句话定位：**Kibana 不存数据，它是 ES 的「前端」**——所有查询、聚合、可视化、告警最终都翻译成 ES REST API 请求执行。
 
 ### 1.3 Kibana 与 ES 的关系（核心认知）
 
@@ -59,7 +59,7 @@
 | 告警 | 定义规则 | 执行查询（ES 9.x 由 ES 侧执行） |
 | 版本 | **必须与 ES 同版本** | 决定生态版本 |
 
-> ⚠️ 版本铁律：**Kibana 与 ES 必须同主版本**（如都是 9.x），否则连接失败；跨主版本升级必须先升 ES 再升 Kibana（或同时）。
+> 版本铁律：**Kibana 与 ES 必须同主版本**（如都是 9.x），否则连接失败；跨主版本升级必须先升 ES 再升 Kibana（或同时）。
 
 ---
 
@@ -144,7 +144,7 @@ Kibana Discover（检索） → Lens/Dashboard（可视化） → Alerting（告
 | `.kibana_security_*` | 安全配置 |
 | `.kibana_alerting_cases_*` | 告警与案例 |
 
-> 💡 备份恢复 Kibana = 备份恢复这些 `.kibana_*` 索引（通过 ES 快照即可）。
+> 备份恢复 Kibana = 备份恢复这些 `.kibana_*` 索引（通过 ES 快照即可）。
 
 ---
 
@@ -200,7 +200,7 @@ curl http://localhost:5601/api/status
 # 期望: "overall" 状态为 green/黄色警告均可访问，但 ES 连接必须正常
 ```
 
-> ⚠️ 常见坑：Kibana 容器启动但页面报「Kibana server is not ready yet」——通常是因为 ES 未就绪或版本不匹配，查看容器日志 `docker logs kibana` 定位。
+> 常见坑：Kibana 容器启动但页面报「Kibana server is not ready yet」——通常是因为 ES 未就绪或版本不匹配，查看容器日志 `docker logs kibana` 定位。
 
 ---
 
@@ -289,7 +289,7 @@ elasticsearch.hosts:
 | 服务端内存需求 | 建议 ≥ 4GB（大型集群 8GB+） |
 | 前端静态资源 | 浏览器端加载，与服务端内存无关 |
 
-> ⚠️ Kibana 是 Node.js 进程，**不是 JVM**——网上「调 JVM 内存」的说法不适用于 Kibana；Logstash 才是 JVM 进程。
+> Kibana 是 Node.js 进程，**不是 JVM**——网上「调 JVM 内存」的说法不适用于 Kibana；Logstash 才是 JVM 进程。
 
 ---
 
@@ -324,7 +324,7 @@ elasticsearch.password: "<生成的服务账号密码>"
 | `logstash_system` | Logstash 监控上报用 | 同上 |
 | `beats_system` | Beats 监控上报用 | 同上 |
 
-> 💡 设置密码：ES 启动后执行 `bin/elasticsearch-setup-passwords interactive` 逐个设置；测试环境可用 `auto` 自动生成。
+> 设置密码：ES 启动后执行 `bin/elasticsearch-setup-passwords interactive` 逐个设置；测试环境可用 `auto` 自动生成。
 
 ---
 
@@ -363,7 +363,7 @@ elasticsearch.password: "<生成的服务账号密码>"
 | 7 | 监控 | 启用 Stack Monitoring 观察自身健康 |
 | 8 | 时区 | `i18n.locale` 与日志时区统一（UTC 存储） |
 
-> 🎯 **核心要点**：Kibana = ES 的「操作门户」，三件事必知——**① 版本与 ES 严格对齐**（9.x ↔ 9.x）；**② 数据请求全部代理给 ES**，Kibana 自身只存 `.kibana_*` 元数据；**③ 它是 Node.js 进程，调优方向是内存与反向代理**而非 JVM。9.x 时代（2026）的新边界：ES|QL 可视化已 GA、PromQL 与 AI Agent 为预览、告警执行下沉到 ES 侧。部署先跑通「Docker Compose 单节点」，生产再上「HTTPS + systemd + 反代」三件套。
+> **核心要点**：Kibana = ES 的「操作门户」，三件事必知——**① 版本与 ES 严格对齐**（9.x ↔ 9.x）；**② 数据请求全部代理给 ES**，Kibana 自身只存 `.kibana_*` 元数据；**③ 它是 Node.js 进程，调优方向是内存与反向代理**而非 JVM。9.x 时代（2026）的新边界：ES|QL 可视化已 GA、PromQL 与 AI Agent 为预览、告警执行下沉到 ES 侧。部署先跑通「Docker Compose 单节点」，生产再上「HTTPS + systemd + 反代」三件套。
 
 ---
 

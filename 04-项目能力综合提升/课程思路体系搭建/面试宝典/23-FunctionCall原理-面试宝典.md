@@ -20,7 +20,7 @@
 ### 1. 什么是 Function Calling（函数调用）？
 Function Calling 是 LLM API 原生支持的一种能力，允许 LLM 在需要时输出结构化的函数调用请求（JSON），由开发者的代码实际执行该函数，再将结果回传给 LLM，最终 LLM 生成自然语言回复。**LLM 本身不执行任何代码，它只决定"何时调用、调用哪个函数、传入什么参数"**。
 
-> 💡 **English**: Function Calling is an API-native capability that lets the LLM output structured JSON requests for function execution. The developer's code executes the function and returns results to the LLM for final response generation.
+> **English**: Function Calling is an API-native capability that lets the LLM output structured JSON requests for function execution. The developer's code executes the function and returns results to the LLM for final response generation.
 
 ### 2. Function Calling 的核心流程是什么？
 三步流程：
@@ -39,7 +39,7 @@ Function Calling 是 LLM API 原生支持的一种能力，允许 LLM 在需要�
 | 适用场景 | 标准工具调用、生产环境 | 复杂多步推理、探索性任务 |
 | 代表实现 | OpenAI / DeepSeek API | LangChain Agent |
 
-> ⚠️ **面试重点**：不要将两者对立。最佳实践是用 Function Calling 做工具调用的"基础设施"，用 ReAct 提示词模式做复杂推理的"引导框架"。
+> **面试重点**：不要将两者对立。最佳实践是用 Function Calling 做工具调用的"基础设施"，用 ReAct 提示词模式做复杂推理的"引导框架"。
 
 ### 4. 什么是 Tool / Function Schema？
 Tool Schema 是以 JSON Schema 格式描述工具元数据的定义体，包含三个核心部分：`name`（函数名，snake_case）、`description`（详细功能描述，LLM 据此判断何时调用）、`parameters`（参数定义，包含类型、枚举值、描述、是否必需）。
@@ -75,7 +75,7 @@ Tool Schema 是以 JSON Schema 格式描述工具元数据的定义体，包含�
 - **`"required"`**：强制 LLM 调用至少一个工具（每次对话必须调用）
 - **`{"type": "function", "function": {"name": "xxx"}}`**：强制 LLM 调用指定名称的工具
 
-> 💡 在测试阶段可用 `"required"` 确保每次都能触发工具调用验证，生产环境推荐 `"auto"`。
+> 在测试阶段可用 `"required"` 确保每次都能触发工具调用验证，生产环境推荐 `"auto"`。
 
 ### 6. Function Calling 中 LLM 生成的内容有哪些字段？
 当 LLM 决定调用函数时，响应中会包含 `tool_calls` 数组，每个元素包含：
@@ -121,7 +121,7 @@ Function Calling 是 API 层的工具调用协议（底层机制），Plugin 是
 ### 10. Function Calling 的 Token 消耗如何计算？
 工具定义本身（Tool Schema）会消耗 Prompt Token。Schema 越大、描述越长，每次请求消耗的 Token 越多。工具调用的返回结果也会计入 Token。优化策略：精简 description、避免过长的参数枚举值、对工具返回结果做截断/摘要。
 
-> 💡 **策略**：将不常用的工具拆分为单独请求组，避免每次携带全部 Schema。
+> **策略**：将不常用的工具拆分为单独请求组，避免每次携带全部 Schema。
 
 ### 11. 如果 LLM 一直不调用工具，可能是什么原因？
 - Tool Schema 的 `description` 不够清晰，LLM 无法判断使用场景
@@ -172,7 +172,7 @@ MCP 是 Anthropic 提出的标准化工具协议层，定义了一套统一的�
 }
 ```
 
-> ⚠️ **安全注意**：必须限制仅允许 SELECT 操作，并通过数据库账号权限做好读写分离，防止 SQL 注入。
+> **安全注意**：必须限制仅允许 SELECT 操作，并通过数据库账号权限做好读写分离，防止 SQL 注入。
 
 ### 16. Function Calling 的 error recovery（错误恢复）策略有哪些？
 工具调用可能失败（API 超时、参数错误、网络异常），常见恢复策略：
@@ -237,7 +237,7 @@ Function Calling 的本质是**指令微调（Instruction Tuning）**与**结构
 - 推理阶段，模型通过**约束解码（Constrained Decoding）**或**分类头（Classification Head）**确保输出的 `tool_calls` 符合 JSON Schema 格式
 - 实际实现中，模型将工具定义编码到 Attention 上下文中，通过特殊 Token 标记函数调用的开始和结束
 
-> 💡 **核心理解**：Function Calling 不是模型在"执行代码"，而是模型在"生成符合格式的结构化文本"，开发者负责将这段结构化文本"翻译"为真实函数执行。
+> **核心理解**：Function Calling 不是模型在"执行代码"，而是模型在"生成符合格式的结构化文本"，开发者负责将这段结构化文本"翻译"为真实函数执行。
 
 ### 2. Function Calling 与 ReAct 在 Prompt 层面本质上有何不同？
 
@@ -271,7 +271,7 @@ user → assistant(含 N 个 tool_calls) → tool_1/tool_2/.../tool_N → assist
 user → assistant(含 tool_call_1) → tool_1_result → assistant(含 tool_call_2) → tool_2_result → assistant(最终回复)
 ```
 
-> 💡 **要点**：串行多轮调用中，每一轮 `assistant` 的消息和 `tool` 的消息都必须追加到 messages 列表，否则 LLM 会丢失上下文。
+> **要点**：串行多轮调用中，每一轮 `assistant` 的消息和 `tool` 的消息都必须追加到 messages 列表，否则 LLM 会丢失上下文。
 
 ### 4. Tool Schema 的设计如何影响 LLM 的调用准确率？
 
@@ -323,7 +323,7 @@ Schema 设计的质量直接决定 LLM 能否准确调用工具：
 
 当设置 `tool_choice="required"` 时，模型在推理时被强制在第一个生成的 Token 就进入"函数调用模式"，跳过自由文本生成的路径。这通过在解码时修改 logit 分布——将非工具调用的 Token 概率置零或极大压低，确保模型一定会输出 `tool_calls`。
 
-> 💡 **应用场景**：在需要强制工具调用的测试场景、工作流编排、工具链处理等场景下非常有用。
+> **应用场景**：在需要强制工具调用的测试场景、工作流编排、工具链处理等场景下非常有用。
 
 ### 8. 为什么说 Function Calling 改变了 LLM 的应用架构范式？
 
@@ -513,7 +513,7 @@ email_tool = {
 }
 ```
 
-> ⚠️ **安全注意**：自动发邮件功能需增加人工确认步骤或白名单机制，防止被滥用为垃圾邮件发送器。
+> **安全注意**：自动发邮件功能需增加人工确认步骤或白名单机制，防止被滥用为垃圾邮件发送器。
 
 ### 场景 4：Tools 和 Messages 的数据准备流程
 
@@ -1323,7 +1323,7 @@ Function Calling 是 **API 层面的原生支持**，LLM 直接返回结构化 J
 - [ ] FC vs Agent：整体与局部关系
 - [ ] OpenAI FC vs LangChain Agent vs Spring AI @Tool：三套方案的对比
 
-> 🎯 **面试核心策略**：用"定义 → 流程 → 痛点 → 解决方案"四步法回答所有 FC 相关问题。先清晰定义问题，再讲标准流程，接着指出实际落地中的坑，最后给出你的解决方案——这是面试官最想听到的"有深度、有实践"的回答。
+> **面试核心策略**：用"定义 → 流程 → 痛点 → 解决方案"四步法回答所有 FC 相关问题。先清晰定义问题，再讲标准流程，接着指出实际落地中的坑，最后给出你的解决方案——这是面试官最想听到的"有深度、有实践"的回答。
 
 ---
 

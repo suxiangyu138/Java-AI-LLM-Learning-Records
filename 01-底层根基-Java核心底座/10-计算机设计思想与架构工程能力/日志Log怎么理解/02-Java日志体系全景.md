@@ -6,7 +6,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [日志体系演进史](#1-日志体系演进史)
 2. [门面模式：SLF4J](#2-门面模式slf4j)
@@ -49,7 +49,7 @@
 
 ### 2.1 门面的作用
 
-> 🎯 **SLF4J（Simple Logging Facade for Java）**：日志门面——只提供 API，不实现输出。代码依赖门面，运行时绑定实现。
+> **SLF4J（Simple Logging Facade for Java）**：日志门面——只提供 API，不实现输出。代码依赖门面，运行时绑定实现。
 
 ```text
 门面模式的价值
@@ -74,8 +74,8 @@ import org.slf4j.LoggerFactory;
 private static final Logger log = LoggerFactory.getLogger(OrderService.class);
 
 log.info("订单创建成功: orderId={}, amount={}", orderId, amount);
-// ⚠️ 占位符 {} 比字符串拼接快（无格式化时零开销）
-// ❌ log.info("订单:" + orderId)（无条件时仍拼接）
+// 占位符 {} 比字符串拼接快（无格式化时零开销）
+// ✗ log.info("订单:" + orderId)（无条件时仍拼接）
 ```
 
 ### 2.2 SLF4J API 要点
@@ -99,13 +99,13 @@ SLF4J 使用要点
 
 | 维度 | Logback | Log4j2 | JUL |
 |------|:---:|:---:|:---:|
-| SLF4J 原生 | ✅（官方） | 需适配包 | 需适配包 |
+| SLF4J 原生 | ✓（官方） | 需适配包 | 需适配包 |
 | 性能 | 好 | **最好（异步原生）** | 基础 |
 | 配置 | XML/Groovy | XML/JSON | properties |
 | 异步日志 | AsyncAppender | **Async Loggers（原生）** | 无 |
 | 结构化 JSON | logstash encoder | **JsonTemplateLayout（自带）** | 无 |
-| 滚动策略 | ✅ 完善 | ✅ | 基础 |
-| 安全 | ✅ | ⚠️ Log4Shell 历史（已修复） | ✅ |
+| 滚动策略 | ✓ 完善 | ✓ | 基础 |
+| 安全 | ✓ | Log4Shell 历史（已修复） | ✓ |
 | 2026 定位 | **主流默认** | 高并发/JSON 场景 | 简单场景 |
 
 ### 3.2 各实现特点
@@ -161,11 +161,11 @@ Maven 依赖（以 Log4j2 → Logback 为例）
 
 ### 4.2 桥接的死循环（经典坑）
 
-> ⚠️ **桥接死循环**：同时存在「实现→SLF4J」与「SLF4J→实现」的桥 → 无限循环（StackOverflow）：
+> **桥接死循环**：同时存在「实现→SLF4J」与「SLF4J→实现」的桥 → 无限循环（StackOverflow）：
 
 ```text
 死循环场景
-├── ❌ 同时引入：log4j-over-slf4j + slf4j-log4j12
+├── ✗ 同时引入：log4j-over-slf4j + slf4j-log4j12
 │   ├── log4j-over-slf4j：Log4j → SLF4J
 │   ├── slf4j-log4j12：SLF4J → Log4j
 │   └── 循环：Log4j → SLF4J → Log4j → ...
@@ -229,7 +229,7 @@ Java 日志选型
 
 ## 7. 核心要点
 
-> 🎯 **核心要点**：
+> **核心要点**：
 > 1. 门面模式：代码依赖 SLF4J、运行时绑定实现——**换实现不改代码**
 > 2. 三大实现：Logback（官方主流）/Log4j2（高性能 JSON）/JUL（零依赖基础）
 > 3. 占位符 {} 是性能关键（懒格式化）——不用字符串拼接

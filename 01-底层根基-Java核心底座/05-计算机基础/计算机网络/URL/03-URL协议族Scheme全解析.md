@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [Scheme 全景分类](#1-scheme-全景分类)
 2. [Web 网络协议族](#2-web-网络协议族)
@@ -22,16 +22,16 @@
 ```text
 Scheme 协议族
 │
-├── 🌐 Web 网络类       http、https、ftp、ftps、sftp、gopher、dict
-├── 🔌 实时通信类       ws、wss、mqtt、mqtts、stomp、sse（非独立scheme）
-├── 💾 本地资源类       file、data、blob、about、chrome、jar、classpath
-├── 🗄️ 数据存储类       jdbc、mongodb、redis、mysql、postgresql、s3、hdfs
-├── 📨 消息中间件类     amqp、amqps、kafka（非标准）、nats、pulsar
-├── ☎️ 设备唤起类       mailto、tel、sms、facetime、geo、maps
-├── 🔗 P2P/下载类       magnet、ed2k、thunder、bittorrent
-├── 📦 版本控制类       git、git+ssh、svn、svn+ssh
-├── 📱 应用唤起类       myapp、weixin、alipay、taobao、vscode、idea
-└── 🛠️ 开发工具类       npm、pip、docker、oci、vscode-remote
+├── Web 网络类       http、https、ftp、ftps、sftp、gopher、dict
+├── 实时通信类       ws、wss、mqtt、mqtts、stomp、sse（非独立scheme）
+├── 本地资源类       file、data、blob、about、chrome、jar、classpath
+├── 数据存储类       jdbc、mongodb、redis、mysql、postgresql、s3、hdfs
+├── 消息中间件类     amqp、amqps、kafka（非标准）、nats、pulsar
+├── 设备唤起类       mailto、tel、sms、facetime、geo、maps
+├── P2P/下载类       magnet、ed2k、thunder、bittorrent
+├── 版本控制类       git、git+ssh、svn、svn+ssh
+├── 应用唤起类       myapp、weixin、alipay、taobao、vscode、idea
+└── 开发工具类       npm、pip、docker、oci、vscode-remote
 ```
 
 | Scheme 注册状态 | 说明 | 例子 |
@@ -40,7 +40,7 @@ Scheme 协议族
 | **Provisional**（临时注册） | IANA 已登记但规范较松 | `redis`、`mongodb`、`magnet` |
 | **Private/Unregistered** | 厂商自用，无 IANA 登记 | `weixin`、`vscode`、`jdbc`、`myapp` |
 
-> 💡 IANA 官方注册表：`https://www.iana.org/assignments/uri-schemes/uri-schemes.xhtml`（约 380 个已注册 Scheme）
+> IANA 官方注册表：`https://www.iana.org/assignments/uri-schemes/uri-schemes.xhtml`（约 380 个已注册 Scheme）
 
 ---
 
@@ -63,7 +63,7 @@ Web Crypto subtle、Clipboard API、WebAuthn/Passkey、HTTP/2、HTTP/3、
 Web Bluetooth、Payment Request、Storage 持久化
 ```
 
-> ⚠️ **例外**：`http://localhost` 与 `http://127.0.0.1` 被浏览器视为 Secure Context，本地开发无需 HTTPS。但 `http://192.168.1.5`（局域网 IP）**不是**——手机调试摄像头功能会失败，需自签证书或用 `ngrok`/`localtunnel` 反代。
+> **例外**：`http://localhost` 与 `http://127.0.0.1` 被浏览器视为 Secure Context，本地开发无需 HTTPS。但 `http://192.168.1.5`（局域网 IP）**不是**——手机调试摄像头功能会失败，需自签证书或用 `ngrok`/`localtunnel` 反代。
 
 **HSTS 强制升级**：
 
@@ -81,16 +81,16 @@ Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
 
 | Scheme | 端口 | 加密 | 浏览器支持 |
 |--------|:---:|------|:---:|
-| `ftp` | 21 | 无 | ❌ Chrome 88+ / Firefox 90+ **已移除** |
-| `ftps` | 990 / 21 | TLS | ❌ |
-| `sftp` | 22 | SSH | ❌（非 IANA 注册，仅客户端工具认） |
+| `ftp` | 21 | 无 | ✗ Chrome 88+ / Firefox 90+ **已移除** |
+| `ftps` | 990 / 21 | TLS | ✗ |
+| `sftp` | 22 | SSH | ✗（非 IANA 注册，仅客户端工具认） |
 
 ```text
 ftp://user:pass@files.example.com:21/pub/docs/readme.txt
 sftp://deploy@10.0.0.5:22/var/www/html/          ← FileZilla / WinSCP 可识别
 ```
 
-> 💡 `sftp` 与 `ftps` 完全不同：`sftp` 是 SSH 子系统（单端口 22），`ftps` 是 FTP + TLS（需要多端口，NAT 不友好）。生产环境一律选 `sftp`。
+> `sftp` 与 `ftps` 完全不同：`sftp` 是 SSH 子系统（单端口 22），`ftps` 是 FTP + TLS（需要多端口，NAT 不友好）。生产环境一律选 `sftp`。
 
 ### 2.3 已淘汰但在安全领域重要的 Scheme
 
@@ -107,7 +107,7 @@ gopher://127.0.0.1:6379/_SET%20key%20value%0d%0a
    → 通过 SSRF 向内网 Redis 写数据
 ```
 
-> ⚠️ **防御结论**：任何接受用户输入 URL 的功能，**Scheme 必须白名单**，只允许 `http`/`https`。详见 06 篇。
+> **防御结论**：任何接受用户输入 URL 的功能，**Scheme 必须白名单**，只允许 `http`/`https`。详见 06 篇。
 
 ---
 
@@ -132,19 +132,19 @@ scheme      host           port  path       query
 // Java 11+ 原生 WebSocket 客户端（可以设 Header，比浏览器灵活）
 HttpClient.newHttpClient()
     .newWebSocketBuilder()
-    .header("Authorization", "Bearer " + token)     // ✅ Java 可以
+    .header("Authorization", "Bearer " + token)     // ✓ Java 可以
     .buildAsync(URI.create("wss://gw.example.com/socket"), listener);
 ```
 
 ```javascript
-// 浏览器只能把 token 放 Query（⚠️ 会进服务端日志）
+// 浏览器只能把 token 放 Query（会进服务端日志）
 const ws = new WebSocket(`wss://gw.example.com/socket?token=${token}`);
 
 // 折中方案：用 Sec-WebSocket-Protocol 携带（服务端需配合）
 const ws2 = new WebSocket("wss://gw.example.com/socket", ["bearer", token]);
 ```
 
-> ⚠️ **WebSocket 鉴权坑**：token 放 Query 会被 Nginx access_log 记录。生产做法：连接后**首帧发送鉴权消息**，服务端未鉴权前不推数据、超时断开。
+> **WebSocket 鉴权坑**：token 放 Query 会被 Nginx access_log 记录。生产做法：连接后**首帧发送鉴权消息**，服务端未鉴权前不推数据、超时断开。
 
 ### 3.2 SSE 与 MQTT
 
@@ -191,10 +191,10 @@ Path p = Paths.get("C:\\Users\\tom\\a b.txt");
 URI  u = p.toUri();          // file:///C:/Users/tom/a%20b.txt
 Path back = Paths.get(u);    // 还原
 
-// ⚠️ 不要手拼字符串，Windows 反斜杠与空格必踩坑
+// 不要手拼字符串，Windows 反斜杠与空格必踩坑
 ```
 
-> ⚠️ **安全**：`file://` 是 SSRF 读取任意文件的经典通道（`file:///etc/passwd`）。所有用户可控 URL 必须禁掉。
+> **安全**：`file://` 是 SSRF 读取任意文件的经典通道（`file:///etc/passwd`）。所有用户可控 URL 必须禁掉。
 
 ### 4.2 data:// —— 内嵌数据
 
@@ -206,7 +206,7 @@ data:[<mediatype>][;charset=xxx][;base64],<data>
 |------|------|
 | `data:,Hello` | 默认 `text/plain;charset=US-ASCII` |
 | `data:text/plain;charset=UTF-8,%E4%B8%AD%E6%96%87` | 百分号编码文本 |
-| `data:text/html,<h1>Hi</h1>` | ⚠️ XSS 载体 |
+| `data:text/html,<h1>Hi</h1>` | XSS 载体 |
 | `data:image/png;base64,iVBORw0KGgo...` | 内嵌图片（最常见） |
 | `data:application/json;base64,eyJhIjoxfQ==` | 内嵌 JSON |
 
@@ -223,7 +223,7 @@ data:[<mediatype>][;charset=xxx][;base64],<data>
 | 省 HTTP 请求，无跨域 | Base64 体积 **+33%** |
 | 离线可用 | 不能被浏览器/CDN 单独缓存 |
 | 适合 < 4 KB 小图标 | 大文件会拖慢首屏解析 |
-| — | ⚠️ `data:text/html` 可执行脚本 → XSS |
+| — | `data:text/html` 可执行脚本 → XSS |
 
 ```javascript
 // JS 生成 data URL
@@ -234,7 +234,7 @@ const utf8DataUrl = "data:text/plain;charset=UTF-8;base64," +
   btoa(String.fromCharCode(...new TextEncoder().encode("中文")));
 ```
 
-> ⚠️ 现代浏览器**禁止顶层导航到 `data:` URL**（防钓鱼），只能用于 `<img>`、`<script>`、CSS 等子资源。
+> 现代浏览器**禁止顶层导航到 `data:` URL**（防钓鱼），只能用于 `<img>`、`<script>`、CSS 等子资源。
 
 ### 4.3 blob:// —— 内存对象引用
 
@@ -260,7 +260,7 @@ a.href = url;
 a.download = "report.csv";
 a.click();
 
-URL.revokeObjectURL(url);   // ✅ 必须释放
+URL.revokeObjectURL(url);   // ✓ 必须释放
 
 // 视频/音频流播放
 videoEl.src = URL.createObjectURL(mediaStream);
@@ -268,10 +268,10 @@ videoEl.src = URL.createObjectURL(mediaStream);
 
 | 场景 | 选 `data:` | 选 `blob:` |
 |------|:---:|:---:|
-| 小图标（< 4 KB） | ✅ | — |
-| 需要持久化到 CSS/HTML | ✅ | ❌ |
-| 大文件下载 / 视频流 | ❌ 内存爆 | ✅ |
-| Canvas 导出图片 | 小图 ✅ | 大图 ✅ |
+| 小图标（< 4 KB） | ✓ | — |
+| 需要持久化到 CSS/HTML | ✓ | ✗ |
+| 大文件下载 / 视频流 | ✗ 内存爆 | ✓ |
+| Canvas 导出图片 | 小图 ✓ | 大图 ✓ |
 
 ### 4.4 浏览器内部 Scheme
 
@@ -282,7 +282,7 @@ videoEl.src = URL.createObjectURL(mediaStream);
 | `chrome://settings` | Chrome 内部页（`edge://`、`brave://` 类似） |
 | `devtools://` | DevTools 自身 |
 | `view-source:https://a.com` | 查看源码 |
-| `javascript:void(0)` | ⚠️ 伪协议，XSS 载体，现代代码不应使用 |
+| `javascript:void(0)` | 伪协议，XSS 载体，现代代码不应使用 |
 
 ---
 
@@ -302,13 +302,13 @@ jdbc:<subprotocol>://<host>:<port>/<database>?<params>
 | PostgreSQL | `jdbc:postgresql://127.0.0.1:5432/mall?currentSchema=public` |
 | Oracle（SID） | `jdbc:oracle:thin:@127.0.0.1:1521:orcl` |
 | Oracle（Service） | `jdbc:oracle:thin:@//127.0.0.1:1521/orclpdb` |
-| SQL Server | `jdbc:sqlserver://127.0.0.1:1433;databaseName=mall;encrypt=true` ⚠️ 分号分隔 |
+| SQL Server | `jdbc:sqlserver://127.0.0.1:1433;databaseName=mall;encrypt=true` 分号分隔 |
 | H2 内存 | `jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1` |
 | SQLite | `jdbc:sqlite:/data/app.db` |
 | ClickHouse | `jdbc:clickhouse://127.0.0.1:8123/default` |
 | Doris / StarRocks | `jdbc:mysql://127.0.0.1:9030/db`（兼容 MySQL 协议） |
 
-> ⚠️ **`jdbc:` 不是合法 URI 的 hier-part**——`jdbc:mysql://...` 中 scheme 是 `jdbc`，剩下 `mysql://...` 是 opaque part。所以 `URI.create(jdbcUrl).getHost()` 返回 `null`，必须先剥掉 `jdbc:` 前缀再解析。
+> **`jdbc:` 不是合法 URI 的 hier-part**——`jdbc:mysql://...` 中 scheme 是 `jdbc`，剩下 `mysql://...` 是 opaque part。所以 `URI.create(jdbcUrl).getHost()` 返回 `null`，必须先剥掉 `jdbc:` 前缀再解析。
 
 ```java
 // 解析 JDBC URL 拿 host/port/db
@@ -328,7 +328,7 @@ u.getPath();    // /mall
 | `serverTimezone` | `Asia/Shanghai` | 否则时间差 8 小时（MySQL 8 必填） |
 | `useSSL` | 内网 `false` | 省握手开销；公网必须 `true` |
 | `rewriteBatchedStatements` | `true` | 批量插入性能提升数十倍 |
-| `allowMultiQueries` | **`false`** | ⚠️ 开了会放大 SQL 注入危害 |
+| `allowMultiQueries` | **`false`** | 开了会放大 SQL 注入危害 |
 | `allowPublicKeyRetrieval` | 按需 | MySQL 8 `caching_sha2_password` 报错时用 |
 | `connectTimeout` / `socketTimeout` | `3000` / `60000` | 防连接悬挂 |
 
@@ -340,27 +340,27 @@ u.getPath();    // /mall
 | Redis TLS | `rediss://:password@r.example.com:6380/0` |
 | Redis Sentinel | `redis-sentinel://host1:26379,host2:26379/mymaster/0` |
 | MongoDB | `mongodb://user:pwd@127.0.0.1:27017/mall?authSource=admin` |
-| MongoDB Atlas | `mongodb+srv://user:pwd@cluster0.xxx.mongodb.net/mall` ⚠️ 走 DNS SRV，无端口 |
-| RabbitMQ | `amqp://guest:guest@127.0.0.1:5672/%2F` ⚠️ 默认 vhost `/` 要编码成 `%2F` |
+| MongoDB Atlas | `mongodb+srv://user:pwd@cluster0.xxx.mongodb.net/mall` 走 DNS SRV，无端口 |
+| RabbitMQ | `amqp://guest:guest@127.0.0.1:5672/%2F` 默认 vhost `/` 要编码成 `%2F` |
 | RabbitMQ TLS | `amqps://user:pwd@mq.example.com:5671/prod` |
 | Elasticsearch | `http://elastic:pwd@127.0.0.1:9200` |
-| Kafka | `kafka-1:9092,kafka-2:9092` ⚠️ **不是 URL**，是逗号分隔的 host:port 列表 |
+| Kafka | `kafka-1:9092,kafka-2:9092` **不是 URL**，是逗号分隔的 host:port 列表 |
 | Nacos | `nacos://127.0.0.1:8848`（Dubbo 注册中心写法） |
 | ZooKeeper | `zookeeper://127.0.0.1:2181` |
 | MinIO / S3 | `s3://my-bucket/path/to/obj`（SDK 内部 URI） |
 | HDFS | `hdfs://namenode:8020/user/hive/warehouse` |
 
-> ⚠️ **RabbitMQ 默认 vhost 坑**：vhost 就是 `/`，作为 path 时必须编码为 `%2F`，写成 `amqp://host:5672/` 表示 vhost 为**空串**，连接会失败。
+> **RabbitMQ 默认 vhost 坑**：vhost 就是 `/`，作为 path 时必须编码为 `%2F`，写成 `amqp://host:5672/` 表示 vhost 为**空串**，连接会失败。
 
 ### 5.3 密码里的特殊字符必须编码
 
 ```text
 密码：p@ss:w/rd#1
 
-❌ redis://:p@ss:w/rd#1@127.0.0.1:6379/0
+✗ redis://:p@ss:w/rd#1@127.0.0.1:6379/0
    → 解析器在第一个 @ 就断开，host 变成 "ss:w"，彻底解析错
 
-✅ redis://:p%40ss%3Aw%2Frd%231@127.0.0.1:6379/0
+✓ redis://:p%40ss%3Aw%2Frd%231@127.0.0.1:6379/0
 ```
 
 | 密码中的字符 | 必须编码为 |
@@ -372,7 +372,7 @@ u.getPath();    // /mall
 | `?` | `%3F` |
 | `%` | `%25` |
 
-> 💡 **最佳实践**：连接串里的密码交给配置中心/环境变量，用 `spring.datasource.password` 单独字段，**不要塞进 URL**，从根上避免编码问题。
+> **最佳实践**：连接串里的密码交给配置中心/环境变量，用 `spring.datasource.password` 单独字段，**不要塞进 URL**，从根上避免编码问题。
 
 ---
 
@@ -398,7 +398,7 @@ u.getPath();    // /mall
 <a href="tel:+8613800138000">拨打</a>
 ```
 
-> ⚠️ `mailto:` 的 `subject`/`body` 必须 `encodeURIComponent`，换行用 `%0D%0A`。未编码的 `&` 会截断后续参数。
+> `mailto:` 的 `subject`/`body` 必须 `encodeURIComponent`，换行用 `%0D%0A`。未编码的 `&` 会截断后续参数。
 
 ---
 
@@ -479,7 +479,7 @@ u.getPath();    // /mall
 vscode://file/d:/Desktop/project/src/main/java/App.java:128:15
 ```
 
-> ⚠️ **自定义 Scheme 的安全风险**：任何 App 都能注册 `myapp://`，恶意 App 抢注后可劫持 DeepLink 窃取 URL 里的 token。**结论：涉及凭证的跳转必须用 Universal Links / App Links（有域名归属验证），不要用裸 Scheme。**
+> **自定义 Scheme 的安全风险**：任何 App 都能注册 `myapp://`，恶意 App 抢注后可劫持 DeepLink 窃取 URL 里的 token。**结论：涉及凭证的跳转必须用 Universal Links / App Links（有域名归属验证），不要用裸 Scheme。**
 
 ---
 
@@ -509,10 +509,10 @@ String text = r1.getContentAsString(StandardCharsets.UTF_8);   // Spring 6+
 **Java 20+ 弃用提醒**：
 
 ```java
-// ❌ Java 20 起 URL 的所有 String 构造器被标记 @Deprecated
+// ✗ Java 20 起 URL 的所有 String 构造器被标记 @Deprecated
 URL bad = new URL("https://a.com/p");
 
-// ✅ 推荐写法
+// ✓ 推荐写法
 URL good = URI.create("https://a.com/p").toURL();
 ```
 
@@ -529,7 +529,7 @@ public class MyHandler extends URLStreamHandler {
 
 ---
 
-> 🎯 **本篇核心要点**
+> **本篇核心要点**
 > 1. 用户可控的 URL，**Scheme 必须白名单只留 `http`/`https`**——`file:`/`gopher:`/`dict:` 都是 SSRF 利器
 > 2. `data:` 适合小图标（+33% 体积），`blob:` 适合大文件/流（需手动 `revokeObjectURL`）
 > 3. `jdbc:` 的 host 用 `URI` 直接取是 `null`，要先剥前缀；**密码里的 `@:/#%` 必须编码**（或干脆别放 URL）

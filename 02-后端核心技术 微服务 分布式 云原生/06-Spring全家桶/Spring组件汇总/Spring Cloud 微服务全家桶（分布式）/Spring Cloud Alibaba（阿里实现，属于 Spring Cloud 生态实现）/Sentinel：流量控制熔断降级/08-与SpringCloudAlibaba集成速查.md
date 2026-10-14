@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [集成全景](#1-集成全景)
 2. [@SentinelResource 注解全属性](#2-sentinelresource-注解全属性)
@@ -66,7 +66,7 @@ public Order createBlock(OrderDTO dto, BlockException e) { return Order.degraded
 public Order createFallback(OrderDTO dto, Throwable t)   { return Order.degraded(dto); }
 ```
 
-> ⚠️ **注解三铁律**：① **只能标实现类方法**（不能标接口）；② 兜底方法必须 `public`，与原方法**同参数同返回**；③ 外置类（`xxClass`）时方法必须 static——三条违反任何一条，兜底静默不生效（[09 篇](09-集成地图与常见问题.md) 坑 #3）。
+> **注解三铁律**：① **只能标实现类方法**（不能标接口）；② 兜底方法必须 `public`，与原方法**同参数同返回**；③ 外置类（`xxClass`）时方法必须 static——三条违反任何一条，兜底静默不生效（[09 篇](09-集成地图与常见问题.md) 坑 #3）。
 
 ## 3. OpenFeign 熔断降级
 
@@ -115,7 +115,7 @@ public class StockClientFallbackFactory implements FallbackFactory<StockClient> 
 | 下游超时/连接失败 | 业务异常 | 同上 |
 | 两者都无 | — | **异常直接抛给调用方**（无默认兜底） |
 
-> ⚠️ **Feign 无兜底 = 异常上抛**：不配 fallback 时被限流/熔断的调用直接抛 `BlockException`/`SentinelClientException`——**生产必须给关键 Feign 配 fallback 或 fallbackFactory**（[04 篇](04-熔断降级速查.md) 的"默认无兜底"同样适用）。
+> **Feign 无兜底 = 异常上抛**：不配 fallback 时被限流/熔断的调用直接抛 `BlockException`/`SentinelClientException`——**生产必须给关键 Feign 配 fallback 或 fallbackFactory**（[04 篇](04-熔断降级速查.md) 的"默认无兜底"同样适用）。
 
 ## 4. Spring Cloud Gateway 限流
 
@@ -154,7 +154,7 @@ public class GatewayConfig {
 | **route 资源** | 按路由 ID 限流（`routeId`） |
 | **API 分组资源** | 自定义 API 定义（路径匹配集合）统一限流 |
 
-> 💡 网关限流的定位：**第一道闸门**——网关层把流量挡在服务网格之外，服务内再按资源细限；注意网关适配器规则与客户端规则是**两套体系**（GatewayRuleManager vs 普通 RuleManager）。
+> 网关限流的定位：**第一道闸门**——网关层把流量挡在服务网格之外，服务内再按资源细限；注意网关适配器规则与客户端规则是**两套体系**（GatewayRuleManager vs 普通 RuleManager）。
 
 ## 5. WebFlux 响应式支持
 
@@ -177,7 +177,7 @@ public BlockRequestHandler blockRequestHandler() {
 }
 ```
 
-> ⚠️ WebFlux 注意：`@SentinelResource` 用于**阻塞方法**；响应式流内限流用**适配器自动埋点**（flux 包），两者不混用——反应式资源在订阅执行时统计。
+> WebFlux 注意：`@SentinelResource` 用于**阻塞方法**；响应式流内限流用**适配器自动埋点**（flux 包），两者不混用——反应式资源在订阅执行时统计。
 
 ## 6. Dubbo 与其他适配器
 

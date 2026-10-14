@@ -1,6 +1,6 @@
 # 02 - 依赖管理与 package.json
 
-> 🎯 package.json 是 npm 项目的"身份证" — 声明依赖、定义脚本、配置元数据。后端必须能读懂这份文件
+> package.json 是 npm 项目的"身份证" — 声明依赖、定义脚本、配置元数据。后端必须能读懂这份文件
 
 ---
 
@@ -22,19 +22,19 @@
   "private": true,                    // 私有项目（防止意外 publish）
   "description": "Vue3 前端项目",
   "main": "src/main.js",              // 入口文件
-  "scripts": {                        // ⭐ 自定义脚本（常用）
+  "scripts": {                        // ★ 自定义脚本（常用）
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
     "test": "vitest run",
     "lint": "eslint src --fix"
   },
-  "dependencies": {                   // ⭐ 生产依赖
+  "dependencies": {                   // ★ 生产依赖
     "vue": "^3.4.0",
     "vue-router": "^4.3.0",
     "axios": "^1.6.0"
   },
-  "devDependencies": {                // ⭐ 开发依赖
+  "devDependencies": {                // ★ 开发依赖
     "vite": "^5.0.0",
     "@vitejs/plugin-vue": "^5.0.0",
     "eslint": "^8.56.0",
@@ -93,7 +93,7 @@ npm install --production
 }
 ```
 
-> 💡 **后端对照**：Maven 的 `scope=compile` 类似 `dependencies`，`scope=test` 类似 `devDependencies`。但 npm 没有 `provided`/`runtime` 精确区分。
+> **后端对照**：Maven 的 `scope=compile` 类似 `dependencies`，`scope=test` 类似 `devDependencies`。但 npm 没有 `provided`/`runtime` 精确区分。
 
 ---
 
@@ -112,7 +112,7 @@ npm install --production
 | `^` | 兼容主版本 | 中 | 大多数依赖 |
 | `~` | 兼容次版本 | 低 | 对稳定性要求高的依赖 |
 | 精确 | 锁定版本 | 无 | 关键依赖 |
-| `latest` | 最新版 | ⚠️ 高 | 不推荐用于生产 |
+| `latest` | 最新版 | 高 | 不推荐用于生产 |
 
 ```bash
 # 安装时用什么版本标识
@@ -121,7 +121,7 @@ npm install vue@3.3.0    # 精确版本
 npm install vue@~3.3.0   # ~ 范围
 ```
 
-> ⚠️ **Java 对标**：npm 的 `^3.4.0` 类似 Maven 的 `[3.4,4.0)` 版本范围，但没有 Maven 的 SNAPSHOT 概念。
+> **Java 对标**：npm 的 `^3.4.0` 类似 Maven 的 `[3.4,4.0)` 版本范围，但没有 Maven 的 SNAPSHOT 概念。
 
 ---
 
@@ -146,9 +146,9 @@ npm install vue@~3.3.0   # ~ 范围
 
 | 特性 | package-lock.json | Maven |
 |------|:---:|------|
-| 锁定版本 | ✅ 精确到 3.4.15 | ✅ BOM / dependencyManagement |
-| 锁定依赖树 | ✅ 递归锁 | ❌ 只锁直接依赖 |
-| 哈希校验 | ✅ integrity 字段 | ⚠️ PGP 签名（不常用） |
-| 提交到 Git | ✅ 必须 | ✅ pom.xml |
+| 锁定版本 | ✓ 精确到 3.4.15 | ✓ BOM / dependencyManagement |
+| 锁定依赖树 | ✓ 递归锁 | ✗ 只锁直接依赖 |
+| 哈希校验 | ✓ integrity 字段 | PGP 签名（不常用） |
+| 提交到 Git | ✓ 必须 | ✓ pom.xml |
 
-> 🎯 **后端必知**：`package-lock.json` 必须提交到 Git！它保证所有环境和 CI 安装的依赖完全一致，相当于确定性构建的保障。
+> **后端必知**：`package-lock.json` 必须提交到 Git！它保证所有环境和 CI 安装的依赖完全一致，相当于确定性构建的保障。

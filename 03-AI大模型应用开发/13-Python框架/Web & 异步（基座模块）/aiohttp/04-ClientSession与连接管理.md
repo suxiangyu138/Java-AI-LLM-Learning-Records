@@ -1,7 +1,7 @@
 # 04-ClientSession与连接管理
 > 定位：`ClientSession` 是 aiohttp 客户端的心脏——连接池、超时、Cookie、代理全部由它管理；不懂连接管理，异步请求就是「看起来并发、实际连不上」。
 
-## 📚 目录
+## 目录
 1. [Session：连接池的持有者](#1-session连接池的持有者)
 2. [生命周期与关闭](#2-生命周期与关闭)
 3. [TCPConnector 参数全解](#3-tcpconnector-参数全解)
@@ -113,7 +113,7 @@ async with session.get(url, proxy="http://user:pass@proxy.example.com:8080") as 
 4. CVE-2026-47265 的正确规避姿势是什么？
 5. 代理连接复用与 Authorization 泄漏是什么关系？
 
-> 🎯 **核心要点**：session = 连接池 + Cookie + 默认参数，建一次全局复用；TCPConnector 的 limit 是内置背压；超时四段独立设，sock_read 防吊死；Cookie 走 jar 同域自动、敏感信息走 headers；2026 两条 CVE 都与 Cookie 相关，升级 3.14+ 是第一防线。
+> **核心要点**：session = 连接池 + Cookie + 默认参数，建一次全局复用；TCPConnector 的 limit 是内置背压；超时四段独立设，sock_read 防吊死；Cookie 走 jar 同域自动、敏感信息走 headers；2026 两条 CVE 都与 Cookie 相关，升级 3.14+ 是第一防线。
 
 ---
 

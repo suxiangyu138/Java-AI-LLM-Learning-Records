@@ -1,6 +1,6 @@
 # 05 - HTTP 服务与 Express 框架
 
-> 🎯 Express 是 Node.js 的 Spring Boot——最流行的 Web 框架，AI 工具的 API 层首选。本章覆盖路由、中间件、REST API 的完整实践
+> Express 是 Node.js 的 Spring Boot——最流行的 Web 框架，AI 工具的 API 层首选。本章覆盖路由、中间件、REST API 的完整实践
 
 ---
 

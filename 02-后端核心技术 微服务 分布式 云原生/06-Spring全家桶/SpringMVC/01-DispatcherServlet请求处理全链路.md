@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [前端控制器模式与请求生命周期](#1-前端控制器模式与请求生命周期)
 2. [DispatcherServlet 初始化与自动配置](#2-dispatcherservlet-初始化与自动配置)
@@ -37,7 +37,7 @@
 | 异常 | HandlerExceptionResolver | 异常 → 响应 |
 | 响应 | HttpMessageConverter / ViewResolver | 返回值 → HTTP 报文 |
 
-> 🎯 **核心要点**：DispatcherServlet 本身不处理业务——它是"调度者"：把请求按固定顺序交给各策略组件。**每个环节都是一个可替换/可扩展的策略接口**，理解这点就理解了 SpringMVC 的全部可定制性。
+> **核心要点**：DispatcherServlet 本身不处理业务——它是"调度者"：把请求按固定顺序交给各策略组件。**每个环节都是一个可替换/可扩展的策略接口**，理解这点就理解了 SpringMVC 的全部可定制性。
 
 ## 2. DispatcherServlet 初始化与自动配置
 
@@ -66,7 +66,7 @@ spring:
 | `@Configuration + WebMvcConfigurer`（推荐） | 定制 MVC 行为（拦截器/转换器/静态资源） |
 | `@EnableWebMvc` | **完全接管**（关闭 Boot 自动配置，慎用） |
 
-> ⚠️ **注意**：`@EnableWebMvc` 会关闭 Boot 的 MVC 自动配置——大多数场景不需要；只在"需要彻底替换默认行为"时使用。
+> **注意**：`@EnableWebMvc` 会关闭 Boot 的 MVC 自动配置——大多数场景不需要；只在"需要彻底替换默认行为"时使用。
 
 ## 3. HandlerMapping：请求到处理器的映射
 
@@ -102,7 +102,7 @@ public User getUser(@PathVariable Long id) { ... }
 | 媒体类型不支持（produces/consumes 不满足） | 406 |
 | 参数缺失 | 400 |
 
-> 💡 **匹配规则优先级**（面试点）：路径精确度 > 方法约束 > 参数/头约束 > 媒体类型约束；**变量与通配的命中由"模板特异性"打分决定**。
+> **匹配规则优先级**（面试点）：路径精确度 > 方法约束 > 参数/头约束 > 媒体类型约束；**变量与通配的命中由"模板特异性"打分决定**。
 
 ## 4. HandlerAdapter：处理器执行与返回值处理
 
@@ -155,7 +155,7 @@ ViewResolver 链（按序尝试）：
   ContentNegotiatingViewResolver → ThymeleafViewResolver → InternalResourceViewResolver
 ```
 
-> 💡 前后端分离时代 ViewResolver 已边缘化（@RestController 直接返回 JSON），但**理解其存在**能解释"为什么 String 返回会去找视图"这类经典问题。
+> 前后端分离时代 ViewResolver 已边缘化（@RestController 直接返回 JSON），但**理解其存在**能解释"为什么 String 返回会去找视图"这类经典问题。
 
 ## 6. 一次请求的完整时序
 
@@ -186,7 +186,7 @@ ViewResolver 链（按序尝试）：
 | 拦截器 | `HandlerInterceptor` / `WebMvcConfigurer.addInterceptors` | 鉴权/审计 |
 | 请求映射 | 自定义 `HandlerMapping` | 特殊路由规则 |
 
-> 🎯 **核心要点**：SpringMVC 的请求链路是一条**固定顺序的策略管道**——映射（找谁）→ 适配（怎么调）→ 转换（怎么回）→ 异常（怎么兜）。所有"接口行为"问题（为什么 404/406、为什么参数绑不上、为什么异常不按我的格式返回）都能在这条链路上定位到具体环节。
+> **核心要点**：SpringMVC 的请求链路是一条**固定顺序的策略管道**——映射（找谁）→ 适配（怎么调）→ 转换（怎么回）→ 异常（怎么兜）。所有"接口行为"问题（为什么 404/406、为什么参数绑不上、为什么异常不按我的格式返回）都能在这条链路上定位到具体环节。
 
 ---
 

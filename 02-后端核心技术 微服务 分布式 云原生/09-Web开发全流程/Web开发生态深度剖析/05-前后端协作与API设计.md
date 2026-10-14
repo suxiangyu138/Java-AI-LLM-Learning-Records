@@ -2,7 +2,7 @@
 
 > 定位：RESTful 规范、参数校验、跨域、幂等、版本化、错误码体系、接口文档——前后端协作契约
 
-## 📚 目录
+## 目录
 
 1. [前后端协作模式](#1-前后端协作模式)
 2. [RESTful API 规范](#2-restful-api-规范)
@@ -27,7 +27,7 @@
   ③ 错误码语义化
   ④ 联调环境（Mock）
 
-⚠️ 面试必答：
+面试必答：
 "前后端分离 = 契约驱动——
  接口文档是团队共识、JSON 是语言、
  统一响应是规范。"
@@ -57,14 +57,14 @@ RESTful 核心：
 ### 2.2 REST 规范要点
 
 ```
-✅ 状态码语义（200/201/204/400/401/403/404）
-✅ 查询参数分页（?page=1&size=20 + 元信息）
-✅ 版本化（/api/v1 或 Header）
-✅ DTO 分层（请求 DTO/响应 VO）
-❌ 动词化 URL（/getUser 非 REST）
-❌ 大而全的万能接口
+✓ 状态码语义（200/201/204/400/401/403/404）
+✓ 查询参数分页（?page=1&size=20 + 元信息）
+✓ 版本化（/api/v1 或 Header）
+✓ DTO 分层（请求 DTO/响应 VO）
+✗ 动词化 URL（/getUser 非 REST）
+✗ 大而全的万能接口
 
-⚠️ 面试必答：
+面试必答：
 "REST 五规范——资源名词、方法语义、
  状态码、分页、版本化；
  DTO/VO 分离是工程标准。"
@@ -77,7 +77,7 @@ RESTful 核心：
 ### 3.1 统一响应格式
 
 ```java
-// ⚠️ 统一响应（前后端约定）
+// 统一响应（前后端约定）
 @Data
 public class Result<T> {
     private int code;        // 业务码（0 成功）
@@ -114,7 +114,7 @@ public class PageResult<T> {
   ③ 前后端枚举对齐（文档维护）
   ④ 全局异常 → 统一错误码（@RestControllerAdvice）
 
-⚠️ 面试必答：
+面试必答：
 "错误码三原则——分段、语义化、文档对齐；
  全局异常处理器统一映射（业务/校验/系统三类）。"
 ```
@@ -128,10 +128,10 @@ public class PageResult<T> {
 ```
 校验三层：
   ① 前端校验（体验：即时提示）
-  ② 后端 DTO 校验（安全：Bean Validation）⚠️ 必须
+  ② 后端 DTO 校验（安全：Bean Validation）必须
   ③ 业务校验（规则：库存/余额/状态）
 
-⚠️ 面试必答：
+面试必答：
 "前端校验是体验、后端校验是安全——
  后端必须校验（前端可绕过）；
  DTO 注解 + 业务规则双层。"
@@ -156,10 +156,10 @@ public class UserCreateDTO {
 // Controller 启用
 @PostMapping
 public Result<UserVO> create(@Valid @RequestBody UserCreateDTO dto) { }
-// ⚠️ 校验失败 → MethodArgumentNotValidException → 全局异常处理
+// 校验失败 → MethodArgumentNotValidException → 全局异常处理
 ```
 
-> 🎯 **要点**：DTO 校验（@Valid + 注解）是接口安全第一道门——参数错误在入口拦截，业务层只处理"合法输入"。
+> **要点**：DTO 校验（@Valid + 注解）是接口安全第一道门——参数错误在入口拦截，业务层只处理"合法输入"。
 
 ---
 
@@ -174,7 +174,7 @@ public Result<UserVO> create(@Valid @RequestBody UserCreateDTO dto) { }
 CORS 流程：
   浏览器预检（OPTIONS）→ 服务器返回允许头 → 正式请求
 
-⚠️ 面试必答：
+面试必答：
 "跨域是浏览器安全策略——
  CORS 靠服务器响应头声明允许；
  生产方案：Nginx 代理（同源）或 CORS 配置。"
@@ -189,7 +189,7 @@ public class CorsConfig {
     @Bean
     public CorsFilter corsFilter() {
         CorsConfiguration config = new CorsConfiguration();
-        config.addAllowedOriginPattern("https://admin.example.com");  // ⚠️ 生产限定域名
+        config.addAllowedOriginPattern("https://admin.example.com");  // 生产限定域名
         config.addAllowedMethod("*");       // GET/POST/PUT/DELETE
         config.addAllowedHeader("*");
         config.setAllowCredentials(true);   // 允许携带 Cookie
@@ -197,7 +197,7 @@ public class CorsConfig {
         return new CorsFilter(source -> config);
     }
 }
-// ⚠️ 安全：生产不要用 *（允许所有来源 + 凭据不能并存）
+// 安全：生产不要用 *（允许所有来源 + 凭据不能并存）
 ```
 
 ---
@@ -218,7 +218,7 @@ public class CorsConfig {
   ② 数据库唯一约束（订单号唯一）
   ③ 状态机（已处理 → 拒绝）
 
-⚠️ 面试必答：
+面试必答：
 "幂等三方案——幂等键（Redis 去重）、
  唯一约束（DB 兜底）、状态机（业务校验）；
  资金类接口必须幂等。"
@@ -237,7 +237,7 @@ API 版本化三方式：
   次版本兼容（新字段）
   旧版本维护期（双版本过渡）
 
-⚠️ 面试必答：
+面试必答：
 "版本化 = 破坏性变更的护栏——
  URL 路径最直观；v1/v2 并存过渡、
  旧版本限期废弃。"
@@ -245,7 +245,7 @@ API 版本化三方式：
 
 ---
 
-> 🎯 **核心要点**：协作体系 = **契约驱动**（文档先行 + 统一响应）+ **RESTful 五规范**（资源/方法/状态码/分页/版本）+ **错误码**（分段语义化 + 全局异常）+ **校验**（DTO 注解 + 业务规则双层）+ **CORS**（白名单 + 凭据安全）+ **幂等版本**（幂等键 + 版本过渡）。"接口是前后端契约、校验是安全底线"是协作两原则。
+> **核心要点**：协作体系 = **契约驱动**（文档先行 + 统一响应）+ **RESTful 五规范**（资源/方法/状态码/分页/版本）+ **错误码**（分段语义化 + 全局异常）+ **校验**（DTO 注解 + 业务规则双层）+ **CORS**（白名单 + 凭据安全）+ **幂等版本**（幂等键 + 版本过渡）。"接口是前后端契约、校验是安全底线"是协作两原则。
 
 ---
 

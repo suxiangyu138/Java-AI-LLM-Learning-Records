@@ -1,6 +1,6 @@
 # 05 - GPT API 开发实战
 
-> 🎯 从快速接入到完整 Agent — 对话、流式 SSE、结构化输出、函数调用、多模态。全部使用 Responses API（新范式）+ Python SDK 可运行代码
+> 从快速接入到完整 Agent — 对话、流式 SSE、结构化输出、函数调用、多模态。全部使用 Responses API（新范式）+ Python SDK 可运行代码
 
 ---
 
@@ -232,6 +232,6 @@ def call_with_retry(fn, max_retries=5):
 
 ---
 
-> 🎯 **核心要点**：GPT-5.6 实战五件事 — **① 默认 Terra（半价）② Responses API（previous_response_id 简化多轮）③ 结构化输出（text.format JSON Schema）④ 函数调用（function_call_output 回传）⑤ 流式（response.output_text.delta）**。
+> **核心要点**：GPT-5.6 实战五件事 — **① 默认 Terra（半价）② Responses API（previous_response_id 简化多轮）③ 结构化输出（text.format JSON Schema）④ 函数调用（function_call_output 回传）⑤ 流式（response.output_text.delta）**。
 
 **下一模块**：[06-生产实践与成本优化](06-生产实践与成本优化.md) / **返回总览**：[00-总览](00-GPT-API知识体系总览.md)

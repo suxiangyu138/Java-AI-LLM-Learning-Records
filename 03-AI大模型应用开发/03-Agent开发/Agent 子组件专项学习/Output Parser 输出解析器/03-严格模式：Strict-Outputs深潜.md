@@ -24,7 +24,7 @@ response = client.chat.completions.create(
     })
 ```
 
-> 🎯 核心要点：strict 的实现机制是**约束解码（constrained decoding）**——模型生成时文法就不允许偏离 schema。这与"提示词要求输出 JSON"（概率性遵守）有本质区别。
+> 核心要点：strict 的实现机制是**约束解码（constrained decoding）**——模型生成时文法就不允许偏离 schema。这与"提示词要求输出 JSON"（概率性遵守）有本质区别。
 
 ## 2. Schema 约束清单（strict 的"规矩"）
 
@@ -55,7 +55,7 @@ schema 简化策略：
 | Bedrock | JSON Schema output + 文法缓存 24h | 采样级 | Draft 2020-12 子集 |
 | OpenAI 兼容（DeepSeek 等） | 接口兼容 response_format | **各不相同** | 必须实测（探针验证） |
 
-> ⚠️ 2026 关键警示：**"OpenAI 兼容"只兼容接口，不兼容强制力**——DeepSeek 等厂商接受 response_format 参数，但可能不真正约束采样。上线前必须用"故意出错的 schema"做探针测试（见 10 篇）。
+> 2026 关键警示：**"OpenAI 兼容"只兼容接口，不兼容强制力**——DeepSeek 等厂商接受 response_format 参数，但可能不真正约束采样。上线前必须用"故意出错的 schema"做探针测试（见 10 篇）。
 
 ## 4. 各家落地示例
 
@@ -89,7 +89,7 @@ response = genai.generate_content(prompt,
 | 不截断 | token 上限仍会截断 | finish_reason 检查 |
 | 跨模型一致 | 同一 schema 各模型行为不同 | 按模式评测（10 篇） |
 
-> 🎯 核心要点：**strict 保"格式"，不保"正确"**——2026 年最佳实践是"strict 打底 + 应用层语义校验兜底"，缺一不可（08 篇）。
+> 核心要点：**strict 保"格式"，不保"正确"**——2026 年最佳实践是"strict 打底 + 应用层语义校验兜底"，缺一不可（08 篇）。
 
 ## 6. Refusal 与截断：strict 之外的两大异常
 
@@ -99,7 +99,7 @@ response = genai.generate_content(prompt,
 | 截断 | finish_reason=length / max_tokens 用尽 | 增大上限或分段生成 |
 | 二者混合 | 半截 JSON | 修复工具 + 提示截断 |
 
-> ⚠️ 常见事故：**把截断当普通解析失败反复重试**——截断的重试只会再次截断（同样 token 上限）。正确做法是检测 finish_reason 后增大上限，而不是盲目重试。
+> 常见事故：**把截断当普通解析失败反复重试**——截断的重试只会再次截断（同样 token 上限）。正确做法是检测 finish_reason 后增大上限，而不是盲目重试。
 
 ## 7. Strict 模式常见坑速查
 
@@ -136,7 +136,7 @@ for _ in range(20):
 print(f"违规率: {violations/20:.0%}")     # >1% → 该厂商 strict 是摆设
 ```
 
-> 💡 探针测试的结论只对该"厂商+模型+schema 形态"有效——换模型或换 schema 复杂度（50 字段）应重测。这是 2026"兼容 ≠ 同能力"共识的落地手段。
+> 探针测试的结论只对该"厂商+模型+schema 形态"有效——换模型或换 schema 复杂度（50 字段）应重测。这是 2026"兼容 ≠ 同能力"共识的落地手段。
 
 **strict 与成本的关系**：约束解码会略微降低生成速度（文法约束开销），但换来零解析失败率——**总成本通常更低**（省掉重试与修复的额外调用）。grammar 缓存命中后（复用 schema）开销进一步下降，因此"复用 schema"不仅是延迟优化也是成本优化。
 

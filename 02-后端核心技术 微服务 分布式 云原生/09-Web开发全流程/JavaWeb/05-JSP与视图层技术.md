@@ -41,7 +41,7 @@
 | **代码** | 纯 Java 代码 | HTML 为主，Java 为辅 |
 | **类比** | Spring 的 @Controller | Thymeleaf 模板 |
 
-> 🎯 MVC 经典分工：Servlet 处理请求 → 调用 Service → 将数据放入 Request → Forward 到 JSP 渲染。
+> MVC 经典分工：Servlet 处理请求 → 调用 Service → 将数据放入 Request → Forward 到 JSP 渲染。
 
 ### 1.3 JSP 的内容组成
 
@@ -138,7 +138,7 @@ public final class index_jsp extends org.apache.jasper.runtime.HttpJspBase
 }
 ```
 
-> 💡 关键发现：`<% %>` 中的代码直接放入 `_jspService()` 方法体，因此**脚本中的变量是局部变量**（线程安全）。`<%! %>` 中的变量变为**成员变量**（线程不安全！）。
+> 关键发现：`<% %>` 中的代码直接放入 `_jspService()` 方法体，因此**脚本中的变量是局部变量**（线程安全）。`<%! %>` 中的变量变为**成员变量**（线程不安全！）。
 
 ### 2.3 为什么第一次访问 JSP 慢？
 
@@ -175,7 +175,7 @@ public final class index_jsp extends org.apache.jasper.runtime.HttpJspBase
 
 <%-- 3. 声明（Declaration）— 成员变量和方法 --%>
 <%!
-    private int count = 0;           // ⚠️ 成员变量，线程不安全！
+    private int count = 0;           // 成员变量，线程不安全！
 
     public int add(int a, int b) {   // 自定义方法
         return a + b;
@@ -198,7 +198,7 @@ public final class index_jsp extends org.apache.jasper.runtime.HttpJspBase
 %>
 ```
 
-> ⚠️ 不要在 JSP 注释中暴露敏感信息！虽然客户端看不到，但页面源码仍可被开发者查看。
+> 不要在 JSP 注释中暴露敏感信息！虽然客户端看不到，但页面源码仍可被开发者查看。
 
 ---
 
@@ -276,7 +276,7 @@ public final class index_jsp extends org.apache.jasper.runtime.HttpJspBase
     isErrorPage="false"               <%-- 是否是错误页面（true 才能用 exception 对象）--%>
     buffer="8kb"                      <%-- out 缓冲区大小 --%>
     autoFlush="true"                  <%-- 缓冲区满时自动刷新 --%>
-    isThreadSafe="true"               <%-- ⚠️ 已废弃！不要使用 false --%>
+    isThreadSafe="true"               <%-- 已废弃！不要使用 false --%>
 %>
 ```
 
@@ -356,7 +356,7 @@ public final class index_jsp extends org.apache.jasper.runtime.HttpJspBase
 <%-- 注意：要求 Bean 有对应的 getter 方法 --%>
 ```
 
-> ⚠️ `<jsp:useBean>` 和 `<jsp:setProperty>` 是 JSP 1.x 时代的 MVC 模式实现，现代已基本不推荐使用。了解即可。
+> `<jsp:useBean>` 和 `<jsp:setProperty>` 是 JSP 1.x 时代的 MVC 模式实现，现代已基本不推荐使用。了解即可。
 
 ---
 
@@ -460,7 +460,7 @@ ${initParam.appName}        <%-- web.xml 中 context-param --%>
 |----|-----|------|------|
 | Core（核心） | `.../jstl/core` | `c` | 流程控制、循环、URL |
 | Format（格式化） | `.../jstl/fmt` | `fmt` | 日期、数字、国际化 |
-| SQL | `.../jstl/sql` | `sql` | ❌ 废弃（不应在 JSP 中操作 DB） |
+| SQL | `.../jstl/sql` | `sql` | ✗ 废弃（不应在 JSP 中操作 DB） |
 | XML | `.../jstl/xml` | `x` | XML 解析 |
 | Functions（函数） | `.../jstl/functions` | `fn` | 字符串处理 |
 
@@ -627,7 +627,7 @@ SSR / SSG (Next.js / Nuxt.js)
 </html>
 ```
 
-> 🎯 为什么 Spring Boot 选 Thymeleaf 而非 JSP？Thymeleaf 是纯 HTML（浏览器可预览），天然支持 SpringEL，不依赖 Servlet 容器即可渲染。
+> 为什么 Spring Boot 选 Thymeleaf 而非 JSP？Thymeleaf 是纯 HTML（浏览器可预览），天然支持 SpringEL，不依赖 Servlet 容器即可渲染。
 
 ---
 

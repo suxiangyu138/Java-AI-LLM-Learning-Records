@@ -72,7 +72,7 @@ protected BeanWrapper createBeanInstance(String beanName, RootBeanDefinition mbd
 | 反射（Constructor.newInstance） | 默认，慢一点 |
 | Objenesis（Spring 6+ 可配） | 绕构造器（无参也走），CGLIB 子类场景需要 |
 
-> 💡 面试细节：`@Bean` 方法创建的对象由「工厂方法调用」产生，不是反射构造——所以 @Bean 方法内的逻辑（如参数注入、手动 new）都会执行。
+> 面试细节：`@Bean` 方法创建的对象由「工厂方法调用」产生，不是反射构造——所以 @Bean 方法内的逻辑（如参数注入、手动 new）都会执行。
 
 ---
 
@@ -99,12 +99,12 @@ protected void populateBean(String beanName, RootBeanDefinition mbd, BeanWrapper
 @Autowired 注入（AutowiredAnnotationBeanPostProcessor）
    ↓
 XML propertyValues（配置定义的属性）
-⚠️ 实际顺序：BeanDefinition 中显式属性先应用，再跑注解注入？
+实际顺序：BeanDefinition 中显式属性先应用，再跑注解注入？
    准确：applyPropertyValues 在注解注入之后（3.x 起）
    面试简化回答：注解注入 + 显式属性都会执行，注解优先
 ```
 
-> 🎯 记忆点：**populateBean 是「循环依赖解决」的现场**——字段注入时依赖还没创建好，会走 getBean → 三级缓存提前暴露（05 篇详述）。
+> 记忆点：**populateBean 是「循环依赖解决」的现场**——字段注入时依赖还没创建好，会走 getBean → 三级缓存提前暴露（05 篇详述）。
 
 ---
 
@@ -147,7 +147,7 @@ protected Object initializeBean(String beanName, Object bean, RootBeanDefinition
 ③ 自定义 init-method（@Bean(initMethod)/XML init-method）
 ```
 
-> ⚠️ 注意：@PostConstruct 其实是在「初始化前」的后置处理器里执行的（postProcessBeforeInitialization），所以顺序是 @PostConstruct → afterPropertiesSet → init-method。
+> 注意：@PostConstruct 其实是在「初始化前」的后置处理器里执行的（postProcessBeforeInitialization），所以顺序是 @PostConstruct → afterPropertiesSet → init-method。
 
 ### 4.3 AOP 代理在初始化后的原因
 
@@ -189,7 +189,7 @@ protected Object initializeBean(String beanName, Object bean, RootBeanDefinition
 | 手动 close | `((ConfigurableApplicationContext) ctx).close()` |
 | 原型 bean | **不随容器销毁**（容器只管理单例销毁） |
 
-> 💡 原型 bean 的销毁责任在调用方：容器创建后不跟踪原型实例，需自行释放资源。
+> 原型 bean 的销毁责任在调用方：容器创建后不跟踪原型实例，需自行释放资源。
 
 ---
 
@@ -258,7 +258,7 @@ protected Object initializeBean(String beanName, Object bean, RootBeanDefinition
 AOP 代理在「初始化后」；循环依赖的提前代理在「填充时」
 ```
 
-> 🎯 **核心要点**：doCreateBean = **实例化（构造器/工厂）→ 填充（@Autowired）→ 初始化（Aware → 初始化前 → 初始化 → 初始化后/代理）**，销毁反向执行。面试手绘这条链 + 标注三个扩展点家族（InstantiationAware/BPP/DestructionAware）即为满分。两个细节加分：@PostConstruct 在「初始化前」钩子执行（顺序 #1）；AOP 代理在初始化后（除循环依赖提前代理）。
+> **核心要点**：doCreateBean = **实例化（构造器/工厂）→ 填充（@Autowired）→ 初始化（Aware → 初始化前 → 初始化 → 初始化后/代理）**，销毁反向执行。面试手绘这条链 + 标注三个扩展点家族（InstantiationAware/BPP/DestructionAware）即为满分。两个细节加分：@PostConstruct 在「初始化前」钩子执行（顺序 #1）；AOP 代理在初始化后（除循环依赖提前代理）。
 
 ---
 

@@ -108,9 +108,9 @@ public class SynchronizedDemo {
 | 修饰静态方法 | `Class`对象（全局唯一） | 所有实例 | 方法级别 | 低（粒度过大） |
 | 修饰代码块 | 自定义锁对象 | 代码块范围 | 块级别（最小） | **高** |
 
-> 💡 **最佳实践**：优先使用同步代码块 + `private final` 专用锁对象，将锁粒度控制在最小范围；禁止使用字符串常量或基本类型包装类作为锁对象，避免锁对象误用导致同步失效。
+> **最佳实践**：优先使用同步代码块 + `private final` 专用锁对象，将锁粒度控制在最小范围；禁止使用字符串常量或基本类型包装类作为锁对象，避免锁对象误用导致同步失效。
 
-> ⚠️ **关键注意**：
+> **关键注意**：
 > - 多个线程竞争**同一把锁**才能实现同步，锁对象不同则同步失效
 > - `synchronized`锁是**可重入锁**，同一线程可重复获取同一把锁，避免自死锁
 > - 锁对象不能为`null`，否则抛出`NullPointerException`
@@ -189,7 +189,7 @@ GC 标记 (11):
 | 重量级锁 | 10 | 指向Monitor对象的指针 | 竞争激烈时 |
 | GC标记 | 11 | 转发指针（Forwarding Pointer） | GC时使用 |
 
-> 💡 **关键理解**：Mark Word是**复用内存**的设计，不同锁状态下同一块内存存储不同含义的数据。例如无锁时存储hashCode，偏向锁时存储线程ID，两者不可共存——因此调用`hashCode()`会撤销偏向锁。
+> **关键理解**：Mark Word是**复用内存**的设计，不同锁状态下同一块内存存储不同含义的数据。例如无锁时存储hashCode，偏向锁时存储线程ID，两者不可共存——因此调用`hashCode()`会撤销偏向锁。
 
 ---
 
@@ -229,7 +229,7 @@ public void demo() {
 25: return
 ```
 
-> 💡 注意`monitorexit`出现了两次：一次是正常退出，一次是异常退出（确保异常时锁也能释放）。这就是`synchronized`比`Lock`更安全的原因——JVM保证锁一定会释放。
+> 注意`monitorexit`出现了两次：一次是正常退出，一次是异常退出（确保异常时锁也能释放）。这就是`synchronized`比`Lock`更安全的原因——JVM保证锁一定会释放。
 
 ### 3.2 同步方法层面
 
@@ -359,7 +359,7 @@ public class LockUpgradeDemo {
 }
 ```
 
-> 💡 **JVM偏向锁延迟**：JDK 8默认在JVM启动后的4秒内偏向锁不可用（`-XX:BiasedLockingStartupDelay=4000`），这是为了减少JVM启动时的锁竞争优化。可通过`-XX:BiasedLockingStartupDelay=0`关闭延迟。
+> **JVM偏向锁延迟**：JDK 8默认在JVM启动后的4秒内偏向锁不可用（`-XX:BiasedLockingStartupDelay=4000`），这是为了减少JVM启动时的锁竞争优化。可通过`-XX:BiasedLockingStartupDelay=0`关闭延迟。
 
 ---
 
@@ -441,7 +441,7 @@ JEP 374: Deprecate and Disable Biased Locking (JDK 15)
 - 升级路径变为：无锁 → 轻量级锁 → 重量级锁
 ```
 
-> ⚠️ **重要**：JDK 15+ 不再支持偏向锁，偏向锁相关内容主要适用于JDK 8~11。面试中对偏向锁的考察重点是**理解其设计思想**和**为何被废弃**。
+> **重要**：JDK 15+ 不再支持偏向锁，偏向锁相关内容主要适用于JDK 8~11。面试中对偏向锁的考察重点是**理解其设计思想**和**为何被废弃**。
 
 ---
 
@@ -522,7 +522,7 @@ public class LightweightLockDemo {
 | `-XX:MaxTenuringThreshold` | 15 | 自适应自旋，JVM动态调整 |
 | `-XX:+UseAdaptiveSizePolicy` | true | 自适应自旋开关 |
 
-> 💡 **自适应自旋**（JDK 6+）：JVM根据前一次自旋的结果动态调整自旋次数。如果上次自旋后成功获取锁，JVM会适当增加自旋次数；如果很少成功，JVM会减少甚至省略自旋，避免CPU空转。
+> **自适应自旋**（JDK 6+）：JVM根据前一次自旋的结果动态调整自旋次数。如果上次自旋后成功获取锁，JVM会适当增加自旋次数；如果很少成功，JVM会减少甚至省略自旋，避免CPU空转。
 
 ### 6.4 自旋的优缺点
 
@@ -532,7 +532,7 @@ public class LightweightLockDemo {
 | 适合锁持有时间短的场景 | 锁持有时间长时自旋浪费CPU |
 | 响应速度快，不进入OS调度 | 自旋线程数过多会导致CPU飙升 |
 
-> 🎯 **团队规范**：选择合适的锁方案应基于临界区的执行时间。锁内操作执行时间短（纳秒级）时，自旋收益高；锁内执行时间长（微秒级以上或因IO阻塞），应直接使用重量级锁或Lock接口，避免CPU空转。
+> **团队规范**：选择合适的锁方案应基于临界区的执行时间。锁内操作执行时间短（纳秒级）时，自旋收益高；锁内执行时间长（微秒级以上或因IO阻塞），应直接使用重量级锁或Lock接口，避免CPU空转。
 
 ---
 
@@ -631,7 +631,7 @@ public class WaitNotifyDemo {
 | notify 随机唤醒 | 随机选择一个_WaitSet中的线程唤醒（非公平） |
 | notifyAll 唤醒全部 | 所有_WaitSet中的线程进入_EntryList竞争 |
 
-> ⚠️ **常见陷阱**：`wait()`应在循环中调用（**Guarded Suspension模式**），而非if判断。因为线程被唤醒后可能不满足执行条件（虚假唤醒或条件被其他线程修改）。
+> **常见陷阱**：`wait()`应在循环中调用（**Guarded Suspension模式**），而非if判断。因为线程被唤醒后可能不满足执行条件（虚假唤醒或条件被其他线程修改）。
 > ```java
 > synchronized (lock) {
 >     while (!condition) {  // 必须用 while，不能用 if
@@ -653,7 +653,7 @@ public class WaitNotifyDemo {
 /**
  * 锁粗化前：循环内反复加锁解锁
  */
-// ❌ JIT 会认为这是低效的
+// ✗ JIT 会认为这是低效的
 StringBuffer sb = new StringBuffer();
 for (int i = 0; i < 100; i++) {
     synchronized (sb) {       // 每次都加锁/解锁
@@ -664,7 +664,7 @@ for (int i = 0; i < 100; i++) {
 /**
  * 锁粗化后：JIT 优化为
  */
-// ✅ JVM 会自动优化为：
+// ✓ JVM 会自动优化为：
 synchronized (sb) {          // 一次性加锁
     for (int i = 0; i < 100; i++) {
         sb.append(i);
@@ -672,7 +672,7 @@ synchronized (sb) {          // 一次性加锁
 }                             // 一次性解锁
 ```
 
-> 💡 JVM的JIT编译器会自动进行锁粗化，但手工编写时仍建议将循环体内的` synchronized `移到循环外，减少锁竞争次数。
+> JVM的JIT编译器会自动进行锁粗化，但手工编写时仍建议将循环体内的` synchronized `移到循环外，减少锁竞争次数。
 
 ### 8.2 锁消除（Lock Elimination）
 
@@ -685,14 +685,14 @@ JIT通过逃逸分析发现锁对象只被当前线程访问，不存在竞争�
  */
 public class LockEliminationDemo {
 
-    // ❌ 看起来有锁，但实际上不存在竞争
+    // ✗ 看起来有锁，但实际上不存在竞争
     public void append(String s1, String s2) {
         StringBuffer sb = new StringBuffer();  // sb 是局部变量
         sb.append(s1);                         // 不会逃逸
         sb.append(s2);                         // JIT 消除锁
     }
 
-    // ✅ 等价于无锁操作
+    // ✓ 等价于无锁操作
     public void appendOptimized(String s1, String s2) {
         StringBuilder sb = new StringBuilder();
         sb.append(s1);
@@ -721,7 +721,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class LockGranularityDemo {
 
-    // ❌ 粗粒度：对整个方法加锁
+    // ✗ 粗粒度：对整个方法加锁
     // 并发度极低，不同key的操作互相阻塞
     private final Map<String, Integer> badCache = new HashMap<>();
 
@@ -729,7 +729,7 @@ public class LockGranularityDemo {
         return badCache.get(key);
     }
 
-    // ✅ 细粒度：只锁需要同步的代码块
+    // ✓ 细粒度：只锁需要同步的代码块
     private final Map<String, Integer> cache = new HashMap<>();
     private final Object lock = new Object();
 
@@ -750,7 +750,7 @@ public class LockGranularityDemo {
         }
     }
 
-    // ✅ 最细粒度：使用并发容器代替手写同步
+    // ✓ 最细粒度：使用并发容器代替手写同步
     private final ConcurrentHashMap<String, Integer> concurrentCache
             = new ConcurrentHashMap<>();
 
@@ -772,7 +772,7 @@ public class LockGranularityDemo {
 | 锁消除 | JIT自动 | 通过逃逸分析删除无用锁 | 消除无竞争锁开销 |
 | 锁细化 | 开发者手动 | 大锁拆小锁，减少竞争范围 | 提升并发度 |
 
-> 🎯 **优化原则**：先保证正确性，再追求性能。不要过早优化锁粒度，先用JMH基准测试确认瓶颈再动手。
+> **优化原则**：先保证正确性，再追求性能。不要过早优化锁粒度，先用JMH基准测试确认瓶颈再动手。
 
 ---
 
@@ -872,7 +872,7 @@ public class LockComparisonDemo {
 | 多个条件变量 | `ReentrantLock` + `Condition` | 多个独立等待队列 |
 | 性能敏感高竞争 | 先`LongAdder`/CAS无锁方案 | 无锁 > 有锁 |
 
-> ⚠️ **虚拟线程注意事项**（JDK 21+）：`synchronized`在虚拟线程中会"钉住"底层平台线程，使得虚拟线程无法在阻塞时yield回调度器，降低了虚拟线程的优势。在虚拟线程环境中应优先使用`ReentrantLock`。
+> **虚拟线程注意事项**（JDK 21+）：`synchronized`在虚拟线程中会"钉住"底层平台线程，使得虚拟线程无法在阻塞时yield回调度器，降低了虚拟线程的优势。在虚拟线程环境中应优先使用`ReentrantLock`。
 
 ---
 
@@ -985,6 +985,6 @@ JDK 15+：无锁 → 轻量级锁 → 重量级锁（偏向锁废弃）
 
 ---
 
-> 🎯 **核心总结**：`synchronized`是Java并发编程的基石，理解其从偏向锁到重量级锁的完整升级链路是JUC学习的核心。JDK 6+通过锁升级机制让synchronized在无竞争时几乎零开销，有竞争时逐步加重。掌握锁优化的三大手段（粗化、消除、细化）和与Lock接口的选型对比，能帮助你在不同并发场景下做出正确选择。在JDK 21+虚拟线程时代，理解synchronized的pin问题并合理选用Lock接口同样重要。
+> **核心总结**：`synchronized`是Java并发编程的基石，理解其从偏向锁到重量级锁的完整升级链路是JUC学习的核心。JDK 6+通过锁升级机制让synchronized在无竞争时几乎零开销，有竞争时逐步加重。掌握锁优化的三大手段（粗化、消除、细化）和与Lock接口的选型对比，能帮助你在不同并发场景下做出正确选择。在JDK 21+虚拟线程时代，理解synchronized的pin问题并合理选用Lock接口同样重要。
 
 *最后更新：2026-07-26 | 适用于 JDK 8/11/17/21*

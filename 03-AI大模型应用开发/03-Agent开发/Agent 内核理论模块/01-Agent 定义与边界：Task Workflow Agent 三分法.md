@@ -2,7 +2,7 @@
 
 > 定位：一切 Agent 学习的起点——2026 年共识定义、判定测试、Anthropic 三分法（Task/Workflow/Agent）与"不要什么都做成 Agent"（2026-08 基准）
 
-## 📚 目录
+## 目录
 
 1. [2026 共识定义](#1-2026-共识定义)
 2. [判定测试：Agent 与 Workflow 的分界](#2-判定测试agent-与-workflow-的分界)
@@ -25,7 +25,7 @@ AI Agent = 处在循环中的 LLM，配工具与记忆，由模型决定下一�
 └─ 模型决策       = 判据：下一步是模型选的，不是代码硬编码的
 ```
 
-> 🎯 **一句话**：Agent 的核心不是"智能"而是"**循环**"——"intelligence lives in the loop"（智能活在循环里）：没有单一工具规划整个任务，是循环本身在承担智能。
+> **一句话**：Agent 的核心不是"智能"而是"**循环**"——"intelligence lives in the loop"（智能活在循环里）：没有单一工具规划整个任务，是循环本身在承担智能。
 
 ## 2. 判定测试：Agent 与 Workflow 的分界
 
@@ -47,7 +47,7 @@ AI Agent = 处在循环中的 LLM，配工具与记忆，由模型决定下一�
 | 成本 | 低（无探索） | 高（探索昂贵） |
 | 适合 | 可预映射决策树的任务 | 无法预映射路径的开放式任务 |
 
-> 💡 **Anthropic 判据**："如果任务的不确定性允许你预映射决策树，就做成 Workflow——比任何 Agent 都更准、更可控、更便宜。"
+> **Anthropic 判据**："如果任务的不确定性允许你预映射决策树，就做成 Workflow——比任何 Agent 都更准、更可控、更便宜。"
 
 ## 3. Anthropic 三分法：Task / Workflow / Agent
 
@@ -81,7 +81,7 @@ Anthropic 2024-12 提出、2026 延续的三层分类（Barry Zhang，AI Enginee
 | 可测试性 | 预定义路径可穷举测试，Agent 路径不可穷举 |
 | 延迟 | 多轮循环延迟显著高于单/少次调用 |
 
-> 🎯 **行业结论（2026）**："Don't build agents for everything"（Anthropic 第一法则）——生产系统设计从 Task 开始，复杂度不够就不升级 Agent。
+> **行业结论（2026）**："Don't build agents for everything"（Anthropic 第一法则）——生产系统设计从 Task 开始，复杂度不够就不升级 Agent。
 
 ## 5. 2025-2026 生产现实
 
@@ -93,7 +93,7 @@ Anthropic 2024-12 提出、2026 延续的三层分类（Barry Zhang，AI Enginee
 | 演进路径 | Anthropic：workflow → single agent → agent workflows → multi-agent systems |
 | 多 Agent 成本证据 | Claude Research coordinator-executor：性能 +90.2%，token ×15 |
 
-> ⚠️ **启示**：别被"全自主多 Agent"叙事带偏——生产主线是 Workflow + 局部 Agent 化；多 Agent 是演进路径的终点而非起点。
+> **启示**：别被"全自主多 Agent"叙事带偏——生产主线是 Workflow + 局部 Agent 化；多 Agent 是演进路径的终点而非起点。
 
 ## 6. 混合形态：高层 Agent + 确定性模块
 
@@ -115,11 +115,11 @@ Anthropic 2024-12 提出、2026 延续的三层分类（Barry Zhang，AI Enginee
 （Workflow 不取代 Agent 自主性，而是塑造它在哪用、怎么用）
 ```
 
-> 💡 **设计心智**：把系统拆成"确定性骨架 + 自主性局部"——每个环节先问"这段路径能预映射吗"：能 → 确定性代码；不能 → Agent。
+> **设计心智**：把系统拆成"确定性骨架 + 自主性局部"——每个环节先问"这段路径能预映射吗"：能 → 确定性代码；不能 → Agent。
 
 ## 7. 核心要点
 
-> 🎯 **核心要点**：
+> **核心要点**：
 > 1. Agent = 循环中的 LLM + 工具 + 记忆，**模型决定下一步**——智能活在循环里
 > 2. 判定测试：下一步是模型选的还是代码硬编码的——硬编码 = Workflow
 > 3. Anthropic 三分法：Task（1 次调用）/ Workflow（预定义多次）/ Agent（自主循环）——设计第一决策

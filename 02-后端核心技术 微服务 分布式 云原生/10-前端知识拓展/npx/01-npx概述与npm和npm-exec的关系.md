@@ -1,6 +1,6 @@
 # 01 - npx 概述与 npm / npm exec 的关系
 
-> 🎯 npx 是 npm 生态的"命令执行器" — npm 负责"装"，npx 负责"跑"。它随 Node.js 内置（npm 5.2+），npm 7+ 之后成为 `npm exec` 的兼容入口。用 Java 后端的视角理解：npx ≈ `mvn exec:java` + `mvn archetype:generate`
+> npx 是 npm 生态的"命令执行器" — npm 负责"装"，npx 负责"跑"。它随 Node.js 内置（npm 5.2+），npm 7+ 之后成为 `npm exec` 的兼容入口。用 Java 后端的视角理解：npx ≈ `mvn exec:java` + `mvn archetype:generate`
 
 ---
 
@@ -31,7 +31,7 @@ npm -v     # 10.9.2
 npx -v     # 10.9.2
 ```
 
-> 💡 **为什么不用全局安装？** 全局安装（`npm install -g`）会造成版本冲突与环境污染 — 不同项目需要不同版本的 prettier/eslint 时，全局只有一个。npx 让每个项目各取所需，类似 Java 项目的 Maven 依赖隔离。
+> **为什么不用全局安装？** 全局安装（`npm install -g`）会造成版本冲突与环境污染 — 不同项目需要不同版本的 prettier/eslint 时，全局只有一个。npx 让每个项目各取所需，类似 Java 项目的 Maven 依赖隔离。
 
 ---
 
@@ -67,7 +67,7 @@ npx prettier --version           # 临时下载 prettier 并执行
 | npm 7.0.0（2020） | **npx 被重写并整合进 `npm exec` 机制**，成为 npm exec 的兼容入口/包装器 |
 | npm 7+ 至今 | 独立的 npx 包已废弃，无需再 `npm install -g npx` |
 
-> 💡 **结论**：现代 npm 中 npx 就是 `npm exec` 的别名，`npm x` 是 npm exec 的简写。三个写法本质相同。
+> **结论**：现代 npm 中 npx 就是 `npm exec` 的别名，`npm x` 是 npm exec 的简写。三个写法本质相同。
 
 ### 3.2 主要区别：参数解析
 
@@ -123,10 +123,10 @@ npx eslint .             # 代码检查
 npm run build            # 构建
 ```
 
-> ⚠️ **常见误区**：`npx` 和 `npm run` 都带命令，但完全不同 — `npm run xxx` 只能执行 `package.json` 的 `scripts` 里定义好的脚本；`npx xxx` 执行的是包里的二进制（无论是否安装过）。
+> **常见误区**：`npx` 和 `npm run` 都带命令，但完全不同 — `npm run xxx` 只能执行 `package.json` 的 `scripts` 里定义好的脚本；`npx xxx` 执行的是包里的二进制（无论是否安装过）。
 
 ---
 
-> 🎯 **核心要点**：现代 npm 里 npx = npm exec 的兼容入口。npx 负责"跑任意包的命令"，npm 负责"装正式依赖"，npm run 负责"跑项目自定义脚本"。三者分工明确，Java 后端看到 `npx create-xxx` 只需理解成"免安装执行脚手架"即可。
+> **核心要点**：现代 npm 里 npx = npm exec 的兼容入口。npx 负责"跑任意包的命令"，npm 负责"装正式依赖"，npm run 负责"跑项目自定义脚本"。三者分工明确，Java 后端看到 `npx create-xxx` 只需理解成"免安装执行脚手架"即可。
 
 **下一模块**：[02-npx核心用法与参数详解](02-npx核心用法与参数详解.md) / **返回总览**：[00-npx知识体系总览](00-npx知识体系总览.md)

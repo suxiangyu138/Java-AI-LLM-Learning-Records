@@ -1,6 +1,6 @@
 # 01 - Agent 执行循环：ReAct 模式
 
-> 🎯 ReAct（Reasoning + Acting）是 AI Agent 执行循环的经典范式。Agent 不是一次问答，而是 Think → Act → Observe 的多轮迭代——这正是"循环工程"的最核心单元
+> ReAct（Reasoning + Acting）是 AI Agent 执行循环的经典范式。Agent 不是一次问答，而是 Think → Act → Observe 的多轮迭代——这正是"循环工程"的最核心单元
 
 ---
 
@@ -167,17 +167,17 @@ class RobustReActAgent(ReActAgent):
         for step in range(self.max_steps):
             # --- 安全检查 ---
             if time.time() - start_time > 300:
-                return "⚠️ 超时（300s），已执行 {} 步".format(step)
+                return "超时（300s），已执行 {} 步".format(step)
 
             if len(last_actions) >= 3 and len(set(last_actions[-3:])) == 1:
-                return "⚠️ 检测到死循环，最后 3 步重复调用 {}".format(last_actions[-1])
+                return "检测到死循环，最后 3 步重复调用 {}".format(last_actions[-1])
 
             # --- 正常流程 ---
             response = self.llm.chat(messages, tools=self.tools)
             token_count += response.usage.total_tokens
 
             if token_count > 50000:
-                return "⚠️ Token 预算耗尽"
+                return "Token 预算耗尽"
 
             if not response.has_tool_calls:
                 return response.content

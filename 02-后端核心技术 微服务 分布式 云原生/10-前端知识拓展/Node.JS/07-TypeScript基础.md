@@ -1,6 +1,6 @@
 # 07 - TypeScript 基础
 
-> 🎯 TypeScript 是 Java 开发者的"舒适区"——静态类型、接口、泛型、装饰器，全都是熟悉的概念。从 JavaScript 到 TypeScript，就是从"裸奔"到"有安全带"
+> TypeScript 是 Java 开发者的"舒适区"——静态类型、接口、泛型、装饰器，全都是熟悉的概念。从 JavaScript 到 TypeScript，就是从"裸奔"到"有安全带"
 
 ---
 
@@ -89,9 +89,9 @@ class UserService implements EventHandler {
 | 维度 | Interface | Type |
 |------|:---:|:---:|
 | 扩展 | `extends` | `&` 交叉 |
-| 声明合并 | ✅ 自动合并 | ❌ |
-| 联合类型 | ❌ | ✅ |
-| 元组 | ❌ | ✅ |
+| 声明合并 | ✓ 自动合并 | ✗ |
+| 联合类型 | ✗ | ✓ |
+| 元组 | ✗ | ✓ |
 | 推荐 | **对象结构优先用 Interface** | 联合/交叉/工具类型 |
 
 ## 3. 泛型

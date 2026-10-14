@@ -1,7 +1,7 @@
 # 05-HTTP 模块与 rewrite
 > URL 重写、if 判断、return/redirect、try_files、跨域配置——"地址改写与请求路由的瑞士军刀"
 
-## 📚 目录
+## 目录
 1. [rewrite 语法与标志](#1-rewrite-语法与标志)
 2. [return 与重定向](#2-return-与重定向)
 3. [if 判断（谨慎使用）](#3-if-判断谨慎使用)
@@ -39,7 +39,7 @@ location /old/ {
 }
 ```
 
-> 🎯 **last vs break**：last 会"重新匹配 location"（新 URI 走新 location 的处理）；break 只改 URI 不重匹配——**路由级变更用 last，仅路径改写用 break**。
+> **last vs break**：last 会"重新匹配 location"（新 URI 走新 location 的处理）；break 只改 URI 不重匹配——**路由级变更用 last，仅路径改写用 break**。
 
 ## 2. return 与重定向
 
@@ -61,7 +61,7 @@ return 301 /new/path;
 | 接口下线 | `return 410;` |
 | 健康检查 | `return 200 "OK";` |
 
-> 💡 **return vs rewrite 的选择**：能 return 就 return（更简单高效）——rewrite 用于需要正则改写的场景，纯跳转用 return。
+> **return vs rewrite 的选择**：能 return 就 return（更简单高效）——rewrite 用于需要正则改写的场景，纯跳转用 return。
 
 ## 3. if 判断（谨慎使用）
 
@@ -85,7 +85,7 @@ if ($request_uri ~* "\.(php)$") {
 | `set` | 设置变量 |
 | 其他 | **大部分指令在 if 中无效**（官方警告） |
 
-> ⚠️ **if 是"邪恶的 if"**（Nginx 官方文档原话）：if 内多数指令行为不可预期——**只用于 return/rewrite/set 三件事**，复杂逻辑用 location 拆分或 Lua（OpenResty）。
+> **if 是"邪恶的 if"**（Nginx 官方文档原话）：if 内多数指令行为不可预期——**只用于 return/rewrite/set 三件事**，复杂逻辑用 location 拆分或 Lua（OpenResty）。
 
 ## 4. 变量系统
 
@@ -139,7 +139,7 @@ location /api/ {
 | `always` 参数 | 错误响应也带 CORS 头（前端能读到错误信息） |
 | 凭证 | `Allow-Credentials true` 时 Origin 不能是 `*` |
 
-> 🎯 **Nginx 解决跨域的定位**：网关/接入层统一加 CORS 头——后端不用每接口处理跨域；**预检请求在 Nginx 层消化**（不浪费后端资源）。
+> **Nginx 解决跨域的定位**：网关/接入层统一加 CORS 头——后端不用每接口处理跨域；**预检请求在 Nginx 层消化**（不浪费后端资源）。
 
 ## 6. 常见重写场景
 
@@ -174,7 +174,7 @@ location /old-page {
 
 ## 7. 核心要点
 
-> 🎯 **核心要点**：
+> **核心要点**：
 > - rewrite 四标志：last（重匹配）/break（停止）/redirect（302）/permanent（301）；
 > - **last vs break 是面试高频**：重匹配 location vs 直接使用；
 > - 能 return 就 return（跳转用 return 301，比 rewrite 高效）；

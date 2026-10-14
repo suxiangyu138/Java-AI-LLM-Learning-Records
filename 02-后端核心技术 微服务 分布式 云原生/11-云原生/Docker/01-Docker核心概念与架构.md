@@ -1,7 +1,7 @@
 # 01-Docker 核心概念与架构
 > 容器的本质 = 被 Linux Namespace 隔离 + 被 Cgroups 限制 + 有独立根文件系统的一群进程——不是"轻量级虚拟机"，而是"被隔离的进程"
 
-## 📚 目录
+## 目录
 1. [容器 vs 虚拟机](#1-容器-vs-虚拟机)
 2. [Docker 三大核心概念](#2-docker-三大核心概念)
 3. [镜像分层与 UnionFS](#3-镜像分层与-unionfs)
@@ -55,7 +55,7 @@ ps aux | grep nginx
 # 输出：可以看到 nginx 进程！它不是虚拟机，就是宿主机上的进程！
 ```
 
-> 🎯 **容器的本质** = 被 Linux Namespace 隔离 + 被 Cgroups 限制 + 有独立根文件系统的一群进程。关键区别：容器不是"轻量级虚拟机"，而是"被隔离的进程"。
+> **容器的本质** = 被 Linux Namespace 隔离 + 被 Cgroups 限制 + 有独立根文件系统的一群进程。关键区别：容器不是"轻量级虚拟机"，而是"被隔离的进程"。
 
 ## 2. Docker 三大核心概念
 
@@ -127,10 +127,10 @@ docker push myrepo/nginx:custom        # Image 推送到 Registry
 
 | 驱动 | 原理 | 内核要求 | 推荐度 |
 |------|------|----------|:---:|
-| overlay2 | 多层联合文件系统 | Linux 4.0+ | ✅ 默认推荐 |
-| aufs | 老牌联合文件系统 | 需单独编译内核 | ❌ 已淘汰 |
-| devicemapper | 块级别 | 需要 thin-provisioning | ❌ 不推荐 |
-| btrfs/zfs | 文件系统级 | 特殊文件系统 | ⚠️ 特定场景 |
+| overlay2 | 多层联合文件系统 | Linux 4.0+ | ✓ 默认推荐 |
+| aufs | 老牌联合文件系统 | 需单独编译内核 | ✗ 已淘汰 |
+| devicemapper | 块级别 | 需要 thin-provisioning | ✗ 不推荐 |
+| btrfs/zfs | 文件系统级 | 特殊文件系统 | 特定场景 |
 
 ```bash
 docker info | grep "Storage Driver"
@@ -176,7 +176,7 @@ docker run -d \
 cat /sys/fs/cgroup/memory/docker/<container-id>/memory.limit_in_bytes
 ```
 
-> 🎯 核心认知：Namespace 只隔离"资源可见性"，Cgroups 只限制"资源使用上限"——都是**基于 Linux 内核的有限隔离**，而非虚拟机级别的完全隔离（详见 [08](08-Docker安全与资源限制.md)）。
+> 核心认知：Namespace 只隔离"资源可见性"，Cgroups 只限制"资源使用上限"——都是**基于 Linux 内核的有限隔离**，而非虚拟机级别的完全隔离（详见 [08](08-Docker安全与资源限制.md)）。
 
 ## 5. Docker 架构与 OCI 标准
 
@@ -208,7 +208,7 @@ Docker 最新架构:
 | OCI Image Spec | 镜像格式标准（层结构、配置、manifest） | 任何符合 OCI 的镜像可在任何 OCI 运行时运行 |
 | OCI Runtime Spec | 容器运行时标准（如何启动容器） | runc 是参考实现，也有 kata-containers、gVisor |
 
-> 💡 **OCI 的意义**：打破 Docker 公司的垄断 → 可以用 Podman/Buildah 构建镜像、用 containerd/cri-o 运行容器、上传到任何 OCI 兼容的 Registry——这就是 **Kubernetes 1.24+ 移除 dockershim** 的背景。
+> **OCI 的意义**：打破 Docker 公司的垄断 → 可以用 Podman/Buildah 构建镜像、用 containerd/cri-o 运行容器、上传到任何 OCI 兼容的 Registry——这就是 **Kubernetes 1.24+ 移除 dockershim** 的背景。
 
 ### 5.3 Docker vs 其他容器工具
 
@@ -234,7 +234,7 @@ Docker 最新架构:
 
 ### 6.2 与 Java 后端的适配底层逻辑
 
-> 🎯 **双重保障**：Java 的跨平台依赖 JVM 虚拟机，Docker 的跨平台依赖宿主机的操作系统内核——二者结合实现"**JVM 隔离 + 系统环境隔离**"的双重保障，彻底解决"环境兼容"问题。
+> **双重保障**：Java 的跨平台依赖 JVM 虚拟机，Docker 的跨平台依赖宿主机的操作系统内核——二者结合实现"**JVM 隔离 + 系统环境隔离**"的双重保障，彻底解决"环境兼容"问题。
 
 | Java 后端痛点 | Docker 解法 |
 |---------------|-------------|
@@ -259,7 +259,7 @@ docker run -m 2g --cpus 1 my-java-app
 
 ## 7. 核心要点
 
-> 🎯 **核心要点**：
+> **核心要点**：
 > - 容器 = 被隔离的进程（Namespace 提供"错觉"、Cgroups 提供"限制"、UnionFS 提供"文件系统"）；
 > - 三要素类比：镜像=类、容器=实例、仓库=Maven 仓库；
 > - 镜像分层 + CoW = 空间共享/构建缓存/拉取加速三大收益；

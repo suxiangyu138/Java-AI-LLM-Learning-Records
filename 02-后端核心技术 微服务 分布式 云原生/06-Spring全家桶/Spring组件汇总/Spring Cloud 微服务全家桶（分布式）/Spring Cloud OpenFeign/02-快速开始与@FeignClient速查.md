@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [环境准备与依赖](#1-环境准备与依赖)
 2. [@EnableFeignClients：扫描与开关](#2-enablefeignclients扫描与开关)
@@ -43,7 +43,7 @@
 </dependency>
 ```
 
-> ⚠️ 缺 loadbalancer 的表现：启动可能正常，**调用时服务名解析失败**（`UnknownHostException: payment-service`）——先查依赖树（[08 篇](08-生产实践与选型避坑.md) 坑位表）。
+> 缺 loadbalancer 的表现：启动可能正常，**调用时服务名解析失败**（`UnknownHostException: payment-service`）——先查依赖树（[08 篇](08-生产实践与选型避坑.md) 坑位表）。
 
 ## 2. @EnableFeignClients：扫描与开关
 
@@ -65,7 +65,7 @@ public class OrderApplication { }
 | basePackages | 接口集中在独立包（如 api.client 包） |
 | clients | 少量接口显式列出（精确控制） |
 
-> ⚠️ **最常见的坑**：Feign 接口不在扫描范围 → 注入报 `No qualifying bean`——先确认 @EnableFeignClients 扫描范围与接口包路径。
+> **最常见的坑**：Feign 接口不在扫描范围 → 注入报 `No qualifying bean`——先确认 @EnableFeignClients 扫描范围与接口包路径。
 
 ## 3. @FeignClient 全属性速查
 
@@ -73,16 +73,16 @@ public class OrderApplication { }
 
 | 属性 | 必填 | 说明 | 示例 |
 |------|:---:|------|------|
-| **name** | ✅（5.x 起） | 客户端名 = 服务名（LB 用它选实例）；支持占位符 | `name = "payment-service"` |
+| **name** | ✓（5.x 起） | 客户端名 = 服务名（LB 用它选实例）；支持占位符 | `name = "payment-service"` |
 | value | — | name 的别名（二选一） | `value = "payment-service"` |
-| **url** | ❌ | 固定地址（**指定后不走 LB**） | `url = "http://localhost:8082"` |
+| **url** | ✗ | 固定地址（**指定后不走 LB**） | `url = "http://localhost:8082"` |
 | **contextId** | 条件 | 同名/同 url 多客户端时的区分标识 | `contextId = "paymentV1"` |
-| **configuration** | ❌ | 自定义配置类（覆盖默认 Feign 配置） | `configuration = FooConfig.class` |
-| fallback | ❌ | 降级实现类（需是 Bean） | `fallback = PaymentFallback.class` |
-| fallbackFactory | ❌ | 降级工厂（可拿异常） | `fallbackFactory = PaymentFallbackFactory.class` |
-| qualifiers | ❌ | Bean 别名（默认全限定接口名） | `qualifiers = "paymentClient"` |
-| primary | ❌ | false 关闭默认 @Primary | `primary = false`（配合 fallback） |
-| path | ❌ | 统一路径前缀 | `path = "/api"` |
+| **configuration** | ✗ | 自定义配置类（覆盖默认 Feign 配置） | `configuration = FooConfig.class` |
+| fallback | ✗ | 降级实现类（需是 Bean） | `fallback = PaymentFallback.class` |
+| fallbackFactory | ✗ | 降级工厂（可拿异常） | `fallbackFactory = PaymentFallbackFactory.class` |
+| qualifiers | ✗ | Bean 别名（默认全限定接口名） | `qualifiers = "paymentClient"` |
+| primary | ✗ | false 关闭默认 @Primary | `primary = false`（配合 fallback） |
+| path | ✗ | 统一路径前缀 | `path = "/api"` |
 
 ### 3.2 核心属性详解
 
@@ -107,7 +107,7 @@ public interface PaymentClient {
 }
 ```
 
-> ⚠️ **name 必填注意**：5.x 起**用 url 也必须写 name**（官方：name is now required even when using url）——早期版本可只写 url，现在必须双写。
+> **name 必填注意**：5.x 起**用 url 也必须写 name**（官方：name is now required even when using url）——早期版本可只写 url，现在必须双写。
 
 ## 4. 接口定义规范
 
@@ -145,7 +145,7 @@ public interface PaymentClient {
 | 参数注解必写 | 多个参数时每个都要标 @PathVariable/@RequestParam（否则绑定失败） |
 | DTO 独立性 | 接口返回 DTO 与 Controller DTO 可共用（跨服务共享 DTO 是常见实践） |
 
-> ⚠️ **接口与 Controller 的边界**：Feign 接口是"调用契约"——**别把业务逻辑写进接口实现**（Feign 接口没有实现类，只有代理）；降级逻辑放 fallback 类。
+> **接口与 Controller 的边界**：Feign 接口是"调用契约"——**别把业务逻辑写进接口实现**（Feign 接口没有实现类，只有代理）；降级逻辑放 fallback 类。
 
 ## 5. 上下文隔离：contextId 的使用场景
 
@@ -171,7 +171,7 @@ public interface PaymentClientB { ... }
   └── contextId 唯一 → 各自独立上下文与配置
 ```
 
-> 💡 判断标准：**同一服务需要多套 Feign 配置（不同超时/不同拦截器）时用 contextId 区分**；大多数项目一个服务一个客户端，用不到。
+> 判断标准：**同一服务需要多套 Feign 配置（不同超时/不同拦截器）时用 contextId 区分**；大多数项目一个服务一个客户端，用不到。
 
 ## 6. 三步验证与排障
 
@@ -194,7 +194,7 @@ public interface PaymentClientB { ... }
 | fallback 不生效 | 没开 circuitbreaker / fallback 不是 Bean | feign.circuitbreaker.enabled=true（[04 篇](04-熔断降级集成.md)） |
 | 超时/慢 | 超时未配（默认值） | connectTimeout/readTimeout 显式配（[03 篇](03-超时重试与HTTP客户端.md)） |
 
-> 💡 排障第一招：**启动日志看 Feign 接口注册**（`Registering Feign client: payment-service` 或类似）→ 再看调用日志（开 DEBUG）——"注册没注册、请求发没发"两步定位（[08 篇](08-生产实践与选型避坑.md) 也有）。
+> 排障第一招：**启动日志看 Feign 接口注册**（`Registering Feign client: payment-service` 或类似）→ 再看调用日志（开 DEBUG）——"注册没注册、请求发没发"两步定位（[08 篇](08-生产实践与选型避坑.md) 也有）。
 
 ---
 

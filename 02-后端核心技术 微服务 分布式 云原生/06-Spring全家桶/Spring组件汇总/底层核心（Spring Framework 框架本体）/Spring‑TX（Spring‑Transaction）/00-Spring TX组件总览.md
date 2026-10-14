@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [组件一句话定位](#1-组件一句话定位)
 2. [版本现状（2026-08）](#2-版本现状2026-08)
@@ -65,7 +65,7 @@ spring-jdbc / spring-orm（实现层：DataSourceTransactionManager / JpaTransac
 | 语义统一 | 所有资源共享同一套传播/隔离/回滚语义，团队心智一致 |
 | 可替换 | 事务管理器本身是 Bean——测试可换假实现（如 `TestTransactionManager`） |
 
-> 🎯 **一句话记忆**：tx 定规则（合同），jdbc/orm 交实现（履约），业务只签合同（面向接口编程）——这是"面向接口、依赖倒置"在数据访问层的标准答案。
+> **一句话记忆**：tx 定规则（合同），jdbc/orm 交实现（履约），业务只签合同（面向接口编程）——这是"面向接口、依赖倒置"在数据访问层的标准答案。
 
 ### 1.2 事务三问与两种入口的对应
 
@@ -93,7 +93,7 @@ spring-jdbc / spring-orm（实现层：DataSourceTransactionManager / JpaTransac
 - **ORM 迁移**：Hibernate 原生支持随 JPA 3.2/Hibernate 7 迁到 `org.springframework.orm.jpa.hibernate`（`HibernateTransactionManager` 同址，spring-orm 模块）；
 - **异常体系延续**：`org.springframework.dao.DataAccessException` 家族稳定，新增类型随需求少量演进。
 
-> ⚠️ **要点**：spring-tx 是 Spring 中最"稳定"的模块之一——7.0 的升级注意点不在 tx 本身，而在**代理默认值**（CGLIB）与 **ORM 包迁移**；事务代码本身可原样保留。
+> **要点**：spring-tx 是 Spring 中最"稳定"的模块之一——7.0 的升级注意点不在 tx 本身，而在**代理默认值**（CGLIB）与 **ORM 包迁移**；事务代码本身可原样保留。
 
 ### 2.1 版本演进：tx 的"变"与"不变"
 
@@ -114,7 +114,7 @@ spring-jdbc / spring-orm（实现层：DataSourceTransactionManager / JpaTransac
 □ 5. 自定义 TransactionInterceptor 子类 → 核对 API 签名
 ```
 
-> 💡 升级结论一句话：**事务业务代码不需要动，代理配置要核对**——7.0 把"代理默认值"从 JDK 接口代理切换为 CGLIB，是升级中唯一可能与事务行为相关的破坏点。
+> 升级结论一句话：**事务业务代码不需要动，代理配置要核对**——7.0 把"代理默认值"从 JDK 接口代理切换为 CGLIB，是升级中唯一可能与事务行为相关的破坏点。
 
 ## 3. 能力地图
 
@@ -146,7 +146,7 @@ spring-jdbc / spring-orm（实现层：DataSourceTransactionManager / JpaTransac
 - 分布式一致性 → 先评估业务是否真的需要强一致（见 [Spring全家桶-14](../../../Spring全家桶/14-分布式事务-Seata.md)）；
 - 锁等待 / 死锁 → 数据库层现象，事务代码只负责"画对边界"。
 
-> ⚠️ **常见归因错误**：把连接池耗尽、死锁、慢 SQL 归罪于"事务框架"——这些是资源层问题；spring-tx 能做的只是暴露正确的事务边界，**边界越小，资源占用越少**。
+> **常见归因错误**：把连接池耗尽、死锁、慢 SQL 归罪于"事务框架"——这些是资源层问题；spring-tx 能做的只是暴露正确的事务边界，**边界越小，资源占用越少**。
 
 ## 4. 与深度体系的映射
 
@@ -158,7 +158,7 @@ spring-jdbc / spring-orm（实现层：DataSourceTransactionManager / JpaTransac
 | 06-编程式事务速查 | [Spring框架核心-06](../../../Spring框架核心/06-声明式事务管理.md) |
 | 08-集成地图与常见问题 | [Spring生态深度剖析-04-AOP代理创建与事务管理内核](../../../Spring生态深度剖析/04-AOP代理创建与事务管理内核.md) |
 
-> 💡 本系列定位"查得快"，深挖事务传播源码、AOP 拦截链、回滚判定逻辑见 [Spring生态深度剖析-04](../../../Spring生态深度剖析/04-AOP代理创建与事务管理内核.md)；分布式事务（Seata）见 [Spring全家桶-14](../../../Spring全家桶/14-分布式事务-Seata.md)。
+> 本系列定位"查得快"，深挖事务传播源码、AOP 拦截链、回滚判定逻辑见 [Spring生态深度剖析-04](../../../Spring生态深度剖析/04-AOP代理创建与事务管理内核.md)；分布式事务（Seata）见 [Spring全家桶-14](../../../Spring全家桶/14-分布式事务-Seata.md)。
 
 ### 4.1 速查与深度的分工约定
 
@@ -170,7 +170,7 @@ spring-jdbc / spring-orm（实现层：DataSourceTransactionManager / JpaTransac
 | 面试系统性复习 | 05-面试冲刺体系 | 传播七种、回滚规则、隔离锁三连问 |
 | 分布式事务 | Spring全家桶-14 | Seata AT / TCC / 本地消息表选型 |
 
-> 🎯 **协作原则**：速查页回答"是什么、怎么用"，深度页回答"为什么、怎么实现"——面试被追问到源码层时，把 [Spring生态深度剖析-04](../../../Spring生态深度剖析/04-AOP代理创建与事务管理内核.md) 的调用链作为扩展阅读锚点即可闭环。
+> **协作原则**：速查页回答"是什么、怎么用"，深度页回答"为什么、怎么实现"——面试被追问到源码层时，把 [Spring生态深度剖析-04](../../../Spring生态深度剖析/04-AOP代理创建与事务管理内核.md) 的调用链作为扩展阅读锚点即可闭环。
 
 ## 5. 快速上手 3 步
 
@@ -239,7 +239,7 @@ tt.executeWithoutResult(status -> {
 | ② 故意抛异常 | 在事务方法中段抛 `RuntimeException` | 前段 INSERT 未落库（回滚） |
 | ③ 断点看代理 | 调试时查看注入 Bean 的类型 | 是 CGLIB 代理类而非原始类型 |
 
-> 💡 排障起点建议：**先看日志再看代码**——`Getting transaction for` 一行日志就能区分"没进事务"与"进了事务但没回滚"两类问题。
+> 排障起点建议：**先看日志再看代码**——`Getting transaction for` 一行日志就能区分"没进事务"与"进了事务但没回滚"两类问题。
 
 ### 5.2 事务相关的日志与监控配置
 
@@ -262,7 +262,7 @@ logging:
 | `Initiating transaction rollback` | 正在回滚 | 查异常类型与规则 |
 | `UnexpectedRollbackException` | 内圈标记了回滚 | 查内圈异常是否被吞 |
 
-> 🎯 **快速结论**：看到"Getting/Completing"成对出现且无 rollback 日志，事务边界就是对的——问题转移到异常语义与资源层；监控指标（提交/回滚计数、事务时长）可交给 Micrometer 的 `@Transactional` 打点。
+> **快速结论**：看到"Getting/Completing"成对出现且无 rollback 日志，事务边界就是对的——问题转移到异常语义与资源层；监控指标（提交/回滚计数、事务时长）可交给 Micrometer 的 `@Transactional` 打点。
 
 ## 6. 速查导航
 
@@ -296,7 +296,7 @@ logging:
 | Bean 生命周期 | [Spring-Context 系列](../Spring‑Context/00-Spring Context组件总览.md) | 代理初始化时序（失效场景根因） |
 | 事件机制 | [Spring-Context-05](../Spring‑Context/05-事件驱动机制速查.md) | 事务事件（AFTER_COMMIT） |
 
-> 💡 零基础顺序：AOP 概念 → JDBC 连接模型 → 本系列 03/04/07 → 源码深挖（02/03 的源码小节）——链条最短且每步都有落点。
+> 零基础顺序：AOP 概念 → JDBC 连接模型 → 本系列 03/04/07 → 源码深挖（02/03 的源码小节）——链条最短且每步都有落点。
 
 ## 7. 学习路线推荐
 

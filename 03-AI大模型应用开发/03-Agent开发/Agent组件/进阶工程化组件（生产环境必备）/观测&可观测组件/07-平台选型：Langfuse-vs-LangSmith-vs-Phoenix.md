@@ -12,7 +12,7 @@
 | 自托管 | 多服务栈（web+worker+PG+ClickHouse+Redis+S3） | Self-Hosted v0.13（2026-01-16，企业级） | 单容器 + OTel collector |
 | 事件上限 | 按单位计费 | 按 base trace | **无事件上限** |
 
-> 🎯 核心要点：**"开源"要问许可**——Phoenix 是 source-available（ELv2），Langfuse 核心 MIT 但企业目录分离——采购合规场景这两个都算"可审计代码"但不都算 OSI 开源。
+> 核心要点：**"开源"要问许可**——Phoenix 是 source-available（ELv2），Langfuse 核心 MIT 但企业目录分离——采购合规场景这两个都算"可审计代码"但不都算 OSI 开源。
 
 ## 2. 定价对比（2026，规模差距巨大）
 
@@ -22,7 +22,7 @@
 | LangSmith | 5k base traces + 1 席位 | Plus $39/席位（100k traces） | **~$2,514/月**（按席位扩展差） |
 | Phoenix | 自托管免费 | Arize AX Pro $50/月 | 自托管无事件费 |
 
-> ⚠️ 注意计量口径不可比：Langfuse 计"单位"（traces/observations/scores/evals），LangSmith 计"base traces"——不是 1:1。但趋势明确：**规模上 Langfuse/自托管 Phoenix 便宜一个数量级**（LangSmith 按席位定价对大团队不友好）。
+> 注意计量口径不可比：Langfuse 计"单位"（traces/observations/scores/evals），LangSmith 计"base traces"——不是 1:1。但趋势明确：**规模上 Langfuse/自托管 Phoenix 便宜一个数量级**（LangSmith 按席位定价对大团队不友好）。
 
 ## 3. 能力对比
 
@@ -36,7 +36,7 @@
 | MCP 工具面 | **最广（52 工具）** | 覆盖 runs/threads/prompts | get-spans 原始 span 访问 |
 | 生态耦合 | 框架无关 | LangChain 深度 | OTel 生态 |
 
-> 💡 MCP 时代的平台差异：**Langfuse 52 个 MCP 工具 vs Phoenix get-spans 原始访问 vs LangSmith fetch_runs（FQL 树过滤，100 trace 重建需 109 次调用）**——Agent 工具化消费观测数据的深度不同（2026 对比结论）。
+> MCP 时代的平台差异：**Langfuse 52 个 MCP 工具 vs Phoenix get-spans 原始访问 vs LangSmith fetch_runs（FQL 树过滤，100 trace 重建需 109 次调用）**——Agent 工具化消费观测数据的深度不同（2026 对比结论）。
 
 ## 4. 2026 平台更新
 
@@ -63,7 +63,7 @@
 └─ 组合模式：trace 层（Langfuse）+ eval 层（LangSmith/Braintrust）双工具
 ```
 
-> 🎯 核心要点：**双工具是 2026 主流**——"一个 LLM trace 层（prompts/完成/成本）+ 一个评估层"各解决不同问题；别指望单平台全能（Langfuse 评估弱、LangSmith 锁定、Phoenix 无网关护栏）。
+> 核心要点：**双工具是 2026 主流**——"一个 LLM trace 层（prompts/完成/成本）+ 一个评估层"各解决不同问题；别指望单平台全能（Langfuse 评估弱、LangSmith 锁定、Phoenix 无网关护栏）。
 
 ## 6. 常见选型陷阱
 

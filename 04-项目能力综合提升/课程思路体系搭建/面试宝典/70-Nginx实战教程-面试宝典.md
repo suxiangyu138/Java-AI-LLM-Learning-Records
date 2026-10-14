@@ -35,7 +35,7 @@ brotli_static on;                      # 优先使用预压缩 .br 文件
 brotli_types text/plain text/css application/json application/javascript text/xml application/xml text/javascript image/svg+xml;
 ```
 
-> 💡 实战建议：Gzip + Brotli 双开启，Nginx 根据客户端 `Accept-Encoding` 自动选择最优算法。`Accept-Encoding: br` 优先 Brotli，其次是 `gzip`。
+> 实战建议：Gzip + Brotli 双开启，Nginx 根据客户端 `Accept-Encoding` 自动选择最优算法。`Accept-Encoding: br` 优先 Brotli，其次是 `gzip`。
 
 ### 1.2 How does Nginx implement rate limiting? Nginx 如何实现限流？
 Nginx 通过 `ngx_http_limit_req_module` 实现**请求频率限制**。
@@ -61,7 +61,7 @@ server {
 | `nodelay` | 不延迟处理突发请求 | 不加 nodelay 则会排队延迟处理 |
 | `limit_req_status` | 限流响应状态码 | 默认 503，推荐 429 |
 
-> ⚠️ **高频面试点**：`burst=20 nodelay` 表示允许瞬间 20 个突发请求按正常速率处理，超出 20 个的部分直接拒绝（返回 429）。如果去掉 `nodelay`，超出的请求会排队延迟处理，相当于降速。
+> **高频面试点**：`burst=20 nodelay` 表示允许瞬间 20 个突发请求按正常速率处理，超出 20 个的部分直接拒绝（返回 429）。如果去掉 `nodelay`，超出的请求会排队延迟处理，相当于降速。
 
 ### 1.3 What is the leaky bucket algorithm? 什么是漏桶算法？
 漏桶算法（Leaky Bucket）是 Nginx `limit_req` 的默认实现：
@@ -83,7 +83,7 @@ limit_req_zone $binary_remote_addr zone=leaky:10m rate=5r/s;
 
 location / {
     limit_req zone=leaky burst=10;           # 不加 nodelay = 漏桶
-    # ⚡ burst=10 表示桶容量 10，超出则排队
+    # burst=10 表示桶容量 10，超出则排队
 }
 ```
 
@@ -107,7 +107,7 @@ location / {
 | 突发处理 | 排队降速 | 积累令牌后突发 |
 | Nginx 支持 | `limit_req` 默认 | 配合 `nodelay` 模拟 |
 
-> 💡 Nginx 的 `limit_req` 实际是**漏桶实现**（请求排队匀速处理），但加上 `nodelay` 后行为更接近令牌桶（允许突发，超出的直接拒绝）。
+> Nginx 的 `limit_req` 实际是**漏桶实现**（请求排队匀速处理），但加上 `nodelay` 后行为更接近令牌桶（允许突发，超出的直接拒绝）。
 
 ### 1.5 How to configure connection limiting? 如何配置连接数限制？
 使用 `ngx_http_limit_conn_module`：
@@ -206,7 +206,7 @@ location /no-cache/ {
 }
 ```
 
-> 💡 生产环境推荐配合管理后台，通过 ngx_cache_purge 模块定向清理特定 URL 的缓存。
+> 生产环境推荐配合管理后台，通过 ngx_cache_purge 模块定向清理特定 URL 的缓存。
 
 ### 1.9 What are the limitations of using a reverse proxy to avoid ICP filing? 反向代理免备案的限制？
 在中国大陆，所有网站必须 ICP 备案。可以使用**反向代理**的方式，将未备案域名的请求代理到已备案的服务器，但存在以下风险：
@@ -290,7 +290,7 @@ server {
 }
 ```
 
-> ⚠️ **关键点**：WebSocket 代理必须设置 `proxy_http_version 1.1` 和 `Connection "upgrade"`，否则握手会失败。`proxy_read_timeout` 要设置足够大（建议 3600s+），避免长时间空闲连接被断开。
+> **关键点**：WebSocket 代理必须设置 `proxy_http_version 1.1` 和 `Connection "upgrade"`，否则握手会失败。`proxy_read_timeout` 要设置足够大（建议 3600s+），避免长时间空闲连接被断开。
 
 ### 1.12 What is X-Forwarded-For? X-Forwarded-For 头的作用？
 `X-Forwarded-For` 是一个 HTTP 扩展头部，用于标识通过代理连接到服务器的客户端原始 IP。
@@ -331,7 +331,7 @@ log_format json escape=json '{'
 access_log /var/log/nginx/access.json.log json buffer=32k;
 ```
 
-> 💡 JSON 格式日志有利于日志收集系统（如 ELK、Loki）直接解析。
+> JSON 格式日志有利于日志收集系统（如 ELK、Loki）直接解析。
 
 ### 1.14 What is proxy_buffering? proxy_buffering 的作用？
 ```nginx
@@ -392,7 +392,7 @@ server {
 | 服务端推送 | 服务器主动推送资源 | 减少请求数 |
 | 二进制帧 | 二进制分帧传输 | 解析效率高 |
 
-> ⚠️ HTTP/2 必须与 HTTPS 配合使用（浏览器要求），不支持明文 HTTP/2。
+> HTTP/2 必须与 HTTPS 配合使用（浏览器要求），不支持明文 HTTP/2。
 
 ### 1.18 What is the stream module? Nginx stream 模块？
 `ngx_stream_core_module` 提供四层（TCP/UDP）负载均衡和代理功能，无需进入 HTTP 协议层。
@@ -488,7 +488,7 @@ limit_req_zone $binary_remote_addr zone=api:10m rate=5r/s;
 # zone=api:10m → 10MB 共享内存（约 16 万个 IP 条目）
 ```
 
-> 🎯 **面试追问**：Nginx 的 rate 支持 `r/s`（每秒）和 `r/m`（每分钟），内部实现是将速率转换为毫秒级精度的时间戳比较。
+> **面试追问**：Nginx 的 rate 支持 `r/s`（每秒）和 `r/m`（每分钟），内部实现是将速率转换为毫秒级精度的时间戳比较。
 
 ### 2.2 How does proxy_cache_key work? proxy_cache_key 如何生成？
 缓存键的生成策略决定了缓存命中率：
@@ -508,7 +508,7 @@ proxy_cache_key "$scheme$request_method$host$uri$is_args$args";
 proxy_cache_key "$scheme$host$uri$is_args$args$http_accept_language";
 ```
 
-> 💡 `$uri` 是重写后的 URI，`$request_uri` 是原始 URI，不含查询参数时使用 `$uri` 可提高命中率。
+> `$uri` 是重写后的 URI，`$request_uri` 是原始 URI，不含查询参数时使用 `$uri` 可提高命中率。
 
 ### 2.3 What is the difference between Gzip and Brotli compression? Gzip 和 Brotli 的区别和选择？
 | 对比维度 | Gzip (deflate) | Brotli |
@@ -578,7 +578,7 @@ location ~ /purge(/.*) {
 }
 ```
 
-> 💡 缓存目录结构：`levels=1:2` 表示缓存文件存放在 2 层子目录中（如 `/data/nginx/cache/c/29/xxxxxxxxxxxxxxxxxxxxxxxxxxxx29c`），这是为了避免单个目录中文件过多。
+> 缓存目录结构：`levels=1:2` 表示缓存文件存放在 2 层子目录中（如 `/data/nginx/cache/c/29/xxxxxxxxxxxxxxxxxxxxxxxxxxxx29c`），这是为了避免单个目录中文件过多。
 
 ### 2.6 How does SSL session resumption work? SSL 会话恢复原理？
 SSL 会话恢复减少完整 TLS 握手的开销，有两种机制：
@@ -595,7 +595,7 @@ ssl_session_tickets on;                 # 启用 Session Ticket（Nginx 1.5.9+�
 ssl_session_ticket_key /etc/nginx/ticket.key;  # 多实例共享密钥
 ```
 
-> 🎯 **性能提升**：完整 TLS 握手需要 2-RTT，会话恢复只需 1-RTT（Session ID）或 0-RTT（TLS 1.3 Session Ticket）。
+> **性能提升**：完整 TLS 握手需要 2-RTT，会话恢复只需 1-RTT（Session ID）或 0-RTT（TLS 1.3 Session Ticket）。
 
 ### 2.7 What is the dynamic module mechanism in Nginx 1.9.11+? Nginx 动态模块机制？
 Nginx 从 1.9.11 开始支持动态加载模块（需要编译时 `--with-http_ssl_module=dynamic`）：
@@ -629,7 +629,7 @@ upstream backend {
 3. 连接数超过 `keepalive 32` 时，LRU 淘汰
 4. 空闲超时后关闭连接
 
-> 💡 配合 `proxy_http_version 1.1;` 和 `proxy_set_header Connection "";` 使用，这是启用上游 keepalive 的前提条件。
+> 配合 `proxy_http_version 1.1;` 和 `proxy_set_header Connection "";` 使用，这是启用上游 keepalive 的前提条件。
 
 ### 2.9 How does Nginx handle SSL certificate chain? Nginx 的证书链处理？
 Nginx 需要三个证书文件：
@@ -648,7 +648,7 @@ ssl_certificate_key /path/to/privkey.pem;        # 私钥（必须保密）
 根 CA 证书 (root CA)  ← 浏览器内置信任
 ```
 
-> ⚠️ `fullchain.pem` 必须包含服务器证书和中间证书，缺了中间证书会导致 iOS/Safari 等设备报 SSL 错误。
+> `fullchain.pem` 必须包含服务器证书和中间证书，缺了中间证书会导致 iOS/Safari 等设备报 SSL 错误。
 
 ### 2.10 What is the merge request mechanism? 合并请求的技术原理？
 合并请求（如 concat 模块、SSI）将多个小文件合并为一个响应，减少 HTTP 请求数。
@@ -725,7 +725,7 @@ http {
 }
 ```
 
-> 💡 构建阶段使用更高压缩级别（gzip 9, brotli 11）预压缩静态资源，Nginx 直接发送预压缩文件，避免实时压缩消耗 CPU。
+> 构建阶段使用更高压缩级别（gzip 9, brotli 11）预压缩静态资源，Nginx 直接发送预压缩文件，避免实时压缩消耗 CPU。
 
 ### 3.2 配置 API 限流（按用户、按 IP、按接口）
 ```nginx
@@ -1466,10 +1466,10 @@ location /signaling/ {
 
 ### 6.1 SSL 证书配置后无法启动
 ```nginx
-# ❌ 常见错误：证书文件路径错误或权限不足
+# ✗ 常见错误：证书文件路径错误或权限不足
 nginx: [emerg] cannot load certificate "/etc/nginx/ssl/cert.pem"
 
-# ✅ 排查步骤
+# ✓ 排查步骤
 # 1. 检查文件是否存在
 ls -la /etc/nginx/ssl/cert.pem
 
@@ -1492,10 +1492,10 @@ openssl rsa -in /etc/nginx/ssl/privkey.pem -check
 
 ### 6.3 proxy_cache 缓存不生效
 ```nginx
-# ❌ 常见问题：Cookies 导致不缓存
+# ✗ 常见问题：Cookies 导致不缓存
 proxy_no_cache $http_cookie;     # 默认情况下带 Cookie 不缓存
 
-# ✅ 解决方案：配置允许缓存的条件
+# ✓ 解决方案：配置允许缓存的条件
 proxy_cache_bypass $cookie_nocache;
 proxy_no_cache $http_pragma;
 
@@ -1580,4 +1580,4 @@ nginx -V 2>&1 | grep proxy_connect
 
 ---
 
-> 🎯 **总结**：实战篇的核心是掌握 Nginx 在实际业务场景中的应用能力。**限流**保护后端、**缓存**提升性能、**SSL** 保障安全、**WebSocket** 支持实时通信，是面试中最高频的四类实战问题。建议在本地搭建环境，亲手配置每个场景并验证效果。
+> **总结**：实战篇的核心是掌握 Nginx 在实际业务场景中的应用能力。**限流**保护后端、**缓存**提升性能、**SSL** 保障安全、**WebSocket** 支持实时通信，是面试中最高频的四类实战问题。建议在本地搭建环境，亲手配置每个场景并验证效果。

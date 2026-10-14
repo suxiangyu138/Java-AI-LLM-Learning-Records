@@ -1,6 +1,6 @@
 # 17 - Maven 与 Gradle 对比选型指南
 
-> 🎯 选 Maven 还是 Gradle？这不是信仰之争，而是工程决策 — 从团队能力、项目规模、构建性能、生态兼容四个维度做出理性选择
+> 选 Maven 还是 Gradle？这不是信仰之争，而是工程决策 — 从团队能力、项目规模、构建性能、生态兼容四个维度做出理性选择
 
 ---
 
@@ -20,18 +20,18 @@
 | 维度 | Maven | Gradle | 胜出 |
 |------|-------|--------|:---:|
 | **构建脚本** | `pom.xml` (XML) | `build.gradle(.kts)` (Groovy/Kotlin) | Gradle |
-| **学习曲线** | ⭐⭐ 平缓，XML 人人可读 | ⭐⭐⭐⭐ 陡峭，DSL 需学习 | Maven |
+| **学习曲线** | ★★ 平缓，XML 人人可读 | ★★★★ 陡峭，DSL 需学习 | Maven |
 | **灵活性** | 低（插件 + XML 配置） | 高（可编程 DSL，直接写逻辑） | Gradle |
 | **构建速度** | 中等（无内置增量） | 快（增量+缓存+并行+Daemon） | Gradle |
-| **约定优于配置** | ⭐⭐⭐ 强约定 | ⭐⭐ 可自定义，需显式声明 | Maven |
-| **IDE 支持** | ⭐⭐⭐ 成熟（IDEA/Eclipse） | ⭐⭐⭐ 良好（IDEA 原生支持） | 平 |
+| **约定优于配置** | ★★★ 强约定 | ★★ 可自定义，需显式声明 | Maven |
+| **IDE 支持** | ★★★ 成熟（IDEA/Eclipse） | ★★★ 良好（IDEA 原生支持） | 平 |
 | **依赖管理** | GAV 坐标 + XML Scope | 短语法 + Configuration | Gradle |
 | **多模块** | `<modules>` + 父 POM 继承 | `include()` + `allprojects{}` | 平 |
-| **插件生态** | ⭐⭐⭐ 极其丰富 | ⭐⭐⭐ 丰富（兼容 Maven 仓库） | Maven |
-| **Android** | 需插件，非官方 | ⭐⭐⭐ 官方构建系统 | Gradle |
-| **CI/CD** | ⭐⭐⭐ 简单可靠 | ⭐⭐ 稍复杂（Wrapper + Daemon） | Maven |
-| **社区规模** | ⭐⭐⭐ 广泛，文档多 | ⭐⭐⭐ 快速增长 | Maven |
-| **Spring Boot** | ⭐⭐⭐ 广泛使用 | ⭐⭐⭐ 官方推荐 | 平 |
+| **插件生态** | ★★★ 极其丰富 | ★★★ 丰富（兼容 Maven 仓库） | Maven |
+| **Android** | 需插件，非官方 | ★★★ 官方构建系统 | Gradle |
+| **CI/CD** | ★★★ 简单可靠 | ★★ 稍复杂（Wrapper + Daemon） | Maven |
+| **社区规模** | ★★★ 广泛，文档多 | ★★★ 快速增长 | Maven |
+| **Spring Boot** | ★★★ 广泛使用 | ★★★ 官方推荐 | 平 |
 
 ---
 
@@ -221,4 +221,4 @@ publishing {
 阶段4：确认稳定后废弃 Maven 构建
 ```
 
-> 🎯 **最终建议**：工具服务于人，不让人服务于工具。选型优先考虑团队能力和项目需求，新项目推荐 Gradle Kotlin DSL，成熟 Maven 项目不折腾。
+> **最终建议**：工具服务于人，不让人服务于工具。选型优先考虑团队能力和项目需求，新项目推荐 Gradle Kotlin DSL，成熟 Maven 项目不折腾。

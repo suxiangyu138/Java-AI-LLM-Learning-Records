@@ -6,7 +6,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [v1.0 的定位](#1-v10-的定位)
 2. [三大核心变化](#2-三大核心变化)
@@ -95,7 +95,7 @@ agent = create_agent(
 
 ## 3. 分包格局
 
-> 🎯 **v1.0 分包清晰**——按需引入（不再大而全）：
+> **v1.0 分包清晰**——按需引入（不再大而全）：
 
 ```text
 分包结构
@@ -127,16 +127,16 @@ pip install langchain
 
 ## 4. 框架分工：LangChain vs LangGraph
 
-> 🎯 **官方明确定位**：两者不是替代关系——同一技术栈的两个抽象层：
+> **官方明确定位**：两者不是替代关系——同一技术栈的两个抽象层：
 
 | 维度 | LangChain | LangGraph |
 |------|:---:|:---:|
 | 定位 | **Agent 框架** | **编排运行时** |
 | 内容 | 模型/工具/循环抽象 + 1000+ 集成 | 状态/持久化/HITL |
 | 解决的问题 | 直线/简单循环（for） | **while 循环/分支/HITL** |
-| 状态管理 | 无 | ✅ StateGraph + Checkpointer |
-| 持久化 | 无 | ✅（崩溃恢复） |
-| 流式 | ✅ | ✅ |
+| 状态管理 | 无 | ✓ StateGraph + Checkpointer |
+| 持久化 | 无 | ✓（崩溃恢复） |
+| 流式 | ✓ | ✓ |
 | 性能 | 快（无状态开销） | 慢约 68%（checkpoint 序列化） |
 
 ```text
@@ -172,7 +172,7 @@ v1.0 其他新特性
 
 ## 6. v1.1 → v1.3 演进（2026）
 
-> 🎯 **v1.0 只是起点——2026 上半年快速迭代到 1.3.14**，按需跟进即可：
+> **v1.0 只是起点——2026 上半年快速迭代到 1.3.14**，按需跟进即可：
 
 | 版本 | 时间 | 关键变化 |
 |------|:---:|------|
@@ -197,7 +197,7 @@ for name, item in stream.interleave("messages", "tool_calls"):
 final_state = stream.output  # 最终状态对象
 ```
 
-> ⚠️ **版本认知**：网上 2025 年教程大多停留在 v0.3/1.0——搜索资料时认准 `1.3.x` 文档（[官方 Release Notes](https://docs.langchain.com/oss/python/releases)）。
+> **版本认知**：网上 2025 年教程大多停留在 v0.3/1.0——搜索资料时认准 `1.3.x` 文档（[官方 Release Notes](https://docs.langchain.com/oss/python/releases)）。
 
 ---
 
@@ -237,7 +237,7 @@ print(response.content)
 
 ## 8. 核心要点
 
-> 🎯 **核心要点**：
+> **核心要点**：
 > 1. v1.0（2025.10 GA）：生产稳定、Agent 统一、分工明确
 > 2. **三大变化**：AgentExecutor 维护（用 create_agent）/Middleware 中间件（摘要/HITL）/content_blocks 结构化输出
 > 3. 分包：core（基石）+ langchain（高层）+ Provider 独立包——按需引入

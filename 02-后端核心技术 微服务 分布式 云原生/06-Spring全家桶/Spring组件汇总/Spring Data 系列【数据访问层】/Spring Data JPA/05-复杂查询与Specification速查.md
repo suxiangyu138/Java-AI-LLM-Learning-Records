@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [动态查询四方案选型](#1-动态查询四方案选型)
 2. [Specification 三件套（4.0）](#2-specification-三件套40)
@@ -22,17 +22,17 @@
 
 | 方案 | 原理 | 类型安全 | 复杂度 | 适用 |
 |------|------|:---:|:---:|------|
-| 派生方法组合 | 每个组合写一个方法 | ✅ | 低 | 条件**固定且少**（≤3 个组合）——**大多数场景够用** |
-| **Specification** | 谓词构建器动态拼接 | ✅ | 中 | **任意组合的动态查询（首选）** |
-| Criteria API 直写 | 底层 API 手动组装 | ✅ | 高 | Specification 覆盖不了（动态 join、子查询） |
-| QueryByExample | 样例对象匹配 | ✅ | 低 | 精确匹配为主的简单筛选（不支持区间/模糊） |
-| @Query + 空参跳过 | `(:x is null or o.x = :x)` | ⚠️ 弱 | 低 | 参数化 JPQL 特例（子查询/复杂结构时兜底） |
+| 派生方法组合 | 每个组合写一个方法 | ✓ | 低 | 条件**固定且少**（≤3 个组合）——**大多数场景够用** |
+| **Specification** | 谓词构建器动态拼接 | ✓ | 中 | **任意组合的动态查询（首选）** |
+| Criteria API 直写 | 底层 API 手动组装 | ✓ | 高 | Specification 覆盖不了（动态 join、子查询） |
+| QueryByExample | 样例对象匹配 | ✓ | 低 | 精确匹配为主的简单筛选（不支持区间/模糊） |
+| @Query + 空参跳过 | `(:x is null or o.x = :x)` | 弱 | 低 | 参数化 JPQL 特例（子查询/复杂结构时兜底） |
 
-> 🎯 选型一句话：**固定组合 → 派生方法；任意组合 → Specification；Specification 表达不了 → Criteria API 直写或空参 @Query；精确匹配 → QBE**。禁止"条件一多就 if/else 拼字符串"。
+> 选型一句话：**固定组合 → 派生方法；任意组合 → Specification；Specification 表达不了 → Criteria API 直写或空参 @Query；精确匹配 → QBE**。禁止"条件一多就 if/else 拼字符串"。
 
 ## 2. Specification 三件套（4.0）
 
-> ⚠️ **4.0 重大变化**：Spring Data 不再让所有 Specification 都走 `CriteriaQuery`——拆成三个专用类型（Spring Data 2025.1 特性）：
+> **4.0 重大变化**：Spring Data 不再让所有 Specification 都走 `CriteriaQuery`——拆成三个专用类型（Spring Data 2025.1 特性）：
 
 | 类型 | 用途 | 底层 |
 |------|------|------|
@@ -75,7 +75,7 @@ Page<Product> page = productRepository.findAll(spec, PageRequest.of(0, 10, Sort.
 | `count(Specification)` | 计数 |
 | `exists(Specification)` | 存在性 |
 
-> 💡 组合语法：`Specification.where(spec1).and(spec2).or(spec3)`；`null` Specification 自动忽略（`where(null)` 等价无条件）——**分支里传 null 是合法用法**，不用特判。
+> 组合语法：`Specification.where(spec1).and(spec2).or(spec3)`；`null` Specification 自动忽略（`where(null)` 等价无条件）——**分支里传 null 是合法用法**，不用特判。
 
 ### 2.2 DeleteSpecification（4.0 新增）
 
@@ -92,7 +92,7 @@ repository.delete((root, query, cb) -> cb.and(
         cb.equal(root.get("status"), Status.OFF_SHELF)));
 ```
 
-> 💡 对比 [04 篇](04-Repository速查.md) 的 `deleteById`（先 select 再逐条删）：DeleteSpecification 走 **CriteriaDelete 一条 SQL**，大表清理性能差一个量级，且**不触发**生命周期回调/级联——"批量清数据"用它，"业务级联删"用逐条。
+> 对比 [04 篇](04-Repository速查.md) 的 `deleteById`（先 select 再逐条删）：DeleteSpecification 走 **CriteriaDelete 一条 SQL**，大表清理性能差一个量级，且**不触发**生命周期回调/级联——"批量清数据"用它，"业务级联删"用逐条。
 
 ### 2.3 UpdateSpecification（4.0 新增）
 
@@ -105,7 +105,7 @@ repository.update((root, query, cb) -> cb.and(
         cb.greaterThan(root.get("price"), BigDecimal.valueOf(3000))));
 ```
 
-> ⚠️ UpdateSpecification 只是"定位条件"，**更新字段值**仍要走 @Modifying @Query 或 CriteriaUpdate 手动 set（4.0 的 UpdateSpecification 用于 Repository 批量删除场景的配套；字段赋值用 `@Modifying` JPQL 更直观——两者按场景选用，见 [04 篇](04-Repository速查.md) 第 4 节）。
+> UpdateSpecification 只是"定位条件"，**更新字段值**仍要走 @Modifying @Query 或 CriteriaUpdate 手动 set（4.0 的 UpdateSpecification 用于 Repository 批量删除场景的配套；字段赋值用 `@Modifying` JPQL 更直观——两者按场景选用，见 [04 篇](04-Repository速查.md) 第 4 节）。
 
 ## 3. Specification 实战：多条件搜索页
 
@@ -146,7 +146,7 @@ public class ProductSearchService {
 }
 ```
 
-> 🎯 关键细节（面试/代码审查必问）：**Specification 里 join 集合后，分页 count 可能重复计数**（一对多 join 让行数膨胀）——要么 `query.distinct(true)`（select distinct），要么让 count 查询走不 join 的独立条件；`root.join("category")` 只做过滤不做加载，需要加载用 `fetch`（见 [07 篇](07-性能优化与批量操作速查.md)）。
+> 关键细节（面试/代码审查必问）：**Specification 里 join 集合后，分页 count 可能重复计数**（一对多 join 让行数膨胀）——要么 `query.distinct(true)`（select distinct），要么让 count 查询走不 join 的独立条件；`root.join("category")` 只做过滤不做加载，需要加载用 `fetch`（见 [07 篇](07-性能优化与批量操作速查.md)）。
 
 ## 4. Criteria API 底层速查
 
@@ -181,7 +181,7 @@ List<Product> result = em.createQuery(query).setMaxResults(20).getResultList();
 | `Path` | 嵌套属性 root.get("order").get("user").get("name") |
 | `CriteriaUpdate/Delete` | 批量更新/删除（Specification 的底层） |
 
-> 💡 分层原则：**业务代码不要直接散用 Criteria**——太啰嗦且难测；把 Criteria 逻辑收敛到 Repository 默认方法/Specification 类里（每个方法一个静态工厂，便于单测）。
+> 分层原则：**业务代码不要直接散用 Criteria**——太啰嗦且难测；把 Criteria 逻辑收敛到 Repository 默认方法/Specification 类里（每个方法一个静态工厂，便于单测）。
 
 ## 5. QueryByExample 样例查询
 
@@ -207,7 +207,7 @@ List<Product> result = productRepository.findAll(example);
 | 支持 | 非 null 字段精确匹配、字符串匹配器（EXACT/CONTAINING/STARTING/ENDING）、忽略字段、大小写 |
 | 不支持 | **区间、大于/小于、in、排序组合、关联嵌套条件**——这些用 Specification |
 
-> 🎯 QBE 一句话：**"探针对象 + 匹配器"的样板查询**——适合测试数据查询、管理后台"全字段模糊筛选"原型；业务级动态查询主力还是 Specification。
+> QBE 一句话：**"探针对象 + 匹配器"的样板查询**——适合测试数据查询、管理后台"全字段模糊筛选"原型；业务级动态查询主力还是 Specification。
 
 ## 6. QueryDSL 现状
 
@@ -225,7 +225,7 @@ public interface ProductRepository extends JpaRepository<Product, Long>,
 // 使用：productRepository.findAll(QProduct.product.price.between(100, 5000).and(...))
 ```
 
-> ⚠️ 迁移提醒：3.x 若用 `QuerydslPredicateExecutor`，升 4.x 前确认 querydsl-jpa 5.x 与 Hibernate 7 的兼容性（QueryDSL 5.x 的 Hibernate 适配层版本需对齐）；**新代码一律 Specification**，别引入第三套查询体系。
+> 迁移提醒：3.x 若用 `QuerydslPredicateExecutor`，升 4.x 前确认 querydsl-jpa 5.x 与 Hibernate 7 的兼容性（QueryDSL 5.x 的 Hibernate 适配层版本需对齐）；**新代码一律 Specification**，别引入第三套查询体系。
 
 ## 7. 动态查询性能注意
 
@@ -238,7 +238,7 @@ public interface ProductRepository extends JpaRepository<Product, Long>,
 | 5 | 大结果集全量 | 动态查询默认分页（Pageable 必传）；导出场景用 [04 篇](04-Repository速查.md) 流式读取 |
 | 6 | 原生 count 对不上 | 复杂 Specification 的 count 查询可能与列表 SQL 不等价：`show-sql` 核对两条 SQL |
 
-> 🎯 动态查询性能口诀：**"过滤条件走索引、join 方向从小表出发、分页必传 Pageable、排序列有索引"**——四件事做到，Specification 再多条件也不会慢；怀疑 SQL 时 `show-sql: true` 把生成的两条（列表+count）SQL 拿去 EXPLAIN。
+> 动态查询性能口诀：**"过滤条件走索引、join 方向从小表出发、分页必传 Pageable、排序列有索引"**——四件事做到，Specification 再多条件也不会慢；怀疑 SQL 时 `show-sql: true` 把生成的两条（列表+count）SQL 拿去 EXPLAIN。
 
 ---
 

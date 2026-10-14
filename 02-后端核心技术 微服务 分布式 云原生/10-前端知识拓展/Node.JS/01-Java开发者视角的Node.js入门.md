@@ -1,6 +1,6 @@
 # 01 - Java 开发者视角的 Node.js 入门
 
-> 🎯 你已经会 Java 了，学 Node.js 不需要从零开始。本章把 Node.js 的核心概念逐一映射到 Java 等价物，帮你用已有的知识框架快速上手 Node.js
+> 你已经会 Java 了，学 Node.js 不需要从零开始。本章把 Node.js 的核心概念逐一映射到 Java 等价物，帮你用已有的知识框架快速上手 Node.js
 
 ---
 

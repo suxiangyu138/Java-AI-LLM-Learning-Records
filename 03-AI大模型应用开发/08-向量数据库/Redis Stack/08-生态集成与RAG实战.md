@@ -121,7 +121,7 @@ if (!hits.isEmpty()) {
 
 集成验收的端到端清单（Spring AI + Redis 8 上线前）：**环境**——Redis 版本 8.x（`INFO server` 确认）、客户端库版本匹配（Jedis 2025+）；**索引**——`initialize-schema` 开启、索引名与集合名一致、DIM 与模型一致；**写入**——`add()` 后 `JSON.GET` 确认文档落库、`FT.INFO` 确认索引同步；**检索**——`similaritySearch` 返回分数方向合理（距离转相似度换算）、filter 生效（TAG 字段）；**缓存**——语义缓存阈值验证（误命中率为 0 的标注集抽测）；**监控**——P95 与内存占用进面板。六步全过，集成才算验收合格——与三套向量库体系的"生产落地清单"结构一致，逐项打勾执行。
 
-> 🎯 **核心要点**：Spring AI RedisVectorStore（builder 全参数）+ Redis OM（注解即索引）+ Redisson（轻量）；**语义缓存是独有红利**（高阈值 + 命中率监控）；距离方向相反是跨库迁移必踩点；RAG 五决策点串起"缓存 + 检索 + 生成"全链路。
+> **核心要点**：Spring AI RedisVectorStore（builder 全参数）+ Redis OM（注解即索引）+ Redisson（轻量）；**语义缓存是独有红利**（高阈值 + 命中率监控）；距离方向相反是跨库迁移必踩点；RAG 五决策点串起"缓存 + 检索 + 生成"全链路。
 
 ---
 

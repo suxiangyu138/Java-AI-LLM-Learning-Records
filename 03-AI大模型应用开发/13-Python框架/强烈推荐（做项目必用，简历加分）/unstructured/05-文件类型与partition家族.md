@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [partition 家族全景](#1-partition-家族全景)
 2. [partition_pdf：头号选手](#2-partition_pdf头号选手)
@@ -181,7 +181,7 @@ dfs = [pd.read_html(el.metadata.get("text_as_html"))[0]
 4. 网页与邮件的特殊注意点？动态网页怎么办？
 5. 表格提取的三层认知？text_as_html 的用途？
 
-> 🎯 **核心要点**：partition 家族 = **函数名即格式（统一输出）+ PDF 头号选手（策略 + 表格 + 图片）+ Office 靠原生结构 + 网页/邮件各有脾气 + 表格提取走 text_as_html**——"换格式只换函数名，但格式差异（OCR/样式/噪音）要心里有数"。
+> **核心要点**：partition 家族 = **函数名即格式（统一输出）+ PDF 头号选手（策略 + 表格 + 图片）+ Office 靠原生结构 + 网页/邮件各有脾气 + 表格提取走 text_as_html**——"换格式只换函数名，但格式差异（OCR/样式/噪音）要心里有数"。
 
 ---
 

@@ -2,7 +2,7 @@
 
 > 定位：server.xml / web.xml / context.xml 三大配置文件全解析——连接器、线程池、虚拟主机、Servlet 映射、数据源
 
-## 📚 目录
+## 目录
 
 1. [配置文件总览](#1-配置文件总览)
 2. [server.xml：全局配置](#2-serverxml全局配置)
@@ -21,11 +21,11 @@
 | context.xml | conf/ + META-INF/ | 应用上下文 | 数据源、JNDI、会话配置 |
 
 ```
-⚠️ 配置优先级（同名配置覆盖）：
+配置优先级（同名配置覆盖）：
   全局 conf/web.xml < 应用 WEB-INF/web.xml
   全局 conf/context.xml < 应用 META-INF/context.xml
 
-⚠️ 面试必答：
+面试必答：
 "三个配置文件分工——server.xml 管服务器、
  web.xml 管应用映射、context.xml 管资源。
  应用级覆盖全局级。"
@@ -105,7 +105,7 @@
 | Host appBase | 应用目录 | webapps |
 | autoDeploy | 热部署 | 生产建议关闭 |
 
-> 🎯 **要点**：server.xml 三大件——Executor（线程池）、Connector（连接器）、Host（虚拟主机）。`maxParameterCount` 是 2011 HashDoS 事件后的安全标配。
+> **要点**：server.xml 三大件——Executor（线程池）、Connector（连接器）、Host（虚拟主机）。`maxParameterCount` 是 2011 HashDoS 事件后的安全标配。
 
 ---
 
@@ -170,10 +170,10 @@
 | 默认 | `/` | 兜底（默认 Servlet） |
 
 ```
-⚠️ 匹配优先级：
+匹配优先级：
   精确 > 最长路径前缀 > 扩展名 > 默认
 
-⚠️ 面试必答：
+面试必答：
 "URL 匹配四级——精确最高、默认兜底；
  Spring MVC 的 DispatcherServlet 映射 '/'
  就是默认级别（静态资源交给默认 Servlet）。"
@@ -218,7 +218,7 @@ DataSource ds = (DataSource) envCtx.lookup("jdbc/UserDB");
 Connection conn = ds.getConnection();
 ```
 
-> 🎯 **要点**：数据源放 context.xml（JNDI）让容器管连接池——**Spring Boot 场景直接用 application.yml 的 HikariCP 即可**（context.xml 是传统部署方式）。
+> **要点**：数据源放 context.xml（JNDI）让容器管连接池——**Spring Boot 场景直接用 application.yml 的 HikariCP 即可**（context.xml 是传统部署方式）。
 
 ---
 
@@ -256,17 +256,17 @@ Connection conn = ds.getConnection();
 ### 5.3 配置检查清单
 
 ```
-✅ 生产关闭 autoDeploy（防意外热部署）
-✅ 修改 shutdown 端口/密码
-✅ maxParameterCount 设置合理值
-✅ 数据源用连接池（maxTotal 调优）
-✅ HTTPS 证书有效 + 强制跳转
-✅ 访问日志开启（AccessLogValve）
-✅ 线程池大小与实际流量匹配
-✅ 修改配置后重启验证（catalina.sh run 看日志）
+✓ 生产关闭 autoDeploy（防意外热部署）
+✓ 修改 shutdown 端口/密码
+✓ maxParameterCount 设置合理值
+✓ 数据源用连接池（maxTotal 调优）
+✓ HTTPS 证书有效 + 强制跳转
+✓ 访问日志开启（AccessLogValve）
+✓ 线程池大小与实际流量匹配
+✓ 修改配置后重启验证（catalina.sh run 看日志）
 ```
 
-> 🎯 **核心要点**：配置体系 = **server.xml**（服务器骨架：Executor/Connector/Host）+ **web.xml**（应用映射：Servlet/Filter 四规则）+ **context.xml**（资源：数据源/环境）。三文件 + 安全清单 = 配置实战的全部。
+> **核心要点**：配置体系 = **server.xml**（服务器骨架：Executor/Connector/Host）+ **web.xml**（应用映射：Servlet/Filter 四规则）+ **context.xml**（资源：数据源/环境）。三文件 + 安全清单 = 配置实战的全部。
 
 ---
 

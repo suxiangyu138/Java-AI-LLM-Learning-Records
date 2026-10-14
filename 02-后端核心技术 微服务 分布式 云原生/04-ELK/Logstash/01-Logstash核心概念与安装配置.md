@@ -100,14 +100,14 @@ output 变慢（ES 写入延迟高）→ 输出队列积压
   · 持久化队列（PQ）：落盘，重启不丢数据
 ```
 
-> 🎯 面试要点：**Logstash 吞吐瓶颈通常在下游（ES 写入）而非解析**——调优先看 output 延迟，再动 workers/batch。
+> 面试要点：**Logstash 吞吐瓶颈通常在下游（ES 写入）而非解析**——调优先看 output 延迟，再动 workers/batch。
 
 ### 3.4 内存计算模型
 
 ```text
 内存占用 ≈ worker 数 × batch.size × 单事件内存
 例：8 workers × 125 events × 1KB = 1MB 批次内存（事件本身还有对象开销）
-⚠️ 9.x 注意：logstash_pipeline_buffer_type 默认值从 direct 改为 heap，
+9.x 注意：logstash_pipeline_buffer_type 默认值从 direct 改为 heap，
    升级到 9.x 会静默增加 JVM 堆压力，需关注堆配置
 ```
 
@@ -231,7 +231,7 @@ WantedBy=multi-user.target
 # 规则：堆 ≥ workers × batch.size × 单事件内存 × 3（含对象开销）
 ```
 
-> ⚠️ Logstash 是 JVM 进程——**调优对象是 JVM 堆（jvm.options）**，与 Kibana（Node.js）完全不同。
+> Logstash 是 JVM 进程——**调优对象是 JVM 堆（jvm.options）**，与 Kibana（Node.js）完全不同。
 
 ---
 
@@ -281,7 +281,7 @@ WantedBy=multi-user.target
 采集量大、需要削峰缓冲 → Filebeat → Kafka → Logstash
 ```
 
-> 🎯 面试要点：**Ingest Pipeline 无法替代 Logstash**——无持久队列、仅单一输出、失败处理弱；Logstash 的价值在「复杂管道 + 可靠性」。
+> 面试要点：**Ingest Pipeline 无法替代 Logstash**——无持久队列、仅单一输出、失败处理弱；Logstash 的价值在「复杂管道 + 可靠性」。
 
 ---
 
@@ -298,7 +298,7 @@ WantedBy=multi-user.target
 | 7 | 集群模式 | 大规模部署前置 Kafka 削峰 |
 | 8 | 9.x 升级注意 | 默认 buffer 类型 direct → heap，评估堆压力 |
 
-> 🎯 **核心要点**：Logstash = **输入队列 + worker 链 + 输出路由**的管道引擎（JVM 进程，9.x 自带 JDK 21）。三大必知：**① 执行模型三参数**（workers/batch.size/batch.delay + 背压）；**② 可靠性两件套**（PQ 持久队列 + DLQ 死信队列）；**③ 定位**（中心化复杂解析，边缘采集用 Beats，简单解析下沉 Ingest Pipeline）。9.x 特别提醒：默认队列 buffer 类型变更（direct → heap）会增加堆压力，升级需评估。
+> **核心要点**：Logstash = **输入队列 + worker 链 + 输出路由**的管道引擎（JVM 进程，9.x 自带 JDK 21）。三大必知：**① 执行模型三参数**（workers/batch.size/batch.delay + 背压）；**② 可靠性两件套**（PQ 持久队列 + DLQ 死信队列）；**③ 定位**（中心化复杂解析，边缘采集用 Beats，简单解析下沉 Ingest Pipeline）。9.x 特别提醒：默认队列 buffer 类型变更（direct → heap）会增加堆压力，升级需评估。
 
 ---
 

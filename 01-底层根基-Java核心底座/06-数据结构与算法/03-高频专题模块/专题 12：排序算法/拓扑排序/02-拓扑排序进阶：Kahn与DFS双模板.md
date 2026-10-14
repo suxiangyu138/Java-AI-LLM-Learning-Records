@@ -2,7 +2,7 @@
 
 > 定位：拓扑排序的理论纵深——Kahn 算法与 DFS 双模板、判环、分层拓扑、拓扑 + DP、传递闭包、与最短路/强连通的衔接
 
-## 📚 目录
+## 目录
 
 1. [拓扑排序的本质](#1-拓扑排序的本质)
 2. [Kahn 算法（BFS 版）](#2-kahn-算法bfs-版)
@@ -22,10 +22,10 @@
 拓扑排序：DAG（有向无环图）的线性序
   边 u→v 表示 u 先于 v → 排序后 u 在 v 前
 
-⚠️ 前提：必须是 DAG！
+前提：必须是 DAG！
   有环 → 拓扑排序不存在（环内无法定先后）
 
-⚠️ 面试必答：
+面试必答：
 "拓扑排序 = DAG 的线性化——
  有环图无拓扑序（环内谁先谁后无法确定）。
  判环是拓扑题的第一步。"
@@ -40,7 +40,7 @@
 ④ 字典序推理（269 火星词典）
 ⑤ 包管理依赖解析
 
-⚠️ 面试表达：
+面试表达：
 "'前置依赖 + 顺序' → 拓扑排序——
  课程/编译/调度都是同一模型。"
 ```
@@ -58,9 +58,9 @@ Kahn（BFS 版）：
   ③ 出队 → 输出 → 其邻居入度 -1 → 归零入队
   ④ 输出数 < 节点数 → 有环！
 
-⚠️ 复杂度：O(V + E)（每节点出队一次、每边减一次）
+复杂度：O(V + E)（每节点出队一次、每边减一次）
 
-⚠️ 面试必答：
+面试必答：
 "Kahn = 入度归零入队——
  '没有前置的先行'；输出数不足 = 有环
  （环内节点入度永远 ≥ 1）。"
@@ -92,9 +92,9 @@ List<Integer> topologicalSort(int n, int[][] prerequisites) {
             if (--indegree[v] == 0) queue.offer(v);   // ③ 减到 0 入队
         }
     }
-    return result.size() == n ? result : new ArrayList<>();  // ⚠️ 判环
+    return result.size() == n ? result : new ArrayList<>();  // 判环
 }
-// ⚠️ 面试必答："Kahn 模板四步——建图、入度、
+// 面试必答："Kahn 模板四步——建图、入度、
 //   零度入队、出队减邻居。输出不足判环。"
 ```
 
@@ -107,12 +107,12 @@ List<Integer> topologicalSort(int n, int[][] prerequisites) {
 ```
 DFS 版：后序入栈 → 逆序即拓扑
   dfs(u)：访问所有邻居 → u 入栈（u 的后置都已完成）
-  ⚠️ 栈逆序 = 拓扑序（后置先完成 → 前置后入栈）
+  栈逆序 = 拓扑序（后置先完成 → 前置后入栈）
 
-⚠️ 判环：三色标记（白/灰/黑）
+判环：三色标记（白/灰/黑）
   灰（正在访问）→ 再次遇到 = 环！
 
-⚠️ 面试必答：
+面试必答：
 "DFS 拓扑 = 后序入栈逆序输出；
  判环用三色——'灰色回边'即环
  （正在访问的祖先再次被访问）。"
@@ -130,21 +130,21 @@ boolean topologicalDFS(int n, List<Integer>[] graph) {
     color = new int[n];
     for (int i = 0; i < n; i++)
         if (color[i] == 0 && !dfs(i, graph)) return false;   // 有环
-    Collections.reverse(order);              // ⚠️ 逆序 = 拓扑
+    Collections.reverse(order);              // 逆序 = 拓扑
     return true;
 }
 
 boolean dfs(int u, List<Integer>[] graph) {
     color[u] = 1;                            // 灰：开始访问
     for (int v : graph[u]) {
-        if (color[v] == 1) return false;     // ⚠️ 灰回边 → 环！
+        if (color[v] == 1) return false;     // 灰回边 → 环！
         if (color[v] == 0 && !dfs(v, graph)) return false;
     }
     color[u] = 2;                            // 黑：完成
     order.add(u);                            // 后序入栈
     return true;
 }
-// ⚠️ 面试必答："DFS 拓扑三色——
+// 面试必答："DFS 拓扑三色——
 //   灰 = 在栈中（回边即环）、黑 = 完成（入栈）、
 //   白 = 未访问。Kahn 判环 vs 三色判环
 //   二选一，面试常问对比。"
@@ -160,7 +160,7 @@ boolean dfs(int u, List<Integer>[] graph) {
 | 栈风险 | 无 | 深图可能溢出 |
 
 ```
-⚠️ 面试表达：
+面试表达：
 "Kahn 迭代无栈风险、输出顺序可控；
  DFS 递归简洁、三色判环直观。
  面试默认 Kahn（工程更稳）。"
@@ -177,11 +177,11 @@ boolean dfs(int u, List<Integer>[] graph) {
   层 0：入度 0（无依赖）
   层 k：依赖层 k-1 的节点
 
-⚠️ 应用：
+应用：
   1136 并行课程：最少学期数 = 层数
   310 最小高度树：从叶子剥层（反向拓扑）
 
-⚠️ 面试必答：
+面试必答：
 "分层拓扑 = 每轮处理一层——
  层数即'并行轮数'（1136 学期数）、
  反向剥层找重心（310）。"
@@ -199,18 +199,18 @@ int minSemesters(int n, int[][] relations) {
         if (indegree[i] == 0) queue.offer(i);
 
     while (!queue.isEmpty()) {
-        int size = queue.size();             // ⚠️ 当前层大小
+        int size = queue.size();             // 当前层大小
         for (int i = 0; i < size; i++) {     // 一层一学期
             int u = queue.poll();
             processed++;
             for (int v : graph[u])
                 if (--indegree[v] == 0) queue.offer(v);
         }
-        semesters++;                         // ⚠️ 每层 +1 学期
+        semesters++;                         // 每层 +1 学期
     }
     return processed == n ? semesters : -1;  // 判环
 }
-// ⚠️ 面试必答："分层 = 每轮取'整层'——
+// 面试必答："分层 = 每轮取'整层'——
 //   queue.size() 是当前层大小；
 //   轮数即最少并行轮数。"
 ```
@@ -227,11 +227,11 @@ DAG 最长路径（2050 并行课程 III）：
 
 dp[v] = max(dp[u] + cost[v])（所有前置 u）
 
-⚠️ 为什么必须拓扑：
+为什么必须拓扑：
   有环 → DP 顺序无法确定（依赖循环）
   拓扑序 = DAG 的"自然 DP 顺序"
 
-⚠️ 面试必答：
+面试必答：
 "DAG 上的 DP 用拓扑序——
  拓扑序保证前置节点先算完，
  dp 递推自然成立。有环则 DP 失效。"
@@ -246,14 +246,14 @@ long minTime(int n, int[][] relations, int[] time) {
     long[] dp = new long[n + 1];             // 完成课程的最早时间
     Deque<Integer> queue = new ArrayDeque<>();
     for (int i = 1; i <= n; i++) {
-        dp[i] = time[i - 1];                 // ⚠️ 初始：自己的时长
+        dp[i] = time[i - 1];                 // 初始：自己的时长
         if (indegree[i] == 0) queue.offer(i);
     }
 
     while (!queue.isEmpty()) {
         int u = queue.poll();
         for (int v : graph[u]) {
-            dp[v] = Math.max(dp[v], dp[u] + time[v - 1]);   // ⚠️ 最晚前置 + 自己
+            dp[v] = Math.max(dp[v], dp[u] + time[v - 1]);   // 最晚前置 + 自己
             if (--indegree[v] == 0) queue.offer(v);
         }
     }
@@ -261,7 +261,7 @@ long minTime(int n, int[][] relations, int[] time) {
     for (int i = 1; i <= n; i++) best = Math.max(best, dp[i]);
     return best;
 }
-// ⚠️ 面试必答："2050 = 拓扑序 DP——
+// 面试必答："2050 = 拓扑序 DP——
 //   dp[v] = max(dp[前置]) + 时长；
 //   拓扑序保证前置先算。"
 ```
@@ -283,7 +283,7 @@ long minTime(int n, int[][] relations, int[] time) {
 | 拓扑 + DP | 前置先算 | 2050 |
 
 ```
-⚠️ 面试必答：
+面试必答：
 "拓扑七大变体——判环/输出/分层/反向/
  闭包/字典序/DP——全是 Kahn 模板的
  状态扩展（队列变优先队列、加 DP 数组）。"
@@ -293,12 +293,12 @@ long minTime(int n, int[][] relations, int[] time) {
 
 ```
 字符间建边：比较相邻单词找第一个不同字符 → 边
-⚠️ 细节：
+细节：
   ① 相邻单词比较（不是全部两两）
   ② "ab" vs "abc" 前缀情况（ab 应在前 → 非法）
   ③ 字典序拓扑 → 优先队列
 
-⚠️ 面试必答：
+面试必答：
 "火星词典 = 相邻单词提取边 + 拓扑；
  细节是前缀特判与字典序输出（优先队列）。"
 ```
@@ -342,7 +342,7 @@ long minTime(int n, int[][] relations, int[] time) {
 
 ---
 
-> 🎯 **核心要点**：拓扑体系 = **Kahn 模板**（零度入队 + 判环）+ **DFS 三色**（灰回边）+ **七大变体**（分层/DP/字典序/反向/闭包）。"有依赖求顺序"识别后直接套模板，判环是第一检查。
+> **核心要点**：拓扑体系 = **Kahn 模板**（零度入队 + 判环）+ **DFS 三色**（灰回边）+ **七大变体**（分层/DP/字典序/反向/闭包）。"有依赖求顺序"识别后直接套模板，判环是第一检查。
 
 ---
 

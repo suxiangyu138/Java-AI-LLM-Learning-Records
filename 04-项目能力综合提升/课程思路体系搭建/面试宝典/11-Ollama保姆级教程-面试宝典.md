@@ -178,7 +178,7 @@ curl http://localhost:11434/v1/embeddings \
 | `OLLAMA_CUDA_VISIBLE_DEVICES` | 指定GPU | `0,1` |
 
 ### Q15: Ollama 如何配置跨域和远程访问？
-> 💡 **提示**：生产环境需谨慎开启远程访问，建议配合反向代理使用认证。
+> **提示**：生产环境需谨慎开启远程访问，建议配合反向代理使用认证。
 
 ```bash
 # 允许所有来源访问
@@ -227,7 +227,7 @@ ollama ps
 ## 二、深度原理剖析（12题）
 
 ### Q1: Ollama 的架构设计原理？
-> 🎯 **核心要点**：Ollama 采用 C/S 架构，底层基于 llama.cpp 进行推理优化，通过 Go 语言编写的服务层管理模型生命周期。
+> **核心要点**：Ollama 采用 C/S 架构，底层基于 llama.cpp 进行推理优化，通过 Go 语言编写的服务层管理模型生命周期。
 
 - **服务层（Go）**：HTTP 服务器、模型管理、请求调度、生命周期管理
 - **推理层（C/C++）**：基于 llama.cpp，支持 GGUF 格式模型文件
@@ -267,7 +267,7 @@ curl http://localhost:11434/api/chat \
 # OpenAI 兼容接口不支持直接设置 num_ctx，需通过 Ollama API
 ```
 
-> ⚠️ **注意**：增大上下文窗口会显著增加显存占用，7B 模型在 4096 上下文约需 5GB 显存，32768 上下文约需 10GB+。
+> **注意**：增大上下文窗口会显著增加显存占用，7B 模型在 4096 上下文约需 5GB 显存，32768 上下文约需 10GB+。
 
 ### Q4: Ollama 的 Keep-Alive 机制如何工作？
 > 模型在无请求后不会立即卸载，而是保持驻留在显存中一段时间（默认 5 分钟），避免频繁加载/卸载带来的性能开销。
@@ -330,7 +330,7 @@ TEMPLATE """<|begin_of_text|><|start_header_id|>system<|end_header_id|>
 ```
 
 ### Q8: Ollama 如何通过 Dify 集成实现知识库 RAG？
-> ⚠️ **常见面试题**：Ollama + Dify 是中小企业构建私有知识库的经典方案。
+> **常见面试题**：Ollama + Dify 是中小企业构建私有知识库的经典方案。
 
 ```yaml
 # Dify 中配置 Ollama 作为模型提供商
@@ -632,7 +632,7 @@ response = client.chat.completions.create(
 ```
 
 ### 场景10: ICL（上下文学习）在 Ollama 中的实现
-> 💡 **面试关注点**：如何在聊天模板中实现 In-Context Learning。
+> **面试关注点**：如何在聊天模板中实现 In-Context Learning。
 
 ```java
 // Spring AI 中使用 ICL
@@ -1004,7 +1004,7 @@ class DocumentIndexer:
 ```
 
 ### 题3: 设计 RAG 知识库问答系统
-> 🎯 **面试高频系统设计题**
+> **面试高频系统设计题**
 
 ```text
 核心流程:
@@ -1102,7 +1102,7 @@ API 网关功能:
 | Embedding 维度不匹配 | 不同模型输出的向量维度不同 | 统一使用同一个 Embedding 模型；检查向量数据库 schema |
 | Modelfile 修改不生效 | 未重新创建模型 | 修改 Modelfile 后需要执行 `ollama create` 重新构建 |
 
-> 💡 **最佳实践总结**：
+> **最佳实践总结**：
 > 1. 生产环境始终使用反向代理（Nginx）加 HTTPS
 > 2. 根据任务类型选择合适大小的模型，避免"杀鸡用牛刀"
 > 3. 监控 GPU 显存和温度，防止过热降频
@@ -1151,4 +1151,4 @@ API 网关功能:
 
 ---
 
-> 🎯 **总结**：Ollama 是 LLM 本地部署的"入口级"工具，面试重点在于 API 调用、Modelfile 定制、与 Spring AI/Dify/RAGFlow 的集成方案以及 RAG 系统架构设计。掌握这些知识点足以应对 90% 以上的 Ollama 相关面试题。
+> **总结**：Ollama 是 LLM 本地部署的"入口级"工具，面试重点在于 API 调用、Modelfile 定制、与 Spring AI/Dify/RAGFlow 的集成方案以及 RAG 系统架构设计。掌握这些知识点足以应对 90% 以上的 Ollama 相关面试题。

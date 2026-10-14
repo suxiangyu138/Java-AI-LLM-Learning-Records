@@ -26,7 +26,7 @@ MyBatis 是一个优秀的**持久层框架**，它封装了 JDBC 的重复性�
 | 性能调优 | 直接优化 SQL | 需调整缓存、抓取策略等 |
 | 适用场景 | 复杂查询、大型项目、需 SQL 优化的场景 | CRUD 密集型、无需复杂 SQL 的场景 |
 
-> 💡 很多大厂面试喜欢问 MyBatis vs Hibernate 的选择依据。核心观点：MyBatis 在手写 SQL 的灵活性上更胜一筹，适合需要 DBA 深度参与优化的场景。
+> 很多大厂面试喜欢问 MyBatis vs Hibernate 的选择依据。核心观点：MyBatis 在手写 SQL 的灵活性上更胜一筹，适合需要 DBA 深度参与优化的场景。
 
 ### 1.3 什么是 ORM？
 ORM（Object Relational Mapping）即**对象关系映射**，是一种将 Java 对象与数据库表记录建立映射关系的技术。MyBatis 通过 `resultMap` 或自动映射将查询结果集转换为 Java 实体对象，从而让开发者用面向对象的方式操作数据库。
@@ -51,7 +51,7 @@ User findById(Long id);
 User findByTable(@Param("tableName") String tableName, @Param("id") Long id);
 ```
 
-> ⚠️ 实测面试陷阱：`${}` 在 ORDER BY 排序字段、表名等场景不可避免，此时一定要对传入参数做白名单校验。
+> 实测面试陷阱：`${}` 在 ORDER BY 排序字段、表名等场景不可避免，此时一定要对传入参数做白名单校验。
 
 ### 1.5 MyBatis 的一级缓存和二级缓存是什么？
 | 缓存级别 | 作用域 | 生命周期 | 默认开启 |
@@ -63,7 +63,7 @@ User findByTable(@Param("tableName") String tableName, @Param("id") Long id);
 
 **二级缓存**：多个 SqlSession 共享同一个 Mapper 的缓存数据。需在 XML 中添加 `<cache/>` 标签，且实体类实现 `Serializable`。
 
-> 🎯 面试亮点点拨：一级缓存是 SqlSession 级别的 Map 结构；二级缓存是 Mapper 级别的，实际存储底层依赖第三方缓存如 Redis。
+> 面试亮点点拨：一级缓存是 SqlSession 级别的 Map 结构；二级缓存是 Mapper 级别的，实际存储底层依赖第三方缓存如 Redis。
 
 ### 1.6 MyBatis 的 DAO 接口是如何工作的？
 MyBatis 使用 **JDK 动态代理**为每个 Mapper 接口创建代理对象。当调用接口方法时，代理对象根据方法的全限定名（`namespace.methodId`）找到对应的 SQL 语句并执行。关键是 `MapperProxy` 类实现了 `InvocationHandler` 接口。
@@ -144,7 +144,7 @@ MyBatis Generator（MBG）是代码生成器，根据数据库表结构自动生
 - Mapper XML 文件（SQL 映射）
 - Example 类（条件查询辅助）
 
-> 💡 大厂面试不会重点考逆向工程用法，但需要知道它的存在以及**代码生成可能导致过度依赖、维护困难**的缺点。
+> 大厂面试不会重点考逆向工程用法，但需要知道它的存在以及**代码生成可能导致过度依赖、维护困难**的缺点。
 
 ### 1.13 MyBatis 延迟加载的原理是什么？
 MyBatis 通过**动态代理**实现懒加载。当配置 `lazyLoadingEnabled=true` 时，关联对象的属性被设置成代理对象。真正调用该属性方法时，代理对象才会执行 SQL 去数据库查询。实现原理是 CGLIB 或 Javassist 创建代理类，触发 `EnhancedDeserializationProxy` 执行后续 SQL。
@@ -230,7 +230,7 @@ public <E> List<E> query(MappedStatement ms, Object parameter, RowBounds rowBoun
 <cache eviction="LRU" flushInterval="60000" size="512" readOnly="false"/>
 ```
 
-> 🎯 面试亮点：二级缓存存在脏读问题（跨 namespace 操作关联表），实际生产建议用 Redis 替代 MyBatis 二级缓存。
+> 面试亮点：二级缓存存在脏读问题（跨 namespace 操作关联表），实际生产建议用 Redis 替代 MyBatis 二级缓存。
 
 ### 2.4 MyBatis 如何解决 JDBC 的重复性问题？
 1. **SQL 语句配置化**：SQL 从 Java 代码解耦到 XML/注解
@@ -326,7 +326,7 @@ MyBatis 通过 `LogFactory` 适配各种日志框架，按优先级查找：SLF4
 </insert>
 ```
 
-> ⚠️ 每次 batch 不宜超过 1000 条，否则 SQL 过长会导致数据库解析压力大。建议分批次提交，每批 500-1000 条。
+> 每次 batch 不宜超过 1000 条，否则 SQL 过长会导致数据库解析压力大。建议分批次提交，每批 500-1000 条。
 
 **优化方案**：
 1. 设置 `rewriteBatchedStatements=true`（MySQL JDBC 参数）
@@ -336,17 +336,17 @@ MyBatis 通过 `LogFactory` 适配各种日志框架，按优先级查找：SLF4
 
 ### 3.2 模糊查询的几种写法及其安全性？
 ```xml
-<!-- ✅ 安全且正确（推荐） -->
+<!-- ✓ 安全且正确（推荐） -->
 <if test="name != null">
     AND name LIKE CONCAT('%', #{name}, '%')
 </if>
 
-<!-- ✅ 安全但需要注意 -->
+<!-- ✓ 安全但需要注意 -->
 <if test="name != null">
     AND name LIKE "%"#{name}""
 </if>
 
-<!-- ❌ SQL 注入风险 -->
+<!-- ✗ SQL 注入风险 -->
 <if test="name != null">
     AND name LIKE '%${name}%'
 </if>
@@ -458,7 +458,7 @@ PageHelper.startPage(pageNum, pageSize);
 List<User> list = userMapper.findAll();
 PageInfo<User> pageInfo = new PageInfo<>(list);
 
-// ⚠️ 注意事项
+// 注意事项
 // 1. startPage 后必须紧跟查询方法，不能隔行
 // 2. 线程安全问题：PageHelper 使用 ThreadLocal，查询结束后自动清理
 // 3. 嵌套查询时，PageHelper 只对主查询生效，不对 association/collection 分页
@@ -552,7 +552,7 @@ public class SqlCostInterceptor implements Interceptor {
         
         if (cost > 1000) {
             // 记录慢 SQL
-            System.err.println("⚠️ 慢 SQL 预警: " + sqlId + " 耗时 " + cost + "ms");
+            System.err.println("慢 SQL 预警: " + sqlId + " 耗时 " + cost + "ms");
         }
         return result;
     }
@@ -662,7 +662,7 @@ public class TenantInterceptor implements Interceptor {
 }
 ```
 
-> 💡 多租户方案的核心挑战是：如何在不改造所有业务 SQL 的情况下自动路由租户数据。AOP + MyBatis 拦截器是最优雅的方案。
+> 多租户方案的核心挑战是：如何在不改造所有业务 SQL 的情况下自动路由租户数据。AOP + MyBatis 拦截器是最优雅的方案。
 
 ### 5.2 如何设计一个支持动态表名（分表分库）的 MyBatis 框架？
 ```java

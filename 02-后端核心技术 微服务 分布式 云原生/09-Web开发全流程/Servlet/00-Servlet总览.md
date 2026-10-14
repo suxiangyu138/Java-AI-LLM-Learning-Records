@@ -1,7 +1,7 @@
 # Servlet 总览
 > JavaWeb 的基石：Servlet 规范演进、生命周期、核心 API、路径映射、配置三方式、异步模型与生产实践——理解了 Servlet，才真正理解 Spring MVC 的 DispatcherServlet 与一切 Java Web 框架的底层
 
-## 📚 目录
+## 目录
 1. [知识体系导图](#1-知识体系导图)
 2. [模块导航](#2-模块导航)
 3. [学习路线推荐](#3-学习路线推荐)
@@ -32,7 +32,7 @@ Servlet 体系（9 篇，Servlet 6.1 / Jakarta EE 11 / Tomcat 11 基准，2026-0
 │   └─ 08 生产实践与面试题（安全清单/性能/避坑/面试）
 ```
 
-> 🎯 定位一句话：Servlet 是 **"Java Web 一切的起点"**——一个跑在容器里的 Java 类，处理 HTTP 请求、生成响应；JavaWeb 三大组件（Servlet / Filter / Listener）之首，Spring MVC / Spring Boot 的 DispatcherServlet 本质就是一个扩展版 Servlet。
+> 定位一句话：Servlet 是 **"Java Web 一切的起点"**——一个跑在容器里的 Java 类，处理 HTTP 请求、生成响应；JavaWeb 三大组件（Servlet / Filter / Listener）之首，Spring MVC / Spring Boot 的 DispatcherServlet 本质就是一个扩展版 Servlet。
 
 ## 2. 模块导航
 
@@ -56,7 +56,7 @@ Servlet 体系（9 篇，Servlet 6.1 / Jakarta EE 11 / Tomcat 11 基准，2026-0
 | 应用进阶（2 天） | 要理解框架底层 | 05 → 06 → 07 |
 | 面试冲刺（1 天） | 备战后端面试 | 00 → 02 → 04 → 05 → 06 → 08 |
 
-> 💡 建议配合同目录兄弟体系交叉学习：**Filter 过滤器**（请求链路拦截）、**Listener 监听器**（容器事件）、**Cookie & Session**（会话）、**Tomcat**（容器实现）。本体系与 `JavaWeb/01-Servlet核心技术深度解析.md`（旧版入门单篇）内容互补：本体系是**规范级深挖**，旧文是**快速入门**。
+> 建议配合同目录兄弟体系交叉学习：**Filter 过滤器**（请求链路拦截）、**Listener 监听器**（容器事件）、**Cookie & Session**（会话）、**Tomcat**（容器实现）。本体系与 `JavaWeb/01-Servlet核心技术深度解析.md`（旧版入门单篇）内容互补：本体系是**规范级深挖**，旧文是**快速入门**。
 
 ## 4. Servlet 定位
 

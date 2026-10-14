@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [2026 生态现状：三足变双雄](#1-2026-生态现状三足变双雄)
 2. [Sentinel：阿里系流控熔断一体](#2-sentinel阿里系流控熔断一体)
@@ -70,7 +70,7 @@ Resilience4j 的定位是"**轻量、函数式、模块化**"，把容错能力�
 
 框架落地后还有两件配套：**配置管理**——Resilience4j 的阈值配合 Spring Cloud Config/Nacos 动态配置实现不重启调整（Sentinel 则用 Dashboard/规则持久化）；**监控告警**——熔断状态迁移事件（OPEN/HALF_OPEN）、限流命中率、降级次数必须接入 Prometheus/Grafana（Resilience4j 原生导出 Metrics，Sentinel 有 Dashboard 与 Micrometer 适配），并配置"熔断打开即告警"——防护组件本身的工作状态不可见，等于没有防护。框架只是载体，[10 篇](10-生产实战与自测.md) 的配置基线、监控闭环与演练才是防护体系真正落地的地方。
 
-> 🎯 **核心要点**：2026 年防护框架双雄并存——Sentinel 1.8.x（规则动态化+控制台+集群流控+系统保护，阿里系）与 Resilience4j 2.4.0（函数式六模块+虚拟线程+Spring Cloud CircuitBreaker 5.0 官方实现），Hystrix 已停更仅存量；SCA 团队选 Sentinel，标准 Spring Cloud 选 Resilience4j，真分布式限流只有 Sentinel 集群流控或自建 Redis Lua；框架是载体，配置基线、监控与演练才是落地关键。
+> **核心要点**：2026 年防护框架双雄并存——Sentinel 1.8.x（规则动态化+控制台+集群流控+系统保护，阿里系）与 Resilience4j 2.4.0（函数式六模块+虚拟线程+Spring Cloud CircuitBreaker 5.0 官方实现），Hystrix 已停更仅存量；SCA 团队选 Sentinel，标准 Spring Cloud 选 Resilience4j，真分布式限流只有 Sentinel 集群流控或自建 Redis Lua；框架是载体，配置基线、监控与演练才是落地关键。
 
 ---
 

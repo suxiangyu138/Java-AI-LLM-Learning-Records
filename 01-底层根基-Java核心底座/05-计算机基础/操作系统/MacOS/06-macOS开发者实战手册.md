@@ -1,10 +1,10 @@
 # macOS 开发者实战手册
 
-> 🛠️ Apple Silicon 兼容性踩坑？Homebrew 装完找不到命令？端口占用、权限拒绝、IDEA 卡顿 —— Java 开发者在 macOS 上的十大高频问题与最优解法
+> Apple Silicon 兼容性踩坑？Homebrew 装完找不到命令？端口占用、权限拒绝、IDEA 卡顿 —— Java 开发者在 macOS 上的十大高频问题与最优解法
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [Apple Silicon 兼容性全攻略](#1-apple-silicon-兼容性全攻略)
 2. [端口与环境排错](#2-端口与环境排错)
@@ -62,7 +62,7 @@ alias brew-x86='eval "$(/usr/local/bin/brew shellenv)"'
 
 ```bash
 # Docker 默认运行 ARM 容器，运行 x86 镜像需要 Rosetta
-# Docker Desktop 设置：Settings → General → ✅ Use Rosetta for x86/amd64 emulation
+# Docker Desktop 设置：Settings → General → ✓ Use Rosetta for x86/amd64 emulation
 
 # 拉取镜像时指定架构
 docker pull --platform linux/arm64 mysql:8.0    # ARM 原生
@@ -439,16 +439,16 @@ java -Xms2g -Xmx4g \
 
 | 工具 | 用途 | 安装 | 免费 |
 |------|------|------|:---:|
-| **Raycast** | Spotlight 增强（启动器+剪贴板+窗口+...） | `brew install --cask raycast` | ✅ |
-| **Rectangle** | 窗口分屏管理 | `brew install --cask rectangle` | ✅ |
-| **iTerm2** | 最强终端模拟器 | `brew install --cask iterm2` | ✅ |
-| **Homebrew** | 包管理器 | 官方脚本安装 | ✅ |
-| **AltTab** | Windows 式应用窗口切换 | `brew install --cask alt-tab` | ✅ |
-| **Maccy / Maccy** | 剪贴板历史管理器 | `brew install --cask maccy` | ✅ |
-| **IINA** | 视频播放器 | `brew install --cask iina` | ✅ |
-| **Keka** | 压缩解压 | `brew install --cask keka` | ✅ |
-| **Visual Studio Code** | 轻量级编辑器 | `brew install --cask visual-studio-code` | ✅ |
-| **Docker Desktop** | 容器运行时 | `brew install --cask docker` | ✅ |
+| **Raycast** | Spotlight 增强（启动器+剪贴板+窗口+...） | `brew install --cask raycast` | ✓ |
+| **Rectangle** | 窗口分屏管理 | `brew install --cask rectangle` | ✓ |
+| **iTerm2** | 最强终端模拟器 | `brew install --cask iterm2` | ✓ |
+| **Homebrew** | 包管理器 | 官方脚本安装 | ✓ |
+| **AltTab** | Windows 式应用窗口切换 | `brew install --cask alt-tab` | ✓ |
+| **Maccy / Maccy** | 剪贴板历史管理器 | `brew install --cask maccy` | ✓ |
+| **IINA** | 视频播放器 | `brew install --cask iina` | ✓ |
+| **Keka** | 压缩解压 | `brew install --cask keka` | ✓ |
+| **Visual Studio Code** | 轻量级编辑器 | `brew install --cask visual-studio-code` | ✓ |
+| **Docker Desktop** | 容器运行时 | `brew install --cask docker` | ✓ |
 
 ### 7.2 开发者增强工具
 

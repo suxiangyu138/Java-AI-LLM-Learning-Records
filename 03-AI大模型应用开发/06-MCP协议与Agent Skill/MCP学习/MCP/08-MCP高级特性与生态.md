@@ -1,6 +1,6 @@
 # 08 - MCP 高级特性与生态
 
-> 🎯 掌握 Sampling、Elicitation、Roots、Multi-Server 编排等高级特性，以及 MCP 的完整生态版图
+> 掌握 Sampling、Elicitation、Roots、Multi-Server 编排等高级特性，以及 MCP 的完整生态版图
 
 ---
 
@@ -138,16 +138,16 @@ async def generate_report(topic: str) -> str:
 ```text
 Sampling 的安全挑战：
 
-  ⚠️ Token 消耗：Server 可以消耗 Host 的 LLM Token
+  Token 消耗：Server 可以消耗 Host 的 LLM Token
     → 防御：maxTokens 限制 + 速率限制
 
-  ⚠️ Prompt 注入：恶意 Server 利用 Sampling 绕过安全策略
+  Prompt 注入：恶意 Server 利用 Sampling 绕过安全策略
     → 防御：Client 审查 Sampling 请求的 messages
 
-  ⚠️ 递归风险：Sampling 结果可能触发新的 Tool 调用
+  递归风险：Sampling 结果可能触发新的 Tool 调用
     → 防御：限制 Sampling 深度（默认 max 1 层）
 
-  ⚠️ 隐私泄露：Server 将用户数据发给 Host LLM
+  隐私泄露：Server 将用户数据发给 Host LLM
     → 防御：数据分类 + Host 侧敏感数据拦截
 ```
 
@@ -195,7 +195,7 @@ Elicitation（2025-06 Spec）= Server 主动向用户请求信息
         },
         "skip_tests": {
           "type": "boolean",
-          "description": "跳过测试（⚠️ 不推荐）",
+          "description": "跳过测试（不推荐）",
           "default": false
         }
       },
@@ -425,7 +425,7 @@ async def mcp_proxy(request: Request, user = Depends(authenticate)):
 │                     MCP 生态全景                              │
 ├──────────────────────────────────────────────────────────────┤
 │                                                               │
-│  📦 官方 Server（@modelcontextprotocol/server-*）              │
+│  官方 Server（@modelcontextprotocol/server-*）              │
 │  ├── server-filesystem    文件系统操作                        │
 │  ├── server-github        GitHub API 集成                     │
 │  ├── server-postgres      数据库查询                          │
@@ -435,12 +435,12 @@ async def mcp_proxy(request: Request, user = Depends(authenticate)):
 │  ├── server-memory        持久化记忆                          │
 │  └── server-puppeteer     浏览器自动化                        │
 │                                                               │
-│  🛠️ 开发工具                                                  │
+│  开发工具                                                  │
 │  ├── MCP Inspector        调试/可视化测试                     │
 │  ├── MCP CLI              命令行管理工具                      │
 │  └── MCP Registry         社区 Server 注册中心                │
 │                                                               │
-│  🏢 平台集成                                                  │
+│  平台集成                                                  │
 │  ├── Claude Desktop       原生 MCP 支持（Anthropic）          │
 │  ├── Claude Code CLI      原生 MCP 支持                       │
 │  ├── VS Code / Cursor     通过插件支持                        │
@@ -449,7 +449,7 @@ async def mcp_proxy(request: Request, user = Depends(authenticate)):
 │  ├── Spring AI            内置 MCP Client/Server             │
 │  └── Dify / Coze          低代码平台集成                      │
 │                                                               │
-│  🌐 市场与社区                                                │
+│  市场与社区                                                │
 │  ├── mcp.so               MCP Server 搜索引擎                 │
 │  ├── github.com/modelcontextprotocol/servers  官方仓库        │
 │  ├── smithery.ai          MCP Server 托管平台                 │
@@ -478,24 +478,24 @@ async def mcp_proxy(request: Request, user = Depends(authenticate)):
 
 ```text
 2025 已发布：
-  ✅ Streamable HTTP 传输
-  ✅ OAuth 2.0 认证标准
-  ✅ Tool Annotations (readOnlyHint/destructiveHint/idempotentHint)
-  ✅ Elicitation 人机交互
-  ✅ JSON-RPC Batching
+  ✓ Streamable HTTP 传输
+  ✓ OAuth 2.0 认证标准
+  ✓ Tool Annotations (readOnlyHint/destructiveHint/idempotentHint)
+  ✓ Elicitation 人机交互
+  ✓ JSON-RPC Batching
 
 2025 进行中：
-  🔄 Tasks API — 长时间运行任务的标准化管理
-  🔄 Dynamic Tool Registration — 运行时注册/注销工具
-  🔄 Server-to-Server — MCP Server 之间直接通信
-  🔄 Namespace — 官方命名空间管理，防工具名冲突
-  🔄 WebTransport — 基于 QUIC 的新传输方式
+  Tasks API — 长时间运行任务的标准化管理
+  Dynamic Tool Registration — 运行时注册/注销工具
+  Server-to-Server — MCP Server 之间直接通信
+  Namespace — 官方命名空间管理，防工具名冲突
+  WebTransport — 基于 QUIC 的新传输方式
 
 未来方向：
-  🔮 Marketplace API — 标准化的 Server 发现与安装
-  🔮 Federation — 跨组织 MCP Server 信任联邦
-  🔮 Agent-as-MCP-Server — Agent 本身作为 MCP Server 暴露
-  🔮 Edge MCP — 边缘计算 + MCP 集成
+  Marketplace API — 标准化的 Server 发现与安装
+  Federation — 跨组织 MCP Server 信任联邦
+  Agent-as-MCP-Server — Agent 本身作为 MCP Server 暴露
+  Edge MCP — 边缘计算 + MCP 集成
 ```
 
 ### 6.2 MCP vs A2A（Google）
@@ -523,7 +523,7 @@ MCP (Anthropic) vs A2A (Google Agent-to-Agent)：
   A2A = Agent 的"嘴"（与其他 Agent 沟通协调）
 ```
 
-> 🎯 **核心要点**：Sampling 让 Server 反向调用 LLM、Elicitation 让人机交互标准化、Roots 限制文件访问边界、Gateway 统一多 Server 入口。MCP 生态已覆盖主流语言和平台，正从工具协议向 Agent 基础设施演进
+> **核心要点**：Sampling 让 Server 反向调用 LLM、Elicitation 让人机交互标准化、Roots 限制文件访问边界、Gateway 统一多 Server 入口。MCP 生态已覆盖主流语言和平台，正从工具协议向 Agent 基础设施演进
 
 ---
 

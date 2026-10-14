@@ -1,6 +1,6 @@
 # 16 - Gradle 多模块构建与插件开发
 
-> 🎯 多模块构建是 Gradle 的强项，自定义插件封装复用逻辑 — 掌握这两项能力，才能在大中型项目中将构建效率发挥到极致
+> 多模块构建是 Gradle 的强项，自定义插件封装复用逻辑 — 掌握这两项能力，才能在大中型项目中将构建效率发挥到极致
 
 ---
 
@@ -73,7 +73,7 @@ plugins {
     id("io.spring.dependency-management") version "1.1.5" apply false
 }
 
-// ⭐ allprojects: 根项目 + 所有子项目
+// ★ allprojects: 根项目 + 所有子项目
 allprojects {
     group = "com.example"
     version = "1.0.0-SNAPSHOT"
@@ -83,7 +83,7 @@ allprojects {
     }
 }
 
-// ⭐ subprojects: 仅子项目（不含根）
+// ★ subprojects: 仅子项目（不含根）
 subprojects {
     apply(plugin = "java")
 
@@ -115,7 +115,7 @@ plugins {
 }
 
 dependencies {
-    // ⭐ 模块间依赖（使用 project()）
+    // ★ 模块间依赖（使用 project()）
     implementation(project(":common"))
 
     implementation("org.springframework.boot:spring-boot-starter-web")
@@ -182,13 +182,13 @@ plugins {
 
 ## 3. 复合构建 (Composite Build)
 
-> 💡 复合构建允许在构建时临时引入外部项目，无需发布到仓库即可调试依赖。
+> 复合构建允许在构建时临时引入外部项目，无需发布到仓库即可调试依赖。
 
 ```kotlin
 // settings.gradle.kts
 rootProject.name = "my-app"
 
-// ⭐ includeBuild：引入外部 Gradle 项目参与本次构建
+// ★ includeBuild：引入外部 Gradle 项目参与本次构建
 includeBuild("../my-common-lib") {
     dependencySubstitution {
         substitute(module("com.example:my-common")).using(project(":"))
@@ -371,12 +371,12 @@ org.gradle.unsafe.configuration-cache=true   # 跳过重复的配置阶段
 
 | 优化 | 说明 | 效果 |
 |------|------|:---:|
-| `--parallel` | 多模块并行构建 | ⭐⭐⭐ |
-| `--build-cache` | 跨构建共享 Task 输出 | ⭐⭐⭐ |
-| `configuration-cache` | 跳过重复配置阶段 | ⭐⭐⭐ |
-| `--daemon` | 复用 JVM 进程 | ⭐⭐ |
-| `api` vs `implementation` | 减少不必要的重新编译 | ⭐⭐ |
-| Task 增量声明 | 声明 @Input/@Output | ⭐⭐⭐ |
+| `--parallel` | 多模块并行构建 | ★★★ |
+| `--build-cache` | 跨构建共享 Task 输出 | ★★★ |
+| `configuration-cache` | 跳过重复配置阶段 | ★★★ |
+| `--daemon` | 复用 JVM 进程 | ★★ |
+| `api` vs `implementation` | 减少不必要的重新编译 | ★★ |
+| Task 增量声明 | 声明 @Input/@Output | ★★★ |
 
 ---
 
@@ -410,4 +410,4 @@ gradle init
 | `mvn clean install` | `./gradlew build publishToMavenLocal` |
 | `mvn dependency:tree` | `./gradlew dependencies` |
 
-> 🎯 **迁移建议**：使用 `gradle init` 自动生成初始脚本，然后根据项目特点手动调优。多模块项目重点调整模块间依赖和 Version Catalog 配置。
+> **迁移建议**：使用 `gradle init` 自动生成初始脚本，然后根据项目特点手动调优。多模块项目重点调整模块间依赖和 Version Catalog 配置。

@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [Checkpoint 机制深度解析](#1-checkpoint-机制深度解析)
 2. [三种 Checkpointer 对比](#2-三种-checkpointer-对比)
@@ -24,10 +24,10 @@
 Checkpoint = 图在每个 Superstep 结束时的完整 State 快照
 
 没有 Checkpoint：
-  A → B → C → 超时 → 💥 全部丢失，从头开始
+  A → B → C → 超时 → 全部丢失，从头开始
 
 有 Checkpoint：
-  A → B → C → 超时 → 💥
+  A → B → C → 超时 → 
   恢复 → Checkpoint[B] ✓ → 从 B 继续，不是从头开始！
 ```
 
@@ -105,8 +105,8 @@ graph = builder.compile(checkpointer=checkpointer)
 | 特性 | 说明 |
 |------|------|
 | 存储 | 内存中（Python dict） |
-| 持久化 | ❌ 进程重启丢失 |
-| 性能 | ⚡ 最快（纯内存） |
+| 持久化 | ✗ 进程重启丢失 |
+| 性能 | 最快（纯内存） |
 | 适用场景 | 开发、测试、原型 |
 | **不可用于** | 生产环境 |
 
@@ -122,8 +122,8 @@ graph = builder.compile(checkpointer=checkpointer)
 | 特性 | 说明 |
 |------|------|
 | 存储 | 本地 SQLite 文件 |
-| 持久化 | ✅ 进程重启保留 |
-| 性能 | 🔶 中等（本地文件 IO） |
+| 持久化 | ✓ 进程重启保留 |
+| 性能 | 中等（本地文件 IO） |
 | 适用场景 | 单机生产、小规模 |
 | 限制 | 不支持分布式、无高可用 |
 
@@ -144,8 +144,8 @@ graph = builder.compile(checkpointer=checkpointer)
 | 特性 | 说明 |
 |------|------|
 | 存储 | PostgreSQL |
-| 持久化 | ✅ 企业级持久化 |
-| 性能 | 🔶 网络 IO（可用连接池优化） |
+| 持久化 | ✓ 企业级持久化 |
+| 性能 | 网络 IO（可用连接池优化） |
 | 适用场景 | **生产环境首选** |
 | 优势 | 高可用、备份、多实例共享 |
 
@@ -251,13 +251,13 @@ result_b = graph.invoke(
 
 ```text
 模式 1：审批（Approval）
-  Agent 生成草稿 → ⏸️ 暂停 → 人类审批 → 通过/修改 → 继续
+  Agent 生成草稿 → 暂停 → 人类审批 → 通过/修改 → 继续
 
 模式 2：编辑（Editing）
-  Agent 执行中 → ⏸️ 暂停 → 人类编辑 State → 从编辑点继续
+  Agent 执行中 → 暂停 → 人类编辑 State → 从编辑点继续
 
 模式 3：引导（Guiding）
-  Agent 遇到歧义 → ⏸️ 暂停 → 人类给出方向 → Agent 按方向继续
+  Agent 遇到歧义 → 暂停 → 人类给出方向 → Agent 按方向继续
 ```
 
 ### 4.2 interrupt()：在 Node 内部暂停
@@ -271,7 +271,7 @@ def generate_draft(state: AgentState) -> dict:
         f"请为用户需求写一份方案：{state['requirement']}"
     )
 
-    # ⏸️ 在这里暂停，等待人工审批
+    # 在这里暂停，等待人工审批
     approval = interrupt({
         "message": "请审批以下方案草稿",
         "draft": draft.content
@@ -364,9 +364,9 @@ graph = builder.compile(
 ├──────────────────┼───────────────┼──────────────────┼──────────────────┤
 │ 暂停位置          │ Node 内部     │ Node 之前        │ Node 之后        │
 │ 粒度              │ 精细（代码级）│ 粗（图级）       │ 粗（图级）       │
-│ 传数据给人类       │ ✅ 任意数据   │ State 自动可读   │ State 自动可读   │
-│ 接收人类输入       │ ✅ resume 值  │ ❌ 只暂停        │ ❌ 只暂停        │
-│ 可逆性（不动代码） │ ❌ 需改代码   │ ✅ 不改图        │ ✅ 不改图        │
+│ 传数据给人类       │ ✓ 任意数据   │ State 自动可读   │ State 自动可读   │
+│ 接收人类输入       │ ✓ resume 值  │ ✗ 只暂停        │ ✗ 只暂停        │
+│ 可逆性（不动代码） │ ✗ 需改代码   │ ✓ 不改图        │ ✓ 不改图        │
 │ 典型场景          │ 审批/编辑     │ 审核类节点       │ 关键节点输出审查 │
 └──────────────────┴───────────────┴──────────────────┴──────────────────┘
 ```
@@ -570,7 +570,7 @@ def approver(state):
 
 ---
 
-> 🎯 **核心要点**：Checkpoint + Human-in-the-Loop 是 LangGraph 的**杀手特性**。没有这两个能力的 Agent 框架只是"自动脚本"，有了它们才是"协作系统"。记忆（MemorySaver/SqliteSaver/PostgresSaver）选择直接影响生产可靠性。`interrupt()` + `Command(resume=...)` 是 Human-in-the-Loop 的标准范式。
+> **核心要点**：Checkpoint + Human-in-the-Loop 是 LangGraph 的**杀手特性**。没有这两个能力的 Agent 框架只是"自动脚本"，有了它们才是"协作系统"。记忆（MemorySaver/SqliteSaver/PostgresSaver）选择直接影响生产可靠性。`interrupt()` + `Command(resume=...)` 是 Human-in-the-Loop 的标准范式。
 
 ---
 

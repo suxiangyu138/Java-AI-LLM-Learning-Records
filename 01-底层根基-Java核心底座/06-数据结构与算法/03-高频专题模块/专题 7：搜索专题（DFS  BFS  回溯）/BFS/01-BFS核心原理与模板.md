@@ -1,7 +1,7 @@
 # BFS核心原理与模板
 > 队列 + 逐层扩散——为什么 BFS 能找到最短路径？分层模板的正确打开方式
 
-## 📚 目录
+## 目录
 1. [BFS 的本质：洋葱模型](#1-bfs-的本质洋葱模型)
 2. [为什么第一次到达即最短](#2-为什么第一次到达即最短)
 3. [BFS 通用模板](#3-bfs-通用模板)
@@ -69,7 +69,7 @@ BFS 按层扩散：第 k 层节点 = 距离起点 k 步
 
 结论：节点第一次被访问时的层数 = 最短距离
   → BFS 求最短路径的前提：无权图（每条边代价相同）
-  ⚠️ 带权图最短路径不能用 BFS（用 Dijkstra）
+  带权图最短路径不能用 BFS（用 Dijkstra）
 ```
 
 ### 2.2 最短路径的两种返回方式
@@ -98,11 +98,11 @@ public int bfs(Node start, Node target) {
     Set<Node> visited = new HashSet<>();   // 或 boolean[]
 
     queue.offer(start);
-    visited.add(start);        // ⚠️ 入队即标记！
+    visited.add(start);        // 入队即标记！
     int steps = 0;
 
     while (!queue.isEmpty()) {
-        int size = queue.size();           // ⚠️ 固定本层大小
+        int size = queue.size();           // 固定本层大小
         for (int i = 0; i < size; i++) {
             Node cur = queue.poll();
             if (cur == target) return steps;   // 到达目标
@@ -128,7 +128,7 @@ public int bfs(Node start, Node target) {
 ③ size 分层：固定本层节点数（层数 = 步数）
 ④ steps：每层 +1，首次到达即最短
 
-⚠️ 三层循环结构：
+三层循环结构：
   while（队列非空）→ for（本层全部）→ for（邻居）
 ```
 
@@ -139,7 +139,7 @@ public int bfs(Node start, Node target) {
 ### 4.1 错误演示：出队才标记
 
 ```java
-// ❌ 错误：出队时标记
+// ✗ 错误：出队时标记
 while (!queue.isEmpty()) {
     Node cur = queue.poll();
     if (visited.contains(cur)) continue;    // 太晚了！
@@ -157,7 +157,7 @@ while (!queue.isEmpty()) {
 ### 4.2 正确写法：入队即标记
 
 ```java
-// ✅ 正确：入队时标记
+// ✓ 正确：入队时标记
 queue.offer(next);
 visited.add(next);          // 入队那一刻就标记
 
@@ -166,7 +166,7 @@ visited.add(next);          // 入队那一刻就标记
 //   入队时标记 → 每个节点恰好入队一次 → O(V+E)
 ```
 
-> 🎯 **铁律**："**入队即标记，出队只处理**"——这是 BFS 面试最大坑，面试官最爱问"为什么这样写"。
+> **铁律**："**入队即标记，出队只处理**"——这是 BFS 面试最大坑，面试官最爱问"为什么这样写"。
 
 ---
 
@@ -189,7 +189,7 @@ public List<List<Integer>> levelOrder(TreeNode root) {
     queue.offer(root);
 
     while (!queue.isEmpty()) {
-        int levelSize = queue.size();          // ⚠️ 先固定本层节点数！
+        int levelSize = queue.size();          // 先固定本层节点数！
         List<Integer> level = new ArrayList<>();
 
         for (int i = 0; i < levelSize; i++) {  // 处理完整一层
@@ -207,10 +207,10 @@ public List<List<Integer>> levelOrder(TreeNode root) {
 ### 5.2 为什么必须固定 size？
 
 ```
-❌ 错误：不用 size，直接 while(!queue.isEmpty())
+✗ 错误：不用 size，直接 while(!queue.isEmpty())
   → 不知道当前层边界 → 所有节点混在一层
 
-✅ 正确：int size = queue.size() 固定本层
+✓ 正确：int size = queue.size() 固定本层
   队列中此时恰好是本层节点（上一层已全部出队）
   处理完 size 个 → 本层结束 → 下一层已全部入队
 
@@ -230,8 +230,8 @@ public List<List<Integer>> levelOrder(TreeNode root) {
 |------|:---:|:---:|
 | 数据结构 | 队列 | 栈/递归 |
 | 遍历顺序 | 按层（广度） | 一条路走到底 |
-| 最短路径 | ✅ 无权图第一次到达即最短 | ❌ 需要全部搜索 |
-| 所有路径/方案 | 不擅长 | ✅ 天然适合 |
+| 最短路径 | ✓ 无权图第一次到达即最短 | ✗ 需要全部搜索 |
+| 所有路径/方案 | 不擅长 | ✓ 天然适合 |
 | 空间 | 大（存整层） | 小（存路径） |
 | 连通块 | 可以 | 可以 |
 | 拓扑排序 | Kahn（BFS） | DFS 颜色法 |
@@ -251,7 +251,7 @@ public List<List<Integer>> levelOrder(TreeNode root) {
  所有路径才能确定最短，效率低。"
 ```
 
-> 🎯 **核心要点**：BFS 的本质是**队列驱动的层扩散**，其正确性源于"第一次到达即最短"（无权图）。**入队即标记**是防死循环的铁律，**size 分层**是记录步数的关键。拿到"最短/最少/扩散"关键词直接 BFS 模板，O(V+E) 搞定。
+> **核心要点**：BFS 的本质是**队列驱动的层扩散**，其正确性源于"第一次到达即最短"（无权图）。**入队即标记**是防死循环的铁律，**size 分层**是记录步数的关键。拿到"最短/最少/扩散"关键词直接 BFS 模板，O(V+E) 搞定。
 
 ---
 

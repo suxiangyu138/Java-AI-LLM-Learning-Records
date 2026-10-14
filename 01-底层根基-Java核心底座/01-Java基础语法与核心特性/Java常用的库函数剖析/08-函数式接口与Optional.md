@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [Function 家族五兄弟](#1-function-家族五兄弟)
 2. [方法引用四种形态](#2-方法引用四种形态)
@@ -58,7 +58,7 @@ hasA.or(hasB).test("a");               // true
 hasA.negate().test("x");               // true
 ```
 
-> 🎯 **核心要点**：五兄弟 = "**Function 转换/Predicate 判断/Consumer 消费/Supplier 供应/BiFunction 双参**"——**"test/apply/get/accept"四个调用动词**是记忆锚；组合方法（andThen/and/or）让函数可复用（`Lambda表达式/02` 全家桶深挖）。
+> **核心要点**：五兄弟 = "**Function 转换/Predicate 判断/Consumer 消费/Supplier 供应/BiFunction 双参**"——**"test/apply/get/accept"四个调用动词**是记忆锚；组合方法（andThen/and/or）让函数可复用（`Lambda表达式/02` 全家桶深挖）。
 
 ---
 
@@ -94,7 +94,7 @@ Lambda：逻辑简单（比较/条件）→ 更直观
 准则：能引用就引用，不能引用才写 Lambda
 ```
 
-> 🎯 **核心要点**：方法引用四形态 = "**静态/特定实例/任意实例/构造器**"——**"String::length 与 instance::concat 的区别（参数位置）"是易混点**；准则 = 能引用优先（`Lambda表达式/03` 深挖）。
+> **核心要点**：方法引用四形态 = "**静态/特定实例/任意实例/构造器**"——**"String::length 与 instance::concat 的区别（参数位置）"是易混点**；准则 = 能引用优先（`Lambda表达式/03` 深挖）。
 
 ---
 
@@ -110,7 +110,7 @@ Optional<String> c = Optional.empty();           // 明确空
 
 // 取值（三选一，避免 get 裸用）
 String v1 = opt.orElse("默认值");                // 空 → 默认值（总是创建）
-String v2 = opt.orElseGet(() -> expensive());    // 空 → 延迟计算（✅ 推荐）
+String v2 = opt.orElseGet(() -> expensive());    // 空 → 延迟计算（✓ 推荐）
 String v3 = opt.orElseThrow(() -> new BizException("缺失"));  // 空 → 抛异常
 
 // 判断
@@ -118,7 +118,7 @@ opt.isPresent();        // 是否存在
 opt.isEmpty();          // 是否为空（JDK 11）
 opt.ifPresent(v -> use(v));    // 存在才消费
 
-// ❌ 反模式：get() 裸用（空时抛 NoSuchElementException）
+// ✗ 反模式：get() 裸用（空时抛 NoSuchElementException）
 String v = opt.get();   // 危险！
 ```
 
@@ -130,7 +130,7 @@ String v = opt.orElseGet(() -> create());   // create() 只在空时执行（懒
 // → orElseGet 避免无谓创建（昂贵默认值时必须用）
 ```
 
-> 🎯 **核心要点**：Optional = "**ofNullable 创建 + orElse/orElseThrow 取值**"——**"orElse 总是创建 vs orElseGet 懒加载"与"get 裸用是反模式"两个考点**；创建三兄弟（of/ofNullable/empty）是入门第一课。
+> **核心要点**：Optional = "**ofNullable 创建 + orElse/orElseThrow 取值**"——**"orElse 总是创建 vs orElseGet 懒加载"与"get 裸用是反模式"两个考点**；创建三兄弟（of/ofNullable/empty）是入门第一课。
 
 ---
 
@@ -144,13 +144,13 @@ Optional<String> name = user
         .map(User::getAddress)        // Optional<Address>
         .map(Address::getCity);       // Optional<String>
 
-// ⚠️ map 的坑：嵌套 Optional
+// map 的坑：嵌套 Optional
 Optional<Order> order = ...;
 order.map(o -> findDetail(o))          // 返回 Optional<Optional<Detail>>！
-        .flatMap(Optional::identity);  // 拍平 → Optional<Detail> ✅
+        .flatMap(Optional::identity);  // 拍平 → Optional<Detail> ✓
 
 // flatMap：拍平（避免嵌套）
-order.flatMap(o -> findDetail(o));     // ✅ 直接得到 Optional<Detail>
+order.flatMap(o -> findDetail(o));     // ✓ 直接得到 Optional<Detail>
 
 // filter：条件过滤
 user.filter(u -> u.getAge() >= 18)
@@ -172,7 +172,7 @@ String city = user.map(User::getAddress)
 → Optional 链是"null 安全的地图导航"
 ```
 
-> 🎯 **核心要点**：链式 = "**map 转换 + flatMap 拍平 + filter 过滤 + 终止取值**"——**"map 产生嵌套 Optional、flatMap 拍平"是最核心考点**；深链取值用 map 链替代逐层 if 判空。
+> **核心要点**：链式 = "**map 转换 + flatMap 拍平 + filter 过滤 + 终止取值**"——**"map 产生嵌套 Optional、flatMap 拍平"是最核心考点**；深链取值用 map 链替代逐层 if 判空。
 
 ---
 
@@ -193,10 +193,10 @@ String city = user.map(User::getAddress)
 ```java
 // 反模式演示：字段 Optional（违反规范）
 public class User {
-    private Optional<String> nickname;    // ❌ 不可序列化 + 语义混乱
-    private String nickname;              // ✅ 普通字段，getter 返回 Optional
+    private Optional<String> nickname;    // ✗ 不可序列化 + 语义混乱
+    private String nickname;              // ✓ 普通字段，getter 返回 Optional
 }
-public Optional<String> getNickname() {   // ✅ 返回值用 Optional（方法级）
+public Optional<String> getNickname() {   // ✓ 返回值用 Optional（方法级）
     return Optional.ofNullable(nickname);
 }
 ```
@@ -204,12 +204,12 @@ public Optional<String> getNickname() {   // ✅ 返回值用 Optional（方法�
 **Optional 的使用边界**（什么时候用）：
 
 ```text
-✅ 方法返回值：可能缺失（findXxx、parseXxx）
-❌ 字段/参数/集合元素：不用（null 或空集合表达）
+✓ 方法返回值：可能缺失（findXxx、parseXxx）
+✗ 字段/参数/集合元素：不用（null 或空集合表达）
 → "Optional 是返回类型，不是类型系统"——Effective Java 观点
 ```
 
-> 🎯 **核心要点**：Optional 边界 = "**返回值可用、字段/参数/集合不可用**"——**"Optional 作为返回类型（find 类方法）是唯一推荐场景"**是面试标准答案；七大反模式清单覆盖误用全貌。
+> **核心要点**：Optional 边界 = "**返回值可用、字段/参数/集合不可用**"——**"Optional 作为返回类型（find 类方法）是唯一推荐场景"**是面试标准答案；七大反模式清单覆盖误用全貌。
 
 ---
 
@@ -239,7 +239,7 @@ Optional 三件事：ofNullable 创建、orElse 取值、map 链转换
 Optional 边界：返回值用、字段参数不用（七反模式）
 ```
 
-> 🎯 **核心要点**：速查 10 项 = "**函数式 + Optional 的完整考点**"——**"Optional 返回值专用 + 链式（map/flatMap/orElse）"两条主线**；方法引用与函数式组合（`Lambda表达式/02-03`）联动深挖。
+> **核心要点**：速查 10 项 = "**函数式 + Optional 的完整考点**"——**"Optional 返回值专用 + 链式（map/flatMap/orElse）"两条主线**；方法引用与函数式组合（`Lambda表达式/02-03`）联动深挖。
 
 ---
 

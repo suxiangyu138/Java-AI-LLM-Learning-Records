@@ -1,6 +1,6 @@
 # 02 - 注册中心：Nacos 服务发现
 
-> 🎯 Nacos（Na ming + Co nfig + Service）是阿里开源的服务注册+配置中心 — 替代 Eureka + Config 的组合，是 Spring Cloud Alibaba 生态的核心基石
+> Nacos（Na ming + Co nfig + Service）是阿里开源的服务注册+配置中心 — 替代 Eureka + Config 的组合，是 Spring Cloud Alibaba 生态的核心基石
 
 ---
 
@@ -44,7 +44,7 @@ docker run -d --name nacos -p 8848:8848 -p 9848:9848 \
 # application.yml
 spring:
   application:
-    name: user-service            # ⭐ 服务名 = Nacos 中的注册名
+    name: user-service            # ★ 服务名 = Nacos 中的注册名
   cloud:
     nacos:
       discovery:
@@ -56,7 +56,7 @@ spring:
 
 ```java
 @SpringBootApplication
-@EnableDiscoveryClient              // ⭐ 开启服务发现（新版可省略）
+@EnableDiscoveryClient              // ★ 开启服务发现（新版可省略）
 public class UserServiceApplication {
     public static void main(String[] args) {
         SpringApplication.run(UserServiceApplication.class, args);
@@ -75,7 +75,7 @@ public class OrderController {
 
     @GetMapping("/order/{id}")
     public Order getOrder(@PathVariable Long id) {
-        // ⭐ 服务名代替 IP:Port
+        // ★ 服务名代替 IP:Port
         String url = "http://user-service/users/" + id;
         return restTemplate.getForObject(url, User.class);
     }
@@ -84,7 +84,7 @@ public class OrderController {
 @Configuration
 class RestConfig {
     @Bean
-    @LoadBalanced            // ⭐ 开启负载均衡
+    @LoadBalanced            // ★ 开启负载均衡
     public RestTemplate restTemplate() {
         return new RestTemplate();
     }
@@ -143,7 +143,7 @@ Namespace (dev) ────── Namespace (prod)
 |------|-------|--------|
 | CAP 模型 | AP / CP 可切换 | AP |
 | 健康检查 | TCP + HTTP + MySQL | 心跳 |
-| 自我保护 | ❌ 无 | ✅ 15min 心跳失败>85%触发 |
+| 自我保护 | ✗ 无 | ✓ 15min 心跳失败>85%触发 |
 | 实例类型 | 临时+永久 | 仅临时 |
 
 ---
@@ -173,4 +173,4 @@ services:
   → 客户端配置 server-addr 用逗号分隔：127.0.0.1:8848,127.0.0.1:8849,127.0.0.1:8850
 ```
 
-> 🎯 **最佳实践**：开发单机模式用内置 Derby，生产必须集群+MySQL。namespace 按环境隔离（dev/test/prod），group 按版本隔离（v1/v2/gray）。
+> **最佳实践**：开发单机模式用内置 Derby，生产必须集群+MySQL。namespace 按环境隔离（dev/test/prod），group 按版本隔离（v1/v2/gray）。

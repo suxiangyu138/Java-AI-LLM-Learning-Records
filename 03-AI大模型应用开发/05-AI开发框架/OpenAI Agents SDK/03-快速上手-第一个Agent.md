@@ -2,7 +2,7 @@
 
 > 从零跑通 OpenAI Agents SDK：安装（openai-agents）、最小 Agent + 工具 + Runner 完整代码、运行验证与排错——"少写样板"的直观体验。
 
-## 📚 目录
+## 目录
 
 1. [安装与环境](#1-安装与环境)
 2. [最小 Agent 应用](#2-最小-agent-应用)
@@ -33,7 +33,7 @@ pip install openai-agents
 | API Key | OPENAI_API_KEY（或 LiteLLM 换其他模型） |
 | 底层 | Responses API（SDK 内置） |
 
-> 💡 Provider 无关：通过 LiteLLM 可接 100+ 模型（不锁定 OpenAI）。
+> Provider 无关：通过 LiteLLM 可接 100+ 模型（不锁定 OpenAI）。
 
 ## 2. 最小 Agent 应用
 
@@ -201,7 +201,7 @@ for item in result.new_items:
 
 > 对照结论：**手写五步循环的每一环都有 SDK 对应物**——原理不变，托管化；先手写（FC 体系）再 SDK，理解不丢。
 
-> 🎯 核心要点：最小 Agent 三步（工具/Agent/Runner）；托管循环 = Function Calling 的自动化；流式（run_streamed）与结构化（output_type）一等公民；LiteLLM 支持多 Provider；排错三问（Key/工具描述/max_turns）；六练习 + 手写对照表（原理不变，托管化）。
+> 核心要点：最小 Agent 三步（工具/Agent/Runner）；托管循环 = Function Calling 的自动化；流式（run_streamed）与结构化（output_type）一等公民；LiteLLM 支持多 Provider；排错三问（Key/工具描述/max_turns）；六练习 + 手写对照表（原理不变，托管化）。
 
 ---
 

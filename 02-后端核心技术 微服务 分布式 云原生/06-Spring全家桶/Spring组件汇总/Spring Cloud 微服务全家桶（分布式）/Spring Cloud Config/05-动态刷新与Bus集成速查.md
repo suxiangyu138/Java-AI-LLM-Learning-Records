@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [刷新三要素：改哪里、刷什么、谁重建](#1-刷新三要素改哪里刷什么谁重建)
 2. [@RefreshScope：重建机制详解](#2-refreshscope重建机制详解)
@@ -31,7 +31,7 @@
 | 客户端拿新 | /actuator/refresh 或 Bus 广播 | 触发 Environment 刷新 + Bean 重建 |
 | Bean 重建 | @RefreshScope | 只有标注的 Bean 重建 |
 
-> 🎯 关键认知：**"刷新"不是把配置推给客户端，而是"客户端主动再拉一次"**——refresh 端点/事件只是触发信号，配置还是从 Server 拉——这也是 Config 与 Nacos（长轮询推送）的本质区别（[08 篇](08-生产实践与选型避坑.md)）。
+> 关键认知：**"刷新"不是把配置推给客户端，而是"客户端主动再拉一次"**——refresh 端点/事件只是触发信号，配置还是从 Server 拉——这也是 Config 与 Nacos（长轮询推送）的本质区别（[08 篇](08-生产实践与选型避坑.md)）。
 
 ## 2. @RefreshScope：重建机制详解
 
@@ -71,15 +71,15 @@ public class OrderProperties {           // 绑定类同样适用
 
 | 目标 | 能刷？ | 说明 |
 |------|:---:|------|
-| @Value 字段 | ✅ | Bean 重建时重新注入 |
-| @ConfigurationProperties Bean | ✅ | 重建时重新绑定 |
-| 普通单例 Bean | ❌ | 不标注 @RefreshScope 不重建 |
-| **连接池/HTTP 客户端（初始化时建连接）** | ⚠️ | 重建 = 重新初始化（连接池重建可能断连，需评估） |
-| **@RefreshScope + @FeignClient / @Scheduled 等代理 Bean** | ⚠️ | 代理与 scope 缓存交互复杂，踩坑重灾区 |
-| 常量/static 字段 | ❌ | 编译期就定了 |
-| 原生镜像（AOT） | ❌ | 官方：refresh scope 不支持 native image |
+| @Value 字段 | ✓ | Bean 重建时重新注入 |
+| @ConfigurationProperties Bean | ✓ | 重建时重新绑定 |
+| 普通单例 Bean | ✗ | 不标注 @RefreshScope 不重建 |
+| **连接池/HTTP 客户端（初始化时建连接）** | | 重建 = 重新初始化（连接池重建可能断连，需评估） |
+| **@RefreshScope + @FeignClient / @Scheduled 等代理 Bean** | | 代理与 scope 缓存交互复杂，踩坑重灾区 |
+| 常量/static 字段 | ✗ | 编译期就定了 |
+| 原生镜像（AOT） | ✗ | 官方：refresh scope 不支持 native image |
 
-> ⚠️ **最常见误区**：以为"刷新 = 全部配置生效"——**只有 @RefreshScope Bean 会重建**；普通 @Service 里 new 出来的依赖、static 常量、初始化期建立连接的对象都不会变（[08 篇](08-生产实践与选型避坑.md) 坑位表）。
+> **最常见误区**：以为"刷新 = 全部配置生效"——**只有 @RefreshScope Bean 会重建**；普通 @Service 里 new 出来的依赖、static 常量、初始化期建立连接的对象都不会变（[08 篇](08-生产实践与选型避坑.md) 坑位表）。
 
 ## 3. 单实例刷新：/actuator/refresh
 
@@ -110,7 +110,7 @@ curl -X POST http://localhost:8081/actuator/refresh
 | 返回 | 变更的 key 列表（可用于断言刷新成功） |
 | 前提 | spring-boot-starter-actuator + 端点暴露 + @RefreshScope Bean |
 
-> 💡 单实例刷新适用：**验证配置、灰度单机验证**；生产 50 个实例逐个刷不现实——上 Bus（下节）。
+> 单实例刷新适用：**验证配置、灰度单机验证**；生产 50 个实例逐个刷不现实——上 Bus（下节）。
 
 ## 4. 全网刷新：Bus 集成（bus-refresh）
 
@@ -180,7 +180,7 @@ curl -X POST "http://localhost:8081/actuator/bus-refresh/order-service:8082"
 | 可靠性 | 直接生效 | fire-and-forget（事件丢了不重试） |
 | SCA 替代 | — | Nacos 内置推送，不需要 Bus |
 
-> 🎯 面试必答：**"Config 怎么做到全网刷新？"**——配套 **Spring Cloud Bus**：任意实例收到 `/actuator/bus-refresh` → 发布 `RefreshRemoteApplicationEvent` 到 MQ → 所有订阅实例消费事件后各自执行 refresh（@RefreshScope 重建）——**一次请求全网生效**；注意事件可能丢（fire-and-forget），关键变更后要抽查实例。
+> 面试必答：**"Config 怎么做到全网刷新？"**——配套 **Spring Cloud Bus**：任意实例收到 `/actuator/bus-refresh` → 发布 `RefreshRemoteApplicationEvent` 到 MQ → 所有订阅实例消费事件后各自执行 refresh（@RefreshScope 重建）——**一次请求全网生效**；注意事件可能丢（fire-and-forget），关键变更后要抽查实例。
 
 ## 5. Webhook 全自动刷新链路
 
@@ -220,7 +220,7 @@ Git 平台配置 Webhook：
   注意: 内网可达（Git 平台能访问到 Config Server）
 ```
 
-> ⚠️ 安全提醒：**/monitor 暴露在公网 = 任何人都能触发全网刷新**——必须加认证（Basic Auth/TLS/IP 白名单，见 [07 篇](07-安全认证与生产运维.md)）。
+> 安全提醒：**/monitor 暴露在公网 = 任何人都能触发全网刷新**——必须加认证（Basic Auth/TLS/IP 白名单，见 [07 篇](07-安全认证与生产运维.md)）。
 
 ### 5.3 全自动 vs 半自动
 
@@ -253,7 +253,7 @@ Git 平台配置 Webhook：
 | Server 一直返回旧配置 | fetch 缓存/工作目录落后 | fetch-interval: 0 或 force-pull |
 | 刷了但连接池没变 | 连接池不是 @RefreshScope 或重建有状态连接 | 评估重建影响，或连接池动态刷新（如 Hikari 需重建） |
 
-> 💡 排查口诀：**"改没改 → 拉到没 → 信号发没发 → 实例收没收到 → Bean 重建没"**——五段式排查，每一段都有日志/响应可查（[08 篇](08-生产实践与选型避坑.md) 也有）。
+> 排查口诀：**"改没改 → 拉到没 → 信号发没发 → 实例收没收到 → Bean 重建没"**——五段式排查，每一段都有日志/响应可查（[08 篇](08-生产实践与选型避坑.md) 也有）。
 
 ---
 

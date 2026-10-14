@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [Operations 家族总览](#1-operations-家族总览)
 2. [ValueOperations：字符串核心操作](#2-valueoperations字符串核心操作)
@@ -39,7 +39,7 @@ RedisTemplate<K,V>
 | ZSetOperations | zset | 排行榜、延迟任务、滑动窗口限流 |
 | StreamOperations | stream | 可靠消息队列（消费组） |
 
-> 💡 每个 `opsForXxx()` 每次调用都返回新实例，但内部无状态、可安全复用；常用写法是每次使用时现取现用。
+> 每个 `opsForXxx()` 每次调用都返回新实例，但内部无状态、可安全复用；常用写法是每次使用时现取现用。
 
 ## 2. ValueOperations：字符串核心操作
 
@@ -71,7 +71,7 @@ String sub = ops.get("str:key", 0, 5);          // GETRANGE 子串
 ops.append("str:key", "tail");                  // APPEND 追加
 ```
 
-> ⚠️ **一致性要点**：`set(k, v)` 后单独再调 `expire(k, ttl)` 是两步操作，两步之间若进程崩溃，key 成为永久 key（内存泄漏）。**必须用带 TTL 的单参数重载**。同理，判断分布式锁用 `setIfAbsent`（SET NX PX 原子），**不要用"先 setnx 再 expire"两段式**。
+> **一致性要点**：`set(k, v)` 后单独再调 `expire(k, ttl)` 是两步操作，两步之间若进程崩溃，key 成为永久 key（内存泄漏）。**必须用带 TTL 的单参数重载**。同理，判断分布式锁用 `setIfAbsent`（SET NX PX 原子），**不要用"先 setnx 再 expire"两段式**。
 
 ### 2.3 位图
 
@@ -104,7 +104,7 @@ Map<String, Object> all = ops.entries("cart:1001");
 Long deleted = ops.delete("cart:1001", "sku:88");
 ```
 
-> 🎯 **要点**：hash 的 `increment(field)` 是原子操作，**不要在业务代码里"先 get 再 put 自加"**——并发下必然丢更新。对象存储优先 hash（可改单字段）而非整体 JSON（改一个字段要整读整写）。
+> **要点**：hash 的 `increment(field)` 是原子操作，**不要在业务代码里"先 get 再 put 自加"**——并发下必然丢更新。对象存储优先 hash（可改单字段）而非整体 JSON（改一个字段要整读整写）。
 
 ## 4. ListOperations：队列与栈
 
@@ -133,7 +133,7 @@ List<Object> list = ops.range("history:1001", 0, -1);
 | `leftPush` + 阻塞变体 | 高并发入队侧 | 配合消费者数设计 |
 | `leftPop(key, timeout)` | 阻塞弹出（BLPOP） | **超时前返回 null，需判空** |
 
-> ⚠️ **阻塞弹出陷阱**：`leftPop(key, Duration)` 在等待期间占用连接（Lettuce 共享连接下会独占），高并发消费者场景注意超时不宜过长；可靠性要求高请直接用 Stream（08 篇）。
+> **阻塞弹出陷阱**：`leftPop(key, Duration)` 在等待期间占用连接（Lettuce 共享连接下会独占），高并发消费者场景注意超时不宜过长；可靠性要求高请直接用 Stream（08 篇）。
 
 ## 5. SetOperations 与 ZSetOperations
 
@@ -173,7 +173,7 @@ long deadline = System.currentTimeMillis();
 Set<Object> due = ops.rangeByScore("delay:task", 0, deadline);   // 已到期任务
 ```
 
-> 🎯 **要点**：ZSet 是"排行榜 + 延迟队列 + 滑动窗口限流"的统一实现；`incrementScore` 原子自增避免了"读分→加分→写回"的丢更新问题。
+> **要点**：ZSet 是"排行榜 + 延迟队列 + 滑动窗口限流"的统一实现；`incrementScore` 原子自增避免了"读分→加分→写回"的丢更新问题。
 
 ## 6. StreamOperations：日志型队列
 
@@ -209,7 +209,7 @@ for (ObjectRecord<String, Object> record : records) {
 | XACK | `ops.acknowledge` | 消费成功后确认，防重复投递 |
 | 死信查看 | `ops.pending(...)` | pending 列表即"未确认/处理中"清单 |
 
-> 💡 生产级消息消费更推荐 08 篇的 `StreamMessageListenerContainer`（自动轮询 + 错误处理 + 并发控制），此处 API 用于理解底层语义。
+> 生产级消息消费更推荐 08 篇的 `StreamMessageListenerContainer`（自动轮询 + 错误处理 + 并发控制），此处 API 用于理解底层语义。
 
 ## 7. Redis 8.x 新命令与 2026 新 API
 
@@ -232,7 +232,7 @@ Object session = hashOps.getAndExpire("session:user:1001", "token", Duration.ofM
 hashOps.set("session:user:1001", "token", newToken, Duration.ofMinutes(30));
 ```
 
-> 🎯 **价值**：这些命令把"读+删""读+续期"从两次网络往返压缩为一次，且消除了两步之间的竞态窗口——Redis 8.0 + Spring Data Redis 4.x 组合下推荐优先使用。
+> **价值**：这些命令把"读+删""读+续期"从两次网络往返压缩为一次，且消除了两步之间的竞态窗口——Redis 8.0 + Spring Data Redis 4.x 组合下推荐优先使用。
 
 ### 7.2 Redis 8.4 条件 SET / DEL（2026 新特性）
 
@@ -260,7 +260,7 @@ ops.delete("session:1001", spec -> spec
 | Watch 事务 | 2+ | 无（失败重试） | 低并发 |
 | **条件 SET/DEL（Redis 8.4+）** | **1** | **无** | **Redis 8.4+ 专用** |
 
-> 💡 生产注意：条件 SET/DEL 是 Redis 8.4 服务端能力，需确认线上 Redis 版本；兼容旧版本的通用原子方案仍是 Lua 脚本（见 04 篇）。
+> 生产注意：条件 SET/DEL 是 Redis 8.4 服务端能力，需确认线上 Redis 版本；兼容旧版本的通用原子方案仍是 Lua 脚本（见 04 篇）。
 
 ## 8. 通用操作与边界场景
 
@@ -278,7 +278,7 @@ redisTemplate.rename("user:1001", "user:1002");       // RENAME
 DataType type = redisTemplate.type("cart:1001");
 ```
 
-> ⚠️ `keys("user:*")` 会阻塞 Redis 单线程全库扫描——生产环境禁止，改走 `scan`（`RedisConnection.scan()` 回调）或维护索引 key。
+> `keys("user:*")` 会阻塞 Redis 单线程全库扫描——生产环境禁止，改走 `scan`（`RedisConnection.scan()` 回调）或维护索引 key。
 
 ### 8.2 边界与陷阱速查
 
@@ -292,7 +292,7 @@ DataType type = redisTemplate.type("cart:1001");
 | `keys`/`smembers` 全量 | 阻塞与内存峰值 | scan / 分批 |
 | 阻塞 pop 超时 | 返回 null | 判空 + 记录 WARN 日志 |
 
-> 🎯 **核心要点**：操作 API 层牢记三条主线——①**原子性优先**：带条件的 set、increment、Redis 8.x 新命令，能一次往返绝不两段式；②**类型即纪律**：同 key 的 value 类型一旦确定不可混用；③**批量与阻塞**：全量命令（KEYS/SMEMBERS）与长阻塞（BLPOP）是性能暗雷，大 key 必须拆分。进阶批量能力见 05 篇管道与事务。
+> **核心要点**：操作 API 层牢记三条主线——①**原子性优先**：带条件的 set、increment、Redis 8.x 新命令，能一次往返绝不两段式；②**类型即纪律**：同 key 的 value 类型一旦确定不可混用；③**批量与阻塞**：全量命令（KEYS/SMEMBERS）与长阻塞（BLPOP）是性能暗雷，大 key 必须拆分。进阶批量能力见 05 篇管道与事务。
 
 ---
 

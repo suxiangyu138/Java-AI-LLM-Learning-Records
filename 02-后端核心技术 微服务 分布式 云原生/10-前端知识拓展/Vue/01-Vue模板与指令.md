@@ -2,7 +2,7 @@
 
 > 定位：模板语法全解——插值、指令系统、事件与表单绑定、计算属性与侦听器
 
-## 📚 目录
+## 目录
 
 1. [插值与模板语法](#1-插值与模板语法)
 2. [指令系统](#2-指令系统)
@@ -24,9 +24,9 @@
     <p>{{ user.name }}</p>                    <!-- 属性访问 -->
     <p>{{ isActive ? '是' : '否' }}</p>       <!-- 三元 -->
 
-    <!-- v-text / v-html（⚠️ v-html 有 XSS 风险） -->
+    <!-- v-text / v-html（v-html 有 XSS 风险） -->
     <span v-text="message"></span>
-    <span v-html="rawHtml"></span>            <!-- ⚠️ 不要用于用户输入 -->
+    <span v-html="rawHtml"></span>            <!-- 不要用于用户输入 -->
 </template>
 ```
 
@@ -48,7 +48,7 @@
 </template>
 ```
 
-> 🎯 **要点**：`{{ }}` 自动转义（安全默认）；`v-html` 渲染原始 HTML（XSS 风险，用户输入禁用）；`:class` 对象/数组语法是高频写法。
+> **要点**：`{{ }}` 自动转义（安全默认）；`v-html` 渲染原始 HTML（XSS 风险，用户输入禁用）；`:class` 对象/数组语法是高频写法。
 
 ---
 
@@ -66,7 +66,7 @@
     <!-- v-show：切换 display（始终渲染） -->
     <p v-show="isVisible">显示/隐藏</p>
 
-    <!-- ⚠️ v-if vs v-show：频繁切换用 v-show，条件少用 v-if -->
+    <!-- v-if vs v-show：频繁切换用 v-show，条件少用 v-if -->
 </template>
 ```
 
@@ -74,7 +74,7 @@
 
 ```vue
 <template>
-    <!-- v-for：列表渲染（⚠️ key 必须唯一稳定） -->
+    <!-- v-for：列表渲染（key 必须唯一稳定） -->
     <li v-for="(item, index) in items" :key="item.id">
         {{ index }} - {{ item.name }}
     </li>
@@ -85,7 +85,7 @@
     <!-- 数字遍历 -->
     <li v-for="n in 5" :key="n">{{ n }}</li>
 
-    <!-- ⚠️ 不要用 index 作 key（列表排序/过滤时出 bug） -->
+    <!-- 不要用 index 作 key（列表排序/过滤时出 bug） -->
 </template>
 ```
 
@@ -98,7 +98,7 @@
 | v-bind（:） | 属性绑定 | `:href="url"` |
 | v-if / v-show | 条件渲染 | 见上 |
 | v-for | 列表渲染 | 见上 |
-| v-html / v-text | 内容输出 | ⚠️ v-html 慎用 |
+| v-html / v-text | 内容输出 | v-html 慎用 |
 | v-once | 只渲染一次 | 静态内容优化 |
 | v-memo | 记忆渲染（Vue 3.2+） | 复杂列表性能优化 |
 
@@ -201,7 +201,7 @@ import { ref, computed } from 'vue';
 
 const items = ref([{ price: 10, count: 2 }, { price: 5, count: 1 }]);
 
-// ⚠️ 计算属性：依赖变化自动重算 + 缓存
+// 计算属性：依赖变化自动重算 + 缓存
 const totalPrice = computed(() =>
     items.value.reduce((sum, item) => sum + item.price * item.count, 0)
 );
@@ -218,7 +218,7 @@ const fullName = computed({
 </template>
 ```
 
-> 🎯 **要点**：`computed` 有缓存（依赖不变不重算）——**模板里复杂表达式一律用 computed**；`watch` 适合副作用（异步/API 调用）。
+> **要点**：`computed` 有缓存（依赖不变不重算）——**模板里复杂表达式一律用 computed**；`watch` 适合副作用（异步/API 调用）。
 
 ### 5.2 watch（侦听器）
 
@@ -255,12 +255,12 @@ watch(keyword, handler, { once: true });
 | 维度 | computed | watch |
 |------|:---:|:---:|
 | 用途 | 派生数据（返回新值） | 副作用（请求/操作） |
-| 缓存 | ✅ 有 | ❌ |
-| 模板使用 | ✅ 直接 {{ }} | ❌ |
+| 缓存 | ✓ 有 | ✗ |
+| 模板使用 | ✓ 直接 {{ }} | ✗ |
 | 触发 | 依赖变化自动 | 显式监听 |
 | 选型口诀 | **能 computed 不 watch** | 需要副作用才 watch |
 
-> 🎯 **核心要点**：模板体系 = **插值**（{{ }} 转义安全）+ **指令**（v-if/v-for/v-model/:class 高频五件套）+ **事件修饰符**（prevent/stop/enter）+ **computed**（缓存派生值）+ **watch**（副作用）。"能 computed 不 watch"是 Vue 最佳实践第一原则。
+> **核心要点**：模板体系 = **插值**（{{ }} 转义安全）+ **指令**（v-if/v-for/v-model/:class 高频五件套）+ **事件修饰符**（prevent/stop/enter）+ **computed**（缓存派生值）+ **watch**（副作用）。"能 computed 不 watch"是 Vue 最佳实践第一原则。
 
 ---
 

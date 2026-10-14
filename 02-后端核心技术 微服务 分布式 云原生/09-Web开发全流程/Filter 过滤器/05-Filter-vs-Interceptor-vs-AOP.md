@@ -1,7 +1,7 @@
 # 05-Filter vs Interceptor vs AOP
 > 三层拦截机制的定位分工：Filter（容器层）、Interceptor（MVC 层）、AOP（Bean 层）——"面试必问的对比"
 
-## 📚 目录
+## 目录
 1. [三层拦截总览](#1-三层拦截总览)
 2. [Filter：容器层](#2-filter容器层)
 3. [Interceptor：MVC 层](#3-interceptormvc-层)
@@ -25,7 +25,7 @@
 | **Interceptor** | Spring MVC | Handler 方法（Controller 前后） | 登录/权限/日志（细粒度） |
 | **AOP** | Spring | Bean 方法 | 事务/日志/性能（最细） |
 
-> 🎯 **一句话记忆**：**Filter 拦请求（最外层）、Interceptor 拦 Controller（中间层）、AOP 拦方法（最内层）**——粒度从粗到细，离业务从远到近。
+> **一句话记忆**：**Filter 拦请求（最外层）、Interceptor 拦 Controller（中间层）、AOP 拦方法（最内层）**——粒度从粗到细，离业务从远到近。
 
 ## 2. Filter：容器层
 
@@ -80,7 +80,7 @@ public class LoginInterceptor implements HandlerInterceptor {
 | 拿到 | `HandlerMethod`（方法/注解！） |
 | 三方法 | preHandle / postHandle / afterCompletion |
 
-> 🎯 **Interceptor 对比 Filter 的核心优势**：**能拿到 HandlerMethod**——可以读取 Controller 方法上的注解（如 @RequireLogin）做细粒度控制；这是 Filter 做不到的。
+> **Interceptor 对比 Filter 的核心优势**：**能拿到 HandlerMethod**——可以读取 Controller 方法上的注解（如 @RequireLogin）做细粒度控制；这是 Filter 做不到的。
 
 ## 4. AOP：Bean 层
 
@@ -109,7 +109,7 @@ public class LogAspect {
 | 拿到 | 方法签名/参数/注解 |
 | 注意 | 代理限制（自调用失效，见 AOP 体系） |
 
-> 💡 **AOP 与 Interceptor 的区别**：Interceptor 只拦"Controller 的 Handler 方法"；AOP 可切**任意 Bean 的方法**（Service 层日志、Repository 监控）——**层级更深入、范围更广**。
+> **AOP 与 Interceptor 的区别**：Interceptor 只拦"Controller 的 Handler 方法"；AOP 可切**任意 Bean 的方法**（Service 层日志、Repository 监控）——**层级更深入、范围更广**。
 
 ## 5. 执行顺序
 
@@ -132,7 +132,7 @@ Filter 前置 → Interceptor.preHandle → Controller（AOP 环绕）
   → Interceptor.postHandle → Interceptor.afterCompletion → Filter 后置
 ```
 
-> 🎯 **面试必答顺序**：**Filter 前置 → Interceptor.preHandle → Controller（AOP）→ Interceptor.postHandle/afterCompletion → Filter 后置**——三层各管一段，外层包裹内层。
+> **面试必答顺序**：**Filter 前置 → Interceptor.preHandle → Controller（AOP）→ Interceptor.postHandle/afterCompletion → Filter 后置**——三层各管一段，外层包裹内层。
 
 ## 6. 选型决策
 
@@ -159,11 +159,11 @@ Filter 前置 → Interceptor.preHandle → Controller（AOP 环绕）
 | 需要 HandlerMethod | Interceptor |
 | 需要静态资源 | Filter |
 
-> 🎯 **分工总结**：**粗粒度全局（Filter）+ 细粒度控制器（Interceptor）+ 方法级业务（AOP）**——三个层次配合，各自处理适合自己的横切逻辑。
+> **分工总结**：**粗粒度全局（Filter）+ 细粒度控制器（Interceptor）+ 方法级业务（AOP）**——三个层次配合，各自处理适合自己的横切逻辑。
 
 ## 7. 核心要点
 
-> 🎯 **核心要点**：
+> **核心要点**：
 > - 三层定位：Filter（容器层，拦请求）、Interceptor（MVC 层，拦 Controller）、AOP（Bean 层，切方法）；
 > - Interceptor 独有能力：拿到 HandlerMethod（读方法注解）；
 > - AOP 独有能力：切任意 Bean 方法（Service 层也行）；

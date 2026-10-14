@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [协议概览与设计哲学](#1-协议概览与设计哲学)
 2. [请求格式详解](#2-请求格式详解)
@@ -37,7 +37,7 @@ Authorization: Bearer <api_key>
 | **SSE 流式** | 可选流式输出，Server-Sent Events 标准协议 |
 | **可扩展** | `tool_choice`、`response_format` 等字段逐步演进 |
 
-> 💡 Chat Completions 本质是**无状态推理服务**：你把完整对话历史发过去，模型基于历史生成下一个回复。没有服务端会话概念。
+> Chat Completions 本质是**无状态推理服务**：你把完整对话历史发过去，模型基于历史生成下一个回复。没有服务端会话概念。
 
 ### 1.3 一个最简请求
 
@@ -77,17 +77,17 @@ curl https://api.openai.com/v1/chat/completions \
 
 | 字段 | 类型 | 必填 | 说明 |
 |------|------|:---:|------|
-| `model` | string | ✅ | 模型 ID，如 `gpt-4o`、`deepseek-chat` |
-| `messages` | array | ✅ | 对话消息列表（见 2.2） |
-| `temperature` | float | ❌ | 0.0~2.0，越高越随机，默认 1.0 |
-| `max_tokens` | int | ❌ | 输出 token 上限（含 reasoning tokens） |
-| `top_p` | float | ❌ | 核采样，0.0~1.0，默认 1.0 |
-| `n` | int | ❌ | 返回几个候选回复，默认 1 |
-| `stream` | bool | ❌ | 是否流式输出，默认 false |
-| `stop` | string/array | ❌ | 停止符，遇到即终止生成 |
-| `frequency_penalty` | float | ❌ | -2.0~2.0，降低重复词概率 |
-| `presence_penalty` | float | ❌ | -2.0~2.0，鼓励讨论新话题 |
-| `user` | string | ❌ | 终端用户标识（用于滥用监控） |
+| `model` | string | ✓ | 模型 ID，如 `gpt-4o`、`deepseek-chat` |
+| `messages` | array | ✓ | 对话消息列表（见 2.2） |
+| `temperature` | float | ✗ | 0.0~2.0，越高越随机，默认 1.0 |
+| `max_tokens` | int | ✗ | 输出 token 上限（含 reasoning tokens） |
+| `top_p` | float | ✗ | 核采样，0.0~1.0，默认 1.0 |
+| `n` | int | ✗ | 返回几个候选回复，默认 1 |
+| `stream` | bool | ✗ | 是否流式输出，默认 false |
+| `stop` | string/array | ✗ | 停止符，遇到即终止生成 |
+| `frequency_penalty` | float | ✗ | -2.0~2.0，降低重复词概率 |
+| `presence_penalty` | float | ✗ | -2.0~2.0，鼓励讨论新话题 |
+| `user` | string | ✗ | 终端用户标识（用于滥用监控） |
 
 ### 2.2 Messages 数组
 
@@ -123,7 +123,7 @@ curl https://api.openai.com/v1/chat/completions \
 }
 ```
 
-> ⚠️ **兼容性注意**：部分兼容实现（如 Ollama 早期版本、某些 llama.cpp 配置）不支持 `system` role，system prompt 会被合并到第一条 user message 中。
+> **兼容性注意**：部分兼容实现（如 Ollama 早期版本、某些 llama.cpp 配置）不支持 `system` role，system prompt 会被合并到第一条 user message 中。
 
 ### 2.3 Content 的多种形式
 
@@ -214,7 +214,7 @@ curl https://api.openai.com/v1/chat/completions \
 }
 ```
 
-> ⚠️ **兼容性注意**：`prompt_tokens_details` 和 `completion_tokens_details` 是 OpenAI 特有字段，绝大多数兼容接口不返回。付费计费应依赖 `total_tokens`。
+> **兼容性注意**：`prompt_tokens_details` 和 `completion_tokens_details` 是 OpenAI 特有字段，绝大多数兼容接口不返回。付费计费应依赖 `total_tokens`。
 
 ---
 
@@ -399,7 +399,7 @@ if (finishReason != null) {
 }
 ```
 
-> ⚠️ **兼容性注意**：Tool Calling 支持差异很大。vLLM/DeepSeek/Qwen 支持良好；Ollama 需较新版本；llama.cpp 需要模型本身支持 function calling 格式。
+> **兼容性注意**：Tool Calling 支持差异很大。vLLM/DeepSeek/Qwen 支持良好；Ollama 需较新版本；llama.cpp 需要模型本身支持 function calling 格式。
 
 ---
 
@@ -426,7 +426,7 @@ if (finishReason != null) {
 }
 ```
 
-> ⚠️ **关键限制**：开启 `json_object` 时，system prompt 或 user prompt 中必须出现 `JSON` 关键词，否则 API 返回错误。
+> **关键限制**：开启 `json_object` 时，system prompt 或 user prompt 中必须出现 `JSON` 关键词，否则 API 返回错误。
 
 ### 6.2 Structured Output（OpenAI 特有）
 
@@ -465,22 +465,22 @@ if (finishReason != null) {
 }
 ```
 
-> ⚠️ **兼容性注意**：`json_schema` 是 OpenAI 2024 年新增的严格结构化输出能力，绝大多数兼容接口**不支持**。跨平台通用方案是使用 `json_object` + 详细 schema 在 system prompt 中描述。
+> **兼容性注意**：`json_schema` 是 OpenAI 2024 年新增的严格结构化输出能力，绝大多数兼容接口**不支持**。跨平台通用方案是使用 `json_object` + 详细 schema 在 system prompt 中描述。
 
 ### 6.3 跨平台 JSON 输出策略
 
 ```text
 方案 A：response_format: json_object + system prompt 描述 schema
-  适用：GPT-4o, DeepSeek, Qwen 等主流模型 ✅
+  适用：GPT-4o, DeepSeek, Qwen 等主流模型 ✓
 
 方案 B：response_format: json_schema（strict mode）
-  适用：仅 OpenAI 官方 API ⚠️
+  适用：仅 OpenAI 官方 API 
 
 方案 C：Tool Calling 强制输出（定义单工具 + tool_choice: required）
-  适用：支持 function calling 的所有模型 🎯 推荐跨平台方案
+  适用：支持 function calling 的所有模型 推荐跨平台方案
 
 方案 D：Grammar-based sampling（llama.cpp 特有）
-  适用：本地 llama.cpp 部署 🔧
+  适用：本地 llama.cpp 部署 
 ```
 
 ---
@@ -518,7 +518,7 @@ if (finishReason != null) {
 | `low` | 低分辨率（512x512） | ~85 tokens |
 | `high` | 高分辨率（按 tile 计费） | ~170 tokens/tile |
 
-> ⚠️ **兼容性注意**：Vision 支持因模型和部署工具而异。vLLM 需加载多模态模型；Ollama 需 `llava`/`llama3.2-vision` 等专用模型；DeepSeek API 不支持图片输入（截至 2025）。
+> **兼容性注意**：Vision 支持因模型和部署工具而异。vLLM 需加载多模态模型；Ollama 需 `llava`/`llama3.2-vision` 等专用模型；DeepSeek API 不支持图片输入（截至 2025）。
 
 ---
 
@@ -533,7 +533,7 @@ if (finishReason != null) {
 数据分析、JSON：  temperature=0.0, top_p=1.0       ← 最确定性
 ```
 
-> 💡 **黄金规则**：通常**只调 temperature 和 top_p 之一**，不同时修改两者。
+> **黄金规则**：通常**只调 temperature 和 top_p 之一**，不同时修改两者。
 
 ### 8.2 max_tokens 设置策略
 
@@ -568,18 +568,18 @@ int maxTokens = Math.min(
 
 | 特性 | OpenAI | DeepSeek | vLLM | Ollama | llama.cpp | 智谱 GLM |
 |------|:---:|:---:|:---:|:---:|:---:|:---:|
-| Chat Completions | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| `system` role | ✅ | ✅ | ✅ | ⚠️ v0.2+ | ✅ | ✅ |
-| Streaming (SSE) | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| Tool Calling | ✅ | ✅ | ✅ | ⚠️ 部分 | ⚠️ 模型 | ✅ |
-| JSON Mode | ✅ | ✅ | ✅ | ✅ | ⚠️ grammar | ⚠️ |
-| Vision | ✅ | ❌ | ⚠️ 多模态 | ⚠️ 专用模型 | ⚠️ 专用模型 | ✅ |
-| `json_schema` | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| `logprobs` | ✅ | ✅ | ❌ | ❌ | ❌ | ❌ |
-| `n > 1` | ✅ | ❌ | ⚠️ | ❌ | ❌ | ❌ |
-| `seed` | ✅ | ❌ | ✅ | ✅ | ✅ | ⚠️ |
+| Chat Completions | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
+| `system` role | ✓ | ✓ | ✓ | v0.2+ | ✓ | ✓ |
+| Streaming (SSE) | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
+| Tool Calling | ✓ | ✓ | ✓ | 部分 | 模型 | ✓ |
+| JSON Mode | ✓ | ✓ | ✓ | ✓ | grammar | |
+| Vision | ✓ | ✗ | 多模态 | 专用模型 | 专用模型 | ✓ |
+| `json_schema` | ✓ | ✗ | ✗ | ✗ | ✗ | ✗ |
+| `logprobs` | ✓ | ✓ | ✗ | ✗ | ✗ | ✗ |
+| `n > 1` | ✓ | ✗ | | ✗ | ✗ | ✗ |
+| `seed` | ✓ | ✗ | ✓ | ✓ | ✓ | |
 
-> 🎯 **核心要点**：基础 Chat Completions + Streaming 是所有兼容接口的共同子集——这是可移植代码的**安全区**。Tool Calling 和 Vision 是差异最大的区域，需要做好能力检测和降级。
+> **核心要点**：基础 Chat Completions + Streaming 是所有兼容接口的共同子集——这是可移植代码的**安全区**。Tool Calling 和 Vision 是差异最大的区域，需要做好能力检测和降级。
 
 ---
 

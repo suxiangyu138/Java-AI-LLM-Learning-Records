@@ -1,7 +1,7 @@
 # 02-静态资源与 location 匹配
 > location 匹配优先级（面试必考）、静态资源服务、gzip 压缩、缓存头——"Nginx 最擅长的事：服务静态文件"
 
-## 📚 目录
+## 目录
 1. [location 匹配规则与优先级](#1-location-匹配规则与优先级)
 2. [静态资源服务](#2-静态资源服务)
 3. [gzip 压缩](#3-gzip-压缩)
@@ -44,7 +44,7 @@ location /api/          { ... }   # ④ 普通前缀（最长匹配）
 location /              { ... }   # ⑤ 兜底
 ```
 
-> ⚠️ **正则的坑**：正则按**配置文件中的顺序**匹配（第一个命中生效）——相同匹配度的正则，写在前面优先。
+> **正则的坑**：正则按**配置文件中的顺序**匹配（第一个命中生效）——相同匹配度的正则，写在前面优先。
 
 ## 2. 静态资源服务
 
@@ -69,7 +69,7 @@ server {
 | `root` | 路径**拼接**（root + URI） | 站点根目录 |
 | `alias` | 路径**替换**（alias 替换 location 前缀） | 指定目录映射 |
 
-> 💡 root vs alias 是高频考点：**root 拼接、alias 替换**——`location /static/` + `alias /data/` 时，`/static/a.js` → `/data/a.js`。
+> root vs alias 是高频考点：**root 拼接、alias 替换**——`location /static/` + `alias /data/` 时，`/static/a.js` → `/data/a.js`。
 
 ## 3. gzip 压缩
 
@@ -93,7 +93,7 @@ http {
 | `gzip_min_length` | 1k（小文件不压） |
 | `gzip_comp_level` | 5（平衡 CPU 与压缩率） |
 
-> 🎯 gzip 的收益：**JSON/JS/CSS 压缩率 60-80%**——接入层开启后全站响应体积大幅下降；动态接口也受益（代理响应可压缩）。
+> gzip 的收益：**JSON/JS/CSS 压缩率 60-80%**——接入层开启后全站响应体积大幅下降；动态接口也受益（代理响应可压缩）。
 
 ## 4. 静态资源缓存头
 
@@ -119,7 +119,7 @@ location ~* \.(js|css|png|jpg|jpeg|gif|ico|svg|woff2?)$ {
   不带 hash 的文件 → 短缓存 + 版本号
 ```
 
-> ⚠️ **缓存与更新的矛盾**：长缓存 + 文件名 hash 是标准解（hash 变化 = 新文件 = 新缓存）；**不要对 HTML 长缓存**（更新后用户拿旧页面）。
+> **缓存与更新的矛盾**：长缓存 + 文件名 hash 是标准解（hash 变化 = 新文件 = 新缓存）；**不要对 HTML 长缓存**（更新后用户拿旧页面）。
 
 ## 5. try_files 与前端路由
 
@@ -144,7 +144,7 @@ try_files 语法：try_files file1 file2 ... fallback;
   /index.html：回退（SPA 入口）
 ```
 
-> 🎯 **SPA 刷新 404 的解法**：`try_files $uri $uri/ /index.html`——前端路由（history 模式）刷新时服务端没有对应文件，回退到入口页由前端路由接管。
+> **SPA 刷新 404 的解法**：`try_files $uri $uri/ /index.html`——前端路由（history 模式）刷新时服务端没有对应文件，回退到入口页由前端路由接管。
 
 ## 6. 目录索引与防盗链
 
@@ -176,7 +176,7 @@ location ~ /\. {
 
 ## 7. 核心要点
 
-> 🎯 **核心要点**：
+> **核心要点**：
 > - location 优先级口诀：**精确 > 前缀(^~) > 正则 > 最长前缀 > 默认**（面试必考）；
 > - root 拼接 vs alias 替换（高频考点）；
 > - gzip：文本类压缩（JS/JSON 省 60-80%），图片视频不压；

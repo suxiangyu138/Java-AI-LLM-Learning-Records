@@ -1,8 +1,8 @@
 # 02 - Java 集合框架
 
-> 🎯 集合框架是 Java 面试的"必考大题"——HashMap 源码几乎场场出现，ConcurrentHashMap 是并发考点的最佳载体。本模块只复盘大厂真题：HashMap put 全流程、扩容机制、为什么 2 的幂、ConcurrentHashMap 1.7→1.8 演进、fail-fast 机制
+> 集合框架是 Java 面试的"必考大题"——HashMap 源码几乎场场出现，ConcurrentHashMap 是并发考点的最佳载体。本模块只复盘大厂真题：HashMap put 全流程、扩容机制、为什么 2 的幂、ConcurrentHashMap 1.7→1.8 演进、fail-fast 机制
 
-## 📚 目录
+## 目录
 
 1. [集合体系全景](#1-集合体系全景)
 2. [List 三兄弟与选型](#2-list-三兄弟与选型)
@@ -91,7 +91,7 @@ TreeMap/TreeSet 底层是红黑树，key 有序，支持范围查询（subMap/fl
 
 HashMap put 流程让手写一遍（口头描述即可）；树化阈值为什么是 8（泊松分布，概率极低）；1.8 为什么用 synchronized（锁升级后性能不输 ReentrantLock + 代码简洁）；ConcurrentHashMap 为什么不能存 null（无法区分 null 与不存在，且源码强制校验）；HashMap 允许 null 吗（允许，key/value 都可——单线程语义下 null 有意义，CHM 不行是并发歧义）。
 
-> 🎯 **核心要点**：集合题的通吃公式 = **结构 → 流程 → 权衡 → 演进**。以 HashMap 为例：结构（数组+链表+红黑树）→ put 流程（hash 定位/尾插/树化）→ 权衡（0.75/8/64/2 的幂都是权衡结果）→ 演进（1.7 头插死循环 → 1.8 尾插+树化；CHM 分段锁 → CAS+synchronized）。按这条线答，任何集合题都逃不出这个框架。
+> **核心要点**：集合题的通吃公式 = **结构 → 流程 → 权衡 → 演进**。以 HashMap 为例：结构（数组+链表+红黑树）→ put 流程（hash 定位/尾插/树化）→ 权衡（0.75/8/64/2 的幂都是权衡结果）→ 演进（1.7 头插死循环 → 1.8 尾插+树化；CHM 分段锁 → CAS+synchronized）。按这条线答，任何集合题都逃不出这个框架。
 
 ---
 

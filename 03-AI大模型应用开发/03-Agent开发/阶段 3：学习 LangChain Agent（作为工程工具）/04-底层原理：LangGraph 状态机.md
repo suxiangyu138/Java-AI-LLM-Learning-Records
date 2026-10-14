@@ -2,7 +2,7 @@
 
 > 定位：拆开 create_agent 的包装看内部——StateGraph 三要素、create_agent 内部结构解剖、何时手动下沉（2026-08 基准）
 
-## 📚 目录
+## 目录
 
 1. [状态机三要素](#1-状态机三要素)
 2. [create_agent 内部结构解剖](#2-create_agent-内部结构解剖)
@@ -50,7 +50,7 @@ graph.add_edge("tools", "agent")        # tools → agent（回到循环）
 app = graph.compile()
 ```
 
-> 🎯 **核心要点**：状态机 = **"显式的循环"**。你的阶段 1 while 循环在 LangGraph 里变成图：`START → agent → (条件) → tools → agent → ... → END`——一模一样，只是"可视化"了。
+> **核心要点**：状态机 = **"显式的循环"**。你的阶段 1 while 循环在 LangGraph 里变成图：`START → agent → (条件) → tools → agent → ... → END`——一模一样，只是"可视化"了。
 
 ## 2. create_agent 内部结构解剖
 
@@ -75,7 +75,7 @@ agent 节点（LLM 调用）
 | 状态（messages） | 全程消息累积 | messages 数组 |
 | recursion_limit | 循环上限 | MAX_TURNS |
 
-> 💡 **费曼测试**：create_agent 的每个内部组件都能对应你阶段 1 手写代码里的一段——对不上说明还没吃透（回阶段 1 的 04 篇）。
+> **费曼测试**：create_agent 的每个内部组件都能对应你阶段 1 手写代码里的一段——对不上说明还没吃透（回阶段 1 的 04 篇）。
 
 ## 3. 手写 StateGraph：最小 Agent
 
@@ -133,18 +133,18 @@ def tools_condition(state: MessagesState):
 # 正是阶段 1 的：if not msg.tool_calls: return answer
 ```
 
-> ⚠️ **理解终点**：LangGraph 没有魔法——条件路由就是你手写的 `if not msg.tool_calls`，节点就是你手写的执行函数，状态就是你手写的 messages。
+> **理解终点**：LangGraph 没有魔法——条件路由就是你手写的 `if not msg.tool_calls`，节点就是你手写的执行函数，状态就是你手写的 messages。
 
 ## 5. 何时下沉 StateGraph
 
 | 需求 | create_agent | StateGraph |
 |------|:---:|:---:|
-| 标准工具循环 | ✅ | ✅（绕远） |
-| 人类审批（human-in-the-loop） | ❌ | ✅（interrupt 节点） |
-| 多 Agent 交接 | ❌ | ✅（Supervisor 模式） |
-| 中途状态检查/注入 | ❌ | ✅（任意节点读 state） |
-| 条件重试逻辑 | ⚠️ 钩子能凑 | ✅ |
-| 非 ReAct 拓扑（如 Plan-Execute） | ❌ | ✅ |
+| 标准工具循环 | ✓ | ✓（绕远） |
+| 人类审批（human-in-the-loop） | ✗ | ✓（interrupt 节点） |
+| 多 Agent 交接 | ✗ | ✓（Supervisor 模式） |
+| 中途状态检查/注入 | ✗ | ✓（任意节点读 state） |
+| 条件重试逻辑 | 钩子能凑 | ✓ |
+| 非 ReAct 拓扑（如 Plan-Execute） | ✗ | ✓ |
 
 ```text
 决策公式：
@@ -152,7 +152,7 @@ def tools_condition(state: MessagesState):
 不要在项目第一天就上 StateGraph（阶段 4/5 会展开多 Agent 与 HITL）
 ```
 
-> 💡 2026 生产模式（Fintoran 等真实案例）：**LangChain 1.0 create_agent + LangGraph StateGraph（Supervisor + 专业 Agent）**——高层 API 起步，节点级控制处下沉。
+> 2026 生产模式（Fintoran 等真实案例）：**LangChain 1.0 create_agent + LangGraph StateGraph（Supervisor + 专业 Agent）**——高层 API 起步，节点级控制处下沉。
 
 ## 6. 与手写循环的对应
 
@@ -166,7 +166,7 @@ def tools_condition(state: MessagesState):
 | 流式打印 | graph.stream() | 自动支持 |
 | 记忆持久化 | checkpointer | checkpointer 参数 |
 
-> 🎯 **核心要点**：状态机不是新知识，是**你手写循环的可视化形式**。学 LangGraph 的正确姿势：先想"这段我手写怎么写"，再看框架怎么表达——两张图重合之日，就是框架真正掌握之时。
+> **核心要点**：状态机不是新知识，是**你手写循环的可视化形式**。学 LangGraph 的正确姿势：先想"这段我手写怎么写"，再看框架怎么表达——两张图重合之日，就是框架真正掌握之时。
 
 ---
 

@@ -116,7 +116,7 @@ spring:
         # namespace: c0a6d4a1-7b8c-4c9d-9e0f-1a2b3c4d5e6f  # 也可以使用 Namespace ID
 ```
 
-> 💡 推荐使用 Namespace ID（UUID）而非 Namespace 名称来配置，避免名称冲突。
+> 推荐使用 Namespace ID（UUID）而非 Namespace 名称来配置，避免名称冲突。
 
 #### 2.2.2 Group（分组）
 
@@ -188,7 +188,7 @@ spring:
 
 #### 2.3.2 bootstrap.yml 配置
 
-> ⚠️ Nacos Config 必须在 **bootstrap.yml**（或 bootstrap.properties）中配置，因为配置中心的信息需要在应用启动的早期阶段加载。Spring Cloud 2020.x 之后默认不再自动引入 bootstrap，需要手动添加依赖或使用不同方式。
+> Nacos Config 必须在 **bootstrap.yml**（或 bootstrap.properties）中配置，因为配置中心的信息需要在应用启动的早期阶段加载。Spring Cloud 2020.x 之后默认不再自动引入 bootstrap，需要手动添加依赖或使用不同方式。
 
 ```xml
 <!-- 方式一：添加 bootstrap 依赖（推荐） -->
@@ -382,7 +382,7 @@ public class ContextRefresher implements ApplicationContextAware {
 }
 ```
 
-> 💡 `@RefreshScope` 的原理是自定义 Scope。Spring 容器在启动时创建 Bean 实例并缓存，刷新时销毁缓存，下次请求时重新创建实例并注入新值。注意：Bean 在第一次被调用时才创建（懒加载），刷新后第一个请求会有创建开销。
+> `@RefreshScope` 的原理是自定义 Scope。Spring 容器在启动时创建 Bean 实例并缓存，刷新时销毁缓存，下次请求时重新创建实例并注入新值。注意：Bean 在第一次被调用时才创建（懒加载），刷新后第一个请求会有创建开销。
 
 #### 2.4.3 @RefreshScope 的局限性
 
@@ -553,7 +553,7 @@ app:
 | 6 | 本地 bootstrap.yml | 本地配置 | 最低 |
 | 7 | 本地 application.yml | 本地配置 | 最低 |
 
-> 🎯 **关键原则**：带 Profile 的配置覆盖无 Profile 的配置；远程配置覆盖本地配置；专有配置覆盖共享配置。
+> **关键原则**：带 Profile 的配置覆盖无 Profile 的配置；远程配置覆盖本地配置；专有配置覆盖共享配置。
 
 ### 2.7 灰度发布（Beta 发布）
 
@@ -619,7 +619,7 @@ curl http://192.168.1.10:8081/config   # 预期显示 pool-size=50
 curl http://192.168.1.11:8081/config   # 预期显示 pool-size=20（未灰度）
 ```
 
-> ⚠️ 灰度发布生效后，如果不正式发布，Beta 配置会覆盖正式配置只在灰度 IP 上生效。**灰度配置重启后是否保留取决于是否已正式发布**，建议灰度验证通过后立即正式发布。
+> 灰度发布生效后，如果不正式发布，Beta 配置会覆盖正式配置只在灰度 IP 上生效。**灰度配置重启后是否保留取决于是否已正式发布**，建议灰度验证通过后立即正式发布。
 
 ### 2.8 配置监听与自定义扩展
 
@@ -709,7 +709,7 @@ Nacos 控制台支持查看配置的历史版本和回滚操作：
 | **社区活跃度** | 非常活跃 | 活跃 |
 | **学习成本** | 低 | 中 |
 
-> 🎯 **选型建议**：已经使用 Nacos 做注册中心的项目，自然使用 Nacos Config 避免维护两套系统；配置管理场景复杂、需要细粒度权限管理和审计追踪的大型团队，Apollo 的管理功能更完善。
+> **选型建议**：已经使用 Nacos 做注册中心的项目，自然使用 Nacos Config 避免维护两套系统；配置管理场景复杂、需要细粒度权限管理和审计追踪的大型团队，Apollo 的管理功能更完善。
 
 ---
 
@@ -722,16 +722,16 @@ Nacos 控制台支持查看配置的历史版本和回滚操作：
 **根源**：Spring Boot 2.4+ / Spring Cloud 2020.x 默认禁用了 bootstrap 机制，`application.yml` 加载顺序晚于 `bootstrap.yml`，导致 Nacos Config 配置未被正确加载。
 
 ```xml
-<!-- ❌ 错误：缺少 bootstrap 依赖 -->
+<!-- ✗ 错误：缺少 bootstrap 依赖 -->
 <!-- 未引入 spring-cloud-starter-bootstrap -->
 
-<!-- ✅ 方案一：添加 bootstrap 依赖 -->
+<!-- ✓ 方案一：添加 bootstrap 依赖 -->
 <dependency>
     <groupId>org.springframework.cloud</groupId>
     <artifactId>spring-cloud-starter-bootstrap</artifactId>
 </dependency>
 
-<!-- ✅ 方案二：不使用 bootstrap，直接使用 Spring Cloud 新机制 -->
+<!-- ✓ 方案二：不使用 bootstrap，直接使用 Spring Cloud 新机制 -->
 <!-- application.yml -->
 spring:
   application:
@@ -747,7 +747,7 @@ spring:
 **根源**：Bean 未标注 `@RefreshScope`，或者配置属性未通过 `@Value` / `@ConfigurationProperties` 注入。
 
 ```java
-// ❌ 错误：未加 @RefreshScope
+// ✗ 错误：未加 @RefreshScope
 @Component
 public class AppConfig {
     @Value("${app.version}")
@@ -755,7 +755,7 @@ public class AppConfig {
     // 修改 Nacos 配置后，version 不会更新
 }
 
-// ✅ 正确：添加 @RefreshScope
+// ✓ 正确：添加 @RefreshScope
 @Component
 @RefreshScope
 public class AppConfig {
@@ -766,11 +766,11 @@ public class AppConfig {
 ```
 
 ```java
-// ❌ 错误：硬编码默认值，覆盖了 Nacos 配置
+// ✗ 错误：硬编码默认值，覆盖了 Nacos 配置
 @Value("${app.version:1.0.0}")  // 默认值 1.0.0 可能覆盖 Nacos 配置
 private String version;
 
-// ✅ 正确：避免使用默认值，或确保 Nacos 配置有值
+// ✓ 正确：避免使用默认值，或确保 Nacos 配置有值
 @Value("${app.version}")
 private String version;
 ```
@@ -780,7 +780,7 @@ private String version;
 **现象**：Nacos 控制台配置的 DataId 为 `user-service.properties`，但客户端设置的 `file-extension` 为 `yaml`，导致配置无法解析。
 
 ```yaml
-# ❌ 错误：DataId 后缀和 file-extension 不一致
+# ✗ 错误：DataId 后缀和 file-extension 不一致
 # Nacos 创建的 DataId：user-service.yaml
 # 客户端配置：
 spring:
@@ -789,7 +789,7 @@ spring:
       config:
         file-extension: properties  # 应该为 yaml
 
-# ✅ 正确：保持一致
+# ✓ 正确：保持一致
 spring:
   cloud:
     nacos:
@@ -797,7 +797,7 @@ spring:
         file-extension: yaml  # 与 DataId 后缀一致
 ```
 
-> 💡 Nacos Config 客户端拼接 DataId 的规则是：`${prefix}-${profile}.${file-extension}`，三个部分任何一个不匹配都会导致获取不到配置。
+> Nacos Config 客户端拼接 DataId 的规则是：`${prefix}-${profile}.${file-extension}`，三个部分任何一个不匹配都会导致获取不到配置。
 
 ### 3.4 Namespace ID 与名称混淆
 
@@ -806,14 +806,14 @@ spring:
 **根源**：`namespace` 属性既可以填 Namespace ID（UUID），也可以填 Namespace 名称，但**如果名称冲突或不存在**，会导致找不到命名空间。
 
 ```yaml
-# ❌ 可能的问题：namespace 名称包含不可见字符或空格
+# ✗ 可能的问题：namespace 名称包含不可见字符或空格
 spring:
   cloud:
     nacos:
       config:
         namespace: dev  # 控制台创建时名称可能误写了 "dev " 带空格
 
-# ✅ 推荐：使用 Namespace ID（UUID），避免歧义
+# ✓ 推荐：使用 Namespace ID（UUID），避免歧义
 spring:
   cloud:
     nacos:
@@ -828,10 +828,10 @@ spring:
 **根源**：对配置优先级规则理解有误。**远程配置的优先级高于本地配置**，但如果本地配置中指定了特殊的 Active Profile，情况会更复杂。
 
 ```yaml
-# ❌ 误区：以为 application.yml 会覆盖 Nacos 配置
+# ✗ 误区：以为 application.yml 会覆盖 Nacos 配置
 # 实际上 Nacos 配置优先级高于本地 application.yml
 
-# ✅ 正确理解优先级：
+# ✓ 正确理解优先级：
 # 1. 带 Profile 的远程配置（优先级最高）
 #    user-service-dev.yaml
 # 2. 不带 Profile 的远程配置
@@ -846,12 +846,12 @@ spring:
 **根源**：使用了相同的 DataId，例如两个服务都使用 `application.yaml` 作为 DataId，导致配置冲突。
 
 ```yaml
-# ❌ 错误：两个服务使用相同的 DataId
+# ✗ 错误：两个服务使用相同的 DataId
 # user-service 的 DataId: application.yaml
 # order-service 的 DataId: application.yaml
 # 修改任意一个，另一个也会收到变更
 
-# ✅ 正确：每个服务使用唯一 DataId
+# ✓ 正确：每个服务使用唯一 DataId
 # user-service 的 DataId: user-service.yaml
 # order-service 的 DataId: order-service.yaml
 ```
@@ -1752,7 +1752,7 @@ public class NacosPropertySourceLocator implements PropertySourceLocator {
 | `nacos.config.enable-remote-sync-config` | true | 启用远程配置同步，确保一致性 |
 | `spring.cloud.nacos.config.refresh-enabled` | true | 开启动态刷新，否则配置变更不会自动生效 |
 
-> 🎯 本章学习了 Nacos Config 的完整配置管理体系：三级模型（Namespace/Group/DataId）、动态刷新原理（@RefreshScope + 长轮询）、配置共享与优先级规则、灰度发布流程。掌握这些知识后，你可以在微服务项目中构建一套完整的集中配置管理方案。
+> 本章学习了 Nacos Config 的完整配置管理体系：三级模型（Namespace/Group/DataId）、动态刷新原理（@RefreshScope + 长轮询）、配置共享与优先级规则、灰度发布流程。掌握这些知识后，你可以在微服务项目中构建一套完整的集中配置管理方案。
 
 ---
 

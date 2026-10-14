@@ -4,11 +4,11 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [依赖与两种姿势](#1-依赖与两种姿势)
 2. [姿势一：原生 WebSocketHandler](#2-姿势一原生-websockethandler)
-3. [姿势二：STOMP 子协议（⭐ 推荐）](#3-姿势二stomp-子协议-推荐)
+3. [姿势二：STOMP 子协议（★ 推荐）](#3-姿势二stomp-子协议-推荐)
 4. [聊天室实战：事件监听](#4-聊天室实战事件监听)
 5. [服务端主动推送](#5-服务端主动推送)
 6. [Boot 4 的变化](#6-boot-4-的变化)
@@ -26,7 +26,7 @@
 </dependency>
 ```
 
-**Spring 提供两种姿势**：**姿势一（原生 Handler）**——`@EnableWebSocket` + 实现 WebSocketHandler——**裸协议、自己管理会话**，适合"协议自己定、消息简单"的场景；**姿势二（STOMP 子协议，⭐ 推荐）**——`@EnableWebSocketMessageBroker` + `@MessageMapping` 注解——**框架帮你做路由/广播/点对点**（类似 RabbitMQ 的 Topic/Queue 语义）——"**原生是砖头，STOMP 是框架——业务开发默认 STOMP，只有特殊协议需求才裸写 Handler**"。**Boot 4 注意**：4.0.5 修复了"Jackson 相关配置缺失导致 WebSocket 启动失败"的问题——**升级到 4.0.5+ 或配好 ObjectMapper bean**（第 6 节）。**版本基线**：Boot 4 需要 **JDK 21+**；starter 坐标与 Boot 3 相同——老教程的配置类写法（@EnableWebSocketMessageBroker 等注解）基本兼容，**安全配置除外**（@EnableWebSocketSecurity 迁移，第 6 节）；**老项目 Boot 2 → Boot 4 升级**：先查 WebSocket 安全配置与消息转换器（Jackson/Gson），再跑 STOMP 连接回归（第 6 节检查单）。
+**Spring 提供两种姿势**：**姿势一（原生 Handler）**——`@EnableWebSocket` + 实现 WebSocketHandler——**裸协议、自己管理会话**，适合"协议自己定、消息简单"的场景；**姿势二（STOMP 子协议，★ 推荐）**——`@EnableWebSocketMessageBroker` + `@MessageMapping` 注解——**框架帮你做路由/广播/点对点**（类似 RabbitMQ 的 Topic/Queue 语义）——"**原生是砖头，STOMP 是框架——业务开发默认 STOMP，只有特殊协议需求才裸写 Handler**"。**Boot 4 注意**：4.0.5 修复了"Jackson 相关配置缺失导致 WebSocket 启动失败"的问题——**升级到 4.0.5+ 或配好 ObjectMapper bean**（第 6 节）。**版本基线**：Boot 4 需要 **JDK 21+**；starter 坐标与 Boot 3 相同——老教程的配置类写法（@EnableWebSocketMessageBroker 等注解）基本兼容，**安全配置除外**（@EnableWebSocketSecurity 迁移，第 6 节）；**老项目 Boot 2 → Boot 4 升级**：先查 WebSocket 安全配置与消息转换器（Jackson/Gson），再跑 STOMP 连接回归（第 6 节检查单）。
 
 ## 2. 姿势一：原生 WebSocketHandler
 
@@ -69,7 +69,7 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
 
 **会话的四个常用操作**：`getAttributes()`（握手拦截器存的数据——用户信息）、`isOpen()`（发送前检查）、`close(CloseStatus)`（主动关闭——**踢人下线 = 找到 session 调 close(1008)**，07 篇）、`getRemoteAddress()`（来源 IP——日志/风控）——"**会话对象是连接的服务端身份证**"。
 
-## 3. 姿势二：STOMP 子协议（⭐ 推荐）
+## 3. 姿势二：STOMP 子协议（★ 推荐）
 
 ```java
 @Configuration
@@ -175,7 +175,7 @@ public class OrderNotifyService {
 4. SimpMessagingTemplate 的两个核心 API？为什么可以任意位置调用？
 5. Boot 4.0.5 修复了什么？@EnableWebSocketSecurity 是什么？
 
-> 🎯 **核心要点**：SpringBoot 实战 = **"原生 Handler 打底、STOMP 推荐（/topic 广播 + /queue 点对点 + /app 入口）、SimpMessagingTemplate 是推送封装"**——"业务事件 → template 推给相关用户"是实时通知标准姿势；**Boot 4.0.5 修了两个 STOMP bug，安全配置迁到 @EnableWebSocketSecurity**。
+> **核心要点**：SpringBoot 实战 = **"原生 Handler 打底、STOMP 推荐（/topic 广播 + /queue 点对点 + /app 入口）、SimpMessagingTemplate 是推送封装"**——"业务事件 → template 推给相关用户"是实时通知标准姿势；**Boot 4.0.5 修了两个 STOMP bug，安全配置迁到 @EnableWebSocketSecurity**。
 
 ---
 

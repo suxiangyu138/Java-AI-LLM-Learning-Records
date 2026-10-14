@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [Spring Messaging 抽象](#1-spring-messaging-抽象)
 2. [STOMP 帧协议深潜](#2-stomp-帧协议深潜)
@@ -115,7 +115,7 @@ template.convertAndSendToUser(userId, "/queue/ai", Map.of(
 4. SimpUserRegistry 与连接注册表的分工？
 5. RSocket 与 WebSocket 的定位？AI 双通道分工？
 
-> 🎯 **核心要点**：Spring 生态 = **Messaging 抽象（通道拦截器挂鉴权/限流）+ STOMP 帧协议（/app 进 /topic /queue 出 /user 个性化）+ 类型化消息（反序列化即校验）**——"三层防线各管一段：握手验连接、通道验订阅、应用做权限"；**AI 时代：SSE 传文字、WS 传事件**。
+> **核心要点**：Spring 生态 = **Messaging 抽象（通道拦截器挂鉴权/限流）+ STOMP 帧协议（/app 进 /topic /queue 出 /user 个性化）+ 类型化消息（反序列化即校验）**——"三层防线各管一段：握手验连接、通道验订阅、应用做权限"；**AI 时代：SSE 传文字、WS 传事件**。
 
 ---
 

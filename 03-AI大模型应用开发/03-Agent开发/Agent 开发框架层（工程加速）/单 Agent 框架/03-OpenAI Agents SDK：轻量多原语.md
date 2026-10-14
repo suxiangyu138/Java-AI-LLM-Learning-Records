@@ -2,7 +2,7 @@
 
 > 定位：轻量原语范式的代表——Agent/Handoffs/Guardrails/Sessions/Tracing 五个原语半天上手（v0.19.0，2026-08 基准）
 
-## 📚 目录
+## 目录
 
 1. [定位与版本现状](#1-定位与版本现状)
 2. [五原语：Agent 与 Runner](#2-五原语agent-与-runner)
@@ -24,7 +24,7 @@
   → 新项目一律走 Agents SDK 或 Responses API
 ```
 
-> 🎯 **生态位**：深度绑定 OpenAI 生态、想要"一个下午上手、官方维护、够用就好"的团队。handoff 链天然对应客服分流场景（前台 → 专员 → 升级）。
+> **生态位**：深度绑定 OpenAI 生态、想要"一个下午上手、官方维护、够用就好"的团队。handoff 链天然对应客服分流场景（前台 → 专员 → 升级）。
 
 ## 2. 五原语：Agent 与 Runner
 
@@ -60,7 +60,7 @@ Runner.run_streamed(...)     流式（事件：模型输出/工具调用/移交�
 run 之间默认无状态 → 用 Sessions（5 节）保留历史
 ```
 
-> 💡 **为什么轻量**：没有图、没有显式状态机——循环（LLM → 工具 → LLM）由 Runner 内部完成，你的心智负担只剩"Agent 怎么分、怎么交"。
+> **为什么轻量**：没有图、没有显式状态机——循环（LLM → 工具 → LLM）由 Runner 内部完成，你的心智负担只剩"Agent 怎么分、怎么交"。
 
 ## 3. Handoffs：任务移交
 
@@ -113,7 +113,7 @@ async def injection_guardrail(ctx, agent, input_data):
 agent = Agent(..., input_guardrails=[injection_guardrail])
 ```
 
-> ⚠️ 注意范围：工具护栏主要作用于 `function_tool`；handoff 与 hosted tools 不走同一管线。
+> 注意范围：工具护栏主要作用于 `function_tool`；handoff 与 hosted tools 不走同一管线。
 
 ## 5. Sessions：会话持久化
 

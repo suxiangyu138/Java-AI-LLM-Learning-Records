@@ -1,10 +1,10 @@
 # macOS 环境配置与 Java 开发
 
-> ☕ `/usr/libexec/java_home` 为什么是 macOS 专属神器？SDKMAN 如何秒切 8 个 JDK 版本？Homebrew JDK 和手动安装有什么不同？—— Java 开发者在 macOS 上的环境配置全攻略
+> `/usr/libexec/java_home` 为什么是 macOS 专属神器？SDKMAN 如何秒切 8 个 JDK 版本？Homebrew JDK 和手动安装有什么不同？—— Java 开发者在 macOS 上的环境配置全攻略
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [macOS 环境变量体系](#1-macos-环境变量体系)
 2. [JDK 安装方案对比](#2-jdk-安装方案对比)
@@ -35,18 +35,18 @@ macOS 上环境变量生效的完整链路：
    └── 不走 Shell 配置！需要特殊方式设置
 ```
 
-> ⚠️ **关键陷阱**：从 Dock 或 Spotlight 启动的 IDEA 不会读取 `~/.zshrc` 中的环境变量。需要通过 `launchctl setenv` 或在 `~/.zshenv` 中设置。
+> **关键陷阱**：从 Dock 或 Spotlight 启动的 IDEA 不会读取 `~/.zshrc` 中的环境变量。需要通过 `launchctl setenv` 或在 `~/.zshenv` 中设置。
 
 ### 1.2 配置方式对比
 
 | 方式 | 作用范围 | 持久性 | GUI 应用可见 | 推荐场景 |
 |------|:---:|:---:|:---:|------|
-| `export` in `.zshrc` | 终端会话 | 永久 | ❌ | 命令行工具 |
-| `export` in `.zshenv` | 所有 zsh | 永久 | ❌ | 环境变量 |
-| `launchctl setenv` | 整个用户会话 | 重启后失效 | ✅ | GUI 应用需用 |
-| `~/Library/LaunchAgents/*.plist` | 用户服务 | 永久 | ✅ | 服务/守护进程 |
-| `/etc/paths` / `/etc/paths.d/` | 全局 PATH | 永久 | ✅ | 系统级 PATH |
-| `/etc/launchd.conf` | 全局环境 | 永久 | ✅ | 所有进程（macOS 10.9 已弃用） |
+| `export` in `.zshrc` | 终端会话 | 永久 | ✗ | 命令行工具 |
+| `export` in `.zshenv` | 所有 zsh | 永久 | ✗ | 环境变量 |
+| `launchctl setenv` | 整个用户会话 | 重启后失效 | ✓ | GUI 应用需用 |
+| `~/Library/LaunchAgents/*.plist` | 用户服务 | 永久 | ✓ | 服务/守护进程 |
+| `/etc/paths` / `/etc/paths.d/` | 全局 PATH | 永久 | ✓ | 系统级 PATH |
+| `/etc/launchd.conf` | 全局环境 | 永久 | ✓ | 所有进程（macOS 10.9 已弃用） |
 
 ### 1.3 推荐配置位置
 
@@ -104,11 +104,11 @@ launchctl load ~/Library/LaunchAgents/environment.plist
 
 | 方案 | 安装命令 | JDK 路径 | 版本切换 | 推荐度 |
 |------|---------|---------|:---:|:---:|
-| **Homebrew** | `brew install openjdk@21` | `/opt/homebrew/opt/openjdk@21/` | 手动 | ⭐⭐⭐ |
-| **SDKMAN** | `sdk install java 21.0.5-tem` | `~/.sdkman/candidates/java/` | ✅ 秒切 | ⭐⭐⭐⭐⭐ |
-| **手动 .tar.gz** | 下载 → 解压 | 自定义 | 手动 | ⭐⭐ |
-| **DMG 安装包** | 双击安装 | `/Library/Java/JavaVirtualMachines/` | 手动 | ⭐⭐⭐ |
-| **jEnv** | `brew install jenv` | 管理 `/Library/Java/` 下的 JDK | ✅ | ⭐⭐⭐ |
+| **Homebrew** | `brew install openjdk@21` | `/opt/homebrew/opt/openjdk@21/` | 手动 | ★★★ |
+| **SDKMAN** | `sdk install java 21.0.5-tem` | `~/.sdkman/candidates/java/` | ✓ 秒切 | ★★★★★ |
+| **手动 .tar.gz** | 下载 → 解压 | 自定义 | 手动 | ★★ |
+| **DMG 安装包** | 双击安装 | `/Library/Java/JavaVirtualMachines/` | 手动 | ★★★ |
+| **jEnv** | `brew install jenv` | 管理 `/Library/Java/` 下的 JDK | ✓ | ★★★ |
 
 ### 2.2 Homebrew 安装
 
@@ -149,7 +149,7 @@ java --version
 # /Library/Java/JavaVirtualMachines/jdk-21.jdk/Contents/Home/
 ```
 
-> 💡 **DMG 安装的系统级 JDK** 会被 `/usr/libexec/java_home` 自动发现，而 Homebrew 的需要手动符号链接。
+> **DMG 安装的系统级 JDK** 会被 `/usr/libexec/java_home` 自动发现，而 Homebrew 的需要手动符号链接。
 
 ---
 
@@ -265,7 +265,7 @@ echo $JAVA_HOME
 # → /Users/xxx/.sdkman/candidates/java/current
 ```
 
-> 🎯 **核心要点**：SDKMAN 的 `sdk use` 和项目级 `.sdkmanrc` 是 Java 版本管理的最佳实践，配合 IDEA 的 Project SDK 设置可做到命令行和 IDE 完全一致。
+> **核心要点**：SDKMAN 的 `sdk use` 和项目级 `.sdkmanrc` 是 Java 版本管理的最佳实践，配合 IDEA 的 Project SDK 设置可做到命令行和 IDE 完全一致。
 
 ---
 
@@ -300,7 +300,7 @@ echo $JAVA_HOME
 export JAVA_HOME=$(/usr/libexec/java_home -v 21)
 ```
 
-> ⚠️ **注意**：`/usr/libexec/java_home` 只能发现 `/Library/Java/JavaVirtualMachines/` 下的 JDK。Homebrew 安装的需要手动符号链接到该目录。
+> **注意**：`/usr/libexec/java_home` 只能发现 `/Library/Java/JavaVirtualMachines/` 下的 JDK。Homebrew 安装的需要手动符号链接到该目录。
 
 ### 4.2 多版本自动切换脚本
 
@@ -312,7 +312,7 @@ function java_version_auto() {
         local version=$(cat .java-version)
         export JAVA_HOME=$(/usr/libexec/java_home -v "$version" 2>/dev/null || \
                            sdk home java "$version" 2>/dev/null)
-        echo "☕ JDK switched to $version → $JAVA_HOME"
+        echo "JDK switched to $version → $JAVA_HOME"
     fi
 }
 

@@ -1,6 +1,6 @@
 # 06 - GLM 在开发框架中的集成
 
-> 🎯 GLM 兼容 OpenAI 协议 = 天然适配所有主流框架 — LangChain4j、Spring AI、Python LangChain、OpenClaw 全部改 baseUrl 即接入。本章给出各框架完整接入代码
+> GLM 兼容 OpenAI 协议 = 天然适配所有主流框架 — LangChain4j、Spring AI、Python LangChain、OpenClaw 全部改 baseUrl 即接入。本章给出各框架完整接入代码
 
 ---
 
@@ -153,10 +153,10 @@ llm_with_tools = llm.bind_tools([get_weather])
 }
 ```
 
-> 💡 **GLM-5-Turbo 是 OpenClaw 官方推荐的龙虾场景模型** — 39 元/月套餐（3500 万 Token）是长链路 Agent 的最低成本方案。
+> **GLM-5-Turbo 是 OpenClaw 官方推荐的龙虾场景模型** — 39 元/月套餐（3500 万 Token）是长链路 Agent 的最低成本方案。
 
 ---
 
-> 🎯 **核心要点**：GLM 集成一句话 — **"OpenAI 兼容 = 所有框架零成本接入"**。所有框架只需改 `baseUrl`（open.bigmodel.cn/api/paas/v4）+ `model`（glm-5/glm-5.1/glm-5-turbo/glm-5.2）。OpenClaw 场景直接用 GLM-5-Turbo + 龙虾套餐最划算。
+> **核心要点**：GLM 集成一句话 — **"OpenAI 兼容 = 所有框架零成本接入"**。所有框架只需改 `baseUrl`（open.bigmodel.cn/api/paas/v4）+ `model`（glm-5/glm-5.1/glm-5-turbo/glm-5.2）。OpenClaw 场景直接用 GLM-5-Turbo + 龙虾套餐最划算。
 
 **下一模块**：[07-GLM选型与生态对比](07-GLM选型与生态对比.md) / **返回总览**：[00-总览](00-GLM-API知识体系总览.md)

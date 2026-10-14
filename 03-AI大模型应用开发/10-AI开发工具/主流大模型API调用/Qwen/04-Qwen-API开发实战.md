@@ -1,6 +1,6 @@
 # 04 - Qwen API 开发实战
 
-> 🎯 Qwen API 通过阿里云百炼平台（Model Studio）提供 — 完全兼容 OpenAI 协议。本章覆盖快速接入、对话/流式、函数调用、多模态、价格计算与免费额度
+> Qwen API 通过阿里云百炼平台（Model Studio）提供 — 完全兼容 OpenAI 协议。本章覆盖快速接入、对话/流式、函数调用、多模态、价格计算与免费额度
 
 ---
 
@@ -36,7 +36,7 @@ response = client.chat.completions.create(
 print(response.choices[0].message.content)
 ```
 
-> 💡 百炼平台已上线 **100+ 款国内外主流模型 API**（Qwen/GLM/Kimi/MiniMax/DeepSeek）— 一个 Key 调用全家。
+> 百炼平台已上线 **100+ 款国内外主流模型 API**（Qwen/GLM/Kimi/MiniMax/DeepSeek）— 一个 Key 调用全家。
 
 ---
 
@@ -190,6 +190,6 @@ print(f"成本: ¥{estimate_cost('qwen3.5-plus', 100_000, 20_000):.4f}")
 
 ---
 
-> 🎯 **核心要点**：Qwen API 四件事 — **① 百炼平台（base_url: dashscope.aliyuncs.com/compatible-mode/v1）② OpenAI 兼容（改 base_url 即用）③ 多模态（图片/2 小时视频/1M 文档）④ 极致低价（Flash ¥0.2/百万）**。免费额度 7000 万+ Token 起步，新用户零成本试水。
+> **核心要点**：Qwen API 四件事 — **① 百炼平台（base_url: dashscope.aliyuncs.com/compatible-mode/v1）② OpenAI 兼容（改 base_url 即用）③ 多模态（图片/2 小时视频/1M 文档）④ 极致低价（Flash ¥0.2/百万）**。免费额度 7000 万+ Token 起步，新用户零成本试水。
 
 **下一模块**：[05-Qwen-Agent与Coding-Plan](05-Qwen-Agent与Coding-Plan.md) / **返回总览**：[00-总览](00-Qwen-API知识体系总览.md)

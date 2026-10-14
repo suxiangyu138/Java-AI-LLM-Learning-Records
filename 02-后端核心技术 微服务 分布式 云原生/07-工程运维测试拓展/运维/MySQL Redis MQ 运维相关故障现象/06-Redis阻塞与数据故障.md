@@ -1,7 +1,7 @@
 # 06-Redis 阻塞与数据故障
 > 大 key、阻塞命令、持久化阻塞、主从切换——"Redis 变慢与丢数据"的现象与解决
 
-## 📚 目录
+## 目录
 1. [故障一：大 key](#1-故障一大-key)
 2. [故障二：阻塞命令与慢命令](#2-故障二阻塞命令与慢命令)
 3. [故障三：持久化阻塞](#3-故障三持久化阻塞)
@@ -57,7 +57,7 @@ redis-cli hlen user:1001
   ④ 删除：用 UNLINK（异步删除，不阻塞）
 ```
 
-> ⚠️ **删除大 key 用 `UNLINK` 不用 `DEL`**：DEL 同步阻塞（大 key 删除 = 阻塞事故），UNLINK 异步释放（8.4 支持）。
+> **删除大 key 用 `UNLINK` 不用 `DEL`**：DEL 同步阻塞（大 key 删除 = 阻塞事故），UNLINK 异步释放（8.4 支持）。
 
 ## 2. 故障二：阻塞命令与慢命令
 
@@ -90,7 +90,7 @@ redis-cli CONFIG SET slowlog-max-len 128
 | `SORT` | 排序耗时 | 应用侧 |
 | `FLUSHALL`/`FLUSHDB` | 清库阻塞 | 慎用 |
 
-> 🎯 **生产铁律**：**`KEYS *` 生产禁用**——用 `SCAN`（游标分批）；大集合读全量用 `SSCAN/HSCAN` 分页。面试问"Redis 变慢"先答慢命令。
+> **生产铁律**：**`KEYS *` 生产禁用**——用 `SCAN`（游标分批）；大集合读全量用 `SSCAN/HSCAN` 分页。面试问"Redis 变慢"先答慢命令。
 
 ## 3. 故障三：持久化阻塞
 
@@ -114,7 +114,7 @@ redis-cli info persistence
 | AOF 重写 | fork + 写盘 | 错峰/调频 |
 | AOF fsync（always） | 每写同步（最慢） | 用 everysec |
 
-> 💡 **fork 是隐藏阻塞点**：RDB/AOF 重写的 fork 瞬间会阻塞（内存越大越久）——**大内存实例（>10G）的 fork 可达秒级**，需评估。
+> **fork 是隐藏阻塞点**：RDB/AOF 重写的 fork 瞬间会阻塞（内存越大越久）——**大内存实例（>10G）的 fork 可达秒级**，需评估。
 
 ## 4. 故障四：主从切换与数据丢失
 
@@ -150,7 +150,7 @@ redis-cli info replication
   appendfsync everysec
 ```
 
-> ⚠️ **Redis 的丢失边界**：异步复制 + AOF everysec 下，**极端故障可能丢 1 秒 + 未同步数据**——"Redis 只放可容忍丢失的数据"再次强调；要强一致用 DB。
+> **Redis 的丢失边界**：异步复制 + AOF everysec 下，**极端故障可能丢 1 秒 + 未同步数据**——"Redis 只放可容忍丢失的数据"再次强调；要强一致用 DB。
 
 ## 5. Redis 变慢的排查路径
 
@@ -179,7 +179,7 @@ redis-cli --stat                    # 实时吞吐统计
 
 ## 6. 核心要点
 
-> 🎯 **核心要点**：
+> **核心要点**：
 > - 大 key 四害：阻塞/带宽/内存/删除阻塞——拆分治理 + `UNLINK` 删除；
 > - 生产禁 `KEYS *`（用 SCAN）；大集合用 SSCAN/HSCAN 分页；
 > - 慢日志是变慢的第一证据（slowlog get）；

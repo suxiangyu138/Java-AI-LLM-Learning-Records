@@ -1,7 +1,7 @@
 # 10-Git 调试取证与排错
 > 定位问题 vs 调查历史：bisect/blame 深潜、reflog 取证、worktree、常见陷阱清单、应急预案——"几乎所有操作都是可逆的"
 
-## 📚 目录
+## 目录
 1. [git bisect 深潜](#1-git-bisect-深潜)
 2. [git blame：谁改了这一行](#2-git-blame谁改了这一行)
 3. [git worktree：并行工作区](#3-git-worktree并行工作区)
@@ -17,7 +17,7 @@
 
 ## 1. git bisect 深潜
 
-> 💡 完整入门（手动/自动/退出码）见 [07](07-Git日常管理与工作区实践.md) 第 9 节；本节为排错视角的进阶用法。
+> 完整入门（手动/自动/退出码）见 [07](07-Git日常管理与工作区实践.md) 第 9 节；本节为排错视角的进阶用法。
 
 ```bash
 git bisect skip         # 跳过无法测试的 commit（编译不过等）
@@ -57,7 +57,7 @@ git config blame.ignoreRevsFile .git-blame-ignore-revs
 a1b2c3d4e5f6...  # prettier format all files
 ```
 
-> 🎯 **blame 正确用法**："这行代码的背景是什么？哪个 PR 引入的？"——配合 bisect 定位 bug；**不是用来甩锅的**。
+> **blame 正确用法**："这行代码的背景是什么？哪个 PR 引入的？"——配合 bisect 定位 bug；**不是用来甩锅的**。
 
 ## 3. git worktree：并行工作区
 
@@ -100,7 +100,7 @@ git switch -c recovered-branch <commit-hash>
 | 恢复误删的分支 | `git branch recovered-branch <hash>` |
 | 查看某次 reflog 条目的详情 | `git show HEAD@{2}` |
 
-> ⚠️ Reflog 限制：默认保留 90 天（可配置），仅本地存储。克隆的新仓库无 reflog 记录。
+> Reflog 限制：默认保留 90 天（可配置），仅本地存储。克隆的新仓库无 reflog 记录。
 
 ## 5. 组合实战：追查线上 Bug
 
@@ -304,17 +304,17 @@ git push --force --all && git push --force --tags
 
 ```text
 心理安全指南：
-✅ 几乎所有操作都是可逆的（有 reflog）
-✅ 不确定时先用 git stash 或 git branch backup 做保险
-✅ git push --force 前停一下，确认没有同事在基于你的分支开发
-✅ 小步提交，频繁 push（备份到远程）
-✅ 多写 commit message，少猜"这行代码是干嘛的"
-✅ 遇到解决不了的冲突 → git merge --abort，休息一下再来
+✓ 几乎所有操作都是可逆的（有 reflog）
+✓ 不确定时先用 git stash 或 git branch backup 做保险
+✓ git push --force 前停一下，确认没有同事在基于你的分支开发
+✓ 小步提交，频繁 push（备份到远程）
+✓ 多写 commit message，少猜"这行代码是干嘛的"
+✓ 遇到解决不了的冲突 → git merge --abort，休息一下再来
 ```
 
 ## 11. 核心要点
 
-> 🎯 **核心要点**：
+> **核心要点**：
 > - 定位问题三件套：bisect（哪个 commit 引入）→ blame（谁改的）→ show（改了什么）；
 > - 取证四件套：reflog（HEAD 历史）、git log 过滤器（时间/作者/文件）、pickaxe（-S/-G）、fsck（悬空对象）；
 > - detached HEAD 三情况：没改切回、改了建分支、切走了 reflog 找回；

@@ -9,11 +9,11 @@
 | 上手速度 | 最快（3-5 行起） | `gr.ChatInterface` 一行出聊天页 |
 | 多模态 | 最强 | 图像/音频/视频/文件原生组件 |
 | 分享 | 即开即用 | HF Spaces 免费托管 + 公开链接 |
-| 聊天/Agent | ⚠️ 可用但浅 | 面向单轮交互，复杂状态管理弱 |
+| 聊天/Agent | 可用但浅 | 面向单轮交互，复杂状态管理弱 |
 | 品牌定制 | 受限 | 布局组件化，深度定制靠 HTML 组件 |
-| 生产级产品 | ❌ 不建议 | 定位原型/演示/评测 |
+| 生产级产品 | ✗ 不建议 | 定位原型/演示/评测 |
 
-> 🎯 核心要点：**Gradio 是"给模型做演示和评测界面"的工具**——模型评测表、多模态输入输出、给非技术同事体验，是它的主场；做产品级聊天 UI 请用 [05 Chainlit](05-Chainlit对话界面.md) 或 [07 AI SDK](07-现代前端方案：AI-SDK与React生态.md)。
+> 核心要点：**Gradio 是"给模型做演示和评测界面"的工具**——模型评测表、多模态输入输出、给非技术同事体验，是它的主场；做产品级聊天 UI 请用 [05 Chainlit](05-Chainlit对话界面.md) 或 [07 AI SDK](07-现代前端方案：AI-SDK与React生态.md)。
 
 ## 2. 一行起步：ChatInterface
 
@@ -65,7 +65,7 @@ with gr.Blocks(title="Agent Demo") as demo:
     status = gr.Markdown("")          # 展示工具调用状态
 
     def respond(message, history):
-        status.update("🔍 正在搜索...")   # 过程提示
+        status.update("正在搜索...")   # 过程提示
         ...  # Agent 调用
         status.update("")
         return history + [{"role": "assistant", "content": answer}]
@@ -92,7 +92,7 @@ with gr.Blocks(title="Agent Demo") as demo:
 | 自动 API 文档 | 每个组件自带 live 文档（gr.ChatInterface 即 REST 端点） |
 | 轻量安装 | 6.x 依赖精简，体积更小 |
 
-> 💡 与 HuggingFace 生态的关系：本仓库 [HuggingFace 知识体系](..%2F..%2F..%2F02-大模型基础与Prompt工程%2FHuggingFace%2F00-HuggingFace知识体系总览.md) 第 09 篇（Gradio 与 Spaces）已讲 HF 视角的部署细节；本篇聚焦"Agent 演示界面"选型视角，Spaces 部署细节见彼处。
+> 与 HuggingFace 生态的关系：本仓库 [HuggingFace 知识体系](..%2F..%2F..%2F02-大模型基础与Prompt工程%2FHuggingFace%2F00-HuggingFace知识体系总览.md) 第 09 篇（Gradio 与 Spaces）已讲 HF 视角的部署细节；本篇聚焦"Agent 演示界面"选型视角，Spaces 部署细节见彼处。
 
 ## 6. 用 Gradio 演示 Agent 的姿势
 
@@ -113,7 +113,7 @@ def respond(message, history):
     tool_logs = run_agent_with_tools(message)      # [{"name","status","dur_ms"}, ...]
     metadata = {
         "tool_calls": [
-            {"icon": "🔧", "name": t["name"], "status": t["status"], "duration_ms": t["dur_ms"]}
+            {"icon": "", "name": t["name"], "status": t["status"], "duration_ms": t["dur_ms"]}
             for t in tool_logs
         ]
     }
@@ -164,12 +164,12 @@ gr.Interface(fn=evaluate,
 
 | 你的场景 | 结论 |
 |---|---|
-| 给模型/Agent 做可分享 Demo、模型对比评测 | ✅ Gradio |
-| 需要图像/音频/视频输入输出 | ✅ Gradio（无出其右） |
+| 给模型/Agent 做可分享 Demo、模型对比评测 | ✓ Gradio |
+| 需要图像/音频/视频输入输出 | ✓ Gradio（无出其右） |
 | 纯文本 Agent 对话演示 | 两者皆可，Streamlit 数据能力更全 |
-| 产品级对话应用 | ❌ 换 Chainlit / AI SDK |
+| 产品级对话应用 | ✗ 换 Chainlit / AI SDK |
 
-> 🎯 核心要点：Gradio 的定位是**"演示与评测"而非"产品"**——它解决的问题是"让不懂技术的人 30 秒上手体验你的 Agent"，Spaces 免费托管让它成为课堂、开源项目、模型卡的默认演示载体。
+> 核心要点：Gradio 的定位是**"演示与评测"而非"产品"**——它解决的问题是"让不懂技术的人 30 秒上手体验你的 Agent"，Spaces 免费托管让它成为课堂、开源项目、模型卡的默认演示载体。
 
 ---
 

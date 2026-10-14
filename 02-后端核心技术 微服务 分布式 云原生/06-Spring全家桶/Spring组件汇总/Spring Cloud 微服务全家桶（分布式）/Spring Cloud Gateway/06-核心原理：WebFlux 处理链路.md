@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [请求旅程总览](#1-请求旅程总览)
 2. [第一站：HandlerMapping 路由匹配](#2-第一站handlermapping-路由匹配)
@@ -45,7 +45,7 @@ Reactor Netty Server（事件循环线程，非阻塞）
 下游服务 → 响应原路返回（过滤链反向执行，改响应头等）
 ```
 
-> 🎯 一句话本质：**Gateway = 一个特殊的 WebFlux HandlerMapping + WebHandler**——路由匹配就是 HandlerMapping 的匹配逻辑，过滤链就是 WebHandler 的处理逻辑——**没有魔法，是 Spring WebFlux 扩展点**。
+> 一句话本质：**Gateway = 一个特殊的 WebFlux HandlerMapping + WebHandler**——路由匹配就是 HandlerMapping 的匹配逻辑，过滤链就是 WebHandler 的处理逻辑——**没有魔法，是 Spring WebFlux 扩展点**。
 
 ## 2. 第一站：HandlerMapping 路由匹配
 
@@ -77,7 +77,7 @@ exchange.getAttribute(GATEWAY_ROUTE_ATTR);                  // Route
 exchange.getAttribute(GATEWAY_REQUEST_URL_ATTR);
 ```
 
-> 💡 自定义过滤器经常操作 exchange 属性——**属性是谓词、过滤器、转发之间的"共享内存"**。
+> 自定义过滤器经常操作 exchange 属性——**属性是谓词、过滤器、转发之间的"共享内存"**。
 
 ## 3. 第二站：过滤链组装（GatewayFilter + GlobalFilter）
 
@@ -128,7 +128,7 @@ NettyRoutingFilter（GlobalFilter，order 默认最后）：
 | ForwardRoutingFilter | `forward:/xxx` | 网关本地转发（fallbackUri 用它） |
 | WebsocketRoutingFilter | `ws://` | WebSocket 转发 |
 
-> 🎯 面试必答：**"lb:// 是怎么变成真实地址的？"**——**LoadBalancerClientFilter**（GlobalFilter）拦截 `lb://` 前缀：通过 Spring Cloud LoadBalancer 向注册中心查服务实例列表 → 按策略（默认轮询）选一个 → 把 URL 改写为 `http://ip:port` 写入 GATEWAY_REQUEST_URL_ATTR → 最后 NettyRoutingFilter 用真实地址转发。
+> 面试必答：**"lb:// 是怎么变成真实地址的？"**——**LoadBalancerClientFilter**（GlobalFilter）拦截 `lb://` 前缀：通过 Spring Cloud LoadBalancer 向注册中心查服务实例列表 → 按策略（默认轮询）选一个 → 把 URL 改写为 `http://ip:port` 写入 GATEWAY_REQUEST_URL_ATTR → 最后 NettyRoutingFilter 用真实地址转发。
 
 ## 5. 非阻塞语义：为什么高性能
 
@@ -155,7 +155,7 @@ WebFlux（Gateway 默认）：
 | 调试 | 直观堆栈 | 异步堆栈难读 |
 | 5.0 的 WebMVC 方案 | — | **虚拟线程版**：阻塞代码 + 接近非阻塞性能（[09 篇](09-WebMVC网关与ProxyExchange（5.0新特性）.md)） |
 
-> ⚠️ **网关性能红线**：WebFlux 网关里**不要写阻塞代码**（Thread.sleep、同步 JDBC、同步 Redis）——阻塞事件循环线程等于自废武功；必须阻塞的场景用 `publishOn` 切线程池或选 WebMVC 栈。
+> **网关性能红线**：WebFlux 网关里**不要写阻塞代码**（Thread.sleep、同步 JDBC、同步 Redis）——阻塞事件循环线程等于自废武功；必须阻塞的场景用 `publishOn` 切线程池或选 WebMVC 栈。
 
 ## 6. vs Zuul：原理对比
 
@@ -167,9 +167,9 @@ WebFlux（Gateway 默认）：
 | 性能 | 高（事件循环） | 低（线程开销） | 高 |
 | 配置 | yaml/DSL | Java 代码 | Java 代码 |
 | 生态 | Spring Cloud 官方 | 2019 停止维护 | 未集成 Spring Cloud |
-| 响应式 | ✅ | ❌ | 部分 |
+| 响应式 | ✓ | ✗ | 部分 |
 
-> 🎯 面试必答：**"为什么弃 Zuul 选 Gateway？"**——三个理由：**① 性能模型**（Zuul 1 阻塞每请求一线程，Gateway 事件循环非阻塞）；**② 编程模型**（Zuul 过滤器全 Java 代码，Gateway 声明式谓词+过滤器 yaml 可配）；**③ 生态**（Zuul 1 停止维护、Zuul 2 未集成 Spring Cloud，Gateway 是官方继任者）。
+> 面试必答：**"为什么弃 Zuul 选 Gateway？"**——三个理由：**① 性能模型**（Zuul 1 阻塞每请求一线程，Gateway 事件循环非阻塞）；**② 编程模型**（Zuul 过滤器全 Java 代码，Gateway 声明式谓词+过滤器 yaml 可配）；**③ 生态**（Zuul 1 停止维护、Zuul 2 未集成 Spring Cloud，Gateway 是官方继任者）。
 
 ## 7. 性能模型与调优方向
 
@@ -194,7 +194,7 @@ WebFlux（Gateway 默认）：
 | 日志 | 访问日志开/关权衡（IO 开销） |
 | 过滤链 | 移除无用过滤器；认证/限流前置（失败早短路） |
 
-> 💡 性能验证：**压测看三指标**——P99 延迟（网关开销应 <5ms）、吞吐（QPS）、线程/内存占用；**网关开销异常大时先查过滤器阻塞**（[10 篇](10-生产实践与选型避坑.md) 调优）。
+> 性能验证：**压测看三指标**——P99 延迟（网关开销应 <5ms）、吞吐（QPS）、线程/内存占用；**网关开销异常大时先查过滤器阻塞**（[10 篇](10-生产实践与选型避坑.md) 调优）。
 
 ---
 

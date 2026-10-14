@@ -1,5 +1,5 @@
 # 09-Web安全基础
-> 🎯 Web安全不是"前端的事" — 理解XSS、CSRF、CORS、CSP的攻击原理和防御方案，是后端工程能力的核心组成
+> Web安全不是"前端的事" — 理解XSS、CSRF、CORS、CSP的攻击原理和防御方案，是后端工程能力的核心组成
 
 ---
 
@@ -27,7 +27,7 @@
 ### 1.2 XSS 防御 — 后端和前端共同责任
 
 ```java
-// ❌ 危险：直接返回未转义的用户输入
+// ✗ 危险：直接返回未转义的用户输入
 @GetMapping("/search")
 public String search(@RequestParam String keyword, Model model) {
     model.addAttribute("keyword", keyword); // ← 可能包含<script>
@@ -37,8 +37,8 @@ public String search(@RequestParam String keyword, Model model) {
 
 ```html
 <!-- 模板引擎自动转义（Thymeleaf/JSP默认安全） -->
-<span th:text="${keyword}"></span>     <!-- ✅ 自动HTML转义 -->
-<span th:utext="${keyword}"></span>    <!-- ❌ 不转义，危险！ -->
+<span th:text="${keyword}"></span>     <!-- ✓ 自动HTML转义 -->
+<span th:utext="${keyword}"></span>    <!-- ✗ 不转义，危险！ -->
 ```
 
 | 防御措施 | 位置 | 说明 |
@@ -77,10 +77,10 @@ public ResponseEntity<Void> login(@RequestBody LoginDTO dto) {
 
 | 方案 | 复杂度 | 效果 | 说明 |
 |------|:---:|:---:|------|
-| **CSRF Token** | 中 | ✅ 传统方案 | 每次请求携带随机Token，服务端校验 |
-| **SameSite Cookie** | 低 | ✅ 现代方案 | `Set-Cookie: SameSite=Strict/Lax` |
-| **Referer校验** | 低 | ⚠️ 可绕过 | 检查请求来源Referer |
-| **自定义Header** | 低 | ✅ | Ajax请求才能加自定义头，form不能 |
+| **CSRF Token** | 中 | ✓ 传统方案 | 每次请求携带随机Token，服务端校验 |
+| **SameSite Cookie** | 低 | ✓ 现代方案 | `Set-Cookie: SameSite=Strict/Lax` |
+| **Referer校验** | 低 | 可绕过 | 检查请求来源Referer |
+| **自定义Header** | 低 | ✓ | Ajax请求才能加自定义头，form不能 |
 
 ```java
 // Spring Security 默认开启 CSRF 防护
@@ -94,7 +94,7 @@ public SecurityFilterChain filterChain(HttpSecurity http) {
 }
 ```
 
-> ⚠️ **关键判断**：如果认证方式是JWT(Header中Bearer token)，则**天然免疫CSRF**（因为form无法添加Authorization头）。如果认证方式是Cookie/Session，则**必须防御CSRF**。
+> **关键判断**：如果认证方式是JWT(Header中Bearer token)，则**天然免疫CSRF**（因为form无法添加Authorization头）。如果认证方式是Cookie/Session，则**必须防御CSRF**。
 
 ---
 
@@ -106,8 +106,8 @@ public SecurityFilterChain filterChain(HttpSecurity http) {
 同源策略（Same-Origin Policy）：
   协议 + 域名 + 端口 三者完全相同 = 同源
 
-http://localhost:3000 → http://localhost:8080  ❌ 跨域（端口不同）
-https://api.example.com → https://www.example.com ❌ 跨域（子域名不同）
+http://localhost:3000 → http://localhost:8080  ✗ 跨域（端口不同）
+https://api.example.com → https://www.example.com ✗ 跨域（子域名不同）
 ```
 
 ### 3.2 后端CORS配置
@@ -139,7 +139,7 @@ public class CorsConfig implements WebMvcConfigurer {
 | `Access-Control-Allow-Credentials` | 允许携带Cookie |
 | `Access-Control-Max-Age` | 预检请求缓存时间（秒） |
 
-> ⚠️ `Access-Control-Allow-Origin: *` 和 `Allow-Credentials: true` 不能同时使用。如果需要携带Cookie，必须指定具体Origin。
+> `Access-Control-Allow-Origin: *` 和 `Allow-Credentials: true` 不能同时使用。如果需要携带Cookie，必须指定具体Origin。
 
 ### 3.4 预检请求(Preflight)
 
@@ -166,7 +166,7 @@ Content-Security-Policy:
   connect-src 'self' https://api.example.com; # XHR/Fetch只允许同源+指定API
 ```
 
-> 💡 **后端只需知道**：CSP是HTTP响应头，后端配置。现代框架（Spring Security）可方便配置CSP。
+> **后端只需知道**：CSP是HTTP响应头，后端配置。现代框架（Spring Security）可方便配置CSP。
 
 ---
 
@@ -182,4 +182,4 @@ Content-Security-Policy:
 
 ---
 
-> 🎯 **后端安全底线**：XSS输出编码 + CSRF/SameSite + CORS白名单 + SQL参数化。这四条做到了，就挡住了90%的Web攻击。
+> **后端安全底线**：XSS输出编码 + CSRF/SameSite + CORS白名单 + SQL参数化。这四条做到了，就挡住了90%的Web攻击。

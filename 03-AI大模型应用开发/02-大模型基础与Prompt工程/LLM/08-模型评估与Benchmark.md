@@ -1,6 +1,6 @@
 # 08 - 模型评估与 Benchmark
 
-> 🎯 "这个模型好不好"不能靠感觉。MMLU 测知识、HumanEval 测代码、GSM8K 测数学、MT-Bench 测对话——理解每个 Benchmark 测什么、怎么测，是做模型选型和评估的基础
+> "这个模型好不好"不能靠感觉。MMLU 测知识、HumanEval 测代码、GSM8K 测数学、MT-Bench 测对话——理解每个 Benchmark 测什么、怎么测，是做模型选型和评估的基础
 
 ---
 
@@ -119,7 +119,7 @@ LMSYS Chatbot Arena = LLM 的"图灵测试竞技场"
 规则：用户提问 → 两个匿名模型回答 → 用户选更好的
 
 排行榜 (2025-2026 典型)：
-  1. Claude 4 Opus         ← 🥇
+  1. Claude 4 Opus         ← 
   2. GPT-4.1/GPT-5.5       
   3. Gemini 2.5 Pro
   4. DeepSeek R1

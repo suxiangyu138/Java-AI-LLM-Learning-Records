@@ -1,7 +1,7 @@
 # 05-CLI 与 CI/CD 集成
 > `apifox run` 把 APIFox 测试接进流水线：CLI 全命令家族、Jenkins/GitHub Actions 集成、定时任务、测试报告与失败通知
 
-## 📚 目录
+## 目录
 1. [CLI 定位与安装](#1-cli-定位与安装)
 2. [apifox run：测试执行](#2-apifox-run测试执行)
 3. [CLI 命令家族全解](#3-cli-命令家族全解)
@@ -61,7 +61,7 @@ apifox run --project <项目ID> --test-scenario <场景ID>
 | `--concurrency` | 并发执行数（加速回归） |
 | `--report-format` | json / html / junit（junit 供 Jenkins 解析） |
 
-> 🎯 **CI 集成公式**：`apifox run --fail-on-error` + junit 报告 = 测试门禁 + 报告可视化，与 Newman（Postman）定位一致但资源管理在 APIFox 侧。
+> **CI 集成公式**：`apifox run --fail-on-error` + junit 报告 = 测试门禁 + 报告可视化，与 Newman（Postman）定位一致但资源管理在 APIFox 侧。
 
 ## 3. CLI 命令家族全解
 
@@ -90,7 +90,7 @@ apifox import / apifox export   # 接口资源导入导出
 apifox cli-schema               # 写入前校验复杂 JSON 结构（字段名/枚举/嵌套）
 ```
 
-> 💡 CLI 管理命令让"测试资源即代码"成为可能：套件/用例/期望可以用脚本批量创建与维护，配合 Git 版本管理。
+> CLI 管理命令让"测试资源即代码"成为可能：套件/用例/期望可以用脚本批量创建与维护，配合 Git 版本管理。
 
 ## 4. 环境与变量管理（CLI）
 
@@ -156,7 +156,7 @@ pipeline {
 }
 ```
 
-> 🎯 流程价值：**API 回归通过才部署**——把"接口契约"变成部署门禁的一部分。
+> 流程价值：**API 回归通过才部署**——把"接口契约"变成部署门禁的一部分。
 
 ## 6. GitHub Actions 集成
 
@@ -220,7 +220,7 @@ jobs:
 | CI 内 | 流水线失败即通知（Jenkins 邮件/Actions 通知） |
 | 报告归档 | 每次运行报告留存，趋势对比 |
 
-> 💡 **失败通知闭环**：CI 拦截（门禁）+ 通知（谁负责）+ 报告（失败现场）——三件套齐了才算完整接入。
+> **失败通知闭环**：CI 拦截（门禁）+ 通知（谁负责）+ 报告（失败现场）——三件套齐了才算完整接入。
 
 ## 8. 2026 CLI 新能力：AI Agent 工作流
 
@@ -239,11 +239,11 @@ AI Agent 使用 APIFox 的自动化闭环：
 | 8 个 SKILL | 帮助 Agent 理解 CLI 命令与任务流程 |
 | AI 分支 | Agent 修改资源先在独立分支完成，确认差异后合入（防污染主分支） |
 
-> 💡 完整用法见 [07-AI能力与MCP调试](07-AI能力与MCP调试.md)。
+> 完整用法见 [07-AI能力与MCP调试](07-AI能力与MCP调试.md)。
 
 ## 9. 核心要点
 
-> 🎯 **核心要点**：
+> **核心要点**：
 > - 安装认证：npm 全局安装 + Token（环境变量方式 CI 友好）；
 > - CI 门禁公式：`apifox run --fail-on-error` + junit 报告；
 > - CLI 命令家族：run（执行）+ 资源管理（场景/套件/用例/报告/定时）+ mock/environment/variables；

@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [安装与第一个日志](#1-安装与第一个日志)
 2. [add()：一函数统治一切](#2-add一函数统治一切)
@@ -98,7 +98,7 @@ logger.add("logs/app.log", rotation="500 MB")
 logger.add(sys.stderr, level="DEBUG")   # 自己想要什么配什么
 ```
 
-> 💡 **提示**：`logger.remove()` 曾在线程并发下偶发 `RuntimeError`（0.7.3 已修复），但生产上仍建议在应用启动时一次性配好 handler，不要在运行中频繁增删。
+> **提示**：`logger.remove()` 曾在线程并发下偶发 `RuntimeError`（0.7.3 已修复），但生产上仍建议在应用启动时一次性配好 handler，不要在运行中频繁增删。
 
 ## 5. 级别体系与自定义 level
 
@@ -109,7 +109,7 @@ loguru 内置七个级别，数字越小越详细：**TRACE(5) < DEBUG(10) < INF
 ```python
 from loguru import logger
 
-logger.level("AUDIT", no=35, color="<magenta>", icon="🔒")
+logger.level("AUDIT", no=35, color="<magenta>", icon="")
 logger.log("AUDIT", "管理员 {} 删除了订单 {}", user_id, order_id)
 ```
 
@@ -144,7 +144,7 @@ logger.log("AUDIT", "管理员 {} 删除了订单 {}", user_id, order_id)
 4. 自定义 level 的 `no` 参数为什么不能乱选数字？
 5. remove() 和 clear() 的关系？为什么建议启动时一次配好？
 
-> 🎯 **核心要点**：loguru 的全部配置收敛在一个 `add()`——**sink 决定去哪、level/filter 决定收什么、format 决定长什么样、rotation/enqueue 决定扛不扛得住生产**；配合 remove() 重置与自定义 level，五分钟就能给项目装上"开发看彩色、生产写轮转文件、告警走推送"的三路日志。
+> **核心要点**：loguru 的全部配置收敛在一个 `add()`——**sink 决定去哪、level/filter 决定收什么、format 决定长什么样、rotation/enqueue 决定扛不扛得住生产**；配合 remove() 重置与自定义 level，五分钟就能给项目装上"开发看彩色、生产写轮转文件、告警走推送"的三路日志。
 
 ---
 

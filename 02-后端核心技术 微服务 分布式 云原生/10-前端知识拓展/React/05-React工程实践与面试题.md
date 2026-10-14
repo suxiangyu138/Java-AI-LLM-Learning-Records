@@ -2,7 +2,7 @@
 
 > 定位：React Router、Next.js 与 RSC、工程化规范、React 面试题精选——从"会写组件"到"能上生产"
 
-## 📚 目录
+## 目录
 
 1. [React Router](#1-react-router)
 2. [Next.js 与 RSC](#2-nextjs-与-rsc)
@@ -62,7 +62,7 @@ import { Navigate } from 'react-router-dom';
 
 const UserPage = lazy(() => import('./pages/UserPage'));
 
-// ⚠️ 鉴权守卫组件（包一层）
+// 鉴权守卫组件（包一层）
 function RequireAuth({ children }) {
     const isLoggedIn = Boolean(localStorage.getItem('token'));
     return isLoggedIn ? children : <Navigate to="/login" replace />;
@@ -97,7 +97,7 @@ Next.js = React 全栈框架（服务端渲染/静态生成/API）
   ③ API Routes（内置后端）
   ④ 文件式路由（app/ 目录）
 
-⚠️ 面试必答：
+面试必答：
 "Next.js = React 的全栈框架——
  App Router（文件即路由）+ RSC（服务端组件）
  + SSR/SSG；适合 SEO 与首屏性能场景。"
@@ -106,7 +106,7 @@ Next.js = React 全栈框架（服务端渲染/静态生成/API）
 ### 2.2 RSC 核心概念
 
 ```jsx
-// ⚠️ 服务端组件（默认，不打包进客户端 JS）
+// 服务端组件（默认，不打包进客户端 JS）
 // app/page.jsx —— 默认 Server Component
 export default async function Page() {
     const data = await fetchData();      // 服务端直接请求
@@ -123,8 +123,8 @@ export default function Counter() {
 }
 
 // 收益：客户端 bundle 减少 30-50%（RSC 核心价值）
-// ⚠️ 规则：服务端组件不能使用 state/effect（无交互）
-//   客户端组件可以导入服务端组件？❌ 不能（方向限制）
+// 规则：服务端组件不能使用 state/effect（无交互）
+//   客户端组件可以导入服务端组件？✗ 不能（方向限制）
 ```
 
 ### 2.3 数据获取模式
@@ -138,7 +138,7 @@ export default async function Home() {
 
     return posts.map(p => <PostCard key={p.id} post={p} />);
 }
-// ⚠️ 对比 CSR：数据在服务端获取 → 首屏含数据 → SEO 友好
+// 对比 CSR：数据在服务端获取 → 首屏含数据 → SEO 友好
 ```
 
 ---
@@ -164,16 +164,16 @@ src/
 ### 3.2 工程规范清单
 
 ```
-✅ 函数组件 + Hooks（无 class 组件）
-✅ 组件命名 PascalCase、Hook 用 use 前缀
-✅ props 解构 + 默认值
-✅ 事件处理器 handleXxx 命名
-✅ 条件渲染用三元/&&（非 if 语句）
-✅ 列表 key 唯一稳定
-✅ 状态提升原则（就近放置）
-✅ 请求封装统一（错误处理/loading）
-✅ ESLint（react-hooks 插件检查依赖数组）
-✅ 环境变量区分（.env.development/production）
+✓ 函数组件 + Hooks（无 class 组件）
+✓ 组件命名 PascalCase、Hook 用 use 前缀
+✓ props 解构 + 默认值
+✓ 事件处理器 handleXxx 命名
+✓ 条件渲染用三元/&&（非 if 语句）
+✓ 列表 key 唯一稳定
+✓ 状态提升原则（就近放置）
+✓ 请求封装统一（错误处理/loading）
+✓ ESLint（react-hooks 插件检查依赖数组）
+✓ 环境变量区分（.env.development/production）
 ```
 
 ### 3.3 请求与错误处理模式
@@ -194,7 +194,7 @@ export function useRequest(fetcher, deps = []) {
             .catch(e => !cancelled && setError(e))
             .finally(() => !cancelled && setLoading(false));
         return () => { cancelled = true; };
-    }, [...deps, refresh]);                // ⚠️ 依赖数组（eslint 检查）
+    }, [...deps, refresh]);                // 依赖数组（eslint 检查）
 
     return {
         data, loading, error,
@@ -216,7 +216,7 @@ React 19 并发：render 可中断（startTransition 标记低优先级）。
 **Q2: 为什么需要 key？**
 ```
 diff 时识别列表节点复用——key 唯一稳定避免
-误删重建（状态丢失）。⚠️ 勿用 index（排序/过滤错乱）。
+误删重建（状态丢失）。勿用 index（排序/过滤错乱）。
 ```
 
 **Q3: useEffect 依赖数组的作用？**
@@ -286,7 +286,7 @@ TS 友好）；class 是历史（生命周期三件套）。
 
 ---
 
-> 🎯 **核心要点**：React 工程 = **Router**（懒加载 + RequireAuth 守卫）+ **Next.js**（RSC 服务端组件 + SSR/ISR）+ **规范**（Hooks + 命名 + eslint）+ **面试十二问**（渲染流程/依赖数组/memo 失效/受控组件是最高频）。React 面试主线：原理（渲染/diff）→ Hooks（依赖/闭包）→ 优化（memo/懒加载）。
+> **核心要点**：React 工程 = **Router**（懒加载 + RequireAuth 守卫）+ **Next.js**（RSC 服务端组件 + SSR/ISR）+ **规范**（Hooks + 命名 + eslint）+ **面试十二问**（渲染流程/依赖数组/memo 失效/受控组件是最高频）。React 面试主线：原理（渲染/diff）→ Hooks（依赖/闭包）→ 优化（memo/懒加载）。
 
 ---
 

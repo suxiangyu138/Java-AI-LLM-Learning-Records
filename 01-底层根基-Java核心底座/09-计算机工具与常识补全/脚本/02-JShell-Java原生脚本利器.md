@@ -2,7 +2,7 @@
 
 > JShell 是 Java 的"交互式实验室"——无需 main 方法、无需编译、即写即验，让 Java 成为真正的脚本语言
 
-## 📚 目录
+## 目录
 
 1. [JShell 简介与定位](#1)
 2. [基础操作入门](#2)
@@ -278,7 +278,7 @@ chmod +x csv-stats.jsh
 ./csv-stats.jsh
 ```
 
-> ⚠️ **注意**：Shebang 脚本必须以 `/exit` 结尾，否则 JShell 保持在交互模式。
+> **注意**：Shebang 脚本必须以 `/exit` 结尾，否则 JShell 保持在交互模式。
 
 ### 4.2 JEP 330 —— 单文件源代码程序（JDK 11+）
 
@@ -327,14 +327,14 @@ java --enable-preview --source 23 hello-modern.java
 | 特性 | 传统 Java | JShell Shebang | JEP 330 | JEP 495 |
 |------|----------|:---:|:---:|:---:|
 | JDK 版本要求 | 所有版本 | JDK 9+ | JDK 11+ | JDK 23+ |
-| 需要类定义 | ✅ | ❌ | ✅ | ❌ |
-| 需要 main 方法 | ✅ static | ❌ | ✅ static | ❌ 或实例 |
-| 显式编译 | ✅ javac | ❌ | ❌ | ❌ |
+| 需要类定义 | ✓ | ✗ | ✓ | ✗ |
+| 需要 main 方法 | ✓ static | ✗ | ✓ static | ✗ 或实例 |
+| 显式编译 | ✓ javac | ✗ | ✗ | ✗ |
 | 外部依赖 | 构建工具 | `--class-path` | `--class-path` | `--class-path` |
-| 可执行权限 | ❌ | ✅ chmod +x | ❌ | ❌ |
+| 可执行权限 | ✗ | ✓ chmod +x | ✗ | ✗ |
 | 适合场景 | 正式项目 | 工具脚本 | 快速原型 | 极简程序 |
 
-> 🎯 **核心要点**：JShell Shebang 适合运维脚本，JEP 330 适合有外部依赖的单文件工具，JEP 495 是未来最简洁的原型方式。
+> **核心要点**：JShell Shebang 适合运维脚本，JEP 330 适合有外部依赖的单文件工具，JEP 495 是未来最简洁的原型方式。
 
 ---
 
@@ -524,7 +524,7 @@ import java.util.stream.*;
 import java.nio.file.*;
 import static java.util.stream.Collectors.*;
 
-System.out.println("✅ 项目 JShell 环境已就绪");
+System.out.println("✓ 项目 JShell 环境已就绪");
 System.out.println("已导入: java.time, java.util, java.util.stream, java.nio.file");
 ```
 
@@ -589,7 +589,7 @@ public class JShellApiDemo {
             // JShell 内部编译，可获取编译错误
             js.eval("int z = unknown;").forEach(event -> {
                 js.diagnostics(event.snippet()).forEach(d ->
-                    System.err.printf("❌ 第 %d 行: %s%n",
+                    System.err.printf("✗ 第 %d 行: %s%n",
                         d.getStartPosition(), d.getMessage(Locale.getDefault())));
             });
 
@@ -615,7 +615,7 @@ public class JShellApiDemo {
 | `Snippet.Status` | 片段状态（VALID / RECOVERABLE / REJECTED） |
 | `SourceCodeAnalysis` | 代码补全和分析 |
 
-> 🎯 **核心要点**：JShell API 让"代码即数据"成为可能——你可以程序化地执行、诊断、分析 Java 代码片段。
+> **核心要点**：JShell API 让"代码即数据"成为可能——你可以程序化地执行、诊断、分析 Java 代码片段。
 
 ---
 
@@ -653,12 +653,12 @@ JShell 执行开销因素：
 |------|:---:|:---:|:---:|
 | 启动速度 | 慢（REPL 模式） | 快（首次下载后缓存） | 快 |
 | 外部依赖 | 手动 --class-path | `//DEPS` 自动管理 | 手动 --class-path |
-| IDE 支持 | ✅ 原生支持 | ✅ 插件支持 | ✅ 原生支持 |
-| 脚本可执行性 | Shebang | ✅ 直接运行 | ❌ 需要 java 命令 |
-| 交互式探索 | ✅ 核心能力 | ❌ | ❌ |
+| IDE 支持 | ✓ 原生支持 | ✓ 插件支持 | ✓ 原生支持 |
+| 脚本可执行性 | Shebang | ✓ 直接运行 | ✗ 需要 java 命令 |
+| 交互式探索 | ✓ 核心能力 | ✗ | ✗ |
 | 适合用途 | 学习、原型 | 工具脚本 | 快速原型 |
 
-> 🎯 **核心要点**：学习探索用 JShell，工具脚本用 JBang，快速原型用 JEP 330。三者互补，不是替代关系。
+> **核心要点**：学习探索用 JShell，工具脚本用 JBang，快速原型用 JEP 330。三者互补，不是替代关系。
 
 ---
 

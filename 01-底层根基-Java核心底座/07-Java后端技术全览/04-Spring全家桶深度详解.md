@@ -87,12 +87,12 @@ ApplicationContext（高级容器，继承 BeanFactory）：
   - 企业级 IoC 容器
   - 预加载（启动时创建所有单例 Bean）→ 启动时发现问题
   - 额外功能：
-    ✅ 国际化（MessageSource）
-    ✅ 事件发布（ApplicationEventPublisher）
-    ✅ 资源加载（ResourceLoader）
-    ✅ 环境抽象（Environment）
-    ✅ 注解支持
-    ✅ AOP 集成
+    ✓ 国际化（MessageSource）
+    ✓ 事件发布（ApplicationEventPublisher）
+    ✓ 资源加载（ResourceLoader）
+    ✓ 环境抽象（Environment）
+    ✓ 注解支持
+    ✓ AOP 集成
   - Spring Boot 默认使用 AnnotationConfigApplicationContext
 
 继承关系：
@@ -241,7 +241,7 @@ public class PrototypeBean { }
 ### 4.1 注入方式对比
 
 ```java
-// 方式 1：构造器注入（✅ 强烈推荐）
+// 方式 1：构造器注入（✓ 强烈推荐）
 @RestController
 @RequiredArgsConstructor  // Lombok：自动为 final 字段生成构造器
 public class UserController {
@@ -251,7 +251,7 @@ public class UserController {
 }
 // 如果只有一个构造器，Spring 自动用这个构造器，无需 @Autowired
 
-// 方式 2：Setter 注入（⚠️ 可选依赖时使用）
+// 方式 2：Setter 注入（可选依赖时使用）
 public class UserService {
     private CacheService cacheService;  // 可选依赖
     @Autowired(required = false)
@@ -260,7 +260,7 @@ public class UserService {
     }
 }
 
-// 方式 3：字段注入（❌ 不推荐，但最常见）
+// 方式 3：字段注入（✗ 不推荐，但最常见）
 @Autowired
 private UserService userService;
 // 缺点：依赖隐藏（看不到有多少依赖）、不可变、测试需反射、强依赖 Spring
@@ -329,7 +329,7 @@ public class BService {
 // 构造器注入的循环依赖无法解决！（因为连实例化都没完成）
 // @Async + 循环依赖可能导致问题
 
-// ✅ 最佳实践：避免循环依赖！
+// ✓ 最佳实践：避免循环依赖！
 // - 重新设计（抽取公共依赖 C）
 // - 用事件机制解耦
 // - 用 @Lazy 推迟初始化
@@ -1233,7 +1233,7 @@ Spring Boot 3.x 重大变化：
 Spring Bean 默认是单例的，但单例 ≠ 线程安全！
 
 Spring 本身不保证 Bean 的线程安全，线程安全取决于 Bean 的实现：
-  - 无状态 Bean（如 Service、Repository）：天然线程安全 ✅
+  - 无状态 Bean（如 Service、Repository）：天然线程安全 ✓
     因为方法是无状态的（局部变量在线程栈上，不共享）
 
   - 有状态 Bean（有成员变量被修改）：不是线程安全！

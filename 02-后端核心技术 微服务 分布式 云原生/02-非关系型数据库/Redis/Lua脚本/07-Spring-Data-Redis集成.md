@@ -1,7 +1,7 @@
 # Spring Data Redis 集成
 > DefaultRedisScript、RedisTemplate.execute 执行脚本、序列化陷阱、NOSCRIPT 处理与 Function 调用——Java 端把脚本跑起来的完整姿势
 
-## 📚 目录
+## 目录
 1. [集成总览与分工](#1-集成总览与分工)
 2. [DefaultRedisScript：脚本的 Java 封装](#2-defaultredisscript脚本的-java-封装)
 3. [执行脚本：execute 全解](#3-执行脚本execute-全解)
@@ -17,7 +17,7 @@
 | RedisTemplate 配置/连接工厂/缓存注解 | [Redis 主体系 08](../../Redis/08-Spring%20Boot集成Redis与Lua.md)（不重复） |
 | **脚本执行细节**（本文件） | DefaultRedisScript、execute、序列化、NOSCRIPT、Function |
 
-> 🎯 分工说明：主体系的 08 篇已有紧凑 Lua 章节（基础语法/案例/Lua vs 事务），本文件做**工程化深挖**——尤其序列化与 NOSCRIPT 这两个生产高频坑。
+> 分工说明：主体系的 08 篇已有紧凑 Lua 章节（基础语法/案例/Lua vs 事务），本文件做**工程化深挖**——尤其序列化与 NOSCRIPT 这两个生产高频坑。
 
 ## 2. DefaultRedisScript：脚本的 Java 封装
 
@@ -30,7 +30,7 @@ public class RedisScriptConfig {
     public DefaultRedisScript<Long> rateLimitScript() {
         DefaultRedisScript<Long> script = new DefaultRedisScript<>();
         script.setLocation(new ClassPathResource("scripts/rate_limit.lua"));  // 脚本文件
-        script.setResultType(Long.class);   // ⚠️ 返回类型必须声明！
+        script.setResultType(Long.class);   // 返回类型必须声明！
         return script;
     }
 }
@@ -54,7 +54,7 @@ return 1
 | `sha1` | 自动计算（execute 时走 EVALSHA） |
 | 线程安全 | Bean 单例可并发使用 |
 
-> ⚠️ **ResultType 是头号坑**：脚本返回 `1`（整数），ResultType 设 String → 拿到字符串或序列化异常；返回 nil 时 ResultType 必须能表达 null（Long 可）。规则：**脚本返回什么类型，ResultType 就声明什么**。
+> **ResultType 是头号坑**：脚本返回 `1`（整数），ResultType 设 String → 拿到字符串或序列化异常；返回 nil 时 ResultType 必须能表达 null（Long 可）。规则：**脚本返回什么类型，ResultType 就声明什么**。
 
 ## 3. 执行脚本：execute 全解
 
@@ -88,7 +88,7 @@ Long result = redisTemplate.execute(rateLimitScript,
 | `args...` | ARGV 参数（按声明顺序） |
 | 序列化器重载 | 显式指定 key/value 序列化器（泛型混乱时的急救） |
 
-> 💡 内部机制：`execute` 默认使用 **RedisTemplate 的序列化器**处理 KEYS/ARGV 与返回值——这就是"脚本没问题但结果不对"的根源（见 §4）。
+> 内部机制：`execute` 默认使用 **RedisTemplate 的序列化器**处理 KEYS/ARGV 与返回值——这就是"脚本没问题但结果不对"的根源（见 §4）。
 
 ## 4. 序列化陷阱
 
@@ -111,7 +111,7 @@ Long result = redisTemplate.execute(rateLimitScript,
 | 脚本内 redis.call 的键 | 与 Java 侧 keySerializer 不一致 → MISS | 全链路统一序列化器 |
 
 ```java
-// ⚠️ 生产实践：脚本操作用 StringRedisTemplate（最稳）
+// 生产实践：脚本操作用 StringRedisTemplate（最稳）
 // String 序列化 = 无歧义（键就是字符串，ARGV 就是字符串）
 private final StringRedisTemplate redis;    // 注入 StringRedisTemplate
 
@@ -119,7 +119,7 @@ Long result = redis.execute(rateLimitScript, List.of(key),
         String.valueOf(limit), String.valueOf(windowSeconds));
 ```
 
-> 🎯 铁律：**脚本相关操作统一用 StringRedisTemplate**——JDK 序列化 + Lua 字节交互是踩坑重灾区；键和参数全部按字符串传递，Lua 侧 `tonumber()` 转换。参考 [Redis 主体系序列化章节](../../Redis/08-Spring%20Boot集成Redis与Lua.md)。
+> 铁律：**脚本相关操作统一用 StringRedisTemplate**——JDK 序列化 + Lua 字节交互是踩坑重灾区；键和参数全部按字符串传递，Lua 侧 `tonumber()` 转换。参考 [Redis 主体系序列化章节](../../Redis/08-Spring%20Boot集成Redis与Lua.md)。
 
 ## 5. NOSCRIPT 与脚本管理
 
@@ -140,7 +140,7 @@ Spring Data Redis 的 NOSCRIPT 处理（DefaultRedisScript.execute 内部）：
 | 事务内 EVALSHA | 若 NOSCRIPT 则整个事务失败（**事务内不做重试**，脚本需预热） |
 | 手动预热 | 启动时 `@PostConstruct` 调一次 execute |
 
-> ⚠️ **事务 + 脚本的坑**：`@Transactional`（Redis 事务）内执行脚本，若脚本未缓存 → NOSCRIPT 导致整个事务失败且**无法重试**——解决：启动时预热脚本（确保已 LOAD）。
+> **事务 + 脚本的坑**：`@Transactional`（Redis 事务）内执行脚本，若脚本未缓存 → NOSCRIPT 导致整个事务失败且**无法重试**——解决：启动时预热脚本（确保已 LOAD）。
 
 ## 6. 调用 Redis Function
 
@@ -161,7 +161,7 @@ String result = redisTemplate.execute((RedisCallback<String>) connection -> {
 // redisTemplate.getConnectionFactory().getConnection() → fcall(...)
 ```
 
-> 💡 Spring Data Redis 对 Function 的封装落后于原生命令——**生产中直接走 connection.execute 或 Lettuce 原生 API**。或者：**Function 注册仍用 redis-cli（FUNCTION LOAD），Java 侧只负责 FCALL 调用**——职责分离最清晰。
+> Spring Data Redis 对 Function 的封装落后于原生命令——**生产中直接走 connection.execute 或 Lettuce 原生 API**。或者：**Function 注册仍用 redis-cli（FUNCTION LOAD），Java 侧只负责 FCALL 调用**——职责分离最清晰。
 
 ## 7. 生产集成规范
 

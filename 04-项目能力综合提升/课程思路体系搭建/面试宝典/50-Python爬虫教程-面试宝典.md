@@ -15,7 +15,7 @@
 
 ## 一、基础概念速答（16题）
 
-> 💡 **面试特点**：基础概念题通常出现在一面，重点考察对HTTP协议、解析库、反爬机制的理解。回答应简洁准确，适当举例。
+> **面试特点**：基础概念题通常出现在一面，重点考察对HTTP协议、解析库、反爬机制的理解。回答应简洁准确，适当举例。
 
 ### 1.1 HTTP请求中 GET 和 POST 的区别
 
@@ -28,7 +28,7 @@
 | 缓存 | 可被浏览器缓存 | 不缓存 |
 | 爬虫应用 | 简单数据获取 | 表单提交、登录、大参数传输 |
 
-> ⚠️ **注意**：POST 并不真正安全，HTTPS 才是保护数据的核心手段。
+> **注意**：POST 并不真正安全，HTTPS 才是保护数据的核心手段。
 
 ### 1.2 requests 库 Session 的作用
 
@@ -82,7 +82,7 @@ titles = jsonpath(data, '$.store.book[*].title')
 print(titles)  # ['A', 'B']
 ```
 
-> 💡 **对比**：JSONPath 类似 XPath for JSON。常见库有 `jsonpath`（第三方）和 Python 原生 `json` 模块。
+> **对比**：JSONPath 类似 XPath for JSON。常见库有 `jsonpath`（第三方）和 Python 原生 `json` 模块。
 
 ### 1.5 常见反爬机制与应对策略
 
@@ -200,7 +200,7 @@ async def main():
 asyncio.run(main())
 ```
 
-> 🎯 **性能**：异步爬虫比同步 requests 快 5-10 倍，适合 IO 密集型场景。核心是 `asyncio.gather` 并发执行任务。
+> **性能**：异步爬虫比同步 requests 快 5-10 倍，适合 IO 密集型场景。核心是 `asyncio.gather` 并发执行任务。
 
 ### 1.11 robots.txt 与爬虫协议
 
@@ -248,7 +248,7 @@ REDIS_URL = "redis://localhost:6379"
 # 多个爬虫节点共享同一个Redis请求队列 → 天然去重 + 分布式调度
 ```
 
-> 💡 **核心**：用 Redis 替代本地的 `Scheduler` 和 `DupeFilter`，实现多个爬虫节点共享请求队列与去重集合。
+> **核心**：用 Redis 替代本地的 `Scheduler` 和 `DupeFilter`，实现多个爬虫节点共享请求队列与去重集合。
 
 ### 1.15 Cookies 管理与登录态维持
 
@@ -283,7 +283,7 @@ session.cookies = jar
 
 ## 二、深度原理剖析（10题）
 
-> 💡 **面试特点**：深度题出现在二面/三面，考察对底层机制的理解和问题排查能力。
+> **面试特点**：深度题出现在二面/三面，考察对底层机制的理解和问题排查能力。
 
 ### 2.1 JS逆向工程完整流程
 
@@ -433,7 +433,7 @@ class RFPDupeFilter(BaseDupeFilter):
 | 时区/语言 | Intl.DateTimeFormat | 固定时区与语言 |
 | 字体列表 | CSS font检测 | 限制字体列表 |
 
-> 🎯 **对抗策略**：使用 Playwright 的 `browser_context` 配合固定参数，或使用指纹修改工具如 `puppeteer-extra-plugin-stealth`。
+> **对抗策略**：使用 Playwright 的 `browser_context` 配合固定参数，或使用指纹修改工具如 `puppeteer-extra-plugin-stealth`。
 
 ### 2.7 Scrapy 中间件执行顺序与优先级
 
@@ -544,13 +544,13 @@ driver.execute_cdp_cmd("Page.addScriptToEvaluateOnNewDocument", {
 })
 ```
 
-> 💡 Playwright 默认已处理 `webdriver` 检测，是更好的选择。
+> Playwright 默认已处理 `webdriver` 检测，是更好的选择。
 
 ---
 
 ## 三、实战场景题（8题）
 
-> 💡 **面试特点**：场景题考察综合能力。需先明确需求边界，再给出技术选型和方案。
+> **面试特点**：场景题考察综合能力。需先明确需求边界，再给出技术选型和方案。
 
 ### 3.1 【字节跳动】如何爬取一个需要登录才能查看数据的网站？
 
@@ -749,13 +749,13 @@ def download_image(img_url, referer_url, save_path):
                 f.write(chunk)
 ```
 
-> 💡 **进阶**：某些站点使用 `data:image/base64` 懒加载——需要找到真实图片地址（通常在 `data-src` 或 `src` 属性的加密值中）。
+> **进阶**：某些站点使用 `data:image/base64` 懒加载——需要找到真实图片地址（通常在 `data-src` 或 `src` 属性的加密值中）。
 
 ---
 
 ## 四、手写代码题（6题）
 
-> 💡 **面试特点**：手写代码题考察编码能力和对库的熟练度。注意边界条件处理和异常处理。
+> **面试特点**：手写代码题考察编码能力和对库的熟练度。注意边界条件处理和异常处理。
 
 ### 4.1 用 requests 实现带重试机制的下载函数
 
@@ -959,7 +959,7 @@ asyncio.run(batch_download(urls))
 
 ## 五、系统设计题（4题）
 
-> 🎯 **面试特点**：系统设计题考察架构设计能力。使用 STAR 法则（场景-方案-行动-结果）组织回答。
+> **面试特点**：系统设计题考察架构设计能力。使用 STAR 法则（场景-方案-行动-结果）组织回答。
 
 ### 5.1 设计一个百万级商品数据的爬虫系统
 
@@ -1047,7 +1047,7 @@ class MonitorMiddleware:
  验证沙箱 —— 测试生成的解密函数是否正确
 ```
 
-> 💡 工具推荐：`mitmproxy` + `ast` 解析 + 规则引擎匹配加密模式。
+> 工具推荐：`mitmproxy` + `ast` 解析 + 规则引擎匹配加密模式。
 
 ### 5.4 设计一个兼容多种反爬策略的动态代理调度器
 
@@ -1093,7 +1093,7 @@ class DynamicProxyScheduler:
 
 ## 六、常见坑点与最佳实践
 
-> ⚠️ **核心原则**：爬虫开发中90%的问题来自**请求层面**（headers/cookies/代理），而不是解析层面。
+> **核心原则**：爬虫开发中90%的问题来自**请求层面**（headers/cookies/代理），而不是解析层面。
 
 ### 6.1 常见坑点汇总
 
@@ -1143,7 +1143,7 @@ PERFECT_HEADERS = {
 
 ## 七、面试回答模板（Top 5）
 
-> 🎯 **使用方式**：面试时不需死记硬背，掌握回答结构和关键词即可。用 STAR 法则组织语言。
+> **使用方式**：面试时不需死记硬背，掌握回答结构和关键词即可。用 STAR 法则组织语言。
 
 ### 模板1：遇到反爬虫如何解决？
 
@@ -1267,7 +1267,7 @@ PERFECT_HEADERS = {
 
 ---
 
-> 📚 **参考资源**
+> **参考资源**
 > - 《Python爬虫开发与项目实战》
 > - Scrapy 官方文档: https://docs.scrapy.org/
 > - Playwright 官方文档: https://playwright.dev/python/

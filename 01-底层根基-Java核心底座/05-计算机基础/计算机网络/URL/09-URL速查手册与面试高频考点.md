@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [URL 语法速查卡](#1-url-语法速查卡)
 2. [常见默认端口全表](#2-常见默认端口全表)
@@ -31,13 +31,13 @@ scheme   userinfo        host       port    path       query     fragment
 
 | 组件 | 必填 | 发送到服务端 | 大小写 | 分隔符 |
 |------|:---:|:---:|:---:|------|
-| Scheme | ✅ | ✅（决定连接方式） | ❌ 不敏感 | `:` |
-| UserInfo | ❌ | ⚠️ 已废弃 | ✅ | `@` |
-| Host | ✅ | ✅（Host 头） | ❌ 不敏感 | — |
-| Port | ❌ | ✅ | — | `:` |
-| Path | ❌ | ✅ | ✅ 敏感 | `/` |
-| Query | ❌ | ✅ | ✅ 敏感 | `?` `&` `=` |
-| Fragment | ❌ | ❌ 不发送 | ✅ 敏感 | `#` |
+| Scheme | ✓ | ✓（决定连接方式） | ✗ 不敏感 | `:` |
+| UserInfo | ✗ | 已废弃 | ✓ | `@` |
+| Host | ✓ | ✓（Host 头） | ✗ 不敏感 | — |
+| Port | ✗ | ✓ | — | `:` |
+| Path | ✗ | ✓ | ✓ 敏感 | `/` |
+| Query | ✗ | ✓ | ✓ 敏感 | `?` `&` `=` |
+| Fragment | ✗ | ✗ 不发送 | ✓ 敏感 | `#` |
 
 ### 1.3 RFC 3986 ABNF 骨架
 
@@ -71,7 +71,7 @@ URI（身份证）⊃ URL（家庭地址）+ URN（姓名）
 |------|-----|-----|-----|
 | 作用 | 标识 | 标识 + 定位（怎么拿） | 标识（永久名） |
 | 示例 | URL、URN | `https://a.com/x.png` | `urn:isbn:978-3-16-148410-0` |
-| 迁移后 | — | ❌ 失效 | ✅ 仍有效 |
+| 迁移后 | — | ✗ 失效 | ✓ 仍有效 |
 
 ---
 
@@ -218,12 +218,12 @@ URI（身份证）⊃ URL（家庭地址）+ URN（姓名）
 
 | 码 | 名称 | 方法保留 | 缓存 | 典型用途 |
 |:---:|------|:---:|:---:|---------|
-| 301 | Moved Permanently | ❌ POST→GET | ✅ 强缓存 | 域名迁移、HTTP→HTTPS |
-| 302 | Found | ❌ POST→GET | ⚠️ | 临时跳转 |
-| 303 | See Other | ✅→GET | ❌ | POST 后跳详情(PRG) |
+| 301 | Moved Permanently | ✗ POST→GET | ✓ 强缓存 | 域名迁移、HTTP→HTTPS |
+| 302 | Found | ✗ POST→GET | | 临时跳转 |
+| 303 | See Other | ✓→GET | ✗ | POST 后跳详情(PRG) |
 | 304 | Not Modified | — | — | 缓存协商 |
-| 307 | Temporary Redirect | ✅ 保留 | ❌ | POST 临时跳转 |
-| 308 | Permanent Redirect | ✅ 保留 | ✅ | 永久跳转+保留POST |
+| 307 | Temporary Redirect | ✓ 保留 | ✗ | POST 临时跳转 |
+| 308 | Permanent Redirect | ✓ 保留 | ✓ | 永久跳转+保留POST |
 
 ### 4.2 客户端错误类 (4xx) —— URL 相关
 
@@ -495,7 +495,7 @@ URI（身份证）⊃ URL（家庭地址）+ URN（姓名）
 
 ---
 
-> 🎯 **本篇核心要点**
+> **本篇核心要点**
 > 1. 基础题（Q1-10）——必会，所有岗位都会问
 > 2. 编码题（Q11-18）——前端/全栈高频，`encodeURIComponent` vs `URLEncoder` 是经典题
 > 3. 路由题（Q19-25）——Java 后端必问，Spring Boot 3 尾斜杠 + Nginx `proxy_pass` 是实战重点

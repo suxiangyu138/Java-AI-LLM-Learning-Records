@@ -1,6 +1,6 @@
 # 07 - Kafka 性能优化与监控
 
-> 🎯 Kafka 的性能天花板极高 — 单机百万 TPS 需要从 OS 参数、JVM 调优、Broker 配置三个层面协同优化，缺一不可
+> Kafka 的性能天花板极高 — 单机百万 TPS 需要从 OS 参数、JVM 调优、Broker 配置三个层面协同优化，缺一不可
 
 ---
 
@@ -57,18 +57,18 @@ Kafka 严重依赖 OS 页缓存：
          经验：Kafka 堆外内存 = 页缓存，比 JVM 堆更重要！
 
 建议：
-  ✅ Broker 内存配置：JVM 堆 6~8GB + 剩余给 OS 页缓存
-  ✅ 热数据比例 > OS 页缓存大小 → 命中率下降 → 磁盘读增加
-  ✅ 监控 page cache hit ratio
+  ✓ Broker 内存配置：JVM 堆 6~8GB + 剩余给 OS 页缓存
+  ✓ 热数据比例 > OS 页缓存大小 → 命中率下降 → 磁盘读增加
+  ✓ 监控 page cache hit ratio
 ```
 
 ### 2.2 文件系统选择
 
 | 文件系统 | 推荐度 | 说明 |
 |----------|:---:|------|
-| **XFS** | ⭐⭐⭐⭐⭐ | 大文件顺序写最优，Kafka 官方推荐 |
-| ext4 | ⭐⭐⭐ | 可用，但非最优 |
-| ZFS/Btrfs | ⭐⭐ | 不推荐，写放大 |
+| **XFS** | ★★★★★ | 大文件顺序写最优，Kafka 官方推荐 |
+| ext4 | ★★★ | 可用，但非最优 |
+| ZFS/Btrfs | ★★ | 不推荐，写放大 |
 
 ```bash
 # 挂载 XFS 建议参数
@@ -154,7 +154,7 @@ log.dirs=/data/kafka/disk1,/data/kafka/disk2,/data/kafka/disk3
 # 日志刷新（通常用默认，让 OS 管理）
 log.flush.interval.messages=10000   # 多少条消息刷一次盘
 log.flush.interval.ms=1000          # 多少毫秒刷一次盘
-# ⚠️ 不建议改太小，影响吞吐；可靠性靠副本保证
+# 不建议改太小，影响吞吐；可靠性靠副本保证
 
 # 日志段
 log.segment.bytes=1073741824        # 1GB 滚动
@@ -196,9 +196,9 @@ buffer.memory=134217728             # 128MB
 # 减少连接创建/销毁开销
 connections.max.idle.ms=540000      # 9 分钟空闲关闭（默认）
 
-# ⚠️ Kafka Producer 是线程安全的，应用层应复用同一个实例！
-# ❌ 每条消息 new KafkaProducer
-# ✅ 单例 KafkaProducer
+# Kafka Producer 是线程安全的，应用层应复用同一个实例！
+# ✗ 每条消息 new KafkaProducer
+# ✓ 单例 KafkaProducer
 ```
 
 ---
@@ -231,10 +231,10 @@ while (true) {
     for (ConsumerRecord<String, String> record : records) {
         executor.submit(() -> process(record));
     }
-    consumer.commitAsync(); // ⚠️ 注意位移提交时机
+    consumer.commitAsync(); // 注意位移提交时机
 }
 
-// ⚠️ 方案 2 的陷阱：
+// 方案 2 的陷阱：
 //   - 位移提交可能在实际处理前 → 丢消息
 //   - 提交可能在处理后 → 重复消息
 //   → 需要精细的 Offset 管理
@@ -280,7 +280,7 @@ export KAFKA_JMX_OPTS="-Dcom.sun.management.jmxremote
 | **TotalProduceRequests** | `kafka.server:type=BrokerTopicMetrics,name=TotalProduceRequests` | 生产请求 | |
 | **TotalFetchRequests** | `kafka.server:type=BrokerTopicMetrics,name=TotalFetchRequests` | 消费请求 | |
 | **RequestQueueSize** | `kafka.network:type=RequestChannel,name=RequestQueueSize` | 请求队列 | >500 |
-| **ActiveControllerCount** | `kafka.controller:type=KafkaController,name=ActiveControllerCount` | Controller 状态 | =0 ❌ |
+| **ActiveControllerCount** | `kafka.controller:type=KafkaController,name=ActiveControllerCount` | Controller 状态 | =0 ✗ |
 
 #### 分区/副本级
 
@@ -348,9 +348,9 @@ bin/kafka-consumer-perf-test.sh \
   └── 不同 replica 数 (1/3)
 
 评估标准：
-  ✅ TPS（吞吐）— 目标吞吐 × 1.5 余量
-  ✅ P99 延迟 — <50ms（低延迟）/ <500ms（通用）
-  ✅ 资源使用 — CPU <70%、磁盘 <80%
+  ✓ TPS（吞吐）— 目标吞吐 × 1.5 余量
+  ✓ P99 延迟 — <50ms（低延迟）/ <500ms（通用）
+  ✓ 资源使用 — CPU <70%、磁盘 <80%
 ```
 
 ---

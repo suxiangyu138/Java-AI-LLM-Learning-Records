@@ -6,7 +6,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [LangGraph 的定位](#1-langgraph-的定位)
 2. [核心概念：State / Node / Edge](#2-核心概念state--node--edge)
@@ -46,7 +46,7 @@ LangGraph 解决什么问题
 
 ## 2. 核心概念：State / Node / Edge
 
-> 🎯 **图的三要素**：State（状态——图中流转的数据）、Node（节点——每个处理步骤）、Edge（边——节点间的连接与条件）。
+> **图的三要素**：State（状态——图中流转的数据）、Node（节点——每个处理步骤）、Edge（边——节点间的连接与条件）。
 
 ```python
 # ① State：图的「共享内存」（TypedDict 或 Pydantic）
@@ -123,13 +123,13 @@ print(result["messages"][-1].content)
 └── 金句：函数就是节点，图只是「把它们串起来 + 跑起来」
 ```
 
-> 💡 **节点返回约定**：返回的 dict 只是「增量更新」——没返回的字段保持不变；返回 None 表示不改状态（如纯副作用节点：发邮件、写日志）。
+> **节点返回约定**：返回的 dict 只是「增量更新」——没返回的字段保持不变；返回 None 表示不改状态（如纯副作用节点：发邮件、写日志）。
 
 ---
 
 ## 4. 条件边与循环
 
-> 🎯 **条件边让图活起来**——模型判断「下一步走哪条路」，这就是 while 循环/分支的本质。
+> **条件边让图活起来**——模型判断「下一步走哪条路」，这就是 while 循环/分支的本质。
 
 ```python
 # 场景：客服 Agent——先分类，再路由到对应处理节点
@@ -187,13 +187,13 @@ graph.add_conditional_edges("evaluate", route,
 graph.add_edge("refine", "evaluate")    # refine → evaluate → (route) → refine...
 ```
 
-> ⚠️ **循环必须有退出条件**：无限循环 = 成本灾难。实践：① 路由函数里加「最大轮次」判断（state 中计数）；② 全局超时；③ 节点内 token 预算控制。
+> **循环必须有退出条件**：无限循环 = 成本灾难。实践：① 路由函数里加「最大轮次」判断（state 中计数）；② 全局超时；③ 节点内 token 预算控制。
 
 ---
 
 ## 5. Checkpointer 持久化
 
-> 🎯 **Checkpointer 在每个节点执行后自动存 checkpoint**——崩溃恢复、多轮会话、HITL 断点都依赖它（create_agent 的记忆也是它）。
+> **Checkpointer 在每个节点执行后自动存 checkpoint**——崩溃恢复、多轮会话、HITL 断点都依赖它（create_agent 的记忆也是它）。
 
 ```python
 from langgraph.checkpoint.memory import InMemorySaver
@@ -224,13 +224,13 @@ for checkpoint in app.get_state_history(config):
 | 生产选型 | Postgres（多实例）/ Redis / 自研接口 |
 | 崩溃恢复 | 新请求同 thread_id → 从最后 checkpoint 继续 |
 
-> ⚠️ **性能代价（约 68%）**：checkpoint 序列化有开销——**高频循环节点别放图里，放节点内部**（一个循环 = 一个节点，而非 N 个节点）。见本章第 9 节。
+> **性能代价（约 68%）**：checkpoint 序列化有开销——**高频循环节点别放图里，放节点内部**（一个循环 = 一个节点，而非 N 个节点）。见本章第 9 节。
 
 ---
 
 ## 6. HITL 人工介入
 
-> 🎯 **HITL（Human-in-the-Loop）是 LangGraph 的招牌能力**——在指定节点「暂停」，等人工审批后再继续；create_agent 的 HumanInTheLoopMiddleware 底层就是它。
+> **HITL（Human-in-the-Loop）是 LangGraph 的招牌能力**——在指定节点「暂停」，等人工审批后再继续；create_agent 的 HumanInTheLoopMiddleware 底层就是它。
 
 ```python
 from langgraph.graph import StateGraph, START, END
@@ -270,13 +270,13 @@ app.invoke(
 | `interrupt_before`（编译期） | 静态声明暂停点 | 固定流程的审批门 |
 | `interrupt()`（运行时） | 节点内动态触发 | 条件性审批（金额>阈值才暂停） |
 
-> 💡 **interrupt_before vs middleware HITL**：create_agent + HumanInTheLoopMiddleware 适合「工具级审批」（简单）；LangGraph 手写图 + interrupt 适合「流程级审批」（多步工作流、需审计轨迹）。
+> **interrupt_before vs middleware HITL**：create_agent + HumanInTheLoopMiddleware 适合「工具级审批」（简单）；LangGraph 手写图 + interrupt 适合「流程级审批」（多步工作流、需审计轨迹）。
 
 ---
 
 ## 7. Time Travel 时间旅行
 
-> 🎯 **回退到任意检查点重放**——排查 Agent 决策错误、尝试「如果当时换条路」的替代路径（官方演示的杀手级功能）。
+> **回退到任意检查点重放**——排查 Agent 决策错误、尝试「如果当时换条路」的替代路径（官方演示的杀手级功能）。
 
 ```python
 # ① 获取某线程的历史检查点
@@ -297,7 +297,7 @@ app.invoke(Command(resume="SKIP_STEP"), replay_config)
 
 ## 8. create_agent 与 LangGraph 的关系
 
-> 🎯 **create_agent 就是预制的 LangGraph 图**——「用 create_agent 起步，需要精细控制时升级到显式图」。
+> **create_agent 就是预制的 LangGraph 图**——「用 create_agent 起步，需要精细控制时升级到显式图」。
 
 ```text
 create_agent 内部（自动生成的状态机）
@@ -374,7 +374,7 @@ LangGraph 性能基线（官方 benchmark）
 
 ## 10. 核心要点
 
-> 🎯 **核心要点**：
+> **核心要点**：
 > 1. **LangGraph = 显式状态机**：State（共享内存）+ Node（步骤）+ Edge（条件边）
 > 2. **与 LangChain 分工**：create_agent 底层就是 LangGraph——够用就高层，要精细控制就拆开写图
 > 3. **条件边 = while 循环/分支**：路由函数返回 key 决定走向；循环必须有退出条件

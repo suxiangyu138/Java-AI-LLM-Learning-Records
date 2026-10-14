@@ -1,6 +1,6 @@
 # 04 - Kimi API 开发实战
 
-> 🎯 Kimi API 完全兼容 OpenAI 协议 — 改 base_url 即可接入。本章覆盖快速接入、深度思考（reasoning_content）、Function Calling 循环、上下文缓存、结构化输出、视觉输入六大实战场景
+> Kimi API 完全兼容 OpenAI 协议 — 改 base_url 即可接入。本章覆盖快速接入、深度思考（reasoning_content）、Function Calling 循环、上下文缓存、结构化输出、视觉输入六大实战场景
 
 ---
 
@@ -48,7 +48,7 @@ const client = new OpenAI({
 });
 ```
 
-> ⚠️ **安全**：API Key 仅限服务端使用，严禁硬编码或暴露在浏览器前端。
+> **安全**：API Key 仅限服务端使用，严禁硬编码或暴露在浏览器前端。
 
 ---
 
@@ -209,7 +209,7 @@ print(response.choices[0].message.content)
 # → {"date":"2026-08-01","customer":"张三","product":"MacBook Pro","quantity":3}
 ```
 
-> ⚠️ **Messages 端点（Anthropic 兼容）不支持结构化输出** — 字段被静默忽略返回自由文本。需要严格 JSON 时用 Chat Completions 或 Responses。
+> **Messages 端点（Anthropic 兼容）不支持结构化输出** — 字段被静默忽略返回自由文本。需要严格 JSON 时用 Chat Completions 或 Responses。
 
 ---
 
@@ -279,6 +279,6 @@ print(response.choices[0].message.content)
 
 ---
 
-> 🎯 **核心要点**：Kimi API 六大实战 — **① OpenAI 兼容（改 base_url）② 深度思考（reasoning_content 必须回传）③ Function Calling 循环（模型不执行工具，8 轮上限）④ 上下文缓存（自动开启，前缀一致省 75%）⑤ JSON Schema 严格模式（Messages 端点不支持）⑥ 视觉 base64（不接受公共 URL）**。生产原则一句话：**Kimi 负责推理，你的后端负责决策/验证/执行/保护**。
+> **核心要点**：Kimi API 六大实战 — **① OpenAI 兼容（改 base_url）② 深度思考（reasoning_content 必须回传）③ Function Calling 循环（模型不执行工具，8 轮上限）④ 上下文缓存（自动开启，前缀一致省 75%）⑤ JSON Schema 严格模式（Messages 端点不支持）⑥ 视觉 base64（不接受公共 URL）**。生产原则一句话：**Kimi 负责推理，你的后端负责决策/验证/执行/保护**。
 
 **下一模块**：[05-Kimi-Agent与智能体集群](05-Kimi-Agent与智能体集群.md) / **返回总览**：[00-总览](00-Kimi知识体系总览.md)

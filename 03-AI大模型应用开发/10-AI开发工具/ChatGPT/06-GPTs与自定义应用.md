@@ -1,6 +1,6 @@
 # 06 - GPTs 与自定义应用
 
-> 🎯 GPTs = 不用写代码就能创建 AI 应用。Assistant API = 把 GPT-4 嵌入你的产品。两者结合 = AI 应用开发的最低门槛
+> GPTs = 不用写代码就能创建 AI 应用。Assistant API = 把 GPT-4 嵌入你的产品。两者结合 = AI 应用开发的最低门槛
 
 ---
 
@@ -29,7 +29,7 @@ GPTs = 四个可配置组件：
 
 ① Instructions（System Prompt）
    "你是 Java 代码审查专家。按阿里巴巴 Java 规范审查代码。
-    输出格式：🔴致命 / 🟡警告 / 🟢建议 分级"
+    输出格式：致命 / 警告 / 建议 分级"
 
 ② Knowledge（知识库）
    上传文件：阿里巴巴Java开发手册.pdf
@@ -54,7 +54,7 @@ client = OpenAI()
 # ① 创建 Assistant（定义行为和工具）
 assistant = client.beta.assistants.create(
     name="Java Code Reviewer",
-    instructions="审查Java代码，按阿里巴巴规范，输出🔴🟡🟢分级",
+    instructions="审查Java代码，按阿里巴巴规范，输出分级",
     model="gpt-4o",
     tools=[{"type": "code_interpreter"}]
 )
@@ -115,4 +115,4 @@ paths:
 
 配置后 GPT 可自主决定何时查询订单、何时发邮件、何时查数据库——实现轻量级 Agent。
 
-> 🎯 GPTs = 零代码 AI 应用。Assistant API = 嵌入式 GPT-4。知识库 + Tools + Actions 三件套，够用不贵。
+> GPTs = 零代码 AI 应用。Assistant API = 嵌入式 GPT-4。知识库 + Tools + Actions 三件套，够用不贵。

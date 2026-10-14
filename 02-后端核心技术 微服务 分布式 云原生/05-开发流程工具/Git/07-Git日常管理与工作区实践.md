@@ -1,7 +1,7 @@
 # 07-Git 日常管理与工作区实践
 > 工作区是 Git 的入口，也是开发者每天的战场——每日节奏、status/diff 解读、add -p 精准暂存、stash 进阶、log 高级、bisect、GC 维护
 
-## 📚 目录
+## 目录
 1. [Developer's Daily Git Rhythm](#1-developers-daily-git-rhythm)
 2. [工作区卫生：status 输出解读](#2-工作区卫生status-输出解读)
 3. [git diff 三种范围](#3-git-diff-三种范围)
@@ -38,7 +38,7 @@ Evening (17:30)   → git push final → create PR / update PR
 | PR 前 | `git log --oneline` | 确认提交历史清晰 |
 | 下班前 | `git stash list` | 检查遗留 stash |
 
-> 🎯 **黄金法则**：提交频率 = 解决一个最小独立问题的单位。如果 commit message 里写了 "and"，说明这个提交应该拆分成两个。
+> **黄金法则**：提交频率 = 解决一个最小独立问题的单位。如果 commit message 里写了 "and"，说明这个提交应该拆分成两个。
 
 ## 2. 工作区卫生：status 输出解读
 
@@ -69,7 +69,7 @@ git status --short
 # MM both-staged.java      ← 两侧M = 暂存后又修改了
 ```
 
-> ⚠️ **关注 Untracked files**：如果 `.idea/` 或 `target/` 出现在 Untracked 中，说明 `.gitignore` 配置有遗漏，立即修复。
+> **关注 Untracked files**：如果 `.idea/` 或 `target/` 出现在 Untracked 中，说明 `.gitignore` 配置有遗漏，立即修复。
 
 ## 3. git diff 三种范围
 
@@ -97,7 +97,7 @@ git add src/main/java/.../service/    # 整个目录
 git add *.java                        # 通配符
 git add -u                            # 仅已跟踪文件的修改+删除（不含新增）
 git add -A                            # 所有变更（新增+修改+删除）
-git add -p                            # 逐块确认是否暂存 ⭐
+git add -p                            # 逐块确认是否暂存 ★
 ```
 
 ### git add -p 交互选项
@@ -117,7 +117,7 @@ git diff --cached       # 复查即将提交的内容
 git commit -m "feat: ..."
 ```
 
-> 💡 `git add -p` 天然强制开发者审查每一块改动，能捕获大量低级错误，远胜无脑 `git add .`。
+> `git add -p` 天然强制开发者审查每一块改动，能捕获大量低级错误，远胜无脑 `git add .`。
 
 ## 5. stash 进阶
 
@@ -146,7 +146,7 @@ git stash branch feature/fix-stash-conflict stash@{0}   # 从 stash 创建分支
 | 多个 WIP 同时进行 | 多次 `stash push -m "描述"` 区分 |
 | 误 stash 后找回 | `git stash list` + `apply` |
 
-> ⚠️ **Stash 风险**：存在本地 `.git/refs/stash`，**不随 push 推送**。重要 WIP 建议推到分支上存储。
+> **Stash 风险**：存在本地 `.git/refs/stash`，**不随 push 推送**。重要 WIP 建议推到分支上存储。
 
 ## 6. commit 日常管理
 
@@ -158,7 +158,7 @@ git add forgot-file.java
 git commit --amend --no-edit          # 追加文件（不改信息）
 ```
 
-> ⚠️ `--amend` 红线：仅对**尚未推送**的提交使用；已 push 则需 `--force-with-lease`，**严禁在公共分支上执行**。
+> `--amend` 红线：仅对**尚未推送**的提交使用；已 push 则需 `--force-with-lease`，**严禁在公共分支上执行**。
 
 ### 6.2 拆分提交
 
@@ -235,7 +235,7 @@ git log -L 1,20:UserService.java                   # 行范围历史
 # 按提交信息
 git log --grep="JIRA-1234"
 
-# 按代码内容（pickaxe 搜索）⭐⭐
+# 按代码内容（pickaxe 搜索）★★
 git log -S"findByEmail"              # 搜索出现/删除"findByEmail"的所有 commit
 git log -G"password.*encrypt"        # 正则搜索代码变更
 git log -S"// TODO: " --all          # 搜所有分支
@@ -247,7 +247,7 @@ git log main...feature               # 两者各自独有的（对称差）
 git log --left-right main...feature  # 标注每个 commit 属于哪边
 ```
 
-> 💡 `git log -S "string"`（pickaxe）非常强大——找出所有**新增或删除**了该字符串的提交，即使 commit message 完全不相关。适用于"哪个提交引入了这段代码"的溯源。
+> `git log -S "string"`（pickaxe）非常强大——找出所有**新增或删除**了该字符串的提交，即使 commit message 完全不相关。适用于"哪个提交引入了这段代码"的溯源。
 
 ## 9. git bisect：二分法定位 Bug
 
@@ -292,7 +292,7 @@ git bisect log          # 查看 bisect 轨迹
 git bisect visualize    # 可视化剩余范围
 ```
 
-> 💡 实战建议：先找确定的好 commit（上个 release 的 tag）→ 写可重复测试脚本 → `git bisect run` 全自动 → 找到后 `git bisect log` 保存记录 → 完成后务必 `git bisect reset`。
+> 实战建议：先找确定的好 commit（上个 release 的 tag）→ 写可重复测试脚本 → `git bisect run` 全自动 → 找到后 `git bisect log` 保存记录 → 完成后务必 `git bisect reset`。
 
 ## 10. 工作区清理与撤销
 
@@ -312,7 +312,7 @@ git clean -i            # 交互式清理
 git reset --hard HEAD && git clean -fd    # 彻底重置（危险！）
 ```
 
-> ⚠️ `git clean -fd` 会**永久删除**未跟踪文件！执行前务必 `git clean -n` 预览。
+> `git clean -fd` 会**永久删除**未跟踪文件！执行前务必 `git clean -n` 预览。
 
 ## 11. .gitattributes 与仓库维护
 
@@ -340,7 +340,7 @@ git reset --hard HEAD && git clean -fd    # 彻底重置（危险！）
 *.vue   linguist-detectable
 ```
 
-> 💡 Java 项目推荐组合：Windows `core.autocrlf true`、Mac/Linux `input`、项目 `.gitattributes: *.java text eol=lf`——三管齐下解决 CRLF/LF 战争。
+> Java 项目推荐组合：Windows `core.autocrlf true`、Mac/Linux `input`、项目 `.gitattributes: *.java text eol=lf`——三管齐下解决 CRLF/LF 战争。
 
 ### 11.2 .git 目录结构与 GC 维护
 
@@ -410,11 +410,11 @@ End of Day (17:45)
   git remote prune origin         # 清理远程已删分支
 ```
 
-> 🎯 **核心要义**：优秀的日常管理在于建立**可重复的操作节律**——每天遵循相同节奏，将 `git pull --rebase → git add -p → git commit → git push` 变为肌肉记忆。
+> **核心要义**：优秀的日常管理在于建立**可重复的操作节律**——每天遵循相同节奏，将 `git pull --rebase → git add -p → git commit → git push` 变为肌肉记忆。
 
 ## 13. 核心要点
 
-> 🎯 **核心要点**：
+> **核心要点**：
 > - 每日节奏五节点：晨间同步 → 微任务提交 → 午间备份 → 午后 rebase → 晚间 PR；
 > - status 两列标记、diff 三种范围、add -p 六选项是工作区卫生三件套；
 > - stash 是"临时移走"，有 4 个进阶参数（-p/-u/-a/指定文件）与 branch 恢复法；

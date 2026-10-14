@@ -6,7 +6,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [认证方式对比](#1-认证方式对比)
 2. [密钥类型选型](#2-密钥类型选型)
@@ -34,7 +34,7 @@
 | **密钥 + 2FA** | 极高 | 中 | 生产加固（见 03 篇） |
 | **证书认证** | 极高 | 高 | 大规模企业 |
 
-> 🎯 **2026 基线**：**生产服务器只允许密钥登录**（`PasswordAuthentication no`）——密码爆破是公网服务器第一攻击向量。
+> **2026 基线**：**生产服务器只允许密钥登录**（`PasswordAuthentication no`）——密码爆破是公网服务器第一攻击向量。
 
 ---
 
@@ -44,11 +44,11 @@
 
 | 类型 | 强度 | 速度 | 长度 | 2026 建议 |
 |------|:---:|:---:|:---:|:---:|
-| **Ed25519** | 高 | 快 | 短（68 字节公钥） | ✅ **首选** |
+| **Ed25519** | 高 | 快 | 短（68 字节公钥） | ✓ **首选** |
 | **RSA 4096** | 高 | 中 | 长 | 兼容旧系统 |
-| **RSA 2048** | 中 | 中 | 中 | ❌ 不推荐 |
-| **ECDSA** | 高 | 快 | 短 | ⚠️ 有争议（随机数问题） |
-| **DSA** | 低 | - | - | ❌ 已废弃 |
+| **RSA 2048** | 中 | 中 | 中 | ✗ 不推荐 |
+| **ECDSA** | 高 | 快 | 短 | 有争议（随机数问题） |
+| **DSA** | 低 | - | - | ✗ 已废弃 |
 
 ### 2.2 为什么 Ed25519 是 2026 首选
 
@@ -111,9 +111,9 @@ SSH 文件权限（过宽 = 拒绝认证）
 ├── ~/.ssh/          目录权限 700
 ├── ~/.ssh/authorized_keys  600
 ├── 私钥文件 id_ed25519     600
-├── ⚠️ 权限过宽：OpenSSH 拒绝使用（"Permissions too open"）
-├── ⚠️ 修复：chmod 700 ~/.ssh && chmod 600 ~/.ssh/authorized_keys
-└── ⚠️ 常见场景：git clone 到非 ~/.ssh 路径时权限问题
+├── 权限过宽：OpenSSH 拒绝使用（"Permissions too open"）
+├── 修复：chmod 700 ~/.ssh && chmod 600 ~/.ssh/authorized_keys
+└── 常见场景：git clone 到非 ~/.ssh 路径时权限问题
 ```
 
 ---
@@ -122,7 +122,7 @@ SSH 文件权限（过宽 = 拒绝认证）
 
 ### 4.1 密码短语（passphrase）
 
-> ⚠️ **私钥是「身份」**——泄露私钥 = 攻击者获得所有配置了对应公钥的服务器访问权：
+> **私钥是「身份」**——泄露私钥 = 攻击者获得所有配置了对应公钥的服务器访问权：
 
 ```text
 密码短语的作用
@@ -174,11 +174,11 @@ ssh user@server                            # 不再提示输入短语
 
 ```text
 ssh-agent 常见问题
-├── ⚠️ 新终端窗口 agent 丢失：agent 是进程级——eval 需在会话内
+├── 新终端窗口 agent 丢失：agent 是进程级——eval 需在会话内
 │   → Linux 用 keychain / systemd user 服务保持
-├── ⚠️ 服务器上找不到 agent：agent 在本机——服务器上用 Agent Forwarding
-├── ⚠️ 密钥没加载：ssh-add 报错检查权限与路径
-└── ✅ 排查：echo $SSH_AUTH_SOCK 查看 agent socket
+├── 服务器上找不到 agent：agent 在本机——服务器上用 Agent Forwarding
+├── 密钥没加载：ssh-add 报错检查权限与路径
+└── ✓ 排查：echo $SSH_AUTH_SOCK 查看 agent socket
 ```
 
 ---
@@ -217,7 +217,7 @@ command="/usr/local/bin/deploy.sh",no-pty,no-port-forwarding \
     ssh-ed25519 AAAA... ci-deploy@example.com
 ```
 
-> 🎯 **企业实践**：不同用途用不同密钥 + authorized_keys 选项限制——**CI 密钥只能跑部署脚本、备份密钥只能执行备份**——最小权限原则的 SSH 落地。
+> **企业实践**：不同用途用不同密钥 + authorized_keys 选项限制——**CI 密钥只能跑部署脚本、备份密钥只能执行备份**——最小权限原则的 SSH 落地。
 
 ---
 
@@ -249,7 +249,7 @@ ssh-keyscan server.example.com          # 获取服务器当前指纹
 ssh-keygen -R server.example.com        # 删除该主机记录
 # 然后重新连接确认新指纹
 
-# 跳过校验（⚠️ 仅临时/内网调试！生产禁止）
+# 跳过校验（仅临时/内网调试！生产禁止）
 ssh -o StrictHostKeyChecking=no user@server
 # 风险：不校验 = 易受中间人攻击（MITM）
 
@@ -257,13 +257,13 @@ ssh -o StrictHostKeyChecking=no user@server
 ssh -o StrictHostKeyChecking=accept-new user@server
 ```
 
-> ⚠️ **安全提醒**：`StrictHostKeyChecking=no` 会关闭指纹校验——**生产/敏感环境禁止**；CI 场景用 `accept-new`（只自动接受新主机，不放过指纹变更）。
+> **安全提醒**：`StrictHostKeyChecking=no` 会关闭指纹校验——**生产/敏感环境禁止**；CI 场景用 `accept-new`（只自动接受新主机，不放过指纹变更）。
 
 ---
 
 ## 8. 核心要点
 
-> 🎯 **核心要点**：
+> **核心要点**：
 > 1. 2026 基线：**Ed25519 密钥 + 生产禁用密码登录**——密码爆破是第一攻击向量
 > 2. 私钥是身份：设密码短语 + 600 权限 + 绝不出本机；泄露 SOP = 先撤锁再换锁
 > 3. ssh-agent 免密中转：一次解锁会话免密；Agent Forwarding 有风险（04 篇详解）

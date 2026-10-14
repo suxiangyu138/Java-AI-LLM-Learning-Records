@@ -1,10 +1,10 @@
 # JMeter CI/CD 集成与实战场景
 
-> 🚀 Maven Plugin 集成、Jenkins Pipeline、GitHub Actions、常见压测场景实战模板 —— 从脚本到流水线
+> Maven Plugin 集成、Jenkins Pipeline、GitHub Actions、常见压测场景实战模板 —— 从脚本到流水线
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [Maven JMeter Plugin](#1-maven-jmeter-plugin)
 2. [Jenkins Pipeline 集成](#2-jenkins-pipeline-集成)
@@ -229,7 +229,7 @@ jobs:
           ERROR_RATE=$(awk -F',' 'NR>1{t++; if($8=="false") e++} END{printf "%.2f", e/t*100}' results.jtl)
           echo "Error Rate: $ERROR_RATE%"
           if (( $(echo "$ERROR_RATE > 1.0" | bc -l) )); then
-            echo "❌ 错误率超阈值！"
+            echo "✗ 错误率超阈值！"
             exit 1
           fi
 
@@ -333,7 +333,7 @@ Thread Group 配置：
 
 ---
 
-> 🎯 **核心要点**：CI/CD 集成的关键是 **Maven Plugin 或 CLI + 结果解析 + SLA 门禁**。压测失败构建也应该失败（质量门禁）。实战中 90% 场景用 HTTP Request + CSV Data Set + JSON Extractor + Aggregate Report 即可覆盖。
+> **核心要点**：CI/CD 集成的关键是 **Maven Plugin 或 CLI + 结果解析 + SLA 门禁**。压测失败构建也应该失败（质量门禁）。实战中 90% 场景用 HTTP Request + CSV Data Set + JSON Extractor + Aggregate Report 即可覆盖。
 
 ---
 

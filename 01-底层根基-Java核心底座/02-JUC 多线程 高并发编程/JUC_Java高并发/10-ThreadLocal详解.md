@@ -66,7 +66,7 @@ private static final ThreadLocal<SimpleDateFormat> DATE_FORMAT =
 
 // 使用
 String today = DATE_FORMAT.get().format(new Date());
-// ⚠️ 线程池场景下务必 remove()
+// 线程池场景下务必 remove()
 // DATE_FORMAT.remove();
 ```
 
@@ -203,7 +203,7 @@ static class Entry extends WeakReference<ThreadLocal<?>> {
 
 ThreadLocalMap在`get()`、`set()`、`remove()`操作时会**被动清理**部分脏Entry（key=null的Entry），但这只是"捎带清理"，不能完全替代主动`remove()`。
 
->   ⚠️ ThreadLocalMap的自清理机制仅发生在对当前key的操作路径上，无法覆盖整个Entry数组中的全部脏Entry。长期不访问的脏Entry仍会持续泄漏。
+>   ThreadLocalMap的自清理机制仅发生在对当前key的操作路径上，无法覆盖整个Entry数组中的全部脏Entry。长期不访问的脏Entry仍会持续泄漏。
 
 ---
 
@@ -221,7 +221,7 @@ public class ThreadLocalLeakPrevention {
             // 业务处理逻辑
             doBusiness();
         } finally {
-            TL.remove(); // ⚠️ 必须调用！防止内存泄漏
+            TL.remove(); // 必须调用！防止内存泄漏
         }
     }
 
@@ -241,16 +241,16 @@ for (int i = 0; i < 10; i++) {
         try {
             // ... 业务处理
         } finally {
-            TL.remove(); // ⚠️ 线程池复用线程，不清理则下次任务会读到旧数据
+            TL.remove(); // 线程池复用线程，不清理则下次任务会读到旧数据
         }
     });
 }
 pool.shutdown();
 ```
 
->   ⚠️ 线程池中的线程复用，如果不remove()，不仅会造成内存泄漏，还会导致**脏数据问题**——下一次由同一线程执行的任务会读到上一次残留的数据。
+>   线程池中的线程复用，如果不remove()，不仅会造成内存泄漏，还会导致**脏数据问题**——下一次由同一线程执行的任务会读到上一次残留的数据。
 
->   💡 ThreadLocal最佳实践三原则：1）声明为`private static final`；2）使用`withInitial`指定初始值；3）在`finally`块中调用`remove()`。
+>   ThreadLocal最佳实践三原则：1）声明为`private static final`；2）使用`withInitial`指定初始值；3）在`finally`块中调用`remove()`。
 
 ---
 
@@ -304,7 +304,7 @@ private void init(Thread parent) {
 | 线程池失效 | 线程池复用已有线程，不会重新拷贝 |
 | 浅拷贝 | Entry的value是引用拷贝，可变对象的修改会互相影响 |
 
->   ⚠️ InheritableThreadLocal在线程池场景**完全失效**，因为线程池复用已创建的线程，不会触发拷贝机制。
+>   InheritableThreadLocal在线程池场景**完全失效**，因为线程池复用已创建的线程，不会触发拷贝机制。
 
 ---
 
@@ -318,7 +318,7 @@ InheritableThreadLocal仅在线程创建时拷贝一次，线程池复用线程�
 |------|---------|-----------|
 | ThreadLocal | 单线程独享数据 | 不支持（需手动remove） |
 | InheritableThreadLocal | 父子线程传递 | 不支持 |
-| TransmittableThreadLocal | 线程池上下文传递 | ✅ 完全支持 |
+| TransmittableThreadLocal | 线程池上下文传递 | ✓ 完全支持 |
 
 ### 7.2 核心原理
 
@@ -352,7 +352,7 @@ ExecutorService ttlExecutor = TtlExecutors.getTtlExecutorService(executor);
 ttlExecutor.submit(() -> System.out.println(CTX.get()));
 ```
 
->   💡 TTL是解决线程池环境下链路追踪（TraceId透传）、用户上下文传递问题的工业级方案，已成为微服务架构中的标配组件。使用时需引入Maven依赖：`com.alibaba:transmittable-thread-local:2.14.5+`。
+>   TTL是解决线程池环境下链路追踪（TraceId透传）、用户上下文传递问题的工业级方案，已成为微服务架构中的标配组件。使用时需引入Maven依赖：`com.alibaba:transmittable-thread-local:2.14.5+`。
 
 ---
 
@@ -370,7 +370,7 @@ Spring的`TransactionSynchronizationManager`内部使用ThreadLocal存储当前�
 // TransactionSynchronizationManager（Spring 核心源码简化）
 public abstract class TransactionSynchronizationManager {
 
-    // ⭐ ThreadLocal 存储当前线程绑定的数据库连接
+    // ★ ThreadLocal 存储当前线程绑定的数据库连接
     private static final ThreadLocal<Map<DataSource, ConnectionHolder>>
             resources = new NamedThreadLocal<>("Transactional resources");
 
@@ -443,7 +443,7 @@ public class UserService {
 }
 ```
 
->   🎯 ThreadLocal在Spring事务中的角色就是"线程维度的数据绑定器"——确保同一线程在任何位置都能获取到本次事务绑定的数据库连接。
+>   ThreadLocal在Spring事务中的角色就是"线程维度的数据绑定器"——确保同一线程在任何位置都能获取到本次事务绑定的数据库连接。
 
 ---
 
@@ -463,16 +463,16 @@ public class UserService {
 ### 9.2 常见陷阱
 
 ```java
-// ❌ 陷阱1：线程池中不清理 → 脏数据
+// ✗ 陷阱1：线程池中不清理 → 脏数据
 private static final ThreadLocal<String> TL = new ThreadLocal<>();
 
 // 线程A执行：TL.set("A") → 未remove
 // 线程A复用执行：TL.get() → 读到"A"，不是当前请求的数据！
 
-// ❌ 陷阱2：使用 static 方法区 ThreadLocal 作为全局变量
+// ✗ 陷阱2：使用 static 方法区 ThreadLocal 作为全局变量
 // 如果在非静态内部类中使用 ThreadLocal，可能导致外部类无法被GC回收
 
-// ❌ 陷阱3：InheritableThreadLocal + 线程池 → 失效
+// ✗ 陷阱3：InheritableThreadLocal + 线程池 → 失效
 private static final InheritableThreadLocal<String> CTX = new InheritableThreadLocal<>();
 ExecutorService pool = Executors.newFixedThreadPool(1);
 CTX.set("parent");
@@ -480,7 +480,7 @@ pool.execute(() -> System.out.println(CTX.get())); // parent ✓（首次创建�
 pool.execute(() -> System.out.println(CTX.get())); // parent ✗（线程复用，值未被刷新）
 ```
 
->   💡 ThreadLocal本质是一个"线程级别的全局变量"。使用时要像对待全局变量一样谨慎：**非必要不使用，使用后必须清理**。推荐在Filter/AOP中统一初始化与清理，参考上述`RequestContext`工具类的`clear()`方法。
+>   ThreadLocal本质是一个"线程级别的全局变量"。使用时要像对待全局变量一样谨慎：**非必要不使用，使用后必须清理**。推荐在Filter/AOP中统一初始化与清理，参考上述`RequestContext`工具类的`clear()`方法。
 
 ---
 
@@ -510,7 +510,7 @@ ThreadLocalMap使用**开放地址法**中的线性探测策略。遇到哈希�
 | 对比维度 | InheritableThreadLocal | TransmittableThreadLocal（阿里TTL） |
 |---------|----------------------|-----------------------------------|
 | 传递时机 | 子线程创建时拷贝一次 | 每次任务提交时捕获，执行前回放 |
-| 线程池支持 | ❌ 不支持 | ✅ 完全支持 |
+| 线程池支持 | ✗ 不支持 | ✓ 完全支持 |
 | 使用方式 | JDK内置，直接使用 | 需引入第三方依赖 |
 | 实现原理 | Thread.init()中拷贝父线程Map | 装饰Runnable/线程池，任务前后回放与恢复 |
 

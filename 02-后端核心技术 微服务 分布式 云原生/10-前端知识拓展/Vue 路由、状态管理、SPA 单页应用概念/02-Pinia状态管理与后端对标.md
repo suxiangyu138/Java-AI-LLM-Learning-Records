@@ -1,6 +1,6 @@
 # 02 - Pinia 状态管理与后端对标
 
-> 🎯 前端状态管理 = 后端的"全局变量 + 缓存" — Pinia 是 Vue 3 的官方状态管理库。理解 Store 如何存用户信息、Token、配置等全局状态
+> 前端状态管理 = 后端的"全局变量 + 缓存" — Pinia 是 Vue 3 的官方状态管理库。理解 Store 如何存用户信息、Token、配置等全局状态
 
 ---
 
@@ -30,11 +30,11 @@
 
 ```text
 什么时候需要状态管理？
-  ✅ 用户信息（路由守卫、权限判断 → 全局）
-  ✅ Token（拦截器需要 → 全局）
-  ✅ 购物车（多个页面共享）
-  ✅ 主题/语言设置（全局）
-  ❌ 表单输入（仅当前页 → 不需要）
+  ✓ 用户信息（路由守卫、权限判断 → 全局）
+  ✓ Token（拦截器需要 → 全局）
+  ✓ 购物车（多个页面共享）
+  ✓ 主题/语言设置（全局）
+  ✗ 表单输入（仅当前页 → 不需要）
 ```
 
 ---
@@ -108,7 +108,7 @@ if (userStore.isLoggedIn) { /* ... */ }
 ## 3. 与后端交互的典型 Store
 
 ```javascript
-// ⭐ 购物车 Store — 数据在服务端
+// ★ 购物车 Store — 数据在服务端
 export const useCartStore = defineStore('cart', {
   state: () => ({
     items: [],
@@ -154,4 +154,4 @@ Pinia 的 actions 是异步的 ←→ Java 的 @Async 方法
 Pinia 的 getters 有缓存 ←→ Spring Cache @Cacheable
 ```
 
-> 🎯 **后端对标**：Store 是前端的"全局变量仓库"兼"Redis 缓存"。Action 负责调 API 取数据，State 存数据，Getters 做层转换。后端 90% 的逻辑在 Service 层，前端 90% 的逻辑在 Store 的 Action 里。
+> **后端对标**：Store 是前端的"全局变量仓库"兼"Redis 缓存"。Action 负责调 API 取数据，State 存数据，Getters 做层转换。后端 90% 的逻辑在 Service 层，前端 90% 的逻辑在 Store 的 Action 里。

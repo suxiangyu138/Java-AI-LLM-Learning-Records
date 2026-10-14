@@ -2,7 +2,7 @@
 
 > Jackson 是 Java JSON 处理的"事实标准"——Spring Boot 默认引擎，功能最全、生态最大、注解最多、安全最稳
 
-## 📚 目录
+## 目录
 
 1. [ObjectMapper 核心配置](#1)
 2. [Jackson 注解完全指南](#2)
@@ -132,7 +132,7 @@ public class JacksonConfig {
 }
 ```
 
-> 🎯 **核心要点**：`ObjectMapper` 创建成本极高（初始化序列化器缓存、内省 Bean），**必须全局单例**。Spring Boot 已自动配置，需要定制化时注入并修改默认配置而非新建实例。
+> **核心要点**：`ObjectMapper` 创建成本极高（初始化序列化器缓存、内省 Bean），**必须全局单例**。Spring Boot 已自动配置，需要定制化时注入并修改默认配置而非新建实例。
 
 ---
 
@@ -289,18 +289,18 @@ String json = new ObjectMapper()
 ### 3.1 TypeReference —— 解决泛型擦除
 
 ```java
-// ❌ 错误：泛型在运行时被擦除
+// ✗ 错误：泛型在运行时被擦除
 List<User> list = mapper.readValue(json, List.class);
 // list 实际是 List<Map>，每个元素是 LinkedHashMap，不是 User！
 
-// ✅ 正确：使用 TypeReference
+// ✓ 正确：使用 TypeReference
 List<User> list = mapper.readValue(json, new TypeReference<List<User>>() {});
 
-// ✅ Map 类型
+// ✓ Map 类型
 Map<String, List<User>> map = mapper.readValue(json,
     new TypeReference<Map<String, List<User>>>() {});
 
-// ✅ 嵌套泛型
+// ✓ 嵌套泛型
 Result<PageInfo<User>> result = mapper.readValue(json,
     new TypeReference<Result<PageInfo<User>>>() {});
 ```
@@ -410,7 +410,7 @@ try (JsonParser parser = factory.createParser(json)) {
 }
 ```
 
-> 🎯 **核心要点**：处理超大 JSON 时的铁律——**永远不要将整个 JSON 加载到 String 中**，直接用 `InputStream`/`Reader` + 流式 API，内存可控。
+> **核心要点**：处理超大 JSON 时的铁律——**永远不要将整个 JSON 加载到 String 中**，直接用 `InputStream`/`Reader` + 流式 API，内存可控。
 
 ---
 
@@ -631,7 +631,7 @@ ObjectMapper mapper = JsonMapper.builder()
 | Java 11-17 | 2.18.x / 2.19.x | 2.19 优化更佳 |
 | Java 21+ | 2.19.x | Multi-Release JAR 获得最优路径 |
 
-> 🎯 **核心要点**：Jackson 2.18 是 2024-2025 年最重要的升级——浮点解析零拷贝优化让处理数值密集型 JSON 的性能和内存表现均有质的飞跃。处于 2.17 及以下版本的项目应优先升级。
+> **核心要点**：Jackson 2.18 是 2024-2025 年最重要的升级——浮点解析零拷贝优化让处理数值密集型 JSON 的性能和内存表现均有质的飞跃。处于 2.17 及以下版本的项目应优先升级。
 
 ---
 

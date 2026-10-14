@@ -2,7 +2,7 @@
 
 > 生产三件套：Tracing 内置追踪（OpenAI 仪表盘/可切 OTel）、HITL 人工审批（run 级别）、Sandbox Agents 容器化执行（2026-04 Beta）——外加 MCP 与多 Provider。
 
-## 📚 目录
+## 目录
 
 1. [生产化全景](#1-生产化全景)
 2. [Tracing 可观测](#2-tracing-可观测)
@@ -175,7 +175,7 @@ MCP 服务器 → 工具 → SDK Agent
 
 ### 生产检查清单
 
-| 类别 | 检查项 | ✅ |
+| 类别 | 检查项 | ✓ |
 |---|---|---|
 | 循环 | max_turns 必设 | ☐ |
 | 安全 | 输入/输出 Guardrails + Tripwire | ☐ |
@@ -236,7 +236,7 @@ Prometheus 指标 → 追踪/成本统计
 | "HITL 拖慢一切" | 只对高危操作设（低频） |
 | "MCP 是可选" | 工具生态扩展的标配 |
 
-> 🎯 核心要点：生产五件套（Tracing/HITL/Sandbox/MCP/多 Provider）；Tracing 默认仪表盘可切 OTel（span 映射 AGENT/TOOL/CHAIN）；HITL 是 run 级审批（自动护栏 + 人审高危）；Sandbox Agents 容器化执行（Beta，启动 2-4 秒）；MCP 扩工具、LiteLLM 多模型；生产清单八项（max_turns 第一）；与 RAG 阶段 5 的思想完全打通（SDK 内建版）。
+> 核心要点：生产五件套（Tracing/HITL/Sandbox/MCP/多 Provider）；Tracing 默认仪表盘可切 OTel（span 映射 AGENT/TOOL/CHAIN）；HITL 是 run 级审批（自动护栏 + 人审高危）；Sandbox Agents 容器化执行（Beta，启动 2-4 秒）；MCP 扩工具、LiteLLM 多模型；生产清单八项（max_turns 第一）；与 RAG 阶段 5 的思想完全打通（SDK 内建版）。
 
 ---
 

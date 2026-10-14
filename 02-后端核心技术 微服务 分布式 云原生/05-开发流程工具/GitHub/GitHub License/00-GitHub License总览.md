@@ -1,7 +1,7 @@
 # GitHub License 总览
 > 开源许可证选型、GitHub 的 License 检测机制、依赖许可证合规与商用避坑——从"加一个 LICENSE 文件"到"企业级合规"
 
-## 📚 目录
+## 目录
 1. [知识体系导图](#1-知识体系导图)
 2. [模块导航](#2-模块导航)
 3. [学习路线推荐](#3-学习路线推荐)
@@ -71,7 +71,7 @@ GitHub License 知识体系（2026-08 基准）
 | SBOM | 软件物料清单（依赖清单标准格式） | CycloneDX/SPDX 格式 |
 | 传染性（Viral） | 衍生代码需继承许可 | GPL 系；AGPL 网络调用也算"分发" |
 
-> 🎯 **核心要点**：License 的三大工程事实——① **没有 LICENSE 文件 = 默认禁止他人使用**（不是"随便用"）；② GitHub 检测是**文件内容比对**，不解析 README 与依赖；③ 依赖合规靠 CI 门禁（Dependency Review），不靠 GitHub 自动提示。
+> **核心要点**：License 的三大工程事实——① **没有 LICENSE 文件 = 默认禁止他人使用**（不是"随便用"）；② GitHub 检测是**文件内容比对**，不解析 README 与依赖；③ 依赖合规靠 CI 门禁（Dependency Review），不靠 GitHub 自动提示。
 
 ## 5. 版本窗口说明
 
@@ -84,7 +84,7 @@ GitHub License 知识体系（2026-08 基准）
 | GitHub 许可证合规产品 | 2026 起随 OSPO Playbook 推出 | 与 Dependency Graph + Dependabot 集成，500+ SPDX 标识符 |
 | 云厂商条款 | SSPL（MongoDB）/ Elastic License | 非 OSI 批准，注意与 GPL 不兼容 |
 
-> ⚠️ **时效性**：许可证文本与条款以 [SPDX License List](https://spdx.org/licenses/) 与官方文本为准；本文是工程视角解读，不构成法律意见——商业关键决策请咨询法务。
+> **时效性**：许可证文本与条款以 [SPDX License List](https://spdx.org/licenses/) 与官方文本为准；本文是工程视角解读，不构成法律意见——商业关键决策请咨询法务。
 
 ## 6. 参考来源
 

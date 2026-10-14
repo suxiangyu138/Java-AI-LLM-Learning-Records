@@ -1,7 +1,7 @@
 # 网格BFS与多源BFS
 > 方向数组 + 沉岛 + 多源扩散——面试最高频的 BFS 形态（岛屿/腐烂/距离）
 
-## 📚 目录
+## 目录
 1. [网格 BFS 模板](#1-网格-bfs-模板)
 2. [200. 岛屿数量：沉岛](#2-200-岛屿数量沉岛)
 3. [1091. 二进制矩阵最短路径](#3-1091-二进制矩阵最短路径)
@@ -84,7 +84,7 @@ private void bfsSink(char[][] grid, int i, int j) {
     int[][] dirs = {{0,1},{0,-1},{1,0},{-1,0}};
     Queue<int[]> queue = new LinkedList<>();
     queue.offer(new int[]{i, j});
-    grid[i][j] = '0';                     // ⚠️ 入队即沉岛！
+    grid[i][j] = '0';                     // 入队即沉岛！
 
     while (!queue.isEmpty()) {
         int[] cur = queue.poll();
@@ -129,7 +129,7 @@ private void bfsSink(char[][] grid, int i, int j) {
  * 0 可走 1 障碍，从 (0,0) 到 (m-1,n-1)，8 方向
  * 求最短步数
  *
- * ⚠️ 8 方向：水平/垂直/对角（对角也算一步）
+ * 8 方向：水平/垂直/对角（对角也算一步）
  * 最短性：BFS 第一次到达终点即最短
  */
 public int shortestPathBinaryMatrix(int[][] grid) {
@@ -137,7 +137,7 @@ public int shortestPathBinaryMatrix(int[][] grid) {
     if (grid[0][0] == 1 || grid[m-1][n-1] == 1) return -1;   // 起点/终点障碍
 
     int[][] dirs = {{0,1},{0,-1},{1,0},{-1,0},
-                    {1,1},{1,-1},{-1,1},{-1,-1}};   // ⚠️ 8 方向
+                    {1,1},{1,-1},{-1,1},{-1,-1}};   // 8 方向
 
     Queue<int[]> queue = new LinkedList<>();
     queue.offer(new int[]{0, 0});
@@ -213,7 +213,7 @@ public int orangesRotting(int[][] grid) {
     // ② 多源 BFS 扩散
     int minutes = 0;
     int[][] dirs = {{0,1},{0,-1},{1,0},{-1,0}};
-    while (!queue.isEmpty() && fresh > 0) {      // ⚠️ fresh > 0 剪枝
+    while (!queue.isEmpty() && fresh > 0) {      // fresh > 0 剪枝
         int size = queue.size();
         for (int i = 0; i < size; i++) {
             int[] cur = queue.poll();
@@ -330,7 +330,7 @@ public int[][] updateMatrix(int[][] mat) {
  我选择原地标记（腐烂置 2），省 visited 数组空间。"
 ```
 
-> 🎯 **核心要点**：网格 BFS 是面试最高频形态——**方向数组**（四/八方向）、**入队即标记**（visited 或沉岛）、**size 分层计步**是铁三角。**多源 BFS**（994/542）是重点变形：所有起点同时入队 = 超级源点，一次 BFS 解决多起点问题。200/1091/994 三道必背题覆盖了网格 BFS 的全部套路。
+> **核心要点**：网格 BFS 是面试最高频形态——**方向数组**（四/八方向）、**入队即标记**（visited 或沉岛）、**size 分层计步**是铁三角。**多源 BFS**（994/542）是重点变形：所有起点同时入队 = 超级源点，一次 BFS 解决多起点问题。200/1091/994 三道必背题覆盖了网格 BFS 的全部套路。
 
 ---
 

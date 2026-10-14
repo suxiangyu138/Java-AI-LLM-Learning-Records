@@ -1,6 +1,6 @@
 # 05 - 动态渲染与 Selenium 实战
 
-> 🎯 现代网站大量使用 JavaScript 渲染（React/Vue/SPA），传统 requests 拿到的是空壳 HTML。Selenium 和 Playwright 通过控制真实浏览器，能处理任何 JS 动态加载的内容
+> 现代网站大量使用 JavaScript 渲染（React/Vue/SPA），传统 requests 拿到的是空壳 HTML。Selenium 和 Playwright 通过控制真实浏览器，能处理任何 JS 动态加载的内容
 
 ---
 
@@ -31,7 +31,7 @@
     └── YES → 需要浏览器 + 反检测措施
 ```
 
-> 🎯 **原则**：能用 requests 就不要上浏览器——浏览器慢 10-100 倍，占内存 10-20 倍
+> **原则**：能用 requests 就不要上浏览器——浏览器慢 10-100 倍，占内存 10-20 倍
 
 ## 2. Selenium 核心操作
 
@@ -106,12 +106,12 @@ result = driver.execute_script("return document.title")
 
 | 维度 | Selenium | Playwright |
 |------|:---:|:---:|
-| 速度 | ⭐⭐⭐ | ⭐⭐⭐⭐⭐ |
+| 速度 | ★★★ | ★★★★★ |
 | API 设计 | 老式 | 现代 async |
-| 自动等待 | ❌ 需手动 | ✅ 内置 |
+| 自动等待 | ✗ 需手动 | ✓ 内置 |
 | 多浏览器 | Chrome/Firefox/Edge | Chromium/Firefox/WebKit |
-| 移动端模拟 | ❌ | ✅ 设备模拟 |
-| 网络拦截 | ❌ | ✅ 内置 |
+| 移动端模拟 | ✗ | ✓ 设备模拟 |
+| 网络拦截 | ✗ | ✓ 内置 |
 
 ### 3.2 Playwright 基础
 

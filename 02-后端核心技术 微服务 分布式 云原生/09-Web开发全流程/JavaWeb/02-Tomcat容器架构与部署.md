@@ -40,7 +40,7 @@
 └─────────────────────────────────────────────┘
 ```
 
-> 🎯 Tomcat = Servlet 容器 + JSP 引擎 + Web 服务器（轻量）。生产环境通常 Nginx 前置 + Tomcat 后置。
+> Tomcat = Servlet 容器 + JSP 引擎 + Web 服务器（轻量）。生产环境通常 Nginx 前置 + Tomcat 后置。
 
 ### 1.2 安装目录结构
 
@@ -52,7 +52,7 @@ tomcat/
 │   ├── catalina.sh   # 核心脚本（设置 JVM 参数等）
 │   └── startup.bat   # Windows
 ├── conf/             # 配置文件
-│   ├── server.xml    # ⭐ 核心配置（Connector、Host、Valve）
+│   ├── server.xml    # ★ 核心配置（Connector、Host、Valve）
 │   ├── web.xml       # 全局默认 web.xml（所有应用继承）
 │   ├── tomcat-users.xml  # 管理用户
 │   └── catalina.properties  # 系统属性
@@ -61,7 +61,7 @@ tomcat/
 │   ├── catalina.out  # 标准输出日志
 │   ├── localhost.log # 单个虚拟主机日志
 │   └── access_log    # 访问日志（需配置）
-├── webapps/          # ⭐ 应用部署目录
+├── webapps/          # ★ 应用部署目录
 │   ├── ROOT/         # 根应用（/）
 │   ├── manager/      # 管理应用
 │   └── docs/         # 文档
@@ -110,7 +110,7 @@ tomcat/
 | **Context** | 应用上下文 | 1~N个/Host | 一个 Web 应用（一个 war 包） |
 | **Wrapper** | Servlet 包装器 | 1~N个/Context | 最底层，封装单个 Servlet |
 
-> 💡 类比：Server = 大楼，Service = 楼层，Connector = 大门，Engine = 前台，Host = 公司，Context = 部门，Wrapper = 员工工位。
+> 类比：Server = 大楼，Service = 楼层，Connector = 大门，Engine = 前台，Host = 公司，Context = 部门，Wrapper = 员工工位。
 
 ### 2.3 server.xml 配置示例
 
@@ -228,7 +228,7 @@ Connector 内部：
 />
 ```
 
-> 💡 `maxThreads` 的推荐公式：CPU 核心数 × 2 ~ 4。过高会导致线程切换开销大于业务处理开销。
+> `maxThreads` 的推荐公式：CPU 核心数 × 2 ~ 4。过高会导致线程切换开销大于业务处理开销。
 
 ---
 
@@ -273,7 +273,7 @@ public class TimingValve extends ValveBase {
 }
 ```
 
-> 💡 Valve 机制类似于 Servlet Filter 链，但工作在 Container 级别而非应用级别。Filter 在 Context 内部，Valve 可影响整个 Engine/Host。
+> Valve 机制类似于 Servlet Filter 链，但工作在 Container 级别而非应用级别。Filter 在 Context 内部，Valve 可影响整个 Engine/Host。
 
 ### 4.2 Host — 虚拟主机
 
@@ -407,7 +407,7 @@ Catalina                       Shared
   - 共享库放在 Common（如 JDBC 驱动放在 lib/）
   - 应用专属库放在 WEB-INF/lib（不会被其他应用影响）
 
-⚠️ Spring Boot 嵌入式 Tomcat 的类加载不同！
+Spring Boot 嵌入式 Tomcat 的类加载不同！
   - 所有类由 Application ClassLoader 统一加载
   - 没有 WebApp 隔离，需要注意 jar 冲突
 ```
@@ -605,7 +605,7 @@ public WebServerFactoryCustomizer<TomcatServletWebServerFactory> tomcatCustomize
 </Cluster>
 ```
 
-> 🎯 现代化推荐：**Redis 集中存储 Session** 或 **JWT 无状态方案**。Tomcat 集群 Session 复制在生产中问题多（脑裂、网络抖动、内存浪费），已基本被淘汰。
+> 现代化推荐：**Redis 集中存储 Session** 或 **JWT 无状态方案**。Tomcat 集群 Session 复制在生产中问题多（脑裂、网络抖动、内存浪费），已基本被淘汰。
 
 ---
 

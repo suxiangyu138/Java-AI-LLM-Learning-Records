@@ -1,6 +1,6 @@
 # 09 - 性能诊断：AWR 与 ASH
 
-> 🎯 AWR 是 Oracle 的"体检报告"——自动采集性能指标生成诊断报告。ASH 是"心电图"——每秒采样当前正在执行的 SQL。两者结合 = Oracle 性能诊断的完整武器库
+> AWR 是 Oracle 的"体检报告"——自动采集性能指标生成诊断报告。ASH 是"心电图"——每秒采样当前正在执行的 SQL。两者结合 = Oracle 性能诊断的完整武器库
 
 ---
 
@@ -38,9 +38,9 @@ AWR 报告核心章节（从最重要开始看）：
 
 1. Top 10 Foreground Events → 看什么等待最多
    db file sequential read → 索引读取（正常）
-   db file scattered read  → 全表扫描（⚠️ 可能有问题）
-   log file sync           → 提交太频繁（⚠️）
-   enq: TX - row lock contention → 行锁争用（🔴 严重）
+   db file scattered read  → 全表扫描（可能有问题）
+   log file sync           → 提交太频繁（）
+   enq: TX - row lock contention → 行锁争用（严重）
 
 2. SQL ordered by Elapsed Time → 最慢的 SQL
    → 优化 Top 5 通常解决 80% 的性能问题

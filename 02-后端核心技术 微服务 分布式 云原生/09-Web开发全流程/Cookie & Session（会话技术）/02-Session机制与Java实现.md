@@ -1,7 +1,7 @@
 # 02-Session 机制与 Java 实现
 > Session 原理、SessionID 流转、HttpSession API、Servlet/JSP/Spring 使用——"数据在服务器，标识在 Cookie"
 
-## 📚 目录
+## 目录
 1. [Session 是什么](#1-session-是什么)
 2. [Session 与 Cookie 的关系](#2-session-与-cookie-的关系)
 3. [HttpSession API](#3-httpsession-api)
@@ -32,7 +32,7 @@ Session = 服务器端保存的会话数据
 | 容量 | 服务器内存（或分布式存储，见 04） |
 | 安全 | 数据不暴露给客户端（只有 ID） |
 
-> 🎯 **Session 的本质**：**"数据在服务器，标识在客户端"**——Cookie 存 SessionID（小、可公开），用户数据存服务器（大、需保密）。
+> **Session 的本质**：**"数据在服务器，标识在客户端"**——Cookie 存 SessionID（小、可公开），用户数据存服务器（大、需保密）。
 
 ## 2. Session 与 Cookie 的关系
 
@@ -52,7 +52,7 @@ Session 与 Cookie 的配合：
 也可以说：Session 是"存数据的地方"，Cookie 是"传标识的通道"
 ```
 
-> 💡 一句话关系：**Session 用 Cookie 做"身份凭证的快递"，数据本身留在服务器**——这也是"Session 比 Cookie 安全（数据层面）"的原因。
+> 一句话关系：**Session 用 Cookie 做"身份凭证的快递"，数据本身留在服务器**——这也是"Session 比 Cookie 安全（数据层面）"的原因。
 
 ## 3. HttpSession API
 
@@ -133,7 +133,7 @@ public class ProfileServlet extends HttpServlet {
 <p>欢迎，<%= user %></p>
 ```
 
-> 🎯 **登录态判断的标准姿势**：`getSession(false)` + 检查属性——**false 参数避免"每次请求都创建新 Session"**（无 Cookie 的请求 getSession() 会一直新建，浪费且异常）。
+> **登录态判断的标准姿势**：`getSession(false)` + 检查属性——**false 参数避免"每次请求都创建新 Session"**（无 Cookie 的请求 getSession() 会一直新建，浪费且异常）。
 
 ## 5. Spring 中的 Session 使用
 
@@ -187,11 +187,11 @@ server:
 "存 Session 的对象一律可序列化"是好习惯
 ```
 
-> ⚠️ **序列化纪律**（为分布式做准备）：Session 里只放"业务数据对象"（用户信息/购物车 DTO），不放"连接/服务"类——否则切到 Redis 存储时直接报错。
+> **序列化纪律**（为分布式做准备）：Session 里只放"业务数据对象"（用户信息/购物车 DTO），不放"连接/服务"类——否则切到 Redis 存储时直接报错。
 
 ## 7. 核心要点
 
-> 🎯 **核心要点**：
+> **核心要点**：
 > - Session = 服务器存数据 + Cookie 传 SessionID（"数据在服务器，标识在客户端"）；
 > - `getSession()` 有取无建 vs `getSession(false)` 有取无 null（登录判断用 false）；
 > - 登出标准姿势：`session.invalidate()`；

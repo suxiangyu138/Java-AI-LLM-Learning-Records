@@ -1,6 +1,6 @@
 # 07 - MyBatis-Plus 快速开发
 
-> 🎯 MyBatis-Plus 是 MyBatis 的增强工具——自动生成 CRUD、条件构造器、分页插件、逻辑删除，让单表开发效率提升 5 倍
+> MyBatis-Plus 是 MyBatis 的增强工具——自动生成 CRUD、条件构造器、分页插件、逻辑删除，让单表开发效率提升 5 倍
 
 ---
 
@@ -75,7 +75,7 @@ List<User> users = userMapper.selectList(
         .last("LIMIT 10")                           // 限制 10 条
 );
 
-// Lambda 写法（类型安全，避免字符串写错列名！）✅
+// Lambda 写法（类型安全，避免字符串写错列名！）✓
 List<User> users = userMapper.selectList(
     new LambdaQueryWrapper<User>()
         .eq(User::getStatus, "ACTIVE")

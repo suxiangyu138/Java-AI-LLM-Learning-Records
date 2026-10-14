@@ -1,5 +1,5 @@
 # 04-Service与网络
-> 🎯 Service是K8s中连接Pod与外部世界的桥梁 — 它为动态变化的Pod提供稳定的虚拟IP、DNS名称和负载均衡，是K8s网络模型中最核心的抽象之一
+> Service是K8s中连接Pod与外部世界的桥梁 — 它为动态变化的Pod提供稳定的虚拟IP、DNS名称和负载均衡，是K8s网络模型中最核心的抽象之一
 
 ---
 
@@ -33,9 +33,9 @@ Pod的生命周期是短暂的：Pod可能因为Node故障、资源压力、应�
   Pod A 无法访问 Pod B，因为 IP 变了！
 
 Service解决的三个核心问题：
-  1. ✅ 稳定的虚拟IP：无论Pod怎么变，Service的IP不变
-  2. ✅ 服务发现：通过DNS名（user-service）而不是硬编码IP
-  3. ✅ 负载均衡：多个副本间自动分发请求
+  1. ✓ 稳定的虚拟IP：无论Pod怎么变，Service的IP不变
+  2. ✓ 服务发现：通过DNS名（user-service）而不是硬编码IP
+  3. ✓ 负载均衡：多个副本间自动分发请求
 ```
 
 ### 1.2 Service的抽象模型
@@ -59,7 +59,7 @@ Service解决的三个核心问题：
 └────────────────────────────────────────────────────────┘
 ```
 
-> 💡 **把Service想象成一个"反向代理"**：外界请求到达Service的虚拟IP:Port，Service把请求转发到后端某个Pod的IP:containerPort。这个转发过程对客户端完全透明。
+> **把Service想象成一个"反向代理"**：外界请求到达Service的虚拟IP:Port，Service把请求转发到后端某个Pod的IP:containerPort。这个转发过程对客户端完全透明。
 
 ### 1.3 Service的YAML骨架
 
@@ -152,7 +152,7 @@ ClusterIP工作原理：
      └── http://10.96.0.50:80                 （ClusterIP直连，不推荐）
 ```
 
-> 💡 **ClusterIP是K8s网络的基础**。所有内部微服务调用都应该使用ClusterIP。在SpringBoot中配置`SPRING_REDIS_HOST=redis-service`（而不是IP地址），K8s会自动解析到Redis Service。
+> **ClusterIP是K8s网络的基础**。所有内部微服务调用都应该使用ClusterIP。在SpringBoot中配置`SPRING_REDIS_HOST=redis-service`（而不是IP地址），K8s会自动解析到Redis Service。
 
 ### 2.4 NodePort
 
@@ -192,7 +192,7 @@ NodePort访问流程：
 | 安全性 | 建议配合防火墙使用，限制来源IP |
 | 性能 | 比ClusterIP多一层NAT，多一次转发 |
 
-> ⚠️ **NodePort不是生产环境的首选方案**。每个服务都需要一个端口，端口管理混乱。生产环境应该使用LoadBalancer或Ingress。
+> **NodePort不是生产环境的首选方案**。每个服务都需要一个端口，端口管理混乱。生产环境应该使用LoadBalancer或Ingress。
 
 ### 2.5 LoadBalancer
 
@@ -276,7 +276,7 @@ ExternalName 工作方式：
   客户端直接连接 rds.aliyuncs.com:3306（阿里云RDS）
 ```
 
-> 💡 **ExternalName适合将外部服务（云数据库、第三方API）映射为集群内部服务名**。应用配置不需要知道是内网还是外网，统一使用Service名即可。切换内部/外部时只需修改Service的type，不改应用代码。
+> **ExternalName适合将外部服务（云数据库、第三方API）映射为集群内部服务名**。应用配置不需要知道是内网还是外网，统一使用Service名即可。切换内部/外部时只需修改Service的type，不改应用代码。
 
 ---
 
@@ -296,9 +296,9 @@ spec:
 # Pod必须有这两个标签才能被选中
 metadata:
   labels:
-    app: user-service     # ✅ 匹配
-    tier: backend         # ✅ 匹配
-    version: "1.0.0"      # ✅ 额外标签不影响
+    app: user-service     # ✓ 匹配
+    tier: backend         # ✓ 匹配
+    version: "1.0.0"      # ✓ 额外标签不影响
 ```
 
 ```text
@@ -362,9 +362,9 @@ kube-proxy 的职责：
 
 | 模式 | 原理 | 负载均衡算法 | 性能 | 适用版本 |
 |------|------|:----------:|:----:|:--------:|
-| **userspace** | 用户态代理（已废弃） | 轮询 | ❌ 慢 | v1.0前 |
-| **iptables** | Linux内核Netfilter规则 | 随机（DNAT） | ⚠️ 中 | v1.1+（默认） |
-| **IPVS** | Linux内核LVS | 多种算法 | ✅ 高 | v1.11+ |
+| **userspace** | 用户态代理（已废弃） | 轮询 | ✗ 慢 | v1.0前 |
+| **iptables** | Linux内核Netfilter规则 | 随机（DNAT） | 中 | v1.1+（默认） |
+| **IPVS** | Linux内核LVS | 多种算法 | ✓ 高 | v1.11+ |
 
 ### 4.3 iptables 模式（默认）
 
@@ -396,12 +396,12 @@ iptables 工作流程：
 ```text
 iptables 模式的优缺点：
 
-✅ 优点：
+✓ 优点：
   - 纯内核态处理（比userspace快）
   - 不需要用户态进程转发
   - 成熟稳定，所有Linux版本都支持
 
-❌ 缺点：
+✗ 缺点：
   - 规则数量与Service+Pod数量成正比
   - 5K+条规则时查表延迟明显
   - 负载均衡只能随机（不能加权、不能一致性哈希）
@@ -421,13 +421,13 @@ kubectl get configmap kube-proxy -n kube-system -o yaml | grep mode
 ```text
 IPVS 模式的优缺点：
 
-✅ 优点：
+✓ 优点：
   - 基于LVS内核模块，性能极高（O(1)查找）
   - 支持多种负载均衡算法
   - 支持大规模集群（上万条规则）
   - 规则更新是增量式的（不会中断连接）
 
-❌ 缺点：
+✗ 缺点：
   - 需要加载ip_vs内核模块
   - 部分K8s发行版默认未开启
   - 需要额外安装ipvsadm工具
@@ -492,7 +492,7 @@ spec:
 
 ### 5.3 注意事项
 
-> ⚠️ **会话亲和性的两大问题：**
+> **会话亲和性的两大问题：**
 > 1. **流量不均**：如果某个客户端IP发请求特别多，会导致某个Pod压力特别大
 > 2. **NAT导致失效**：多个真实用户经过同一个NAT出口，会被认为是同一个ClientIP，全部转发到同一个Pod
 >
@@ -512,7 +512,7 @@ kind: Service
 metadata:
   name: mysql-headless
 spec:
-  clusterIP: None              # ⭐ 关键：ClusterIP设为None
+  clusterIP: None              # ★ 关键：ClusterIP设为None
   selector:
     app: mysql
   ports:
@@ -554,7 +554,7 @@ kind: StatefulSet
 metadata:
   name: mysql
 spec:
-  serviceName: mysql-h              # ⭐ 关联Headless Service
+  serviceName: mysql-h              # ★ 关联Headless Service
   replicas: 3
   selector:
     matchLabels:
@@ -666,7 +666,7 @@ nslookup mysql-h
 # Address:   10.244.3.9
 ```
 
-> 💡 **SpringBoot不需要额外配置DNS**，使用Service名作为数据库、Redis等地址即可。例如`spring.redis.host=redis-service`，K8s的CoreDNS会自动解析为Service的ClusterIP。
+> **SpringBoot不需要额外配置DNS**，使用Service名作为数据库、Redis等地址即可。例如`spring.redis.host=redis-service`，K8s的CoreDNS会自动解析为Service的ClusterIP。
 
 ### 7.4 Pod DNS 策略
 
@@ -763,7 +763,7 @@ subsets:
       - port: 3306
 ```
 
-> 💡 **手动创建Endpoints可以实现"Service代理外部服务"的效果**，比ExternalName更灵活（支持IP而不是只能DNS）。
+> **手动创建Endpoints可以实现"Service代理外部服务"的效果**，比ExternalName更灵活（支持IP而不是只能DNS）。
 
 ### 8.3 EndpointSlice（大规模集群优化）
 
@@ -786,7 +786,7 @@ EndpointSlice（新）：
 |------|:---------:|:-------------:|
 | API版本 | v1 | discovery.k8s.io/v1 |
 | 最大端点/对象 | 1000 | 100 |
-| 拓扑感知路由 | ❌ | ✅ |
+| 拓扑感知路由 | ✗ | ✓ |
 | K8s版本 | 一直支持 | v1.21+ 默认启用 |
 
 ---
@@ -809,15 +809,15 @@ EndpointSlice（新）：
   允许：来自特定Pod或特定IP段的流量
 ```
 
-> ⚠️ **NetworkPolicy需要CNI网络插件支持**。Flannel不支持NetworkPolicy，Calico和Cilium支持。如果CNI不支持，NetworkPolicy定义不会生效（所有Pod仍可互访）。
+> **NetworkPolicy需要CNI网络插件支持**。Flannel不支持NetworkPolicy，Calico和Cilium支持。如果CNI不支持，NetworkPolicy定义不会生效（所有Pod仍可互访）。
 
 | CNI插件 | NetworkPolicy支持 |
 |---------|:----------------:|
-| Flannel | ❌ |
-| Calico | ✅ |
-| Cilium | ✅（eBPF实现，性能最高） |
-| Weave Net | ✅ |
-| Kube-router | ✅ |
+| Flannel | ✗ |
+| Calico | ✓ |
+| Cilium | ✓（eBPF实现，性能最高） |
+| Weave Net | ✓ |
+| Kube-router | ✓ |
 
 ### 9.2 NetworkPolicy语法
 
@@ -943,13 +943,13 @@ spec:
                      └──────────────────┘
 
   实现效果：
-    api-gateway → user-service:8080  ✅
-    api-gateway → mysql:3306         ❌  （隔离）
-    user-service → mysql:3306        ✅
-    user-service → Internet          ❌  （隔离）
+    api-gateway → user-service:8080  ✓
+    api-gateway → mysql:3306         ✗  （隔离）
+    user-service → mysql:3306        ✓
+    user-service → Internet          ✗  （隔离）
 ```
 
-> 💡 **零信任网络的核心原则**：显式允许，隐式拒绝。不因为两个服务在同一命名空间就默认互通。每个连通路径都需要显式声明在NetworkPolicy中。
+> **零信任网络的核心原则**：显式允许，隐式拒绝。不因为两个服务在同一命名空间就默认互通。每个连通路径都需要显式声明在NetworkPolicy中。
 
 ---
 
@@ -1169,4 +1169,4 @@ app:
 
 ---
 
-> 🎯 **Service是K8s网络的灵魂**。理解Service的四种类型（ClusterIP/NodePort/LoadBalancer/ExternalName）、kube-proxy的转发模式（iptables vs IPVS）、Headless Service与StatefulSet的配合、CoreDNS的服务发现机制，以及NetworkPolicy的零信任网络隔离，才能真正掌握K8s网络模型。下一章将介绍如何通过Ingress实现HTTP七层路由。
+> **Service是K8s网络的灵魂**。理解Service的四种类型（ClusterIP/NodePort/LoadBalancer/ExternalName）、kube-proxy的转发模式（iptables vs IPVS）、Headless Service与StatefulSet的配合、CoreDNS的服务发现机制，以及NetworkPolicy的零信任网络隔离，才能真正掌握K8s网络模型。下一章将介绍如何通过Ingress实现HTTP七层路由。

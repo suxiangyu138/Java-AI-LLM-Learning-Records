@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [面试回答框架](#1-面试回答框架)
 2. [基础语法与捕获](#2-基础语法与捕获)
@@ -45,7 +45,7 @@
 
 ```java
 Function<Integer, Integer> f = x -> x + 1;
-// var f = x -> x + 1; // ❌ 没有目标类型
+// var f = x -> x + 1; // ✗ 没有目标类型
 ```
 
 `Function<Integer,Integer>` 和 `ToIntFunction<Integer>` 的函数描述符不同，编译器不能凭箭头表达式自行选择。方法参数、返回值、赋值或显式强转都可以提供目标类型。
@@ -76,7 +76,7 @@ interface Action {
 ```java
 int offset = 10;
 Function<Integer, Integer> add = value -> value + offset;
-// offset++; // ❌ 重新赋值后不能捕获
+// offset++; // ✗ 重新赋值后不能捕获
 ```
 
 Java 采用捕获值的模型，Lambda 可能在方法返回后执行；要求变量绑定稳定可避免“栈变量还是副本”的歧义。它不等于对象不可变，也不等于线程安全。
@@ -209,7 +209,7 @@ Supplier<Integer> lambda = () -> value.length(); // 创建成功，get 时 NPE
 
 ```java
 Function<String, String> ref = String::trim;
-// var ref = String::trim; // ❌
+// var ref = String::trim; // ✗
 ```
 
 重载方法或静态/实例两条适配路径都匹配时，可以显式转型，或者改写为带类型参数的 Lambda。
@@ -513,7 +513,7 @@ long total = values.parallelStream()
         .sum();
 ```
 
-> 🎯 **追问收束**：重点不是背“能不能用 Lambda”，而是能否说明目标类型、捕获边界、异常契约、运行时实现和并发代价。
+> **追问收束**：重点不是背“能不能用 Lambda”，而是能否说明目标类型、捕获边界、异常契约、运行时实现和并发代价。
 
 ---
 
@@ -616,7 +616,7 @@ values.parallelStream().forEach(result::add);
 4. 设计可观测、可取消的 Lambda 重试模板。
 5. 说明 Lambda 捕获外部 `this` 对生命周期的影响。
 
-> 🎯 **最终复盘**：面试不要只背“Lambda 是语法糖”。高质量回答应同时说明目标类型、函数描述符、捕获语义、运行时实现和工程边界，并用一个最小例子证明结论。
+> **最终复盘**：面试不要只背“Lambda 是语法糖”。高质量回答应同时说明目标类型、函数描述符、捕获语义、运行时实现和工程边界，并用一个最小例子证明结论。
 
 ---
 

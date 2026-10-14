@@ -25,7 +25,7 @@ RESTful API 是遵循 **REST**（Representational State Transfer，表述性状�
 - **统一接口**：使用标准 HTTP 方法（GET、POST、PUT、DELETE、PATCH）
 - **表现形式**：资源可以有多种表现形式（JSON、XML）
 
-> 💡 RESTful 强调"资源"而非"动作"——URL 中不应出现动词（如 `/getUser`），而应使用 HTTP 方法表达动作。
+> RESTful 强调"资源"而非"动作"——URL 中不应出现动词（如 `/getUser`），而应使用 HTTP 方法表达动作。
 
 ### 1.3 HTTP 请求格式包含哪些部分？
 | 部分 | 说明 | 示例 |
@@ -73,7 +73,7 @@ RESTful API 是遵循 **REST**（Representational State Transfer，表述性状�
 | **前后端分离** | 不支持（强耦合） | 天然支持 |
 | **API 场景** | 传统服务端渲染 | 现代 RESTful / 微服务 |
 
-> 🎯 **面试重点**：JSON 响应已成为现代 API 的事实标准，HTML 响应仅用于 SSR（服务端渲染）场景。
+> **面试重点**：JSON 响应已成为现代 API 的事实标准，HTML 响应仅用于 SSR（服务端渲染）场景。
 
 ### 1.7 RESTful API 的 URL 命名规范有哪些？
 | 规范 | 正确示例 | 错误示例 |
@@ -89,7 +89,7 @@ RESTful API 是遵循 **REST**（Representational State Transfer，表述性状�
 |------|-----|------|
 | **语义** | 获取资源 | 创建资源 |
 | **参数位置** | URL 查询参数 | 请求体 |
-| **幂等性** | 幂等 ✅ | 非幂等 ❌ |
+| **幂等性** | 幂等 ✓ | 非幂等 ✗ |
 | **缓存** | 可被缓存 | 不可缓存 |
 | **安全性** | 参数暴露在 URL | 参数在请求体中 |
 | **长度限制** | URL 有长度限制（约 2KB） | 无限制 |
@@ -99,7 +99,7 @@ RESTful API 是遵循 **REST**（Representational State Transfer，表述性状�
 | 维度 | PUT | PATCH |
 |------|-----|-------|
 | **语义** | 全量替换 | 部分更新 |
-| **幂等性** | 幂等 ✅ | 可能非幂等 ❌ |
+| **幂等性** | 幂等 ✓ | 可能非幂等 ✗ |
 | **请求体** | 完整资源对象 | 仅包含要修改的字段 |
 | **使用场景** | 更新整个资源 | 修改某个/某些字段 |
 
@@ -108,7 +108,7 @@ RESTful API 是遵循 **REST**（Representational State Transfer，表述性状�
 - **幂等方法**：GET、PUT、DELETE、HEAD、OPTIONS
 - **非幂等方法**：POST（每次创建新资源）、PATCH（增量更新可能非幂等）
 
-> ⚠️ 幂等性在处理重试和网络异常时至关重要——支付接口必须保证幂等，防止重复扣款。
+> 幂等性在处理重试和网络异常时至关重要——支付接口必须保证幂等，防止重复扣款。
 
 ### 1.11 RESTful API 中的无状态性（Stateless）指什么？
 无状态性要求**每个请求都包含服务器处理所需的所有信息**，服务器不保存任何客户端上下文。这意味着：
@@ -124,7 +124,7 @@ RESTful API 是遵循 **REST**（Representational State Transfer，表述性状�
 | **请求头** | `Accept: application/vnd.myapp.v1+json` | 符合 REST 原则，URL 不变 | 不够直观，调试困难 |
 | **自定义 Header** | `X-API-Version: 1` | 简单，URL 不变 | 非标准做法 |
 
-> 💡 业界主流推荐 **URL 路径方式**（`/api/v1/...`），兼具直观性和可维护性。版本号建议使用整数（v1、v2）而非语义化版本（1.0.0）。
+> 业界主流推荐 **URL 路径方式**（`/api/v1/...`），兼具直观性和可维护性。版本号建议使用整数（v1、v2）而非语义化版本（1.0.0）。
 
 ### 1.13 Swagger / OpenAPI 是什么？
 - **OpenAPI**：一个用于描述 RESTful API 的规范（原称 Swagger 规范）
@@ -149,7 +149,7 @@ RESTful API 是遵循 **REST**（Representational State Transfer，表述性状�
 }
 ```
 
-> 🎯 HATEOAS 在实践中应用较少，但面试中常作为 REST 理论深度考察点出现。
+> HATEOAS 在实践中应用较少，但面试中常作为 REST 理论深度考察点出现。
 
 ### 1.15 Webhook 与轮询（Polling）的区别？
 | 维度 | Webhook | Polling |
@@ -249,7 +249,7 @@ header.payload.signature
 - Payload 仅 Base64 编码，不可存放敏感信息
 - Token 体积较大
 
-> ⚠️ JWT 的 Payload 只是 Base64 编码，不是加密！任何人都可以解码阅读内容，**绝不可存放密码等敏感信息**。
+> JWT 的 Payload 只是 Base64 编码，不是加密！任何人都可以解码阅读内容，**绝不可存放密码等敏感信息**。
 
 ### 2.2 JWT vs OAuth2 的区别与联系
 
@@ -261,7 +261,7 @@ header.payload.signature
 | **是否含用户信息** | 是（自包含） | 否（只是令牌，后端查询） |
 | **单独使用** | 适用于前后端分离的登录认证 | 适用于第三方开放平台 |
 
-> 🎯 **一句话总结**：JWT 是一种 Token 格式，OAuth2 是一种授权流程。两者可以结合使用——用 OAuth2 协议获取 JWT 格式的 Access Token。
+> **一句话总结**：JWT 是一种 Token 格式，OAuth2 是一种授权流程。两者可以结合使用——用 OAuth2 协议获取 JWT 格式的 Access Token。
 
 ### 2.3 OAuth2 的四种授权模式
 
@@ -272,7 +272,7 @@ header.payload.signature
 | **密码模式（Resource Owner Password Credentials）** | 用户名 + 密码直接换 token | 第一方应用、高度信任场景 | 中 |
 | **客户端凭证模式（Client Credentials）** | 客户端 ID + Secret 换 token | 服务间通信、无用户场景 | 高 |
 
-> 💡 **授权码模式 + PKCE**（Proof Key for Code Exchange）是目前移动端和 SPA 应用的标准推荐方案。
+> **授权码模式 + PKCE**（Proof Key for Code Exchange）是目前移动端和 SPA 应用的标准推荐方案。
 
 ### 2.4 RESTful API 的六大约束
 
@@ -500,7 +500,7 @@ public class ResourceNotFoundException extends RuntimeException {
 3. **降级**：返回兜底数据（缓存 / 默认值），保证核心功能可用
 4. **异步**：写操作改为 MQ 异步处理，削峰填谷
 
-> 💡 面试中要区分"限流"（阻止请求进入）和"熔断"（停止调用下游失败服务）。
+> 面试中要区分"限流"（阻止请求进入）和"熔断"（停止调用下游失败服务）。
 
 ### 3.2 接口响应太慢，如何排查和优化？
 **排查步骤**：
@@ -1276,7 +1276,7 @@ public class OrderController {
 - [ ] 第三方开放平台 API 设计
 - [ ] 高可用 API 设计思路
 
-> 🎯 **面试策略**：先过一遍 Checklist，标记自己不熟悉的知识点重点复习。概念题用"总-分-总"结构回答（先给出结论，再分点展开，最后总结升华）。代码题先写核心逻辑框架再补细节。系统设计题先明确需求边界，再画架构图，最后深入某个模块。
+> **面试策略**：先过一遍 Checklist，标记自己不熟悉的知识点重点复习。概念题用"总-分-总"结构回答（先给出结论，再分点展开，最后总结升华）。代码题先写核心逻辑框架再补细节。系统设计题先明确需求边界，再画架构图，最后深入某个模块。
 
 ---
 

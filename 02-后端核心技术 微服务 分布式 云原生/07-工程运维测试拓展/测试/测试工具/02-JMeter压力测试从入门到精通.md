@@ -59,7 +59,7 @@ Thread Group
     └── Listener (记录/展示结果)
 ```
 
-> 💡 **组件执行顺序**：同一作用域内，各组件按上述顺序执行。若多个同类型组件存在，则按它们在测试计划中的出现顺序执行。
+> **组件执行顺序**：同一作用域内，各组件按上述顺序执行。若多个同类型组件存在，则按它们在测试计划中的出现顺序执行。
 
 ---
 
@@ -115,7 +115,7 @@ jmeter
 └──────────────────────────────────────────────────────┘
 ```
 
-> ⚠️ **重要**：JMeter GUI 模式仅用于测试脚本开发和调试。**切勿**在 GUI 模式下执行正式压力测试，否则会因 GUI 本身消耗大量内存而导致测试结果不准确。
+> **重要**：JMeter GUI 模式仅用于测试脚本开发和调试。**切勿**在 GUI 模式下执行正式压力测试，否则会因 GUI 本身消耗大量内存而导致测试结果不准确。
 
 ### 2.4 GUI 模式快捷键
 
@@ -183,7 +183,7 @@ Test Plan (.jmx 文件)
 | `Functional Test Mode` | 是否存储完整响应数据 | `false`（提高性能） |
 | `Run Thread Groups consecutively` | 线程组是否串行执行 | 默认 `false`（并行） |
 
-> 💡 **建议**：将频繁变化的配置（如 target URL、端口号、超时时间）定义为变量，方便不同环境切换。
+> **建议**：将频繁变化的配置（如 target URL、端口号、超时时间）定义为变量，方便不同环境切换。
 
 ---
 
@@ -221,7 +221,7 @@ Ramp-Up = (总线程数 × 目标请求间隔) / 目标QPS
 # Ramp-Up = (1000 × 5) / 1000 = 5s (约)
 ```
 
-> 💡 **经验法则**：Ramp-Up 设为线程数 / 10，如 500 线程则 Ramp-Up 为 50 秒。观察系统负载曲线是否平滑上升。
+> **经验法则**：Ramp-Up 设为线程数 / 10，如 500 线程则 Ramp-Up 为 50 秒。观察系统负载曲线是否平滑上升。
 
 ### 4.4 调度器配置
 
@@ -371,7 +371,7 @@ Test Plan
      │   └── HTTP Request: GET /users/1   # 只需配置 Path
 ```
 
-> 💡 **变量引用**：JMeter 中使用 `${variableName}` 引用变量，变量来源可以是 User Defined Variables、CSV Data Set Config、Extractor 等。
+> **变量引用**：JMeter 中使用 `${variableName}` 引用变量，变量来源可以是 User Defined Variables、CSV Data Set Config、Extractor 等。
 
 ---
 
@@ -381,13 +381,13 @@ Test Plan
 
 | 监听器 | 用途 | 性能影响 | 适用阶段 |
 |--------|------|----------|----------|
-| **View Results Tree** | 查看单个请求/响应详情 | 🔴 极高 | 调试阶段 |
-| **Summary Report** | 汇总统计（Avg, Min, Max, TPS） | 🟡 中 | 压测阶段（慎用） |
-| **Aggregate Report** | 分区间统计 + 汇总 | 🟡 中 | 压测阶段（慎用） |
-| **Graph Results** | 折线图展示 | 🔴 高 | 调试阶段 |
-| **Simple Data Writer** | 写入 CSV 文件 | 🟢 低 | 压测阶段推荐 |
-| **Backend Listener** | 发送结果到 InfluxDB 等 | 🟢 低 | 压测阶段推荐 |
-| **Generate Summary Results** | 输出行摘要到日志 | 🟢 极低 | 压测阶段推荐 |
+| **View Results Tree** | 查看单个请求/响应详情 | 极高 | 调试阶段 |
+| **Summary Report** | 汇总统计（Avg, Min, Max, TPS） | 中 | 压测阶段（慎用） |
+| **Aggregate Report** | 分区间统计 + 汇总 | 中 | 压测阶段（慎用） |
+| **Graph Results** | 折线图展示 | 高 | 调试阶段 |
+| **Simple Data Writer** | 写入 CSV 文件 | 低 | 压测阶段推荐 |
+| **Backend Listener** | 发送结果到 InfluxDB 等 | 低 | 压测阶段推荐 |
+| **Generate Summary Results** | 输出行摘要到日志 | 极低 | 压测阶段推荐 |
 
 ### 6.2 View Results Tree
 
@@ -395,7 +395,7 @@ Test Plan
 
 ```
 Tree View:
- ├── Sample #1: GET /api/users ✅ (200)
+ ├── Sample #1: GET /api/users ✓ (200)
  │   ├── Request: GET https://api.example.com/api/users
  │   ├── Response Headers: HTTP/1.1 200 OK
  │   │   ├── Content-Type: application/json
@@ -403,7 +403,7 @@ Tree View:
  │   ├── Response Data: {"total":100, "data":[...]}
  │   └── Response Time: 23ms
  │
- └── Sample #2: POST /api/users ✅ (201)
+ └── Sample #2: POST /api/users ✓ (201)
      ├── Request: POST https://api.example.com/api/users
      ├── Response Headers: HTTP/1.1 201 Created
      └── ...
@@ -415,7 +415,7 @@ Tree View:
 | `Configure` | 选择展示内容 | 默认全选 |
 | `Log/Display Only` | 过滤展示 | `Errors`（仅错误） |
 
-> ⚠️ View Results Tree **会保存每个请求的完整 Request/Response 数据**，内存消耗巨大，**严禁**在正式压测时开启。
+> View Results Tree **会保存每个请求的完整 Request/Response 数据**，内存消耗巨大，**严禁**在正式压测时开启。
 
 ### 6.3 Summary Report
 
@@ -474,7 +474,7 @@ Parameters:
   measurement: jmeter
 ```
 
-> 🎯 **核心原则**：GUI 监听器会占用大量内存和 CPU，严重影响测试结果的准确性。正式压测一律使用 CLI 模式 + 后端存储。
+> **核心原则**：GUI 监听器会占用大量内存和 CPU，严重影响测试结果的准确性。正式压测一律使用 CLI 模式 + 后端存储。
 
 ---
 
@@ -669,7 +669,7 @@ Timeout in milliseconds: 10000                  # 超时时间：10 秒后不再
 # └────────────────────────────────────────────┘
 ```
 
-> ⚠️ **注意事项**：Synchronizing Timer 会阻塞线程直到达到指定数量或超时，过多的集合点会显著降低测试吞吐量。超时时间不宜过长，防止线程死等。
+> **注意事项**：Synchronizing Timer 会阻塞线程直到达到指定数量或超时，过多的集合点会显著降低测试吞吐量。超时时间不宜过长，防止线程死等。
 
 ---
 
@@ -746,7 +746,7 @@ Test Plan
       └── Summary Report (禁用，仅调试)
 ```
 
-> 💡 **CSV 最佳实践**：
+> **CSV 最佳实践**：
 > 1. CSV 文件使用相对路径（相对于 JMeter 工作目录或测试计划所在目录）
 > 2. 包含表头时勾选 "Ignore first line"（仅当 Variable Names 手动填写时）
 > 3. 大型数据集（10w+ 行）建议使用 `__CSVRead()` 函数替代 CSV Data Set Config
@@ -811,7 +811,7 @@ Options:
   Max Number of cached elements: 5000
 ```
 
-> 💡 **压测时建议**：
+> **压测时建议**：
 > - **关闭 Cache Manager**：大多数性能测试关注的是服务器处理能力，而非客户端缓存
 > - 如要模拟真实带缓存的用户行为，开启 Cache Manager 并设置合理的缓存限制
 
@@ -927,7 +927,7 @@ Default Value: CSRF_NOT_FOUND
 # 输出: abc123xyz
 ```
 
-> 💡 **提取器选择建议**：
+> **提取器选择建议**：
 > - **JSON 响应优先使用 JSON Extractor**：语法简洁，性能好，不易出问题
 > - **HTML 响应使用 Boundary Extractor**：简单直观
 > - **复杂场景使用 Regular Expression Extractor**：最灵活，但正则表达式本身有学习成本
@@ -1397,7 +1397,7 @@ jmeter.save.saveservice.autoflush=false
 
 ### 16.3 压测禁忌清单
 
-| ❌ 禁止 | ✅ 推荐 |
+| ✗ 禁止 | ✓ 推荐 |
 |---------|---------|
 | GUI 模式下执行正式压测 | CLI 模式执行 + 结果收集 |
 | View Results Tree 在压测时开启 | 仅调试阶段开启 |
@@ -1852,7 +1852,7 @@ jmeter -n -t test-plan.jmx \
 # 4. 建议：继续增加并发找到拐点，关注 CPU 和数据库连接池使用情况
 ```
 
-> 🎯 **JMeter 核心心法**：测试计划是剧本，线程组是演员，采样器是台词，断言是考核，监听器是录像。好的压测在于真实地模拟用户行为，而非堆高并发数字。
+> **JMeter 核心心法**：测试计划是剧本，线程组是演员，采样器是台词，断言是考核，监听器是录像。好的压测在于真实地模拟用户行为，而非堆高并发数字。
 
 ---
 

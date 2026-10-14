@@ -1,10 +1,10 @@
 # Android 知识体系
 
-> 🤖 从 Java 后端的视角理解 Android —— Linux 内核、ART 虚拟机、四大组件、Material Design、Jetpack 全家桶，构建从系统层到应用层的完整认知地图
+> 从 Java 后端的视角理解 Android —— Linux 内核、ART 虚拟机、四大组件、Material Design、Jetpack 全家桶，构建从系统层到应用层的完整认知地图
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [知识体系导图](#1-知识体系导图)
 2. [模块导航](#2-模块导航)
@@ -18,7 +18,7 @@
 ```
 Android 知识体系 (Java 后端视角)
 │
-├── 🏗️ 系统认知层
+├── 系统认知层
 │   └── 01-Android系统架构与演进
 │       ├── Android 版本演进 (1.0 → 16)
 │       ├── 系统架构：Linux Kernel → HAL → ART → Framework → Apps
@@ -26,7 +26,7 @@ Android 知识体系 (Java 后端视角)
 │       ├── APK 结构、签名、沙盒机制
 │       └── Android 与标准 Java 的 API 差异
 │
-├── 🛠️ 开发环境层
+├── 开发环境层
 │   └── 02-Android开发环境搭建
 │       ├── Android Studio：从安装到精通
 │       ├── SDK Manager：SDK Platform、Build-Tools、NDK
@@ -34,7 +34,7 @@ Android 知识体系 (Java 后端视角)
 │       ├── Gradle 构建体系（与 Maven 的对比）
 │       └── JDK 版本与 Android 兼容性
 │
-├── 🧩 核心组件层
+├── 核心组件层
 │   └── 03-Android四大组件详解
 │       ├── Activity：生命周期、启动模式、任务栈
 │       ├── Service：前台/后台/绑定服务
@@ -42,7 +42,7 @@ Android 知识体系 (Java 后端视角)
 │       ├── ContentProvider：跨进程数据共享
 │       └── Intent：组件间通信的桥梁
 │
-├── 🎨 UI 界面层
+├── UI 界面层
 │   └── 04-Android UI与界面开发
 │       ├── View 体系：ViewGroup → View 树
 │       ├── 经典布局：Linear/Relative/Constraint/Frame
@@ -50,7 +50,7 @@ Android 知识体系 (Java 后端视角)
 │       ├── Material Design 3：设计规范与组件
 │       └── 资源系统：layout/drawable/values/mipmap
 │
-├── 💾 数据与网络层
+├── 数据与网络层
 │   └── 05-Android数据存储与网络通信
 │       ├── SharedPreferences / DataStore
 │       ├── SQLite + Room (ORM，与 JPA/Hibernate 对比)
@@ -58,7 +58,7 @@ Android 知识体系 (Java 后端视角)
 │       ├── Retrofit + OkHttp：HTTP 客户端双雄
 │       └── 序列化：Serializable vs Parcelable vs Gson/Moshi
 │
-└── 📦 工程化层
+└── 工程化层
     └── 06-Android构建发布与性能优化
         ├── Gradle 多模块构建
         ├── APK vs AAB (Android App Bundle)
@@ -87,9 +87,9 @@ Android 知识体系 (Java 后端视角)
 
 | 路线 | 路径 | 时长 | 目标 |
 |------|------|:--:|------|
-| 🟢 **快速入门** | 01 → 02 → 03 | 1 天 | 理解 Android 架构、跑通第一个 Activity |
-| 🟡 **能写应用** | + 04 → 05 | 2-3 天 | 独立开发包含 UI + 网络 + 存储的完整 App |
-| 🔴 **上线发布** | + 06 | 5-7 天 | 掌握构建优化、签名、发布 Google Play 全流程 |
+| **快速入门** | 01 → 02 → 03 | 1 天 | 理解 Android 架构、跑通第一个 Activity |
+| **能写应用** | + 04 → 05 | 2-3 天 | 独立开发包含 UI + 网络 + 存储的完整 App |
+| **上线发布** | + 06 | 5-7 天 | 掌握构建优化、签名、发布 Google Play 全流程 |
 
 ---
 
@@ -108,7 +108,7 @@ Android 知识体系 (Java 后端视角)
 | **ProGuard / R8** | 代码混淆、收缩、优化工具 | 类似 Java 的 ProGuard（同一个） | 模块06 |
 | **AAB** | Android App Bundle，按需分发 | 类似 Docker 分层镜像 | 模块06 |
 
-> 🎯 **开始学习**：[01-Android系统架构与演进](./01-Android系统架构与演进.md) ｜ **快速入门**：[02-Android开发环境搭建](./02-Android开发环境搭建.md)
+> **开始学习**：[01-Android系统架构与演进](./01-Android系统架构与演进.md) ｜ **快速入门**：[02-Android开发环境搭建](./02-Android开发环境搭建.md)
 
 ---
 

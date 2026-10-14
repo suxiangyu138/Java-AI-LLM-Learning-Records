@@ -18,7 +18,7 @@
 ### 1.1 什么是 Agent Harness？
 Agent Harness 是 AI Agent 的**运行时基础设施层**，它为 Agent 提供文件系统、脚本执行、沙箱隔离、工具集成、记忆搜索、上下文工程等核心能力。类比而言：LLM 是 Agent 的大脑，Harness 是 Agent 的身体和神经系统。
 
-> 💡 Harness 的核心价值在于让 LLM 从"聊天机器人"进化为"可执行任务的数字员工"。
+> Harness 的核心价值在于让 LLM 从"聊天机器人"进化为"可执行任务的数字员工"。
 
 ### 1.2 AI 开发的三层进化路线是什么？
 | 层级 | 名称 | 核心关注点 | 代表技术 |
@@ -27,7 +27,7 @@ Agent Harness 是 AI Agent 的**运行时基础设施层**，它为 Agent 提供
 | 第二层 | Context Engineering（上下文工程） | 如何构建和注入高质量上下文 | RAG、向量数据库、Context 窗口管理 |
 | 第三层 | Harness Engineering（运行时工程） | 如何让 Agent 安全可靠地执行任务 | Filesystem、Sandbox、Tool Integration |
 
-> 🎯 2026 年是 Harness Engineering 的爆发之年，OpenAI、Anthropic 等顶级 AI 公司都在疯狂投入这一领域。
+> 2026 年是 Harness Engineering 的爆发之年，OpenAI、Anthropic 等顶级 AI 公司都在疯狂投入这一领域。
 
 ### 1.3 Harness 与 Framework 的核心区别是什么？
 | 维度 | Framework | Harness |
@@ -59,7 +59,7 @@ Context Drift 是指 Agent 在执行过程中，上下文逐渐偏离原始目�
 - 多步推理中中间结论被错误累积
 - 上下文窗口溢出导致关键信息被截断
 
-> ⚠️ Context Drift 是生产环境 Agent 最主要的失败模式之一。
+> Context Drift 是生产环境 Agent 最主要的失败模式之一。
 
 ### 1.7 三种主流 Harness 设计范式是什么？
 | 范式 | 特点 | 适用场景 |
@@ -224,7 +224,7 @@ class ContextDriftProtector:
 2. **Phase 2 — 基础设施觉醒（2024-2025）**：发现模型虽强，但在生产环境中频繁失败——文件存取失败、代码执行溢出、上下文丢失
 3. **Phase 3 — 基础设施中心化（2025-2026+）**：认识到 Agent 的生产力 = 模型能力 × 基础设施质量，Harness 成为核心投资方向
 
-> 🎯 面试核心点：要有"模型能力是乘法因子，基础设施是底数"的认知。
+> 面试核心点：要有"模型能力是乘法因子，基础设施是底数"的认知。
 
 ### 2.6 Hermes Agent 的工作原理是什么？
 ```python
@@ -304,7 +304,7 @@ SANDBOX_CONFIG = {
 | 投入产出比 | 每次微调成本高 | 一次构建，多次复用 |
 | 关系 | 互补关系 | 互补关系 |
 
-> 💡 一个高效的 Agent = 微调后的专业模型 + 完善的 Harness 基础设施。
+> 一个高效的 Agent = 微调后的专业模型 + 完善的 Harness 基础设施。
 
 ---
 
@@ -1005,4 +1005,4 @@ observability:
 
 ---
 
-> 🎯 **面试总结**：Agent Harness 面试的核心在于展现**系统思维**——不是零散地背组件名，而是能够从架构视角阐述 LLM 的缺陷、Harness 如何弥补这些缺陷、以及如何构建安全可靠的 Agent 生产系统。2026 年 Harness Engineering 是 AI 领域最热的方向之一，扎实的理解会让你在面试中脱颖而出。
+> **面试总结**：Agent Harness 面试的核心在于展现**系统思维**——不是零散地背组件名，而是能够从架构视角阐述 LLM 的缺陷、Harness 如何弥补这些缺陷、以及如何构建安全可靠的 Agent 生产系统。2026 年 Harness Engineering 是 AI 领域最热的方向之一，扎实的理解会让你在面试中脱颖而出。

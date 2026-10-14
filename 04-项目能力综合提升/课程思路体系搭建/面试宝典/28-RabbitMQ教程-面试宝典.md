@@ -18,7 +18,7 @@
 ### 1.1 什么是消息队列（MQ）？为什么要用 MQ？
 消息队列（Message Queue）是一种**异步通信中间件**，用于解耦生产者和消费者。核心作用是**异步处理、流量削峰、系统解耦**。
 
-> 💡 面试回答时可以用"同步调用 vs 异步调用"的对比来引出 MQ 的价值。
+> 面试回答时可以用"同步调用 vs 异步调用"的对比来引出 MQ 的价值。
 
 ### 1.2 同步调用和异步调用的区别？
 
@@ -40,7 +40,7 @@
 | 路由能力 | 强大（多种 Exchange） | 弱（基于 Topic） | 一般（基于 Topic + Tag） |
 | 适用场景 | 企业级应用、事务消息、复杂路由 | 日志采集、大数据流处理、埋点 | 金融级、分布式事务、削峰 |
 
-> 🎯 阿里/字节高频题：**"你的项目为什么选 RabbitMQ 而不是 Kafka？"** 回答关键：业务需要灵活路由、延时消息、死信队列等特性，且吞吐量要求未达到百万级。
+> 阿里/字节高频题：**"你的项目为什么选 RabbitMQ 而不是 Kafka？"** 回答关键：业务需要灵活路由、延时消息、死信队列等特性，且吞吐量要求未达到百万级。
 
 ### 1.4 RabbitMQ 的 Exchange 类型有哪些？
 
@@ -58,7 +58,7 @@ channel.queueBind("queue.order", "direct.exchange", "order.create");
 // 只有 routing key = "order.create" 的消息才会被路由到 queue.order
 ```
 
-> ⚠️ 面试高频：**Topic Exchange 中 `#` 和 `*` 的区别**——`#` 匹配零个或多个单词，`*` 匹配一个单词。
+> 面试高频：**Topic Exchange 中 `#` 和 `*` 的区别**——`#` 匹配零个或多个单词，`*` 匹配一个单词。
 
 ### 1.5 Connection 与 Channel 有什么区别？
 
@@ -68,7 +68,7 @@ channel.queueBind("queue.order", "direct.exchange", "order.create");
 | **Channel** | 虚拟连接，一个 Connection 可创建多个 Channel |
 | 关系 | Channel 复用 Connection 的 TCP 连接，减少连接开销 |
 
-> 💡 AMQP 协议的核心优化思想：**多路复用**。一个 TCP 连接上开辟多个轻量级 Channel，每个 Channel 代表一个会话任务。
+> AMQP 协议的核心优化思想：**多路复用**。一个 TCP 连接上开辟多个轻量级 Channel，每个 Channel 代表一个会话任务。
 
 ### 1.6 什么是 Virtual Host（vhost）？
 
@@ -117,7 +117,7 @@ AMQP.BasicProperties props = new AMQP.BasicProperties.Builder()
 channel.basicPublish("", "priority.queue", props, messageBody);
 ```
 
-> ⚠️ 优先级队列的局限：只有消息堆积时优先级才生效；消费者空闲时优先级无意义。
+> 优先级队列的局限：只有消息堆积时优先级才生效；消费者空闲时优先级无意义。
 
 ### 1.10 消息 TTL 有哪两种设置方式？
 
@@ -139,7 +139,7 @@ AMQP.BasicProperties props = new AMQP.BasicProperties.Builder()
 channel.basicPublish("", "ttl.queue", props, messageBody);
 ```
 
-> 🎯 如果同时设置两者，取**最小值**。消息到达队列头部才检查 TTL（不保证精确到期移除）。
+> 如果同时设置两者，取**最小值**。消息到达队列头部才检查 TTL（不保证精确到期移除）。
 
 ### 1.11 什么是 Dead Letter Exchange（DLX）？
 
@@ -165,7 +165,7 @@ channel.queueDeclare("main.queue", true, false, false, args);
 | **DLX + TTL** | 消息 TTL 过期后进入 DLX，消费者监听 DLQ | 无需额外插件 | 只能固定 TTL，先过期消息被阻塞 |
 | **延迟消息插件** | `rabbitmq_delayed_message_exchange` | 灵活、精确到秒 | 需安装插件 |
 
-> 💡 延迟消息最常见的面试题是**"订单超时未支付自动取消"**场景。
+> 延迟消息最常见的面试题是**"订单超时未支付自动取消"**场景。
 
 ### 1.13 ACK 模式有哪几种？
 
@@ -193,7 +193,7 @@ Prefetch Count 控制**消费者一次能接收多少条未确认消息**，用�
 channel.basicQos(5);
 ```
 
-> ⚠️ 面试重点：prefetch 设得太大导致消息倾斜（一个消费者处理慢，积压多）；设得太小降低吞吐量。推荐根据业务处理耗时调整，一般设置在 1-100 之间。
+> 面试重点：prefetch 设得太大导致消息倾斜（一个消费者处理慢，积压多）；设得太小降低吞吐量。推荐根据业务处理耗时调整，一般设置在 1-100 之间。
 
 ### 1.15 消息持久化包含哪些方面？
 
@@ -213,7 +213,7 @@ channel.basicPublish("exchange", "rk",
     MessageProperties.PERSISTENT_TEXT_PLAIN, messageBody); // deliveryMode=2
 ```
 
-> 🎯 高频陷阱：只配了队列持久化没配消息持久化，重启后队列在但消息没了！
+> 高频陷阱：只配了队列持久化没配消息持久化，重启后队列在但消息没了！
 
 ### 1.16 Lazy Queue 是什么？和普通队列的区别？
 
@@ -240,7 +240,7 @@ rabbitmqctl set_policy lazy "^lazy-queue$" '{"queue-mode":"lazy"}' --apply-to qu
 | **单队列单消费者** | 一个 Queue 绑定一个 Consumer | 吞吐量受限 |
 | **分区有序** | 同一业务 ID 的消息路由到同一个 Queue | 增加运维复杂度 |
 
-> 💡 阿里面试高频：**"如何保证订单状态变更消息的顺序？"** 回答思路：用订单 ID 作为 routing key，确保同一订单的消息进入同一个 Queue。
+> 阿里面试高频：**"如何保证订单状态变更消息的顺序？"** 回答思路：用订单 ID 作为 routing key，确保同一订单的消息进入同一个 Queue。
 
 ### 1.18 什么是消息的幂等性？如何保证？
 
@@ -306,7 +306,7 @@ Layer 3: 模型层（Exchange、Queue、Binding）
 Layer 4: 数据传输层（Basic.Publish、Basic.Consume 方法）
 ```
 
-> 🎯 关键亮点：AMQP 与 JMS 不同，它是**跨语言、跨平台**的线级协议，不同语言的客户端可以实现互操作。
+> 关键亮点：AMQP 与 JMS 不同，它是**跨语言、跨平台**的线级协议，不同语言的客户端可以实现互操作。
 
 ### 2.2 消息的完整路由流程是怎样的？
 
@@ -344,7 +344,7 @@ if (channel.waitForConfirms(5000)) {
 }
 ```
 
-> ⚠️ 面试常问：**Confirm 是同步阻塞还是异步回调？** 两者都支持。`waitForConfirms()` 是同步阻塞；`addConfirmListener()` 是异步回调。
+> 面试常问：**Confirm 是同步阻塞还是异步回调？** 两者都支持。`waitForConfirms()` 是同步阻塞；`addConfirmListener()` 是异步回调。
 
 ### 2.4 Return 机制的触发条件和处理方式？
 
@@ -495,7 +495,7 @@ Lazy Queue 的核心优化是将消息**优先写入磁盘**而非内存。内�
 4. 支持**批量预读取**（提高 I/O 效率）
 5. 磁盘满时支持**流式垃圾回收**（删除已确认消息的 segment）
 
-> 🎯 性能数据：Lazy Queue 单节点写入吞吐量约 15-30K msg/s，内存占用降低 90%+。
+> 性能数据：Lazy Queue 单节点写入吞吐量约 15-30K msg/s，内存占用降低 90%+。
 
 ### 2.11 RabbitMQ 集群模式对比？
 
@@ -517,7 +517,7 @@ rabbitmqctl start_app
 rabbitmqctl set_policy ha-all "^" '{"ha-mode":"all","ha-sync-mode":"automatic"}'
 ```
 
-> ⚠️ 面试重点：**镜像队列和仲裁队列的区别**。仲裁队列（Quorum Queue）是 3.8 引入的替代镜像的推荐方案，基于 Raft 实现，更可靠、更简单。
+> 面试重点：**镜像队列和仲裁队列的区别**。仲裁队列（Quorum Queue）是 3.8 引入的替代镜像的推荐方案，基于 Raft 实现，更可靠、更简单。
 
 ### 2.12 流量控制（Flow Control）机制？
 
@@ -540,7 +540,7 @@ rabbitmqctl status | grep "disk_free_limit\|vm_memory_high_watermark"
 rabbitmqctl set_vm_memory_high_watermark 0.6
 ```
 
-> 💡 流控触发条件：内存超过阈值、磁盘剩余空间不足、未确认消息过多。
+> 流控触发条件：内存超过阈值、磁盘剩余空间不足、未确认消息过多。
 
 ---
 
@@ -656,7 +656,7 @@ public void confirmAndSend() {
 }
 ```
 
-> 🎯 字节面试题：**"不使用分布式事务框架，如何自己实现可靠消息方案？"** 核心思路：本地事务 + 消息表 + 定时任务扫描 + MQ 投递 + 消费端幂等。
+> 字节面试题：**"不使用分布式事务框架，如何自己实现可靠消息方案？"** 核心思路：本地事务 + 消息表 + 定时任务扫描 + MQ 投递 + 消费端幂等。
 
 ### 3.4 日志收集系统设计
 
@@ -739,7 +739,7 @@ public void handleOrderStatus(OrderStatusMessage msg) {
 }
 ```
 
-> ⚠️ 核心原则：**需要保证顺序的消息，必须路由到同一个 Queue，且单线程消费。**
+> 核心原则：**需要保证顺序的消息，必须路由到同一个 Queue，且单线程消费。**
 
 ### 3.8 海量消息积压的应对方案
 
@@ -1513,7 +1513,7 @@ public class SeckillConsumer {
 }
 ```
 
-> 🎯 阿里面试题：**"秒杀系统的核心挑战是什么？"** 回答：库存防超卖、流量削锋、防刷单、用户体验。MQ 在这里的角色是缓冲 + 异步落单。
+> 阿里面试题：**"秒杀系统的核心挑战是什么？"** 回答：库存防超卖、流量削锋、防刷单、用户体验。MQ 在这里的角色是缓冲 + 异步落单。
 
 ### 5.3 设计分布式事务最终一致性方案
 
@@ -1754,7 +1754,7 @@ rabbitTemplate.convertAndSend("delayed.exchange", "delayed.routing.key",
     });
 ```
 
-> 🎯 面试加分：可以主动指出头部阻塞问题（head-of-line blocking），并说明为什么插件能避免此问题。
+> 面试加分：可以主动指出头部阻塞问题（head-of-line blocking），并说明为什么插件能避免此问题。
 
 ### 7.3 RabbitMQ 如何处理重复消息？
 
@@ -1801,7 +1801,7 @@ channel.queueBind("queue2", "topic.exchange", "user.#");     // user, user.creat
 channel.queueBind("queue3", "topic.exchange", "#.complete"); // task.complete, order.task.complete
 ```
 
-> ⚠️ 常见面试陷阱：`*` 只能匹配一个单词，`#` 可匹配多级。Routing Key 中单词用 `.` 分隔。
+> 常见面试陷阱：`*` 只能匹配一个单词，`#` 可匹配多级。Routing Key 中单词用 `.` 分隔。
 
 ---
 

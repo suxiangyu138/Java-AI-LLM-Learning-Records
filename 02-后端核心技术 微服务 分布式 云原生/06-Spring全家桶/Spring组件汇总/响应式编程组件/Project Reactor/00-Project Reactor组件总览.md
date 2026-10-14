@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [组件一句话定位](#1-组件一句话定位)
 2. [版本现状（2026-08）](#2-版本现状2026-08)
@@ -34,7 +34,7 @@
   终止：onComplete / onError（错误处理操作符兜底）
 ```
 
-> 🎯 **一句话**：Reactor = "异步流式编程的 Java 母语"——WebFlux、R2DBC、RSocket、Spring Cloud Gateway 的底层都是它；理解 Mono/Flux 就理解了 Spring 响应式生态的一切。
+> **一句话**：Reactor = "异步流式编程的 Java 母语"——WebFlux、R2DBC、RSocket、Spring Cloud Gateway 的底层都是它；理解 Mono/Flux 就理解了 Spring 响应式生态的一切。
 
 ## 2. 版本现状（2026-08）
 
@@ -52,7 +52,7 @@
 - **Spring Boot 4 配套 Reactor 3.8.x**（Spring Shell 4.0.3 依赖升级即 Reactor 3.8.6）；
 - 与 Micrometer 观测 / Micrometer Tracing 深度集成（`Mono.deferContextual` + 观测 API）。
 
-> 💡 版本线：Reactor 3.8.x ↔ Boot 4 / SF 7；Reactor 3.7.x ↔ Boot 3.x——版本由 Boot BOM 管理，一般无需手工指定。
+> 版本线：Reactor 3.8.x ↔ Boot 4 / SF 7；Reactor 3.7.x ↔ Boot 3.x——版本由 Boot BOM 管理，一般无需手工指定。
 
 ## 3. 能力地图
 
@@ -78,7 +78,7 @@
 | 04 集成地图 | [Spring Batch 深度体系-07 并行与分布式](../../../Spring Batch/07-并行与分布式：多线程、分区与远程执行.md) | Reactor 3.8.x 是 Batch 生产者-消费者模型的线程技术背景 |
 | 04 集成地图 | [消息队列理论与实战](../../../../03-消息队列/消息队列理论与实战/00-消息队列知识体系总览.md) | reactor-kafka 是 Kafka 的响应式客户端 |
 
-> 💡 Reactor 生态位：它是**数据流编程库**（非 Web 框架）——WebFlux/R2DBC/RSocket/Gateway 全部建立其上；本仓库暂无独立深度体系，深入以 [官方参考文档](https://projectreactor.io/docs/core/release/reference/) 为准。
+> Reactor 生态位：它是**数据流编程库**（非 Web 框架）——WebFlux/R2DBC/RSocket/Gateway 全部建立其上；本仓库暂无独立深度体系，深入以 [官方参考文档](https://projectreactor.io/docs/core/release/reference/) 为准。
 
 ## 5. 快速上手 3 步
 
@@ -104,7 +104,7 @@ Mono.zip(user, order)
     .subscribe(profile -> log.info("profile: {}", profile));
 ```
 
-> 💡 心智起点：**写操作符链像写"数据流的 SQL"——声明什么，不执行什么**；订阅（subscribe）才是执行信号。
+> 心智起点：**写操作符链像写"数据流的 SQL"——声明什么，不执行什么**；订阅（subscribe）才是执行信号。
 
 ## 6. 速查导航
 
@@ -139,6 +139,6 @@ Mono.zip(user, order)
 
 ---
 
-> 🎯 **核心要点**：Reactor = Mono/Flux + 操作符 + 背压 + 调度器四大件；"惰性、背压、不可变"是三大心智原则；3.8.x 与 Micrometer/Tracing 的深度集成让响应式可观测成为标配。
+> **核心要点**：Reactor = Mono/Flux + 操作符 + 背压 + 调度器四大件；"惰性、背压、不可变"是三大心智原则；3.8.x 与 Micrometer/Tracing 的深度集成让响应式可观测成为标配。
 
 **下一模块**：[01-模块清单](01-模块清单.md)

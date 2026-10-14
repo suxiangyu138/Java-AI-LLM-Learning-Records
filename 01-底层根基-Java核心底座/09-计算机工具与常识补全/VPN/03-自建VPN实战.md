@@ -1,10 +1,10 @@
 # 自建 VPN 实战
 
-> 🛠️ WireGuard 5 分钟上线、OpenVPN 完整部署、云平台一键搭建、Docker 容器化、性能调优 —— 从零到生产
+> WireGuard 5 分钟上线、OpenVPN 完整部署、云平台一键搭建、Docker 容器化、性能调优 —— 从零到生产
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [为什么自建 VPN](#1-为什么自建-vpn)
 2. [WireGuard 快速搭建](#2-wireguard-快速搭建)
@@ -24,8 +24,8 @@
 | 维度 | 自建 VPN | 商业 VPN (Nord/Express 等) |
 |------|---------|--------------------------|
 | **费用** | 仅 VPS 费用 (~$5/月) | ~$3-12/月 |
-| **可控性** | ✅ 完全控制 | ❌ 信任第三方 |
-| **IP 纯净度** | ⭐⭐⭐⭐⭐ 独享 IP | ⭐⭐ IP 被大量用户共享，容易被标记 |
+| **可控性** | ✓ 完全控制 | ✗ 信任第三方 |
+| **IP 纯净度** | ★★★★★ 独享 IP | ★★ IP 被大量用户共享，容易被标记 |
 | **速度** | 取决于 VPS 带宽 | 共享带宽，高峰期慢 |
 | **被封风险** | 低（个人使用，流量小） | 中高（IP 段被大量封锁） |
 | **维护成本** | 需要自己维护 | 零维护 |
@@ -381,7 +381,7 @@ sysctl net.ipv4.ip_forward
 sysctl -w net.ipv4.ip_forward=1
 
 # 3. 如果是国内 ECS 搭建跨境 VPN
-# ⚠️ 注意合规要求，个人使用通常没问题
+# 注意合规要求，个人使用通常没问题
 # 但不要用于商业 VPN 服务
 ```
 
@@ -771,7 +771,7 @@ echo "kill <CLIENT_COMMON_NAME>" | sudo tee /var/run/openvpn-server/status.sock
 sudo tail -f /var/log/openvpn/openvpn.log
 ```
 
-> 🎯 **核心要点**：自建 VPN 投入运行后，最关键的三件事 —— 1) 定期 `wg show` 检查握手状态 2) 监控流量异常（是否有未授权的 client）3) 保持系统和 WireGuard/OpenVPN 软件更新。
+> **核心要点**：自建 VPN 投入运行后，最关键的三件事 —— 1) 定期 `wg show` 检查握手状态 2) 监控流量异常（是否有未授权的 client）3) 保持系统和 WireGuard/OpenVPN 软件更新。
 
 ---
 

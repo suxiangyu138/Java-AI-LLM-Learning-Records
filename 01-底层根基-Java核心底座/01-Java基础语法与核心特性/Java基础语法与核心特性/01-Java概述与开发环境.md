@@ -31,7 +31,7 @@
 | 2021 | JDK 17 | LTS版本，密封类、模式匹配预览、强封装JDK内部API |
 | 2024 | JDK 21 | LTS版本，虚拟线程、Record模式、字符串模板 |
 
-> 💡 Oracle宣布JDK每6个月发布一个新版本，建议生产环境使用**LTS版本**（JDK 8、11、17、21）。
+> Oracle宣布JDK每6个月发布一个新版本，建议生产环境使用**LTS版本**（JDK 8、11、17、21）。
 
 ### 1.2 Java语言核心特性
 
@@ -63,7 +63,7 @@
       └──────────────┘ └──────────────┘ └──────────────┘
 ```
 
-> 🎯 Java是后端开发的主流语言，理解Java核心机制（JVM、集合、多线程）是后端面试的必备项。学C++理解底层，学Java理解工程化。
+> Java是后端开发的主流语言，理解Java核心机制（JVM、集合、多线程）是后端面试的必备项。学C++理解底层，学Java理解工程化。
 
 ### 1.4 Java后端核心包速览
 
@@ -71,14 +71,14 @@ JDK内置的核心包覆盖了后端开发80%以上的基础场景，后续框�
 
 | 包名 | 自动导入 | 核心功能 | 最常用类 |
 |------|:--------:|----------|----------|
-| `java.lang` | ✅ | 语言基础 | `String`、`Integer`、`Object`、`Thread`、`System` |
-| `java.util` | ❌ | 集合+日期+工具 | `ArrayList`、`HashMap`、`LocalDateTime`、`Optional` |
-| `java.io` | ❌ | 传统文件IO | `File`、`BufferedReader`、`BufferedWriter` |
-| `java.nio` | ❌ | 非阻塞IO | `ByteBuffer`、`FileChannel` |
-| `java.sql` | ❌ | 数据库操作 | `Connection`、`PreparedStatement`、`ResultSet` |
-| `java.net` | ❌ | 网络通信 | `Socket`、`ServerSocket`、`URL` |
+| `java.lang` | ✓ | 语言基础 | `String`、`Integer`、`Object`、`Thread`、`System` |
+| `java.util` | ✗ | 集合+日期+工具 | `ArrayList`、`HashMap`、`LocalDateTime`、`Optional` |
+| `java.io` | ✗ | 传统文件IO | `File`、`BufferedReader`、`BufferedWriter` |
+| `java.nio` | ✗ | 非阻塞IO | `ByteBuffer`、`FileChannel` |
+| `java.sql` | ✗ | 数据库操作 | `Connection`、`PreparedStatement`、`ResultSet` |
+| `java.net` | ✗ | 网络通信 | `Socket`、`ServerSocket`、`URL` |
 
-> ⚠️ `java.lang` 是唯一被JVM自动导入的包，使用其中的类无需手动 `import`。
+> `java.lang` 是唯一被JVM自动导入的包，使用其中的类无需手动 `import`。
 
 ---
 
@@ -139,7 +139,7 @@ java -version
 # OpenJDK 64-Bit Server VM (build 21+35, mixed mode, sharing)
 ```
 
-> ⚠️ **面试高频题**：JDK、JRE、JVM三者的区别与联系 —— JDK包含JRE，JRE包含JVM。写代码用JDK，跑程序用JRE，跨平台靠JVM。
+> **面试高频题**：JDK、JRE、JVM三者的区别与联系 —— JDK包含JRE，JRE包含JVM。写代码用JDK，跑程序用JRE，跨平台靠JVM。
 
 ---
 
@@ -210,7 +210,7 @@ javap -c HelloWorld.class
 | **JIT编译** | 将热点代码（HotSpot）编译为本地机器码 | 执行快 | 启动慢，占用内存 |
 | **AOT编译** | 提前编译为本地代码（GraalVM） | 冷启动极快 | 动态特性受限 |
 
-> 💡 HotSpot VM会根据代码执行频率自动判断"热点"，触发JIT编译。JDK 8默认采用**分层编译**（C1+C2编译器），兼顾启动速度与峰值性能。
+> HotSpot VM会根据代码执行频率自动判断"热点"，触发JIT编译。JDK 8默认采用**分层编译**（C1+C2编译器），兼顾启动速度与峰值性能。
 
 ### 3.4 编译与运行命令
 
@@ -251,7 +251,7 @@ javac -help
 | **解析** | 将常量池的符号引用替换为直接引用 |
 | **初始化** | 执行静态代码块和静态变量赋值操作 |
 
-> ⚠️ **双亲委派模型**：类加载器收到加载请求时，先委派给父类加载器，只有当父类加载器无法加载时，才由自己尝试加载。这种机制避免核心类被篡改。
+> **双亲委派模型**：类加载器收到加载请求时，先委派给父类加载器，只有当父类加载器无法加载时，才由自己尝试加载。这种机制避免核心类被篡改。
 
 ---
 
@@ -278,7 +278,7 @@ javac -help
 | 商业支持 | Oracle官方提供 | 社区或第三方（Red Hat、Azul等） |
 | 适用场景 | 有Oracle商业许可的企业 | 大多数开发和生产场景 |
 
-> 💡 自JDK 11起，Oracle JDK与OpenJDK在功能上已无实质性差异。推荐使用 **OpenJDK** 或 **Adoptium（原AdoptOpenJDK）** 发行版。
+> 自JDK 11起，Oracle JDK与OpenJDK在功能上已无实质性差异。推荐使用 **OpenJDK** 或 **Adoptium（原AdoptOpenJDK）** 发行版。
 
 ### 4.3 环境变量配置
 
@@ -523,16 +523,16 @@ java.util.Date utilDate = new java.util.Date();
 java.sql.Date sqlDate = java.sql.Date.valueOf("2026-07-26");
 ```
 
-> 💡 一般优先用 `import` 简化代码，仅在冲突时使用全限定名。阿里巴巴规范推荐 **Import显式声明具体类**，避免使用 `import xxx.*` 通配符。
+> 一般优先用 `import` 简化代码，仅在冲突时使用全限定名。阿里巴巴规范推荐 **Import显式声明具体类**，避免使用 `import xxx.*` 通配符。
 
 ### 6.5 包与访问权限
 
 | 访问修饰符 | 同包 | 不同包（子类） | 不同包（非子类） |
 |------------|:----:|:--------------:|:----------------:|
-| `private` | ❌ | ❌ | ❌ |
-| `default`（无修饰符） | ✅ | ❌ | ❌ |
-| `protected` | ✅ | ✅ | ❌ |
-| `public` | ✅ | ✅ | ✅ |
+| `private` | ✗ | ✗ | ✗ |
+| `default`（无修饰符） | ✓ | ✗ | ✗ |
+| `protected` | ✓ | ✓ | ✗ |
+| `public` | ✓ | ✓ | ✓ |
 
 ---
 
@@ -598,7 +598,7 @@ public static void main(String args[])     // C风格数组声明，不推荐
 public static void main(String... args)    // 可变参数形式，不推荐
 ```
 
-> ⚠️ `main` 方法签名中 `static` 和 `public` 的顺序可以互换，但习惯将 `public` 放在第一位。方法名必须为 `main`，JVM只识别固定签名的 `main` 方法。
+> `main` 方法签名中 `static` 和 `public` 的顺序可以互换，但习惯将 `public` 放在第一位。方法名必须为 `main`，JVM只识别固定签名的 `main` 方法。
 
 ### 7.4 main方法常见错误
 
@@ -816,8 +816,8 @@ Step 3  ──▶ 学习下一章《数据类型与变量》
          练习简单程序 → 逐步增加复杂性
 ```
 
-> 🎯 **总结**：Java概述与开发环境是Java学习的第一道门槛。理解JDK/JRE/JVM关系、掌握编译运行流程、熟练搭建开发环境、理解程序结构和包机制，是后续深入学习Java的坚实基础。**动手练习是最重要的** -- 不要只看教程，必须亲手写代码、编译、运行、调试。
+> **总结**：Java概述与开发环境是Java学习的第一道门槛。理解JDK/JRE/JVM关系、掌握编译运行流程、熟练搭建开发环境、理解程序结构和包机制，是后续深入学习Java的坚实基础。**动手练习是最重要的** -- 不要只看教程，必须亲手写代码、编译、运行、调试。
 
 ---
 
-> 📖 **推荐阅读**：《Java编程思想》（Thinking in Java）第1章"对象入门"和第2章"一切都是对象"；《Java程序设计与问题求解》第1章"计算机与Java引论"。
+> **推荐阅读**：《Java编程思想》（Thinking in Java）第1章"对象入门"和第2章"一切都是对象"；《Java程序设计与问题求解》第1章"计算机与Java引论"。

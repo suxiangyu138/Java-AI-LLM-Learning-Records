@@ -1,10 +1,10 @@
 # macOS 系统基础与演进
 
-> 🏗️ 从 Mac OS X 10.0 到 macOS 15 Sequoia，从 PowerPC 到 Apple Silicon —— 理解 Darwin 内核、APFS 文件系统和 macOS 独特的架构哲学
+> 从 Mac OS X 10.0 到 macOS 15 Sequoia，从 PowerPC 到 Apple Silicon —— 理解 Darwin 内核、APFS 文件系统和 macOS 独特的架构哲学
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [macOS 版本演进简史](#1-macos-版本演进简史)
 2. [Darwin 内核架构](#2-darwin-内核架构)
@@ -34,7 +34,7 @@
 | macOS 14 | Sonoma | 2023 | Darwin 23.x | 桌面小组件、游戏模式 |
 | macOS 15 | Sequoia | 2024 | Darwin 24.x | iPhone Mirroring、Apple Intelligence |
 
-> 💡 **命名变化**：Mac OS X → OS X (2012) → macOS (2016)。版本号从 10.x 跨越到 11 (2020)，标志着 Apple Silicon 时代的到来。
+> **命名变化**：Mac OS X → OS X (2012) → macOS (2016)。版本号从 10.x 跨越到 11 (2020)，标志着 Apple Silicon 时代的到来。
 
 ### 1.2 企业/服务器相关
 
@@ -87,7 +87,7 @@
 | **BSD** | FreeBSD | POSIX 兼容层：进程模型、VFS、网络栈、权限 | 提供标准 Unix 编程接口 |
 | **I/O Kit** | Apple 自研 | 设备驱动框架 | C++ 面向对象驱动模型，动态加载 |
 
-> 🎯 **核心认知**：XNU = **Mach (微内核)** + **BSD (单体内核层)** 的混合内核，兼具微内核的模块化和单体内核的性能。
+> **核心认知**：XNU = **Mach (微内核)** + **BSD (单体内核层)** 的混合内核，兼具微内核的模块化和单体内核的性能。
 
 ### 2.3 与 Linux 内核的关键差异
 
@@ -199,16 +199,16 @@ arch -x86_64 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebr
 
 | 概念 | 说明 | Linux 类比 |
 |------|------|-----------|
-| **Bundle** | `.app` 是目录，包含所有资源，看起来像单个文件 | ❌ 无直接类比 |
+| **Bundle** | `.app` 是目录，包含所有资源，看起来像单个文件 | ✗ 无直接类比 |
 | **plist** | XML/Binary 格式的配置文件 | 部分类似 systemd unit 文件 |
 | **launchd** | 统一进程/服务/定时任务管理器 | systemd + cron + inetd |
-| **TCC** | 隐私权限控制（相机/麦克风/文件） | ❌ 无直接类比 |
-| **Gatekeeper** | 代码签名验证 + 公证 | ❌ 无直接类比 |
+| **TCC** | 隐私权限控制（相机/麦克风/文件） | ✗ 无直接类比 |
+| **Gatekeeper** | 代码签名验证 + 公证 | ✗ 无直接类比 |
 | **Keychain** | 密码/证书/密钥安全存储 | gnome-keyring / kwallet |
 | **Spotlight** | 系统级实时搜索索引 | locate + GNOME Tracker |
-| **.DS_Store** | 每个目录的元数据文件 | ❌ 无（常出现在 Git 中） |
+| **.DS_Store** | 每个目录的元数据文件 | ✗ 无（常出现在 Git 中） |
 
-> 🎯 **核心要点**：macOS 的本质是一个**经过深度定制的 Unix 系统**，它既有 Linux 的终端体验，又有封闭生态的优雅体验。
+> **核心要点**：macOS 的本质是一个**经过深度定制的 Unix 系统**，它既有 Linux 的终端体验，又有封闭生态的优雅体验。
 
 ---
 

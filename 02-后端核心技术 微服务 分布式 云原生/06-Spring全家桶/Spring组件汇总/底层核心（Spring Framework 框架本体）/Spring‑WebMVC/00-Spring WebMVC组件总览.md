@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [组件一句话定位](#1-组件一句话定位)
 2. [版本现状（2026-08）](#2-版本现状2026-08)
@@ -56,7 +56,7 @@
 | 适用 | 传统业务系统（默认选择） | 高并发 IO 密集网关/流式推送场景 |
 | 共用点 | 同一套 spring-web 基础设施、注解风格、校验/转换体系 | 同左 |
 
-> 💡 选型结论：没有明确需求不要用 WebFlux——MVC 的事务、模板、Security 集成更成熟；WebFlux 的"高并发"优势只在 IO 密集场景成立，且与 MVC 互斥（一个应用一个栈）。
+> 选型结论：没有明确需求不要用 WebFlux——MVC 的事务、模板、Security 集成更成熟；WebFlux 的"高并发"优势只在 IO 密集场景成立，且与 MVC 互斥（一个应用一个栈）。
 
 ## 2. 版本现状（2026-08）
 
@@ -76,7 +76,7 @@
 - **7.0 延续**：Jackson CBOR 默认装配、Kotlin Serialization 转换器只编解码 @Serializable 类型、虚拟线程默认（Boot 4）；
 - **7.1**：`PreFlightRequestFilter`（CORS 预检，见 [Spring-Web-06](../Spring‑Web/06-过滤链与CORS速查.md)）。
 
-> ⚠️ **要点**：7.0 的 MVC 变化集中在"路由匹配现代化"（PathPattern + API 版本化）与"配置 API 统一"（HttpMessageConverters）——存量代码主要注意通配规则收紧与转换器类名更新。
+> **要点**：7.0 的 MVC 变化集中在"路由匹配现代化"（PathPattern + API 版本化）与"配置 API 统一"（HttpMessageConverters）——存量代码主要注意通配规则收紧与转换器类名更新。
 
 ### 版本演进时间线
 
@@ -99,7 +99,7 @@
 | 模型 | `HttpHeaders` 不再实现 `MultiValueMap` | 类型引用代码需调整 |
 | 移除 | suffixPatternMatch / trailingSlashMatch / favorPathExtension | 路径后缀、尾部斜杠匹配行为变化 |
 
-> 💡 7.0 移除项提醒：`trailingSlashMatch`（尾部斜杠匹配）7.0 已彻底移除——`/api/orders/` 与 `/api/orders` 不再等价，客户端必须按定义路径访问。
+> 7.0 移除项提醒：`trailingSlashMatch`（尾部斜杠匹配）7.0 已彻底移除——`/api/orders/` 与 `/api/orders` 不再等价，客户端必须按定义路径访问。
 
 ## 3. 能力地图
 
@@ -137,7 +137,7 @@
 | 6 出错 | 异常处理 | `@ExceptionHandler` / `ProblemDetail` |
 | 7 出参 | 响应转换 | `RequestResponseBodyMethodProcessor` / 转换器 |
 
-> 🎯 理解 MVC 的捷径：把请求想象成"流水线"——每个能力域只做一件事，**顺序固定、职责单一**；面试讲 MVC 架构时按此表把十步拆成"能力域 × 阶段"就清楚了。
+> 理解 MVC 的捷径：把请求想象成"流水线"——每个能力域只做一件事，**顺序固定、职责单一**；面试讲 MVC 架构时按此表把十步拆成"能力域 × 阶段"就清楚了。
 
 ### 各能力域的扩展点
 
@@ -152,7 +152,7 @@
 | 校验 | `ConstraintValidator` / `Validator` | SPI 自动发现 / `mvcValidator` |
 | 视图 | `ViewResolver` / `View` | `WebMvcConfigurer.configureViewResolvers` |
 
-> 💡 统一规律：**MVC 的每个能力域都有一个"策略接口 + WebMvcConfigurer 回调"**——想扩展哪里就找对应的 add/configure 方法；这就是 WebMvcConfigurer 被称为"MVC 总配置面板"的原因（详见 [02 篇第 4 节](02-DispatcherServlet与请求全链路速查.md) 的解析器链）。
+> 统一规律：**MVC 的每个能力域都有一个"策略接口 + WebMvcConfigurer 回调"**——想扩展哪里就找对应的 add/configure 方法；这就是 WebMvcConfigurer 被称为"MVC 总配置面板"的原因（详见 [02 篇第 4 节](02-DispatcherServlet与请求全链路速查.md) 的解析器链）。
 
 ### 异步与虚拟线程（Boot 4）
 
@@ -175,7 +175,7 @@ Boot 4（Framework 7.x）默认虚拟线程处理请求：
 | 长连接推送 | SseEmitter（显式异步） |
 | 超大文件下载 | StreamingResponseBody（流式） |
 
-> ⚠️ 虚拟线程注意事项：**ThreadLocal 语义变化**（虚拟线程不回收）——请求级状态用 request 属性/请求作用域 Bean，别长期持有 ThreadLocal（见 [08 篇第 3 节](08-集成地图与常见问题.md) 高频坑表）。
+> 虚拟线程注意事项：**ThreadLocal 语义变化**（虚拟线程不回收）——请求级状态用 request 属性/请求作用域 Bean，别长期持有 ThreadLocal（见 [08 篇第 3 节](08-集成地图与常见问题.md) 高频坑表）。
 
 ## 4. 与深度体系的映射
 
@@ -189,7 +189,7 @@ Boot 4（Framework 7.x）默认虚拟线程处理请求：
 | 07-拦截器与视图速查 | [SpringMVC-06-拦截器与过滤器](../../../SpringMVC/06-拦截器与过滤器.md) |
 | 08-集成地图与常见问题 | [SpringMVC-09-生产实践与面试题](../../../SpringMVC/09-生产实践与面试题.md) |
 
-> 💡 本系列定位"查得快"，深度体系定位"学得透"——**SpringMVC 深度体系（10 篇）与本系列一一对应**；DispatcherServlet 源码深挖见 [Spring生态深度剖析-05](../../../Spring生态深度剖析/05-DispatcherServlet请求处理全链路.md)。
+> 本系列定位"查得快"，深度体系定位"学得透"——**SpringMVC 深度体系（10 篇）与本系列一一对应**；DispatcherServlet 源码深挖见 [Spring生态深度剖析-05](../../../Spring生态深度剖析/05-DispatcherServlet请求处理全链路.md)。
 
 ### 速查与深潜的分工
 
@@ -200,7 +200,7 @@ Boot 4（Framework 7.x）默认虚拟线程处理请求：
 | DispatcherServlet 逐行源码 | Spring生态深度剖析-05 | 全链路代码注释 |
 | 消息转换器全家表 | Spring-Web 系列 03 | 转换器/协商全表 |
 
-> 💡 组合用法：面试前先过本系列速查表建立框架，再对不熟的点进深度体系看推导；代码层面以 Boot 4 实际装配为准（自动配置清单可在 IDE 里看 `WebMvcAutoConfiguration`）。
+> 组合用法：面试前先过本系列速查表建立框架，再对不熟的点进深度体系看推导；代码层面以 Boot 4 实际装配为准（自动配置清单可在 IDE 里看 `WebMvcAutoConfiguration`）。
 
 ## 5. 快速上手 3 步
 
@@ -258,7 +258,7 @@ curl http://localhost:8080/api/orders/9999
 # → 404 + application/problem+json 错误体（第三步的全局兜底生效）
 ```
 
-> 💡 三步之外还要会两件事：**看装配**（启动日志的 `RequestMappingHandlerMapping` 行能看到全部路由）与**看转换**（异常/JSON 问题先查转换器链，见 [04-响应与消息转换速查](04-响应与消息转换速查.md)）。
+> 三步之外还要会两件事：**看装配**（启动日志的 `RequestMappingHandlerMapping` 行能看到全部路由）与**看转换**（异常/JSON 问题先查转换器链，见 [04-响应与消息转换速查](04-响应与消息转换速查.md)）。
 
 ### 从三步到生产的增量清单
 
@@ -271,7 +271,7 @@ curl http://localhost:8080/api/orders/9999
 | 版本化 | 7.0 `@ApiVersion`（多版本共存） | [03-控制器与请求映射速查](03-控制器与请求映射速查.md) |
 | 异步 | 长任务 DeferredResult / SSE | [Spring-Web-07](../Spring‑Web/07-异步与流式速查.md) |
 
-> 🎯 一句话路线：**先能跑（3 步）→ 再补横切（校验/异常/拦截）→ 最后上生产细节（转换/上传/版本化）**——本系列 8 篇按这个顺序读最顺。
+> 一句话路线：**先能跑（3 步）→ 再补横切（校验/异常/拦截）→ 最后上生产细节（转换/上传/版本化）**——本系列 8 篇按这个顺序读最顺。
 
 ## 6. 速查导航
 
@@ -286,7 +286,7 @@ curl http://localhost:8080/api/orders/9999
 | [07-拦截器与视图速查](07-拦截器与视图速查.md) | HandlerInterceptor 三方法、ViewResolver、静态资源 |
 | [08-集成地图与常见问题](08-集成地图与常见问题.md) | 底层核心八系列收官 + 高频坑 + 面试考点 |
 
-> 💡 使用建议：本系列按"请求链路"组织——02 → 08 恰好是一条请求从前到后的完整旅程；不熟悉的章节之间随时用 [08 篇第 1 节](08-集成地图与常见问题.md) 的集成地图定位"当前在链路哪一段"。
+> 使用建议：本系列按"请求链路"组织——02 → 08 恰好是一条请求从前到后的完整旅程；不熟悉的章节之间随时用 [08 篇第 1 节](08-集成地图与常见问题.md) 的集成地图定位"当前在链路哪一段"。
 
 ### 官方资料速查
 
@@ -298,7 +298,7 @@ curl http://localhost:8080/api/orders/9999
 | [API Version 参考（7.0 新章节）](https://docs.spring.io/spring-framework/reference/7.0-SNAPSHOT/web/webmvc/mvc-config/api-version.html) | `@ApiVersion` 官方用法 |
 | [ProblemDetail 参考](https://docs.spring.io/spring-framework/reference/web/webmvc/mvc-ann-rest-exceptions.html) | RFC 7807 错误体官方示例 |
 
-> 💡 速查文档与官方文档的配合：**官方文档讲"标准答案"，本系列讲"考法/坑/取舍"**——面试题里 80% 的坑来自官方文档字缝里的细节（如 7.0 移除 trailingSlashMatch、版本化默认关闭等），本系列把它们显式化，考前过一遍本页 + 各篇速查表即可覆盖大部分考点。
+> 速查文档与官方文档的配合：**官方文档讲"标准答案"，本系列讲"考法/坑/取舍"**——面试题里 80% 的坑来自官方文档字缝里的细节（如 7.0 移除 trailingSlashMatch、版本化默认关闭等），本系列把它们显式化，考前过一遍本页 + 各篇速查表即可覆盖大部分考点。
 
 ## 7. 学习路线推荐
 

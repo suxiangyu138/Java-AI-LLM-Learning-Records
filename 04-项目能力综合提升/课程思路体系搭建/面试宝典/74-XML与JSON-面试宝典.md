@@ -36,7 +36,7 @@
 | 数据类型 | 有限（仅 10 种） | 丰富（string, int, date 等 40+） |
 | 可扩展性 | 差 | 强 |
 | 使用场景 | 简单配置文件 | 复杂数据校验、WebService（SOAP） |
-> 💡 **面试金句**：XSD 是 DTD 的替代品，功能更强大，但 DTD 仍在一些老旧项目中存在。
+> **面试金句**：XSD 是 DTD 的替代品，功能更强大，但 DTD 仍在一些老旧项目中存在。
 
 ### Q4：DTD 如何定义元素和属性？
 ```xml-dtd
@@ -102,7 +102,7 @@
 | 内存占用 | 高（整个文档载入内存） | 低（流式处理） | 低（流式处理） |
 | 速度 | 中 | 快 | 快 |
 | 适用场景 | 小文档、频繁修改 | 大文档、仅读取 | 大文档、需要写入 |
-> 🎯 **总结**：DOM 吃内存但功能全；SAX 速度快但不能回头；StAX 是 SAX 的改进版，开发者主动拉取事件。
+> **总结**：DOM 吃内存但功能全；SAX 速度快但不能回头；StAX 是 SAX 的改进版，开发者主动拉取事件。
 
 ### Q9：什么是 JSON？JSON 支持哪些数据类型？
 > JSON（JavaScript Object Notation）是一种轻量级数据交换格式。支持的数据类型：
@@ -140,7 +140,7 @@
 | Schema 约束 | DTD / XSD（强大） | JSON Schema（相对较新） |
 | 浏览器原生 | 需解析 | 原生支持（`JSON.parse`） |
 | 适用场景 | 复杂文档、配置、SOAP、XSLT | Web API、移动端、NoSQL |
-> 💡 **面试高频题**："什么时候用 JSON 不用 XML？" -- 简单数据传输用 JSON，需要 Schema 约束和数据校验用 XML。
+> **面试高频题**："什么时候用 JSON 不用 XML？" -- 简单数据传输用 JSON，需要 Schema 约束和数据校验用 XML。
 
 ### Q12：Java 中常见的 JSON 解析库有哪些？
 | 库 | 特点 | 优点 | 缺点 |
@@ -273,7 +273,7 @@ public class MyHandler extends DefaultHandler {
     }
 }
 ```
-> ⚠️ **注意**：`characters()` 可能被多次回调（同一个文本内容可能在多次中返回），需要拼接处理。
+> **注意**：`characters()` 可能被多次回调（同一个文本内容可能在多次中返回），需要拼接处理。
 
 ### Q3：StAX 基于"拉"模型与 SAX 的"推"模型有何本质区别？
 | 维度 | SAX（推模型） | StAX（拉模型） |
@@ -282,7 +282,7 @@ public class MyHandler extends DefaultHandler {
 | 编程模型 | 回调式（被动） | 迭代器/游标式（主动） |
 | 状态管理 | 需手动维护状态变量 | 局部变量即可，更自然 |
 | 双向操作 | 只读 | 支持写入（`XMLEventWriter`） |
-> 💡 **一句话**：SAX 是解析器"推"事件给你，StAX 是你"拉"事件。
+> **一句话**：SAX 是解析器"推"事件给你，StAX 是你"拉"事件。
 
 ### Q4：StAX 的两种读取方式：Cursor 和 Iterator 有什么区别？
 | 特性 | Cursor（游标式） | Iterator（迭代器式） |
@@ -361,7 +361,7 @@ List<User> users = gson.fromJson(json, type);
 ### Q9：Fastjson 的 `AutoType` 机制有什么安全隐患？
 > Fastjson 的 `AutoType` 允许在 JSON 中指定 `@type` 字段来反序列化为任意类。如果关闭安全检查，攻击者可以构造恶意 JSON 触发 JNDI 注入（如利用 `com.sun.rowset.JdbcRowSetImpl`），导致 RCE（远程代码执行）。
 >
-> ❗ **防护措施**：
+> **防护措施**：
 > - 升级到最新版本（1.2.83+ / 2.0+）
 > - 使用 `ParserConfig.getGlobalInstance().setAutoTypeSupport(false)`
 > - 配置白名单：`ParserConfig.getGlobalInstance().addAccept("com.example.")`
@@ -445,7 +445,7 @@ private Date createTime;
 ### Q14：什么是 JSONP？和 JSON 有什么区别？
 > JSONP（JSON with Padding）是一种**跨域解决方案**，利用 `<script>` 标签不受同源策略限制的特性。通过动态创建 script 标签加载数据，回调函数处理返回的 JSON。
 >
-> ⚠️ **局限性**：仅支持 GET 请求，需要服务器配合，存在安全风险。现代 Web 开发已被 CORS 替代。
+> **局限性**：仅支持 GET 请求，需要服务器配合，存在安全风险。现代 Web 开发已被 CORS 替代。
 
 ### Q15：JSON-B 和 JSON-P 是什么关系？
 > - **JSON-P（JSR 353）**：底层 API，提供 JSON 解析和生成的流式/树模型接口（类似 StAX 之于 XML）
@@ -483,7 +483,7 @@ parser.parse(new BufferedInputStream(new FileInputStream("huge.xml")), new Defau
     }
 });
 ```
-> 💡 **优化技巧**：配合 `BufferedInputStream` 减少 I/O 次数；使用多线程处理（SAX 本身单线程，但可在 `endElement` 中将数据提交到线程池入库）。
+> **优化技巧**：配合 `BufferedInputStream` 减少 I/O 次数；使用多线程处理（SAX 本身单线程，但可在 `endElement` 中将数据提交到线程池入库）。
 
 ### Q2：如何将 XML 配置文件的全部属性映射为 Java 对象？
 > **方案**：JAXB 是最方便的方式。对于 Spring 配置类文件用 Spring 的 `@ConfigurationProperties` + XSD 约束。
@@ -1210,4 +1210,4 @@ System.out.println("Area: " + shape.area()); // 78.54
 
 ---
 
-> 🎯 **面试核心**：能熟练讲解 XML/JSON 的对比选型，能手写使用 Jackson/Gson 解析 JSON 和使用 dom4j/JAXB 解析 XML 的完整代码。重点掌握流式解析的原理和使用场景区分。安全方面必须了解 XXE 和 AutoType RCE 的防护。
+> **面试核心**：能熟练讲解 XML/JSON 的对比选型，能手写使用 Jackson/Gson 解析 JSON 和使用 dom4j/JAXB 解析 XML 的完整代码。重点掌握流式解析的原理和使用场景区分。安全方面必须了解 XXE 和 AutoType RCE 的防护。

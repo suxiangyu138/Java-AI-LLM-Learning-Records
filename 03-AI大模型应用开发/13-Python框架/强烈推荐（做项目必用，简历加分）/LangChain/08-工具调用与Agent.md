@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [Agent 的定位](#1-agent-的定位)
 2. [@tool：定义工具](#2-tool定义工具)
@@ -112,7 +112,7 @@ LangGraph 底层
 
 **验收动作**：① 用 @tool 定义两个工具（天气/计算）；② 用 create_agent 创建 Agent 并调用（观察自动循环）；③ 让 Agent 完成一个多步任务（查天气 + 计算温差）；④ 写"Agent 选型"笔记（Chain vs Agent）——**"工具 + create_agent + 边界 = Agent 能力"**——**练习纪律**：Agent 前先想"能不能用 Chain"——"固定用 Chain、灵活用 Agent"。
 
-> 🎯 **核心要点**：Agent = 自主决策（**大脑 + 手脚 + 循环——思考-行动-观察——固定用 Chain 灵活用 Agent——Agent 贵要护栏**）；**@tool（函数变工具——docstring 是模型决策依据——实现要安全）**；**create_agent（1.x 入口——模型 + 工具 + 提示词——循环自动——LangGraph 状态机开箱即用——AgentExecutor 维护至 2026-12）**；**LangGraph（编排引擎——create_agent 是现成图复杂流程自己画——本课给地图进阶给路）**——"Agent 是应用的'大脑'——create_agent 是 1.x 的入口——工具是它的'手脚'"。
+> **核心要点**：Agent = 自主决策（**大脑 + 手脚 + 循环——思考-行动-观察——固定用 Chain 灵活用 Agent——Agent 贵要护栏**）；**@tool（函数变工具——docstring 是模型决策依据——实现要安全）**；**create_agent（1.x 入口——模型 + 工具 + 提示词——循环自动——LangGraph 状态机开箱即用——AgentExecutor 维护至 2026-12）**；**LangGraph（编排引擎——create_agent 是现成图复杂流程自己画——本课给地图进阶给路）**——"Agent 是应用的'大脑'——create_agent 是 1.x 的入口——工具是它的'手脚'"。
 
 ---
 

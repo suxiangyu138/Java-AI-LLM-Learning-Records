@@ -2,7 +2,7 @@
 
 > 技能的最小权限边界：allowed-tools 限定"技能无需权限即可用的工具"——作用域精确到命令（Bash(gh:*)）、按需收窄、experimental 状态谨慎使用——"技能能用什么，由你说了算"。
 
-## 📚 目录
+## 目录
 
 1. [allowed-tools 机制](#1-allowed-tools-机制)
 2. [作用域语法](#2-作用域语法)
@@ -57,9 +57,9 @@ allowed-tools:
 
 ```
 精确到命令（最小权限）：
-❌ Bash(*)          # 所有 shell 命令（太宽）
-✅ Bash(python:*)   # 只允许运行 python
-✅ Bash(gh:*)       # 只允许 GitHub CLI
+✗ Bash(*)          # 所有 shell 命令（太宽）
+✓ Bash(python:*)   # 只允许运行 python
+✓ Bash(gh:*)       # 只允许 GitHub CLI
 ```
 
 ### 示例配置
@@ -206,7 +206,7 @@ allowed-tools 被标记为 experimental：
 脚本写得再好，也要限制运行环境（纵深防御）
 ```
 
-> 🎯 核心要点：allowed-tools = 免权限工具白名单；命令级作用域（Bash(python:*)）；配置原则（最小/只读/危险拒绝）；与确认+审批三层防线；experimental 状态（谨慎 + 测试 + 关注演进）；有 references 加 Read/Grep；配置六项检查清单 + 与脚本安全组成纵深防御。
+> 核心要点：allowed-tools = 免权限工具白名单；命令级作用域（Bash(python:*)）；配置原则（最小/只读/危险拒绝）；与确认+审批三层防线；experimental 状态（谨慎 + 测试 + 关注演进）；有 references 加 Read/Grep；配置六项检查清单 + 与脚本安全组成纵深防御。
 
 ---
 

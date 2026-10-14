@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [核心结论先行](#1-核心结论先行)
 2. [javac 编译产物剖析](#2-javac-编译产物剖析)
@@ -52,14 +52,14 @@ Runnable r = () -> foo();
 
 | # | 结论 | 常见错误说法 |
 |:-:|------|-------------|
-| 1 | Lambda **不在编译期**生成 `Outer$1.class` 文件 | ❌"Lambda 就是匿名内部类" |
-| 2 | Lambda 体通常被抽取为**同类内的合成方法** `lambda$xxx$0` | ❌"Lambda 体没有对应方法" |
-| 3 | 实现类在**运行期**由 `LambdaMetafactory` 生成 | ❌"Lambda 永远不生成实现类" |
-| 4 | **非捕获** Lambda 的实例**在当前实现中**会被复用 | ❌"非捕获 Lambda 一定单例"（规范未保证） |
-| 5 | **捕获** Lambda 每次求值**通常**产生新实例 | ❌"Lambda 都是单例" |
-| 6 | Lambda 中的 `this` 指向**外围类实例** | ❌"this 指向 Lambda 自身" |
+| 1 | Lambda **不在编译期**生成 `Outer$1.class` 文件 | ✗"Lambda 就是匿名内部类" |
+| 2 | Lambda 体通常被抽取为**同类内的合成方法** `lambda$xxx$0` | ✗"Lambda 体没有对应方法" |
+| 3 | 实现类在**运行期**由 `LambdaMetafactory` 生成 | ✗"Lambda 永远不生成实现类" |
+| 4 | **非捕获** Lambda 的实例**在当前实现中**会被复用 | ✗"非捕获 Lambda 一定单例"（规范未保证） |
+| 5 | **捕获** Lambda 每次求值**通常**产生新实例 | ✗"Lambda 都是单例" |
+| 6 | Lambda 中的 `this` 指向**外围类实例** | ✗"this 指向 Lambda 自身" |
 
-> ⚠️ **规范与实现的边界**：`LambdaMetafactory` 的 JavaDoc 明确说明——它**不保证**返回实例的同一性（identity）、可变性或可序列化性。因此"非捕获 Lambda 缓存复用"是 **HotSpot 当前实现的行为**，是有意留给 JVM 的优化空间，**不是语言规范承诺**。写代码时绝不能依赖 `==` 比较 Lambda 实例。
+> **规范与实现的边界**：`LambdaMetafactory` 的 JavaDoc 明确说明——它**不保证**返回实例的同一性（identity）、可变性或可序列化性。因此"非捕获 Lambda 缓存复用"是 **HotSpot 当前实现的行为**，是有意留给 JVM 的优化空间，**不是语言规范承诺**。写代码时绝不能依赖 `==` 比较 Lambda 实例。
 
 ### 1.3 为什么设计成这样
 
@@ -70,7 +70,7 @@ Runnable r = () -> foo();
 | 未来演进 | 翻译策略固化在字节码里 | 策略在 JDK 内部，可**随版本优化** |
 | 实例复用 | `new` 语义强制每次新建 | 可由运行时决定是否缓存 |
 
-> 🎯 **最关键的一点是第三条**：invokedynamic 把"Lambda 如何变成对象"这个决策从**编译期字节码**推迟到**运行时 JDK 库代码**。这意味着 JDK 可以在不重新编译用户代码的前提下改进 Lambda 实现（事实上从 Java 8 到 Java 15 的隐藏类改造正是如此发生的）。
+> **最关键的一点是第三条**：invokedynamic 把"Lambda 如何变成对象"这个决策从**编译期字节码**推迟到**运行时 JDK 库代码**。这意味着 JDK 可以在不重新编译用户代码的前提下改进 Lambda 实现（事实上从 Java 8 到 Java 15 的隐藏类改造正是如此发生的）。
 
 ---
 
@@ -123,7 +123,7 @@ public class AnonVsLambda {
 -rw-r--r--  1075  AnonVsLambda.class     ← Lambda 未产生额外文件
 ```
 
-> 🎯 这是"Lambda ≠ 匿名内部类"最直观的证据：**同一个文件里两种写法，只有匿名类多出一个 class 文件**。
+> 这是"Lambda ≠ 匿名内部类"最直观的证据：**同一个文件里两种写法，只有匿名类多出一个 class 文件**。
 
 ### 2.3 调用点：清一色 invokedynamic
 
@@ -153,7 +153,7 @@ java.util.function.Supplier<java.lang.Integer> captureThis();
                                 //  ↑ 签名带 LambdaDemo → 捕获了 this
 ```
 
-> 💡 **看调用点签名就知道捕获了什么**：`invokedynamic` 的**参数类型列表 = 捕获变量列表**，**返回类型 = 目标函数式接口**。这是分析 Lambda 最快的方法。
+> **看调用点签名就知道捕获了什么**：`invokedynamic` 的**参数类型列表 = 捕获变量列表**，**返回类型 = 目标函数式接口**。这是分析 Lambda 最快的方法。
 
 ### 2.4 合成方法：Lambda 体的真实归宿
 
@@ -195,16 +195,16 @@ private java.lang.Integer lambda$captureThis$0();
 
 | 写法 | 是否生成 `lambda$` 方法 | 原因 |
 |------|:---:|------|
-| `() -> "hello"` | ✅ 生成 | Lambda 体需要载体 |
-| `Integer::parseInt` | ❌ 不生成 | 直接引用已有方法 |
-| `System.out::println` | ❌ 不生成 | 直接引用已有方法 |
-| `String::trim` | ❌ 不生成 | 直接引用已有方法 |
-| `StringBuilder::new` | ❌ 不生成 | 直接引用 `<init>` |
-| `String[]::new` | ✅ 生成 | `anewarray` 是指令不是方法 |
+| `() -> "hello"` | ✓ 生成 | Lambda 体需要载体 |
+| `Integer::parseInt` | ✗ 不生成 | 直接引用已有方法 |
+| `System.out::println` | ✗ 不生成 | 直接引用已有方法 |
+| `String::trim` | ✗ 不生成 | 直接引用已有方法 |
+| `StringBuilder::new` | ✗ 不生成 | 直接引用 `<init>` |
+| `String[]::new` | ✓ 生成 | `anewarray` 是指令不是方法 |
 
 实测中 `LambdaDemo` 共 8 个函数式表达式，只生成了 **4 个**合成方法（3 个 Lambda + 1 个数组引用）。
 
-> ⚠️ **这解释了一个常见误区**：有人说"方法引用比 Lambda 少一层调用所以更快"——从编译产物看确实少了一层转发方法，但 JIT 内联后这层转发通常被完全消除，实测差异不可测量（见第 11 节）。
+> **这解释了一个常见误区**：有人说"方法引用比 Lambda 少一层调用所以更快"——从编译产物看确实少了一层转发方法，但 JIT 内联后这层转发通常被完全消除，实测差异不可测量（见第 11 节）。
 
 ---
 
@@ -303,7 +303,7 @@ instantiatedMethodType (String)  -> Integer
 implMethod            (String)   -> int
 ```
 
-> 🎯 生成的实现类里，`apply(Object)` 方法会：**checkcast 到 String → 调用 parseInt 得到 int → Integer.valueOf 装箱 → 返回**。这三步适配代码就是从三个 MethodType 的差值推导出来的。
+> 生成的实现类里，`apply(Object)` 方法会：**checkcast 到 String → 调用 parseInt 得到 int → Integer.valueOf 装箱 → 返回**。这三步适配代码就是从三个 MethodType 的差值推导出来的。
 
 ### 3.5 常量池中的 MethodHandle 种类
 
@@ -322,7 +322,7 @@ implMethod            (String)   -> int
 | 8 | `REF_newInvokeSpecial` | 构造器引用 |
 | 9 | `REF_invokeInterface` | 接口默认方法引用 |
 
-> 💡 **Kind 6 还是 Kind 5，一眼看出是否捕获 this**：合成方法是 `static` 的（Kind 6）说明 Lambda 体没碰实例状态；是实例方法（Kind 5）说明捕获了 `this`。
+> **Kind 6 还是 Kind 5，一眼看出是否捕获 this**：合成方法是 `static` 的（Kind 6）说明 Lambda 体没碰实例状态；是实例方法（Kind 5）说明捕获了 `this`。
 
 ---
 
@@ -381,7 +381,7 @@ public static CallSite metafactory(
    └─ ⑧ 【后续执行】直接走已绑定目标，无任何额外开销
 ```
 
-> ⚠️ **链接只发生一次，但每次执行仍会调用目标句柄**。对捕获型 Lambda 来说，"目标句柄"是构造器，所以每次执行都 `new` 一个实例；对非捕获型来说是返回常量，所以复用同一实例。
+> **链接只发生一次，但每次执行仍会调用目标句柄**。对捕获型 Lambda 来说，"目标句柄"是构造器，所以每次执行都 `new` 一个实例；对非捕获型来说是返回常量，所以复用同一实例。
 
 ### 4.3 altMetafactory：可序列化与多接口场景
 
@@ -409,7 +409,7 @@ BootstrapMethods:
 | bit 1 | `FLAG_MARKERS` | 2 | 附加标记接口 |
 | bit 2 | `FLAG_BRIDGES` | 4 | 生成桥接方法 |
 
-> 💡 实测 flags = 5 = `SERIALIZABLE(1) + BRIDGES(4)`。之所以带 BRIDGES，是因为示例中的 `SFun<T,R> extends Function<T,R>, Serializable` 继承了父接口的方法，需要桥接方法适配（见第 9 节）。
+> 实测 flags = 5 = `SERIALIZABLE(1) + BRIDGES(4)`。之所以带 BRIDGES，是因为示例中的 `SFun<T,R> extends Function<T,R>, Serializable` 继承了父接口的方法，需要桥接方法适配（见第 9 节）。
 
 ### 4.4 metafactory vs altMetafactory 对比
 
@@ -447,11 +447,11 @@ BootstrapMethods:
 
 | 类型 | target 可变 | 使用场景 | Lambda 用哪个 |
 |------|:---:|---------|:---:|
-| `ConstantCallSite` | 否 | 目标永不改变 | ✅ |
-| `MutableCallSite` | 是 | 可重新绑定，如动态语言 | ❌ |
-| `VolatileCallSite` | 是（跨线程立即可见） | 多线程重绑定 | ❌ |
+| `ConstantCallSite` | 否 | 目标永不改变 | ✓ |
+| `MutableCallSite` | 是 | 可重新绑定，如动态语言 | ✗ |
+| `VolatileCallSite` | 是（跨线程立即可见） | 多线程重绑定 | ✗ |
 
-> 🎯 Lambda 使用 `ConstantCallSite`——这一点很重要：**目标不可变意味着 JIT 可以放心地把它当常量做激进内联优化**，这是 Lambda 性能能追平匿名内部类的关键。
+> Lambda 使用 `ConstantCallSite`——这一点很重要：**目标不可变意味着 JIT 可以放心地把它当常量做激进内联优化**，这是 Lambda 性能能追平匿名内部类的关键。
 
 ### 5.3 MethodType
 
@@ -510,7 +510,7 @@ public class ManualLambda {
 
 这段代码手工完成了编译器 + JVM 在 `Function<String,Integer> f = Integer::parseInt;` 背后做的全部工作。
 
-> 💡 **捕获型的区别**：如果要模拟捕获，把参数 ③ 改为 `MethodType.methodType(Function.class, String.class)`（工厂接收一个捕获参数），然后 `site.getTarget().invokeExact("captured")` 传入。
+> **捕获型的区别**：如果要模拟捕获，把参数 ③ 改为 `MethodType.methodType(Function.class, String.class)`（工厂接收一个捕获参数），然后 `site.getTarget().invokeExact("captured")` 传入。
 
 ---
 
@@ -531,7 +531,7 @@ Supplier<Integer> c = () -> field + 1;    // 捕获 this（field 是实例字段
 Supplier<Integer> d = () -> CONST + 1;    // 非捕获！静态常量不算捕获
 ```
 
-> ⚠️ **易错点**：访问 `static` 字段**不构成捕获**（静态字段通过 `getstatic` 直接访问，无需上下文）；访问实例字段**构成对 this 的捕获**（哪怕只读一个字段，捕获的也是整个 `this` 引用）。
+> **易错点**：访问 `static` 字段**不构成捕获**（静态字段通过 `getstatic` 直接访问，无需上下文）；访问实例字段**构成对 this 的捕获**（哪怕只读一个字段，捕获的也是整个 `this` 引用）。
 
 ### 6.2 实例复用的实测行为
 
@@ -567,7 +567,7 @@ JDK 25 实测输出：
 | 不同调用点 `sameClass=false` | **每个调用点生成独立的实现类**，代码相同也不共享 |
 | 方法引用不同调用点不共享 | 同上，链接是**按调用点**而非按目标方法 |
 
-> ⚠️ **绝对不要依赖这些行为**：
+> **绝对不要依赖这些行为**：
 > - 不要用 `==` 比较 Lambda
 > - 不要把 Lambda 当作 map 的 key 后期望能取回
 > - 不要依赖"非捕获必单例"做资源管理
@@ -609,8 +609,8 @@ final class Outer$$Lambda implements Runnable {
 
 ```java
 int count = 0;
-Runnable r = () -> System.out.println(count);   // ✅
-count++;                                         // ❌ 编译错误：count 必须是 effectively final
+Runnable r = () -> System.out.println(count);   // ✓
+count++;                                         // ✗ 编译错误：count 必须是 effectively final
 ```
 
 **根本原因是值捕获（capture by value）**：
@@ -632,7 +632,7 @@ Lambda 实例可能存活到方法返回之后（如被 return 出去、放入�
 Java 的选择：编译期强制 effectively final，从根上杜绝歧义
 ```
 
-> 💡 **对比其他语言**：JavaScript / Kotlin 支持引用捕获（把变量提升到堆对象）。Java 选择值捕获是为了**避免隐式的堆分配和并发可见性问题**——如果允许修改，多线程下 `count` 的可见性就需要额外的内存屏障语义，这会让简单的 Lambda 变得昂贵且难以推理。
+> **对比其他语言**：JavaScript / Kotlin 支持引用捕获（把变量提升到堆对象）。Java 选择值捕获是为了**避免隐式的堆分配和并发可见性问题**——如果允许修改，多线程下 `count` 的可见性就需要额外的内存屏障语义，这会让简单的 Lambda 变得昂贵且难以推理。
 
 **绕过写法及其代价**：
 
@@ -657,16 +657,16 @@ long count = list.stream().filter(pred).count();
 | 捕获 1 个 int | 每次求值 | 对象头 + 4B | 可能被 JIT 标量替换消除 |
 | 捕获 this | 每次求值 | 对象头 + 引用 | **注意隐式持有外围对象** |
 
-> ⚠️ **内存泄漏风险**：捕获 `this` 的 Lambda 会**强引用外围对象**。如果把它注册到长生命周期的监听器列表而忘记注销，外围对象（可能是一个大 Activity / Controller / Bean）无法回收。
+> **内存泄漏风险**：捕获 `this` 的 Lambda 会**强引用外围对象**。如果把它注册到长生命周期的监听器列表而忘记注销，外围对象（可能是一个大 Activity / Controller / Bean）无法回收。
 
 ```java
 class BigService {
     private byte[] cache = new byte[100 * 1024 * 1024];
     void register() {
-        // ❌ 捕获 this，EventBus 持有 → BigService 及其 100MB cache 无法回收
+        // ✗ 捕获 this，EventBus 持有 → BigService 及其 100MB cache 无法回收
         EventBus.subscribe(e -> this.handle(e));
 
-        // ✅ 只捕获需要的字段，不捕获 this
+        // ✓ 只捕获需要的字段，不捕获 this
         final Handler h = this.handler;
         EventBus.subscribe(e -> h.handle(e));
     }
@@ -697,7 +697,7 @@ isHidden=true
 interfaces=[interface java.util.function.Supplier]
 ```
 
-> ⚠️ **不要在代码中解析或依赖这个类名格式**——它在 Java 8 / 15 / 21 都发生过变化。日志里看到 `$$Lambda` 只用于人工诊断。
+> **不要在代码中解析或依赖这个类名格式**——它在 Java 8 / 15 / 21 都发生过变化。日志里看到 `$$Lambda` 只用于人工诊断。
 
 ### 7.2 隐藏类（Hidden Class）的特性
 
@@ -710,7 +710,7 @@ JEP 371（Java 15）引入隐藏类，Lambda 实现类随之迁移：
 | 可被 GC 单独卸载 | 与定义它的 `Lookup` 生命周期绑定 | **动态生成的类可回收** |
 | 支持 `@Stable` 等 VM 注解 | 内部优化 | JIT 优化更激进 |
 
-> 💡 **为什么这件事重要**：Java 8 用的 VM Anonymous Class 是 HotSpot 的私有机制，属于"内部黑魔法"。JEP 371 把它标准化为公开 API 后，Lambda 实现从"依赖 VM 私有特性"变成"依赖标准 API"，同时改善了元空间回收行为。这正是第 1.3 节所说"invokedynamic 让 JDK 能在不重编译用户代码的前提下改进实现"的实证。
+> **为什么这件事重要**：Java 8 用的 VM Anonymous Class 是 HotSpot 的私有机制，属于"内部黑魔法"。JEP 371 把它标准化为公开 API 后，Lambda 实现从"依赖 VM 私有特性"变成"依赖标准 API"，同时改善了元空间回收行为。这正是第 1.3 节所说"invokedynamic 让 JDK 能在不重编译用户代码的前提下改进实现"的实证。
 
 ### 7.3 类的加载与卸载
 
@@ -729,7 +729,7 @@ java -Xlog:class+load=info IdentityTest 2>&1 | grep -i lambda | head -5
 [0.044s][info][class,load] java.lang.invoke.LambdaForm$Kind source: shared objects file
 ```
 
-> 💡 可以看到 `LambdaMetafactory`、`LambdaForm` 等基础设施在**第一个 Lambda 链接时**才被加载——这也是"应用第一个 Lambda 有额外启动开销"的来源（见 11.3）。
+> 可以看到 `LambdaMetafactory`、`LambdaForm` 等基础设施在**第一个 Lambda 链接时**才被加载——这也是"应用第一个 Lambda 有额外启动开销"的来源（见 11.3）。
 
 ### 7.4 关于 dumpProxyClasses 的重要提醒
 
@@ -739,7 +739,7 @@ java -Xlog:class+load=info IdentityTest 2>&1 | grep -i lambda | head -5
 java -Djdk.internal.lambda.dumpProxyClasses=. YourClass
 ```
 
-> ⚠️ **JDK 25 实测：该属性已不再产出文件**（dump 目录为空）。这个属性是 JDK 内部实现细节，随隐藏类改造已失效。
+> **JDK 25 实测：该属性已不再产出文件**（dump 目录为空）。这个属性是 JDK 内部实现细节，随隐藏类改造已失效。
 
 **当前可用的替代观测手段**：
 
@@ -751,7 +751,7 @@ java -Djdk.internal.lambda.dumpProxyClasses=. YourClass
 | BSM 分析 | `javap -v -p` | 编译期完整信息（**最可靠**） |
 | JFR | `-XX:StartFlightRecording` | 类加载/编译事件统计 |
 
-> 🎯 **实践建议**：与其纠结于 dump 运行时生成的类，不如吃透 `javap -v` 输出的 BootstrapMethods——那里包含了推导出实现类结构所需的**全部信息**（接口、方法名、捕获参数、适配签名）。
+> **实践建议**：与其纠结于 dump 运行时生成的类，不如吃透 `javap -v` 输出的 BootstrapMethods——那里包含了推导出实现类结构所需的**全部信息**（接口、方法名、捕获参数、适配签名）。
 
 ---
 
@@ -793,15 +793,15 @@ public class ThisDemo {
 void test() {
     int x = 10;
     Runnable anon = new Runnable() {
-        public void run() { int x = 20; }    // ✅ 合法，新作用域
+        public void run() { int x = 20; }    // ✓ 合法，新作用域
     };
     Runnable lambda = () -> {
-        int x = 20;                          // ❌ 编译错误：已在方法中定义了变量 x
+        int x = 20;                          // ✗ 编译错误：已在方法中定义了变量 x
     };
 }
 ```
 
-> 🎯 **这是"Lambda 不是匿名内部类"在源码层面的直接证据**：Lambda 与外围方法**共享同一个变量作用域**，参数名和局部变量名都不能与外围重复。
+> **这是"Lambda 不是匿名内部类"在源码层面的直接证据**：Lambda 与外围方法**共享同一个变量作用域**，参数名和局部变量名都不能与外围重复。
 
 ### 8.3 字节码层面的解释
 
@@ -846,7 +846,7 @@ final class Demo$$Lambda implements Function {
 | 返回值适配 | 返回类型不同或需丢弃 | 同上 |
 | 可变参数打包 | 引用 varargs 方法 | implMethod 是 varargs |
 
-> ⚠️ **性能提示**：装箱适配是**真实开销**。这就是 `java.util.function` 提供 `IntFunction` / `IntPredicate` / `ToIntFunction` 等原始类型特化接口的原因——它们让 `instantiatedMethodType` 直接使用基本类型，消除装箱适配。
+> **性能提示**：装箱适配是**真实开销**。这就是 `java.util.function` 提供 `IntFunction` / `IntPredicate` / `ToIntFunction` 等原始类型特化接口的原因——它们让 `instantiatedMethodType` 直接使用基本类型，消除装箱适配。
 
 ### 9.2 桥接方法（FLAG_BRIDGES）
 
@@ -867,7 +867,7 @@ SFun<String, Integer> f = String::length;
 | `BootstrapMethodError` | BSM 执行抛异常，包装后抛出 |
 | `NoSuchMethodError` | implMethod 在运行时不存在（版本不一致） |
 
-> 💡 **典型踩坑场景**：A 模块编译时依赖接口 `v1`，运行时替换为 `v2` 且抽象方法签名改了 → 链接时 `LambdaConversionException`。**注意这个错误发生在首次执行到该 Lambda 时，而非类加载时**，所以可能在生产运行很久后才暴露。
+> **典型踩坑场景**：A 模块编译时依赖接口 `v1`，运行时替换为 `v2` 且抽象方法签名改了 → 链接时 `LambdaConversionException`。**注意这个错误发生在首次执行到该 Lambda 时，而非类加载时**，所以可能在生产运行很久后才暴露。
 
 ---
 
@@ -934,7 +934,7 @@ capturedArgCount  = 0
 | `implMethodKind` | MethodHandle 种类（5 = invokeVirtual） |
 | `capturedArgs` | 捕获的参数值（会被一并序列化） |
 
-> 💡 **`SerializedLambda` 是"方法坐标 + 捕获值"的字符串描述**，反序列化时用这些信息**重新链接**——不是恢复一个对象，而是重新走一遍 metafactory 流程。
+> **`SerializedLambda` 是"方法坐标 + 捕获值"的字符串描述**，反序列化时用这些信息**重新链接**——不是恢复一个对象，而是重新走一遍 metafactory 流程。
 
 ### 10.4 三大风险
 
@@ -951,13 +951,13 @@ capturedArgCount  = 0
 | **调整同一方法内 Lambda 的顺序** | `lambda$m$0` → `lambda$m$1`，**反序列化失败** |
 | 编译器版本变化导致合成方法名不同 | 可能失败 |
 
-> ⚠️ **第三条最阴险**：仅仅在方法里**多加一个 Lambda**或**调换两个 Lambda 的位置**，合成方法名的序号就会变，此前序列化的数据全部失效。这是纯粹的实现细节泄漏到持久化格式。
+> **第三条最阴险**：仅仅在方法里**多加一个 Lambda**或**调换两个 Lambda 的位置**，合成方法名的序号就会变，此前序列化的数据全部失效。这是纯粹的实现细节泄漏到持久化格式。
 
 **风险三：反序列化安全**
 
 `SerializedLambda` 在反序列化时会**触发方法链接与调用能力构造**。反序列化不可信数据时，攻击者可能构造指向危险方法的 `SerializedLambda`。
 
-> ⚠️ **安全准则**：**永远不要反序列化来自不可信来源的 Lambda**。JDK 内部对 `SerializedLambda` 的 `readResolve` 有 capturingClass 校验（要求由捕获类的 `$deserializeLambda$` 方法处理），但这不构成对不可信输入的完整防护。Java 原生序列化本身在处理不可信数据时就是高危操作。
+> **安全准则**：**永远不要反序列化来自不可信来源的 Lambda**。JDK 内部对 `SerializedLambda` 的 `readResolve` 有 capturingClass 校验（要求由捕获类的 `$deserializeLambda$` 方法处理），但这不构成对不可信输入的完整防护。Java 原生序列化本身在处理不可信数据时就是高危操作。
 
 ### 10.5 实用场景与替代方案
 
@@ -974,12 +974,12 @@ wrapper.eq(User::getName, "张三");
 
 | 场景 | 是否推荐用可序列化 Lambda |
 |------|:---:|
-| 框架内提取字段名（本地） | ✅ 推荐 |
-| 跨 JVM 传输行为（如分布式任务） | ❌ 用命名类 + 参数 |
-| 持久化到数据库/缓存 | ❌ 版本脆弱，绝对避免 |
-| RPC 传参 | ❌ 安全风险 |
+| 框架内提取字段名（本地） | ✓ 推荐 |
+| 跨 JVM 传输行为（如分布式任务） | ✗ 用命名类 + 参数 |
+| 持久化到数据库/缓存 | ✗ 版本脆弱，绝对避免 |
+| RPC 传参 | ✗ 安全风险 |
 
-> 🎯 **需要跨进程传递"行为"时的正确做法**：传递**标识符 + 参数**（如策略名 `"DISCOUNT_VIP"` + 参数），接收方按标识符查找本地实现。永远不要传递序列化的函数对象。
+> **需要跨进程传递"行为"时的正确做法**：传递**标识符 + 参数**（如策略名 `"DISCOUNT_VIP"` + 参数），接收方按标识符查找本地实现。永远不要传递序列化的函数对象。
 
 ---
 
@@ -995,7 +995,7 @@ wrapper.eq(User::getName, "张三");
 | 首次调用开销 | 类加载 | **链接（较高）** | 链接（较高） | 链接（较高） |
 | 稳态性能 | 基准 | **持平** | 持平 | 持平 |
 
-> 🎯 **稳态下四者性能基本一致**——JIT 内联后，Lambda 的转发层被完全消除。差异主要在**启动阶段**和**是否分配实例**。
+> **稳态下四者性能基本一致**——JIT 内联后，Lambda 的转发层被完全消除。差异主要在**启动阶段**和**是否分配实例**。
 
 ### 11.2 JIT 为何能优化得这么好
 
@@ -1016,7 +1016,7 @@ list.stream().map(String::trim).count()
      └─ ④ 最终机器码 ≈ 手写循环调用 trim()
 ```
 
-> ⚠️ **去虚化失效的情况**：如果同一个调用点被多种 Lambda 实现"污染"（megamorphic call site），JIT 无法去虚化，性能会下降。典型场景是**通用工具方法接收各种不同的 Lambda**：
+> **去虚化失效的情况**：如果同一个调用点被多种 Lambda 实现"污染"（megamorphic call site），JIT 无法去虚化，性能会下降。典型场景是**通用工具方法接收各种不同的 Lambda**：
 
 ```java
 // 这个 apply 调用点会被大量不同实现类污染
@@ -1042,7 +1042,7 @@ static <T, R> R helper(T t, Function<T, R> f) { return f.apply(t); }
 | AOT / GraalVM Native Image | 编译期完成链接 | 极致启动 |
 | 减少启动路径 Lambda | 冷启动关键路径改用普通方法 | 针对性优化 |
 
-> 💡 Spring Boot 3 的 CDS 支持与 GraalVM Native Image 支持，很大程度上就是在解决包括 Lambda 链接在内的启动开销。
+> Spring Boot 3 的 CDS 支持与 GraalVM Native Image 支持，很大程度上就是在解决包括 Lambda 链接在内的启动开销。
 
 ### 11.4 真正需要关注的性能点
 
@@ -1054,16 +1054,16 @@ static <T, R> R helper(T t, Function<T, R> f) { return f.apply(t); }
 | **Stream 开销** | 小集合上 Stream 慢于 for | 小数据量用普通循环 |
 
 ```java
-// ❌ 每次调用都装箱
+// ✗ 每次调用都装箱
 Function<Integer, Integer> f = x -> x * 2;
 for (int i = 0; i < 1_000_000; i++) f.apply(i);   // 200 万次装箱/拆箱
 
-// ✅ 原始类型特化，零装箱
+// ✓ 原始类型特化，零装箱
 IntUnaryOperator g = x -> x * 2;
 for (int i = 0; i < 1_000_000; i++) g.applyAsInt(i);
 ```
 
-> ⚠️ **不要过早优化**：上述差异在 JIT 标量替换生效后往往也会消失。**先用 JMH 测量再优化**，不要凭直觉改写代码降低可读性。
+> **不要过早优化**：上述差异在 JIT 标量替换生效后往往也会消失。**先用 JMH 测量再优化**，不要凭直觉改写代码降低可读性。
 
 ---
 
@@ -1079,7 +1079,7 @@ for (int i = 0; i < 1_000_000; i++) g.applyAsInt(i);
 | `javap -v -p X.class \| sed -n '/^BootstrapMethods/,$p'` | 只看 BSM 段（最常用） |
 | `javap -s -p Xxx.class` | 显示内部类型签名 |
 
-> ⚠️ **`-p` 不能省**：Lambda 合成方法是 `ACC_PRIVATE ACC_SYNTHETIC`，不加 `-p` 完全看不到。这是初学者最常见的困惑来源。
+> **`-p` 不能省**：Lambda 合成方法是 `ACC_PRIVATE ACC_SYNTHETIC`，不加 `-p` 完全看不到。这是初学者最常见的困惑来源。
 
 ### 12.2 实验一：捕获分析三步法
 
@@ -1138,7 +1138,7 @@ public class IdentityTest {
 javac IdentityTest.java && java IdentityTest
 ```
 
-> 💡 **换不同 JDK 版本跑一遍**，观察类名格式差异（`$$Lambda$1/0x...` vs `$$Lambda/0x...`），亲手确认"不能依赖类名格式"这条结论。
+> **换不同 JDK 版本跑一遍**，观察类名格式差异（`$$Lambda$1/0x...` vs `$$Lambda/0x...`），亲手确认"不能依赖类名格式"这条结论。
 
 ### 12.4 实验三：对比匿名内部类
 
@@ -1169,7 +1169,7 @@ java -Xlog:class+load=info IdentityTest 2>&1 | grep -i lambda | head
 java -Xlog:class+load=info IdentityTest 2>&1 | grep '\$\$Lambda'
 ```
 
-> ⚠️ **不要用 `-Djdk.internal.lambda.dumpProxyClasses`**：JDK 25 实测该属性已不产出文件。老教程中的这条命令已过时。
+> **不要用 `-Djdk.internal.lambda.dumpProxyClasses`**：JDK 25 实测该属性已不产出文件。老教程中的这条命令已过时。
 
 ---
 

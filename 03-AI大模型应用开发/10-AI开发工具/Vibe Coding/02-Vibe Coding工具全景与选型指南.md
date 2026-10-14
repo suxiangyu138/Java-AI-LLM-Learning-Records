@@ -6,7 +6,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [工具市场全景](#1-工具市场全景)
 2. [五类工具详解](#2-五类工具详解)
@@ -29,7 +29,7 @@
 | **Vibe Coding 范式** | Bolt.new、Lovable、Replit Agent | 非技术人员快速原型 | 高 |
 | **工程严谨范式** | Claude Code、Codex、Aider、OpenCode | 工程师生产级开发 | 低 |
 
-> 💡 行业论断："The era of 'magic' AI coding is over. The era of managed, verified, and economically rational AI engineering has begun."（魔法 AI 编码时代已结束，可管理、可验证、经济理性的 AI 工程时代已开始。）
+> 行业论断："The era of 'magic' AI coding is over. The era of managed, verified, and economically rational AI engineering has begun."（魔法 AI 编码时代已结束，可管理、可验证、经济理性的 AI 工程时代已开始。）
 
 ### 1.1 五类工具分类
 
@@ -94,7 +94,7 @@
 
 ## 3. 主流 Agent 横评：Claude Code vs Cursor vs Cline
 
-> 📊 数据来源：2026 年 1 月社区实测汇总（140+ 权威来源）
+> 数据来源：2026 年 1 月社区实测汇总（140+ 权威来源）
 
 | 指标 | Claude Code | Cursor | Cline |
 |------|:---:|:---:|:---:|
@@ -134,15 +134,15 @@
 
 ## 4. 2026 实测榜单：Go 企业级项目
 
-> 📊 阿里云开发者社区 2026 年实测（Go/Gin ToB 项目，六工具横评）
+> 阿里云开发者社区 2026 年实测（Go/Gin ToB 项目，六工具横评）
 
 | 工具 | 自然语言还原度 | 多文件调度准确率 | 内存 | 离线可用 |
 |------|:---:|:---:|:---:|:---:|
-| **TRAE** | **91%** | 74% | **662MB** | ✅ |
-| Claude Code | 88% | **79%** | 1,097MB | ❌ |
-| Cursor | 85% | 72% | 923MB | ❌ |
+| **TRAE** | **91%** | 74% | **662MB** | ✓ |
+| Claude Code | 88% | **79%** | 1,097MB | ✗ |
+| Cursor | 85% | 72% | 923MB | ✗ |
 
-> 🎯 结论：中文企业场景 TRAE 综合最优（还原度高 + 内存最低 + 离线可用）；复杂多文件调度 Claude Code 最强。
+> 结论：中文企业场景 TRAE 综合最优（还原度高 + 内存最低 + 离线可用）；复杂多文件调度 Claude Code 最强。
 
 ---
 
@@ -152,14 +152,14 @@
 
 | 工具 | 类型 | 免费层 | 起步价 |
 |------|------|:---:|:---:|
-| GitHub Copilot | 编辑器 | ✅ | $10/月 |
-| Windsurf | 编辑器 | ✅ | $15/月 |
-| Cursor | 编辑器 | ✅（50 次/月） | $20/月 |
-| Claude Code | 终端 | ❌ | $20/月（Pro） |
+| GitHub Copilot | 编辑器 | ✓ | $10/月 |
+| Windsurf | 编辑器 | ✓ | $15/月 |
+| Cursor | 编辑器 | ✓（50 次/月） | $20/月 |
+| Claude Code | 终端 | ✗ | $20/月（Pro） |
 | Codex | 终端/云端 | 有限 | $20/月（Plus） |
-| Bolt.new | 浏览器 | ✅ | $20/月 |
+| Bolt.new | 浏览器 | ✓ | $20/月 |
 | Replit | 浏览器 | 试用 | $20/月 |
-| Lovable | 浏览器 | ✅ | $25/月 |
+| Lovable | 浏览器 | ✓ | $25/月 |
 | Cline | IDE 插件 | 开源 | BYOK（模型费） |
 
 ### 5.2 真实成本场景
@@ -171,7 +171,7 @@
 | 小团队（5 人） | Copilot Business | $95 |
 | 重度团队（7 人） | Claude Code + Opus | ~$1,700/周 |
 
-> ⚠️ 注意 2026 两大定价变革：**Copilot 6 月起按用量计费**；**Codex 4 月起按 token 计费**——重度使用前必须算清成本模型。
+> 注意 2026 两大定价变革：**Copilot 6 月起按用量计费**；**Codex 4 月起按 token 计费**——重度使用前必须算清成本模型。
 
 ---
 
@@ -215,7 +215,7 @@
 └── 成本透明诉求              → Cline（BYOK）→ Aider
 ```
 
-> 💡 最优实践：**不选唯一工具，而是多工具协同**——VS Code 做日常编辑，Claude Code 做重构攻坚，Codex 做定点修改，各取所长。
+> 最优实践：**不选唯一工具，而是多工具协同**——VS Code 做日常编辑，Claude Code 做重构攻坚，Codex 做定点修改，各取所长。
 
 ---
 
@@ -233,7 +233,7 @@
 
 ## 9. 核心要点
 
-> 🎯 **核心要点**：
+> **核心要点**：
 > 1. 2026 工具市场二分：原型派（Bolt/Lovable）vs 工程派（Claude Code/Codex/Aider）——工程师应选工程派
 > 2. 大仓库/重构攻坚选 Claude Code；IDE 日常选 Cursor；中文企业项目实测 TRAE 最优；成本透明选 Cline/Aider
 > 3. 选型四步法：定场景 → 定维度（完成率/上下文效率/成本比）→ 跑测试 → 算成本

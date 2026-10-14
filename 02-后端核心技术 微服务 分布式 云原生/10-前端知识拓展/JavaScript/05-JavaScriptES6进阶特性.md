@@ -2,7 +2,7 @@
 
 > 定位：模块系统、Symbol、迭代器与生成器、Proxy 与 Reflect、Map/Set/WeakMap、新数据结构——ES6 之后的工程级特性
 
-## 📚 目录
+## 目录
 
 1. [ES Modules 模块系统](#1-es-modules-模块系统)
 2. [Symbol 与唯一键](#2-symbol-与唯一键)
@@ -42,7 +42,7 @@ const module = await import('./heavy.js');
 | 延迟执行 | 依赖模块先执行（深度优先） |
 | 顶层 await | 模块支持（ES2022） |
 
-> 🎯 **要点**：ES Modules 是前端标准模块系统（VS CommonJS 的 `require`）。`export default` + 具名导出组合是组件库惯例。
+> **要点**：ES Modules 是前端标准模块系统（VS CommonJS 的 `require`）。`export default` + 具名导出组合是组件库惯例。
 
 ---
 
@@ -66,9 +66,9 @@ obj[KEY] = '安全属性';     // 不会与其他库冲突
 // 用途三：内置 Symbol（JS 内部机制）
 obj[Symbol.iterator];      // 迭代协议
 obj[Symbol.toPrimitive];   // 类型转换
-obj[Symbol.dispose];       // ⚠️ using 声明（ES2026）资源清理钩子
+obj[Symbol.dispose];       // using 声明（ES2026）资源清理钩子
 
-// ⚠️ 注意：for...in / Object.keys 不含 Symbol 键
+// 注意：for...in / Object.keys 不含 Symbol 键
 // 取 Symbol 键：Object.getOwnPropertySymbols(obj)
 ```
 
@@ -115,7 +115,7 @@ fib.next().value;    // 1
 fib.next().value;    // 2
 
 // 生成器与迭代器：生成器天然可迭代
-// ⚠️ 用途：无限序列、惰性计算、异步流程控制（async 的底层）
+// 用途：无限序列、惰性计算、异步流程控制（async 的底层）
 ```
 
 ### 3.3 ES2025 迭代器增强
@@ -136,7 +136,7 @@ naturalNumbers()
 // 其他：.drop()、.flatMap()、.reduce()、.forEach()、Iterator.from()
 ```
 
-> 🎯 **要点**：生成器 = 可暂停函数（yield）；ES2025 的 Iterator Helpers 让无限序列处理像数组一样优雅（且惰性）。
+> **要点**：生成器 = 可暂停函数（yield）；ES2025 的 Iterator Helpers 让无限序列处理像数组一样优雅（且惰性）。
 
 ---
 
@@ -162,7 +162,7 @@ const proxy = new Proxy(target, {
 });
 
 proxy.name;        // 【张三】
-proxy.age = -1;    // ❌ 抛错（set 拦截校验）
+proxy.age = -1;    // ✗ 抛错（set 拦截校验）
 ```
 
 | 拦截方法 | 触发场景 |
@@ -200,7 +200,7 @@ Reflect.set(obj, 'age', 25);     // 返回布尔
 Reflect.has(obj, 'name');        // in 操作
 ```
 
-> 🎯 **要点**：Proxy + Reflect 是 Vue 3 响应式的基础（get 收集依赖、set 触发更新）。Proxy 比 Object.defineProperty 强大（可拦截所有操作、数组友好）。
+> **要点**：Proxy + Reflect 是 Vue 3 响应式的基础（get 收集依赖、set 触发更新）。Proxy 比 Object.defineProperty 强大（可拦截所有操作、数组友好）。
 
 ---
 
@@ -239,7 +239,7 @@ set.add(4); set.has(2); set.delete(1);
 // 数组去重（经典）
 const unique = [...new Set(arr)];
 
-// ⚠️ ES2025 Set 新方法（集合运算）：
+// ES2025 Set 新方法（集合运算）：
 const a = new Set([1, 2, 3]);
 const b = new Set([2, 3, 4]);
 
@@ -257,7 +257,7 @@ a.isDisjointFrom(b);     // false 不相交
 const wm = new WeakMap();
 const obj = {};
 wm.set(obj, '数据');
-obj = null;              // ⚠️ 键被回收 → 条目自动消失
+obj = null;              // 键被回收 → 条目自动消失
 
 // 用途：私有数据、缓存（键生命周期随对象）、
 //       Vue 3 的 targetMap（响应式对象 → 依赖）
@@ -291,14 +291,14 @@ obj = null;              // ⚠️ 键被回收 → 条目自动消失
 const byCity = Object.groupBy(users, u => u.city);
 // Map.groupBy 同样可用
 
-// ES2023 不可变数组方法（⚠️ sort 原地 vs toSorted 新数组）
+// ES2023 不可变数组方法（sort 原地 vs toSorted 新数组）
 arr.toSorted((a, b) => a - b);    // 返回新数组（原数组不变）
 arr.toReversed();                 // 反转副本
 ```
 
 ---
 
-> 🎯 **核心要点**：ES6+ 进阶 = **模块**（import/export）+ **Symbol**（唯一键 + 内置协议）+ **生成器**（yield 暂停 + 惰性）+ **Proxy/Reflect**（元编程 + Vue 3 响应式底层）+ **Map/Set/WeakMap**（集合体系）+ **年度新特性**（?. ?? structuredClone 分组）。ES2025 的 Iterator Helpers 与 Set 集合运算是最新亮点。
+> **核心要点**：ES6+ 进阶 = **模块**（import/export）+ **Symbol**（唯一键 + 内置协议）+ **生成器**（yield 暂停 + 惰性）+ **Proxy/Reflect**（元编程 + Vue 3 响应式底层）+ **Map/Set/WeakMap**（集合体系）+ **年度新特性**（?. ?? structuredClone 分组）。ES2025 的 Iterator Helpers 与 Set 集合运算是最新亮点。
 
 ---
 

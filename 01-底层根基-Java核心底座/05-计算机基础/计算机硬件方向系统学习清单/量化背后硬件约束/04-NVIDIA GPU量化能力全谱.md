@@ -98,7 +98,7 @@ NVFP4 检查点可以在 H100/A100 上加载（vLLM 支持），Marlin 系列内
 
 生产上建议把"量化器版本 + 引擎版本 + 硬件型号 + scale 布局"写进模型制品元数据——FP4 时代的部署事故有一半来自这三者错配。
 
-> 🎯 **核心要点**：量化精度跟着 compute capability 走：INT8 全世代可用、FP8 需 Hopper、FP4 仅 Blackwell；B200 标称 9-18 PFLOPS FP4，但实测内核工程好的引擎也只能到 ~1200 TFLOPS，引擎间差 15%——FP4 时代的竞争力在 kernel 而不在纸面密度；老卡加载 FP4 只省显存，本质是容量换吞吐。
+> **核心要点**：量化精度跟着 compute capability 走：INT8 全世代可用、FP8 需 Hopper、FP4 仅 Blackwell；B200 标称 9-18 PFLOPS FP4，但实测内核工程好的引擎也只能到 ~1200 TFLOPS，引擎间差 15%——FP4 时代的竞争力在 kernel 而不在纸面密度；老卡加载 FP4 只省显存，本质是容量换吞吐。
 
 ---
 

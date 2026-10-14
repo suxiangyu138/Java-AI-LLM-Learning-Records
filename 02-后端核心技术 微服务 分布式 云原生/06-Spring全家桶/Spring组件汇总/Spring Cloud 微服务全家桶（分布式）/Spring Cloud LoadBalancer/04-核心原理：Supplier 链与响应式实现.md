@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [调用旅程总览](#1-调用旅程总览)
 2. [上下文模型：per-service 隔离](#2-上下文模型per-service-隔离)
@@ -44,7 +44,7 @@
 下游实例
 ```
 
-> 🎯 一句话本质：**LoadBalancer = "服务名 → 实例"的解析器**——拦截器负责发现服务名，Supplier 链负责拿候选列表，LoadBalancer 负责选一个，最后把 URL 里的服务名替换成真实地址。
+> 一句话本质：**LoadBalancer = "服务名 → 实例"的解析器**——拦截器负责发现服务名，Supplier 链负责拿候选列表，LoadBalancer 负责选一个，最后把 URL 里的服务名替换成真实地址。
 
 ## 2. 上下文模型：per-service 隔离
 
@@ -76,7 +76,7 @@ spring:
 预加载：启动时创建指定服务的上下文（首次调用无冷启动）
 ```
 
-> 💡 首调延迟敏感（网关/入口服务）用 eager-load 预加载，避免"第一个请求慢"。
+> 首调延迟敏感（网关/入口服务）用 eager-load 预加载，避免"第一个请求慢"。
 
 ## 3. Supplier 链：组合与执行顺序
 
@@ -108,7 +108,7 @@ ServiceInstanceListSupplier 是响应式数据流（Flux<ServiceInstance>）：
 | 过滤型 supplier（权重/区域/提示）在缓存之后 | 每次请求都过滤（缓存列表 + 实时过滤） |
 | Caching 与 HealthCheck 二选一 | 两者都有"缓存"语义，双包是重复（[05 篇](05-缓存与健康检查.md)） |
 
-> 🎯 面试必答：**"为什么要 Supplier 链而不是一个接口？"**——**单一职责 + 自由组合**：发现、缓存、过滤、选择各管一段，策略差异 = 链的组合差异——新增策略只需新增一个 supplier（开闭原则），Ribbon 的 Rule 体系则难扩展。
+> 面试必答：**"为什么要 Supplier 链而不是一个接口？"**——**单一职责 + 自由组合**：发现、缓存、过滤、选择各管一段，策略差异 = 链的组合差异——新增策略只需新增一个 supplier（开闭原则），Ribbon 的 Rule 体系则难扩展。
 
 ## 4. 实例选择：ReactiveLoadBalancer 内部
 
@@ -144,7 +144,7 @@ ServiceInstance 携带 metadata（注册时写入）：
   └── 策略差异的本质 = 读 metadata 的方式不同
 ```
 
-> 💡 面试加分：**"策略之间为什么能任意组合？"——所有策略都是"读 metadata + 过滤/加权"**——metadata 是策略的输入协议，组合因此正交。
+> 面试加分：**"策略之间为什么能任意组合？"——所有策略都是"读 metadata + 过滤/加权"**——metadata 是策略的输入协议，组合因此正交。
 
 ## 5. 地址替换：请求变换与执行
 
@@ -199,7 +199,7 @@ ReactiveLoadBalancer.choose() → Mono<Response>（选择是异步）
 | Feign | FeignBlockingLoadBalancerClient | 阻塞包装 |
 | 直接调用 | ReactiveLoadBalancer.choose() | 原生 |
 
-> 🎯 面试必答：**"为什么 LoadBalancer 是响应式的？"**——**注册中心的查询与健康检查天然是"流"**（实例会变、健康会变），响应式 API（Flux/Mono）让"列表→过滤→选择"全链路非阻塞；阻塞客户端（RestTemplate/Feign）通过内部 block() 适配——**一个响应式核心，多种客户端形态**。
+> 面试必答：**"为什么 LoadBalancer 是响应式的？"**——**注册中心的查询与健康检查天然是"流"**（实例会变、健康会变），响应式 API（Flux/Mono）让"列表→过滤→选择"全链路非阻塞；阻塞客户端（RestTemplate/Feign）通过内部 block() 适配——**一个响应式核心，多种客户端形态**。
 
 ## 7. vs Ribbon：原理对比
 
@@ -209,13 +209,13 @@ ReactiveLoadBalancer.choose() → Mono<Response>（选择是异步）
 | 选择 API | ReactiveLoadBalancer.choose() | ServerList / chooseServer() |
 | 列表获取 | DiscoveryClientSupplier | ServerList 接口 |
 | 缓存 | **内置 Caffeine（TTL 35s）** | 无内置（靠注册中心客户端缓存） |
-| 响应式 | ✅ 原生 | ❌ |
-| 健康检查 | ✅ 内置 supplier | ⚠️ 依赖注册中心 |
+| 响应式 | ✓ 原生 | ✗ |
+| 健康检查 | ✓ 内置 supplier | 依赖注册中心 |
 | 配置 | spring.cloud.loadbalancer.* | ribbon.*（已移除） |
-| 维护 | ✅ 官方活跃 | 2018 停止 |
+| 维护 | ✓ 官方活跃 | 2018 停止 |
 | 扩展 | 新增 supplier（开闭原则） | 继承 Rule（重） |
 
-> 🎯 面试必答：**"LoadBalancer 和 Ribbon 原理上什么区别？"**——**三差**：**① 模型**（Ribbon 继承式 Rule，LoadBalancer 组合式 Supplier 链——新策略 = 新 supplier 而非改基类）；**② 响应式**（LoadBalancer 全链路 Mono/Flux，Ribbon 同步阻塞）；**③ 缓存**（LoadBalancer 内置 Caffeine 35s 缓存防注册中心压力，Ribbon 无）——所以 Ribbon 被官方放弃不是"功能缺失"，是**架构模型过时**。
+> 面试必答：**"LoadBalancer 和 Ribbon 原理上什么区别？"**——**三差**：**① 模型**（Ribbon 继承式 Rule，LoadBalancer 组合式 Supplier 链——新策略 = 新 supplier 而非改基类）；**② 响应式**（LoadBalancer 全链路 Mono/Flux，Ribbon 同步阻塞）；**③ 缓存**（LoadBalancer 内置 Caffeine 35s 缓存防注册中心压力，Ribbon 无）——所以 Ribbon 被官方放弃不是"功能缺失"，是**架构模型过时**。
 
 ---
 

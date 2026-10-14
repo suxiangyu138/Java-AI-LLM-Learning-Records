@@ -1,6 +1,6 @@
 # 05 - Agent Skills 框架实现对比
 
-> 🎯 六大主流框架的 Skill 实现方式全景对比 — 从 OpenAI Function Calling 到 Spring AI，掌握各框架的 Skill 抽象和最佳实践
+> 六大主流框架的 Skill 实现方式全景对比 — 从 OpenAI Function Calling 到 Spring AI，掌握各框架的 Skill 抽象和最佳实践
 
 ---
 
@@ -74,7 +74,7 @@ OpenAI 2023.11 起支持 parallel_tool_calls：
   → 应用并行执行 → 合并结果返回 LLM
 ```
 
-> 💡 **OpenAI 模式特点**：最简洁的 Skill 抽象，没有框架层 — 应用完全负责任务编排、状态管理、错误重试
+> **OpenAI 模式特点**：最简洁的 Skill 抽象，没有框架层 — 应用完全负责任务编排、状态管理、错误重试
 
 ---
 
@@ -234,9 +234,9 @@ public class AgentController {
 | **Spring 集成** | 原生一等公民 | 需要适配 |
 | **Tool 定义** | `@Tool` + `@ToolParam` | `@Tool` + `@P` |
 | **自动配置** | Spring Boot AutoConfiguration | 手动配置 |
-| **MCP 支持** | ✅ 内置 MCP Client | ✅ 社区支持 |
-| **Advisors 链** | ✅ 过滤器链模式 | ❌ |
-| **多模态** | ✅ OpenAI/Vertex 原生 | ✅ |
+| **MCP 支持** | ✓ 内置 MCP Client | ✓ 社区支持 |
+| **Advisors 链** | ✓ 过滤器链模式 | ✗ |
+| **多模态** | ✓ OpenAI/Vertex 原生 | ✓ |
 | **模型切换** | `spring.ai.openai` → 改依赖即可 | 修改 Builder |
 
 ---
@@ -476,10 +476,10 @@ public class BrowserNavigateTool implements McpTool {
 |------|:---:|:---:|:---:|:---:|:---:|:---:|
 | **Skill 抽象** | Function | Tool/Agent | @Tool Bean | .md 指令文件 | Plugin/Function | Tools |
 | **定义方式** | JSON Schema | 注解+代码 | 注解+Bean | Markdown+YAML | 特性+配置 | JSON Schema |
-| **编排能力** | ❌ 手动 | ✅ AgentExecutor | ⚠️ 基础 | ✅ LLM自治 | ✅ Planner | ❌ 纯传输 |
+| **编排能力** | ✗ 手动 | ✓ AgentExecutor | 基础 | ✓ LLM自治 | ✓ Planner | ✗ 纯传输 |
 | **模型支持** | OpenAI | 多模型 | 多模型 | Anthropic | OpenAI/Azure | 无关 |
 | **语言生态** | 多语言 SDK | Python/JS/Java | Java/Kotlin | 自然语言 | .NET/Python | 协议层 |
-| **生产就绪** | ⭐⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ |
+| **生产就绪** | ★★★★ | ★★★ | ★★★ | ★★★★ | ★★★★ | ★★★★★ |
 | **学习曲线** | 低 | 中高 | 低（Spring系） | 低（自然语言） | 中 | 中 |
 
 ### 7.2 选型决策树
@@ -507,7 +507,7 @@ public class BrowserNavigateTool implements McpTool {
     └── → MCP 协议（通用 Skill 传输层）
 ```
 
-> 🎯 **核心要点**：框架是手段不是目的。选择最契合技术栈的框架，用 MCP 做跨框架桥接，让 Skill 定义与执行解耦才是长久之计
+> **核心要点**：框架是手段不是目的。选择最契合技术栈的框架，用 MCP 做跨框架桥接，让 Skill 定义与执行解耦才是长久之计
 
 ---
 

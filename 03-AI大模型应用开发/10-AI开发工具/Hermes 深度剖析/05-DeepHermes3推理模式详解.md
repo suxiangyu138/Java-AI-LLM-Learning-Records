@@ -1,6 +1,6 @@
 # 05 - DeepHermes 3 推理模式详解
 
-> 🎯 DeepHermes 3 是 2025 年开源社区最受关注的创新之一——首次将"直觉回答"与"深度链式推理"统一到一个模型，通过 system prompt 一键切换模式，无需部署两个模型
+> DeepHermes 3 是 2025 年开源社区最受关注的创新之一——首次将"直觉回答"与"深度链式推理"统一到一个模型，通过 system prompt 一键切换模式，无需部署两个模型
 
 ---
 
@@ -62,7 +62,7 @@ You should enclose your thoughts and internal monologue inside <think>
 You are Hermes, an AI assistant.
 ```
 
-> 💡 **切换成本为零**——同一个模型，只改 system prompt，无需重新加载权重
+> **切换成本为零**——同一个模型，只改 system prompt，无需重新加载权重
 
 ### 2.3 推理长度控制
 
@@ -170,7 +170,7 @@ SFT 微调（学生模型 = Llama 3.1/Mistral）
 DeepHermes 3 = 直觉 + 推理 混合模型
 ```
 
-> 🎯 关键设计：CoT 数据仅占 15/115 ≈ 13%，但模型学会了"按需推理"——不是每道题都长篇大论
+> 关键设计：CoT 数据仅占 15/115 ≈ 13%，但模型学会了"按需推理"——不是每道题都长篇大论
 
 ## 5. 已知限制与规避方案
 
@@ -202,7 +202,7 @@ def build_messages_with_think(history, new_question):
     return messages
 ```
 
-> ⚠️ **强制 `<think>\n` 的副作用**：可能影响模型正常对话风格，建议只在需要推理的场景使用
+> **强制 `<think>\n` 的副作用**：可能影响模型正常对话风格，建议只在需要推理的场景使用
 
 ## 6. 性能 Benchmark
 

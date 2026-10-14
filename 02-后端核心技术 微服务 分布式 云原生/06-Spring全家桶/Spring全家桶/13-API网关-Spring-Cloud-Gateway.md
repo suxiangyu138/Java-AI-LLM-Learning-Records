@@ -1,5 +1,5 @@
 # 13-API网关-Spring-Cloud-Gateway
-> 🎯 P1 就业必备 — Spring Cloud Gateway是微服务架构的流量入口，负责路由转发、鉴权、限流、日志等横切关注点，是微服务网关层的核心组件。基于WebFlux + Netty的非阻塞架构，性能远超传统Zuul 1.x。
+> P1 就业必备 — Spring Cloud Gateway是微服务架构的流量入口，负责路由转发、鉴权、限流、日志等横切关注点，是微服务网关层的核心组件。基于WebFlux + Netty的非阻塞架构，性能远超传统Zuul 1.x。
 
 ---
 
@@ -32,7 +32,7 @@
 |------|------|
 | **归属** | Spring全家桶核心组件 → 层级2 P1就业必备 → Spring Cloud微服务生态 |
 | **前置依赖** | Spring Boot、Spring WebFlux基础、Nacos/Eureka服务发现、微服务基础理论 |
-| **重要性** | ⭐⭐⭐⭐⭐（微服务网关是流量入口，几乎每个微服务项目必备） |
+| **重要性** | ★★★★★（微服务网关是流量入口，几乎每个微服务项目必备） |
 | **学习难度** | 中等（概念清晰，但Filter/Predicate体系较丰富，底层Netty有一定门槛） |
 
 ### 1.2 三层学习目标
@@ -158,7 +158,7 @@ spring:
             - Path=/ws/**
 ```
 
-> 💡 `lb://` 前缀表示启用负载均衡，Gateway会通过`LoadBalancerClient`从注册中心获取服务实例列表并进行负载均衡（默认轮询）。
+> `lb://` 前缀表示启用负载均衡，Gateway会通过`LoadBalancerClient`从注册中心获取服务实例列表并进行负载均衡（默认轮询）。
 
 #### 2.1.4 路由匹配优先级
 
@@ -182,7 +182,7 @@ spring:
           order: 0
 ```
 
-> ⚠️ 若不指定order，Spring Cloud Gateway按配置顺序匹配，匹配到第一个即终止。所以精确路由应放在通用路由之前。
+> 若不指定order，Spring Cloud Gateway按配置顺序匹配，匹配到第一个即终止。所以精确路由应放在通用路由之前。
 
 #### 2.1.5 动态路由配置
 
@@ -303,11 +303,11 @@ predicates:
 
 | Pattern | 示例路径 | 是否匹配 |
 |----------|----------|---------|
-| `/api/user/**` | `/api/user/list` | ✅ |
-| `/api/user/**` | `/api/user/detail/1001` | ✅ |
-| `/api/user/*` | `/api/user/list` | ✅ |
-| `/api/user/*` | `/api/user/detail/1001` | ❌（\*只匹配一级） |
-| `/api/{segment}/**` | `/api/user/list` | ✅（支持占位符） |
+| `/api/user/**` | `/api/user/list` | ✓ |
+| `/api/user/**` | `/api/user/detail/1001` | ✓ |
+| `/api/user/*` | `/api/user/list` | ✓ |
+| `/api/user/*` | `/api/user/detail/1001` | ✗（\*只匹配一级） |
+| `/api/{segment}/**` | `/api/user/list` | ✓（支持占位符） |
 
 **Java配置方式：**
 ```java
@@ -339,7 +339,7 @@ predicates:
   - Header=Authorization, Bearer .*  # Authorization必须是Bearer开头
 ```
 
-> 💡 第二个参数是正则表达式。只写`Header=X-Request-Id`表示只检查Header是否存在，不校验值。
+> 第二个参数是正则表达式。只写`Header=X-Request-Id`表示只检查Header是否存在，不校验值。
 
 #### 2.2.5 Query Predicate
 
@@ -402,7 +402,7 @@ spring:
             - Weight=user-service-group, 20   # 20%流量
 ```
 
-> 🎯 **灰度发布场景**：将20%流量转发到新版本服务，80%到旧版本，验证新版本稳定性后再逐步切量。
+> **灰度发布场景**：将20%流量转发到新版本服务，80%到旧版本，验证新版本稳定性后再逐步切量。
 
 #### 2.2.10 RemoteAddr Predicate
 
@@ -450,7 +450,7 @@ Gateway Filter 体系
     └── GlobalFilter 默认所有路由生效
 ```
 
-> 💡 **GatewayFilter** 作用在某一个路由上，可以通过 `filters:` 配置；**GlobalFilter** 作用于所有路由，需要在代码中定义。
+> **GatewayFilter** 作用在某一个路由上，可以通过 `filters:` 配置；**GlobalFilter** 作用于所有路由，需要在代码中定义。
 
 #### 2.3.2 内置GatewayFilter API参考
 
@@ -510,7 +510,7 @@ filters:
 # 请求 /api/user/detail/1001 → 转发到后端 /detail/1001
 ```
 
-> ⚠️ 在yaml中，`${segment}` 需要转义为 `$\{segment}`，否则会被Spring解析为占位符。
+> 在yaml中，`${segment}` 需要转义为 `$\{segment}`，否则会被Spring解析为占位符。
 
 **④ AddRequestHeader / AddRequestParameter**
 
@@ -541,7 +541,7 @@ filters:
         - java.util.concurrent.TimeoutException
 ```
 
-> ⚠️ Retry Filter 只在GET等幂等方法上启用，不要在POST/PUT上使用，避免重复提交。
+> Retry Filter 只在GET等幂等方法上启用，不要在POST/PUT上使用，避免重复提交。
 
 **⑥ RequestRateLimiter — 请求限流**
 
@@ -671,7 +671,7 @@ filters:
 响应 ← 所有GlobalFilter(order=-∞) ← 路由的GatewayFilter ← 路由目标服务
 ```
 
-> 💡 前置逻辑按order从小到大执行，后置逻辑按order从大到小执行（类似AOP的环绕通知）。
+> 前置逻辑按order从小到大执行，后置逻辑按order从大到小执行（类似AOP的环绕通知）。
 
 ---
 
@@ -830,7 +830,7 @@ server:
 | **配置方式** | Java + properties | properties | Java + yaml（声明式） |
 | **动态路由** | 支持（需配合Spring Cloud Bus） | 支持 | 原生支持 |
 | **学习曲线** | 低 | 中 | 中（需理解响应式编程） |
-| **生产推荐度** | ❌ 不推荐 | ⚠️ 谨慎使用 | ✅ **强烈推荐** |
+| **生产推荐度** | ✗ 不推荐 | 谨慎使用 | ✓ **强烈推荐** |
 
 #### 2.5.2 Zuul 1.x 性能瓶颈
 
@@ -879,7 +879,7 @@ Gateway 线程模型（NIO）
 优势：8核CPU → 16个EventLoop线程 → 支持数万并发连接
 ```
 
-> 🎯 **总结**：Gateway是Spring官方推荐的网关方案，性能优越，功能丰富，社区活跃。Zuul 1.x已进入维护模式，不应在新项目中使用。Zuul 2.x虽然有Netty支持但社区和生态远不如Gateway。
+> **总结**：Gateway是Spring官方推荐的网关方案，性能优越，功能丰富，社区活跃。Zuul 1.x已进入维护模式，不应在新项目中使用。Zuul 2.x虽然有Netty支持但社区和生态远不如Gateway。
 
 ---
 
@@ -988,7 +988,7 @@ filters:
 # 转发到后端: /api/api/v1/user/list （注意：是在原始路径上加前缀）
 ```
 
-> 💡 同时使用StripPrefix和PrefixPath时，执行顺序是：StripPrefix先执行（去除前缀），然后PrefixPath再执行（添加前缀）。
+> 同时使用StripPrefix和PrefixPath时，执行顺序是：StripPrefix先执行（去除前缀），然后PrefixPath再执行（添加前缀）。
 
 #### 错误5：跨域问题 — CORS配置无效
 
@@ -1117,7 +1117,7 @@ public class ModifyBodyGlobalFilter implements GlobalFilter, Ordered {
 }
 ```
 
-> ⚠️ 修改请求体/响应体是Gateway的进阶操作，涉及`DataBuffer`管理，稍有不慎会导致内存泄漏。建议优先使用Header/Parameter传递信息，仅在必要时修改Body。
+> 修改请求体/响应体是Gateway的进阶操作，涉及`DataBuffer`管理，稍有不慎会导致内存泄漏。建议优先使用Header/Parameter传递信息，仅在必要时修改Body。
 
 ### 3.2 误区澄清
 
@@ -2277,7 +2277,7 @@ public class SentinelGatewayConfig {
 }
 ```
 
-> 💡 生产环境中，建议通过Sentinel控制台动态配置规则，而不是写死在代码中。使用Nacos数据源可以实现规则持久化。
+> 生产环境中，建议通过Sentinel控制台动态配置规则，而不是写死在代码中。使用Nacos数据源可以实现规则持久化。
 
 #### 5.3.5 Sentinel控制台规则配置（Nacos data-id示例）
 
@@ -2399,7 +2399,7 @@ spring:
               - X-Error-Code
 ```
 
-> ⚠️ yaml方式配置CORS时，注意缩进和数组格式。`allowed-origin-patterns` 支持通配符`*`，`allowed-origins` 不支持。
+> yaml方式配置CORS时，注意缩进和数组格式。`allowed-origin-patterns` 支持通配符`*`，`allowed-origins` 不支持。
 
 #### 5.4.3 细粒度CORS（按路由配置）
 
@@ -2953,7 +2953,7 @@ management:
 | `gateway.filter.count` | 过滤器计数 | `gateway_filter_count` |
 | `gateway.httpclient.connections` | 连接数 | `gateway_httpclient_connections` |
 
-> 🎯 在生产环境中，务必配置Gateway的监控告警，包括：路由404率飙升、请求延迟P99超阈值、限流触发次数、5xx错误率等关键指标。
+> 在生产环境中，务必配置Gateway的监控告警，包括：路由404率飙升、请求延迟P99超阈值、限流触发次数、5xx错误率等关键指标。
 
 ---
 

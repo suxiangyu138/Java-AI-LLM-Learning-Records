@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [包装前后：模型差异在哪里](#1-包装前后模型差异在哪里)
 2. [TrainingArguments 要点](#2-trainingarguments-要点)
@@ -141,7 +141,7 @@ tokenizer.save_pretrained("./dolly-lora")
 4. 显存账本的三级结构（全量/LoRA/QLoRA）？各省了哪一块？
 5. 恢复训练为什么天然方便？评估为什么不能只看 loss？
 
-> 🎯 **核心要点**：PEFT 与 Trainer 是零摩擦集成——**包装即全部差异，循环仍是 transformers 的活**；LoRA 专属设置只有三处：**学习率 2e-4、batch 放大、save_only_model**；"数据质量决定上限，LoRA 决定下限"。
+> **核心要点**：PEFT 与 Trainer 是零摩擦集成——**包装即全部差异，循环仍是 transformers 的活**；LoRA 专属设置只有三处：**学习率 2e-4、batch 放大、save_only_model**；"数据质量决定上限，LoRA 决定下限"。
 
 ---
 

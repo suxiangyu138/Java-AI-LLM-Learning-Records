@@ -1,7 +1,7 @@
 # 07-AI 能力与 MCP 调试
 > APIFox 的 AI 三件套：文档自愈（Self-Healing）、CLI+Skill for AI Agent、MCP 调试——API 工具链的 AI 原生进化
 
-## 📚 目录
+## 目录
 1. [AI 能力全景](#1-ai-能力全景)
 2. [文档自愈（Self-Healing）](#2-文档自愈self-healing)
 3. [CLI + Skill：AI Agent 工作流入口](#3-cli--skillai-agent-工作流入口)
@@ -16,13 +16,13 @@
 
 | 能力 | 解决的问题 | 2026 状态 |
 |------|-----------|-----------|
-| 文档自愈（Self-Healing） | 后端重构后文档/测试/Mock 手动更新的痛苦 | ✅ 已上线 |
-| CLI + Skill for Agent | AI Agent（Cursor/Claude Code 等）无法稳定操作 APIFox | ✅ 已上线 |
-| cli-schema | Agent 写入复杂 JSON 结构前的校验 | ✅ 已上线 |
-| MCP 调试 | MCP Server 的 Tools/Resources/Prompts 调试 | ✅ 已上线（1 月） |
-| AI 分支 | AI 修改资源的隔离与可审查 | ✅ 已上线 |
+| 文档自愈（Self-Healing） | 后端重构后文档/测试/Mock 手动更新的痛苦 | ✓ 已上线 |
+| CLI + Skill for Agent | AI Agent（Cursor/Claude Code 等）无法稳定操作 APIFox | ✓ 已上线 |
+| cli-schema | Agent 写入复杂 JSON 结构前的校验 | ✓ 已上线 |
+| MCP 调试 | MCP Server 的 Tools/Resources/Prompts 调试 | ✓ 已上线（1 月） |
+| AI 分支 | AI 修改资源的隔离与可审查 | ✓ 已上线 |
 
-> 🎯 **主线**：APIFox 正在成为"AI Agent 的 API 工作台"——不仅人用，AI 也能用，且 AI 的修改可审查、可回滚。
+> **主线**：APIFox 正在成为"AI Agent 的 API 工作台"——不仅人用，AI 也能用，且 AI 的修改可审查、可回滚。
 
 ## 2. 文档自愈（Self-Healing）
 
@@ -60,7 +60,7 @@ AI 自愈流程：
   AI 自愈：2 小时（+ 人工确认）
 ```
 
-> ⚠️ **自愈不是无人值守**：AI 生成"建议修改"，人工确认后合入——与代码 AI 助手（Copilot）的定位一致：**AI 提议，人决策**。
+> **自愈不是无人值守**：AI 生成"建议修改"，人工确认后合入——与代码 AI 助手（Copilot）的定位一致：**AI 提议，人决策**。
 
 ## 3. CLI + Skill：AI Agent 工作流入口
 
@@ -73,9 +73,9 @@ AI Agent（Cursor/Claude Code/Trae/Codex）直接操作 APIFox 的难点：
   × 写入的 JSON 结构可能不合法
 
 CLI + Skill 的解法：
-  ✅ CLI 提供结构化命令（接口查看/用例创建/场景编排/测试运行）
-  ✅ 8 个 SKILL 教 Agent 理解 CLI 命令与任务流程
-  ✅ cli-schema 写入前校验 JSON 结构
+  ✓ CLI 提供结构化命令（接口查看/用例创建/场景编排/测试运行）
+  ✓ 8 个 SKILL 教 Agent 理解 CLI 命令与任务流程
+  ✓ cli-schema 写入前校验 JSON 结构
 ```
 
 ### 3.2 Agent 可用操作
@@ -127,7 +127,7 @@ apifox cli-schema validate \
 | 嵌套结构 | 深层对象/数组结构正确 |
 | 类型 | 字段类型匹配 |
 
-> 💡 价值：**AI 生成的用例/接口数据先过校验再写入**——避免"AI 写入了结构错误的数据"污染 APIFox 资源。
+> 价值：**AI 生成的用例/接口数据先过校验再写入**——避免"AI 写入了结构错误的数据"污染 APIFox 资源。
 
 ## 5. MCP 调试
 
@@ -168,7 +168,7 @@ mcpServers:
     # 或 stdio: ["node", "server.js"]
 ```
 
-> 💡 与 [03-AI大模型官方文档](../../../06-Spring全家桶/Spring%20AI/03-模型接入与结构化输出.md) 联动：调试 MCP Server 是 Agent 工具链上线的第一道验证——APIFox 补上了"API 调试工具 → MCP 调试"的能力缺口。
+> 与 [03-AI大模型官方文档](../../../06-Spring全家桶/Spring%20AI/03-模型接入与结构化输出.md) 联动：调试 MCP Server 是 Agent 工具链上线的第一道验证——APIFox 补上了"API 调试工具 → MCP 调试"的能力缺口。
 
 ## 6. AI 分支
 
@@ -207,7 +207,7 @@ Agent 修改资源 → 自动创建分支 → 独立修改 → 差异预览 → 
 
 ## 8. 核心要点
 
-> 🎯 **核心要点**：
+> **核心要点**：
 > - AI 三件套：文档自愈（感知代码变更自动更新）、CLI+Skill（Agent 可操作）、MCP 调试（MCP Server 验证）；
 > - 自愈四能力：AST 扫描、语义对齐（98% 重命名识别）、依赖映射修复、版本回溯——**AI 提议，人决策**；
 > - CLI+Skill：8 个 SKILL 教 Agent 用命令；cli-schema 保证写入结构合法；

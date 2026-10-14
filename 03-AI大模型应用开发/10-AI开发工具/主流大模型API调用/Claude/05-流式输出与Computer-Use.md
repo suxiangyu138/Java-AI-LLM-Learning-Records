@@ -1,6 +1,6 @@
 # 05 - 流式输出与 Computer Use
 
-> 🎯 Claude 的 SSE 流式输出 + Computer Use 桌面操控 + 视觉输入= 三大差异化能力。流式实现逐 Token 打字机效果，Computer Use 让 Claude 操控桌面 GUI（业界独有）
+> Claude 的 SSE 流式输出 + Computer Use 桌面操控 + 视觉输入= 三大差异化能力。流式实现逐 Token 打字机效果，Computer Use 让 Claude 操控桌面 GUI（业界独有）
 
 ---
 
@@ -125,7 +125,7 @@ tools = [{
 ```
 
 **Computer Use 的适用边界：**
-| ✅ 适合 | ❌ 不适合 |
+| ✓ 适合 | ✗ 不适合 |
 |---------|----------|
 | 旧系统无 API 可调 | 有稳定 API 的服务 |
 | 一次性任务（无需重建 API） | 高频/大规模自动化 |
@@ -164,6 +164,6 @@ response = client.messages.create(
 
 ---
 
-> 🎯 **核心要点**：Claude 三大差异化能力 — **① 思考流式（thinking_delta → UI 可折叠推理面板）② Computer Use（操控桌面 GUI，OSWorld 72.5%）③ 视觉输入（base64 图片分析）**。流式事件顺序：thinking_delta（先） → text_delta（后），映射到前端 = "思考面板" → "回答打字机"。
+> **核心要点**：Claude 三大差异化能力 — **① 思考流式（thinking_delta → UI 可折叠推理面板）② Computer Use（操控桌面 GUI，OSWorld 72.5%）③ 视觉输入（base64 图片分析）**。流式事件顺序：thinking_delta（先） → text_delta（后），映射到前端 = "思考面板" → "回答打字机"。
 
 **下一模块**：[06-生产最佳实践与成本优化](06-生产最佳实践与成本优化.md) / **返回总览**：[00-总览](00-Claude-API知识体系总览.md)

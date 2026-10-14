@@ -1,6 +1,6 @@
 # 05 - Python 与 Java 联动实战
 
-> 🎯 最优架构 = Java 管业务 + Python 跑 AI。三种联动方式：HTTP、进程调用、gRPC
+> 最优架构 = Java 管业务 + Python 跑 AI。三种联动方式：HTTP、进程调用、gRPC
 
 ## 1. FastAPI 服务（推荐）
 

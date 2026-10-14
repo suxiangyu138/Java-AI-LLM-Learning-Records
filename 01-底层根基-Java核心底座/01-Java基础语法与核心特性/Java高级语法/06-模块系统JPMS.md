@@ -1,6 +1,6 @@
 # 06 - 模块系统 JPMS
 
-> 🎯 Java 9 引入的模块系统(JPMS)改变了 Java 的封装边界——从"所有 public 都可见"到"显式声明导出哪些包"。虽然大多数项目不需要自定义模块，但理解模块化是读懂 JDK 源码和解决 ClassNotFoundException 的关键
+> Java 9 引入的模块系统(JPMS)改变了 Java 的封装边界——从"所有 public 都可见"到"显式声明导出哪些包"。虽然大多数项目不需要自定义模块，但理解模块化是读懂 JDK 源码和解决 ClassNotFoundException 的关键
 
 ---
 

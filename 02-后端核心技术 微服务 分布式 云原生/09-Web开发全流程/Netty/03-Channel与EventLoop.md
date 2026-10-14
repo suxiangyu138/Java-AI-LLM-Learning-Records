@@ -1,6 +1,6 @@
 # 03 - Channel 与 EventLoop
 
-> 🎯 Channel 是连接的抽象、EventLoop 是执行的线程 — Channel 与 EventLoop 的绑定关系，以及 EventLoopGroup 的线程模型，是理解 Netty 高性能的关键
+> Channel 是连接的抽象、EventLoop 是执行的线程 — Channel 与 EventLoop 的绑定关系，以及 EventLoopGroup 的线程模型，是理解 Netty 高性能的关键
 
 ---
 
@@ -81,7 +81,7 @@ while (true) {
 
 ## 3. 线程绑定模型
 
-> ⚠️ **核心规则**：一个 Channel 从注册到销毁，始终绑定同一个 EventLoop 线程 — 无锁化设计。
+> **核心规则**：一个 Channel 从注册到销毁，始终绑定同一个 EventLoop 线程 — 无锁化设计。
 
 ```text
 Boss EventLoopGroup(1)          Worker EventLoopGroup(4)
@@ -101,7 +101,7 @@ Boss EventLoopGroup(1)          Worker EventLoopGroup(4)
 ### 3.1 耗时操作的处理
 
 ```java
-// ❌ 错误：在 EventLoop 线程中执行耗时操作
+// ✗ 错误：在 EventLoop 线程中执行耗时操作
 public class BadHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
@@ -110,7 +110,7 @@ public class BadHandler extends ChannelInboundHandlerAdapter {
     }
 }
 
-// ✅ 正确：提交到业务线程池
+// ✓ 正确：提交到业务线程池
 public class GoodHandler extends ChannelInboundHandlerAdapter {
     private final ExecutorService bizPool = Executors.newFixedThreadPool(64);
 
@@ -123,7 +123,7 @@ public class GoodHandler extends ChannelInboundHandlerAdapter {
     }
 }
 
-// ✅ 也可以用 Netty 提供的 DefaultEventExecutorGroup
+// ✓ 也可以用 Netty 提供的 DefaultEventExecutorGroup
 pipeline.addLast(new DefaultEventExecutorGroup(16), new GoodHandler());
 ```
 
@@ -138,7 +138,7 @@ pipeline.addLast(new DefaultEventExecutorGroup(16), new GoodHandler());
 ChannelFuture future = bootstrap.connect("127.0.0.1", 8080).sync();
 if (future.isSuccess()) { /* 连接成功 */ }
 
-// ═══ 方式2：addListener() 异步回调（⭐ 推荐） ═══
+// ═══ 方式2：addListener() 异步回调（★ 推荐） ═══
 ChannelFuture future = bootstrap.connect("127.0.0.1", 8080);
 future.addListener(f -> {
     if (f.isSuccess()) {
@@ -188,4 +188,4 @@ promise.setSuccess("Hello");
 </dependency>
 ```
 
-> 🎯 **核心理解**：Channel = 网络连接抽象，EventLoop = 执行线程，两者永久绑定 → 无锁 → 高性能。耗时逻辑务必异步到业务线程池。
+> **核心理解**：Channel = 网络连接抽象，EventLoop = 执行线程，两者永久绑定 → 无锁 → 高性能。耗时逻辑务必异步到业务线程池。

@@ -6,7 +6,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [Multiplexing 连接复用](#1-multiplexing-连接复用)
 2. [Agent Forwarding 正确姿势](#2-agent-forwarding-正确姿势)
@@ -59,7 +59,7 @@ ssh -O check server1      # 检查复用状态
 ssh -O stop server1       # 主动断开复用连接
 ```
 
-> ⚠️ **注意**：ControlPath 包含特殊字符（%r 用户/%h 主机/%p 端口）——socket 路径过长会报错（Unix socket 限长 108 字符），主机名长时缩短路径。
+> **注意**：ControlPath 包含特殊字符（%r 用户/%h 主机/%p 端口）——socket 路径过长会报错（Unix socket 限长 108 字符），主机名长时缩短路径。
 
 ---
 
@@ -100,7 +100,7 @@ ssh-add -l              # 看到本机密钥被转发（验证生效）
 
 ### 2.3 安全风险（必须了解）
 
-> ⚠️ **Agent Forwarding 的著名风险**：中间机器被攻破 → 攻击者能**借用你的 agent 认证任何配置了你公钥的服务器**（无法读取私钥，但能使用认证能力）：
+> **Agent Forwarding 的著名风险**：中间机器被攻破 → 攻击者能**借用你的 agent 认证任何配置了你公钥的服务器**（无法读取私钥，但能使用认证能力）：
 
 ```text
 风险场景
@@ -117,7 +117,7 @@ ssh-add -l              # 看到本机密钥被转发（验证生效）
 └── ⑤ 最安全：每跳显式配置密钥（02 篇方案 A）
 ```
 
-> 🎯 **2026 结论**：**Agent Forwarding 是「便捷但危险」**——多级跳板优先用 ProxyJump + 逐跳密钥；Agent Forwarding 仅用于「无法逐跳配置密钥」的可信内网。
+> **2026 结论**：**Agent Forwarding 是「便捷但危险」**——多级跳板优先用 ProxyJump + 逐跳密钥；Agent Forwarding 仅用于「无法逐跳配置密钥」的可信内网。
 
 ---
 
@@ -287,7 +287,7 @@ ssh -o BatchMode=yes server       # 无交互测试（密钥认证是否成功�
 
 ## 7. 核心要点
 
-> 🎯 **核心要点**：
+> **核心要点**：
 > 1. Multiplexing（ControlMaster auto）让高频 SSH 秒连——高频操作必备
 > 2. **Agent Forwarding 是「便捷但危险」**：2026 优先 ProxyJump + 逐跳密钥；转发仅限可信中间机
 > 3. 堡垒机模式：内网不暴露公网 + ProxyJump 透明穿透 + 堡垒机专项加固（密钥/限源/fail2ban/审计）

@@ -2,7 +2,7 @@
 
 > 定位：双向链表的理论纵深——API 设计与哨兵、LRU/LFU 设计模式、循环双端队列、与哈希的复合结构、Java 内部实现对比
 
-## 📚 目录
+## 目录
 
 1. [双向链表 API 设计](#1-双向链表-api-设计)
 2. [哨兵节点：工程细节](#2-哨兵节点工程细节)
@@ -22,13 +22,13 @@
 单向链表：删除节点需要找前驱（O(n)）
 双向链表：prev 指针直接给前驱（O(1)）
 
-⚠️ 双向链表的 O(1) 能力：
+双向链表的 O(1) 能力：
   ① 头部插入/删除
   ② 尾部插入/删除
   ③ 任意已知节点的插入/删除
   → 配合哈希定位 = 全 O(1)
 
-⚠️ 面试必答：
+面试必答：
 "'已知节点'的插入删除 O(1) 是双向链表
  的核心价值——哈希提供'定位'，
  双向链表提供'操作'，组合成全 O(1)。"
@@ -45,7 +45,7 @@ class DListNode {
 }
 
 class DLinkedList {
-    DListNode head, tail;           // ⚠️ 头尾指针
+    DListNode head, tail;           // 头尾指针
 
     void addFirst(DListNode node) {          // 头部插入 O(1)
         node.next = head;
@@ -63,7 +63,7 @@ class DLinkedList {
         if (head == null) head = node;
     }
 
-    void remove(DListNode node) {            // ⚠️ 任意节点删除 O(1)
+    void remove(DListNode node) {            // 任意节点删除 O(1)
         if (node.prev != null) node.prev.next = node.next;
         else head = node.next;
         if (node.next != null) node.next.prev = node.prev;
@@ -75,7 +75,7 @@ class DLinkedList {
         addLast(node);
     }
 }
-// ⚠️ 边界：空链表/单节点/头尾操作（prev/next 判空）
+// 边界：空链表/单节点/头尾操作（prev/next 判空）
 ```
 
 ### 1.3 双向链表的变体
@@ -88,7 +88,7 @@ class DLinkedList {
 | 带频次 | 节点存 count | LFU 桶内 |
 
 ```
-⚠️ 面试表达：
+面试表达：
 "双向链表四变体——哨兵版最实用
  （146 用哨兵免空判）、循环版用于
  环形场景（641 循环队列）。"
@@ -105,11 +105,11 @@ class DLinkedList {
   ① 免去空链表判断（head/tail 永远存在）
   ② 插入/删除边界统一（无特判）
 
-⚠️ 对比无哨兵：
+对比无哨兵：
   无哨兵：addFirst 要判 head 是否 null
   有哨兵：addAfter(dummy) 天然正确
 
-⚠️ 面试必答：
+面试必答：
 "哨兵节点把'边界判断'变成'普通操作'——
  头尾永远存在，插入删除代码统一。
  工程上哨兵是双向链表的标准写法。"
@@ -126,11 +126,11 @@ class LRUList {
         Node(int k, int v) { key = k; val = v; }
     }
 
-    private final Node head = new Node(0, 0);   // ⚠️ 哨兵头（最旧侧）
+    private final Node head = new Node(0, 0);   // 哨兵头（最旧侧）
     private final Node tail = new Node(0, 0);   // 哨兵尾（最新侧）
 
     LRUList() {
-        head.next = tail;                        // ⚠️ 初始互指
+        head.next = tail;                        // 初始互指
         tail.prev = head;
     }
 
@@ -146,7 +146,7 @@ class LRUList {
         node.next.prev = node.prev;
     }
 }
-// ⚠️ 哨兵互指初始化是常见遗漏（否则空链表操作 NPE）
+// 哨兵互指初始化是常见遗漏（否则空链表操作 NPE）
 ```
 
 ---
@@ -161,10 +161,10 @@ LRU = 哈希（定位）+ 双向链表（顺序）+ 哨兵（边界）
   ② put：新 key → 尾部插入 + 超容量淘汰头部
   ③ 节点存 key：淘汰时同步删哈希
 
-⚠️ 复杂度论证（面试必答）：
+复杂度论证（面试必答）：
   哈希 get O(1) + 链表 move O(1) = O(1)
 
-⚠️ 完整实现见设计/02 的 146（本模块讲设计模式）
+完整实现见设计/02 的 146（本模块讲设计模式）
 ```
 
 ### 3.2 LRU 变体
@@ -177,7 +177,7 @@ LRU = 哈希（定位）+ 双向链表（顺序）+ 哨兵（边界）
 | 并发 LRU | 锁/分段（见设计/01） |
 
 ```
-⚠️ 面试表达：
+面试表达：
 "LRU 是设计题模板——'哈希定位 +
  双向链表保序 + 哨兵边界'三件套，
  变体（LFU/LRU-K/过期）都是加状态。"
@@ -196,11 +196,11 @@ LFU = 最少使用淘汰（频次最低者）
   频次 → 双向链表（每个频次一条 LRU 链）
   维护 minFreq（当前最低频次）
 
-⚠️ 复杂度论证：
+复杂度论证：
   访问 +1 频次：节点从 freq 链移到 freq+1 链（O(1)）
   淘汰：minFreq 链的头部（O(1)）
 
-⚠️ 面试必答：
+面试必答：
 "LFU = 双哈希嵌套——外层 key 哈希定位节点，
  内层'频次 → LRU 链'。访问时跨链移动 O(1)，
  淘汰取 minFreq 链头。"
@@ -216,11 +216,11 @@ class LFUCache {
     int minFreq = 0;
     int capacity;
 
-    void touch(Node node) {                  // ⚠️ 访问：频次 +1
+    void touch(Node node) {                  // 访问：频次 +1
         int oldFreq = node.freq;
         freqList.get(oldFreq).remove(node);
         if (freqList.get(oldFreq).isEmpty()
-                && oldFreq == minFreq) minFreq++;      // ⚠️ minFreq 提升
+                && oldFreq == minFreq) minFreq++;      // minFreq 提升
         node.freq++;
         freqList.computeIfAbsent(node.freq, k -> new LinkedList<>())
                 .addLast(node);              // 新频次链尾部（LRU）
@@ -231,7 +231,7 @@ class LFUCache {
         nodes.remove(victim.key);
     }
 }
-// ⚠️ 面试必答："LFU 的难点是 minFreq 维护——
+// 面试必答："LFU 的难点是 minFreq 维护——
 //   空链且等于 minFreq 时 minFreq++；
 //   新节点 freq=1 时 minFreq 重置为 1。"
 ```
@@ -248,7 +248,7 @@ class LFUCache {
   ① 循环数组：head/tail 指针 + 取模（O(1) 空间好）
   ② 双向链表：哨兵 + 前后操作（O(1) 无扩容）
 
-⚠️ 面试必答：
+面试必答：
 "双端队列 = 双向链表的天然应用——
  前后插入删除都是 O(1)；
  数组版用循环下标模拟（641 两种都可）。"
@@ -260,13 +260,13 @@ class LFUCache {
 /** 641 循环双端队列（数组版要点） */
 class MyCircularDeque {
     private final int[] data;
-    private int head = 0, tail = 0;          // ⚠️ 循环下标
+    private int head = 0, tail = 0;          // 循环下标
     private int size = 0;
     private final int capacity;
 
     boolean insertFront(int value) {
         if (isFull()) return false;
-        head = (head - 1 + capacity) % capacity;   // ⚠️ 前移（防负）
+        head = (head - 1 + capacity) % capacity;   // 前移（防负）
         data[head] = value;
         size++;
         return true;
@@ -275,14 +275,14 @@ class MyCircularDeque {
     boolean insertLast(int value) {
         if (isFull()) return false;
         data[tail] = value;
-        tail = (tail + 1) % capacity;        // ⚠️ 后移（循环）
+        tail = (tail + 1) % capacity;        // 后移（循环）
         size++;
         return true;
     }
-    // ⚠️ 删除同理：front 后移、last 前移
+    // 删除同理：front 后移、last 前移
 }
-// ⚠️ 循环下标的统一公式：(i + delta + capacity) % capacity
-// ⚠️ 面试必答："循环队列 = 数组 + 取模下标——
+// 循环下标的统一公式：(i + delta + capacity) % capacity
+// 面试必答："循环队列 = 数组 + 取模下标——
 //   head/tail 环形移动，满/空用 size 判断
 //   （不用 head==tail 二义）。"
 ```
@@ -296,15 +296,15 @@ class MyCircularDeque {
 | 类 | 底层 | 特点 |
 |------|------|------|
 | LinkedList | 双向链表 | 任意位置 O(n) 查找 |
-| ArrayDeque | 循环数组 | ⚠️ 更推荐（缓存友好） |
+| ArrayDeque | 循环数组 | 更推荐（缓存友好） |
 | LinkedHashMap | 哈希+双向链表 | accessOrder 可做 LRU |
 
 ```
-⚠️ 工程真相：
+工程真相：
   LinkedList 的"随机访问 O(n)"常被误解
   ArrayDeque 在栈/队列场景更快（数组连续）
 
-⚠️ 面试必答：
+面试必答：
 "Java 栈队列首选 ArrayDeque（数组连续、缓存友好）；
  LinkedList 的双向链表适合'已知节点的 O(1) 删除'
  （配合哈希）。LinkedHashMap(accessOrder=true)
@@ -316,13 +316,13 @@ class MyCircularDeque {
 ```java
 // JDK 内置 LRU（无需手写）：
 LinkedHashMap<Integer, Integer> lru =
-        new LinkedHashMap<>(16, 0.75f, true) {   // ⚠️ accessOrder=true
+        new LinkedHashMap<>(16, 0.75f, true) {   // accessOrder=true
     @Override
     protected boolean removeEldestEntry(Map.Entry<Integer, Integer> eldest) {
         return size() > capacity;                 // 超容量淘汰最老
     }
 };
-// ⚠️ 面试表达："LinkedHashMap(accessOrder=true)
+// 面试表达："LinkedHashMap(accessOrder=true)
 //   + removeEldestEntry = JDK 内置 LRU——
 //   手写 146 展示底层原理，工程用内置。"
 ```
@@ -367,7 +367,7 @@ LinkedHashMap<Integer, Integer> lru =
 
 ---
 
-> 🎯 **核心要点**：双向链表 = **O(1) 删除**（prev 指针）+ **哨兵**（边界统一）+ **复合**（哈希定位）。LRU/LFU 是旗舰应用，循环队列是数组变体，Java 内置（ArrayDeque/LinkedHashMap）是工程答案——"三件套 + 状态扩展"覆盖全部设计题。
+> **核心要点**：双向链表 = **O(1) 删除**（prev 指针）+ **哨兵**（边界统一）+ **复合**（哈希定位）。LRU/LFU 是旗舰应用，循环队列是数组变体，Java 内置（ArrayDeque/LinkedHashMap）是工程答案——"三件套 + 状态扩展"覆盖全部设计题。
 
 ---
 

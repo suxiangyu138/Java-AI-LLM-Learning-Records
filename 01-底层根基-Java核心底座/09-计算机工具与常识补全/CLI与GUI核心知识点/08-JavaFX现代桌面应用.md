@@ -1,6 +1,6 @@
 # 08 - JavaFX 现代桌面应用
 
-> 🎯 JavaFX 是 Java 桌面应用的现代方案 — FXML 声明式 UI + CSS 样式 + SceneBuilder 可视化设计 + Property 数据绑定
+> JavaFX 是 Java 桌面应用的现代方案 — FXML 声明式 UI + CSS 样式 + SceneBuilder 可视化设计 + Property 数据绑定
 
 ---
 
@@ -93,7 +93,7 @@ scene.getStylesheets().add(getClass().getResource("/style.css").toExternalForm()
 
 ---
 
-## 4. Property 数据绑定（⭐ JavaFX 核心特色）
+## 4. Property 数据绑定（★ JavaFX 核心特色）
 
 ```java
 // Property — 可观察的值（类似 Vue 的 reactive）
@@ -147,4 +147,4 @@ jpackage --name MyApp --input target/ --main-jar app.jar --main-class com.exampl
 # → 生成 .exe (Windows) / .dmg (macOS) / .deb (Linux)
 ```
 
-> 🎯 **JavaFX vs Swing**：新项目用 JavaFX（FXML+CSS+Property 绑定比 Swing 的纯 Java 代码高效很多）。SceneBuilder 是拖拽设计 UI 的利器。
+> **JavaFX vs Swing**：新项目用 JavaFX（FXML+CSS+Property 绑定比 Swing 的纯 Java 代码高效很多）。SceneBuilder 是拖拽设计 UI 的利器。

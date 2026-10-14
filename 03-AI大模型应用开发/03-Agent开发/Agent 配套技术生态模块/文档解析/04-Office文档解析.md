@@ -18,7 +18,7 @@ with zipfile.ZipFile("doc.docx") as z:
     texts = re.findall(r"<w:t[^>]*>(.*?)</w:t>", xml)   # 简易提取
 ```
 
-> 🎯 核心要点：**Office 文档的结构是"本来就存在"的**（不像 PDF 要恢复）——解析的关键是"按结构走"，而不是"猜结构"。用对了库，DOCX 的结构保留度天然高于 PDF。
+> 核心要点：**Office 文档的结构是"本来就存在"的**（不像 PDF 要恢复）——解析的关键是"按结构走"，而不是"猜结构"。用对了库，DOCX 的结构保留度天然高于 PDF。
 
 ## 2. 四件套库速查
 
@@ -80,7 +80,7 @@ rows = [[cell.value for cell in row] for row in ws.iter_rows()]
 | 大文件 | `read_only=True` 流式读取，防内存爆炸 |
 | 多 sheet | 按 sheet 名分别结构化，保留 sheet 名作元数据 |
 
-> 💡 XLSX 解析后建议**保持表格式输出（Markdown 表格/JSON）**而非摊成纯文本——这是 [07 模块](07-表格与版面结构化.md) 的核心原则，表格数据线性化会毁掉行列关系。
+> XLSX 解析后建议**保持表格式输出（Markdown 表格/JSON）**而非摊成纯文本——这是 [07 模块](07-表格与版面结构化.md) 的核心原则，表格数据线性化会毁掉行列关系。
 
 ## 5. HTML：去噪是第一优先级
 
@@ -109,7 +109,7 @@ md = main_to_markdown(main)            # 标题→#、表格→| |
 | PDF | 字体+坐标 | Docling/PaddleOCR-VL 直接出 LaTeX |
 | 扫描件 | 图像 | OCR 公式识别（PaddleOCR-VL 支持公式转 LaTeX） |
 
-> 💡 论文/教材场景公式必须转 LaTeX 才可检索可引用——纯文本提取会把公式变成乱码。
+> 论文/教材场景公式必须转 LaTeX 才可检索可引用——纯文本提取会把公式变成乱码。
 
 ## 7. WPS 与兼容性
 
@@ -125,7 +125,7 @@ md = main_to_markdown(main)            # 标题→#、表格→| |
 soffice --headless --convert-to docx --outdir /tmp/input/ legacy.doc
 ```
 
-> 🎯 核心要点：Office 解析的成功率排序是 XLSX > DOCX > PPTX > 老格式——**遇到老格式（.doc/.ppt/.xls）先转新格式再解析**，别自己写解析器。表格类（XLSX）输出保持表格结构，这是下游 RAG/入库的前提。
+> 核心要点：Office 解析的成功率排序是 XLSX > DOCX > PPTX > 老格式——**遇到老格式（.doc/.ppt/.xls）先转新格式再解析**，别自己写解析器。表格类（XLSX）输出保持表格结构，这是下游 RAG/入库的前提。
 
 ## 8. 端到端：批量 Office → Markdown 入库前置格式
 
@@ -187,7 +187,7 @@ def extract_meta(path: str) -> dict:
             "paragraphs": len(doc.paragraphs), "tables": len(doc.tables)}
 ```
 
-> 💡 元数据是 RAG 检索的过滤键（作者/时间/文档类型）——Office 文档的元数据免费可得（XML 里现成），务必随正文一起入库（衔接 08 篇元数据清单）。
+> 元数据是 RAG 检索的过滤键（作者/时间/文档类型）——Office 文档的元数据免费可得（XML 里现成），务必随正文一起入库（衔接 08 篇元数据清单）。
 
 Office 解析的最终心智：**"格式是外壳，XML 是本体"**——一切解析都是读 XML 树，遇到任何奇怪格式问题，先解压看一眼 document.xml 就懂了（`unzip -p file.docx word/document.xml | head`）。
 

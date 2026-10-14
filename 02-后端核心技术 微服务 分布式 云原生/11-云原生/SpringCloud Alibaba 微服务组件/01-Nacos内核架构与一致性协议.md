@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [Nacos 整体架构](#1-nacos-整体架构)
 2. [AP 模式：Distro 协议深度解析](#2-ap-模式distro-协议深度解析)
@@ -89,10 +89,10 @@ Nacos 配置中心三层模型：
   → 需要 AP：高可用 + 最终一致性
 
 Distro 的设计目标：
-  ✅ 每个 Nacos 节点都可以独立处理写请求
-  ✅ 写请求只需一个节点确认即可返回
-  ✅ 异步同步到其他节点，最终一致
-  ✅ 节点间对等（无 Leader），避免选举延迟
+  ✓ 每个 Nacos 节点都可以独立处理写请求
+  ✓ 写请求只需一个节点确认即可返回
+  ✓ 异步同步到其他节点，最终一致
+  ✓ 节点间对等（无 Leader），避免选举延迟
 ```
 
 ### 2.2 Distro 写流程
@@ -108,7 +108,7 @@ Step 2: Server-A 写入本地
   → 写入本地存储 (Derby/MySQL)
 
 Step 3: Server-A → Client
-  ✅ 立即返回成功（不等待其他节点确认！）
+  ✓ 立即返回成功（不等待其他节点确认！）
 
 Step 4: Server-A 异步同步到其他节点
   → Distro 协议：生成 distro 任务
@@ -178,9 +178,9 @@ public class DistroConsistencyChecker {
   配置数据必须强一致 → 用户改了配置，必须确认写入成功，不能丢
 
 Raft 的设计目标：
-  ✅ 强一致性：Leader 提案 → 多数派确认 → 提交
-  ✅ 自动选举：Leader 宕机 → 新 Leader 选出
-  ✅ 日志复制：顺序 commit，不会出现脑裂
+  ✓ 强一致性：Leader 提案 → 多数派确认 → 提交
+  ✓ 自动选举：Leader 宕机 → 新 Leader 选出
+  ✓ 日志复制：顺序 commit，不会出现脑裂
 ```
 
 ### 3.2 Nacos 中的 Raft 实现
@@ -387,7 +387,7 @@ Nacos 支持三种健康检查协议：
 
 ---
 
-> 🎯 **核心要点**：Nacos 的 CP/AP 双模式是它区别于 Eureka（纯 AP）和 Consul（纯 CP）的核心优势。微服务实例注册用 AP（Distro），配置管理和持久化实例用 CP（Raft），一个组件解决两种一致性需求。理解 Distro 的异步同步窗口（~500ms-2s）和 Raft 的多数派提交，是排查 Nacos 一致性问题的关键。
+> **核心要点**：Nacos 的 CP/AP 双模式是它区别于 Eureka（纯 AP）和 Consul（纯 CP）的核心优势。微服务实例注册用 AP（Distro），配置管理和持久化实例用 CP（Raft），一个组件解决两种一致性需求。理解 Distro 的异步同步窗口（~500ms-2s）和 Raft 的多数派提交，是排查 Nacos 一致性问题的关键。
 
 ---
 

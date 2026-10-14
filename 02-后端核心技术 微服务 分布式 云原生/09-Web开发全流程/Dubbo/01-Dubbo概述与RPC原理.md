@@ -1,6 +1,6 @@
 # 01 - Dubbo 概述与 RPC 原理
 
-> 🎯 理解 RPC 的核心价值是理解 Dubbo 的前提 — 像调用本地方法一样调用远程服务。掌握调用链路、Dubbo 架构分层、与 gRPC/Feign 的定位差异
+> 理解 RPC 的核心价值是理解 Dubbo 的前提 — 像调用本地方法一样调用远程服务。掌握调用链路、Dubbo 架构分层、与 gRPC/Feign 的定位差异
 
 ---
 
@@ -123,10 +123,10 @@ Consumer 启动：
 | 定位 | 高性能 RPC | 跨语言 RPC | HTTP 声明式调用 |
 | 协议 | Dubbo/Triple(HTTP2) | HTTP/2 | HTTP/1.1 |
 | 序列化 | Hessian2/Protobuf | Protobuf | JSON |
-| 性能 | ⭐⭐⭐ 极高 | ⭐⭐⭐ 高 | ⭐⭐ 一般 |
-| 服务治理 | ⭐⭐⭐ 极丰富(内置) | ⭐ 需外部 | ⭐⭐ Spring Cloud 生态 |
-| 跨语言 | Dubbo 3.x Triple ✅ | ✅ 原生支持 | ❌ Java 限定 |
+| 性能 | ★★★ 极高 | ★★★ 高 | ★★ 一般 |
+| 服务治理 | ★★★ 极丰富(内置) | ★ 需外部 | ★★ Spring Cloud 生态 |
+| 跨语言 | Dubbo 3.x Triple ✓ | ✓ 原生支持 | ✗ Java 限定 |
 | 生态 | 国内主流 | Google/CNCF | Netflix→Spring |
 | **推荐场景** | 国内 Java 微服务 | 跨语言/多端 | Spring Cloud 项目 |
 
-> 🎯 **选型建议**：纯 Java 微服务 → Dubbo（性能+治理最优）；跨语言 → gRPC；已有 Spring Cloud 项目 → Feign。Dubbo 3.x Triple 协议兼容 gRPC，跨语言场景也不输 gRPC。
+> **选型建议**：纯 Java 微服务 → Dubbo（性能+治理最优）；跨语言 → gRPC；已有 Spring Cloud 项目 → Feign。Dubbo 3.x Triple 协议兼容 gRPC，跨语言场景也不输 gRPC。

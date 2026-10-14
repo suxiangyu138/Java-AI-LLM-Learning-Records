@@ -3,7 +3,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [sqlite-jdbc 驱动](#1-sqlite-jdbc-驱动)
 2. [连接管理](#2-连接管理)
@@ -377,7 +377,7 @@ try (Statement st = conn.createStatement()) {
 // 常用替代：VACUUM INTO（简单）或文件级方案（Litestream）
 ```
 
-> 🎯 **核心要点**：Java 集成 SQLite = sqlite-jdbc（零依赖）+ SQLiteConfig（初始化 PRAGMA）+ 连接策略（读池写队列）。三个关键纪律：**连接初始化必配 WAL/NORMAL/busy/外键；批量写入必用事务+预编译；类型映射明确（布尔 0/1、日期 ISO8601、JSONB 用 BLOB）**。框架选择：轻量用 JdbcTemplate/MyBatis（无方言坑），JPA 需谨慎评估。
+> **核心要点**：Java 集成 SQLite = sqlite-jdbc（零依赖）+ SQLiteConfig（初始化 PRAGMA）+ 连接策略（读池写队列）。三个关键纪律：**连接初始化必配 WAL/NORMAL/busy/外键；批量写入必用事务+预编译；类型映射明确（布尔 0/1、日期 ISO8601、JSONB 用 BLOB）**。框架选择：轻量用 JdbcTemplate/MyBatis（无方言坑），JPA 需谨慎评估。
 
 ---
 

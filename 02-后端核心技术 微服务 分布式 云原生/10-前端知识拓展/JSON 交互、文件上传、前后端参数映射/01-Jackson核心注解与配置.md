@@ -1,6 +1,6 @@
 # 01 - Jackson 核心注解与配置
 
-> 🎯 Jackson 是 Spring Boot 默认的 JSON 序列化库 — 掌握驼峰下划线转换、日期格式化、字段忽略、枚举映射，80% 的 JSON 问题迎刃而解
+> Jackson 是 Spring Boot 默认的 JSON 序列化库 — 掌握驼峰下划线转换、日期格式化、字段忽略、枚举映射，80% 的 JSON 问题迎刃而解
 
 ---
 
@@ -102,7 +102,7 @@ public class Order {
 ```
 
 ```xml
-<!-- ⚠️ LocalDateTime 需要额外依赖 -->
+<!-- LocalDateTime 需要额外依赖 -->
 <dependency>
     <groupId>com.fasterxml.jackson.datatype</groupId>
     <artifactId>jackson-datatype-jsr310</artifactId>
@@ -126,7 +126,7 @@ public class User {
     private String salt;
 }
 
-// ⭐ 条件序列化（比 @JsonIgnore 更灵活）
+// ★ 条件序列化（比 @JsonIgnore 更灵活）
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)   // null 值不序列化
 public class Result<T> {
@@ -187,4 +187,4 @@ public static OrderStatus fromCode(int code) {
 }
 ```
 
-> 🎯 **最常用组合**：`application.yml` 全局下划线 + `@JsonFormat` 日期 + `@JsonIgnore` 排密码/盐。枚举用 `@JsonValue` 或 `Shape.OBJECT` 而非默认 name()。
+> **最常用组合**：`application.yml` 全局下划线 + `@JsonFormat` 日期 + `@JsonIgnore` 排密码/盐。枚举用 `@JsonValue` 或 `Shape.OBJECT` 而非默认 name()。

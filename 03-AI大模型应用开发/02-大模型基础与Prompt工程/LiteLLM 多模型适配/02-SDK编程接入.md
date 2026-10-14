@@ -1,7 +1,7 @@
 # 02 SDK 编程接入
 > 统一接口实战：completion 全参数、同步异步、流式、成本追踪与 Function Calling
 
-## 📚 目录
+## 目录
 1. [安装与第一个调用](#1-安装与第一个调用)
 2. [completion 参数全解](#2-completion-参数全解)
 3. [同步 / 异步 / 流式三形态](#3-同步--异步--流式三形态)
@@ -54,7 +54,7 @@ export DEEPSEEK_API_KEY=sk-...
 | `openai/vllm-model-name` | 本地 vLLM（OpenAI 兼容） |
 | `bedrock/...` / `vertex_ai/...` | 云平台模型 |
 
-> 🎯 **核心要点**：**模型名 = 路由键**。`供应商前缀/模型名` 是统一规范（省略前缀默认 OpenAI）。key 走环境变量（前缀大写模型名），代码零 key 逻辑。
+> **核心要点**：**模型名 = 路由键**。`供应商前缀/模型名` 是统一规范（省略前缀默认 OpenAI）。key 走环境变量（前缀大写模型名），代码零 key 逻辑。
 
 ## 2. completion 参数全解
 
@@ -91,7 +91,7 @@ resp = completion(
 | `mock_response` | 测试免真实调用 |
 | `metadata` | 元数据（成本归属/审计） |
 
-> ⚠️ 注意：`max_tokens` 在部分新模型（o 系）语境是 `max_completion_tokens`——LiteLLM 做映射；但**各家模型对参数语义有细微差异**（如 temperature 在推理模型被忽略），统一参数 ≠ 行为完全一致。
+> 注意：`max_tokens` 在部分新模型（o 系）语境是 `max_completion_tokens`——LiteLLM 做映射；但**各家模型对参数语义有细微差异**（如 temperature 在推理模型被忽略），统一参数 ≠ 行为完全一致。
 
 ## 3. 同步 / 异步 / 流式三形态
 
@@ -121,11 +121,11 @@ async for chunk in litellm.acompletion(model="gpt-4o", messages=..., stream=True
 | 形态 | 方法 | 场景 |
 |------|------|------|
 | 同步 | `litellm.completion` | 脚本/简单服务 |
-| 异步 | `litellm.acompletion` | ⭐ FastAPI/Agent 循环（不冻结事件循环） |
+| 异步 | `litellm.acompletion` | ★ FastAPI/Agent 循环（不冻结事件循环） |
 | 同步流式 | `stream=True` 迭代 | 命令行 Demo |
-| 异步流式 | `acompletion + stream=True` | ⭐ 生产 API（SSE） |
+| 异步流式 | `acompletion + stream=True` | ★ 生产 API（SSE） |
 
-> 🎯 **核心要点**：**async 环境必须用 `acompletion`**（FastAPI 体系金科律：async def 里不能调同步阻塞）。生产 Agent/FastAPI 服务的标准形态 = `acompletion + stream=True`。
+> **核心要点**：**async 环境必须用 `acompletion`**（FastAPI 体系金科律：async def 里不能调同步阻塞）。生产 Agent/FastAPI 服务的标准形态 = `acompletion + stream=True`。
 
 ## 4. 统一参数映射
 
@@ -147,7 +147,7 @@ async for chunk in litellm.acompletion(model="gpt-4o", messages=..., stream=True
 | 参数兼容 | 各家支持的参数子集 |
 | 模型特定参数 | `extra_body` / 供应商前缀参数（如 thinking_mode） |
 
-> 💡 映射的边界：**通用参数（temperature/max_tokens）统一；模型特有能力用前缀参数**——如 DeepSeek 的 `thinking_mode` 在模型名前缀 `deepseek/` 时可用。LiteLLM 的映射覆盖 100+ 家，但"边缘能力"仍需查文档。
+> 映射的边界：**通用参数（temperature/max_tokens）统一；模型特有能力用前缀参数**——如 DeepSeek 的 `thinking_mode` 在模型名前缀 `deepseek/` 时可用。LiteLLM 的映射覆盖 100+ 家，但"边缘能力"仍需查文档。
 
 ## 5. Function Calling 支持
 
@@ -183,13 +183,13 @@ if resp.choices[0].message.tool_calls:
 
 | FC 能力 | LiteLLM 支持 |
 |---------|:---:|
-| tools/tool_calls | ✅（OpenAI 格式） |
-| tool_choice | ✅ |
-| 各家映射 | ✅（自动转 Anthropic/Gemini 格式） |
-| 流式 tool_calls | ✅ |
+| tools/tool_calls | ✓（OpenAI 格式） |
+| tool_choice | ✓ |
+| 各家映射 | ✓（自动转 Anthropic/Gemini 格式） |
+| 流式 tool_calls | ✓ |
 | 统一循环 | 用 FC 体系 03 章的循环，模型名换 LiteLLM 即可 |
 
-> 🎯 **核心要点**：LiteLLM 让 FC 循环**只写一遍**——`tools` 参数统一 OpenAI 格式，内部自动转各家协议（FC 体系 08 章"适配器"的工作被 LiteLLM 代劳）。Agent 循环 + LiteLLM = 多平台 Agent 零适配。
+> **核心要点**：LiteLLM 让 FC 循环**只写一遍**——`tools` 参数统一 OpenAI 格式，内部自动转各家协议（FC 体系 08 章"适配器"的工作被 LiteLLM 代劳）。Agent 循环 + LiteLLM = 多平台 Agent 零适配。
 
 ## 6. 成本追踪与回调
 
@@ -199,7 +199,7 @@ import litellm
 # ① 响应内直接拿成本（自动计算）
 resp = litellm.completion(model="gpt-4o", messages=...)
 print(resp.usage.prompt_tokens, resp.usage.completion_tokens)
-print(resp._hidden_params.get("response_cost"))      # 💲 本次调用成本（美元）
+print(resp._hidden_params.get("response_cost"))      # 本次调用成本（美元）
 
 # ② 回调钩子：每次调用后触发（记账/告警/日志）
 def track_spend(kwargs, completion_response, start_time, end_time):
@@ -220,7 +220,7 @@ litellm.failure_callback = [on_failure]
 | 按 metadata 归属 | 用户/团队/项目维度记账 |
 | Proxy 侧 | Spend Logs 全量记录（05/06 章） |
 
-> 💡 SDK 层的成本追踪 = **"每次调用都知道花了多少钱"**；Proxy 层 = "所有调用集中记账"。单体先用 SDK 回调，多服务上 Proxy（05 章）。
+> SDK 层的成本追踪 = **"每次调用都知道花了多少钱"**；Proxy 层 = "所有调用集中记账"。单体先用 SDK 回调，多服务上 Proxy（05 章）。
 
 ## 7. 常见坑
 

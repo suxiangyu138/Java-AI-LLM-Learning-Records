@@ -1,6 +1,6 @@
 # 08 - LeetCode 高频：链表与树
 
-> 🎯 链表和树是大厂面试的"基本功测试"——链表考指针操作，树考遍历和递归。这两类题写不出来基本等于"不合格"
+> 链表和树是大厂面试的"基本功测试"——链表考指针操作，树考遍历和递归。这两类题写不出来基本等于"不合格"
 
 ---
 
@@ -14,7 +14,7 @@
 ## 1. 链表必刷题
 
 ```java
-// LRU 缓存（HashMap + 双向链表）⭐⭐⭐⭐⭐
+// LRU 缓存（HashMap + 双向链表）★★★★★
 class LRUCache {
     private final int capacity;
     private final Map<Integer, Node> map;

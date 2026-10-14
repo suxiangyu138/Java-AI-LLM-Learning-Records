@@ -43,31 +43,31 @@ Issue 的 5 个核心属性：
 ```markdown
 <!-- ═══ Bug Report 最佳模板 ═══ -->
 
-### 🐛 问题描述
+### 问题描述
 用户列表接口 /api/users 在高并发下偶发返回 500 错误
 
-### 🔄 复现步骤
+### 复现步骤
 1. 使用 JMeter 创建 100 线程并发
 2. 持续请求 GET /api/users?page=1&size=50
 3. 约 30 秒后开始出现 500 错误
 4. 停止压测后错误消失
 
-### ✅ 期望行为
+### ✓ 期望行为
 所有请求正常返回 200 和用户列表数据
 
-### 📊 环境信息
+### 环境信息
 - OS: Ubuntu 22.04
 - Java: 17.0.5
 - DB: MySQL 8.0.32
 - 分支: main @ commit abc123
 
-### 📎 相关日志
+### 相关日志
 ```
 2024-01-15 10:23:45 ERROR HikariPool - Connection is not available,
 request timed out after 30000ms
 ```
 
-### 🔗 关联
+### 关联
 - 可能是 #34 的同样根因
 ```
 
@@ -80,47 +80,47 @@ request timed out after 30000ms
 ```markdown
 # ═══ 类型（Type）— 用颜色分类 ═══
 
-🐛 bug              #FC2929 红色 — Bug 报告
-✨ enhancement      #84B6EB 蓝色 — 功能增强
-📚 documentation    #FEF2C0 黄色 — 文档
-🧹 refactor         #D4C5F9 紫色 — 重构
-🧪 test             #C5DEF5 浅蓝 — 测试
-🔧 chore            #BFDADC 青色 — 工程杂务
-❓ question         #D876E3 品红 — 疑问/讨论
+bug              #FC2929 红色 — Bug 报告
+enhancement      #84B6EB 蓝色 — 功能增强
+documentation    #FEF2C0 黄色 — 文档
+refactor         #D4C5F9 紫色 — 重构
+test             #C5DEF5 浅蓝 — 测试
+chore            #BFDADC 青色 — 工程杂务
+question         #D876E3 品红 — 疑问/讨论
 
 # ═══ 优先级（Priority）═══
 
-🔥 critical        #E11D21 深红 — 阻塞，立即修复
-⚠️ high             #EB6420 橙色 — 本里程碑必须修
-📌 medium           #FB135B0 黄绿 — 下个里程碑
-⬇️ low              #0E8A16 绿色 — Nice to have
+critical        #E11D21 深红 — 阻塞，立即修复
+high             #EB6420 橙色 — 本里程碑必须修
+medium           #FB135B0 黄绿 — 下个里程碑
+↓low              #0E8A16 绿色 — Nice to have
 
 # ═══ 状态（Status）═══
 
-📋 triage           #5319E7 紫色 — 待评估
-✅ confirmed        #006B75 深青 — 已确认
-🚧 in-progress      #E99695 粉色 — 进行中
-🧊 blocked          #000000 黑色 — 被阻塞
-🚫 wontfix          #FFFFFF 白色 — 不修复
+triage           #5319E7 紫色 — 待评估
+✓ confirmed        #006B75 深青 — 已确认
+in-progress      #E99695 粉色 — 进行中
+blocked          #000000 黑色 — 被阻塞
+wontfix          #FFFFFF 白色 — 不修复
 
 # ═══ 模块（Module）═══
 
-📦 frontend         #FFA07A 浅橙
-🗄️ backend           #87CEEB 天蓝
-🗃️ database          #FFD700 金色
-🚀 devops            #D3D3D3 浅灰
-📱 mobile            #98FB98 浅绿
-🔒 security          #2F4F4F 深灰
+frontend         #FFA07A 浅橙
+backend           #87CEEB 天蓝
+database          #FFD700 金色
+devops            #D3D3D3 浅灰
+mobile            #98FB98 浅绿
+security          #2F4F4F 深灰
 ```
 
 ### 2.2 Issue 的典型标签组合
 
 ```
-Bug 报告：     🐛 bug + 🔥 critical + 🗄️ backend
-功能请求：     ✨ enhancement + 📌 medium + 📦 frontend
-文档更新：     📚 documentation + ⬇️ low
-安全漏洞：     🐛 bug + 🔥 critical + 🔒 security
-线上故障：     🐛 bug + 🔥 critical + 🧊 blocked（等修复环境）
+Bug 报告：     bug + critical + backend
+功能请求：     enhancement + medium + frontend
+文档更新：     documentation + ↓low
+安全漏洞：     bug + critical + security
+线上故障：     bug + critical + blocked（等修复环境）
 ```
 
 ---
@@ -171,8 +171,8 @@ curl -H "Authorization: token $GITHUB_TOKEN" \
 1. Board（看板视图）— 类似 Trello/Jira
    ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────┐
    │  Todo    │  │In Progress│ │ In Review│  │  Done    │
-   │ □ #12    │  │ □ #15  👤 │  │ □ #18    │  │ ✅ #10   │
-   │ □ #13 🔥 │  │ □ #16     │  │          │  │ ✅ #11   │
+   │ □ #12    │  │ □ #15  │  │ □ #18    │  │ ✓ #10   │
+   │ □ #13 │  │ □ #16     │  │          │  │ ✓ #11   │
    └──────────┘  └──────────┘  └──────────┘  └──────────┘
 
 2. Table（表格视图）— 类似 Excel
@@ -227,30 +227,30 @@ Fields:
 # .github/ISSUE_TEMPLATE/config.yml — 模板配置
 blank_issues_enabled: false  # 禁止空白 Issue，强制使用模板
 contact_links:
-  - name: 💬 社区讨论
+  - name: 社区讨论
     url: https://github.com/user/repo/discussions
     about: 使用问题请到 Discussions 提问
-  - name: 📖 文档
+  - name: 文档
     url: https://docs.example.com
     about: 请先查阅文档
 ```
 
 ```markdown
 <!-- .github/ISSUE_TEMPLATE/bug_report.yml — YAML 表单模板 -->
-name: 🐛 Bug 报告
+name: Bug 报告
 description: 报告一个 Bug
 title: "[Bug]: "
 labels: ["bug", "triage"]
 body:
   - type: textarea
     attributes:
-      label: 🐛 问题描述
+      label: 问题描述
       description: 清晰描述你遇到的问题
     validations:
       required: true
   - type: textarea
     attributes:
-      label: 🔄 复现步骤
+      label: 复现步骤
       placeholder: |
         1. 打开...
         2. 点击...
@@ -273,9 +273,9 @@ body:
 
 | 特性 | Issue Form (YAML) | Issue Template (Markdown) |
 |------|------------------|--------------------------|
-| 输入验证 | ✅ required 字段 | ❌ |
-| 下拉选项 | ✅ dropdown | ❌ |
-| 自动标签 | ✅ labels 字段 | ❌ |
+| 输入验证 | ✓ required 字段 | ✗ |
+| 下拉选项 | ✓ dropdown | ✗ |
+| 自动标签 | ✓ labels 字段 | ✗ |
 | 自定义性 | 较高 | 最高（完全自由） |
 | 学习成本 | 中 | 低 |
 | **推荐** | 结构化项目 | 灵活的自由格式需求 |
@@ -296,21 +296,21 @@ body:
 
 ```
 使用原则：
-  ✅ 你知道"要做什么" → Issue
-  ✅ 你在探索"怎么做/该不该做" → Discussion
-  ✅ Discussion 讨论出结论 → 转为 Issue 执行
+  ✓ 你知道"要做什么" → Issue
+  ✓ 你在探索"怎么做/该不该做" → Discussion
+  ✓ Discussion 讨论出结论 → 转为 Issue 执行
 ```
 
 ### 6.2 推荐的 Discussion 分类
 
 ```yaml
 Categories:
-  📢 Announcements    # 公告（仅维护者可发）
-  💡 Ideas            # 功能想法和提案
-  🙏 Q&A              # 问答（支持标记最佳答案）
-  👏 Show and tell     # 社区展示
-  💬 General          # 一般讨论
-  📊 Polls            # 投票
+  Announcements    # 公告（仅维护者可发）
+  Ideas            # 功能想法和提案
+  Q&A              # 问答（支持标记最佳答案）
+  Show and tell     # 社区展示
+  General          # 一般讨论
+  Polls            # 投票
 ```
 
 ---

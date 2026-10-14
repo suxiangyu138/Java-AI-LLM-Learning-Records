@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [从 Lambda 到方法引用](#1-从-lambda-到方法引用)
 2. [四种方法引用全景](#2-四种方法引用全景)
@@ -44,17 +44,17 @@ Function<String, Integer> f3 = new Function<>() {          // 匿名内部类
 | 需要多条语句 | `s -> { log(s); return f(s); }` | 不是单一方法调用 |
 | 返回值需再包装 | `s -> Optional.of(parse(s))` | 存在两层调用 |
 
-> 🎯 **核心判据**：把 Lambda 体写成 `方法名(形参1, 形参2, ...)` 且形参**按原顺序、原样、全部**传入，才能用 `::`。
+> **核心判据**：把 Lambda 体写成 `方法名(形参1, 形参2, ...)` 且形参**按原顺序、原样、全部**传入，才能用 `::`。
 
 ### 1.3 `::` 不是运算符
 
 `::` 是**方法引用分隔符**，不参与表达式运算。`A::b` 本身没有独立类型，它是一个 **poly expression（多态表达式）**——必须有目标类型才能确定含义。
 
 ```java
-var x = Integer::parseInt;   // ❌ 编译错误：无法推断类型
+var x = Integer::parseInt;   // ✗ 编译错误：无法推断类型
 // 错误：无法推断 x 的类型（方法引用需要显式目标类型）
 
-Function<String, Integer> ok = Integer::parseInt;   // ✅ 有目标类型
+Function<String, Integer> ok = Integer::parseInt;   // ✓ 有目标类型
 ```
 
 ---
@@ -105,7 +105,7 @@ List<String> list = new ArrayList<>();
 Consumer<String> adder = list::add;           // 接收者 = list
 ```
 
-> ⚠️ **最容易搞反的点**：`prefix::startsWith` 中 `prefix` 是**调用者**不是**参数**。
+> **最容易搞反的点**：`prefix::startsWith` 中 `prefix` 是**调用者**不是**参数**。
 > `prefix::startsWith` ≡ `s -> prefix.startsWith(s)`，而不是 `s -> s.startsWith(prefix)`。
 
 绑定形式还包括 `this::` 和 `super::`：
@@ -156,7 +156,7 @@ Function<String, Integer>       boxed   = Integer::new;         // s -> new Inte
 BiFunction<String, Integer, User> user  = User::new;            // (n,a) -> new User(n,a)
 ```
 
-> 💡 同一个 `ArrayList::new` 在不同目标类型下会绑定到**不同的构造器重载**——这正是"目标类型驱动"的直接体现。
+> 同一个 `ArrayList::new` 在不同目标类型下会绑定到**不同的构造器重载**——这正是"目标类型驱动"的直接体现。
 
 ### 2.6 四类的字节码指纹
 
@@ -178,7 +178,7 @@ BiFunction<String, Integer, User> user  = User::new;            // (n,a) -> new 
 #128 = MethodHandle  8:#129  // REF_newInvokeSpecial java/lang/StringBuilder."<init>":()V
 ```
 
-> ⚠️ **绑定与未绑定在 MethodHandle Kind 上都是 5**，区分它们看的是 **invokedynamic 的调用点签名**：绑定形式会把接收者作为捕获参数传入（`(Ljava/io/PrintStream;)Ljava/util/function/Consumer;`），未绑定形式的调用点签名为空（`()Ljava/util/function/Function;`）。
+> **绑定与未绑定在 MethodHandle Kind 上都是 5**，区分它们看的是 **invokedynamic 的调用点签名**：绑定形式会把接收者作为捕获参数传入（`(Ljava/io/PrintStream;)Ljava/util/function/Consumer;`），未绑定形式的调用点签名为空（`()Ljava/util/function/Function;`）。
 
 ---
 
@@ -213,8 +213,8 @@ BiFunction<String, Integer, User> user  = User::new;            // (n,a) -> new 
 
 ```java
 List<String> list = new ArrayList<>();
-Consumer<String> c = list::add;   // ✅ add 返回 boolean，Consumer 返回 void，允许丢弃
-Function<String, Boolean> f = list::add;  // ✅ 也可以保留返回值
+Consumer<String> c = list::add;   // ✓ add 返回 boolean，Consumer 返回 void，允许丢弃
+Function<String, Boolean> f = list::add;  // ✓ 也可以保留返回值
 ```
 
 ### 3.3 自动装箱/拆箱参与适配
@@ -233,7 +233,7 @@ Function<String, Integer> f = Integer::parseInt;
     #111 (Ljava/lang/String;)Ljava/lang/Integer;     ← instantiatedMethodType：实例化后签名（返回 Integer）
 ```
 
-> 🎯 三个 `MethodType` 参数的分工：`samMethodType` 是**泛型擦除后**的接口签名，`instantiatedMethodType` 是**泛型实例化后**的签名，二者的差值就是运行时需要插入的 **checkcast + 装箱/拆箱**适配代码。
+> 三个 `MethodType` 参数的分工：`samMethodType` 是**泛型擦除后**的接口签名，`instantiatedMethodType` 是**泛型实例化后**的签名，二者的差值就是运行时需要插入的 **checkcast + 装箱/拆箱**适配代码。
 
 ### 3.4 目标类型不同 → 同一写法含义不同
 
@@ -255,7 +255,7 @@ Function<String,String> Amb::make -> STATIC:in
 Function<Amb,String>    Amb::make -> INSTANCE
 ```
 
-> 💡 这**不是**歧义错误——两个目标类型分别只有一条路径可走，编译器能唯一确定。真正的歧义见 6.2。
+> 这**不是**歧义错误——两个目标类型分别只有一条路径可走，编译器能唯一确定。真正的歧义见 6.2。
 
 ---
 
@@ -284,7 +284,7 @@ BiPredicate<String, String> p = String::startsWith;
 | `BiFunction<String,String,Boolean>` = `String::startsWith` | 2 | 1 | 首参当接收者，余 1 个实参 |
 | `Comparator<String>` = `String::compareTo` | 2 | 1 | 同上 |
 
-> 🎯 **换算公式**：未绑定实例方法引用中，`接口参数数 = 方法参数数 + 1`。
+> **换算公式**：未绑定实例方法引用中，`接口参数数 = 方法参数数 + 1`。
 
 ### 4.3 绑定 vs 未绑定的经典对照
 
@@ -319,7 +319,7 @@ static class A {
     static void stat() {}
 }
 A a = new A();
-Runnable r = a::stat;   // ❌
+Runnable r = a::stat;   // ✗
 ```
 
 实测编译错误：
@@ -331,7 +331,7 @@ Runnable r = a::stat;   // ❌
     在绑定查找中找到意外的静态 方法 stat()
 ```
 
-> ⚠️ **规则**：静态方法只能用 `类名::`，实例方法在 `类名::` 形式下必须走"隐式首参数"路径。不能用对象引用静态方法。
+> **规则**：静态方法只能用 `类名::`，实例方法在 `类名::` 形式下必须走"隐式首参数"路径。不能用对象引用静态方法。
 
 ---
 
@@ -362,10 +362,10 @@ BiFunction<String, Integer, User>  u    = User::new;
 ```java
 Supplier<List<String>>  s1 = ArrayList::new;          // 由目标类型推断 <String>
 Supplier<List<String>>  s2 = ArrayList<String>::new;  // 显式指定，等价
-// Supplier<List<String>> s3 = ArrayList<>::new;      // ❌ 不允许菱形语法
+// Supplier<List<String>> s3 = ArrayList<>::new;      // ✗ 不允许菱形语法
 ```
 
-> ⚠️ 构造器引用**不支持菱形 `<>`**，要么完全省略类型参数（靠推断），要么写全。
+> 构造器引用**不支持菱形 `<>`**，要么完全省略类型参数（靠推断），要么写全。
 
 ### 5.3 数组构造器引用
 
@@ -406,16 +406,16 @@ private static java.lang.String[] lambda$arrayRef$0(int);
     #139 (I)[Ljava/lang/String;
 ```
 
-> 💡 **原因**：JVM 中"创建数组"是 `anewarray` **指令**，不是可被 MethodHandle 直接引用的方法。编译器必须包一层合成方法承载这条指令。而 `StringBuilder::new` 对应真实存在的 `<init>` 方法，可直接引用。
+> **原因**：JVM 中"创建数组"是 `anewarray` **指令**，不是可被 MethodHandle 直接引用的方法。编译器必须包一层合成方法承载这条指令。而 `StringBuilder::new` 对应真实存在的 `<init>` 方法，可直接引用。
 
 ### 5.5 数组引用不支持的形态
 
 | 写法 | 是否合法 | 说明 |
 |------|:---:|------|
-| `String[]::new` | ✅ | 一维数组构造 |
-| `int[][]::new` | ✅ | 创建首维，等价 `new int[n][]` |
-| `String[]::clone` | ✅ | 数组的 `clone()` 可引用 |
-| `String[]::length` | ❌ | `length` 是字段不是方法 |
+| `String[]::new` | ✓ | 一维数组构造 |
+| `int[][]::new` | ✓ | 创建首维，等价 `new int[n][]` |
+| `String[]::clone` | ✓ | 数组的 `clone()` 可引用 |
+| `String[]::length` | ✗ | `length` 是字段不是方法 |
 
 ---
 
@@ -461,7 +461,7 @@ Function<Amb, String> fn = Amb::make;
       Amb 中的方法 make(Amb) 和 Amb 中的方法 make() 都匹配
 ```
 
-> ⚠️ **规避方式**：改写成 Lambda 显式表达意图——`a -> Amb.make(a)` 或 `a -> a.make()`。
+> **规避方式**：改写成 Lambda 显式表达意图——`a -> Amb.make(a)` 或 `a -> a.make()`。
 
 ### 6.3 错误三：重载方法 + 重载目标类型的双向歧义
 
@@ -483,7 +483,7 @@ take(Amb4::id);   // 两侧都重载
   Amb4 中的方法 take(F1) 和 Amb4 中的方法 take(F2) 都匹配
 ```
 
-> 💡 **注意错误点在 `take` 上而不是 `id` 上**——编译器连"该选哪个重载的 `take`"都无法确定，因为 `Amb4::id` 是**不精确（inexact）方法引用**，在重载决议阶段不提供有效的类型信息。
+> **注意错误点在 `take` 上而不是 `id` 上**——编译器连"该选哪个重载的 `take`"都无法确定，因为 `Amb4::id` 是**不精确（inexact）方法引用**，在重载决议阶段不提供有效的类型信息。
 >
 > **修复**：显式转型 `take((F1) Amb4::id)`，或改用带类型的 Lambda `take((String s) -> Amb4.id(s))`。
 
@@ -538,12 +538,12 @@ Function<String, String> safe = unchecked(Err4::risky);
 
 | 被引用方法 | 在同类中 | 在同包其他类 | 在子类 | 在无关类 |
 |-----------|:---:|:---:|:---:|:---:|
-| `public` | ✅ | ✅ | ✅ | ✅ |
-| `protected` | ✅ | ✅ | ✅（受 `super::`/自身实例限制） | ❌ |
-| 包私有 | ✅ | ✅ | 仅同包 | ❌ |
-| `private` | ✅ | ❌ | ❌ | ❌ |
+| `public` | ✓ | ✓ | ✓ | ✓ |
+| `protected` | ✓ | ✓ | ✓（受 `super::`/自身实例限制） | ✗ |
+| 包私有 | ✓ | ✓ | 仅同包 | ✗ |
+| `private` | ✓ | ✗ | ✗ | ✗ |
 
-> 💡 引用私有方法在同一类内完全合法。编译器生成的 `lambda$xxx$0` 合成方法本身就是 `ACC_PRIVATE ACC_SYNTHETIC`，运行时由 `LambdaMetafactory` 通过带**私有访问权限的 `Lookup`** 完成链接——这也是 Lambda 不需要像早期匿名内部类那样生成 `access$000` 桥接方法的原因。
+> 引用私有方法在同一类内完全合法。编译器生成的 `lambda$xxx$0` 合成方法本身就是 `ACC_PRIVATE ACC_SYNTHETIC`，运行时由 `LambdaMetafactory` 通过带**私有访问权限的 `Lookup`** 完成链接——这也是 Lambda 不需要像早期匿名内部类那样生成 `access$000` 桥接方法的原因。
 
 ### 6.6 泛型方法引用
 
@@ -554,7 +554,7 @@ Function<String, List<String>> f = SuperRef::wrap;           // 类型推断
 Function<String, List<String>> g = SuperRef::<String>wrap;   // 显式类型参数
 ```
 
-> ⚠️ 显式类型参数写在 `::` **之后**：`Class::<T>method`，不是 `Class<T>::method`（后者是给类指定类型参数）。绝大多数场景推断即可，显式形式主要用于推断失败时兜底。
+> 显式类型参数写在 `::` **之后**：`Class::<T>method`，不是 `Class<T>::method`（后者是给类指定类型参数）。绝大多数场景推断即可，显式形式主要用于推断失败时兜底。
 
 ### 6.7 编译错误速查表
 
@@ -604,7 +604,7 @@ java.util.function.Consumer<java.lang.String> boundRef();
     13: areturn
 ```
 
-> ⚠️ **实战影响**：`obj::method` 中的 `obj` 表达式在**创建方法引用时求值一次并锁定**。如果 `obj` 后续被重新赋值，方法引用**仍指向旧对象**。
+> **实战影响**：`obj::method` 中的 `obj` 表达式在**创建方法引用时求值一次并锁定**。如果 `obj` 后续被重新赋值，方法引用**仍指向旧对象**。
 
 ```java
 StringBuilder sb = new StringBuilder("A");
@@ -626,7 +626,7 @@ Consumer<String> l = s -> getLogger().info(s);   // 每次 accept 都调用 getL
 | `getLogger()::info` | 1 次（创建时） | 接收者稳定、希望复用 |
 | `s -> getLogger().info(s)` | 每次调用 | 接收者可能变化、需动态获取 |
 
-> 🎯 当接收者是**有副作用的表达式**或**可能变化的引用**时，方法引用与 Lambda **不等价**，不能机械替换。
+> 当接收者是**有副作用的表达式**或**可能变化的引用**时，方法引用与 Lambda **不等价**，不能机械替换。
 
 ---
 
@@ -672,7 +672,7 @@ Consumer<String> l = s -> getLogger().info(s);   // 每次 accept 都调用 getL
 
 ### 8.4 关于性能的准确表述
 
-> ⚠️ **不要宣称"方法引用比 Lambda 快"**。
+> **不要宣称"方法引用比 Lambda 快"**。
 
 | 情形 | 实际差异 |
 |------|---------|
@@ -682,17 +682,17 @@ Consumer<String> l = s -> getLogger().info(s);   // 每次 accept 都调用 getL
 
 真正影响性能的是**是否捕获**（决定能否复用实例）与**是否装箱**，而不是"用了 `::` 还是 `->`"。
 
-> 🎯 **结论**：按**可读性**选择，不要按臆想的性能选择。
+> **结论**：按**可读性**选择，不要按臆想的性能选择。
 
 ### 8.5 团队规范建议
 
 ```text
-✅ 推荐
+✓ 推荐
   - 单一方法调用一律用 ::
   - Comparator.comparing / thenComparing 链一律用 ::
   - 需要 3 行以上逻辑时，抽成命名方法 + 方法引用（而不是写长 Lambda）
 
-❌ 避免
+✗ 避免
   - 为了用 :: 而重构出语义不清的辅助方法
   - 在接收者可能为 null 的地方用 obj::method（会提前 NPE）
   - 在重载密集的 API 上使用不精确方法引用（增加维护脆弱性）
@@ -778,7 +778,7 @@ javac Err2.java   # 对象引用静态方法
 javac Err4.java   # 受检异常不兼容
 ```
 
-> 💡 **技巧**：加 `-Xdiags:verbose` 可让 javac 输出更详细的候选方法列表，排查歧义时非常有用。
+> **技巧**：加 `-Xdiags:verbose` 可让 javac 输出更详细的候选方法列表，排查歧义时非常有用。
 >
 > ```bash
 > javac -Xdiags:verbose Amb3.java

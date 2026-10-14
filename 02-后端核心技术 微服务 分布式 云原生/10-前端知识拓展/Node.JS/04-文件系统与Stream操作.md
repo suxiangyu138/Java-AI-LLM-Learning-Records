@@ -1,6 +1,6 @@
 # 04 - 文件系统与 Stream 操作
 
-> 🎯 Node.js 最常见的用途之一就是操作文件——读配置、写日志、处理数据。本章覆盖 fs 模块的同步/异步/Promise API、Stream 流水线、文件监听
+> Node.js 最常见的用途之一就是操作文件——读配置、写日志、处理数据。本章覆盖 fs 模块的同步/异步/Promise API、Stream 流水线、文件监听
 
 ---
 
@@ -20,7 +20,7 @@
 |------|------|---------|
 | **同步** `fs.readFileSync` | 阻塞，返回结果 | 启动时读配置文件（仅一次） |
 | **回调** `fs.readFile` | 不阻塞，回调接收 | 旧代码兼容 |
-| **Promise** `fs.promises.readFile` | 不阻塞，async/await | **推荐：所有新代码** ✅ |
+| **Promise** `fs.promises.readFile` | 不阻塞，async/await | **推荐：所有新代码** ✓ |
 
 ```javascript
 import { readFileSync } from 'fs';
@@ -81,7 +81,7 @@ try {
 
 ```text
 没有 Stream：
-  readFile → 整个 2GB 文件读入内存 → 💥 OOM
+  readFile → 整个 2GB 文件读入内存 → OOM
 
 有 Stream：
   读取一小块 → 处理 → 释放 → 读取下一块
@@ -92,10 +92,10 @@ try {
 
 | 类型 | 可读 | 可写 | 示例 |
 |------|:---:|:---:|------|
-| **Readable** | ✅ | ❌ | `fs.createReadStream()` |
-| **Writable** | ❌ | ✅ | `fs.createWriteStream()` |
-| **Duplex** | ✅ | ✅ | TCP socket |
-| **Transform** | ✅ | ✅ | 压缩/加密（边读边写边转换） |
+| **Readable** | ✓ | ✗ | `fs.createReadStream()` |
+| **Writable** | ✗ | ✓ | `fs.createWriteStream()` |
+| **Duplex** | ✓ | ✓ | TCP socket |
+| **Transform** | ✓ | ✓ | 压缩/加密（边读边写边转换） |
 
 ### 2.3 管道操作
 

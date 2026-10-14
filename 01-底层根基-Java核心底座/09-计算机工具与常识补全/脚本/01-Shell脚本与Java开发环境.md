@@ -2,7 +2,7 @@
 
 > Shell 是 Java 开发者的"操作系统对话界面"——从编译启动到进程管理，从环境配置到批量自动化
 
-## 📚 目录
+## 目录
 
 1. [Shell 脚本基础](#1)
 2. [Java 环境变量管理](#2)
@@ -50,19 +50,19 @@ readonly MAIN_CLASS="com.example.Main"
 
 # ── 函数定义 ──
 compile() {
-    echo "🔨 编译中..."
+    echo "编译中..."
     mkdir -p "${BUILD_DIR}"
     javac -d "${BUILD_DIR}" $(find "${SRC_DIR}" -name "*.java")
-    echo "✅ 编译完成"
+    echo "✓ 编译完成"
 }
 
 run() {
-    echo "🚀 启动应用..."
+    echo "启动应用..."
     java -cp "${BUILD_DIR}" "${MAIN_CLASS}"
 }
 
 clean() {
-    echo "🧹 清理构建目录..."
+    echo "清理构建目录..."
     rm -rf "${BUILD_DIR}"
 }
 
@@ -75,7 +75,7 @@ case "${1:-build}" in
 esac
 ```
 
-> 🎯 **核心要点**：`set -euo pipefail` 是 Shell 脚本的最佳实践标配——`-e` 遇错即停，`-u` 禁止未定义变量，`-o pipefail` 管道中任一命令失败则整体失败。
+> **核心要点**：`set -euo pipefail` 是 Shell 脚本的最佳实践标配——`-e` 遇错即停，`-u` 禁止未定义变量，`-o pipefail` 管道中任一命令失败则整体失败。
 
 ### 1.3 常用 Shell 内置变量与操作符
 
@@ -140,14 +140,14 @@ switch_jdk() {
         *)  echo "不支持的版本: $version"; return 1 ;;
     esac
     export PATH="$JAVA_HOME/bin:$PATH"
-    echo "✅ 已切换到 JDK $version: $JAVA_HOME"
+    echo "✓ 已切换到 JDK $version: $JAVA_HOME"
     java -version
 }
 
 switch_jdk "${1:-21}"
 ```
 
-> 💡 **提示**：更专业的多版本管理推荐使用 **SDKMAN**（Linux/macOS）或 **jabba**（跨平台），而非手动脚本。
+> **提示**：更专业的多版本管理推荐使用 **SDKMAN**（Linux/macOS）或 **jabba**（跨平台），而非手动脚本。
 
 ---
 
@@ -248,10 +248,10 @@ for module in "${MODULES[@]}"; do
     build_module "$module"
 done
 
-echo "✅ 全部模块构建完成"
+echo "✓ 全部模块构建完成"
 ```
 
-> 🎯 **核心要点**：多模块项目中，模块间存在依赖关系，必须按依赖顺序构建。CI/CD 中可并行构建无依赖关系的模块以加速。
+> **核心要点**：多模块项目中，模块间存在依赖关系，必须按依赖顺序构建。CI/CD 中可并行构建无依赖关系的模块以加速。
 
 ---
 
@@ -303,28 +303,28 @@ is_running() {
 
 start() {
     if is_running; then
-        echo "⚠️  ${APP_NAME} 已在运行 (PID: $(get_pid))"
+        echo " ${APP_NAME} 已在运行 (PID: $(get_pid))"
         return 1
     fi
 
-    echo "🚀 启动 ${APP_NAME}..."
+    echo "启动 ${APP_NAME}..."
     mkdir -p "$(dirname "${LOG_FILE}")"
 
     nohup java ${JVM_OPTS} -jar "${JAR_FILE}" ${APP_OPTS} \
         >> "${LOG_FILE}" 2>&1 &
 
     echo $! > "${PID_FILE}"
-    echo "✅ 已启动 (PID: $(get_pid))"
+    echo "✓ 已启动 (PID: $(get_pid))"
 }
 
 stop() {
     local pid=$(get_pid)
     if [[ -z "${pid}" ]]; then
-        echo "⚠️  ${APP_NAME} 未在运行"
+        echo " ${APP_NAME} 未在运行"
         return 1
     fi
 
-    echo "🛑 停止 ${APP_NAME} (PID: ${pid})..."
+    echo "停止 ${APP_NAME} (PID: ${pid})..."
 
     # 优雅关闭
     kill -15 "${pid}"
@@ -338,12 +338,12 @@ stop() {
 
     # 仍未退出则强制关闭
     if kill -0 "${pid}" 2>/dev/null; then
-        echo "⚠️  强制关闭..."
+        echo " 强制关闭..."
         kill -9 "${pid}"
     fi
 
     rm -f "${PID_FILE}"
-    echo "✅ 已停止"
+    echo "✓ 已停止"
 }
 
 restart() {
@@ -354,9 +354,9 @@ restart() {
 
 status() {
     if is_running; then
-        echo "✅ ${APP_NAME} 运行中 (PID: $(get_pid))"
+        echo "✓ ${APP_NAME} 运行中 (PID: $(get_pid))"
     else
-        echo "❌ ${APP_NAME} 未运行"
+        echo "✗ ${APP_NAME} 未运行"
     fi
 }
 
@@ -370,7 +370,7 @@ case "${1:-}" in
 esac
 ```
 
-> ⚠️ **注意**：`nohup` 确保进程在终端关闭后继续运行。生产环境推荐使用 **systemd**（Linux）或容器编排（K8s）替代手工脚本管理。
+> **注意**：`nohup` 确保进程在终端关闭后继续运行。生产环境推荐使用 **systemd**（Linux）或容器编排（K8s）替代手工脚本管理。
 
 ### 4.3 systemd 服务配置
 
@@ -434,7 +434,7 @@ done
 # ── 清理过期归档 ──
 find "${ARCHIVE_DIR}" -name "*.tar.gz" -mtime +${RETENTION_DAYS} -delete
 
-echo "✅ 日志轮转完成，保留 ${RETENTION_DAYS} 天"
+echo "✓ 日志轮转完成，保留 ${RETENTION_DAYS} 天"
 ```
 
 ### 5.2 配置文件备份脚本
@@ -453,18 +453,18 @@ backup() {
     mkdir -p "${BACKUP_DIR}"
     tar -czf "${backup_file}" -C "$(dirname "${CONFIG_DIR}")" "$(basename "${CONFIG_DIR}")"
 
-    echo "✅ 配置已备份至: ${backup_file}"
+    echo "✓ 配置已备份至: ${backup_file}"
 }
 
 restore() {
     local backup_file="$1"
-    [[ -f "${backup_file}" ]] || { echo "❌ 备份文件不存在"; exit 1; }
+    [[ -f "${backup_file}" ]] || { echo "✗ 备份文件不存在"; exit 1; }
 
     # 先备份当前配置
     backup
 
     tar -xzf "${backup_file}" -C "$(dirname "${CONFIG_DIR}")"
-    echo "✅ 配置已恢复"
+    echo "✓ 配置已恢复"
 }
 
 case "${1:-backup}" in
@@ -528,14 +528,14 @@ $JarFile = ".\$AppName.jar"
 $LogFile = ".\logs\$AppName.log"
 
 function Start-App {
-    Write-Host "🚀 启动 $AppName..."
+    Write-Host "启动 $AppName..."
     $process = Start-Process java `
         -ArgumentList "-Xms512m -Xmx2g -jar $JarFile" `
         -NoNewWindow -PassThru `
         -RedirectStandardOutput $LogFile `
         -RedirectStandardError $LogFile
     $process.Id | Out-File "$AppName.pid"
-    Write-Host "✅ 已启动 (PID: $($process.Id))"
+    Write-Host "✓ 已启动 (PID: $($process.Id))"
 }
 
 function Stop-App {
@@ -543,7 +543,7 @@ function Stop-App {
         $pid = Get-Content "$AppName.pid"
         Stop-Process -Id $pid -Force
         Remove-Item "$AppName.pid"
-        Write-Host "✅ 已停止"
+        Write-Host "✓ 已停止"
     }
 }
 
@@ -558,13 +558,13 @@ switch ($Action) {
 
 | 策略 | 适用场景 | 推荐度 |
 |------|---------|:-----:|
-| **WSL2** | Windows 开发者，生产环境为 Linux | ⭐⭐⭐⭐⭐ |
-| **Git Bash** | Windows 上运行 Bash 脚本 | ⭐⭐⭐⭐ |
-| **双脚本** | 同时维护 .sh 和 .ps1 | ⭐⭐⭐ |
-| **Maven/Gradle 插件** | 通过构建工具抽象平台差异 | ⭐⭐⭐⭐⭐ |
-| **Docker** | 完全消除环境差异 | ⭐⭐⭐⭐⭐ |
+| **WSL2** | Windows 开发者，生产环境为 Linux | ★★★★★ |
+| **Git Bash** | Windows 上运行 Bash 脚本 | ★★★★ |
+| **双脚本** | 同时维护 .sh 和 .ps1 | ★★★ |
+| **Maven/Gradle 插件** | 通过构建工具抽象平台差异 | ★★★★★ |
+| **Docker** | 完全消除环境差异 | ★★★★★ |
 
-> 🎯 **核心要点**：现代 Java 项目最佳跨平台方案是 **WSL2 + Docker**——开发环境与生产环境完全一致，Shell 脚本只需写 Linux 版本。
+> **核心要点**：现代 Java 项目最佳跨平台方案是 **WSL2 + Docker**——开发环境与生产环境完全一致，Shell 脚本只需写 Linux 版本。
 
 ---
 
@@ -597,11 +597,11 @@ set -euo pipefail
 
 # ── 模式1: trap 捕获清理 ──
 cleanup() {
-    echo "🧹 清理临时文件..."
+    echo "清理临时文件..."
     rm -rf "${TEMP_DIR}"
 }
 trap cleanup EXIT                    # 脚本退出时执行
-trap 'echo "❌ 第 $LINENO 行出错"' ERR  # 出错时打印行号
+trap 'echo "✗ 第 $LINENO 行出错"' ERR  # 出错时打印行号
 
 # ── 模式2: 函数返回值检查 ──
 run_with_retry() {
@@ -612,10 +612,10 @@ run_with_retry() {
         if eval "$cmd"; then
             return 0
         fi
-        echo "⚠️  第 ${i} 次尝试失败，${max_attempts}s 后重试..."
+        echo " 第 ${i} 次尝试失败，${max_attempts}s 后重试..."
         sleep $((i * 5))
     done
-    echo "❌ 重试 ${max_attempts} 次后仍失败"
+    echo "✗ 重试 ${max_attempts} 次后仍失败"
     return 1
 }
 
@@ -623,13 +623,13 @@ run_with_retry() {
 readonly LOCK_FILE="/tmp/myapp-deploy.lock"
 exec 200>"${LOCK_FILE}"
 if ! flock -n 200; then
-    echo "❌ 另一个部署进程正在运行"
+    echo "✗ 另一个部署进程正在运行"
     exit 1
 fi
 
 # ── 模式4: 超时控制 ──
 timeout 300 ./long-running-build.sh || {
-    echo "❌ 构建超时（300s）"
+    echo "✗ 构建超时（300s）"
     exit 1
 }
 ```
@@ -645,7 +645,7 @@ timeout 300 ./long-running-build.sh || {
 | `rm -rf $VAR/` | 变量为空时变成 `rm -rf /` | 先检查变量非空 |
 | 信号处理缺失 | Ctrl+C 后临时文件残留 | `trap cleanup EXIT` |
 
-> 🎯 **核心要点**：Shell 脚本的信条是 **"Fail Fast, Fail Loud"**——错误应立即暴露，不容忍任何静默失败。
+> **核心要点**：Shell 脚本的信条是 **"Fail Fast, Fail Loud"**——错误应立即暴露，不容忍任何静默失败。
 
 ---
 

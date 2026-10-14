@@ -1,5 +1,5 @@
 # 03-Deployment与滚动更新
-> 🎯 Deployment是K8s中管理无状态工作负载的核心控制器 — 它封装了副本管理、滚动更新、回滚、自愈和弹性伸缩，让Java应用发布变成声明式的"我要这个版本跑3个"而非命令式的"先停旧再启新"
+> Deployment是K8s中管理无状态工作负载的核心控制器 — 它封装了副本管理、滚动更新、回滚、自愈和弹性伸缩，让Java应用发布变成声明式的"我要这个版本跑3个"而非命令式的"先停旧再启新"
 
 ---
 
@@ -80,11 +80,11 @@ metadata:
   labels:
     app: user-service
 spec:
-  replicas: 3               # ⭐ 要素1：期望副本数
-  selector:                 # ⭐ 要素2：选择Pod的标签
+  replicas: 3               # ★ 要素1：期望副本数
+  selector:                 # ★ 要素2：选择Pod的标签
     matchLabels:
       app: user-service
-  template:                 # ⭐ 要素3：Pod模板
+  template:                 # ★ 要素3：Pod模板
     metadata:
       labels:
         app: user-service   # 必须与selector.matchLabels匹配
@@ -127,7 +127,7 @@ selector:
   #       - backend
 ```
 
-> ⚠️ **selector一旦创建不可修改**。如果必须修改，只能删除重建Deployment。所以创建Deployment时selector要规划好。
+> **selector一旦创建不可修改**。如果必须修改，只能删除重建Deployment。所以创建Deployment时selector要规划好。
 
 ### 2.3 要素三：template（Pod模板）
 
@@ -144,7 +144,7 @@ template:
       - ...
 ```
 
-> 💡 **Pod模板中labels和annotation可以任意添加**，但至少要有与selector匹配的标签。额外标签可以用于区分版本、区分环境等。
+> **Pod模板中labels和annotation可以任意添加**，但至少要有与selector匹配的标签。额外标签可以用于区分版本、区分环境等。
 
 ---
 
@@ -192,7 +192,7 @@ user-service-7d9f8c9b6   0         0         0      # 旧版RS缩到0（保留�
 user-service-8e1a9c7d4   3         3         3      # 新版RS
 ```
 
-> 💡 **旧版ReplicaSet的Pod缩到0但RS对象不删除**，保留它们是为了回滚时能快速扩容。K8s默认保留10个历史RS，可通过`spec.revisionHistoryLimit`配置。
+> **旧版ReplicaSet的Pod缩到0但RS对象不删除**，保留它们是为了回滚时能快速扩容。K8s默认保留10个历史RS，可通过`spec.revisionHistoryLimit`配置。
 
 ---
 
@@ -267,7 +267,7 @@ maxSurge=0（零额外资源）:
   会导致 Pod 数低于期望值，对高可用有影响
 ```
 
-> 💡 **生产环境核心服务推荐 `maxSurge=1, maxUnavailable=0`**：每次只新建一个Pod，等它Ready后再停一个旧Pod。虽然慢（3副本需要3轮），但保证服务容量始终不降低。
+> **生产环境核心服务推荐 `maxSurge=1, maxUnavailable=0`**：每次只新建一个Pod，等它Ready后再停一个旧Pod。虽然慢（3副本需要3轮），但保证服务容量始终不降低。
 
 ### 4.3 滚动更新触发条件
 
@@ -275,13 +275,13 @@ maxSurge=0（零额外资源）:
 
 | 字段 | 示例 | 触发更新 |
 |------|------|:--------:|
-| **image** | 修改container镜像tag | ✅ |
-| **resources** | 修改CPU/Memory限制 | ✅ |
-| **env** | 增加/修改环境变量 | ✅ |
-| **ports** | 修改容器端口 | ✅ |
-| **command/args** | 修改启动命令 | ✅ |
-| **volumeMounts** | 修改挂载卷 | ✅ |
-| **replicas** | 修改副本数 | ❌（仅伸缩） |
+| **image** | 修改container镜像tag | ✓ |
+| **resources** | 修改CPU/Memory限制 | ✓ |
+| **env** | 增加/修改环境变量 | ✓ |
+| **ports** | 修改容器端口 | ✓ |
+| **command/args** | 修改启动命令 | ✓ |
+| **volumeMounts** | 修改挂载卷 | ✓ |
+| **replicas** | 修改副本数 | ✗（仅伸缩） |
 
 ```bash
 # 触发滚动更新的三种方式
@@ -371,14 +371,14 @@ Recreate过程：
 
 | 维度 | RollingUpdate | Recreate |
 |------|:------------:|:--------:|
-| 零停机 | ✅ | ❌ |
-| 双版本共存 | ✅（短暂） | ❌ |
+| 零停机 | ✓ | ✗ |
+| 双版本共存 | ✓（短暂） | ✗ |
 | 资源消耗 | 高（可能双倍） | 低 |
 | 回滚速度 | 慢 | 快（一次性重建） |
 | 适用 | 大部分无状态服务 | 数据库schema变更、有状态服务 |
 | 风险 | 新旧版本短暂共存 | 一段时间完全不可用 |
 
-> ⚠️ **如果你的更新包含不兼容的数据库Migration（比如删除字段），使用RollingUpdate可能导致新旧版本同时操作数据库而报错。** 这种场景要么使用Recreate，要么把迁移和代码发布拆成两步。
+> **如果你的更新包含不兼容的数据库Migration（比如删除字段），使用RollingUpdate可能导致新旧版本同时操作数据库而报错。** 这种场景要么使用Recreate，要么把迁移和代码发布拆成两步。
 
 ---
 
@@ -415,7 +415,7 @@ spec:
                                  # 超过的版本会被清理
 ```
 
-> 💡 **如果设置revisionHistoryLimit=0，则无法回滚！** 生产环境建议保留3~5个版本。
+> **如果设置revisionHistoryLimit=0，则无法回滚！** 生产环境建议保留3~5个版本。
 
 ### 6.4 完整回滚示例
 
@@ -616,7 +616,7 @@ kubectl scale deployment user-service-blue --replicas=0
 | **A/B测试** | 按用户特征分流 | 可验证业务效果 | 配置复杂 | 功能试用、版本对比 |
 | **Recreate** | 一次性重建 | 无新老共存问题 | 有停机时间 | 数据库迁移、有状态服务 |
 
-> 💡 **策略选择原则**：资源充足+需要极速回滚 → 蓝绿部署；要安全验证新版本 → 金丝雀发布；最常用+最省事 → 滚动更新。
+> **策略选择原则**：资源充足+需要极速回滚 → 蓝绿部署；要安全验证新版本 → 金丝雀发布；最常用+最省事 → 滚动更新。
 
 ---
 
@@ -628,11 +628,11 @@ K8s除了Deployment之外，还有其他几种Workload资源，适用于不同�
 
 | 资源 | 缩写 | 用途 | 有状态？ | 副本管理 | 更新策略 |
 |------|:----:|------|:--------:|---------|---------|
-| **Deployment** | deploy | 无状态应用 | ❌ | ✅ ReplicaSet | RollingUpdate/Recreate |
-| **StatefulSet** | sts | 有状态应用 | ✅ | ✅ 有状态副本 | RollingUpdate/OnDelete |
-| **DaemonSet** | ds | 每个Node一个Pod | ❌ | ❌ 按Node数 | RollingUpdate/OnDelete |
-| **Job** | job | 一次性任务 | ❌ | ❌ | ❌ 运行完退出 |
-| **CronJob** | cj | 定时任务 | ❌ | ❌ 按Cron调度 | ❌ 每次新建 |
+| **Deployment** | deploy | 无状态应用 | ✗ | ✓ ReplicaSet | RollingUpdate/Recreate |
+| **StatefulSet** | sts | 有状态应用 | ✓ | ✓ 有状态副本 | RollingUpdate/OnDelete |
+| **DaemonSet** | ds | 每个Node一个Pod | ✗ | ✗ 按Node数 | RollingUpdate/OnDelete |
+| **Job** | job | 一次性任务 | ✗ | ✗ | ✗ 运行完退出 |
+| **CronJob** | cj | 定时任务 | ✗ | ✗ 按Cron调度 | ✗ 每次新建 |
 
 ### 9.2 详细对比
 
@@ -641,7 +641,7 @@ K8s除了Deployment之外，还有其他几种Workload资源，适用于不同�
 | **Pod名称** | 随机后缀 | 有序编号（pod-0, pod-1） | 随机后缀 | 随机后缀 | 随机后缀 |
 | **存储** | 共享PV | 独立PVC（每个Pod一个） | 共享/hostPath | 临时 | 临时 |
 | **网络** | 随机IP | 稳定DNS（pod-0.svc） | 每个Node一个 | 随机IP | 随机IP |
-| **伸缩** | ✅ 任意 | ✅ 但需谨慎 | ❌ 按Node | ❌ | ❌ |
+| **伸缩** | ✓ 任意 | ✓ 但需谨慎 | ✗ 按Node | ✗ | ✗ |
 | **典型场景** | Web服务、API | 数据库、消息队列、ZooKeeper | 日志收集、监控Agent | 数据迁移 | 定时备份 |
 
 ### 9.3 StatefulSet 特点详解
@@ -935,4 +935,4 @@ spec:
       port: 8080
 ```
 
-> 🎯 **Deployment是K8s中最常用的Workload，但它不是万能的**。理解Deployment和StatefulSet/DaemonSet/Job的差异，选择正确的工作负载类型，才能设计出高可用的生产系统。下一章[04-Service与网络](04-Service与网络.md)将介绍如何让外界访问这些Pod。
+> **Deployment是K8s中最常用的Workload，但它不是万能的**。理解Deployment和StatefulSet/DaemonSet/Job的差异，选择正确的工作负载类型，才能设计出高可用的生产系统。下一章[04-Service与网络](04-Service与网络.md)将介绍如何让外界访问这些Pod。

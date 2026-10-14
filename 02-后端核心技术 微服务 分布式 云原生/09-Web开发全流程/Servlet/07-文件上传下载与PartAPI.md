@@ -1,7 +1,7 @@
 # Servlet 文件上传下载与 Part API
 > multipart 报文解析、@MultipartConfig 四参数、Part API 全解、大文件流式处理与下载头——以及路径穿越等上传安全必修课
 
-## 📚 目录
+## 目录
 1. [上传原理：multipart/form-data 报文](#1-上传原理multipartform-data-报文)
 2. [@MultipartConfig 四参数](#2-multipartconfig-四参数)
 3. [Part API 全解](#3-part-api-全解)
@@ -38,7 +38,7 @@ Content-Type: image/jpeg
 | 普通字段 | 无 filename → 归入 `getParameter` |
 | 文件字段 | 有 filename → 走 `Part` API（Servlet 3.0 起，`getParameter` 对文件返回 null） |
 
-> 💡 Servlet 3.0 之前没有原生上传 API（只能解析 `getInputStream()` 手动拆报文，或用 Commons FileUpload）——Part API 是规范层对"手动解析 multipart"的终结。
+> Servlet 3.0 之前没有原生上传 API（只能解析 `getInputStream()` 手动拆报文，或用 Commons FileUpload）——Part API 是规范层对"手动解析 multipart"的终结。
 
 ## 2. @MultipartConfig 四参数
 
@@ -66,7 +66,7 @@ public class UploadServlet extends HttpServlet {
 | `maxRequestSize` | -1（无限制） | 请求总大小上限（含所有文件与字段） |
 | `location` | 空 | 临时文件目录（`Part.write()` 相对路径的基准） |
 
-> ⚠️ **阈值设计**：小文件多 → 调大 `fileSizeThreshold` 减少磁盘 IO；大文件多 → 调小阈值防止大对象撑爆堆内存（尤其容器堆只有几百 MB 时，10MB 文件 × 100 并发 = 1GB 内存）。
+> **阈值设计**：小文件多 → 调大 `fileSizeThreshold` 减少磁盘 IO；大文件多 → 调小阈值防止大对象撑爆堆内存（尤其容器堆只有几百 MB 时，10MB 文件 × 100 并发 = 1GB 内存）。
 
 ## 3. Part API 全解
 
@@ -84,13 +84,13 @@ InputStream in = file.getInputStream();         // 读取内容
 
 // 落盘（最常用）
 file.write("/uploads/" + fileName);   // 相对路径基于 location；绝对路径直接写
-// ⚠️ write() 内部自动关闭流；重复调用报错
+// write() 内部自动关闭流；重复调用报错
 
 // 清理临时文件（大文件落盘后必须）
 file.delete();
 ```
 
-> ⚠️ **getSubmittedFileName() 返回的是客户端原始文件名**——这是路径穿越攻击的入口，见 §7。`getParts()` 返回的集合**包含普通字段**（无 filename 的 Part），判断文件：`part.getSubmittedFileName() != null`。
+> **getSubmittedFileName() 返回的是客户端原始文件名**——这是路径穿越攻击的入口，见 §7。`getParts()` 返回的集合**包含普通字段**（无 filename 的 Part），判断文件：`part.getSubmittedFileName() != null`。
 
 ## 4. 多文件与表单字段混用
 
@@ -119,7 +119,7 @@ protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 
 ## 5. 大文件流式处理
 
-> 🎯 核心原则：**永远不要 `readAllBytes()` 或 `Files.copy(inputStream)` 到内存**——大文件上传是流式的，逐块搬移即可，内存占用恒定。
+> 核心原则：**永远不要 `readAllBytes()` 或 `Files.copy(inputStream)` 到内存**——大文件上传是流式的，逐块搬移即可，内存占用恒定。
 
 ```java
 protected void doPost(HttpServletRequest req, HttpServletResponse resp)
@@ -143,7 +143,7 @@ protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 }
 ```
 
-> 💡 进阶：大文件可配 `fileSizeThreshold` 让容器先落临时盘，再 `part.write()` 或直接 `Files.move` 到目标目录（避免一次 `getInputStream` 全读内存）。超大文件（GB 级）建议绕过 Servlet 走对象存储直传（前端直传 OSS/S3 预签名 URL），别让应用服务器成为带宽瓶颈。
+> 进阶：大文件可配 `fileSizeThreshold` 让容器先落临时盘，再 `part.write()` 或直接 `Files.move` 到目标目录（避免一次 `getInputStream` 全读内存）。超大文件（GB 级）建议绕过 Servlet 走对象存储直传（前端直传 OSS/S3 预签名 URL），别让应用服务器成为带宽瓶颈。
 
 ## 6. 文件下载与响应头
 
@@ -181,7 +181,7 @@ public class DownloadServlet extends HttpServlet {
 | `Content-Length` | 流式下载前设置，支持进度条与断点续传服务端判断 |
 | `Accept-Ranges: bytes` | 声明支持 Range 分片（配合 206 实现断点续传） |
 
-> ⚠️ 下载安全：**别用未校验的原始文件名直接拼 Content-Disposition**——`filename="../../etc/passwd"` 或注入 `";` 可被部分代理/杀软误判甚至注入响应头（CRLF 注入）。
+> 下载安全：**别用未校验的原始文件名直接拼 Content-Disposition**——`filename="../../etc/passwd"` 或注入 `";` 可被部分代理/杀软误判甚至注入响应头（CRLF 注入）。
 
 ## 7. 上传安全：路径穿越与消毒
 
@@ -220,7 +220,7 @@ private String sanitize(String fileName) {
 | 文件重名覆盖 | `CREATE_NEW` 或 UUID 重命名 |
 | 临时文件残留 | `Part.delete()` / 定时清理 location 目录 |
 
-> 🎯 一句话：**上传本质是把"不可信字节"放进"受控目录"**——客户端给的一切（文件名、Content-Type、大小）都不可信；服务端必须重新命名、白名单扩展名、隔离目录、限大小。
+> 一句话：**上传本质是把"不可信字节"放进"受控目录"**——客户端给的一切（文件名、Content-Type、大小）都不可信；服务端必须重新命名、白名单扩展名、隔离目录、限大小。
 
 ## 8. 与 Spring MVC 的对比
 
@@ -243,7 +243,7 @@ spring:
       file-size-threshold: 1MB # 对应 fileSizeThreshold
 ```
 
-> 🎯 本质：Spring MVC 的 `MultipartFile` 就是 Part 的框架化包装——**学会 Part API，Spring 上传配置只需记三个 key**。两者共用同一套容器解析链路。
+> 本质：Spring MVC 的 `MultipartFile` 就是 Part 的框架化包装——**学会 Part API，Spring 上传配置只需记三个 key**。两者共用同一套容器解析链路。
 
 ---
 

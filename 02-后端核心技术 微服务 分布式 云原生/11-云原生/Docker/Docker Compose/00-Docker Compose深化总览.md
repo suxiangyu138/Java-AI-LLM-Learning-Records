@@ -1,7 +1,7 @@
 # Docker Compose 深化总览
 > 从"会用 Compose 编排多服务"到"吃透 Compose Spec"：文件规范、网络卷、依赖管理、多环境、Watch 热重载、生产与故障排查
 
-## 📚 目录
+## 目录
 1. [知识体系导图](#1-知识体系导图)
 2. [定位：与上级 Docker 体系的分工](#2-定位与上级-docker-体系的分工)
 3. [模块导航](#3-模块导航)
@@ -30,7 +30,7 @@ Docker Compose 深化体系（7 篇，Compose v5 / v2.40+ 基准）
 └─ 00 总览（本文）
 ```
 
-> 🎯 定位一句话：上级 `07-Docker-Compose多服务编排.md` 讲"怎么用"，本体系讲"为什么这么设计 + 怎么用到极致"。
+> 定位一句话：上级 `07-Docker-Compose多服务编排.md` 讲"怎么用"，本体系讲"为什么这么设计 + 怎么用到极致"。
 
 ## 2. 定位：与上级 Docker 体系的分工
 
@@ -71,7 +71,7 @@ Docker Compose 深化体系（7 篇，Compose v5 / v2.40+ 基准）
 | Compose Bridge | 可用 | `docker compose convert --format kubernetes` 转 K8s 清单 |
 | 安全 | CVE-2025-62725 已修复（v2.40.2+） | `include` + OCI 制品场景需升级 |
 
-> ⚠️ **时效性**：本文按 2026-08 官方 Compose Spec 与发布信息编写。字段细节以 [Compose Spec 官方规范](https://compose-spec.io/) 与 `docker compose config` 实际输出为准。
+> **时效性**：本文按 2026-08 官方 Compose Spec 与发布信息编写。字段细节以 [Compose Spec 官方规范](https://compose-spec.io/) 与 `docker compose config` 实际输出为准。
 
 ## 6. 核心概念速查
 

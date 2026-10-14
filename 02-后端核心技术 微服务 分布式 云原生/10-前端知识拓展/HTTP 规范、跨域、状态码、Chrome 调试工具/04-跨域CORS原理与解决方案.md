@@ -1,6 +1,6 @@
 # 04 - 跨域 CORS 原理与解决方案
 
-> 🎯 跨域是前后端分离项目的"第一关" — 同源策略是浏览器的安全机制，CORS 是标准解决方案。后端配置几个 HTTP 头就能彻底解决
+> 跨域是前后端分离项目的"第一关" — 同源策略是浏览器的安全机制，CORS 是标准解决方案。后端配置几个 HTTP 头就能彻底解决
 
 ---
 
@@ -20,16 +20,16 @@
 同源 = 协议 + 域名 + 端口 完全相同
 
 http://example.com:8080/ 和
-  ├── http://example.com:8080/api  → ✅ 同源（路径不同不影响）
-  ├── https://example.com:8080/    → ❌ 协议不同
-  ├── http://api.example.com:8080/ → ❌ 域名不同
-  └── http://example.com:9090/     → ❌ 端口不同
+  ├── http://example.com:8080/api  → ✓ 同源（路径不同不影响）
+  ├── https://example.com:8080/    → ✗ 协议不同
+  ├── http://api.example.com:8080/ → ✗ 域名不同
+  └── http://example.com:9090/     → ✗ 端口不同
 
 同源策略限制：
-  ✅ 允许：<script> <link> <img> <video> 等标签跨域加载
-  ❌ 禁止：XHR/Fetch API 跨域请求
-  ❌ 禁止：跨域读取 Cookie/LocalStorage/IndexDB
-  ❌ 禁止：跨域操作 DOM（iframe 跨域）
+  ✓ 允许：<script> <link> <img> <video> 等标签跨域加载
+  ✗ 禁止：XHR/Fetch API 跨域请求
+  ✗ 禁止：跨域读取 Cookie/LocalStorage/IndexDB
+  ✗ 禁止：跨域操作 DOM（iframe 跨域）
 ```
 
 ---
@@ -71,14 +71,14 @@ http://example.com:8080/ 和
 | `Access-Control-Max-Age` | 预检缓存时间（秒） | `3600` |
 | `Access-Control-Expose-Headers` | 允许 JS 读取的响应头 | `X-Total-Count` |
 
-> ⚠️ `Access-Control-Allow-Origin: *` 和 `Access-Control-Allow-Credentials: true` **不能同时使用**！带 Credentials 时必须指定具体 Origin。
+> `Access-Control-Allow-Origin: *` 和 `Access-Control-Allow-Credentials: true` **不能同时使用**！带 Credentials 时必须指定具体 Origin。
 
 ---
 
 ## 3. Spring Boot 跨域配置
 
 ```java
-// ⭐ 方式1：全局配置（推荐）
+// ★ 方式1：全局配置（推荐）
 @Configuration
 public class CorsConfig implements WebMvcConfigurer {
     @Override
@@ -145,8 +145,8 @@ server {
 
 | 方案 | 原理 | 适用场景 |
 |------|------|----------|
-| **CORS** | 服务端设置响应头允许跨域 | ⭐ 标准方案 |
-| **JSONP** | `<script>` 标签不受同源限制 | ⚠️ 仅 GET、老旧项目 |
+| **CORS** | 服务端设置响应头允许跨域 | ★ 标准方案 |
+| **JSONP** | `<script>` 标签不受同源限制 | 仅 GET、老旧项目 |
 | **反向代理** | 同源部署（Nginx 代理前后端） | 生产环境 |
 | **postMessage** | iframe 跨域通信 | 嵌入页面场景 |
 | **WebSocket** | 不受同源策略限制 | 实时通信 |
@@ -168,4 +168,4 @@ server {
 # → 前后端都在 www.example.com，不存在跨域
 ```
 
-> 🎯 **最佳实践**：开发环境用 Spring Boot CORS 配置；生产环境用 Nginx 反向代理（前后端同域）或 Nginx CORS 头。`OPTIONS` 预检请求走 Nginx 直接返回 204（不穿透到后端），减少无谓开销。
+> **最佳实践**：开发环境用 Spring Boot CORS 配置；生产环境用 Nginx 反向代理（前后端同域）或 Nginx CORS 头。`OPTIONS` 预检请求走 Nginx 直接返回 204（不穿透到后端），减少无谓开销。

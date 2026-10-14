@@ -2,7 +2,7 @@
 
 > 定位：LangChain 生态的可视化层——Flowise（TypeScript/LangChainJS）与 Langflow（Python/LangChain）同源不同语言；Langflow 2026 年以"流程一键导出 MCP Server"出圈（2026-08 基准）
 
-## 📚 目录
+## 目录
 
 1. [双子星定位对比](#1-双子星定位对比)
 2. [Langflow：Python 可视化流程构建器](#2-langflowpython-可视化流程构建器)
@@ -26,7 +26,7 @@
 | 强项 | 最快出聊天/RAG MVP、模板市场、托管 Widget | 序列化流程可被 Python 服务运行、MCP 导出、企业级 |
 | 弱项 | 纯 JS 生态、画布 30 节点后卡顿 | 需 Python 环境、组件体系学习成本 |
 
-> 🎯 **一句话**：两个平台都是"LangChain 的画布化包装"——Flowise 是给 Node/前端团队的快速 MVP 工具，Langflow 是给 Python 团队的可视化-代码桥接工具。
+> **一句话**：两个平台都是"LangChain 的画布化包装"——Flowise 是给 Node/前端团队的快速 MVP 工具，Langflow 是给 Python 团队的可视化-代码桥接工具。
 
 ## 2. Langflow：Python 可视化流程构建器
 
@@ -77,7 +77,7 @@ Langflow 1.9（2026-04-13）引入工程化能力：
 | IDE/编码 Agent 支持 | MCP 协议让 IBM Bob、Claude Code 等可编程化构建与执行流程 |
 | 部署延伸 | EDB Hybrid Manager 将流程打包为不可变版本化 bundle，经网关以 HTTP 与 MCP 双端点发布 |
 
-> 💡 **工程化信号**：Langflow 在 1.9 前是"画布工具"，1.9 后开始覆盖**版本、测试、部署、CI 化**——补齐了低代码平台通往生产的最后一公里。
+> **工程化信号**：Langflow 在 1.9 前是"画布工具"，1.9 后开始覆盖**版本、测试、部署、CI 化**——补齐了低代码平台通往生产的最后一公里。
 
 ## 5. Flowise：LangChainJS 拖拽构建器
 
@@ -106,7 +106,7 @@ Langflow：2024 被 DataStax 收购 → 2025 IBM 收购 DataStax
   → 2026-08 仍保持高频发布（1.9 → 1.11.x）
 ```
 
-> ⚠️ **选型提示**：开源平台被收购后，License 与演进方向是长期风险——选择前查看最新条款（Flowise 尤其注意）。
+> **选型提示**：开源平台被收购后，License 与演进方向是长期风险——选择前查看最新条款（Flowise 尤其注意）。
 
 ## 7. Flowise vs Langflow 选型
 
@@ -142,11 +142,11 @@ Langflow：2024 被 DataStax 收购 → 2025 IBM 收购 DataStax
 | 非产品化 | 无 Dify 式的用户/密钥/分析体系 | 对外交付接自建网关 |
 | 多 Agent 深度 | 组件级支持，复杂编排弱于专用框架 | 复杂多 Agent 用 LangGraph 等 |
 
-> 🎯 **适用结论**：Langflow = "**Python 团队的可视化-代码桥**"，最独特的价值是 MCP 一键导出（让编码 Agent 调用业务流程图）；Flowise = "**Node 团队的快速 MVP 工具**"。两者都是"原型验证好、产品化弱"——交付完整产品时仍要接自建网关或迁移。
+> **适用结论**：Langflow = "**Python 团队的可视化-代码桥**"，最独特的价值是 MCP 一键导出（让编码 Agent 调用业务流程图）；Flowise = "**Node 团队的快速 MVP 工具**"。两者都是"原型验证好、产品化弱"——交付完整产品时仍要接自建网关或迁移。
 
 ## 9. 核心要点
 
-> 🎯 **核心要点**：
+> **核心要点**：
 > 1. 双子星同源：Flowise 包 LangChainJS（Node），Langflow 包 LangChain Python——按技术栈选
 > 2. Langflow 的杀手锏是 **MCP Server 一键导出**：拖拽流程 → MCP 工具 → Claude Code/Codex 调用
 > 3. Langflow 1.9 补齐工程化（Flow DevOps Toolkit + 版本管理），从"画布工具"走向"开发平台"

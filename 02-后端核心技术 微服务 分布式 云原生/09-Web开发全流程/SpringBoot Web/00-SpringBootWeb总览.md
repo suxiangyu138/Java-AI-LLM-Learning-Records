@@ -1,7 +1,7 @@
 # SpringBoot Web 总览
 > Spring Boot 的 Web 层专项体系：内嵌容器、DispatcherServlet 请求链路、MVC 定制、Filter/Interceptor、错误处理、静态资源、部署与 HTTPS——与 Servlet 体系同目录联动，专攻"Boot 的 Web 到底怎么跑起来"
 
-## 📚 目录
+## 目录
 1. [知识体系导图](#1-知识体系导图)
 2. [模块导航](#2-模块导航)
 3. [学习路线推荐](#3-学习路线推荐)
@@ -32,7 +32,7 @@ SpringBoot Web 体系（8 篇，Boot 4.1 / Framework 7.0 / Tomcat 11 / Servlet 6
 │   └─ 08 生产实践与面试题（上传速查/故障排障/避坑/面试）
 ```
 
-> 🎯 定位一句话：SpringBoot Web 是 **"Servlet 体系之上的框架化 Web 层"**——DispatcherServlet 是一个标准 Servlet（映射 `/`），Boot 只是把容器、配置、定制全部自动化的"零配置版本"。
+> 定位一句话：SpringBoot Web 是 **"Servlet 体系之上的框架化 Web 层"**——DispatcherServlet 是一个标准 Servlet（映射 `/`），Boot 只是把容器、配置、定制全部自动化的"零配置版本"。
 
 ## 2. 模块导航
 
@@ -56,7 +56,7 @@ SpringBoot Web 体系（8 篇，Boot 4.1 / Framework 7.0 / Tomcat 11 / Servlet 6
 | 应用进阶（2 天） | 要搞懂框架机制 | 04 → 05 → 06 |
 | 面试冲刺（1 天） | 备战后端面试 | 00 → 02 → 03 → 05 → 08 |
 
-> 💡 前置要求：本体系假设已了解 [Servlet](../Servlet/00-Servlet总览.md)、[Filter 过滤器](../Filter%20过滤器/00-Filter过滤器总览.md)、[Listener 监听器](../Listener%20监听器/00-Listener监听器总览.md)。**先学 Servlet 再看本体系，理解深度完全不同**。
+> 前置要求：本体系假设已了解 [Servlet](../Servlet/00-Servlet总览.md)、[Filter 过滤器](../Filter%20过滤器/00-Filter过滤器总览.md)、[Listener 监听器](../Listener%20监听器/00-Listener监听器总览.md)。**先学 Servlet 再看本体系，理解深度完全不同**。
 
 ## 4. SpringBoot Web 定位
 

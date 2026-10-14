@@ -1,6 +1,6 @@
 # 06 - Hermes-Agent 框架架构与插件系统
 
-> 🎯 Hermes-Agent 是 Nous Research 打造的**闭环自学习** AI Agent 框架——Agent 自主管理记忆、创建技能、在多次会话中不断进化，支持多平台接入和完整的插件扩展体系
+> Hermes-Agent 是 Nous Research 打造的**闭环自学习** AI Agent 框架——Agent 自主管理记忆、创建技能、在多次会话中不断进化，支持多平台接入和完整的插件扩展体系
 
 ---
 
@@ -42,7 +42,7 @@ Hermes-Agent 闭环
 └──────────────────────────────────────────────────┘
 ```
 
-> 🎯 **核心哲学**：Agent 不是一次性工具，而是一个在使用中不断变聪明的伙伴
+> **核心哲学**：Agent 不是一次性工具，而是一个在使用中不断变聪明的伙伴
 
 ### 1.2 关键能力矩阵
 
@@ -236,12 +236,12 @@ Session 生命周期
 
 | 平台 | 状态 | 特点 |
 |------|:---:|------|
-| **Telegram** | ✅ Production | 机器人 API 最成熟 |
-| **Discord** | ✅ Production | 社区运营首选 |
-| **Slack** | ✅ Production | 企业内部协作 |
-| **WhatsApp** | ✅ Beta | 个人助手场景 |
-| **Signal** | ✅ Preview | 隐私优先 |
-| **Terminal (TUI)** | ✅ Production | 开发者原生体验 |
+| **Telegram** | ✓ Production | 机器人 API 最成熟 |
+| **Discord** | ✓ Production | 社区运营首选 |
+| **Slack** | ✓ Production | 企业内部协作 |
+| **WhatsApp** | ✓ Beta | 个人助手场景 |
+| **Signal** | ✓ Preview | 隐私优先 |
+| **Terminal (TUI)** | ✓ Production | 开发者原生体验 |
 
 ## 6. 代码级上手
 

@@ -69,7 +69,7 @@ WireMock 能力矩阵
 └────────────────────────────────────────────┘
 ```
 
-> 💡 **适用场景判断**：如果被测代码通过 HTTP 调用外部服务，且你不希望在测试中真正调用该服务，就是 WireMock 的用武之地。
+> **适用场景判断**：如果被测代码通过 HTTP 调用外部服务，且你不希望在测试中真正调用该服务，就是 WireMock 的用武之地。
 
 ---
 
@@ -104,7 +104,7 @@ docker run -it --rm \
 docker run -it --rm -p 9090:9090 wiremock/wiremock:3.9.1 --port 9090
 ```
 
-> 💡 使用 Docker 时，将 stubbing 配置文件放在挂载目录的 `mappings/` 和 `__files/` 目录下，WireMock 自动加载。
+> 使用 Docker 时，将 stubbing 配置文件放在挂载目录的 `mappings/` 和 `__files/` 目录下，WireMock 自动加载。
 
 ### 2.3 JVM 库模式（WireMockServer）
 
@@ -213,7 +213,7 @@ stubFor(get(urlMatching("/api/users/[0-9]+"))
 stubFor(get(urlPathMatching("/api/(users|orders)/.*"))
 ```
 
-> ⚠️ `urlEqualTo` 会匹配完整 URL 包括查询参数，`urlPathEqualTo` 只匹配路径部分。
+> `urlEqualTo` 会匹配完整 URL 包括查询参数，`urlPathEqualTo` 只匹配路径部分。
 
 ### 3.4 Header 匹配
 
@@ -345,7 +345,7 @@ stubFor(get(urlEqualTo("/api/orders/ORD-123"))
         .withBodyFile("response/order-123.json")));
 ```
 
-> 💡 `withBodyFile` 默认从 `__files/` 目录查找文件，可通过 `--root-dir` 或 `wireMockConfig().usingFilesUnderDirectory()` 自定义根目录。
+> `withBodyFile` 默认从 `__files/` 目录查找文件，可通过 `--root-dir` 或 `wireMockConfig().usingFilesUnderDirectory()` 自定义根目录。
 
 ### 4.4 延迟模拟
 
@@ -759,7 +759,7 @@ WireMock.takeSnapshotRecording();
 // Body: {"targetBaseUrl": "https://api.real-service.com"}
 ```
 
-> 💡 **使用建议**：录制功能适合快速生成 Stub，但录制的响应数据可能包含敏感信息或过期数据。录制结果应作为起点，再手动调整和精简。
+> **使用建议**：录制功能适合快速生成 Stub，但录制的响应数据可能包含敏感信息或过期数据。录制结果应作为起点，再手动调整和精简。
 
 ---
 
@@ -1394,7 +1394,7 @@ class OrderServiceFullTest {
 }
 ```
 
-> 🎯 **最佳实践总结**：对于涉及外部 HTTP API 的集成测试，WireMock 是首选方案。Mockito 用于模拟内部依赖。在微服务架构中，每个微服务的测试通常同时使用 Mockito（模拟本服务内部依赖）和 WireMock（模拟其他微服务）。Hoverfly 适合需要透明的全局代理拦截场景，但在精细控制和 Java 生态集成方面不如 WireMock 成熟。
+> **最佳实践总结**：对于涉及外部 HTTP API 的集成测试，WireMock 是首选方案。Mockito 用于模拟内部依赖。在微服务架构中，每个微服务的测试通常同时使用 Mockito（模拟本服务内部依赖）和 WireMock（模拟其他微服务）。Hoverfly 适合需要透明的全局代理拦截场景，但在精细控制和 Java 生态集成方面不如 WireMock 成熟。
 
 ### 14.4 性能参考
 
@@ -1408,10 +1408,10 @@ class OrderServiceFullTest {
 
 ---
 
-> ⚠️ **注意事项**：
+> **注意事项**：
 > 1. WireMock 的 Stub 默认会在 `mappings/` 目录下持久化，使用 `@WireMockExtension` 的 `@BeforeEach` 中建议调用 `WireMock.reset()` 避免 Stub 污染。
 > 2. WireMock 只模拟 HTTP 协议的交互，不能模拟 HTTPS 证书链验证等安全细节（除非配置 SSL）。
 > 3. 使用录制功能时注意处理敏感数据（API Key、密码等），录制后应审查并清理。
 > 4. 对于高并发测试，WireMock 的默认线程池可能成为瓶颈，可通过 `wireMockConfig().containerThreads(16)` 调整。
 
-> 🎯 **WireMock 核心优势**：在真实的 HTTP 协议层面模拟外部服务，同时提供精确的请求匹配、丰富的响应定义和强大的验证能力，是 Java 微服务集成测试中模拟外部 HTTP API 的事实标准工具。
+> **WireMock 核心优势**：在真实的 HTTP 协议层面模拟外部服务，同时提供精确的请求匹配、丰富的响应定义和强大的验证能力，是 Java 微服务集成测试中模拟外部 HTTP API 的事实标准工具。

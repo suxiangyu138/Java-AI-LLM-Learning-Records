@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [官方立场：feature-complete 与迁移建议](#1-官方立场feature-complete-与迁移建议)
 2. [@HttpExchange：Framework 7 的声明式客户端](#2-httpexchangeframework-7-的声明式客户端)
@@ -33,7 +33,7 @@
 | ② 5.0 无新特性 | 只有 Jackson 3 兼容 |
 | ③ **官方转向的根基** | Spring Cloud Commons 5.0 让 @HttpExchange 自动获得：**服务发现 + 负载均衡 + 熔断**——补上了微服务场景的最后一块拼图 |
 
-> 🎯 一句话：**@HttpExchange 不是"又一个 Feign"，是"Framework 7 原生 + Cloud 自动集成"的完整替代**——Cloud 5.0 把 Feign 的三大卖点（发现/LB/熔断）原样搬给了它，Feign 只剩"存量兼容"角色。
+> 一句话：**@HttpExchange 不是"又一个 Feign"，是"Framework 7 原生 + Cloud 自动集成"的完整替代**——Cloud 5.0 把 Feign 的三大卖点（发现/LB/熔断）原样搬给了它，Feign 只剩"存量兼容"角色。
 
 ## 2. @HttpExchange：Framework 7 的声明式客户端
 
@@ -85,7 +85,7 @@ spring:
   └── HTTPS 升级（选中 secure 实例自动 https）
 ```
 
-> 🎯 对照记忆：**@FeignClient(name=) 的三大能力，@HttpExchange 用"serviceclient 组配置"等价获得**——Feign 的 name 属性 → 组名；Feign 的 fallback → 熔断装饰 + 方法降级。
+> 对照记忆：**@FeignClient(name=) 的三大能力，@HttpExchange 用"serviceclient 组配置"等价获得**——Feign 的 name 属性 → 组名；Feign 的 fallback → 熔断装饰 + 方法降级。
 
 ## 3. 与 OpenFeign 的全维度对比
 
@@ -95,15 +95,15 @@ spring:
 | 注解 | @FeignClient + Spring MVC 注解 | @HttpExchange/@GetExchange/@PostExchange |
 | 依赖 | spring-cloud-starter-openfeign | 无额外依赖（Framework 7 内置） |
 | 代理层 | 反射代理（Feign ClientFactoryBean） | 代理（HttpServiceProxyFactory，更轻） |
-| 服务发现/LB | ✅（LoadBalancer 集成） | ✅（5.0 自动集成） |
-| 熔断 | ✅ fallback/fallbackFactory | ✅（5.0 熔断装饰 + 降级） |
-| **响应式** | ❌（无） | ✅（WebClient 版，响应式链路可用） |
-| 原生镜像 | ⚠️（反射代理不友好） | ✅ 更友好（编译期代理信息） |
+| 服务发现/LB | ✓（LoadBalancer 集成） | ✓（5.0 自动集成） |
+| 熔断 | ✓ fallback/fallbackFactory | ✓（5.0 熔断装饰 + 降级） |
+| **响应式** | ✗（无） | ✓（WebClient 版，响应式链路可用） |
+| 原生镜像 | （反射代理不友好） | ✓ 更友好（编译期代理信息） |
 | 启动速度 | 反射处理（略慢） | 更快 |
 | 维护状态 | **feature-complete（兼容适配器）** | **官方新方向（活跃）** |
 | 生态成熟度 | 极成熟（多年社区积累） | 较新（5.0 补齐微服务能力） |
 
-> 🎯 面试必答：**"@HttpExchange 比 OpenFeign 好在哪？"**——**官方原话三卖点：① 无额外依赖（Framework 7 原生）；② 性能更好（去掉 Feign 的反射代理层）；③ 原生镜像更友好（启动更快）**；再加两点：**响应式支持（Feign 没有）、官方新方向（Feign 只修 bug）**——存量代码继续用 Feign 没问题，新代码官方明确导向 @HttpExchange。
+> 面试必答：**"@HttpExchange 比 OpenFeign 好在哪？"**——**官方原话三卖点：① 无额外依赖（Framework 7 原生）；② 性能更好（去掉 Feign 的反射代理层）；③ 原生镜像更友好（启动更快）**；再加两点：**响应式支持（Feign 没有）、官方新方向（Feign 只修 bug）**——存量代码继续用 Feign 没问题，新代码官方明确导向 @HttpExchange。
 
 ## 4. 迁移清单（存量 Feign 项目）
 
@@ -136,7 +136,7 @@ spring:
 | 团队学习 | 中 | 新 API 熟悉成本 |
 | 收益 | 长期 | 响应式能力、原生镜像、官方支持方向 |
 
-> 💡 务实建议：**不要"为迁而迁"**——存量 Feign 代码稳定运行就继续用（bugfix 长期维护）；**迁移的时机**：① 新项目直接上；② 需要响应式/原生镜像时；③ 重大版本升级顺带改造（避免专门安排迁移工单）。
+> 务实建议：**不要"为迁而迁"**——存量 Feign 代码稳定运行就继续用（bugfix 长期维护）；**迁移的时机**：① 新项目直接上；② 需要响应式/原生镜像时；③ 重大版本升级顺带改造（避免专门安排迁移工单）。
 
 ## 5. 何时不迁：存量项目决策
 
@@ -166,13 +166,13 @@ spring:
   │         ├── 阻塞式 → RestClient 版
   │         └── 响应式 → WebClient 版
   └── 否（存量 Feign 项目）：
-        ├── 稳定运行 + 无新需求 → 保持 Feign（bugfix 长期维护）✅
+        ├── 稳定运行 + 无新需求 → 保持 Feign（bugfix 长期维护）✓
         ├── 需要响应式/原生镜像 → 迁移 @HttpExchange
         ├── 大版本升级中 → 顺带迁移（评估后）
         └── 团队想渐进 → 新接口用 @HttpExchange、老接口留 Feign（共存过渡）
 ```
 
-> 🎯 最终结论：**"2026 年新代码写什么？"——官方答案：@HttpExchange**；**"存量 Feign 要慌吗？"——不慌**，bugfix 长期维护，按需迁移——**共存过渡（新接口 @HttpExchange + 老接口 Feign）是务实的渐进路径**。
+> 最终结论：**"2026 年新代码写什么？"——官方答案：@HttpExchange**；**"存量 Feign 要慌吗？"——不慌**，bugfix 长期维护，按需迁移——**共存过渡（新接口 @HttpExchange + 老接口 Feign）是务实的渐进路径**。
 
 ---
 

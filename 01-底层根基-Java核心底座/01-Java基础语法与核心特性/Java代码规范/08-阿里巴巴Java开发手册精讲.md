@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [手册全景结构](#1-手册全景结构)
 2. [强制规则精讲 TOP 20](#2-强制规则精讲-top-20)
@@ -76,35 +76,35 @@
 
 **【强制】1.1.1 代码中的命名均不能以下划线或美元符号开始或结束**
 ```java
-// ❌
+// ✗
 _name / name_ / $name / name$
-// ✅
+// ✓
 name
 ```
 
 **【强制】1.1.2 严禁使用拼音与英文混合命名，更不允许直接使用中文命名**
 ```java
-// ❌
+// ✗
 DaZhePromotion（打折）/ getPingfenByName()
-// ✅
+// ✓
 discountPromotion / getScoreByName()
 ```
 
 **【强制】1.1.3 类名使用 UpperCamelCase 风格**
 ```java
-// ✅
+// ✓
 ForceCode / UserDO / HTMLDocument
 ```
 
 **【强制】1.1.4 方法名、参数名、成员变量、局部变量都统一使用 lowerCamelCase 风格**
 ```java
-// ✅
+// ✓
 localValue / getHttpMessage()
 ```
 
 **【强制】1.1.5 常量命名全部大写，单词间用下划线隔开**
 ```java
-// ✅
+// ✓
 MAX_STOCK_COUNT / CACHE_EXPIRED_TIME
 ```
 
@@ -112,25 +112,25 @@ MAX_STOCK_COUNT / CACHE_EXPIRED_TIME
 
 **【强制】1.4.1 避免通过一个类的对象引用访问此类的静态变量或静态方法，无谓增加编译器解析成本，直接用类名来访问即可**
 ```java
-// ❌
+// ✗
 User user = new User();
 user.staticMethod();
-// ✅
+// ✓
 User.staticMethod();
 ```
 
 **【强制】1.4.2 所有的覆写方法，必须加 @Override 注解**
 ```java
-// ✅
+// ✓
 @Override
 public String toString() { }
 ```
 
 **【强制】1.4.3 相同参数类型，相同业务含义，才可以使用可变参数，避免使用 Object**
 ```java
-// ❌
+// ✗
 public void method(Object... args)
-// ✅
+// ✓
 public void method(String... args)
 ```
 
@@ -138,11 +138,11 @@ public void method(String... args)
 
 **【强制】1.4.5 Object 的 equals 方法容易抛空指针异常，应使用常量或确定有值的对象来调用 equals**
 ```java
-// ❌
+// ✗
 user.equals("admin")  // user 可能为 null
-// ✅
+// ✓
 "admin".equals(user)
-// ✅ 推荐
+// ✓ 推荐
 Objects.equals(user, "admin")
 ```
 
@@ -181,15 +181,15 @@ Objects.equals(user, "admin")
 
 **【推荐】1.1.2 如果是描述底层或系统特性的命名，使用名词 + 形容词的形式**
 ```java
-// ✅
+// ✓
 CacheExpiredTime / UserActiveStatus
 ```
 
 **【推荐】1.2.1 不允许任何魔法值直接出现在代码中**
 ```java
-// ❌
+// ✗
 if (type == 1)
-// ✅
+// ✓
 private static final int TYPE_ACTIVE = 1;
 if (type == TYPE_ACTIVE)
 ```

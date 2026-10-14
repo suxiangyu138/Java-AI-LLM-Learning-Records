@@ -2,7 +2,7 @@
 
 > 定位：HTML 知识体系入口——文档结构、语义化标签体系、SEO 与可访问性基础、模块导航
 
-## 📚 目录
+## 目录
 
 1. [HTML 是什么](#1-html-是什么)
 2. [HTML 文档骨架](#2-html-文档骨架)
@@ -19,11 +19,11 @@ HTML（HyperText Markup Language）= 网页结构语言
   标记（标签）描述内容的语义与结构
   与 CSS（样式）、JavaScript（行为）组成前端三件套
 
-⚠️ 版本现状（2026）：
+版本现状（2026）：
   HTML 已无版本号——Living Standard（活标准）持续演进
   由 WHATWG 维护，浏览器按标准实现
 
-⚠️ 面试必答：
+面试必答：
 "HTML 是网页的结构层——标签定义语义，
  CSS 负责表现、JS 负责行为；
  现代 HTML 是 WHATWG 的 Living Standard。"
@@ -57,7 +57,7 @@ HTML（HyperText Markup Language）= 网页结构语言
 | viewport | 移动端适配 | 缺失 → 移动端缩放过小 |
 | title/description | SEO 与分享 | 每个页面唯一 |
 
-> 🎯 **核心要点**：骨架五要素——DOCTYPE、lang、charset、viewport、title。移动端页面缺 viewport 是最常见错误。
+> **核心要点**：骨架五要素——DOCTYPE、lang、charset、viewport、title。移动端页面缺 viewport 是最常见错误。
 
 ---
 
@@ -105,7 +105,7 @@ HTML（HyperText Markup Language）= 网页结构语言
 | `<abbr>` | 缩写 | 带 title 全称 |
 
 ```
-⚠️ 面试必答：
+面试必答：
 "'div 套 div'是旧时代的写法——
  语义化标签让结构可被机器理解
  （搜索引擎、屏幕阅读器、爬虫）。"
@@ -124,7 +124,7 @@ HTML（HyperText Markup Language）= 网页结构语言
 | 可维护性 | 结构自解释，团队协作成本低 |
 
 ```
-⚠️ 面试必答：
+面试必答：
 "语义化 = 机器可理解的结构——
  SEO 排名、无障碍访问、代码可维护
  三赢。div 是最后手段。"
@@ -133,15 +133,15 @@ HTML（HyperText Markup Language）= 网页结构语言
 ### 4.2 语义化检查清单
 
 ```
-✅ 每页一个 h1
-✅ main 唯一
-✅ 导航用 nav（不是 div+class）
-✅ 列表用 ul/ol（不是 div 堆叠）
-✅ 按钮用 button（不是 div 点击）
-✅ 图片有 alt
-✅ 表单控件有 label
+✓ 每页一个 h1
+✓ main 唯一
+✓ 导航用 nav（不是 div+class）
+✓ 列表用 ul/ol（不是 div 堆叠）
+✓ 按钮用 button（不是 div 点击）
+✓ 图片有 alt
+✓ 表单控件有 label
 
-⚠️ 面试必答：
+面试必答：
 "'语义化检查'是前端面试常问——
  从 h1/main/nav/button/alt/label 六项
  自查页面是否语义正确。"
@@ -159,7 +159,7 @@ HTML（HyperText Markup Language）= 网页结构语言
 
 ---
 
-> 🎯 **本体系学习建议**：HTML 是前端地基——先掌握骨架与语义化（00），再熟练基础标签（01），最后补多媒体与可访问性（02）。语义化思维贯穿始终。
+> **本体系学习建议**：HTML 是前端地基——先掌握骨架与语义化（00），再熟练基础标签（01），最后补多媒体与可访问性（02）。语义化思维贯穿始终。
 
 ---
 

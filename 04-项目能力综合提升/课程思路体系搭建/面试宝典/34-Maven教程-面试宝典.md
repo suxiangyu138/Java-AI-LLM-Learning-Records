@@ -607,8 +607,8 @@ IDEA Maven配置步骤：
    ├── clean: 清理
    ├── install: 安装
    ├── package: 打包
-   ├── ⚡图标: Skip Tests
-   └── 🗘图标: Reimport All Projects
+   ├── 图标: Skip Tests
+   └── 图标: Reimport All Projects
 ```
 
 ### Q3: 如何从零搭建多模块Maven项目？

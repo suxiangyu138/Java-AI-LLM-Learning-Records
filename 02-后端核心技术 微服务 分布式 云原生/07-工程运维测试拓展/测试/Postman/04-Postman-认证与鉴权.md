@@ -1,10 +1,10 @@
 # Postman 认证与鉴权
 
-> 🔐 Bearer Token、OAuth 2.0、JWT 自动续期、API Key、Basic Auth —— Postman 中 7 种认证方式完全攻略
+> Bearer Token、OAuth 2.0、JWT 自动续期、API Key、Basic Auth —— Postman 中 7 种认证方式完全攻略
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [认证方式速览](#1-认证方式速览)
 2. [Bearer Token](#2-bearer-token)
@@ -21,12 +21,12 @@
 | 认证方式 | 配置复杂度 | 自动化 | 典型场景 |
 |---------|:------:|:----:|---------|
 | **No Auth** | - | - | 公开 API |
-| **Bearer Token** | ⭐ | 手动 | RESTful API 最常用 |
-| **OAuth 2.0** | ⭐⭐⭐ | ✅ 内置自动刷新 | 第三方登录 |
-| **API Key** | ⭐ | 手动 | 开放平台（Header/Query） |
-| **Basic Auth** | ⭐ | 手动 | 内部系统/调试 |
-| **Digest Auth** | ⭐⭐ | 手动 | 需要更高安全性的 HTTP 认证 |
-| **AWS Signature** | ⭐⭐⭐ | ✅ 内置 | AWS API Gateway |
+| **Bearer Token** | ★ | 手动 | RESTful API 最常用 |
+| **OAuth 2.0** | ★★★ | ✓ 内置自动刷新 | 第三方登录 |
+| **API Key** | ★ | 手动 | 开放平台（Header/Query） |
+| **Basic Auth** | ★ | 手动 | 内部系统/调试 |
+| **Digest Auth** | ★★ | 手动 | 需要更高安全性的 HTTP 认证 |
+| **AWS Signature** | ★★★ | ✓ 内置 | AWS API Gateway |
 
 ---
 
@@ -90,9 +90,9 @@ Postman 内置 OAuth 2.0 Token 自动刷新：
   3. 无缝更新，无需手动干预
 
 支持 Grant Type：
-  ✅ Authorization Code + PKCE
-  ✅ Client Credentials
-  ✅ Implicit
+  ✓ Authorization Code + PKCE
+  ✓ Client Credentials
+  ✓ Implicit
 ```
 
 ---
@@ -165,7 +165,7 @@ Basic Auth：
   → Authorization: Basic dXNlcjpwYXNz
 
   填写 Username / Password，Postman 自动生成 Header
-  ⚠️ 明文传输（仅 Base64 编码）→ 必须配 HTTPS！
+  明文传输（仅 Base64 编码）→ 必须配 HTTPS！
 
 Digest Auth：
   → 服务端发送 nonce → 客户端 hash(username:realm:password:nonce:...)
@@ -178,23 +178,23 @@ Digest Auth：
 ## 7. 认证最佳实践
 
 ```text
-✅ 使用集合级 Authorization
+✓ 使用集合级 Authorization
    → 整个 Collection 的请求共用同一认证方式
    → 需要特殊认证的单个请求可覆盖
 
-✅ Token 放 Collection Variables
+✓ Token 放 Collection Variables
    → 登录获取 token → 脚本存到 Collection Variables
    → 其他请求统一用 {{authToken}}
 
-✅ 敏感信息放 Environment 变量
+✓ 敏感信息放 Environment 变量
    → password, client_secret, api_key → Environment
    → 不放入 Collection JSON 导出文件
 
-✅ Pre-request Script 处理 Token 过期
+✓ Pre-request Script 处理 Token 过期
    → 每次请求前检查过期时间
    → 过期自动调用 refresh 接口
 
-✅ 不同环境不同认证
+✓ 不同环境不同认证
    → Dev 环境：简单 Basic Auth
    → Prod 环境：OAuth 2.0 + JWT
    → 切换环境时认证自动切换
@@ -210,7 +210,7 @@ Digest Auth：
 
 ---
 
-> 🎯 **核心要点**：大部分场景用 **Bearer Token + 自动续期脚本** 就够了；第三方集成用 **OAuth 2.0**（Postman 原生支持自动刷新）；开放平台用 **API Key**。
+> **核心要点**：大部分场景用 **Bearer Token + 自动续期脚本** 就够了；第三方集成用 **OAuth 2.0**（Postman 原生支持自动刷新）；开放平台用 **API Key**。
 
 ---
 

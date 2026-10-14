@@ -2,7 +2,7 @@
 
 > 定位：文本、列表、链接、图片、表格、表单六大基础标签族的完整语法与易错点
 
-## 📚 目录
+## 目录
 
 1. [文本与标题](#1-文本与标题)
 2. [列表与链接](#2-列表与链接)
@@ -48,7 +48,7 @@
 <q>行内引用</q>
 ```
 
-> 🎯 **要点**：`<strong>/<em>` 是语义标签（机器可理解），`<b>/<i>` 仅视觉效果——语义优先。
+> **要点**：`<strong>/<em>` 是语义标签（机器可理解），`<b>/<i>` 仅视觉效果——语义优先。
 
 ---
 
@@ -82,7 +82,7 @@
 <!-- 外部链接 -->
 <a href="https://example.com" target="_blank" rel="noopener">新窗口打开</a>
 
-<!-- ⚠️ 安全属性：target="_blank" 必须配 rel="noopener"（防钓鱼） -->
+<!-- 安全属性：target="_blank" 必须配 rel="noopener"（防钓鱼） -->
 
 <!-- 页面内锚点 -->
 <a href="#section2">跳转到第二节</a>
@@ -125,7 +125,7 @@
 </figure>
 ```
 
-> 🎯 **要点**：`alt` 必填（无障碍 + SEO + 图片加载失败时兜底）；`loading="lazy"` 是性能优化标配。
+> **要点**：`alt` 必填（无障碍 + SEO + 图片加载失败时兜底）；`loading="lazy"` 是性能优化标配。
 
 ### 3.2 音视频
 
@@ -189,7 +189,7 @@
 |--------|------|
 | thead/tbody 缺失 | 语义不完整（样式/滚动依赖） |
 | th 无 scope | 屏幕阅读器读错 |
-| 表格用于布局 | ❌ 必须用 CSS（div/grid） |
+| 表格用于布局 | ✗ 必须用 CSS（div/grid） |
 
 ---
 
@@ -200,7 +200,7 @@
 ```html
 <form action="/submit" method="post">
     <!-- 文本框 -->
-    <label for="name">姓名：</label>          <!-- ⚠️ label 必配 for -->
+    <label for="name">姓名：</label>          <!-- label 必配 for -->
     <input type="text" id="name" name="name"
            required placeholder="请输入姓名" maxlength="20">
 
@@ -239,7 +239,7 @@
 <input pattern="[0-9]{11}" title="11 位手机号">   <!-- 正则 -->
 <input minlength="6" maxlength="20">
 
-<!-- ⚠️ 安全：CSRF 令牌（后端注入） -->
+<!-- 安全：CSRF 令牌（后端注入） -->
 <input type="hidden" name="_token" value="...">
 ```
 
@@ -277,7 +277,7 @@ function handleClick(btn) {
 </script>
 ```
 
-> 🎯 **核心要点**：六大标签族——文本（strong/em 语义优先）、列表（ul/ol/dl）、链接（rel=noopener 安全）、图片（alt 必填 + lazy）、表格（thead/tbody 语义 + scope）、表单（label 配对 + 原生校验）。全局属性 data-* 是 JS 通信的桥梁。
+> **核心要点**：六大标签族——文本（strong/em 语义优先）、列表（ul/ol/dl）、链接（rel=noopener 安全）、图片（alt 必填 + lazy）、表格（thead/tbody 语义 + scope）、表单（label 配对 + 原生校验）。全局属性 data-* 是 JS 通信的桥梁。
 
 ---
 

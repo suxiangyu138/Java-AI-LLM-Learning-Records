@@ -1,6 +1,6 @@
 # 08 - Vision Transformer 与多模态
 
-> 🎯 Transformer 不仅统治了 NLP，还入侵了 CV 领域——ViT 证明"图片切成 patch 当 token"就能用纯 Transformer 处理图像。CLIP 和 DALL·E 则用 Transformer 桥接了文本和图像的鸿沟
+> Transformer 不仅统治了 NLP，还入侵了 CV 领域——ViT 证明"图片切成 patch 当 token"就能用纯 Transformer 处理图像。CLIP 和 DALL·E 则用 Transformer 桥接了文本和图像的鸿沟
 
 ---
 

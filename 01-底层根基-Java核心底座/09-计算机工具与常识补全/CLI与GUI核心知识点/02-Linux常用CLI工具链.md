@@ -1,6 +1,6 @@
 # 02 - Linux 常用 CLI 工具链
 
-> 🎯 管道 + 文本处理三剑客 + jq + xargs — 后端80%的日志分析和脚本任务靠这几把"瑞士军刀"搞定
+> 管道 + 文本处理三剑客 + jq + xargs — 后端80%的日志分析和脚本任务靠这几把"瑞士军刀"搞定
 
 ---
 
@@ -99,4 +99,4 @@ curl -s localhost:8080/actuator/health | jq '.components.db.status'
 du -sh /* 2>/dev/null | sort -rh | head -5
 ```
 
-> 🎯 **记忆法则**：grep 找行、sed 改行、awk 切列、jq 解JSON、find 找文件、xargs 批量执行。管道串联 = 万能工具。
+> **记忆法则**：grep 找行、sed 改行、awk 切列、jq 解JSON、find 找文件、xargs 批量执行。管道串联 = 万能工具。

@@ -1,6 +1,6 @@
 # 05 - Spring AI 多模态与生产
 
-> 🎯 Spring AI 不止文本 — 图片理解、语音合成、Actuator 监控、AOT 原生编译。这是从 Demo 到生产的最后一公里
+> Spring AI 不止文本 — 图片理解、语音合成、Actuator 监控、AOT 原生编译。这是从 Demo 到生产的最后一公里
 
 ## 1. 多模态：图片理解
 

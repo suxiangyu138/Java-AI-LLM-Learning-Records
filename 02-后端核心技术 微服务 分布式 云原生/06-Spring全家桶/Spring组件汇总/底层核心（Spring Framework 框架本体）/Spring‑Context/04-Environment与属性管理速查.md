@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [Environment 体系](#1-environment-体系)
 2. [PropertySource 解析链](#2-propertysource-解析链)
@@ -24,7 +24,7 @@
 | `StandardEnvironment` | 默认实现：系统属性 + 系统环境变量两个 PropertySource |
 | `StandardServletEnvironment` | Web 环境：追加 Servlet 上下文参数/配置 |
 
-> 💡 知识归属：`org.springframework.core.env` 包在 **spring-core**——Environment 接口是 core 的，context 提供默认实现装配与 `EnvironmentAware`/注入支持。
+> 知识归属：`org.springframework.core.env` 包在 **spring-core**——Environment 接口是 core 的，context 提供默认实现装配与 `EnvironmentAware`/注入支持。
 
 **获取方式**：
 
@@ -49,10 +49,10 @@ public class ConfigService {
 
 | 方式 | 示例 | 时机 | 取舍 |
 |------|------|------|------|
-| 构造器注入 `Environment` | `private final Environment env;` | Bean 创建时 | ✅ 首选——静态分析友好、可测试 |
-| `@Value("${...}")` 字段/参数 | `@Value("${app.name}") String name` | Bean 创建时（占位符解析） | ✅ 简单场景首选；注意解析发生在 BeanFactoryPostProcessor 阶段 |
+| 构造器注入 `Environment` | `private final Environment env;` | Bean 创建时 | ✓ 首选——静态分析友好、可测试 |
+| `@Value("${...}")` 字段/参数 | `@Value("${app.name}") String name` | Bean 创建时（占位符解析） | ✓ 简单场景首选；注意解析发生在 BeanFactoryPostProcessor 阶段 |
 | `EnvironmentAware` 回调 | `setEnvironment(Environment)` | Bean 创建早期 | 需要环境又不想注入时的接口方案 |
-| 静态持有者 | `ApplicationContextHolder.getEnv()` | 任意时刻 | ⚠️ 仅工具类兜底——隐藏依赖、难测试、7.0 静态化趋势下更应避免 |
+| 静态持有者 | `ApplicationContextHolder.getEnv()` | 任意时刻 | 仅工具类兜底——隐藏依赖、难测试、7.0 静态化趋势下更应避免 |
 
 ```java
 // 两种注入方式的边界差异
@@ -69,7 +69,7 @@ public class ConfService {
 }
 ```
 
-> 🎯 **核心取舍**：`@Value` 是**编译期确定 key** 的静态绑定（错误 key 启动即失败）；`Environment.getProperty` 是**运行期动态解析**（key 可拼接、可缺省）。动态 key、批量遍历、按需组合场景用 Environment；单值配置用 @Value 更简洁且有启动期校验。
+> **核心取舍**：`@Value` 是**编译期确定 key** 的静态绑定（错误 key 启动即失败）；`Environment.getProperty` 是**运行期动态解析**（key 可拼接、可缺省）。动态 key、批量遍历、按需组合场景用 Environment；单值配置用 @Value 更简洁且有启动期校验。
 
 ### 1.2 面试追问：配置体系三连
 
@@ -80,7 +80,7 @@ public class ConfService {
 | "PropertySource 链能否在运行期修改？" | 能——`ConfigurableEnvironment.getPropertySources()` 暴露增删改；但**已解析的 @Value 不会重算**，只影响后续 `getProperty` 调用 |
 | "为什么属性名用小写点分（app.name）？" | 约定：属性名 = 层级命名空间；Boot 还支持**宽松绑定**（`app.name` ↔ `APP_NAME` ↔ `appName`），context 层无此能力 |
 
-> 💡 **记忆**：context 层的 Environment 是"**解析链 + Profile**"的朴素实现；Boot 在其上加了三样东西——**文件发现（application.yml）、宽松绑定（relaxed binding）、类型化配置类（@ConfigurationProperties）**。面试答"Boot 配置比原生强在哪"就用这三点。
+> **记忆**：context 层的 Environment 是"**解析链 + Profile**"的朴素实现；Boot 在其上加了三样东西——**文件发现（application.yml）、宽松绑定（relaxed binding）、类型化配置类（@ConfigurationProperties）**。面试答"Boot 配置比原生强在哪"就用这三点。
 
 ## 2. PropertySource 解析链
 
@@ -100,7 +100,7 @@ for (PropertySource<?> ps : env.getPropertySources()) {
 }
 ```
 
-> 🎯 **核心要点**：`env.getProperty(key)` 按链从前往后查，**第一个命中的值生效**——这就是"环境变量覆盖配置文件、命令行覆盖一切"的依据；Boot 的"配置优先级"本质是 PropertySource 排序（见 Boot 系列）。
+> **核心要点**：`env.getProperty(key)` 按链从前往后查，**第一个命中的值生效**——这就是"环境变量覆盖配置文件、命令行覆盖一切"的依据；Boot 的"配置优先级"本质是 PropertySource 排序（见 Boot 系列）。
 
 ### 2.1 自定义 PropertySource：接入数据库/远程配置中心
 
@@ -133,7 +133,7 @@ public class RemoteConfigBootstrap {
 | `addLast` | 链尾 | 最低优先级兜底 |
 | `addBefore(name, ps)` / `addAfter(name, ps)` | 指定锚点 | 最常用：插在 systemProperties 之前即可覆盖 JVM 参数 |
 
-> ⚠️ **边界**：`@PostConstruct` 里注入属性源有顺序风险——**占位符解析（BeanFactoryPostProcessor）早于 Bean 的 @PostConstruct**，若其他 Bean 的 @Value 依赖该源，会解析失败。安全姿势是注册 `ApplicationContextInitializer`（refresh 前执行）或实现 `BeanFactoryPostProcessor` 并在其中操作 `ConfigurableEnvironment`。
+> **边界**：`@PostConstruct` 里注入属性源有顺序风险——**占位符解析（BeanFactoryPostProcessor）早于 Bean 的 @PostConstruct**，若其他 Bean 的 @Value 依赖该源，会解析失败。安全姿势是注册 `ApplicationContextInitializer`（refresh 前执行）或实现 `BeanFactoryPostProcessor` 并在其中操作 `ConfigurableEnvironment`。
 
 ### 2.2 Boot 完整优先级链（自上而下覆盖关系）
 
@@ -144,7 +144,7 @@ public class RemoteConfigBootstrap {
   > jar 外 application.yml > jar 内 application.yml > @PropertySource 加载的文件
 ```
 
-> 💡 **记忆锚点**："外 > 内、具体（profile）> 通用、运行期（命令行/环境变量）> 声明期（文件）"——Boot 的优先级表就是按这个直觉排序的，与 context 层"PropertySource 顺序即优先级"是同一机制的两层表现。
+> **记忆锚点**："外 > 内、具体（profile）> 通用、运行期（命令行/环境变量）> 声明期（文件）"——Boot 的优先级表就是按这个直觉排序的，与 context 层"PropertySource 顺序即优先级"是同一机制的两层表现。
 
 ### 2.3 属性覆盖的实战陷阱
 
@@ -156,7 +156,7 @@ public class RemoteConfigBootstrap {
 | 属性值首尾空格 | `getProperty` 返回带空格值 | 生产文件人工编辑易漏——启动校验 trim 或 CI 检查 |
 | 同 key 多来源值不一致 | 线上与本地行为不同 | 启动时打印"生效值 + 来源名"（见第 2 节代码） |
 
-> ⚠️ **生产建议**：把"配置生效值审计"做成启动日志——遍历关键配置 key，输出 `key=value (来源: propertySourceName)`；上线对比差异是排查"配置没生效"最有效的手段，成本只要十几行代码。
+> **生产建议**：把"配置生效值审计"做成启动日志——遍历关键配置 key，输出 `key=value (来源: propertySourceName)`；上线对比差异是排查"配置没生效"最有效的手段，成本只要十几行代码。
 
 ## 3. Profile：环境激活机制
 
@@ -183,7 +183,7 @@ public class DataConfig {
 }
 ```
 
-> ⚠️ **高频坑**：`setActiveProfiles` 必须在 `refresh()` 之前调用；`@Profile` 评估在 refresh 第 5 步——之后设置不生效。Boot 中配置文件里的 `spring.profiles.active` 在自动配置处理时读取，正常。
+> **高频坑**：`setActiveProfiles` 必须在 `refresh()` 之前调用；`@Profile` 评估在 refresh 第 5 步——之后设置不生效。Boot 中配置文件里的 `spring.profiles.active` 在自动配置处理时读取，正常。
 
 ### 3.1 Profile 进阶边界与生产实践
 
@@ -206,14 +206,14 @@ public DataSource prodDs() { return prodPool(); }
 public DataSource fallbackDs() { return localPool(); }
 ```
 
-> 🎯 **面试追问**："@Profile 和 @Conditional 什么关系？"——`@Profile` 本身就是 `@Conditional(ProfileCondition.class)` 的派生注解（元注解带 @Conditional）；所以 profile 是条件装配的**内置特例**，自定义条件用 `@Conditional` 任意扩展——两者可以叠加使用（见 [03-配置类与扫描机制速查](03-配置类与扫描机制速查.md) 第 6 节）。
+> **面试追问**："@Profile 和 @Conditional 什么关系？"——`@Profile` 本身就是 `@Conditional(ProfileCondition.class)` 的派生注解（元注解带 @Conditional）；所以 profile 是条件装配的**内置特例**，自定义条件用 `@Conditional` 任意扩展——两者可以叠加使用（见 [03-配置类与扫描机制速查](03-配置类与扫描机制速查.md) 第 6 节）。
 
 ### 3.2 Profile 与配置中心的配合（生产形态）
 
 | 形态 | 做法 | 注意 |
 |------|------|------|
 | 纯文件 | application-{profile}.yml 多套 | 文件膨胀，易漂移（三套配置互相抄） |
-| 文件 + 覆盖 | 基线 application.yml + profile 只放差异 | ✅ 推荐——差异越小漂移越少 |
+| 文件 + 覆盖 | 基线 application.yml + profile 只放差异 | ✓ 推荐——差异越小漂移越少 |
 | 配置中心 | Nacos/Apollo 按 group/dataId 区分环境 | 运维体系成本；启动期需要拉取（见 2.1） |
 | 环境注入 | 容器/K8s 注入 `SPRING_PROFILES_ACTIVE` | 部署平台管理环境，代码零感知 |
 
@@ -224,7 +224,7 @@ application-dev.yml      # 仅差异：本地库、日志级别
 application-prod.yml     # 仅差异：生产库、线程池、监控开关
 ```
 
-> 💡 **实践原则**：profile 的数量 = 环境的数量，**每个 profile 文件只写与基线不同的键**；差异越大，测试环境验证覆盖越差——"dev 能跑、prod 爆炸"多半是 profile 文件里藏了环境专属逻辑，而不是环境本身的问题。
+> **实践原则**：profile 的数量 = 环境的数量，**每个 profile 文件只写与基线不同的键**；差异越大，测试环境验证覆盖越差——"dev 能跑、prod 爆炸"多半是 profile 文件里藏了环境专属逻辑，而不是环境本身的问题。
 
 ## 4. 占位符解析：${} 的幕后
 
@@ -246,7 +246,7 @@ application-prod.yml     # 仅差异：生产库、线程池、监控开关
 | `#{...}` | SpEL 表达式（见 [Spring-Core-06](../Spring‑Core/06-SpEL表达式速查.md)） |
 | `${pool.size:8}` 注入 `int` 字段 | 自动类型转换 |
 
-> 🎯 **核心要点**：占位符解析发生在"图纸阶段"（BeanFactoryPostProcessor）而非实例化阶段——**属性写错 = 启动即失败**，这是 Spring 配置安全性的根基；@Value 失败排查先看 PropertySource 链（第 2 节）。
+> **核心要点**：占位符解析发生在"图纸阶段"（BeanFactoryPostProcessor）而非实例化阶段——**属性写错 = 启动即失败**，这是 Spring 配置安全性的根基；@Value 失败排查先看 PropertySource 链（第 2 节）。
 
 ### 4.1 占位符解析的边界与高频坑
 
@@ -274,7 +274,7 @@ public class AppConfig {
 }
 ```
 
-> ⚠️ **与 SpEL 的边界**：`${}` 占位符是**属性解析**（先查链后替换）；`#{}` 是 SpEL 表达式（可运算、调方法）——两者可以组合：`#{'${a:10} * 2'}`。顺序是**先解析 ${} 再执行 SpEL**（`PlaceholderConfigurerSupport` 在 SpEL 求值前完成占位符替换）。
+> **与 SpEL 的边界**：`${}` 占位符是**属性解析**（先查链后替换）；`#{}` 是 SpEL 表达式（可运算、调方法）——两者可以组合：`#{'${a:10} * 2'}`。顺序是**先解析 ${} 再执行 SpEL**（`PlaceholderConfigurerSupport` 在 SpEL 求值前完成占位符替换）。
 
 ### 4.2 @Value 迁移与配置重构实践
 
@@ -300,7 +300,7 @@ public record OrderProps(
         @Min(0) int retry) { }
 ```
 
-> 💡 **边界**：纯 context（无 Boot）项目没有 @ConfigurationProperties——重构只能止步于"自定义 Properties 类 + 构造器传入"，或引入 Boot 配置模块。**先确认工程形态再决定重构方案**，不要为"优雅"引入不必要的依赖。
+> **边界**：纯 context（无 Boot）项目没有 @ConfigurationProperties——重构只能止步于"自定义 Properties 类 + 构造器传入"，或引入 Boot 配置模块。**先确认工程形态再决定重构方案**，不要为"优雅"引入不必要的依赖。
 
 ### 4.3 属性诊断实战：三分钟定位"值从哪来"
 
@@ -330,7 +330,7 @@ public static void diagnose(Environment env, String key) {
 | 无任何来源命中 | key 名拼写/前缀问题；检查占位符 `:default` 是否掩盖了缺失 |
 | 命中值带意外空格 | 文件编辑问题（见 2.3） |
 
-> 🎯 **核心心法**：**"先问值从哪来，再问为什么错"**——80% 的配置事故是"我以为的源"与"实际的源"不一致；把诊断脚本固化进运维工具（或 Boot 的 `/actuator/env` 端点），任何配置疑问 30 秒定位，而不是改代码反复试。
+> **核心心法**：**"先问值从哪来，再问为什么错"**——80% 的配置事故是"我以为的源"与"实际的源"不一致；把诊断脚本固化进运维工具（或 Boot 的 `/actuator/env` 端点），任何配置疑问 30 秒定位，而不是改代码反复试。
 
 ## 5. @PropertySource 与外部化配置
 
@@ -352,7 +352,7 @@ public class AppConfig { }
 | 第三方模块属性 | `@PropertySource` + 前缀常量 |
 | 加密/敏感 | 不要在属性文件存明文，用环境变量/密钥管理 |
 
-> ⚠️ **Boot 注意**：`@PropertySource` 加载的文件**优先级低于** application.yml，且不参与 Boot 的 profile 切换——需要"按 profile 追加"用 `spring.config.import`（Boot 专属，见 Spring Boot 系列）。
+> **Boot 注意**：`@PropertySource` 加载的文件**优先级低于** application.yml，且不参与 Boot 的 profile 切换——需要"按 profile 追加"用 `spring.config.import`（Boot 专属，见 Spring Boot 系列）。
 
 ### 5.1 外部化配置方案选型
 
@@ -372,7 +372,7 @@ public class AppConfig { }
 - 配置变更走发布流程（GitOps/配置中心），禁止生产机直接改文件；
 - 用 `optional:` 前缀允许外部文件缺失（开发机无配置文件也能启动）。
 
-> 🎯 **面试总结**："Spring 的配置体系"一条线：**PropertySource 链（从哪取值）→ Profile（按环境过滤）→ 占位符解析（绑定到代码）→ 外部化（运行时注入）**——四个环节全部在 context 层有对应机制，Boot 只是把文件发现与绑定做得更好用。
+> **面试总结**："Spring 的配置体系"一条线：**PropertySource 链（从哪取值）→ Profile（按环境过滤）→ 占位符解析（绑定到代码）→ 外部化（运行时注入）**——四个环节全部在 context 层有对应机制，Boot 只是把文件发现与绑定做得更好用。
 
 ---
 

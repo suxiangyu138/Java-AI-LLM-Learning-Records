@@ -1,10 +1,10 @@
 # Postman Collection 与变量管理
 
-> 📦 Collection 请求组织、Pre-request Script 动态变量、Environment 环境切换、Data File 数据驱动 —— 高效管理 API 测试的基石
+> Collection 请求组织、Pre-request Script 动态变量、Environment 环境切换、Data File 数据驱动 —— 高效管理 API 测试的基石
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [Collection 集合](#1-collection-集合)
 2. [变量体系](#2-变量体系)
@@ -129,14 +129,14 @@ let baseUrl = pm.variables.get("baseUrl");
 
 ```text
 推荐在 Environment 中定义：
-  ✅ baseUrl       → 不同环境的 API 地址
-  ✅ apiKey        → 不同环境的 API Key
-  ✅ username/password → 测试账号
-  ✅ timeout       → 超时设置
+  ✓ baseUrl       → 不同环境的 API 地址
+  ✓ apiKey        → 不同环境的 API Key
+  ✓ username/password → 测试账号
+  ✓ timeout       → 超时设置
 
 不要放在 Environment 中：
-  ❌ 生产环境密码 → 用 Secret 变量或外部密钥管理
-  ❌ 频繁变化的值 → 用脚本动态生成
+  ✗ 生产环境密码 → 用 Secret 变量或外部密钥管理
+  ✗ 频繁变化的值 → 用脚本动态生成
 ```
 
 ---
@@ -238,7 +238,7 @@ pm.variables.set("nonce", params.nonce);
 
 ---
 
-> 🎯 **核心要点**：变量是 Postman 的灵魂——Environment 做环境隔离、Collection Variables 做链式传参、Dynamic Variables 做随机数据、Data File 做数据驱动。
+> **核心要点**：变量是 Postman 的灵魂——Environment 做环境隔离、Collection Variables 做链式传参、Dynamic Variables 做随机数据、Data File 做数据驱动。
 
 ---
 

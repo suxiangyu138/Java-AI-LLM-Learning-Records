@@ -46,20 +46,20 @@ SonarLint 是 SonarSource 推出的 IDE 实时代码质量检查插件，相当�
 // SonarLint 会在以下代码上标记问题：
 public class BadExample {
 
-    // ⚠️ Hard-coded credentials are security-sensitive
+    // Hard-coded credentials are security-sensitive
     private static final String DB_PASSWORD = "admin123";
 
-    // ⚠️ A "NullPointerException" could be thrown
+    // A "NullPointerException" could be thrown
     public String getUpperName(User user) {
         return user.getName().toUpperCase();
     }
 
-    // ⚠️ Use isEmpty() instead of size() == 0
+    // Use isEmpty() instead of size() == 0
     public boolean isEmpty(List<String> list) {
         return list.size() == 0;
     }
 
-    // ⚠️ Remove useless curly braces around statement
+    // Remove useless curly braces around statement
     public void doWork() {
         if (true) {
             process();
@@ -168,10 +168,10 @@ File → Settings → Plugins → 搜索 "SonarLint" → Install → Restart IDE
 4. Bind Project → 选择SonarQube上的对应项目
 
 同步效果：
-✅ 本地IDE自动使用SonarQube的Quality Profile（规则集）
-✅ 本地排除的规则与服务器一致
-✅ 可看到服务器标记为"Won't Fix"/"False Positive"的问题
-✅ 新代码周期内的问题着重高亮
+✓ 本地IDE自动使用SonarQube的Quality Profile（规则集）
+✓ 本地排除的规则与服务器一致
+✓ 可看到服务器标记为"Won't Fix"/"False Positive"的问题
+✓ 新代码周期内的问题着重高亮
 ```
 
 ## 八、常见问题与排查
@@ -218,7 +218,7 @@ public void legacyMethod() { ... }
 
 ## 十、总结
 
-> 🎯 SonarLint 的价值在于 **"左移"质量问题**——在 IDE 中实时发现并修复问题，而非等 CI/CD 阶段才发现。
+> SonarLint 的价值在于 **"左移"质量问题**——在 IDE 中实时发现并修复问题，而非等 CI/CD 阶段才发现。
 
 **使用建议：**
 - **必装**：所有Java开发者必备IDE插件

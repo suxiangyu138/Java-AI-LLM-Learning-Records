@@ -1,10 +1,10 @@
 # Android 开发环境搭建
 
-> 🛠️ Android Studio、SDK Manager、AVD 模拟器、Gradle 构建工具 —— 从零到运行第一个 Hello World，为 Java 后端开发者定制的 Android 环境搭建指南
+> Android Studio、SDK Manager、AVD 模拟器、Gradle 构建工具 —— 从零到运行第一个 Hello World，为 Java 后端开发者定制的 Android 环境搭建指南
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [Android Studio 安装与配置](#1-android-studio-安装与配置)
 2. [SDK Manager 详解](#2-sdk-manager-详解)
@@ -47,10 +47,10 @@
 
 3. SDK Components Setup
    → 默认勾选的：
-     ✅ Android SDK (最新版)
-     ✅ Android SDK Platform (最新 API)
-     ✅ Android Emulator (模拟器)
-     ✅ Intel HAXM / Apple Hypervisor (加速)
+     ✓ Android SDK (最新版)
+     ✓ Android SDK Platform (最新 API)
+     ✓ Android Emulator (模拟器)
+     ✓ Intel HAXM / Apple Hypervisor (加速)
 
 4. 验证设置
    → SDK 路径（记住这个路径）：
@@ -71,26 +71,26 @@
 ├── File → Settings (Win) / Preferences (Mac)
 
 不同：
-├── ➕ 多出了：Logcat、Layout Inspector、Device Manager、Profiler
-├── ➖ 缺少了：Spring、JPA、Maven 支持（Gradle 替代）
-├── 🔄 变了：Run → Run 'app'（部署到模拟器/真机）
-└── 🆕 新增：SDK Manager、AVD Manager、Resource Manager
+├── 多出了：Logcat、Layout Inspector、Device Manager、Profiler
+├── 缺少了：Spring、JPA、Maven 支持（Gradle 替代）
+├── 变了：Run → Run 'app'（部署到模拟器/真机）
+└── 新增：SDK Manager、AVD Manager、Resource Manager
 ```
 
 ### 1.4 与 VS Code 对比
 
 | 功能 | Android Studio | VS Code + Android 插件 |
 |------|:---:|:---:|
-| **Java/Kotlin 语言支持** | ✅ 顶级 | ⚠️ 一般（LSP 模式） |
-| **布局预览** | ✅ 实时预览 + 拖拽 | ❌ |
-| **模拟器集成** | ✅ 内置 | ⚠️ 需命令行操作 |
-| **性能分析** | ✅ Profiler 全套 | ❌ |
-| **Gradle 支持** | ✅ 深度集成 | ⚠️ 基本 |
-| **启动速度** | 慢 | ✅ 快 |
-| **内存占用** | 大（4G+） | ✅ 小 |
+| **Java/Kotlin 语言支持** | ✓ 顶级 | 一般（LSP 模式） |
+| **布局预览** | ✓ 实时预览 + 拖拽 | ✗ |
+| **模拟器集成** | ✓ 内置 | 需命令行操作 |
+| **性能分析** | ✓ Profiler 全套 | ✗ |
+| **Gradle 支持** | ✓ 深度集成 | 基本 |
+| **启动速度** | 慢 | ✓ 快 |
+| **内存占用** | 大（4G+） | ✓ 小 |
 | **推荐场景** | **所有 Android 开发** | 轻量编辑、前端+Android 混合 |
 
-> 💡 **结论**：Android 开发**强烈推荐 Android Studio**，不要用 VS Code 折腾。
+> **结论**：Android 开发**强烈推荐 Android Studio**，不要用 VS Code 折腾。
 
 ---
 
@@ -119,11 +119,11 @@ SDK Platforms 选项卡：
 
 | 工具 | 必须 | 说明 |
 |------|:---:|------|
-| **Android SDK Build-Tools** | ✅ | dx/d8、aapt2、zipalign 等编译打包工具 |
-| **Android Emulator** | ✅ | 模拟器运行环境 |
-| **Android SDK Platform-Tools** | ✅ | adb、fastboot、systrace |
-| **NDK (Native Development Kit)** | ❌ | C/C++ 编译（游戏/音视频/加密场景才用） |
-| **CMake** | ❌ | NDK 的构建工具 |
+| **Android SDK Build-Tools** | ✓ | dx/d8、aapt2、zipalign 等编译打包工具 |
+| **Android Emulator** | ✓ | 模拟器运行环境 |
+| **Android SDK Platform-Tools** | ✓ | adb、fastboot、systrace |
+| **NDK (Native Development Kit)** | ✗ | C/C++ 编译（游戏/音视频/加密场景才用） |
+| **CMake** | ✗ | NDK 的构建工具 |
 | **Android Emulator Hypervisor Driver** | 推荐 | 加速模拟器（Windows） |
 | **Intel HAXM** | 推荐 | Intel CPU 加速（旧方案，已被 Hypervisor 代替） |
 | **Google USB Driver** | 推荐 | Windows 上真机调试驱动 |
@@ -177,7 +177,7 @@ Device Manager → Create Device
 #    设置 → 关于手机 → 连击"版本号" 7 次
 
 # 2. 开启 USB 调试
-#    设置 → 开发者选项 → USB 调试 ✅
+#    设置 → 开发者选项 → USB 调试 ✓
 
 # 3. Windows 安装驱动
 #    厂商官网下载 USB 驱动，或通过 SDK Manager 安装 Google USB Driver
@@ -188,7 +188,7 @@ adb devices
 #    R5CT1234ABCD    device    ← 已连接
 
 # 5. 无线调试 (Android 11+)
-#    开发者选项 → 无线调试 ✅
+#    开发者选项 → 无线调试 ✓
 #    → 使用配对码配对
 adb pair 192.168.1.100:12345
 # 输入配对码

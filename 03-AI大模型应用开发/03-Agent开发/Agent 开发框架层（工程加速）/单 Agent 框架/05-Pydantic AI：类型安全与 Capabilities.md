@@ -2,7 +2,7 @@
 
 > 定位：类型安全范式的代表——Pydantic 校验一切输入输出，v2 以 Capability 原语重构（v2.26.0，2026-08 基准）
 
-## 📚 目录
+## 目录
 
 1. [定位与版本现状](#1-定位与版本现状)
 2. [Agent 类：类型安全的骨架](#2-agent-类类型安全的骨架)
@@ -23,7 +23,7 @@
   类型化 I/O、40+ 模型供应商可移植、原生 MCP、OTel/Logfire 内置
 ```
 
-> 🎯 **生态位**：结构化数据提取、类型安全的 Python 服务、需要"校验过的工具输出"进上下文的场景。多 Agent 深度编排不是它的强项——配 LangGraph/CrewAI 用。
+> **生态位**：结构化数据提取、类型安全的 Python 服务、需要"校验过的工具输出"进上下文的场景。多 Agent 深度编排不是它的强项——配 LangGraph/CrewAI 用。
 
 ## 2. Agent 类：类型安全的骨架
 
@@ -83,7 +83,7 @@ Capability = 可复用、可组合的 Agent 行为单元：
 | 压缩 | `OpenAICompaction`、`AnthropicCompaction`（供应商原生压缩） |
 | 持久执行 | `TemporalDurability`、`DBOSDurability`、`PrefectDurability`（跨故障/重启执行） |
 
-> 💡 **设计意图**：把"记忆系统/护栏/成本追踪/审批流"这些横切能力变成插拔件——你要什么插什么，Agent 本体保持干净。
+> **设计意图**：把"记忆系统/护栏/成本追踪/审批流"这些横切能力变成插拔件——你要什么插什么，Agent 本体保持干净。
 
 ## 4. Dynamic Workflows：子 Agent 即函数
 

@@ -60,7 +60,7 @@ Skill 是 OpenClaw 中的**可插拔能力单元**，封装了 Agent 完成特�
 - **Worker Agent**：执行具体任务，可具备特定的 Skill 集合
 - **协调机制**：Agent 间通过消息队列通信，支持异步任务和状态同步
 
-> 💡 多 Agent 架构的优势在于职责分离、水平扩展和容错性。
+> 多 Agent 架构的优势在于职责分离、水平扩展和容错性。
 
 ### 1.5 OpenClaw 的 DeepAgent 框架是什么？
 DeepAgent 是 OpenClaw 的企业级 Agent 运行时框架，提供了：
@@ -281,7 +281,7 @@ class AgentMessageBus:
             yield self._parse_message(message)
 ```
 
-> 💡 消息协议使用 JSON，包含 `sender`、`receiver`、`action`、`payload`、`trace_id` 字段。
+> 消息协议使用 JSON，包含 `sender`、`receiver`、`action`、`payload`、`trace_id` 字段。
 
 ### 2.5 OpenClaw 的沙箱技术选型有哪些？
 | 沙箱方案 | 隔离级别 | 适用场景 | 性能开销 |
@@ -329,7 +329,7 @@ class BaseSkill(ABC):
 - **第二层**（匹配到意图时）：暴露参数 Schema
 - **第三层**（执行时）：加载具体实现代码
 
-> 🎯 这种机制显著降低了 LLM 的 Token 消耗，提高了决策速度。
+> 这种机制显著降低了 LLM 的 Token 消耗，提高了决策速度。
 
 ### 2.8 OpenClaw 如何保障企业级安全性？
 | 安全层面 | 措施 |
@@ -960,7 +960,7 @@ Layer 4: 数据层 - 临时文件系统、禁止挂载宿主机目录、输出�
 | 权限配置过于宽松 | 默认允许所有操作 | 最小权限原则 + 定期审计 |
 | Sandbox 启动失败 | Docker daemon 未运行 | 设置健康检查 + fallback 到 subprocess |
 
-> 💡 **黄金原则**：在生产环境中，宁可功能降级也不要功能失效。始终为每项关键能力设计 fallback 机制。
+> **黄金原则**：在生产环境中，宁可功能降级也不要功能失效。始终为每项关键能力设计 fallback 机制。
 
 ---
 

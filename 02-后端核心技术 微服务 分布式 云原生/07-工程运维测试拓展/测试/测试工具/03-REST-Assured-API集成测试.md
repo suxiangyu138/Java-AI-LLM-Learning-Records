@@ -185,7 +185,7 @@ List<UserDTO> users = given()
     .getList("data", UserDTO.class);
 ```
 
-> 💡 设计原则：Given-When-Then 模式使测试用例天然成为可执行的需求文档。团队评审时，非技术人员也能理解测试意图。
+> 设计原则：Given-When-Then 模式使测试用例天然成为可执行的需求文档。团队评审时，非技术人员也能理解测试意图。
 
 ---
 
@@ -406,7 +406,7 @@ void testCreateUser_WithJavaObject() {
 }
 ```
 
-> 💡 序列化机制：REST Assured 默认使用 Jackson（若在 classpath 上），其次支持 Gson。通过 body() 传入 Java 对象时，会自动调用 ObjectMapper 序列化为 JSON 字符串。
+> 序列化机制：REST Assured 默认使用 Jackson（若在 classpath 上），其次支持 Gson。通过 body() 传入 Java 对象时，会自动调用 ObjectMapper 序列化为 JSON 字符串。
 
 #### Form 参数
 

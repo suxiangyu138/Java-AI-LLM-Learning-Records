@@ -12,7 +12,7 @@
 | 攻破成本 | 需 exploit hypervisor | 远高于容器（内核漏洞）与 gVisor（Sentry） |
 | 支持方 | AWS Lambda（**15 万亿次/月**）、E2B、Fly.io、Northflank、Vercel Sandbox | 生态成熟、久经考验 |
 
-> 💡 与 gVisor 的关键差异：Firecracker 需 `/dev/kvm`（裸机或嵌套虚拟化）；gVisor 无此依赖——这是 ChatGPT 在 K8s-on-VM 上选 gVisor 的务实原因（见 [03-容器与 gVisor](03-容器与gVisor.md)）。
+> 与 gVisor 的关键差异：Firecracker 需 `/dev/kvm`（裸机或嵌套虚拟化）；gVisor 无此依赖——这是 ChatGPT 在 K8s-on-VM 上选 gVisor 的务实原因（见 [03-容器与 gVisor](03-容器与gVisor.md)）。
 
 ## 2. 架构要点
 

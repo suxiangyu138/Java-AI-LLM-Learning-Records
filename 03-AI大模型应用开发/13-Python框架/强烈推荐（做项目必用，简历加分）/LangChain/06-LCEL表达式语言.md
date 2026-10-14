@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [LCEL 的定位](#1-lcel-的定位)
 2. [基础管道组合](#2-基础管道组合)
@@ -126,7 +126,7 @@ LCEL 内置能力（组合即获得）
 
 **验收动作**：① 拼标准模板链并 invoke；② 加 RunnableLambda 业务函数；③ 用 RunnableParallel 做并行链（总结+关键词）；④ 体验 stream 流式输出——**"标准模板 + 复杂模式 + 内置能力 = LCEL 能力"**——**练习纪律**：写链先想数据流——"链的设计 = 数据流的设计"。
 
-> 🎯 **核心要点**：LCEL = 声明式组合（**| 管道——1.x 链标准——旧 Chain 类已移 classic——组合优于继承**）；标准模板（**prompt | model | parser——加业务 RunnableLambda——加结构化 with_structured_output**）；**复杂组合（Parallel 并行/Passthrough 透传/Branch 分支——简单用 LCEL 复杂上 LangGraph）**；**内置能力（流式/异步/批量/容错——拼链即获得——生产三件套）**——"`prompt | model | parser` 一行拼出链——LCEL 是 1.x 的链标准"。
+> **核心要点**：LCEL = 声明式组合（**| 管道——1.x 链标准——旧 Chain 类已移 classic——组合优于继承**）；标准模板（**prompt | model | parser——加业务 RunnableLambda——加结构化 with_structured_output**）；**复杂组合（Parallel 并行/Passthrough 透传/Branch 分支——简单用 LCEL 复杂上 LangGraph）**；**内置能力（流式/异步/批量/容错——拼链即获得——生产三件套）**——"`prompt | model | parser` 一行拼出链——LCEL 是 1.x 的链标准"。
 
 ---
 

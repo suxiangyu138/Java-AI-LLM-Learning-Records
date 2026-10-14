@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [HikariCP 定位与"快"的来源](#1-hikaricp-定位与快的来源)
 2. [FastList：借还的数组优化](#2-fastlist借还的数组优化)
@@ -41,7 +41,7 @@
 </dependency>
 ```
 
-> 🎯 **核心要点**：HikariCP = "**Spring Boot 默认 + 快（三大机制）**"——**"FastList + ConcurrentBag + 字节码代理"是面试源码题的答案**；快在"高频借还路径的每一项都优化"。
+> **核心要点**：HikariCP = "**Spring Boot 默认 + 快（三大机制）**"——**"FastList + ConcurrentBag + 字节码代理"是面试源码题的答案**；快在"高频借还路径的每一项都优化"。
 
 ---
 
@@ -70,7 +70,7 @@ FastList 的优化：
 // get(int index)：无 rangeCheck（少一次检查）
 ```
 
-> 🎯 **核心要点**：FastList = "**为池定制的数组（removeLast O(1) + 无范围检查）**"——**"借还的尾部操作被优化到极致"**是设计思路（池的工作负载决定了数据结构选择）。
+> **核心要点**：FastList = "**为池定制的数组（removeLast O(1) + 无范围检查）**"——**"借还的尾部操作被优化到极致"**是设计思路（池的工作负载决定了数据结构选择）。
 
 ---
 
@@ -107,7 +107,7 @@ ConcurrentBag 的设计：
   ConcurrentBag 用"状态标记"避免物理移除（更快）
 ```
 
-> 🎯 **核心要点**：ConcurrentBag = "**无锁并发连接集合（ThreadLocal 优先 + CAS 状态标记）**"——**"线程本地缓存减少竞争"是核心设计**；借还的并发模型是 HikariCP 快的关键（比锁队列高并发友好）。
+> **核心要点**：ConcurrentBag = "**无锁并发连接集合（ThreadLocal 优先 + CAS 状态标记）**"——**"线程本地缓存减少竞争"是核心设计**；借还的并发模型是 HikariCP 快的关键（比锁队列高并发友好）。
 
 ---
 
@@ -140,7 +140,7 @@ ConcurrentBag 的设计：
 | 开销 | 每次调用有反射 | 接近原生 |
 | 生成 | 运行期接口代理 | 编译期字节码生成 |
 
-> 🎯 **核心要点**：字节码代理 = "**Javassist 生成代理（close 改归还、调用零反射）**"——**"代理的目的不是安全而是拦截 close"**（归还语义）；字节码 vs 反射的性能差异在频繁调用时放大。
+> **核心要点**：字节码代理 = "**Javassist 生成代理（close 改归还、调用零反射）**"——**"代理的目的不是安全而是拦截 close"**（归还语义）；字节码 vs 反射的性能差异在频繁调用时放大。
 
 ---
 
@@ -180,7 +180,7 @@ spring:
    - 波动负载调小（省空闲资源）
 ```
 
-> 🎯 **核心要点**：参数语义 = "**池满等待（非无限创建）+ idle 与 lifetime 分工（空闲回收 vs 强制更换）+ 泄漏检测**"——**"max-lifetime 防死连接、leakDetection 防泄漏"两个防护**是生产必配；配置用 yaml 的 hikari 前缀。
+> **核心要点**：参数语义 = "**池满等待（非无限创建）+ idle 与 lifetime 分工（空闲回收 vs 强制更换）+ 泄漏检测**"——**"max-lifetime 防死连接、leakDetection 防泄漏"两个防护**是生产必配；配置用 yaml 的 hikari 前缀。
 
 ---
 
@@ -235,7 +235,7 @@ management:
 → 指标接入 Prometheus + Grafana（部署工具/09 联动）
 ```
 
-> 🎯 **核心要点**：防护与监控 = "**leakDetection（防泄漏）+ 五指标（active/pending/timeout 是核心）**"——**"pending 与 timeout 是池耗尽的先行指标"**；生产三件套（泄漏检测 + 指标 + 告警）缺一不可。
+> **核心要点**：防护与监控 = "**leakDetection（防泄漏）+ 五指标（active/pending/timeout 是核心）**"——**"pending 与 timeout 是池耗尽的先行指标"**；生产三件套（泄漏检测 + 指标 + 告警）缺一不可。
 
 ---
 

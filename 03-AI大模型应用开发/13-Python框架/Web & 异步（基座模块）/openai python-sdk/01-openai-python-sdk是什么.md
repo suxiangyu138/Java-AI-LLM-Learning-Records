@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [官方 SDK：LLM 应用的第一依赖](#1-官方-sdkllm-应用的第一依赖)
 2. [解决什么问题](#2-解决什么问题)
@@ -79,7 +79,7 @@ print(resp.choices[0].message.content)
 4. 与裸 HTTP/LangChain/LiteLLM 的选型判断？
 5. 五个边界分别是什么？"学会它，换兼容服务零成本"怎么理解？
 
-> 🎯 **核心要点**：openai python-sdk = **官方客户端（OpenAI() 一个对象全 API）+ 重试/类型/流式/结构化四重工程化 + 2.53.0（2026）Responses 新方向**——"LLM 应用的第一依赖：框架是编排，SDK 是调用本身——学会它，一切 OpenAI 兼容生态通吃"。
+> **核心要点**：openai python-sdk = **官方客户端（OpenAI() 一个对象全 API）+ 重试/类型/流式/结构化四重工程化 + 2.53.0（2026）Responses 新方向**——"LLM 应用的第一依赖：框架是编排，SDK 是调用本身——学会它，一切 OpenAI 兼容生态通吃"。
 
 ---
 

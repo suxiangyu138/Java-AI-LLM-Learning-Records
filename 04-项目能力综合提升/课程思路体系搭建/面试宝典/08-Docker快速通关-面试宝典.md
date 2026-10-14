@@ -570,14 +570,14 @@ volumes:                # 声明命名卷
 
 ### Q38: Layer 缓存优化示例（用错误顺序示范缓存失效）
 ```dockerfile
-# ❌ 错误写法：源码先复制，导致每次修改源码都需重新下载依赖
+# ✗ 错误写法：源码先复制，导致每次修改源码都需重新下载依赖
 FROM maven:3.8-jdk-11
 WORKDIR /app
 COPY . .                        # 源码变更 → 此层缓存失效
 RUN mvn dependency:go-offline   # 每次都要重跑
 RUN mvn package
 
-# ✅ 正确写法：分层利用缓存
+# ✓ 正确写法：分层利用缓存
 FROM maven:3.8-jdk-11 AS builder
 WORKDIR /app
 COPY pom.xml .                  # 依赖变更不频繁

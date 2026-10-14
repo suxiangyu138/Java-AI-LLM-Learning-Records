@@ -2,7 +2,7 @@
 
 > 定位：JVM 调优、部署运维、日志分析、常见故障排查、Tomcat 面试题精选——从"能跑"到"能扛"
 
-## 📚 目录
+## 目录
 
 1. [性能优化总览](#1-性能优化总览)
 2. [JVM 调优](#2-jvm-调优)
@@ -22,7 +22,7 @@ Tomcat 性能优化四层：
   ③ 应用层：数据库连接池、缓存、慢 SQL
   ④ 架构层：Nginx 前置、集群、CDN
 
-⚠️ 面试必答：
+面试必答：
 "性能优化四层——JVM、连接器、应用、架构；
  先监控再优化（数据驱动），不要盲调参数。"
 ```
@@ -36,10 +36,10 @@ Tomcat 性能优化四层：
 ```bash
 # catalina.sh 中 JAVA_OPTS 设置
 export JAVA_OPTS="
-  -Xms1g -Xmx1g                    # ⚠️ 堆初始 = 最大（避免动态伸缩）
+  -Xms1g -Xmx1g                    # 堆初始 = 最大（避免动态伸缩）
   -XX:+UseG1GC                     # G1 垃圾收集器（默认）
   -XX:MaxGCPauseMillis=100         # GC 停顿目标
-  -XX:+HeapDumpOnOutOfMemoryError  # ⚠️ OOM 自动堆转储
+  -XX:+HeapDumpOnOutOfMemoryError  # OOM 自动堆转储
   -XX:HeapDumpPath=/logs/heap.hprof
   -Xlog:gc*:file=/logs/gc.log:time  # GC 日志
 "
@@ -65,7 +65,7 @@ OOM 排查：
   ② 检查 GC 日志（Full GC 频繁？）
   ③ 常见原因：内存泄漏（缓存/连接未关）
 
-⚠️ 面试必答：
+面试必答：
 "堆大小 = 物理内存 60-70%；OOM 用
  HeapDump + MAT 分析；Full GC 频繁
  是内存压力的第一信号。"
@@ -86,7 +86,7 @@ Tomcat 目录（bin/conf/lib/logs/temp/webapps/work）：
   webapps/   应用部署目录
   work/      编译产物（JSP → class）
 
-⚠️ 面试必答：
+面试必答：
 "目录六件套——bin 启动、conf 配置、
  lib 共享库、logs 日志、webapps 部署、
  work 编译产物。"
@@ -112,7 +112,7 @@ Tomcat 目录（bin/conf/lib/logs/temp/webapps/work）：
 # systemctl start tomcat
 ```
 
-> 🎯 **要点**：现代部署 = Spring Boot 内嵌（微服务）或独立 Tomcat（传统 WAR）；`catalina.sh run` 前台调试是排查启动问题的标准姿势。
+> **要点**：现代部署 = Spring Boot 内嵌（微服务）或独立 Tomcat（传统 WAR）；`catalina.sh run` 前台调试是排查启动问题的标准姿势。
 
 ---
 
@@ -147,7 +147,7 @@ Tomcat 目录（bin/conf/lib/logs/temp/webapps/work）：
 ④ 压测：ab/JMeter 定位瓶颈
 ⑤ 实时查看：tail -f catalina.out
 
-⚠️ 面试必答：
+面试必答：
 "监控四件套——访问日志（耗时/状态）、
  JMX（线程/连接）、GC 日志、压测定位。
  先看数据再优化。"
@@ -188,7 +188,7 @@ jstack <pid> > thread_dump.txt
 #   锁等待（synchronized 死锁）
 #   外部调用超时（第三方接口）
 
-⚠️ 面试必答：
+面试必答：
 "'请求全卡'排查三步——jstack 看线程状态、
  看数据库连接池是否耗尽、看外部依赖
  是否超时。线程 dump 是卡死问题第一工具。"
@@ -203,7 +203,7 @@ jstack <pid> > thread_dump.txt
   ③ 数据库连接池满 → SQL 等待
   ④ GC 频繁 → CPU 飙升
 
-⚠️ 面试必答：
+面试必答：
 "瓶颈排查从下往上——连接→线程→DB→GC，
  每层看监控数据定位，避免盲目调参。"
 ```
@@ -276,7 +276,7 @@ Tomcat 11 支持 → 每请求一虚拟线程（同步风格 + 高并发）。
 
 ---
 
-> 🎯 **核心要点**：优化排查体系 = **四层优化**（JVM/连接器/应用/架构）+ **JVM 调优**（堆 60-70% + G1 + HeapDump）+ **日志监控**（访问日志 %D + JMX + GC）+ **故障排查**（jstack 卡死/堆转储 OOM/瓶颈递进）。面试十问覆盖全部主线：请求流程、NIO、线程池、Session、HTTPS、排查。
+> **核心要点**：优化排查体系 = **四层优化**（JVM/连接器/应用/架构）+ **JVM 调优**（堆 60-70% + G1 + HeapDump）+ **日志监控**（访问日志 %D + JMX + GC）+ **故障排查**（jstack 卡死/堆转储 OOM/瓶颈递进）。面试十问覆盖全部主线：请求流程、NIO、线程池、Session、HTTPS、排查。
 
 ---
 

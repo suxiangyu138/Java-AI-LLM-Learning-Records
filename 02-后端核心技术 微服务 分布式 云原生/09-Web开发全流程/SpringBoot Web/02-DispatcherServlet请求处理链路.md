@@ -1,7 +1,7 @@
 # DispatcherServlet 请求处理链路
 > 一个 Servlet 如何支撑整个 MVC：doDispatch 源码十步、四大组件（HandlerMapping/HandlerAdapter/HandlerExceptionResolver/ViewResolver）、拦截器链与异步返回类型——Spring MVC 的"心脏解剖"
 
-## 📚 目录
+## 目录
 1. [DispatcherServlet 的本质](#1-dispatcherservlet-的本质)
 2. [doDispatch 源码十步](#2-dodispatch-源码十步)
 3. [HandlerMapping 家族](#3-handlermapping-家族)
@@ -22,7 +22,7 @@ DispatcherServlet extends HttpServlet
         URL → HandlerMapping → HandlerAdapter → 方法执行 → 返回值 → 响应
 ```
 
-> 🎯 与 [Servlet 体系](../Servlet/08-生产实践与面试题.md) 的关系：DispatcherServlet 没有发明新协议——它只是**重写了 HttpServlet 的分发逻辑**（把"HTTP 方法 → doXxx"升级为"URL → Controller 方法"）。理解 Servlet 再读源码，一切顺理成章。
+> 与 [Servlet 体系](../Servlet/08-生产实践与面试题.md) 的关系：DispatcherServlet 没有发明新协议——它只是**重写了 HttpServlet 的分发逻辑**（把"HTTP 方法 → doXxx"升级为"URL → Controller 方法"）。理解 Servlet 再读源码，一切顺理成章。
 
 ## 2. doDispatch 源码十步
 
@@ -86,7 +86,7 @@ protected void doDispatch(HttpServletRequest request, HttpServletResponse respon
 | ⑨ | HandlerInterceptor | postHandle 后置（异常时不执行） |
 | ⑩ | ViewResolver | 视图渲染；afterCompletion 收尾（恒执行） |
 
-> ⚠️ **postHandle 与 afterCompletion 的差别**：Controller 抛异常时，postHandle **不执行**，afterCompletion **必执行**（finally 语义）——资源清理（MDC 清除、ThreadLocal.remove）必须放 afterCompletion，不能放 postHandle。
+> **postHandle 与 afterCompletion 的差别**：Controller 抛异常时，postHandle **不执行**，afterCompletion **必执行**（finally 语义）——资源清理（MDC 清除、ThreadLocal.remove）必须放 afterCompletion，不能放 postHandle。
 
 ## 3. HandlerMapping 家族
 
@@ -107,7 +107,7 @@ public List<User> list() { ... }
 // 需要旧行为 → 用 UrlHandlerFilter（Framework 提供）恢复
 ```
 
-> 🎯 匹配顺序即注册顺序：请求先过 RequestMappingHandlerMapping（业务路由），未命中再走静态资源——所以**业务路径与静态资源重名时，业务优先**。
+> 匹配顺序即注册顺序：请求先过 RequestMappingHandlerMapping（业务路由），未命中再走静态资源——所以**业务路径与静态资源重名时，业务优先**。
 
 ## 4. HandlerAdapter 与参数解析
 
@@ -137,7 +137,7 @@ public class UserController {
 }
 ```
 
-> ⚠️ 参数绑定失败的处理：@RequestBody JSON 格式错误 → `HttpMessageNotReadableException` → 默认 400；@Valid 校验失败 → `MethodArgumentNotValidException` → 400。两者都由 [05-错误处理机制深潜](05-错误处理机制深潜.md) 的 @ExceptionHandler 兜底统一格式。
+> 参数绑定失败的处理：@RequestBody JSON 格式错误 → `HttpMessageNotReadableException` → 默认 400；@Valid 校验失败 → `MethodArgumentNotValidException` → 400。两者都由 [05-错误处理机制深潜](05-错误处理机制深潜.md) 的 @ExceptionHandler 兜底统一格式。
 
 ## 5. 返回值解析与消息转换
 
@@ -161,7 +161,7 @@ Controller 返回 → HandlerMethodReturnValueHandler（按返回类型选处理
 | ModelAndView | ModelAndViewMethodReturnValueHandler | 视图渲染 |
 | void | 无返回 | 空 200 |
 
-> ⚠️ **@RestController 方法返回 String 返回的是 JSON 字符串还是视图名？** 是 JSON 字符串（@RestController 自带 @ResponseBody）——"返回 String 会被当视图名"只发生在 @Controller 时代。前后端分离项目全用 @RestController，无歧义。
+> **@RestController 方法返回 String 返回的是 JSON 字符串还是视图名？** 是 JSON 字符串（@RestController 自带 @ResponseBody）——"返回 String 会被当视图名"只发生在 @Controller 时代。前后端分离项目全用 @RestController，无歧义。
 
 ### 5.1 Jackson 3 定制（Boot 4 破坏性变更）
 
@@ -219,7 +219,7 @@ public class WebConfig implements WebMvcConfigurer {
 }
 ```
 
-> 🎯 与 Filter 的分工：**Filter 在容器层**（进 Servlet 前，能拦一切含静态资源）、**Interceptor 在 MVC 层**（能拿到 HandlerMethod 与 ModelAndView）。Boot 中的注册与顺序控制详见 [04-Filter与Interceptor注册与顺序](04-Filter与Interceptor注册与顺序.md)。
+> 与 Filter 的分工：**Filter 在容器层**（进 Servlet 前，能拦一切含静态资源）、**Interceptor 在 MVC 层**（能拿到 HandlerMethod 与 ModelAndView）。Boot 中的注册与顺序控制详见 [04-Filter与Interceptor注册与顺序](04-Filter与Interceptor注册与顺序.md)。
 
 ## 7. 异常处理链
 
@@ -246,7 +246,7 @@ public class GlobalExceptionHandler {
 }
 ```
 
-> 💡 面试深度：能说出"@ExceptionHandler 的处理入口其实是 `ExceptionHandlerExceptionResolver`，内部按 `@ControllerAdvice` 排序、按异常类型做精确匹配（子类优先）"就是源码级理解。
+> 面试深度：能说出"@ExceptionHandler 的处理入口其实是 `ExceptionHandlerExceptionResolver`，内部按 `@ControllerAdvice` 排序、按异常类型做精确匹配（子类优先）"就是源码级理解。
 
 ## 8. 异步返回类型
 
@@ -285,7 +285,7 @@ public SseEmitter sseNotify() {
 }
 ```
 
-> ⚠️ 异步请求必须显式完成（complete/超时/错误），否则连接挂账；异步场景决策与避坑详见 [Servlet 异步体系](../Servlet/06-异步处理与非阻塞IO.md) §7（机制同源，Boot 只是返回类型包装）。
+> 异步请求必须显式完成（complete/超时/错误），否则连接挂账；异步场景决策与避坑详见 [Servlet 异步体系](../Servlet/06-异步处理与非阻塞IO.md) §7（机制同源，Boot 只是返回类型包装）。
 
 ## 9. Boot 4：内置 API 版本管理
 
@@ -306,7 +306,7 @@ spring:
 | 查询参数 | `parameter-name` | `/api/users?version=v2` |
 | 媒体类型 | `media-type-prefix` | `Accept: application/vnd.demo.v2+json` |
 
-> 💡 定位：这是 Boot 4 对"接口多版本共存"痛点的官方解法（此前靠自定义 HandlerMapping 或网关层路由）；面试可作差异化加分点，生产多版本场景可直接启用。
+> 定位：这是 Boot 4 对"接口多版本共存"痛点的官方解法（此前靠自定义 HandlerMapping 或网关层路由）；面试可作差异化加分点，生产多版本场景可直接启用。
 
 ---
 

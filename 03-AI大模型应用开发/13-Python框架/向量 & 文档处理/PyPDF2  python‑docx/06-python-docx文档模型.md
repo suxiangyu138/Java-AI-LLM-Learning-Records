@@ -1,7 +1,7 @@
 # 06-python-docx文档模型
 > 定位：python-docx 的核心是对象模型——Document 管全局、Paragraph 管段落、Run 管格式，样式体系是「模板化写作」的钥匙；模型懂了，一切操作都是对象调用。
 
-## 📚 目录
+## 目录
 1. [对象模型三层](#1-对象模型三层)
 2. [打开与新建](#2-打开与新建)
 3. [段落与 run 详解](#3-段落与-run-详解)
@@ -178,7 +178,7 @@ for i, p in enumerate(doc.paragraphs, start=1):
 4. 中文字体为什么必须设 eastAsia？
 5. 完整提取 docx 内容（含表格）的代码怎么写？
 
-> 🎯 **核心要点**：Document→Paragraph→Run 三层模型；run 是格式最小单位；样式是模板化写作核心；中文字体双设置（name + eastAsia）；读取与生成同一套模型，完整提取要含表格。
+> **核心要点**：Document→Paragraph→Run 三层模型；run 是格式最小单位；样式是模板化写作核心；中文字体双设置（name + eastAsia）；读取与生成同一套模型，完整提取要含表格。
 
 ---
 

@@ -2,7 +2,7 @@
 
 > 定位：框架深潜第一站——生产部署份额第一（~38%）的多 Agent 编排：supervisor/subagents/swarm 三种实现方式、checkpointer 持久化、time-travel 调试与 2026 架构变化（2026-08 基准）
 
-## 📚 目录
+## 目录
 
 1. [为什么是生产标杆](#1-为什么是生产标杆)
 2. [2026 架构变化：subagents 模式取代 supervisor 包](#2-2026-架构变化subagents-模式取代-supervisor-包)
@@ -27,13 +27,13 @@
 | 独有能力 | **time-travel 调试**——"步骤 7 失败了会发生什么"有一等公民答案 |
 | 可观测 | LangSmith 追踪最成熟 |
 
-> 🎯 **一句话**：LangGraph 把多 Agent 编排表达为**可持久化、可回放、可审计的状态机**——这是它成为生产标杆的根本：其他框架把编排藏在提示词里，LangGraph 把编排显式画成图。
+> **一句话**：LangGraph 把多 Agent 编排表达为**可持久化、可回放、可审计的状态机**——这是它成为生产标杆的根本：其他框架把编排藏在提示词里，LangGraph 把编排显式画成图。
 
 ## 2. 2026 架构变化：subagents 模式取代 supervisor 包
 
 ```text
 2025          langgraph-supervisor 包（create_supervisor）── 官方推荐
-2026          ⚠️ 弃用：不再积极维护，迁移到 subagents 模式
+2026          弃用：不再积极维护，迁移到 subagents 模式
 
 迁移映射表（官方指南）：
 create_supervisor + worker 作为图节点
@@ -47,7 +47,7 @@ interrupt/resume 流程
       外部用 Command(resume=result) 恢复
 ```
 
-> 💡 **为什么弃用**：supervisor 包把路由逻辑放在模型提示词里，难以调试与复用；subagents 模式把子 Agent 变成普通工具，统一了"工具调用"与"子 Agent 调用"两种心智模型——编排放图里，调用是工具。
+> **为什么弃用**：supervisor 包把路由逻辑放在模型提示词里，难以调试与复用；subagents 模式把子 Agent 变成普通工具，统一了"工具调用"与"子 Agent 调用"两种心智模型——编排放图里，调用是工具。
 
 ## 3. 三种多 Agent 实现方式
 
@@ -155,7 +155,7 @@ graph = builder.compile(checkpointer=MemorySaver())
 # 恢复：thread_id 定位会话；get_state/list_state 查看快照
 ```
 
-> 🎯 **checkpointer 是 LangGraph 相对所有竞品的最强差异化能力**——CrewAI 2026 也加了 checkpointing（v1.14.2+），但 time-travel 调试仍只有 LangGraph 是一等公民。
+> **checkpointer 是 LangGraph 相对所有竞品的最强差异化能力**——CrewAI 2026 也加了 checkpointing（v1.14.2+），但 time-travel 调试仍只有 LangGraph 是一等公民。
 
 ## 8. 状态设计：共享 State 与 reducer
 
@@ -195,11 +195,11 @@ class State(TypedDict):
 | LangChain 耦合 | 生态耦合（虽可独立运行） | 评估耦合成本 |
 | 表达范式偏状态机 | 群聊/辩论类场景不顺手 | 此类场景考虑 AG2 |
 
-> 🎯 **适用结论**：长流程、分支重试、人工介入、需要审计回放的生产系统 → LangGraph 是 2026 年第一选择；快速原型（数小时出活）则 CrewAI 更快（04 篇）。
+> **适用结论**：长流程、分支重试、人工介入、需要审计回放的生产系统 → LangGraph 是 2026 年第一选择；快速原型（数小时出活）则 CrewAI 更快（04 篇）。
 
 ## 11. 核心要点
 
-> 🎯 **核心要点**：
+> **核心要点**：
 > 1. LangGraph = 多 Agent 编排的状态机表达：节点/边/共享 State/checkpointer 四要素
 > 2. **2026 弃用 langgraph-supervisor 包** → subagents 模式（Worker 包装为 @tool），统一"工具调用=子 Agent 调用"
 > 3. checkpointer 是强制项（swarm 无它即失忆）；time-travel 调试是独有能力

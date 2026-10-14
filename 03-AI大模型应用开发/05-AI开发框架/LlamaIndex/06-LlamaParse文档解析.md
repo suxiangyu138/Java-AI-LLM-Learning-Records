@@ -2,7 +2,7 @@
 
 > LlamaIndex 的竞争资产：LlamaParse v2 四级解析（Fast 1 积分/页 → Agentic Plus 45 积分/页）、Parse API v2 结构化配置、Retrieval Harness 文件系统原语——"解析质量决定 RAG 上限"的实践答案。
 
-## 📚 目录
+## 目录
 
 1. [为什么解析是竞争资产](#1-为什么解析是竞争资产)
 2. [LlamaParse v2 四级服务](#2-llamaparse-v2-四级服务)
@@ -238,7 +238,7 @@ LlamaParse → 付费但 VLM 级保真
 | "离线也免费" | 是托管服务（API 调用）；开源解析替代有限 |
 | "解析不重要" | 2026 共识：解析质量决定 RAG 上限 |
 
-> 🎯 核心要点：LlamaParse = 解析层竞争资产（v2 四级：Fast 1 → Agentic Plus 45 积分）；API v2 的结构化配置 + 版本固定让生产管线可锁定；Retrieval Harness 四原语（File Read 克服分块截断）；视觉布局保留防复杂文档幻觉；选型按"文档复杂度 × 信息价值 > 解析成本"决策；对应阶段 4 的 Agentic 解析思想（商业级实现）。
+> 核心要点：LlamaParse = 解析层竞争资产（v2 四级：Fast 1 → Agentic Plus 45 积分）；API v2 的结构化配置 + 版本固定让生产管线可锁定；Retrieval Harness 四原语（File Read 克服分块截断）；视觉布局保留防复杂文档幻觉；选型按"文档复杂度 × 信息价值 > 解析成本"决策；对应阶段 4 的 Agentic 解析思想（商业级实现）。
 
 ---
 

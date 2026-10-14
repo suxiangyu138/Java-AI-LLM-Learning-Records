@@ -1,6 +1,6 @@
 # 04 - Spring AI Function Calling
 
-> 🎯 Function Calling = LLM 能"动手"调用你的 Java 方法。Spring AI 用 `@Tool` 注解 + 自动 JSON Schema 生成实现了零侵入式工具注册。本章覆盖工具注册、参数解析、多工具编排、异常处理、并行调用、Agent 模式
+> Function Calling = LLM 能"动手"调用你的 Java 方法。Spring AI 用 `@Tool` 注解 + 自动 JSON Schema 生成实现了零侵入式工具注册。本章覆盖工具注册、参数解析、多工具编排、异常处理、并行调用、Agent 模式
 
 ---
 
@@ -144,7 +144,7 @@ public String queryUser(@ToolParam(description = "用户ID") String userId) {
     } catch (UserNotFoundException e) {
         // ★ 关键：返回可读的错误信息给 LLM，让它决定下一步
         return "未找到用户：" + userId + "，请核实用户ID是否正确";
-        // ❌ 不要抛异常 — LLM 收到 exception message 后会困惑
+        // ✗ 不要抛异常 — LLM 收到 exception message 后会困惑
     }
 }
 
@@ -224,6 +224,6 @@ public class ProductionAgent {
 
 ---
 
-> 🎯 **核心要点**：Spring AI Function Calling 三件事 — **① @Tool 注解声明工具（LLM 通过 JSON Schema 理解）② ToolCallbacks.from() 批量注册 ③ ChatClient.defaultTools() 全局注入**。工具设计黄金法则：**幂等方法 + catch 返回友好描述（不给 LLM 异常堆栈）+ 超时/次数上限（防死循环）+ 返回值精简（大结果截断）**。
+> **核心要点**：Spring AI Function Calling 三件事 — **① @Tool 注解声明工具（LLM 通过 JSON Schema 理解）② ToolCallbacks.from() 批量注册 ③ ChatClient.defaultTools() 全局注入**。工具设计黄金法则：**幂等方法 + catch 返回友好描述（不给 LLM 异常堆栈）+ 超时/次数上限（防死循环）+ 返回值精简（大结果截断）**。
 
 **下一模块**：[05-Spring AI 多模态与生产](05-Spring-AI-多模态与生产.md) / **返回总览**：[00-总览](00-Java-AI开发框架体系总览.md)

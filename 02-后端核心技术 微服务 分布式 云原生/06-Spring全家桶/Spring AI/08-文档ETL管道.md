@@ -1,7 +1,7 @@
 # 08-文档 ETL 管道
 > RAG 的数据准备层：DocumentReader 抽取 → Transformer 分块/压缩 → DocumentWriter 写入向量库，附分块策略对比与生产建议
 
-## 📚 目录
+## 目录
 1. [ETL 管道模型](#1-etl-管道模型)
 2. [Extract：DocumentReader 抽取](#2-extractdocumentreader-抽取)
 3. [Transform：分块与处理策略](#3-transform分块与处理策略)
@@ -25,7 +25,7 @@
 | Transform | 分块/清洗/摘要，提升检索质量 | `Document` → `List<Document>` |
 | Load | 向量化并写入存储 | `List<Document>` → 向量库/文件 |
 
-> 🎯 **核心要点**：**检索质量的上限在 ETL，不在模型**。分块粒度、元数据完整性、文档清洗直接决定召回精度——RAG 效果差，90% 先查 ETL 环节。
+> **核心要点**：**检索质量的上限在 ETL，不在模型**。分块粒度、元数据完整性、文档清洗直接决定召回精度——RAG 效果差，90% 先查 ETL 环节。
 
 ## 2. Extract：DocumentReader 抽取
 
@@ -53,7 +53,7 @@ var reader = new FileSystemDocumentReader(
 List<Document> docs = reader.get();
 ```
 
-> ⚠️ **抽取陷阱**：PDF 扫描件（无文本层）Tika 提不出内容；多栏排版 PDF 文本顺序错乱——生产环境先做抽取质量抽检，再进管道。
+> **抽取陷阱**：PDF 扫描件（无文本层）Tika 提不出内容；多栏排版 PDF 文本顺序错乱——生产环境先做抽取质量抽检，再进管道。
 
 ## 3. Transform：分块与处理策略
 
@@ -88,7 +88,7 @@ List<Document> docs = reader.get();
 vectorStore.add(transformedDocs);   // 内部：EmbeddingModel.embed → 入库
 ```
 
-> 💡 **向量化时机**：默认"写入时向量化"（write-time embedding）。海量/冷启动场景评估批量化与增量更新策略，避免全量重嵌。
+> **向量化时机**：默认"写入时向量化"（write-time embedding）。海量/冷启动场景评估批量化与增量更新策略，避免全量重嵌。
 
 ## 5. 管道组装实战
 
@@ -137,7 +137,7 @@ public class IngestionPipelineConfig {
 
 选型决策链：`文档结构（有无层级）→ 检索粒度（问答 vs 概览）→ 成本预算（LLM 分块开销）→ 实测召回率`
 
-> ⚠️ **块大小与检索体验**：块太大→上下文混入噪声、token 成本高；块太小→语义残缺、召回碎片。用真实查询做召回率评测（见 [10-可观测性评估与生产避坑](10-可观测性评估与生产避坑.md)），不要拍脑袋定参数。
+> **块大小与检索体验**：块太大→上下文混入噪声、token 成本高；块太小→语义残缺、召回碎片。用真实查询做召回率评测（见 [10-可观测性评估与生产避坑](10-可观测性评估与生产避坑.md)），不要拍脑袋定参数。
 
 ## 7. 生产化建议
 
@@ -153,7 +153,7 @@ public class IngestionPipelineConfig {
 
 ## 8. 核心要点
 
-> 🎯 **核心要点**：
+> **核心要点**：
 > - ETL 三阶段：Reader（抽取，Tika 多格式）→ Transformer（分块/摘要/元数据）→ Writer（向量化入库）；
 > - 分块策略按"文档结构 + 检索粒度 + 成本"选型：语义分块默认、树状分块长文档、压缩摘要海量低质；
 > - 检索质量上限在 ETL：先查抽取乱码、分块粒度、元数据，再谈模型与重排；

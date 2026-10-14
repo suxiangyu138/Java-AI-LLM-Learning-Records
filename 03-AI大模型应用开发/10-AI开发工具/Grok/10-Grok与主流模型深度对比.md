@@ -1,10 +1,10 @@
 # 10 - Grok 与主流模型深度对比
 
-> 🎯 Grok 4.5 vs Claude Opus 5 vs Claude Fable 5 vs GPT-5.6 Sol vs DeepSeek V4 Pro——2026 年 7 月五大旗舰代码模型的全面对决。Grok 4.5 的定位不是"绝对最强"，而是"最值的旗舰"
+> Grok 4.5 vs Claude Opus 5 vs Claude Fable 5 vs GPT-5.6 Sol vs DeepSeek V4 Pro——2026 年 7 月五大旗舰代码模型的全面对决。Grok 4.5 的定位不是"绝对最强"，而是"最值的旗舰"
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [2026.07 旗舰模型速览](#1-202607-旗舰模型速览)
 2. [代码能力深度对比](#2-代码能力深度对比)
@@ -21,12 +21,12 @@
 | 发布时间 | 2026.07 | 2026.07 | 2025.11 | 2026 Q2 | 2026 Q2 |
 | 架构 | 1.5T MoE | MoE | MoE | MoE | MoE |
 | 上下文 | 500K | 200K | 200K | 128K | 128K |
-| 多模态 | ✅ | ✅ | ✅ | ✅ | ❌ |
-| 开源 | ❌ | ❌ | ❌ | ❌ | ✅ |
+| 多模态 | ✓ | ✓ | ✓ | ✓ | ✗ |
+| 开源 | ✗ | ✗ | ✗ | ✗ | ✓ |
 | API 输入 | **$2** | $15 | $30 | ~$20 | ~$0.50 |
 | API 输出 | **$6** | $75 | $150 | ~$60 | ~$2 |
-| Cursor 集成 | ✅ 原生 | ⚠️ API | ⚠️ API | ✅ Copilot | ❌ |
-| X 平台数据 | ✅ 独家 | ❌ | ❌ | ❌ | ❌ |
+| Cursor 集成 | ✓ 原生 | API | API | ✓ Copilot | ✗ |
+| X 平台数据 | ✓ 独家 | ✗ | ✗ | ✗ | ✗ |
 
 ---
 
@@ -34,27 +34,27 @@
 
 | 基准 | Grok 4.5 | Claude Opus 5 | Claude Fable 5 | GPT-5.6 Sol | DeepSeek V4 Pro |
 |------|:---:|:---:|:---:|:---:|:---:|
-| **SWE Marathon** | **29.0%** 🥇 | — | 24.0% | — | — |
+| **SWE Marathon** | **29.0%** | — | 24.0% | — | — |
 | **Terminal-Bench 2.1** | 83.3% | ~80% | **84.3%** | 83.4% | — |
 | **DeepSWE 1.0** | 62.0% | ~65% | **66.1%** | 64.31% | — |
 | SWE-bench Pro | 64.7% | **79.2%** | 80.0% | ~65% | 55.4% |
 | SWE-bench Verified | ~65% | 76.8% | ~73% | ~72% | **80.6%** |
 | LiveCodeBench | ~88% | — | — | 89.0% | **93.5%** |
 | Code Arena (ELO) | — | — | 1631 | 1618 | ~1520 |
-| **A-CODE-LLM** | **0.732** 🥇 | — | — | ~0.70 | — |
+| **A-CODE-LLM** | **0.732** | — | — | ~0.70 | — |
 
 ### 关键发现
 
 ```text
 Grok 4.5 赢在哪？
-  ✅ SWE Marathon 29.0% 🥇 — 长时间 Agent 任务可靠性第一
-  ✅ A-CODE-LLM 0.732 🥇 — Agent 编程综合效率第一
-  ✅ Terminal-Bench 2.1 83.3% — 终端 Agent 能力前二
+  ✓ SWE Marathon 29.0% — 长时间 Agent 任务可靠性第一
+  ✓ A-CODE-LLM 0.732 — Agent 编程综合效率第一
+  ✓ Terminal-Bench 2.1 83.3% — 终端 Agent 能力前二
 
 Grok 4.5 输在哪？
-  ❌ SWE-bench Pro 64.7% — 被 Opus 5 (79.2%) 和 Fable 5 (80.0%) 大幅拉开
-  ❌ SWE-bench Verified ~65% — 不如 DeepSeek V4 Pro (80.6%)
-  ❌ 代码修复的"精准度"不如 Claude 家族
+  ✗ SWE-bench Pro 64.7% — 被 Opus 5 (79.2%) 和 Fable 5 (80.0%) 大幅拉开
+  ✗ SWE-bench Verified ~65% — 不如 DeepSeek V4 Pro (80.6%)
+  ✗ 代码修复的"精准度"不如 Claude 家族
 ```
 
 ---
@@ -80,13 +80,13 @@ Grok 4.5 输在哪？
 | GPT-5.6 Sol | $6,000 | 4× |
 | DeepSeek V4 Pro | $300 | 0.2× |
 
-> 💡 DeepSeek V4 Pro 仍是最便宜的，但 Grok 4.5 在"旗舰级质量 × 极低成本"的交集上无人能敌。
+> DeepSeek V4 Pro 仍是最便宜的，但 Grok 4.5 在"旗舰级质量 × 极低成本"的交集上无人能敌。
 
 ---
 
 ## 4. Java 开发场景实测
 
-| Java 场景 | Grok 4.5 | Claude Opus 5 | DeepSeek V4 Pro | 🥇 推荐 |
+| Java 场景 | Grok 4.5 | Claude Opus 5 | DeepSeek V4 Pro | 推荐 |
 |------|:---:|:---:|:---:|------|
 | Spring Boot CRUD | 9.0 | **9.5** | 8.8 | Opus 5（质量优先） |
 | 复杂并发编程 | 8.8 | 9.3 | **9.2** | 各有千秋 |
@@ -100,7 +100,7 @@ Grok 4.5 输在哪？
 
 ## 5. 选型决策矩阵
 
-| 你的核心需求 | 🥇 首选 | 理由 |
+| 你的核心需求 | 首选 | 理由 |
 |------|------|------|
 | **追求最高代码质量** | Claude Opus 5 | SWE-bench Pro 79.2% |
 | **追求极致性价比** | DeepSeek V4 Pro | $0.50/$2，SWE Verified 80.6% |
@@ -123,7 +123,7 @@ Claude Opus 5 做 30% 的任务（代码审查、架构设计、关键Bug修复�
 质量和成本的最佳平衡
 ```
 
-> 🎯 **核心要点**：Grok 4.5 不是"最强代码模型"，而是"最具经济效益的旗舰代码模型"。它的竞争壁垒不是单点最高分，而是 **Token 效率 × Cursor 原生集成 × SWE Marathon 持久性** 的三位一体。对于高频使用场景，Grok 4.5 的综合 ROI 在 2026 年 7 月无人能及。
+> **核心要点**：Grok 4.5 不是"最强代码模型"，而是"最具经济效益的旗舰代码模型"。它的竞争壁垒不是单点最高分，而是 **Token 效率 × Cursor 原生集成 × SWE Marathon 持久性** 的三位一体。对于高频使用场景，Grok 4.5 的综合 ROI 在 2026 年 7 月无人能及。
 
 ---
 

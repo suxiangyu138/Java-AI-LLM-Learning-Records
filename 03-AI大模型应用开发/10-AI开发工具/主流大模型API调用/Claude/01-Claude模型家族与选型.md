@@ -1,6 +1,6 @@
 # 01 - Claude 模型家族与选型
 
-> 🎯 Anthropic 的模型矩阵（2026.08）：Opus 4.7（旗舰·最强推理）、Sonnet 4.6（主力·编程首选）、Haiku 4.5（轻量·高吞吐）。选型一句话：日常用 Sonnet、省钱用 Haiku、难题用 Opus
+> Anthropic 的模型矩阵（2026.08）：Opus 4.7（旗舰·最强推理）、Sonnet 4.6（主力·编程首选）、Haiku 4.5（轻量·高吞吐）。选型一句话：日常用 Sonnet、省钱用 Haiku、难题用 Opus
 
 ---
 
@@ -109,6 +109,6 @@ Batch 批量任务 → 一律 Batch API（半价）
 
 ---
 
-> 🎯 **核心要点**：模型选型三句话 — **① 默认用 Sonnet 4.6（98% 任务足够 + $3/$15 可接受）② 高量管道用 Haiku 4.5（$1/$5 + 极快）③ 极难推理用 Opus 4.7（$5/$25 + xhigh effort）**。成本最优 = 80% Haiku + 15% Sonnet + 5% Opus。
+> **核心要点**：模型选型三句话 — **① 默认用 Sonnet 4.6（98% 任务足够 + $3/$15 可接受）② 高量管道用 Haiku 4.5（$1/$5 + 极快）③ 极难推理用 Opus 4.7（$5/$25 + xhigh effort）**。成本最优 = 80% Haiku + 15% Sonnet + 5% Opus。
 
 **下一模块**：[02-Messages-API核心协议](02-Messages-API核心协议.md) / **返回总览**：[00-总览](00-Claude-API知识体系总览.md)

@@ -3,7 +3,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [知识体系导图](#1-知识体系导图)
 2. [模块导航](#2-模块导航)
@@ -76,7 +76,7 @@
 **路线 C：前沿与生产（面向架构师）**
 路线 B + 06 + 08 + 09。Agentic Reasoning 与 Model-Native Harness 转变、生产化护栏、框架选型。
 
-> 💡 与知识库关系：本目录与 `Agent开发/`（P-A-M-E 方法论）、`Agent与MCP协议/`（工具协议）、`03-Multi-Agent与MCP协议/`（深度模块）构成 Agent 知识族；`03-AI大模型应用开发` 的模型层（DeepSeek R1 等推理模型）是范式演进的底层驱动。
+> 与知识库关系：本目录与 `Agent开发/`（P-A-M-E 方法论）、`Agent与MCP协议/`（工具协议）、`03-Multi-Agent与MCP协议/`（深度模块）构成 Agent 知识族；`03-AI大模型应用开发` 的模型层（DeepSeek R1 等推理模型）是范式演进的底层驱动。
 
 ---
 
@@ -97,7 +97,7 @@
 | Evaluator-optimizer | 生成-批评循环 | 有明确标准时使用 |
 | MCP | 工具连接标准协议 | Agent 的工具接口 |
 
-> 🎯 **核心要点**：Agent 范式的 2025-2026 主线 = **从"外部编排代码"转向"更强模型内化循环"**——推理模型（o1/R1/Thinking）把计划-执行-反思放进思维链，手写 ReAct 循环逐渐成为 legacy，Model-Native Harness 成为共识。但 Anthropic 的告诫依然有效：**先用最简单的工作流，确定性管道能解决就不要用 Agent**；范式选择的核心是"任务能否预先写成清单"（能 → Plan-and-Execute，不能 → ReAct/Agent）。
+> **核心要点**：Agent 范式的 2025-2026 主线 = **从"外部编排代码"转向"更强模型内化循环"**——推理模型（o1/R1/Thinking）把计划-执行-反思放进思维链，手写 ReAct 循环逐渐成为 legacy，Model-Native Harness 成为共识。但 Anthropic 的告诫依然有效：**先用最简单的工作流，确定性管道能解决就不要用 Agent**；范式选择的核心是"任务能否预先写成清单"（能 → Plan-and-Execute，不能 → ReAct/Agent）。
 
 ---
 

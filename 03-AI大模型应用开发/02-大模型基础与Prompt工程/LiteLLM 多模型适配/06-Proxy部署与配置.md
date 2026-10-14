@@ -1,7 +1,7 @@
 # 06 Proxy 部署与配置
 > 网关的骨架：config.yaml 全解、起服务、虚拟 key、鉴权与团队管理
 
-## 📚 目录
+## 目录
 1. [Proxy 是什么：一个 OpenAI 兼容端点](#1-proxy-是什么一个-openai-兼容端点)
 2. [config.yaml 配置全解](#2-configyaml-配置全解)
 3. [启动与验证](#3-启动与验证)
@@ -37,7 +37,7 @@
 | 治理集中 | 预算/限流/审计/模型白名单一处配置 |
 | 切换无感 | 换供应商 = 改网关配置 |
 
-> 🎯 **核心要点**：**Proxy = "把 LiteLLM 变成服务"**——调用方只看到 OpenAI 兼容端点（换 base_url 即可），所有治理（key/预算/路由）收进网关。**虚拟 key 是核心设计**：真实 key 永不出网关。
+> **核心要点**：**Proxy = "把 LiteLLM 变成服务"**——调用方只看到 OpenAI 兼容端点（换 base_url 即可），所有治理（key/预算/路由）收进网关。**虚拟 key 是核心设计**：真实 key 永不出网关。
 
 ## 2. config.yaml 配置全解
 
@@ -58,7 +58,7 @@ litellm_settings:                            # ② 运行时设置
   max_budget: 1000                           # 全局预算（05 章）
 
 general_settings:                            # ③ 安全与集成
-  master_key: sk-master-xxx                  # ⚠️ 主 key（管理 API 用，生产环境变量）
+  master_key: sk-master-xxx                  # 主 key（管理 API 用，生产环境变量）
   database_url: postgresql://...             # 数据库（记账/key 持久化）
   otel: true                                 # OpenTelemetry 集成
 
@@ -80,7 +80,7 @@ guardrails:                                  # ⑤ 内容安全（可选）
 | `router_settings` | 路由策略（04 章） |
 | `guardrails` | 内容安全策略（输入输出） |
 
-> ⚠️ 安全底线：**master_key 必须设置**（未设置 = 任何人都能调管理 API）；生产用环境变量（`LITELLM_MASTER_KEY`）而非明文 yaml（FC 体系 06 章 key 基线）。
+> 安全底线：**master_key 必须设置**（未设置 = 任何人都能调管理 API）；生产用环境变量（`LITELLM_MASTER_KEY`）而非明文 yaml（FC 体系 06 章 key 基线）。
 
 ## 3. 启动与验证
 
@@ -104,7 +104,7 @@ curl http://localhost:4000/health/liveliness
 from openai import OpenAI
 
 client = OpenAI(
-    base_url="http://localhost:4000/v1",   # ⭐ 唯一改动
+    base_url="http://localhost:4000/v1",   # ★ 唯一改动
     api_key="sk-virtual-key-xxx",           # 虚拟 key（不是真实 key）
 )
 
@@ -114,7 +114,7 @@ resp = client.chat.completions.create(
 )
 ```
 
-> 🎯 **核心要点**：**调用方接入 Proxy = 改两个配置**（base_url + api_key）——任何语言的 OpenAI SDK 都能接。模型名用逻辑名（model_list 里定义的），调用方不需要知道物理模型。
+> **核心要点**：**调用方接入 Proxy = 改两个配置**（base_url + api_key）——任何语言的 OpenAI SDK 都能接。模型名用逻辑名（model_list 里定义的），调用方不需要知道物理模型。
 
 ## 4. 虚拟 Key：网关的权限核心
 
@@ -143,7 +143,7 @@ curl -X POST http://localhost:4000/key/generate \
 | 团队归属 | 成本归集 |
 | 可撤销 | 泄露即删 |
 
-> 💡 **虚拟 key = 权限对象**：给每个调用方（应用/团队/用户）发独立 key——**每个 key 都是"受限身份"**，泄露一个只影响一个 key 的额度，可立即吊销。这是网关治理的第一能力。
+> **虚拟 key = 权限对象**：给每个调用方（应用/团队/用户）发独立 key——**每个 key 都是"受限身份"**，泄露一个只影响一个 key 的额度，可立即吊销。这是网关治理的第一能力。
 
 ## 5. 鉴权与安全基线
 
@@ -158,7 +158,7 @@ curl -X POST http://localhost:4000/key/generate \
 | 审计日志 | 管理操作全记录（Enterprise） | 进阶 |
 | 密钥轮换 | 真实 key 定期轮换 | 运维 |
 
-> ⚠️ 安全红线：**网关不暴露公网**（与 Scrapyd 6800 端口同理）——内网 + 反代 + 虚拟 key 三层；管理 API 只有 master key 能调。
+> 安全红线：**网关不暴露公网**（与 Scrapyd 6800 端口同理）——内网 + 反代 + 虚拟 key 三层；管理 API 只有 master key 能调。
 
 ## 6. 团队与多租户
 
@@ -184,7 +184,7 @@ curl -X POST http://localhost:4000/team/new \
   -d '{"team_alias": "客服组", "max_budget": 300, "models": ["pro-llm"]}'
 ```
 
-> 🎯 **核心要点**：**团队 = 预算与权限的容器**——"客服组 300 元/月、只能用 pro-llm、超支拒绝"用三个配置表达。多团队场景的治理模型：**全局预算 > 团队预算 > 用户预算 > key 预算**（05 章三级预算的完整形态）。
+> **核心要点**：**团队 = 预算与权限的容器**——"客服组 300 元/月、只能用 pro-llm、超支拒绝"用三个配置表达。多团队场景的治理模型：**全局预算 > 团队预算 > 用户预算 > key 预算**（05 章三级预算的完整形态）。
 
 ## 7. 管理 API 与 UI
 
@@ -210,7 +210,7 @@ curl http://localhost:4000/model/info -H "Authorization: Bearer sk-master-xxx"  
 curl "http://localhost:4000/spend/logs?start_date=2026-08-01" -H "Authorization: Bearer sk-master-xxx"
 ```
 
-> 💡 管理 API = "**网关的运维接口**"——key 生命周期、模型健康、花费查询全在这里。生产脚本（创建 key/查花费/吊销）都用 API 自动化（07 章 CI 集成）。
+> 管理 API = "**网关的运维接口**"——key 生命周期、模型健康、花费查询全在这里。生产脚本（创建 key/查花费/吊销）都用 API 自动化（07 章 CI 集成）。
 
 ## 8. 常见坑
 

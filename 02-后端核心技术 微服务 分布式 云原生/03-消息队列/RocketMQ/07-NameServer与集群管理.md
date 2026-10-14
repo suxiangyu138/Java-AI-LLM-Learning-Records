@@ -1,6 +1,6 @@
 # 07 - NameServer 与集群管理
 
-> 🎯 NameServer 是 RocketMQ 中最"轻"的组件 — 无状态、无共识、彼此不通信。理解这个"极简"设计，才能理解 RocketMQ 的架构哲学
+> NameServer 是 RocketMQ 中最"轻"的组件 — 无状态、无共识、彼此不通信。理解这个"极简"设计，才能理解 RocketMQ 的架构哲学
 
 ---
 
@@ -154,8 +154,8 @@ producer.setSendLatencyFaultEnable(true);
 │  node1   │◄───→│  Master  │
 └──────────┘     └──────────┘
 
-✅ 最简单，开发测试
-❌ 无高可用，宕机即不可用
+✓ 最简单，开发测试
+✗ 无高可用，宕机即不可用
 ```
 
 ### 4.2 多 Master（无 Slave）
@@ -171,9 +171,9 @@ producer.setSendLatencyFaultEnable(true);
 │ (Master) │ │ (Master) │
 └──────────┘ └──────────┘
 
-✅ 读写高可用（多 Master 分摊）
-✅ 配置简单
-❌ Master 宕机 → 该机器上数据暂时不可消费
+✓ 读写高可用（多 Master 分摊）
+✓ 配置简单
+✗ Master 宕机 → 该机器上数据暂时不可消费
 ```
 
 ### 4.3 多 Master 多 Slave（异步复制）
@@ -193,11 +193,11 @@ producer.setSendLatencyFaultEnable(true);
 │ └──────┘     │ │ └──────┘      │
 └──────────────┘ └───────────────┘
 
-✅ 高可用（Master 宕机可手动切 Slave）
-✅ 主从异步复制，性能好
-✅ ⭐ 生产推荐（经典配置）
-❌ Master 宕机丢失少量异步数据
-❌ 主从切换需手动
+✓ 高可用（Master 宕机可手动切 Slave）
+✓ 主从异步复制，性能好
+✓ ★ 生产推荐（经典配置）
+✗ Master 宕机丢失少量异步数据
+✗ 主从切换需手动
 ```
 
 ### 4.4 多 Master 多 Slave（同步复制）
@@ -205,9 +205,9 @@ producer.setSendLatencyFaultEnable(true);
 ```text
 Master ──同步刷盘──→ Slave（等待确认后才返回 Producer）
 
-✅ 强一致，不丢数据
-❌ 延迟高（同步刷盘 + 同步复制）
-❌ 吞吐低
+✓ 强一致，不丢数据
+✗ 延迟高（同步刷盘 + 同步复制）
+✗ 吞吐低
 ```
 
 ---
@@ -218,15 +218,15 @@ Master ──同步刷盘──→ Slave（等待确认后才返回 Producer）
 
 ```text
 传统主从的痛点：
-  ❌ Master 宕机 → 手动切换（或脚本切换） → 分钟级
-  ❌ 切换过程中可能有数据丢失（异步复制）
-  ❌ 切换后需要修改配置，运维成本高
+  ✗ Master 宕机 → 手动切换（或脚本切换） → 分钟级
+  ✗ 切换过程中可能有数据丢失（异步复制）
+  ✗ 切换后需要修改配置，运维成本高
 
 DLedger（RocketMQ 4.5+）：
-  ✅ 基于 Raft 协议，自动选主
-  ✅ 切换秒级完成
-  ✅ 数据强一致（Raft Log）
-  ✅ 无需外部组件
+  ✓ 基于 Raft 协议，自动选主
+  ✓ 切换秒级完成
+  ✓ 数据强一致（Raft Log）
+  ✓ 无需外部组件
 ```
 
 ### 5.2 DLedger 架构
@@ -271,9 +271,9 @@ DLedger 替换了 CommitLog：
 RocketMQ 5.x 引入 Controller — DLedger 的升级替代
 
 Controller 职责：
-  ✅ Broker 主备切换管理
-  ✅ 选主决策（Raft 共识）
-  ✅ 管理 Broker 的 Active/Standby 状态
+  ✓ Broker 主备切换管理
+  ✓ 选主决策（Raft 共识）
+  ✓ 管理 Broker 的 Active/Standby 状态
 
 与 DLedger 的区别：
   → DLedger: 存储和选主耦合（DLedger 直接管理 CommitLog）
@@ -311,10 +311,10 @@ Broker 专注于消息存储（无需关心选主）
 
 | 方案 | 自动切换 | 数据一致 | 最小节点 | 成熟度 | 推荐 |
 |------|:---:|:---:|:---:|:---:|:---:|
-| **传统主从(Async)** | ❌ | ❌(可能丢) | 2 | ⭐⭐⭐⭐⭐ | 老项目 |
-| **传统主从(Sync)** | ❌ | ✅ | 2 | ⭐⭐⭐ | 金融 |
-| **DLedger** | ✅ | ✅ | 3 | ⭐⭐⭐⭐ | 4.x 推荐 |
-| **Controller(5.x)** | ✅ | ✅ | 3(Controller)+2(Broker) | ⭐⭐⭐ | 5.x 推荐 |
+| **传统主从(Async)** | ✗ | ✗(可能丢) | 2 | ★★★★★ | 老项目 |
+| **传统主从(Sync)** | ✗ | ✓ | 2 | ★★★ | 金融 |
+| **DLedger** | ✓ | ✓ | 3 | ★★★★ | 4.x 推荐 |
+| **Controller(5.x)** | ✓ | ✓ | 3(Controller)+2(Broker) | ★★★ | 5.x 推荐 |
 
 ---
 
@@ -358,7 +358,7 @@ nohup sh bin/mqbroker -c conf/new-broker.conf &
 # 1. 停掉原 Master 进程
 # 2. 修改 Slave 配置: brokerId=0, brokerRole=ASYNC_MASTER
 # 3. 重启 Slave → 成为新 Master
-# ⚠️ 不推荐线上手动切换，请使用 DLedger/Controller
+# 不推荐线上手动切换，请使用 DLedger/Controller
 
 # DLedger 模式：自动切换（无需手动操作）
 # Controller 模式：自动切换（无需手动操作）
@@ -381,9 +381,9 @@ nohup sh bin/mqbroker -c conf/new-broker.conf &
 
 | 场景 | 方案 | 推荐度 |
 |------|------|:---:|
-| 开发测试 | 单 Master | ⭐⭐⭐⭐⭐ |
-| 中小规模生产 | 多 Master 多 Slave（异步） | ⭐⭐⭐⭐⭐ |
-| 金融级 | 多 Master 多 Slave（同步）或 DLedger | ⭐⭐⭐⭐ |
-| 4.x 自动切换 | DLedger | ⭐⭐⭐⭐ |
-| 5.x 新项目 | Controller 模式 | ⭐⭐⭐⭐ |
-| 跨机房 | 多 NameServer + 异步复制 | ⭐⭐⭐ |
+| 开发测试 | 单 Master | ★★★★★ |
+| 中小规模生产 | 多 Master 多 Slave（异步） | ★★★★★ |
+| 金融级 | 多 Master 多 Slave（同步）或 DLedger | ★★★★ |
+| 4.x 自动切换 | DLedger | ★★★★ |
+| 5.x 新项目 | Controller 模式 | ★★★★ |
+| 跨机房 | 多 NameServer + 异步复制 | ★★★ |

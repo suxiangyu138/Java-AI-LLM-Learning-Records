@@ -1,6 +1,6 @@
 # 07 - Python AI 项目工程化模板
 
-> 🎯 从零搭建一个生产级 Python AI 项目的完整模板 — 技术栈选型、pyproject.toml 统一配置、目录结构、CI/CD、日志/监控/安全。面向 LLM API 调用 + RAG + Agent 场景
+> 从零搭建一个生产级 Python AI 项目的完整模板 — 技术栈选型、pyproject.toml 统一配置、目录结构、CI/CD、日志/监控/安全。面向 LLM API 调用 + RAG + Agent 场景
 
 ---
 
@@ -170,6 +170,6 @@ logger.info("llm_call", model="claude-sonnet-4-5", tokens=1500, latency_ms=2300)
 
 ---
 
-> 🎯 **核心要点**：2026 年 Python AI 工程化标准 = **uv 管项目 + pyproject.toml 收敛全配置 + Ruff 管代码质量 + FastAPI 做服务 + structlog 做日志 + Phoenix 做追踪**。关键动作：锁文件提交 Git（可复现构建）、`uv sync --frozen` 保证 CI 一致性、评估指标纳入 CI（RAGAS/DeepEval 回归）。
+> **核心要点**：2026 年 Python AI 工程化标准 = **uv 管项目 + pyproject.toml 收敛全配置 + Ruff 管代码质量 + FastAPI 做服务 + structlog 做日志 + Phoenix 做追踪**。关键动作：锁文件提交 Git（可复现构建）、`uv sync --frozen` 保证 CI 一致性、评估指标纳入 CI（RAGAS/DeepEval 回归）。
 
 **返回总览**：[00-Python生态知识体系总览](00-Python生态知识体系总览.md)

@@ -1,7 +1,7 @@
 # 03-Git 分支模型与团队工作流
 > 分支本质只是指针，几乎零成本；但**怎么用分支**决定团队开发效率和发布质量——四模型对比、命名规范、发布与热修复流程
 
-## 📚 目录
+## 目录
 1. [分支底层原理](#1-分支底层原理)
 2. [四种主流分支模型速览](#2-四种主流分支模型速览)
 3. [Git Flow — 经典重型模型](#3-git-flow--经典重型模型)
@@ -34,7 +34,7 @@ ls -la .git/refs/heads/           # 每个分支文件 = 41 字节（40 位哈�
 | HEAD 状态 | 指向 | 场景 | 风险 |
 |-----------|------|------|:---:|
 | 正常 | 某个分支引用 | 日常开发 | 无 |
-| detached HEAD | 直接指向某个 commit | `git checkout <commit>` 查看历史 | ⚠️ 此状态提交可能丢失 |
+| detached HEAD | 直接指向某个 commit | `git checkout <commit>` 查看历史 | 此状态提交可能丢失 |
 
 ```bash
 git checkout 8f3a2c9b               # 进入 detached HEAD
@@ -42,7 +42,7 @@ git switch -c temp-branch           # 已有提交时：创建分支保住代码
 git switch main                     # 只是查看：直接切回分支
 ```
 
-> 🎯 **核心要点**：分支 = 环境隔离 + 需求边界 + 版本管理 + 安全防线。没有分支模型的团队痛点：所有人往 main 直接提交 → 频繁冲突；不知道哪些代码在生产 → 回滚困难；紧急修复没地方放。
+> **核心要点**：分支 = 环境隔离 + 需求边界 + 版本管理 + 安全防线。没有分支模型的团队痛点：所有人往 main 直接提交 → 频繁冲突；不知道哪些代码在生产 → 回滚困难；紧急修复没地方放。
 
 ## 2. 四种主流分支模型速览
 
@@ -59,8 +59,8 @@ git switch main                     # 只是查看：直接切回分支
 | 分支数量 | 5 种 | 2 种 | 3-4 种（按环境） |
 | 发布节奏 | 固定周期（周/月） | 随时发布 | 按环境推进 |
 | 版本管理 | 每个 release 独立分支 | main 即最新 | 环境分支即版本 |
-| 复杂度 | ⚠️ 高 | ✅ 低 | ⚠️ 中 |
-| CI/CD 友好度 | ⚠️ 中 | ✅ 高 | ✅ 高 |
+| 复杂度 | 高 | ✓ 低 | 中 |
+| CI/CD 友好度 | 中 | ✓ 高 | ✓ 高 |
 | 适用团队 | 10+ 人传统企业 | 2-10 人互联网 | 中型多环境团队 |
 
 ## 3. Git Flow — 经典重型模型
@@ -132,7 +132,7 @@ git branch -d hotfix/1.0.1
 | 适合有明确版本周期的软件 | merge 太多，历史复杂 |
 | 发布内容可控 | 不适合频繁部署的 Web 应用 |
 
-> 💡 适用：Java 传统项目、金融、政务等版本发布周期长的场景。
+> 适用：Java 传统项目、金融、政务等版本发布周期长的场景。
 
 ## 4. GitHub Flow — 轻量敏捷模型
 
@@ -248,7 +248,7 @@ else:
 | 企业级多环境 | GitLab Flow | 环境分支匹配发布流水线 |
 | 大型基础设施 | Trunk-Based | 避免分支地狱 |
 
-> 💡 建议路径：先用 GitHub Flow 入门 → 团队大了考虑 GitLab Flow → 工程能力强了探索 Trunk-Based。
+> 建议路径：先用 GitHub Flow 入门 → 团队大了考虑 GitLab Flow → 工程能力强了探索 Trunk-Based。
 
 ## 8. 分支命名规范
 
@@ -262,13 +262,13 @@ else:
 | `chore/` | 构建/依赖/工具 | develop | develop | `chore/upgrade-spring` |
 
 ```bash
-feature/user-center-auth        # ✅ 小写+连字符
-feature/UserAuth                # ❌ 驼峰命名
-feature/user_auth               # ❌ 下划线
-feature/user-auth-and-profile   # ❌ 太长
+feature/user-center-auth        # ✓ 小写+连字符
+feature/UserAuth                # ✗ 驼峰命名
+feature/user_auth               # ✗ 下划线
+feature/user-auth-and-profile   # ✗ 太长
 ```
 
-> 🎯 **命名原则**：小写字母 + 连字符分隔，前缀明确意图，名称简短（≤4 个单词）。团队规范可加 JIRA 号：`feature/PROJ-123-user-login`。
+> **命名原则**：小写字母 + 连字符分隔，前缀明确意图，名称简短（≤4 个单词）。团队规范可加 JIRA 号：`feature/PROJ-123-user-login`。
 
 ## 9. 版本发布流程与 hotfix 双合并
 
@@ -327,7 +327,7 @@ git push origin develop
 git branch -d hotfix/critical-fix
 ```
 
-> ⚠️ **hotfix 未合并回 develop 的后果**：下次发布重复踩坑——hotfix 修复必须在 develop 上重放（合并或 cherry-pick）。
+> **hotfix 未合并回 develop 的后果**：下次发布重复踩坑——hotfix 修复必须在 develop 上重放（合并或 cherry-pick）。
 
 ## 10. worktree：多分支并行开发
 
@@ -358,11 +358,11 @@ cd ../project                      # 原工作区完全没受影响，连 stash 
 git worktree remove ../project-hotfix
 ```
 
-> 💡 Java 后端实战：一个 worktree 跑 `feature/user-module`，另一个跑 `feature/order-module`，两个 IDEA 窗口同时开发互不干扰。
+> Java 后端实战：一个 worktree 跑 `feature/user-module`，另一个跑 `feature/order-module`，两个 IDEA 窗口同时开发互不干扰。
 
 ## 11. 核心要点
 
-> 🎯 **核心要点**：
+> **核心要点**：
 > - 分支 = 41 字节指针文件，创建近乎零成本——成本在"怎么用"；
 > - 四模型坐标：发布节奏（周/月 → 小时）× 团队规模（小 → 大）× 环境数（1 → N）；
 > - 命名规范：小写 + 连字符 + 前缀表（feature/fix/hotfix/release/refactor/chore）；

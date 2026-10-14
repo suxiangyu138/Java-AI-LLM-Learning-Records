@@ -1,6 +1,6 @@
 # 11 - ChatGPT 面试题与生态影响
 
-> 🎯 ChatGPT 面试逃不开的 20 道题 — GPT 架构、RLHF 原理、API 开发、安全隐私、与竞品对比
+> ChatGPT 面试逃不开的 20 道题 — GPT 架构、RLHF 原理、API 开发、安全隐私、与竞品对比
 
 ---
 
@@ -89,4 +89,4 @@ GPT-1(117M)→GPT-2(1.5B)→GPT-3(175B)→GPT-3.5/ChatGPT→GPT-4(MoE)→GPT-4o(
   → AI-Native IDE 成为默认开发环境
 ```
 
-> 🎯 ChatGPT 不只是产品，是一个时代的开端。理解它 = 理解未来 5 年的技术走向。
+> ChatGPT 不只是产品，是一个时代的开端。理解它 = 理解未来 5 年的技术走向。

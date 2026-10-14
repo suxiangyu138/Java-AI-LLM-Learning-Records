@@ -1,10 +1,10 @@
 # Windows 文件系统、进程与安全
 
-> 🗄️ NTFS 不只是"存文件的格式"，Windows 进程不只是"任务管理器里的列表" —— 从文件权限到服务管理，从用户账户到防火墙，掌握 Windows 系统管理的核心三件套
+> NTFS 不只是"存文件的格式"，Windows 进程不只是"任务管理器里的列表" —— 从文件权限到服务管理，从用户账户到防火墙，掌握 Windows 系统管理的核心三件套
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [NTFS 文件系统](#1-ntfs-文件系统)
 2. [文件权限与 ACL](#2-文件权限与-acl)
@@ -22,13 +22,13 @@
 |------|:---:|:---:|:---:|
 | **单文件最大** | 4 GB | 理论 16 EB | 理论 16 EB |
 | **分区最大** | 2 TB | 128 PB | 256 TB |
-| **日志（Journaling）** | ❌ | ❌ | ✅ |
-| **权限控制（ACL）** | ❌ | ❌ | ✅ |
-| **压缩** | ❌ | ❌ | ✅ |
-| **加密（EFS）** | ❌ | ❌ | ✅ |
-| **磁盘配额** | ❌ | ❌ | ✅ |
-| **硬链接/符号链接** | ❌ | ❌ | ✅ |
-| **跨平台兼容** | ✅ 最好 | ✅ 最好 | macOS 只读，Linux 需 ntfs-3g |
+| **日志（Journaling）** | ✗ | ✗ | ✓ |
+| **权限控制（ACL）** | ✗ | ✗ | ✓ |
+| **压缩** | ✗ | ✗ | ✓ |
+| **加密（EFS）** | ✗ | ✗ | ✓ |
+| **磁盘配额** | ✗ | ✗ | ✓ |
+| **硬链接/符号链接** | ✗ | ✗ | ✓ |
+| **跨平台兼容** | ✓ 最好 | ✓ 最好 | macOS 只读，Linux 需 ntfs-3g |
 | **适用场景** | U 盘（小文件） | 移动存储（大文件） | 系统盘、开发盘 |
 
 ### 1.2 NTFS 核心特性
@@ -50,9 +50,9 @@ NTFS 的 $LogFile 元文件记录所有元数据更改：
 
 | 类型 | 创建命令 | 跨分区 | 目标可以是目录 | 删除目标后 |
 |------|---------|:---:|:---:|------|
-| **硬链接 (Hard Link)** | `mklink /H` | ❌ | ❌ | 链接仍有效 |
-| **符号链接 (Symlink)** | `mklink` | ✅ | ✅ | 链接失效 |
-| **目录链接 (Junction)** | `mklink /J` | ❌ | ✅（仅目录） | 链接失效 |
+| **硬链接 (Hard Link)** | `mklink /H` | ✗ | ✗ | 链接仍有效 |
+| **符号链接 (Symlink)** | `mklink` | ✓ | ✓ | 链接失效 |
+| **目录链接 (Junction)** | `mklink /J` | ✗ | ✓（仅目录） | 链接失效 |
 
 ```powershell
 # 硬链接：两个"文件名"指向同一个文件数据
@@ -66,7 +66,7 @@ mklink link.txt original.txt
 mklink /J link-dir target-dir
 ```
 
-> 💡 **Java 场景**：Maven 本地仓库 `~/.m2/repository` 可以用 `mklink /J` 移到其他分区释放 C 盘空间。
+> **Java 场景**：Maven 本地仓库 `~/.m2/repository` 可以用 `mklink /J` 移到其他分区释放 C 盘空间。
 
 ### 1.3 常用文件操作命令
 
@@ -163,7 +163,7 @@ icacls file.txt /setowner "UserName"
 | **Gradle Daemon 无权限** | Gradle 构建失败 | 检查 `~/.gradle/` 目录权限 |
 | **跨用户文件访问** | `C:\Users\OtherUser\...` 报错 | 以管理员身份 + 修改 ACL |
 
-> 🎯 **核心要点**：最简单的排错法 —— 在项目根目录右键 → 属性 → 安全 → 确保当前用户有"完全控制"权限。
+> **核心要点**：最简单的排错法 —— 在项目根目录右键 → 属性 → 安全 → 确保当前用户有"完全控制"权限。
 
 ---
 
@@ -317,7 +317,7 @@ sc config MySQL start= auto           # 设为自动启动（注意等号后有�
 .\WinSW-x64.exe uninstall myapp-service.xml   # 卸载
 ```
 
-> 💡 **推荐**：WinSW 是 Spring Boot 官方推荐的 Windows 服务化方案，可以将任何 Java 程序包装为 Windows 服务。
+> **推荐**：WinSW 是 Spring Boot 官方推荐的 Windows 服务化方案，可以将任何 Java 程序包装为 Windows 服务。
 
 方式二：使用 **NSSM** (Non-Sucking Service Manager)
 
@@ -399,7 +399,7 @@ Add-MpPreference -ExclusionProcess "javac.exe"
 Get-MpPreference | Select-Object ExclusionPath, ExclusionExtension, ExclusionProcess
 ```
 
-> ⚠️ **性能影响**：Windows Defender 的实时扫描会显著拖慢 Java 编译和 Maven 构建。建议排除**项目目录、.m2、.gradle、node_modules**，构建速度可提升 30%-50%。
+> **性能影响**：Windows Defender 的实时扫描会显著拖慢 Java 编译和 Maven 构建。建议排除**项目目录、.m2、.gradle、node_modules**，构建速度可提升 30%-50%。
 
 ### 5.4 hosts 文件
 

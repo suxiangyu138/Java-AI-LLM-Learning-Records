@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [表设计规约](#1-表设计规约)
 2. [索引设计规约](#2-索引设计规约)
@@ -71,33 +71,33 @@ CREATE TABLE `user` (
 ```sql
 -- 联合索引：idx_user_id_order_status (user_id, order_status)
 
--- ✅ 命中索引
+-- ✓ 命中索引
 SELECT * FROM `order` WHERE user_id = 1;
 SELECT * FROM `order` WHERE user_id = 1 AND order_status = 0;
 
--- ❌ 不命中索引
+-- ✗ 不命中索引
 SELECT * FROM `order` WHERE order_status = 0;  -- 缺少最左列
 ```
 
 ### 2.2 索引失效场景
 
 ```sql
--- ❌ 函数操作
+-- ✗ 函数操作
 SELECT * FROM `user` WHERE DATE(create_time) = '2024-01-01';
 
--- ✅ 改范围查询
+-- ✓ 改范围查询
 SELECT * FROM `user` WHERE create_time >= '2024-01-01' AND create_time < '2024-01-02';
 
--- ❌ 隐式类型转换
+-- ✗ 隐式类型转换
 SELECT * FROM `user` WHERE phone = 13800138000;  -- phone 是 VARCHAR，传入数字
 
--- ✅ 类型一致
+-- ✓ 类型一致
 SELECT * FROM `user` WHERE phone = '13800138000';
 
--- ❌ 前导模糊查询
+-- ✗ 前导模糊查询
 SELECT * FROM `user` WHERE name LIKE '%张';
 
--- ✅ 后缀模糊查询
+-- ✓ 后缀模糊查询
 SELECT * FROM `user` WHERE name LIKE '张%';
 ```
 
@@ -106,10 +106,10 @@ SELECT * FROM `user` WHERE name LIKE '张%';
 ```sql
 -- 索引：idx_user_name_email (user_name, email)
 
--- ✅ 覆盖索引（只查索引列，不回表）
+-- ✓ 覆盖索引（只查索引列，不回表）
 SELECT user_name, email FROM `user` WHERE user_name = '张三';
 
--- ❌ 需要回表（查了不在索引里的列）
+-- ✗ 需要回表（查了不在索引里的列）
 SELECT * FROM `user` WHERE user_name = '张三';
 ```
 
@@ -120,30 +120,30 @@ SELECT * FROM `user` WHERE user_name = '张三';
 ### 3.1 禁止 SELECT *
 
 ```sql
--- ❌ 问题：网络 IO 大、无法覆盖索引、字段变更风险
+-- ✗ 问题：网络 IO 大、无法覆盖索引、字段变更风险
 SELECT * FROM `user`;
 
--- ✅ 只查需要的字段
+-- ✓ 只查需要的字段
 SELECT id, user_name, email FROM `user`;
 ```
 
 ### 3.2 避免在 WHERE 中对字段做函数操作
 
 ```sql
--- ❌ 索引失效
+-- ✗ 索引失效
 SELECT * FROM `user` WHERE YEAR(create_time) = 2024;
 
--- ✅ 改范围查询
+-- ✓ 改范围查询
 SELECT * FROM `user` WHERE create_time >= '2024-01-01' AND create_time < '2025-01-01';
 ```
 
 ### 3.3 避免 OR 条件
 
 ```sql
--- ❌ 索引失效
+-- ✗ 索引失效
 SELECT * FROM `user` WHERE user_name = '张三' OR email = 'test@test.com';
 
--- ✅ 用 UNION
+-- ✓ 用 UNION
 SELECT * FROM `user` WHERE user_name = '张三'
 UNION
 SELECT * FROM `user` WHERE email = 'test@test.com';
@@ -152,10 +152,10 @@ SELECT * FROM `user` WHERE email = 'test@test.com';
 ### 3.4 大批量数据分批处理
 
 ```sql
--- ❌ 一次性处理大量数据
+-- ✗ 一次性处理大量数据
 UPDATE `user` SET is_deleted = 1 WHERE last_login < '2023-01-01';
 
--- ✅ 分批处理
+-- ✓ 分批处理
 UPDATE `user` SET is_deleted = 1 WHERE last_login < '2023-01-01' LIMIT 1000;
 -- 循环执行直到影响行数为 0
 ```
@@ -167,17 +167,17 @@ UPDATE `user` SET is_deleted = 1 WHERE last_login < '2023-01-01' LIMIT 1000;
 ### 4.1 MyBatis #{} vs ${}
 
 ```xml
-<!-- ✅ 参数化查询，防注入 -->
+<!-- ✓ 参数化查询，防注入 -->
 <select id="findById">
     SELECT * FROM `user` WHERE id = #{id}
 </select>
 
-<!-- ❌ 字符串拼接，有注入风险 -->
+<!-- ✗ 字符串拼接，有注入风险 -->
 <select id="findByTable">
     SELECT * FROM ${tableName}
 </select>
 
-<!-- ✅ 白名单校验后使用 ${} -->
+<!-- ✓ 白名单校验后使用 ${} -->
 <select id="findByTable">
     <if test="tableName == 'user' or tableName == 'order'">
         SELECT * FROM ${tableName}
@@ -188,13 +188,13 @@ UPDATE `user` SET is_deleted = 1 WHERE last_login < '2023-01-01' LIMIT 1000;
 ### 4.2 避免 N+1 查询
 
 ```java
-// ❌ N+1 问题
+// ✗ N+1 问题
 List<Order> orders = orderMapper.findAll();
 for (Order order : orders) {
     User user = userMapper.findById(order.getUserId());  // 每次循环查一次
 }
 
-// ✅ JOIN 查询
+// ✓ JOIN 查询
 <select id="findAllWithUser">
     SELECT o.*, u.user_name
     FROM `order` o
@@ -205,7 +205,7 @@ for (Order order : orders) {
 ### 4.3 批量插入优化
 
 ```xml
-<!-- ✅ 批量插入 -->
+<!-- ✓ 批量插入 -->
 <insert id="batchInsert">
     INSERT INTO `user` (user_name, email) VALUES
     <foreach collection="list" item="user" separator=",">
@@ -221,20 +221,20 @@ for (Order order : orders) {
 ### 5.1 分页必须带排序
 
 ```sql
--- ❌ 分页结果不稳定
+-- ✗ 分页结果不稳定
 SELECT * FROM `order` LIMIT 10, 10;
 
--- ✅ 带排序
+-- ✓ 带排序
 SELECT * FROM `order` ORDER BY id DESC LIMIT 10, 10;
 ```
 
 ### 5.2 深分页优化
 
 ```sql
--- ❌ 深分页性能差（扫描 10010 条，丢弃前 10000 条）
+-- ✗ 深分页性能差（扫描 10010 条，丢弃前 10000 条）
 SELECT * FROM `order` ORDER BY id DESC LIMIT 10000, 10;
 
--- ✅ 游标分页
+-- ✓ 游标分页
 SELECT * FROM `order` WHERE id > #{lastId} ORDER BY id DESC LIMIT 10;
 ```
 
@@ -245,7 +245,7 @@ SELECT * FROM `order` WHERE id > #{lastId} ORDER BY id DESC LIMIT 10;
 ### 6.1 @Transactional 失效场景
 
 ```java
-// ❌ 自调用：同一个类内方法调用，事务失效
+// ✗ 自调用：同一个类内方法调用，事务失效
 @Service
 public class OrderService {
     @Transactional
@@ -254,18 +254,18 @@ public class OrderService {
     }
     
     public void doCreate() {
-        createOrder();  // ❌ 事务失效
+        createOrder();  // ✗ 事务失效
     }
 }
 
-// ✅ 拆分到不同类
+// ✓ 拆分到不同类
 @Service
 public class OrderService {
     @Autowired
     private OrderManager orderManager;
     
     public void doCreate() {
-        orderManager.createOrder();  // ✅ 事务生效
+        orderManager.createOrder();  // ✓ 事务生效
     }
 }
 ```
@@ -273,7 +273,7 @@ public class OrderService {
 ### 6.2 长事务的危害
 
 ```java
-// ❌ 长事务：锁持有时间长、连接占用
+// ✗ 长事务：锁持有时间长、连接占用
 @Transactional
 public void processOrder(Order order) {
     doSomething();        // 100ms
@@ -282,7 +282,7 @@ public void processOrder(Order order) {
 }
 // 事务耗时 2.2s，连接被占用 2.2s
 
-// ✅ 拆分事务
+// ✓ 拆分事务
 public void processOrder(Order order) {
     doSomething();
     doInTransaction(order);  // 只把 DB 操作包在事务里
@@ -331,23 +331,23 @@ connections = (4 * 2) + 0 = 8
 ### 8.1 参数化查询
 
 ```java
-// ✅ PreparedStatement
+// ✓ PreparedStatement
 String sql = "SELECT * FROM user WHERE id = ?";
 PreparedStatement ps = conn.prepareStatement(sql);
 ps.setLong(1, userId);
 ResultSet rs = ps.executeQuery();
 
-// ❌ 字符串拼接
+// ✗ 字符串拼接
 String sql = "SELECT * FROM user WHERE id = " + userId;  // 危险！
 ```
 
 ### 8.2 动态表名白名单
 
 ```java
-// ❌ 危险
+// ✗ 危险
 String sql = "SELECT * FROM " + tableName;
 
-// ✅ 白名单校验
+// ✓ 白名单校验
 Set<String> allowedTables = Set.of("user", "order", "product");
 if (!allowedTables.contains(tableName)) {
     throw new IllegalArgumentException("非法表名");

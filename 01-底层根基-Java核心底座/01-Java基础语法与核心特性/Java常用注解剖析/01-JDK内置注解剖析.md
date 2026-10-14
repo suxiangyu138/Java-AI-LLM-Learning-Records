@@ -2,7 +2,7 @@
 
 > JDK 内置注解分三类：编译期契约（@Override/@Deprecated/@FunctionalInterface，编译器校验语义）、告警抑制（@SuppressWarnings/@SafeVarargs，干预编译器诊断）、元注解（定义注解的注解）。它们自身几乎不含逻辑，价值全在「javac 如何处理它们」——这正是面试区分"用过"与"懂原理"的分水岭
 
-## 📚 目录
+## 目录
 
 1. [标记类注解：编译期契约](#1-标记类注解编译期契约)
 2. [抑制类注解：与编译器讨价还价](#2-抑制类注解与编译器讨价还价)
@@ -53,7 +53,7 @@ if (d != null && d.forRemoval()) {
 
 注意一个反直觉事实：**@FunctionalInterface 是可选的**。任何仅含一个抽象方法的接口自动具备 Lambda 能力；加注解只是让编译器替你守住这个结构。接口演化规则同理：抽象方法一旦增多，此前所有 `(x) -> ...` 调用点全部编译失败——这正是 JDK 在 Comparator 等接口上坚持单抽象方法的原因。
 
-> 🎯 **核心要点**：三个标记注解都是"编译器契约"——@Override 锁多态、@FunctionalInterface 锁 SAM 结构、@Deprecated(forRemoval) 锁移除预期。它们运行时零开销，属于无条件使用的注解。
+> **核心要点**：三个标记注解都是"编译器契约"——@Override 锁多态、@FunctionalInterface 锁 SAM 结构、@Deprecated(forRemoval) 锁移除预期。它们运行时零开销，属于无条件使用的注解。
 
 ---
 
@@ -82,7 +82,7 @@ static <T> List<T> ofAll(T... items) {   // 只读消费 items，安全
 }
 ```
 
-> ⚠️ **陷阱**：`@SafeVarargs` 与 `@SuppressWarnings("unchecked")` 的区别是本质的——前者是"向编译器声明方法实现安全"，后者是"屏蔽编译器诊断"。前者有使用位置限制，后者无限制。
+> **陷阱**：`@SafeVarargs` 与 `@SuppressWarnings("unchecked")` 的区别是本质的——前者是"向编译器声明方法实现安全"，后者是"屏蔽编译器诊断"。前者有使用位置限制，后者无限制。
 
 ---
 

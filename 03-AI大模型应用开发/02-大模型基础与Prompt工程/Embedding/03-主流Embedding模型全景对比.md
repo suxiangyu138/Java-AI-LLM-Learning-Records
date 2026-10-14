@@ -1,6 +1,6 @@
 # 03 - 主流 Embedding 模型全景对比
 
-> 🎯 选对 Embedding 模型，RAG 效果能差 30% 以上 — 从开源到商业、从中文到多语言、从轻量到旗舰，一文覆盖全场景选型
+> 选对 Embedding 模型，RAG 效果能差 30% 以上 — 从开源到商业、从中文到多语言、从轻量到旗舰，一文覆盖全场景选型
 
 ---
 
@@ -71,10 +71,10 @@ Sparse 向量：词权重字典 — 关键词匹配
 Qwen-Embedding = 阿里通义千问系列 Embedding 模型
 
 突出优势：
-  ✅ 超长文本：支持 32K token 输入
-  ✅ 多尺寸：从 0.5B 到 7B 参数可选
-  ✅ 生态整合：与 Qwen LLM 配合效果最佳
-  ✅ 多语言：中英文均优秀
+  ✓ 超长文本：支持 32K token 输入
+  ✓ 多尺寸：从 0.5B 到 7B 参数可选
+  ✓ 生态整合：与 Qwen LLM 配合效果最佳
+  ✓ 多语言：中英文均优秀
 
 部署：
   ollama pull qwen-embedding   # 需先配置 Ollama 模型源
@@ -100,7 +100,7 @@ Qwen-Embedding = 阿里通义千问系列 Embedding 模型
 | text-embedding-3-large | $0.13 | 3072 维，精度最高 |
 | Ada v2 (旧) | $0.10 | 1536 维，即将退役 |
 
-> 💡 text-embedding-3-small 的性价比极高 — 100 万 token 仅 $0.02（约 ¥0.14），中小规模项目首选。
+> text-embedding-3-small 的性价比极高 — 100 万 token 仅 $0.02（约 ¥0.14），中小规模项目首选。
 
 ---
 
@@ -126,9 +126,9 @@ Qwen-Embedding = 阿里通义千问系列 Embedding 模型
 
 ```text
 代码 Embedding 的应用：
-  ✅ 代码搜索："找项目中所有处理 JWT token 的函数"
-  ✅ Bug 定位：用错误日志匹配相似代码
-  ✅ 代码审查：检索类似的 PR 和修复方案
+  ✓ 代码搜索："找项目中所有处理 JWT token 的函数"
+  ✓ Bug 定位：用错误日志匹配相似代码
+  ✓ 代码审查：检索类似的 PR 和修复方案
 ```
 
 ---

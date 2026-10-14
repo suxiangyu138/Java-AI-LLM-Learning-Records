@@ -1,7 +1,7 @@
 # 07-RAG 与向量数据库
 > 检索增强生成在 Spring AI 的落地：RAG 四步、双检索 Advisor、20+ 向量库抽象、重排与 Agentic RAG
 
-## 📚 目录
+## 目录
 1. [RAG 四步流程](#1-rag-四步流程)
 2. [向量数据库抽象](#2-向量数据库抽象)
 3. [简单 RAG：QuestionAnswerAdvisor](#3-简单-ragquestionansweradvisor)
@@ -28,7 +28,7 @@
 | 增强 | `QuestionAnswerAdvisor` 或 `RetrievalAugmentationAdvisor` |
 | 生成 | ChatClient 调用（Advisor 已在链上） |
 
-> 🎯 **核心要点**：RAG 解决的是 LLM 的"静态知识 + 幻觉"问题——用检索把**权威上下文**注入生成。Spring AI 中 RAG ≈ "一个 Advisor + 一个向量库"，接入成本极低。
+> **核心要点**：RAG 解决的是 LLM 的"静态知识 + 幻觉"问题——用检索把**权威上下文**注入生成。Spring AI 中 RAG ≈ "一个 Advisor + 一个向量库"，接入成本极低。
 
 ## 2. 向量数据库抽象
 
@@ -105,7 +105,7 @@ String answer = ragChatClient.prompt().user("Spring AI 支持哪些模型？").c
 | 开箱即用 | 一个 Bean + 挂 Advisor 即可 |
 | 局限 | 检索策略固定（无自定义查询改写、重排） |
 
-> 💡 适用：快速验证 RAG 效果、内部知识问答 MVP。生产级检索策略用 `RetrievalAugmentationAdvisor`。
+> 适用：快速验证 RAG 效果、内部知识问答 MVP。生产级检索策略用 `RetrievalAugmentationAdvisor`。
 
 ## 4. 模块化 RAG：RetrievalAugmentationAdvisor
 
@@ -162,7 +162,7 @@ List<Document> docs = vectorStore.similaritySearch(
 | 组件 | `DashScopeDocumentRetriever`：`IndexName` 指定知识库、`RerankMinScore` 重排阈值 |
 | 场景 | 已有百炼知识库的国内项目，免自建向量库 |
 
-> 🟢 按需：云上知识库已托管 ETL 与向量存储，适合快速交付；数据敏感/定制需求仍建议自建向量库（Milvus/PGVector）。
+> 按需：云上知识库已托管 ETL 与向量存储，适合快速交付；数据敏感/定制需求仍建议自建向量库（Milvus/PGVector）。
 
 ## 7. 传统 RAG vs Agentic RAG
 
@@ -177,11 +177,11 @@ List<Document> docs = vectorStore.similaritySearch(
 Agentic RAG 循环：问题 → 扩展 → 多路检索 → 评估 → 不足则再检索 → 生成
 ```
 
-> 🎯 **核心要点**：先传统 RAG 跑通再演进 Agentic——绝大多数业务场景传统 RAG + 重排已够用；Agentic RAG 只在"查询复杂、来源多、要求高召回"时引入。
+> **核心要点**：先传统 RAG 跑通再演进 Agentic——绝大多数业务场景传统 RAG + 重排已够用；Agentic RAG 只在"查询复杂、来源多、要求高召回"时引入。
 
 ## 8. 核心要点
 
-> 🎯 **核心要点**：
+> **核心要点**：
 > - RAG = 索引（ETL）+ 检索（VectorStore）+ 增强（Advisor）+ 生成（ChatClient）；
 > - 快速验证用 `QuestionAnswerAdvisor`，生产检索用 `RetrievalAugmentationAdvisor` 三扩展点；
 > - 检索质量三件套：Top-K 粗筛 → 重排精排 → 元数据过滤/阈值兜底；

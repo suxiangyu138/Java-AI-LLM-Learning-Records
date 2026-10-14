@@ -29,7 +29,7 @@
 | 独立节点 | 生产小集群 | Kibana 单独一台（2-4GB） |
 | 多实例 + 反代 | 生产大集群 | Nginx 负载均衡，Kibana 无状态可水平扩展 |
 
-> 💡 Kibana 是无状态应用（状态都在 ES 的 `.kibana_*` 索引），**水平扩展只需加实例 + 负载均衡**——这是它和 Logstash（有状态队列）的重要区别。
+> Kibana 是无状态应用（状态都在 ES 的 `.kibana_*` 索引），**水平扩展只需加实例 + 负载均衡**——这是它和 Logstash（有状态队列）的重要区别。
 
 ---
 
@@ -180,7 +180,7 @@ server {
 }
 ```
 
-> ⚠️ Nginx 反代三坑：**① X-Forwarded-For 不配 → Kibana 审计记录不到真实 IP；② proxy_read_timeout 过短 → 长查询面板报 504；③ WebSocket 场景需额外配置（Kibana 9.x 部分实时功能）**。
+> Nginx 反代三坑：**① X-Forwarded-For 不配 → Kibana 审计记录不到真实 IP；② proxy_read_timeout 过短 → 长查询面板报 504；③ WebSocket 场景需额外配置（Kibana 9.x 部分实时功能）**。
 
 ---
 
@@ -210,7 +210,7 @@ fi
 echo "Kibana OK"
 ```
 
-> 🎯 **核心要点**：Kibana 运维四件事——**① 资源**（4GB 起、Node 堆调优）、**② 高可用**（无状态多实例 + Nginx 反代）、**③ 升级**（同版本对齐、逐版本跳、快照备份）、**④ 排错**（看日志三处：Kibana 自身 / ES / 规则执行历史）。记住一个本质：**Kibana 慢 90% 是 ES 慢**——调优先查查询，别先动 Kibana。
+> **核心要点**：Kibana 运维四件事——**① 资源**（4GB 起、Node 堆调优）、**② 高可用**（无状态多实例 + Nginx 反代）、**③ 升级**（同版本对齐、逐版本跳、快照备份）、**④ 排错**（看日志三处：Kibana 自身 / ES / 规则执行历史）。记住一个本质：**Kibana 慢 90% 是 ES 慢**——调优先查查询，别先动 Kibana。
 
 ---
 

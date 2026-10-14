@@ -1,6 +1,6 @@
 # 01 - MCP 协议规范与生命周期
 
-> 🎯 MCP 基于 JSON-RPC 2.0，定义了 Client-Server 间的完整通信流程。理解协议规范和生命周期，是掌握 MCP 的基石
+> MCP 基于 JSON-RPC 2.0，定义了 Client-Server 间的完整通信流程。理解协议规范和生命周期，是掌握 MCP 的基石
 
 ---
 
@@ -291,11 +291,11 @@ Server Capabilities（Server → Client 声明）：
   Server 声明: { tools: {}, resources: {}, logging: {} }
 
   协商后可用：
-    Client → Server: tools/call ✅, resources/read ✅
-    Server → Client: sampling/createMessage ✅
+    Client → Server: tools/call ✓, resources/read ✓
+    Server → Client: sampling/createMessage ✓
     
   不可用（因为对方没声明）：
-    prompts/get ❌ (Client 知道 Server 不支持)
+    prompts/get ✗ (Client 知道 Server 不支持)
 
 原则：
   ① 双方都声明的能力才可使用
@@ -344,7 +344,7 @@ MCP 协议兼容策略：
 ④ 废弃字段保留 6 个月：标注 @deprecated，保留实现
 ```
 
-> 🎯 **核心要点**：MCP 本质上是 JSON-RPC 2.0 + 初始化协商 + 三大原语（Resources/Tools/Prompts）+ 两种传输方式。理解 Initialize 流程和 Capabilities 协商是写对 MCP 代码的前提
+> **核心要点**：MCP 本质上是 JSON-RPC 2.0 + 初始化协商 + 三大原语（Resources/Tools/Prompts）+ 两种传输方式。理解 Initialize 流程和 Capabilities 协商是写对 MCP 代码的前提
 
 ---
 

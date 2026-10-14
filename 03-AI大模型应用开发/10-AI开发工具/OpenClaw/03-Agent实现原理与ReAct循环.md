@@ -1,6 +1,6 @@
 # 03 - Agent 实现原理与 ReAct 循环
 
-> 🎯 OpenClaw Agent = ReAct 循环 + 工具调用 + Skills 注入 + Memory 管理 + 主子 Agent 协作。本章覆盖从消息入站到回复发出的完整执行链路
+> OpenClaw Agent = ReAct 循环 + 工具调用 + Skills 注入 + Memory 管理 + 主子 Agent 协作。本章覆盖从消息入站到回复发出的完整执行链路
 
 ---
 
@@ -172,6 +172,6 @@ subagents 工具：
 
 ---
 
-> 🎯 **核心要点**：Agent 的三个核心机制 — **① ReAct 循环（Reasoning→Acting→Observation，最多 N 次迭代）② Hook 扩展点（5 个生命周期钩子，插件式注入）③ Memory 四层架构（Session→Daily→MEMORY.md→Vector）**。关键设计：NO_REPLY 实现沉默语义、Prompt 文本约束替代代码拦截、主子 Agent 并行 + 权限隔离。
+> **核心要点**：Agent 的三个核心机制 — **① ReAct 循环（Reasoning→Acting→Observation，最多 N 次迭代）② Hook 扩展点（5 个生命周期钩子，插件式注入）③ Memory 四层架构（Session→Daily→MEMORY.md→Vector）**。关键设计：NO_REPLY 实现沉默语义、Prompt 文本约束替代代码拦截、主子 Agent 并行 + 权限隔离。
 
 **下一模块**：[04-Skills技能系统与开发](04-Skills技能系统与开发.md) / **返回总览**：[00-总览](00-OpenClaw知识体系总览.md)

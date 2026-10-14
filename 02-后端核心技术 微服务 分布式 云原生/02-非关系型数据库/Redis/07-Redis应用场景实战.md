@@ -172,7 +172,7 @@ lock() 或 tryLock() 不传过期时间时：
 5. 业务完成后 unlock() 取消看门狗
 ```
 
-> ⚠️ 锁的 4 个核心要求：互斥性（SETNX）、防死锁（自动过期）、防误删（唯一 ID 校验）、高性能（Lua 原子操作）。
+> 锁的 4 个核心要求：互斥性（SETNX）、防死锁（自动过期）、防误删（唯一 ID 校验）、高性能（Lua 原子操作）。
 
 ---
 
@@ -287,7 +287,7 @@ public class SearchComponent {
         Set<String> result = redisTemplate.opsForZSet()
             .rangeByLex(key, 
                 RedisZSetCommands.Range.range().gte(prefix),
-                RedisZSetCommands.Range.range().lte(prefix + "￿"),
+                RedisZSetCommands.Range.range().lte(prefix + ""),
                 0, limit);
         return new ArrayList<>(result);
     }
@@ -314,7 +314,7 @@ public class SearchComponent {
                                                     Hash 存储详情
 ```
 
-> 💡 适用场景：10 万级数据量。百万级以上请用 Elasticsearch。
+> 适用场景：10 万级数据量。百万级以上请用 Elasticsearch。
 
 ---
 
@@ -425,7 +425,7 @@ public Set<ZSetOperations.TypedTuple<Object>> getTimeline(Long userId, int limit
 | 推模式 | 发布时写入所有粉丝时间线（写放大）| 直接读取（速度快）| 大 V 粉丝多时写开销大  |
 | 拉模式 | 只写自己的时间线（写开销小）| 读取时合并（读放大）| 粉丝量大的场景 |
 
-> 💡 上例使用拉模式（读取时合并），比推模式（写入时扩散）节省 80% 内存。实际生产通常采用推拉结合：普通用户用推模式，大 V 用户用拉模式。
+> 上例使用拉模式（读取时合并），比推模式（写入时扩散）节省 80% 内存。实际生产通常采用推拉结合：普通用户用推模式，大 V 用户用拉模式。
 
 ### 5.4 点赞与评论
 
@@ -559,7 +559,7 @@ redisTemplate.opsForStream()
 | Stream | 支持 ACK、消费者组、消息回溯 | 实现略复杂 | 需要可靠投递 |
 | Pub/Sub | 广播模式 | 消息不持久，丢失无记录 | 实时通知 |
 
-> ⚠️ 中小规模异步任务用 List 即可；需要 ACK 确认、消费者组、消息回溯用 Stream；核心业务消息用 RabbitMQ/Kafka。
+> 中小规模异步任务用 List 即可；需要 ACK 确认、消费者组、消息回溯用 Stream；核心业务消息用 RabbitMQ/Kafka。
 
 ---
 

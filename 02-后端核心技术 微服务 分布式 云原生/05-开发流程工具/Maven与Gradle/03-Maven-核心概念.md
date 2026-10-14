@@ -96,11 +96,11 @@ POM 是 Maven 的核心，通过 `pom.xml` 描述项目的所有配置信息。
 
 | Scope | 编译 | 测试 | 运行 | 打包 | 典型场景 |
 |-------|:----:|:----:|:----:|:----:|---------|
-| `compile`（默认）| ✅ | ✅ | ✅ | ✅ | Spring Core、MyBatis |
-| `test` | ❌ | ✅ | ❌ | ❌ | JUnit、Mockito |
-| `provided` | ✅ | ✅ | ❌ | ❌ | Servlet API（Tomcat 提供） |
-| `runtime` | ❌ | ✅ | ✅ | ✅ | MySQL 驱动 |
-| `system` | ✅ | ✅ | ❌ | ❌ | 本地 jar（不推荐） |
+| `compile`（默认）| ✓ | ✓ | ✓ | ✓ | Spring Core、MyBatis |
+| `test` | ✗ | ✓ | ✗ | ✗ | JUnit、Mockito |
+| `provided` | ✓ | ✓ | ✗ | ✗ | Servlet API（Tomcat 提供） |
+| `runtime` | ✗ | ✓ | ✓ | ✓ | MySQL 驱动 |
+| `system` | ✓ | ✓ | ✗ | ✗ | 本地 jar（不推荐） |
 
 ### 依赖传递规则
 
@@ -181,9 +181,9 @@ Maven 所有构建功能均由插件实现：
 
 | 插件 | 作用 | 必配 |
 |------|------|:----:|
-| `maven-compiler-plugin` | 编译 Java 源码，指定 JDK 版本 | ✅ |
-| `maven-surefire-plugin` | 执行单元测试 | ✅ |
-| `maven-jar-plugin` | 打包为 jar | ✅ |
+| `maven-compiler-plugin` | 编译 Java 源码，指定 JDK 版本 | ✓ |
+| `maven-surefire-plugin` | 执行单元测试 | ✓ |
+| `maven-jar-plugin` | 打包为 jar | ✓ |
 | `maven-war-plugin` | 打包为 war | Web 项目必配 |
 | `spring-boot-maven-plugin` | Spring Boot 打包 + 运行 | Spring Boot |
 | `maven-surefire-report-plugin` | 生成测试报告 | 可选 |

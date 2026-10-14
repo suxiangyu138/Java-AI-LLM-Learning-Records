@@ -1,6 +1,6 @@
 # 05 - Python 对象模型与魔术方法
 
-> 🎯 Python 的"魔法"全部来自魔术方法 — `obj[key]` 的背后是 `__getitem__`，`obj()` 的背后是 `__call__`，属性访问的背后是描述符协议。理解对象模型 = 理解 Python 的一切
+> Python 的"魔法"全部来自魔术方法 — `obj[key]` 的背后是 `__getitem__`，`obj()` 的背后是 `__call__`，属性访问的背后是描述符协议。理解对象模型 = 理解 Python 的一切
 
 ---
 
@@ -183,8 +183,8 @@ class LLMConfig:
     max_tokens = ValidatedParameter("max_tokens", 1, 8192, int)
 
 cfg = LLMConfig()
-cfg.temperature = 1.0     # ✅
-cfg.temperature = 3.0     # ❌ ValueError
+cfg.temperature = 1.0     # ✓
+cfg.temperature = 3.0     # ✗ ValueError
 ```
 
 **描述符优先级：** 数据描述符（定义了 `__set__`）> 实例 `__dict__` > 非数据描述符（仅 `__get__`）。
@@ -210,7 +210,7 @@ class GPTPlugin(BasePlugin): ...       # 自动注册到 PluginMeta.registry
 class ClaudePlugin(BasePlugin): ...    # 自动注册
 ```
 
-> ⚠️ Python 核心开发者："99% 的时间里你不需要元类。能用装饰器、继承、普通函数解决的，不要用元类。"
+> Python 核心开发者："99% 的时间里你不需要元类。能用装饰器、继承、普通函数解决的，不要用元类。"
 
 ---
 
@@ -237,6 +237,6 @@ class Singleton:
 
 ---
 
-> 🎯 **核心要点**：Python 对象模型记忆法 — **① 运行时行为 = 魔术方法（obj[key]→__getitem__、obj()→__call__）② 属性控制 = 描述符（ORM/校验的底层机制）③ 类创建 = 元类（99%不需要）**。AI 开发中最实用的三个：`__call__` 做可调用装饰器、`__getitem__` 做自定义 Dataset、描述符做参数校验。
+> **核心要点**：Python 对象模型记忆法 — **① 运行时行为 = 魔术方法（obj[key]→__getitem__、obj()→__call__）② 属性控制 = 描述符（ORM/校验的底层机制）③ 类创建 = 元类（99%不需要）**。AI 开发中最实用的三个：`__call__` 做可调用装饰器、`__getitem__` 做自定义 Dataset、描述符做参数校验。
 
 **下一模块**：[06-并发与异步编程模块](06-并发与异步编程模块.md) / **返回总览**：[00-总览](00-Python模块对象知识体系总览.md)

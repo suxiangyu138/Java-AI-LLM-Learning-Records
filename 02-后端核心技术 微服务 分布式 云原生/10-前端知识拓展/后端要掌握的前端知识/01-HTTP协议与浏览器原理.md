@@ -56,7 +56,7 @@ Access-Control-Allow-Origin: *
 { "id": 1, "name": "张三" }                 ← 响应体
 ```
 
-> 💡 后端通过 `Content-Type` 告诉浏览器如何解析响应体，通过 `Cache-Control` 控制浏览器缓存行为。
+> 后端通过 `Content-Type` 告诉浏览器如何解析响应体，通过 `Cache-Control` 控制浏览器缓存行为。
 
 ---
 
@@ -104,7 +104,7 @@ public class UserController {
 }
 ```
 
-> ⚠️ PATCH 通常不是幂等的：例如 `PATCH /users/1` 请求体为 `{ "count": "count+1" }`，重复执行会导致 count 递增。PUT 是幂等的，因为它是全量替换。
+> PATCH 通常不是幂等的：例如 `PATCH /users/1` 请求体为 `{ "count": "count+1" }`，重复执行会导致 count 递增。PUT 是幂等的，因为它是全量替换。
 
 ### 2.3 OPTIONS 与 CORS 预检
 
@@ -163,7 +163,7 @@ public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
 | 302 Found | 临时重定向 | 登录后跳转、短链接 |
 | 304 Not Modified | 资源未修改 | 缓存验证，配合 `ETag` / `Last-Modified` |
 
-> ⚠️ 后端 API 设计应避免重定向，301/302 通常用于 Web 页面跳转。304 是后端实现缓存的核心机制。
+> 后端 API 设计应避免重定向，301/302 通常用于 Web 页面跳转。304 是后端实现缓存的核心机制。
 
 ### 4xx 客户端错误
 
@@ -195,7 +195,7 @@ public ResponseEntity<ErrorResponse> handleValidation(MethodArgumentNotValidExce
 | 503 Service Unavailable | 服务不可用 | 服务过载、正在重启、熔断 |
 | 504 Gateway Timeout | 网关超时 | 后端响应超时，Nginx 主动断开 |
 
-> 💡 502 和 504 是运维层面的信号：502 表示连接失败（服务没启动），504 表示连接上了但响应太慢（超时配置问题）。
+> 502 和 504 是运维层面的信号：502 表示连接失败（服务没启动），504 表示连接上了但响应太慢（超时配置问题）。
 
 ---
 
@@ -227,7 +227,7 @@ public Map<String, String> getHeaders(@RequestHeader HttpHeaders headers) {
 }
 ```
 
-> 💡 `X-Request-Id` 是微服务链路追踪的重要头。前端每次请求生成唯一 ID，后端透传（gateway 自动注入），方便跨服务追踪日志。
+> `X-Request-Id` 是微服务链路追踪的重要头。前端每次请求生成唯一 ID，后端透传（gateway 自动注入），方便跨服务追踪日志。
 
 ---
 
@@ -366,7 +366,7 @@ public ResponseEntity<User> getUser(@PathVariable Long id,
 }
 ```
 
-> 🎯 **缓存策略选择指南**：
+> **缓存策略选择指南**：
 > - 静态资源（JS/CSS/图片）：`Cache-Control: public, max-age=31536000, immutable` + 版本化文件名（如 `app.a1b2c3.js`）
 > - 动态 API 数据：`Cache-Control: no-cache` + ETag 协商缓存
 > - 敏感数据：`Cache-Control: no-store`
@@ -422,7 +422,7 @@ public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest req) {
 }
 ```
 
-> ⚠️ 后端使用 JWT 时务必注意：不要将敏感数据放入 payload（Base64 解码即可读取）；设置合理的过期时间；使用 refresh_token 机制避免频繁登录。
+> 后端使用 JWT 时务必注意：不要将敏感数据放入 payload（Base64 解码即可读取）；设置合理的过期时间；使用 refresh_token 机制避免频繁登录。
 
 ---
 
@@ -456,7 +456,7 @@ public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest req) {
 # - 连接迁移（手机切 WiFi 不断连）
 ```
 
-> 💡 对于后端开发者，HTTP/2 和 HTTP/3 基本是透明的——底层协议升级，应用层代码无需改动。唯一注意：HTTP/2 的服务器推送（Server Push）实际上很少用，且已被 Chrome 逐步移除支持。
+> 对于后端开发者，HTTP/2 和 HTTP/3 基本是透明的——底层协议升级，应用层代码无需改动。唯一注意：HTTP/2 的服务器推送（Server Push）实际上很少用，且已被 Chrome 逐步移除支持。
 
 ---
 
@@ -512,7 +512,7 @@ public class SecurityConfig {
 }
 ```
 
-> ⚠️ HSTS 的 `includeSubDomains` 务必谨慎：一旦浏览器收到此头，所有子域名无法再通过 HTTP 访问。如有子域名尚未配置 HTTPS，将导致不可用。
+> HSTS 的 `includeSubDomains` 务必谨慎：一旦浏览器收到此头，所有子域名无法再通过 HTTP 访问。如有子域名尚未配置 HTTPS，将导致不可用。
 
 ---
 
@@ -568,7 +568,7 @@ public class SecurityConfig {
 浏览器缓存 → 操作系统缓存 → hosts 文件 → 本地 DNS 服务器 → 根 DNS → 顶级域 DNS → 权威 DNS
 ```
 
-> 💡 首次 DNS 解析通常 20-120ms。后端关注点：使用 CDN 缩短 DNS 距离；配置 DNSPod 等实现智能 DNS 解析；TTL 设置合理（默认 600s）。
+> 首次 DNS 解析通常 20-120ms。后端关注点：使用 CDN 缩短 DNS 距离；配置 DNSPod 等实现智能 DNS 解析；TTL 设置合理（默认 600s）。
 
 ---
 
@@ -708,7 +708,7 @@ public class AuthController {
 55ms     浏览器开始加载 /dashboard 页面...
 ```
 
-> 🎯 **后端开发者要做好的环节**：
+> **后端开发者要做好的环节**：
 > 1. 服务端处理时间尽量控制在 50ms 以内（超过 100ms 用户能感知到延迟）
 > 2. 添加 X-Request-Id 用于全链路追踪
 > 3. 响应体不要过大（超过 1MB 考虑分页或压缩）

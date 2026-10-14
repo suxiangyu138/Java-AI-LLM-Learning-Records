@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [架构总览：三层职责](#1-架构总览三层职责)
 2. [SecurityFilterChain：过滤器链全解析](#2-securityfilterchain过滤器链全解析)
@@ -46,7 +46,7 @@
 | 认证/授权模型 | 验证身份、判定权限 | `AuthorizationManager#check` 删除，只剩 `authorize` |
 | 上下文 | 跨过滤器共享身份 | 无变化（线程模型稳定） |
 
-> 🎯 **核心要点**：Spring Security 不是"在业务代码里做安全检查"，而是**用过滤器在请求进入业务之前完成认证与授权**。理解这条链 = 理解一切"为什么这里 401""为什么这里放行"。
+> **核心要点**：Spring Security 不是"在业务代码里做安全检查"，而是**用过滤器在请求进入业务之前完成认证与授权**。理解这条链 = 理解一切"为什么这里 401""为什么这里放行"。
 
 ## 2. SecurityFilterChain：过滤器链全解析
 
@@ -101,7 +101,7 @@ Order  ┌───────────────────────�
 | `ExceptionTranslationFilter` | 捕获认证/授权异常并翻译 | 401 vs 403 的分界 |
 | `AuthorizationFilter` | 最后判定：放行 or 403 | 403 |
 
-> ⚠️ **7.0 注意**：认证过滤器（第 ⑤⑦ 环）负责"建立身份"，授权过滤器（第 ⑫ 环）负责"判定权限"——**认证异常 → 401（或重定向登录），授权异常 → 403**。排障第一步就是分清是认证失败还是授权失败。
+> **7.0 注意**：认证过滤器（第 ⑤⑦ 环）负责"建立身份"，授权过滤器（第 ⑫ 环）负责"判定权限"——**认证异常 → 401（或重定向登录），授权异常 → 403**。排障第一步就是分清是认证失败还是授权失败。
 
 ## 3. 认证与授权：两个阶段的分界
 
@@ -152,24 +152,24 @@ SecurityContextHolder.getContext().setAuthentication(auth);
 ### 4.2 异步/线程池的上下文传播（高频坑）
 
 ```java
-// ❌ 坑：新线程拿不到 SecurityContext（ThreadLocal 不跨线程）
+// ✗ 坑：新线程拿不到 SecurityContext（ThreadLocal 不跨线程）
 new Thread(() -> {
     Authentication a = SecurityContextHolder.getContext().getAuthentication(); // null！
 }).start();
 
-// ✅ 方案一：手动传递
+// ✓ 方案一：手动传递
 Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 new Thread(() -> {
     SecurityContextHolder.getContext().setAuthentication(auth);
     ...
 }).start();
 
-// ✅ 方案二：DelegatingSecurityContextExecutor 包装线程池
+// ✓ 方案二：DelegatingSecurityContextExecutor 包装线程池
 Executor executor = new DelegatingSecurityContextExecutor(Executors.newFixedThreadPool(4));
 executor.execute(() -> { /* 上下文自动携带 */ });
 ```
 
-> ⚠️ **注意**：`@Async`、响应式、虚拟线程场景各有专门的上下文传播机制（`@Async` 用 `SecurityContextHolder` 配合 `DelegatingSecurityContextAsyncTaskExecutor`）。**"异步就丢身份"是微服务里的高频 bug**，面试常考。
+> **注意**：`@Async`、响应式、虚拟线程场景各有专门的上下文传播机制（`@Async` 用 `SecurityContextHolder` 配合 `DelegatingSecurityContextAsyncTaskExecutor`）。**"异步就丢身份"是微服务里的高频 bug**，面试常考。
 
 ## 5. 7.0 模块化配置：Customizer 化整为零
 
@@ -197,7 +197,7 @@ Customizer<OAuth2AuthorizationServerConfigurer> authServerCustomizer() {
 | 继承 Boot 默认 | 改局部不动全局，升级兼容好 | 旧版默认配置易被误覆盖 |
 | 按领域拆分 | 网关/管理台/OAuth2 各自独立 | 巨型 SecurityConfig 消亡 |
 
-> 🎯 **面试点**：模块化配置是 7.0 的三大卖点之一（另两个是 MFA 与授权服务器并入核心）。答"如何多人协作配置安全规则"——给答案 `Customizer<HttpSecurity>` Bean。
+> **面试点**：模块化配置是 7.0 的三大卖点之一（另两个是 MFA 与授权服务器并入核心）。答"如何多人协作配置安全规则"——给答案 `Customizer<HttpSecurity>` Bean。
 
 ## 6. 与 Spring Boot 4 自动配置的协同
 
@@ -222,7 +222,7 @@ spring:
       order: -100                    # 过滤器链注册顺序
 ```
 
-> ⚠️ **升级事故 Top1**：Boot 4 + Security 7 下 CSRF 默认覆盖 API，无状态 REST 接口全部 403——**要么显式 `csrf(csrf -> csrf.disable())`（无状态 API），要么携带 CSRF 令牌**（详见 05 篇）。
+> **升级事故 Top1**：Boot 4 + Security 7 下 CSRF 默认覆盖 API，无状态 REST 接口全部 403——**要么显式 `csrf(csrf -> csrf.disable())`（无状态 API），要么携带 CSRF 令牌**（详见 05 篇）。
 
 ## 7. 多过滤器链与匹配规则
 
@@ -255,12 +255,12 @@ public SecurityFilterChain uiChain(HttpSecurity http) throws Exception {
 
 | 写法 | 7.0 状态 | 示例 |
 |------|:---:|------|
-| `requestMatchers("/admin/**")` | ✅ | 尾部通配合法 |
-| `requestMatchers("/api/**/admin")` | ❌ | **中间通配非法**（`**` 只能出现在开头或结尾） |
-| `requestMatchers("/login")` | ✅ | 精确匹配 |
-| `antMatchers(...)` | ❌ 已删除 | 迁移为 `requestMatchers(...)` |
+| `requestMatchers("/admin/**")` | ✓ | 尾部通配合法 |
+| `requestMatchers("/api/**/admin")` | ✗ | **中间通配非法**（`**` 只能出现在开头或结尾） |
+| `requestMatchers("/login")` | ✓ | 精确匹配 |
+| `antMatchers(...)` | ✗ 已删除 | 迁移为 `requestMatchers(...)` |
 
-> ⚠️ **静默差异**：PathPattern 更严格——尾斜杠不再匹配（`/api/users` ≠ `/api/users/`）、绝对路径需不含上下文路径。迁移时**先写授权测试再上线**，这些差异全是静默的。
+> **静默差异**：PathPattern 更严格——尾斜杠不再匹配（`/api/users` ≠ `/api/users/`）、绝对路径需不含上下文路径。迁移时**先写授权测试再上线**，这些差异全是静默的。
 
 ## 8. 常见故障排查
 
@@ -273,7 +273,7 @@ public SecurityFilterChain uiChain(HttpSecurity http) throws Exception {
 | 中间通配报错 | PathPattern 更严格 | 改写为开头/结尾 `**` |
 | 配置不生效 | 自定义 Bean 覆盖了默认链 | 检查 `@Order` 与链匹配优先级 |
 
-> 🎯 **核心要点**：FilterChain 是理解 Spring Security 的"坐标系"——请求从左到右穿过过滤器，认证在中间环节建立身份（SecurityContext），授权在最后一环判定放行，异常翻译器决定 401 还是 403。7.0 的三大变化（模块化配置、authorize 唯一化、PathPattern 匹配）全部挂在这条链上。
+> **核心要点**：FilterChain 是理解 Spring Security 的"坐标系"——请求从左到右穿过过滤器，认证在中间环节建立身份（SecurityContext），授权在最后一环判定放行，异常翻译器决定 401 还是 403。7.0 的三大变化（模块化配置、authorize 唯一化、PathPattern 匹配）全部挂在这条链上。
 
 ---
 

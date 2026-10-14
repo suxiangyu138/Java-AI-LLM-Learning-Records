@@ -19,7 +19,7 @@
 ### 1.1 什么是Netty？
 Netty是一个基于Java NIO的异步事件驱动网络应用框架，用于快速开发可维护的高性能协议服务器和客户端。它封装了JDK NIO的复杂性，提供了易于使用的API。
 
-> 💡 **一句话总结**：Netty = NIO + Reactor模式 + 大量工程优化，是目前Java网络编程的事实标准。
+> **一句话总结**：Netty = NIO + Reactor模式 + 大量工程优化，是目前Java网络编程的事实标准。
 
 ### 1.2 BIO、NIO、AIO的区别
 
@@ -32,7 +32,7 @@ Netty是一个基于Java NIO的异步事件驱动网络应用框架，用于快�
 | 性能 | 低（线程开销大） | 高 | 高（但Netty未使用） |
 | 编程复杂度 | 简单 | 中等 | 复杂 |
 
-> ⚠️ Netty底层使用的是NIO多路复用，而非AIO。因为Linux的AIO（epoll的异步实现）并不成熟，NIO多路复用在实践中表现更优。
+> Netty底层使用的是NIO多路复用，而非AIO。因为Linux的AIO（epoll的异步实现）并不成熟，NIO多路复用在实践中表现更优。
 
 ### 1.3 Reactor模型的三种变体
 
@@ -200,7 +200,7 @@ public class SharedHandler extends ChannelInboundHandlerAdapter {
 }
 ```
 
-> ⚠️ @Sharable要求Handler必须是线程安全的，不能保存与具体Channel相关的状态。
+> @Sharable要求Handler必须是线程安全的，不能保存与具体Channel相关的状态。
 
 ### 1.10 EmbeddedChannel的使用
 
@@ -423,7 +423,7 @@ composite.addComponents(true, header, body);
 | 内存占用 | 高（每个线程栈1MB+） | 低 |
 | 连接数上限 | 取决于线程数 | 取决于操作系统FD限制 |
 
-> 🎯 Netty核心优化：一个EventLoop处理多个Channel，Channel上的所有操作都在同一个线程上执行，避免了锁竞争。
+> Netty核心优化：一个EventLoop处理多个Channel，Channel上的所有操作都在同一个线程上执行，避免了锁竞争。
 
 ### 2.6 NIO多路复用的核心原理
 - **Selector**：Java NIO的事件选择器，底层通过操作系统的`select/poll/epoll`实现

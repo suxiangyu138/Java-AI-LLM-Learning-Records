@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [客户端四选一](#1-客户端四选一)
 2. [RestClient：全 API 速查](#2-restclient全-api-速查)
@@ -19,9 +19,9 @@
 
 | 客户端 | 栈 | 7.x 状态 | 选型 |
 |--------|-----|---------|------|
-| `RestClient` | 同步（阻塞） | ✅ **官方推荐**（主推） | 常规 HTTP 调用 |
-| `WebClient` | 响应式（非阻塞） | ✅ 积极维护 | 响应式 API、流式、高并发编排 |
-| `RestTemplate` | 同步 | ⚠️ 7.0 弃用（8.0 移除） | 存量代码，逐步迁移 |
+| `RestClient` | 同步（阻塞） | ✓ **官方推荐**（主推） | 常规 HTTP 调用 |
+| `WebClient` | 响应式（非阻塞） | ✓ 积极维护 | 响应式 API、流式、高并发编排 |
+| `RestTemplate` | 同步 | 7.0 弃用（8.0 移除） | 存量代码，逐步迁移 |
 | JDK `HttpClient` | 同步/异步 | 非 Spring 管理 | 零依赖场景 |
 
 ```text
@@ -32,7 +32,7 @@
   （拦截器/请求工厂/转换器可无缝搬移）
 ```
 
-> 🎯 **核心要点**：7.x 的 HTTP 客户端只有两个未来——RestClient（同步）与 WebClient（响应式）；RestTemplate 是"历史包袱"，新代码写它=给后人留技术债。
+> **核心要点**：7.x 的 HTTP 客户端只有两个未来——RestClient（同步）与 WebClient（响应式）；RestTemplate 是"历史包袱"，新代码写它=给后人留技术债。
 
 ### 1.1 选型决策清单（3 问定案）
 
@@ -44,7 +44,7 @@
 | 零 Spring 依赖的脚本/工具？ | JDK HttpClient | 任意 Spring 客户端 |
 | 服务端线程内要发起调用？ | RestClient（阻塞安全） | WebClient 的 .block() 有死锁风险 |
 
-> 💡 决策顺序：**先看链路形态（同步/响应式）→ 再看能力需求（流式）→ 最后看存量**——三个问题答完，客户端就定了；答完还犹豫的，选 RestClient（默认答案）。
+> 决策顺序：**先看链路形态（同步/响应式）→ 再看能力需求（流式）→ 最后看存量**——三个问题答完，客户端就定了；答完还犹豫的，选 RestClient（默认答案）。
 
 ## 2. RestClient：全 API 速查
 
@@ -72,7 +72,7 @@ RestClient client = RestClient.builder()
 | 完整控制 | `.exchange((req,res) -> ...)`（绕过转换链） |
 | 异步（7.1+） | `RestClient` 仍同步；异步走 WebClient 或 JDK HttpClient |
 
-> 💡 注入姿势：`RestClient.Builder`（Boot 4 自动配置 Bean）→ 各服务各自 build 定制——比全局单例更灵活；7.0 起可用 `configureMessageConverters` 精准换转换器。
+> 注入姿势：`RestClient.Builder`（Boot 4 自动配置 Bean）→ 各服务各自 build 定制——比全局单例更灵活；7.0 起可用 `configureMessageConverters` 精准换转换器。
 
 ### 2.1 超时、连接池与重试（生产必配）
 
@@ -111,7 +111,7 @@ public class RestClientConfig {
 | 读取超时 | 无 | 按接口 SLA（如 10s） |
 | 重试 | 不重试 | 幂等请求可重试；POST 必须幂等键 |
 
-> ⚠️ **三个生产大坑**：① 不配超时 → 依赖方慢接口拖死本服务线程；② 不配池 → 每次请求新建 TCP + TLS 握手（开销巨大）；③ POST 盲目重试 → 重复扣款——重试前必须确认幂等键（Idempotency-Key），或用 `RetryTemplate`（见 [Spring-Core-07](../Spring‑Core/07-重试与弹性速查.md)）限定次数与退避。
+> **三个生产大坑**：① 不配超时 → 依赖方慢接口拖死本服务线程；② 不配池 → 每次请求新建 TCP + TLS 握手（开销巨大）；③ POST 盲目重试 → 重复扣款——重试前必须确认幂等键（Idempotency-Key），或用 `RetryTemplate`（见 [Spring-Core-07](../Spring‑Core/07-重试与弹性速查.md)）限定次数与退避。
 
 ### 2.2 全流程示例：调用、错误映射、响应头
 
@@ -151,13 +151,13 @@ public ResponseEntity<Order> getWithHeaders(Long id) {
 | `.toBodilessEntity()` | 仅状态码/头 | 204/删除类接口 |
 | `.exchange(...)` | 自定义处理 | 原始访问 |
 
-> 💡 泛型响应（`Page<Order>`、`List<Order>`）必须用 `ParameterizedTypeReference`——直接 `.body(Page.class)` 会丢失泛型（转换器拿到裸类型报错或类型不符）。
+> 泛型响应（`Page<Order>`、`List<Order>`）必须用 `ParameterizedTypeReference`——直接 `.body(Page.class)` 会丢失泛型（转换器拿到裸类型报错或类型不符）。
 
 ## 3. retrieve vs exchange
 
 | 方式 | 语义 | 适用 |
 |------|------|------|
-| `.retrieve()` | 声明式：自动状态码检查 + 转换器链 + 错误映射 | ✅ 90% 场景 |
+| `.retrieve()` | 声明式：自动状态码检查 + 转换器链 + 错误映射 | ✓ 90% 场景 |
 | `.exchange()` | 原始访问：拿到完整 `ClientHttpResponse`（头/流/手动绑定） | 特殊需求（读头、流式、多格式协商） |
 
 ```java
@@ -172,7 +172,7 @@ String result = client.get().uri("/orders/{id}", id)
         });
 ```
 
-> ⚠️ exchange 里必须自己**消费或关闭响应体**（否则连接不释放）；状态码判断也自己做——它是"逃逸舱口"，别默认用。
+> exchange 里必须自己**消费或关闭响应体**（否则连接不释放）；状态码判断也自己做——它是"逃逸舱口"，别默认用。
 
 ### 3.1 调用内部机制：拦截器链与响应处理
 
@@ -201,7 +201,7 @@ restClient.requestInterceptor((request, body, execution) -> {
 });
 ```
 
-> 💡 面试被问"RestClient 怎么实现统一鉴权/日志"——答**拦截器链**：它包裹在请求工厂之外、转换器之前，一次注册全局生效。
+> 面试被问"RestClient 怎么实现统一鉴权/日志"——答**拦截器链**：它包裹在请求工厂之外、转换器之前，一次注册全局生效。
 
 ## 4. WebClient：响应式客户端
 
@@ -229,12 +229,12 @@ Mono<PaymentResult> mono = client.get()
 | 对比 | RestClient | WebClient |
 |------|-----------|-----------|
 | 模型 | 阻塞（同步返回） | 非阻塞（Mono/Flux） |
-| 流式 | 不支持（规划中） | ✅ 原生支持（SSE/大流） |
+| 流式 | 不支持（规划中） | ✓ 原生支持（SSE/大流） |
 | 线程 | 平台线程/虚拟线程 | 事件循环（Netty） |
 | 混用 | 服务端线程内安全 | 服务端线程内 `.block()` 有死锁风险 |
 | 选型 | 常规服务间调用 | 响应式链路、流式、网关 |
 
-> 💡 7.x 大方向：虚拟线程成熟后"阻塞式也扛并发"——**常规同步服务用 RestClient + 虚拟线程**已是 Boot 4 主流姿势（见 [07-异步与流式速查](07-异步与流式速查.md)）。
+> 7.x 大方向：虚拟线程成熟后"阻塞式也扛并发"——**常规同步服务用 RestClient + 虚拟线程**已是 Boot 4 主流姿势（见 [07-异步与流式速查](07-异步与流式速查.md)）。
 
 ### 4.1 WebClient 使用边界与 .block() 陷阱
 
@@ -261,11 +261,11 @@ return service.callRemote().flatMap(x -> ...);
 |------|-----------|-----------|----------------|
 | 生态 | Spring 全面集成（拦截器/转换器） | Spring 全面集成 | 零依赖原生 |
 | 学习成本 | 低 | 高（响应式） | 中 |
-| 流式 | 不支持 | ✅ | 部分（异步流） |
+| 流式 | 不支持 | ✓ | 部分（异步流） |
 | 服务发现 | 无（对接 Spring Cloud 组件） | 同 | 无 |
 | 适用 | 常规服务间调用 | 响应式链路 | 工具脚本、轻量场景 |
 
-> 🎯 **取舍结论**：RestClient（同步）与 WebClient（响应式）不是"谁更好"，而是"你的链路是什么形态"——链路同步则 RestClient + 虚拟线程；链路响应式则全链 WebClient；**混搭点（同步服务里 .block()）是事故高发区**。
+> **取舍结论**：RestClient（同步）与 WebClient（响应式）不是"谁更好"，而是"你的链路是什么形态"——链路同步则 RestClient + 虚拟线程；链路响应式则全链 WebClient；**混搭点（同步服务里 .block()）是事故高发区**。
 
 ### 4.2 WebClient 高级用法：流式、超时与重试
 
@@ -301,7 +301,7 @@ WebClient client = WebClient.builder()
 | timeout 操作符 | 单次/整体超时控制 |
 | 取消 | Disposable.dispose() 停止订阅 |
 
-> ⚠️ 流式消费的常见 bug：**不订阅（subscribe 缺失）管道不执行**——响应式是"声明 + 订阅"两段式；还有订阅后异常未处理（doOnError 缺失）导致静默中断。
+> 流式消费的常见 bug：**不订阅（subscribe 缺失）管道不执行**——响应式是"声明 + 订阅"两段式；还有订阅后异常未处理（doOnError 缺失）导致静默中断。
 
 ## 5. 从 RestTemplate 迁移
 
@@ -324,7 +324,7 @@ PaymentResult r = client.post().uri(url).body(req).retrieve().body(PaymentResult
 | `setErrorHandler` | `.defaultStatusHandler(...)` / `onStatus(...)` |
 | `setMessageConverters` | `.configureMessageConverters(...)`（7.0） |
 
-> 🎯 **核心要点**：迁移是"声明式化"——RestTemplate 把配置放在对象上，RestClient 把配置放在请求链上；**同一请求工厂/拦截器/转换器基础设施**保证迁移零行为差异（官方为此设计 `RestClient.create(existingRestTemplate)` 包装器）。
+> **核心要点**：迁移是"声明式化"——RestTemplate 把配置放在对象上，RestClient 把配置放在请求链上；**同一请求工厂/拦截器/转换器基础设施**保证迁移零行为差异（官方为此设计 `RestClient.create(existingRestTemplate)` 包装器）。
 
 ### 5.1 迁移清单与兼容性对照
 
@@ -350,7 +350,7 @@ public class LegacyTemplateFacade {
 }
 ```
 
-> 💡 迁移是"渐进式"的：先 `RestClient.create(existingRestTemplate)` 包装过渡，再逐个方法换链式写法，最后删包装层——**每个步骤都可单独验证行为一致**。
+> 迁移是"渐进式"的：先 `RestClient.create(existingRestTemplate)` 包装过渡，再逐个方法换链式写法，最后删包装层——**每个步骤都可单独验证行为一致**。
 
 ### 5.2 迁移验收清单（行为等价对照）
 
@@ -370,7 +370,7 @@ public class LegacyTemplateFacade {
   预期：每阶段独立上线，风险可控
 ```
 
-> 🎯 **迁移的最终目标**：不是"代码长一样"，而是"行为可等价验证"——用验收清单替代"感觉没问题"，是生产迁移的底线。
+> **迁移的最终目标**：不是"代码长一样"，而是"行为可等价验证"——用验收清单替代"感觉没问题"，是生产迁移的底线。
 
 ## 6. 7.0 新能力：ApiVersionInserter 与 HTTP 接口
 
@@ -402,7 +402,7 @@ public class HttpClientsConfig { }
 | `@ImportHttpServices` | 批量注册接口组（7.0） |
 | `RestTestClient` | 统一测试客户端（真实服务器 + mock 双模式） |
 
-> 💡 面试加分：HTTP 接口客户端 = "OpenFeign 的 Spring 原生平替"——同声明式代理模型（对比 Spring Cloud OpenFeign 系列：Spring 原生无服务发现、轻量；Feign 集成注册中心/负载均衡）。
+> 面试加分：HTTP 接口客户端 = "OpenFeign 的 Spring 原生平替"——同声明式代理模型（对比 Spring Cloud OpenFeign 系列：Spring 原生无服务发现、轻量；Feign 集成注册中心/负载均衡）。
 
 ### 6.1 ApiVersionInserter 原理与接口组细节
 
@@ -441,7 +441,7 @@ ApiVersionInserter 工作链路（客户端侧）：
 | 响应体是 JSON 数组怎么绑定 | `ParameterizedTypeReference<List<Order>>` 或记录数组类型（泛型必须带全） |
 | defaultUriVariables 与请求级变量怎么共存 | 默认变量被请求级同名变量覆盖——越具体越优先 |
 
-> 🎯 **本模块一句话**：四选一（RestClient 主推）→ 全 API（链式）→ 迁移（渐进包装）→ 新能力（版本化/接口组）——HTTP 客户端的答案都在这一篇。
+> **本模块一句话**：四选一（RestClient 主推）→ 全 API（链式）→ 迁移（渐进包装）→ 新能力（版本化/接口组）——HTTP 客户端的答案都在这一篇。
 
 ### 6.2 RestTestClient 与测试实践（7.0）
 
@@ -475,7 +475,7 @@ class OrderClientTest {
 | 集成（真实服务器） | RestTestClient 绑定 + @SpringBootTest | 全链路验证 |
 | 契约测试 | 契约框架（如 Pact） | 跨团队接口一致性 |
 
-> 💡 与 `MockRestServiceServer` 的关系：6.x 时代的客户端 mock 工具，7.0 的 `RestTestClient` 是官方统一替代（覆盖 mock + 真实双模式）——新测试代码用 RestTestClient。
+> 与 `MockRestServiceServer` 的关系：6.x 时代的客户端 mock 工具，7.0 的 `RestTestClient` 是官方统一替代（覆盖 mock + 真实双模式）——新测试代码用 RestTestClient。
 
 ---
 

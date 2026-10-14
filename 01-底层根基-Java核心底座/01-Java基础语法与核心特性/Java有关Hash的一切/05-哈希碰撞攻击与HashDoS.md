@@ -2,7 +2,7 @@
 
 > 定位：理解哈希碰撞的数学必然性，剖析 HashDoS 攻击原理与 2011 年 28C3 实战事件，掌握 JDK 内置防御机制与 2026 年的分层防护最佳实践
 
-## 📚 目录
+## 目录
 
 1. [碰撞为什么不可避免](#1-碰撞为什么不可避免)
 2. [HashDoS 攻击原理](#2-hashdos-攻击原理)
@@ -33,7 +33,7 @@ Java hashCode 返回 int：2^32 ≈ 42.9 亿种取值
 k ≈ 1.18 × √(2^32) ≈ 68,000  个不同 key 即有一半概率发生碰撞
 ```
 
-> 💡 **工程含义**：6.8 万个 key 就可能碰到碰撞——所以"碰撞只是理论问题"是错的，它是日常就要面对的工程问题。不过普通业务 key 的碰撞是"均匀分散"的，对性能影响可忽略；攻击者要做的是**定向制造海量同桶 key**。
+> **工程含义**：6.8 万个 key 就可能碰到碰撞——所以"碰撞只是理论问题"是错的，它是日常就要面对的工程问题。不过普通业务 key 的碰撞是"均匀分散"的，对性能影响可忽略；攻击者要做的是**定向制造海量同桶 key**。
 
 ### 1.3 碰撞的两种形态
 
@@ -93,7 +93,7 @@ JDK 7 时代最坏情况：
 | ASP.NET | ViewState、参数 | 拒绝服务 |
 | Python | dict | 哈希种子固定时可预计算 |
 
-> ⚠️ **历史教训**：当年 Tomcat、Jetty 等中间件都中招——攻击面是"任何把不可信输入变成 Map key"的入口，而不仅仅是业务代码。
+> **历史教训**：当年 Tomcat、Jetty 等中间件都中招——攻击面是"任何把不可信输入变成 Map key"的入口，而不仅仅是业务代码。
 
 ---
 
@@ -120,7 +120,7 @@ JDK 7 时代最坏情况：
 | JDK 8u20+ | String 相关哈希种子在 JVM 启动时随机化（`String.hash32()`），碰撞集每次启动都失效 |
 | JDK 8+ 通用 | 树化是主要防御，随机化作为补充 |
 
-> 💡 **随机化的意义**：攻击者预计算碰撞集需要知道种子；种子随机后，**针对本轮 JVM 预计算的成本高到不可行**，且服务重启即失效。
+> **随机化的意义**：攻击者预计算碰撞集需要知道种子；种子随机后，**针对本轮 JVM 预计算的成本高到不可行**，且服务重启即失效。
 
 ### 4.3 容器层基础配置
 
@@ -143,7 +143,7 @@ java -Djava.security.egd=file:/dev/./urandom -jar app.jar
 | 红黑树仍非恒时 | 最坏 O(log n) 对超大输入仍可能被刷爆 |
 | 其他哈希结构 | 非 HashMap 场景（HashSet、框架自带哈希表）不一定有树化兜底 |
 
-> 🎯 **结论**：JDK 8+ 只是把攻击成本提高了几个数量级，**不是免疫**。真实生产必须叠加应用层防御。
+> **结论**：JDK 8+ 只是把攻击成本提高了几个数量级，**不是免疫**。真实生产必须叠加应用层防御。
 
 ---
 
@@ -168,10 +168,10 @@ java -Djava.security.egd=file:/dev/./urandom -jar app.jar
 - key 字符集白名单（拒绝超长随机串）
 
 # 第 3 层：框架层（重点！）
-- ❌ @RequestParam Map<String,String> params   # 用户可控 key 直进 HashMap
-- ✅ @RequestParam UserDTO user                 # 显式 DTO，字段固定、类型校验
-- ❌ @RequestBody Map<String,Object>            # JSON 字段名直进 HashMap
-- ✅ @RequestBody OrderDTO order                # 结构绑定 + Bean Validation
+- ✗ @RequestParam Map<String,String> params   # 用户可控 key 直进 HashMap
+- ✓ @RequestParam UserDTO user                 # 显式 DTO，字段固定、类型校验
+- ✗ @RequestBody Map<String,Object>            # JSON 字段名直进 HashMap
+- ✓ @RequestBody OrderDTO order                # 结构绑定 + Bean Validation
 
 # 第 4 层：边缘层（Tomcat/网关）
 - maxParameterCount=1000（Tomcat 连接器）
@@ -186,15 +186,15 @@ java -Djava.security.egd=file:/dev/./urandom -jar app.jar
 ### 6.3 自定义类哈希的防御准则
 
 ```java
-// ✅ 安全：组合不可变字段（Objects.hash 默认 31 多项式，分布良好）
+// ✓ 安全：组合不可变字段（Objects.hash 默认 31 多项式，分布良好）
 public record Order(String orderNo, long userId) { }
 
-// ❌ 危险：固定值、基于可预测序号、基于公开小值域
+// ✗ 危险：固定值、基于可预测序号、基于公开小值域
 //   例：hashCode() 返回 1 → 所有元素进同一桶（自残式 HashDoS）
 //   例：hashCode() 返回 id % 10 → 攻击者可轻易预测桶位置
 ```
 
-> 💡 **借他山之石**：Python 3.4+ 用 **SipHash + 进程随机密钥**哈希字符串；Java 主流方案是"树化 + 随机化"，工程上等价——都让攻击者无法预计算。
+> **借他山之石**：Python 3.4+ 用 **SipHash + 进程随机密钥**哈希字符串；Java 主流方案是"树化 + 随机化"，工程上等价——都让攻击者无法预计算。
 
 ---
 
@@ -238,7 +238,7 @@ for (int i = 0; i < 100_000; i++) {
 
 ---
 
-> 🎯 **核心要点**：哈希碰撞是数学必然，HashDoS 是把它武器化。Java 的答案 = 树化兜底（成本上移）+ 随机化（预测失效）+ 应用层纵深防御（入口封堵）。三者缺一不可。
+> **核心要点**：哈希碰撞是数学必然，HashDoS 是把它武器化。Java 的答案 = 树化兜底（成本上移）+ 随机化（预测失效）+ 应用层纵深防御（入口封堵）。三者缺一不可。
 
 ---
 

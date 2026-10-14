@@ -1,7 +1,7 @@
 # 05-Spring Security 7 源码导读
 > Security 7 的源码地图：SecurityFilterChain 构建、认证与授权两条链、7.0 新结构（Lambda DSL/Customizer/MFA/Passkey/授权服务器）
 
-## 📚 目录
+## 目录
 1. [Security 7 架构总览](#1-security-7-架构总览)
 2. [过滤器链的构建与执行](#2-过滤器链的构建与执行)
 3. [认证流程源码链路](#3-认证流程源码链路)
@@ -158,7 +158,7 @@ AuthorizationManager（授权决策接口，7.x 唯一授权模型）
 | Argon2 推荐 | `Argon2PasswordEncoder.defaultsForSpring7()` | PasswordEncoder 工厂 |
 | 移除 OAuth2 Password Grant | 迁移授权码流程（OAuth 2.1） | 兼容层删除 |
 
-> ⚠️ **7.x 迁移雷区**：① `.and()` 编译错误 → 改 Lambda DSL；② `antMatchers` 编译错误 → `requestMatchers`；③ 路径匹配语义变化（无尾斜杠容忍）；④ 授权模型变化导致 error dispatch 401——全部是**静默行为变化**，升级必须全量回归。
+> **7.x 迁移雷区**：① `.and()` 编译错误 → 改 Lambda DSL；② `antMatchers` 编译错误 → `requestMatchers`；③ 路径匹配语义变化（无尾斜杠容忍）；④ 授权模型变化导致 error dispatch 401——全部是**静默行为变化**，升级必须全量回归。
 
 ## 6. 源码阅读断点路径
 
@@ -172,7 +172,7 @@ AuthorizationManager（授权决策接口，7.x 唯一授权模型）
 
 ## 7. 核心要点
 
-> 🎯 **核心要点**：
+> **核心要点**：
 > - 一条主链：DelegatingFilterProxy → FilterChainProxy → SecurityFilterChain → 责任链执行；
 > - 两条子链：认证（AuthenticationManager → Provider → 上下文）+ 授权（AuthorizationManager → 决策）；
 > - 7.x 三大结构变化：Lambda DSL 强制、`Customizer<HttpSecurity>` 模块化、`PathPatternRequestMatcher` 唯一；

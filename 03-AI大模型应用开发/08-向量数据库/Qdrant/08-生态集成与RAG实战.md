@@ -143,7 +143,7 @@ for mode in ["dense", "sparse", "hybrid"]:。
 
 三套向量库体系的集成避坑高度重合（gRPC/REST 端口、维度一致、索引先行、幂等 ID）——**这套"客户端四层排错 + 索引先行 + 模型一致性"的纪律是通用的**，换库时排错经验直接迁移，这也是本体系与 Chroma/PgVector 体系共用"评估/避坑/面试"框架的原因。
 
-> 🎯 **核心要点**：Java 三路径（官方客户端/LangChain4j/Spring AI）按场景选，生产组合"Spring AI 管检索 + LangChain4j 管切分"；Python 侧 FastEmbed 本地向量化是内网利器；RAG 五决策点（切分/payload/过滤感知/混合/评估）串起全链路；评估闭环进 CI，指标说话。
+> **核心要点**：Java 三路径（官方客户端/LangChain4j/Spring AI）按场景选，生产组合"Spring AI 管检索 + LangChain4j 管切分"；Python 侧 FastEmbed 本地向量化是内网利器；RAG 五决策点（切分/payload/过滤感知/混合/评估）串起全链路；评估闭环进 CI，指标说话。
 
 ---
 

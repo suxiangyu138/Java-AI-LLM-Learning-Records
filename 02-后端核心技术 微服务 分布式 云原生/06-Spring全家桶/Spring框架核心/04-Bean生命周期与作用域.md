@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [生命周期全景时序](#1-生命周期全景时序)
 2. [Aware 接口家族](#2-aware-接口家族)
@@ -32,7 +32,7 @@
       ↓
 ⑥ 初始化（@PostConstruct → InitializingBean#afterPropertiesSet → @Bean(initMethod)）
       ↓
-⑦ BeanPostProcessor#postProcessAfterInitialization（⚠️ AOP 代理在此创建）
+⑦ BeanPostProcessor#postProcessAfterInitialization（AOP 代理在此创建）
       ↓
 ⑧ 使用（getBean / 注入给其他 Bean）
       ↓ 容器关闭
@@ -54,7 +54,7 @@ public class LifecycleDemo implements InitializingBean, DisposableBean {
 }
 ```
 
-> 🎯 **核心要点**：**实例化 ≠ 初始化**——实例化只是构造器执行（对象存在但字段可能没赋值），初始化才是业务准备完成（校验配置、建连接）。AOP 代理在**初始化之后**创建（第 ⑦ 步）——所以代理能拦到所有方法调用。
+> **核心要点**：**实例化 ≠ 初始化**——实例化只是构造器执行（对象存在但字段可能没赋值），初始化才是业务准备完成（校验配置、建连接）。AOP 代理在**初始化之后**创建（第 ⑦ 步）——所以代理能拦到所有方法调用。
 
 ---
 
@@ -88,7 +88,7 @@ public class MyBean implements ApplicationContextAware {
 }
 ```
 
-> ⚠️ **现代实践**：Aware 接口正被"直接注入"取代——`@Autowired ApplicationContext`、`@Value` 能覆盖 90% 场景。Aware 只在"初始化回调阶段就需要容器能力"时必要（那时注入还没完成？不——属性填充在 Aware 之前，所以其实都可注入；Aware 的独特价值是**不依赖注解**的纯回调）。框架内部大量使用 Aware。
+> **现代实践**：Aware 接口正被"直接注入"取代——`@Autowired ApplicationContext`、`@Value` 能覆盖 90% 场景。Aware 只在"初始化回调阶段就需要容器能力"时必要（那时注入还没完成？不——属性填充在 Aware 之前，所以其实都可注入；Aware 的独特价值是**不依赖注解**的纯回调）。框架内部大量使用 Aware。
 
 ---
 
@@ -114,7 +114,7 @@ public class ConnConfig {
 
 **Spring 7.0 的默认 destroyMethod**：`@Bean` 默认会推断 `close()/shutdown()` 作为销毁方法（`AbstractBeanDefinition.INFER_METHOD`）——所以第三方类实现 `AutoCloseable` 时无需显式声明 destroyMethod，容器自动调用。
 
-> 🎯 **核心要点**：选型口诀——**自己的类用 @PostConstruct/@PreDestroy；第三方类用 @Bean(initMethod/destroyMethod)**；接口方式留给框架内部。
+> **核心要点**：选型口诀——**自己的类用 @PostConstruct/@PreDestroy；第三方类用 @Bean(initMethod/destroyMethod)**；接口方式留给框架内部。
 
 ---
 
@@ -148,7 +148,7 @@ public class RequestContext { ... }
 | 线程安全 | 必须自身无状态/线程安全 | 每次独立，天然隔离 |
 | 适用 | Service、Repository、配置 | 有状态工作对象 |
 
-> ⚠️ **request/session 作用域在非 Web 环境不可用**；注入 request Bean 到 singleton 时必须用 `@Scope(proxyMode = ScopedProxyMode.TARGET_CLASS)` 代理，否则注入的是"创建时的那个实例"。
+> **request/session 作用域在非 Web 环境不可用**；注入 request Bean 到 singleton 时必须用 `@Scope(proxyMode = ScopedProxyMode.TARGET_CLASS)` 代理，否则注入的是"创建时的那个实例"。
 
 ---
 
@@ -161,7 +161,7 @@ public class RequestContext { ... }
 @Component
 public class SingletonService {
     @Autowired
-    private AuditRecorder recorder;      // ❌ 看起来是 prototype，实际只有一个（创建时注入的那个）
+    private AuditRecorder recorder;      // ✗ 看起来是 prototype，实际只有一个（创建时注入的那个）
 }
 ```
 
@@ -196,12 +196,12 @@ public abstract class SingletonService {
 @Component
 @Scope("prototype")
 public class SessionPool {
-    @PreDestroy public void release() { }   // ❌ prototype 下永远不会被调用
+    @PreDestroy public void release() { }   // ✗ prototype 下永远不会被调用
 }
 // 解法：实现 DisposableBean 并让调用方手动销毁，或对象自带资源管理（TWR）
 ```
 
-> 🎯 **核心要点**：**singleton 注入 prototype = 只注入一次**——这是使用作用域时最常踩的坑。正确姿势是 ObjectProvider 或 @Lookup，让"获取"推迟到使用点。
+> **核心要点**：**singleton 注入 prototype = 只注入一次**——这是使用作用域时最常踩的坑。正确姿势是 ObjectProvider 或 @Lookup，让"获取"推迟到使用点。
 
 ---
 
@@ -230,7 +230,7 @@ public class StartupPreheater implements ApplicationRunner {
 }
 ```
 
-> 🎯 **核心要点**：选型口诀——**"改图纸"用 BFPP，"改实例"用 BPP，"等就绪"用 ApplicationRunner/事件，"拦方法"用 AOP**。把扩展点按"作用对象 + 时机"归档，面试与设计都不慌。
+> **核心要点**：选型口诀——**"改图纸"用 BFPP，"改实例"用 BPP，"等就绪"用 ApplicationRunner/事件，"拦方法"用 AOP**。把扩展点按"作用对象 + 时机"归档，面试与设计都不慌。
 
 ---
 

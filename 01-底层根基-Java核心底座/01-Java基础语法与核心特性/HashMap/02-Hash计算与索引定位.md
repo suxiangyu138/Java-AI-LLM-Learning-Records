@@ -6,7 +6,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [索引定位的本质](#1-索引定位的本质)
 2. [扰动函数](#2-扰动函数)
@@ -52,7 +52,7 @@ static final int hash(Object key) {
 
 ### 2.1 原理
 
-> 🎯 **扰动函数**：`hash = hashCode() ^ (hashCode() >>> 16)`——高 16 位与低 16 位异或：
+> **扰动函数**：`hash = hashCode() ^ (hashCode() >>> 16)`——高 16 位与低 16 位异或：
 
 ```text
 为什么要扰动（高 16 位参与）
@@ -87,7 +87,7 @@ JDK 7 vs JDK 8 扰动
 // hash1 = 0x00000001 ^ 0x00000000 = 1
 // hash2 = 0x00000011 ^ 0x00000000 = 0x11 = 17 → 桶 1
 // hash3 = 0x00000021 ^ 0x00000000 = 0x21 = 33 → 桶 1
-// ⚠️ 高位相同则扰动也无用（真正问题是 hashCode 设计）
+// 高位相同则扰动也无用（真正问题是 hashCode 设计）
 // 结论：扰动优化「低位分布」，不拯救「差的 hashCode」
 ```
 
@@ -95,7 +95,7 @@ JDK 7 vs JDK 8 扰动
 
 ## 3. 为什么容量是 2 的幂
 
-> 🎯 **容量必须是 2 的幂**——位运算 `(n - 1) & hash` 代替取模 `hash % n`：
+> **容量必须是 2 的幂**——位运算 `(n - 1) & hash` 代替取模 `hash % n`：
 
 ```text
 2 的幂的两个价值
@@ -110,7 +110,7 @@ JDK 7 vs JDK 8 扰动
     ├── 容量翻倍 = 多一位参与
     └── 元素只需判断「新位」——免重算
 
-⚠️ 自定义初始容量的处理
+自定义初始容量的处理
 ├── new HashMap<>(10)：不是直接用 10！
 ├── tableSizeFor 转成 ≥ 10 的最近 2 的幂（16）
 └── 结论：任何传入容量都被规范为 2 的幂
@@ -137,7 +137,7 @@ static final int tableSizeFor(int cap) {
 // 示例：tableSizeFor(10)
 // 10 - 1 = 9（1001）
 // 逐步或扩散：1111 = 15
-// 15 + 1 = 16 ✅（≥10 的最近 2 的幂）
+// 15 + 1 = 16 ✓（≥10 的最近 2 的幂）
 
 // 示例：tableSizeFor(16) → 16 - 1 = 15 → 扩散 15 → +1 = 16
 // （不减 1 会得到 32——所以 cap - 1 很重要）
@@ -231,33 +231,33 @@ map.get(null);                // 桶 0 查找
 ### 7.2 示例
 
 ```java
-// ✅ 正确的自定义 key（不可变 + equals/hashCode 一致）
+// ✓ 正确的自定义 key（不可变 + equals/hashCode 一致）
 record OrderKey(String orderId, Long userId) { }
 // record 自动生成：equals/hashCode/toString（不可变）
 
-// ❌ 错误：可变 key
+// ✗ 错误：可变 key
 class BadKey {
     String id;
     // 无 equals/hashCode 重写 → 引用比较（永远 get 不到）
 }
-// ❌ 错误：hashCode 与 equals 不一致
+// ✗ 错误：hashCode 与 equals 不一致
 class WorseKey {
     String id;
     @Override public boolean equals(Object o) { ... }
-    // ⚠️ 没重写 hashCode → equals 相等但 hash 不同 → 不同桶！
+    // 没重写 hashCode → equals 相等但 hash 不同 → 不同桶！
 }
 
 // 生产实践
 Map<OrderKey, Order> orderCache = new HashMap<>();
 orderCache.put(new OrderKey("ORD-1", 100L), order);
-Order found = orderCache.get(new OrderKey("ORD-1", 100L));  // ✅ 找到
+Order found = orderCache.get(new OrderKey("ORD-1", 100L));  // ✓ 找到
 ```
 
 ---
 
 ## 8. 核心要点
 
-> 🎯 **核心要点**：
+> **核心要点**：
 > 1. 定位链路：hashCode → 扰动（^>>>16）→ `(n-1) & hash`（位运算）
 > 2. **扰动函数让高位参与低位**——小容量下分布均匀（JDK 8 简化为 2 次）
 > 3. **容量 2 的幂三价值**：位运算代替取模 + 分布均匀 + 扩容友好

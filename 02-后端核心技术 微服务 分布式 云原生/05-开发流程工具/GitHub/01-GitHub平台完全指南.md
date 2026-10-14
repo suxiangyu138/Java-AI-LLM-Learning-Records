@@ -50,12 +50,12 @@ GitHub = Git 托管 + 协作平台 + DevOps 平台 + 社交网络 + AI 开发工
 | **CI/CD** | GitHub Actions | GitLab CI（更成熟） | Bitbucket Pipelines |
 | **私有仓库** | 免费（无限） | 免费（无限） | 免费（5人限制） |
 | **AI 能力** | Copilot（最强） | GitLab Duo | 无 |
-| **开源生态** | ⭐⭐⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐ |
+| **开源生态** | ★★★★★ | ★★★ | ★★ |
 | **自托管** | GitHub Enterprise | GitLab CE/EE | Bitbucket Data Center |
 | **包管理** | GitHub Packages | GitLab Container Registry | 需第三方集成 |
 | **项目管理** | Projects（看板+表格） | 内置 Issue Board | Jira 深度集成 |
 
-> 🎯 开源项目首选 GitHub，企业自建 DevOps 选 GitLab，Jira/Confluence 生态选 Bitbucket。
+> 开源项目首选 GitHub，企业自建 DevOps 选 GitLab，Jira/Confluence 生态选 Bitbucket。
 
 ---
 
@@ -71,15 +71,15 @@ GitHub = Git 托管 + 协作平台 + DevOps 平台 + 社交网络 + AI 开发工
 #    Private → 仅受邀者可见（适合企业/个人项目）
 
 # 2. README.md
-#    ✅ 建议初始化时勾选 — 仓库的第一份文档
+#    ✓ 建议初始化时勾选 — 仓库的第一份文档
 #    包含：项目简介、安装步骤、使用示例、License、贡献指南
 
 # 3. .gitignore
-#    ✅ 必须选 — 根据语言/框架选择模板
+#    ✓ 必须选 — 根据语言/框架选择模板
 #    GitHub 提供了 100+ 预置模板
 
 # 4. License
-#    ✅ 开源项目必须选 —
+#    ✓ 开源项目必须选 —
 #    MIT     → 最宽松（随便用，保留版权声明）
 #    Apache 2.0 → 宽松 + 专利许可
 #    GPL v3  → 强 Copyleft（衍生项目也必须开源）
@@ -95,11 +95,11 @@ GitHub = Git 托管 + 协作平台 + DevOps 平台 + 社交网络 + AI 开发工
 # 描述（Description）：一句话说明，出现在搜索列表中
 # 网站（Website）：项目官网或文档链接
 
-# Topics（标签）— ⭐ 影响 GitHub 搜索排名！
+# Topics（标签）— ★ 影响 GitHub 搜索排名！
 # 例：java, spring-boot, microservices, rest-api, backend
 
 # About 配置（仓库首页右侧）：
-#   ✅ Description  + Topics + Website + Releases
+#   ✓ Description  + Topics + Website + Releases
 ```
 
 ### 2.3 Fork 工作流
@@ -140,9 +140,9 @@ Fork 的本质：
 | **General** | Default branch | 默认分支名（main/master） |
 | | Features（Wiki/Issues/Discussions/Projects） | 按需启用/禁用 |
 | | Pull Requests（合并方式） | Merge Commit / Squash / Rebase |
-| | Automatically delete head branches | ✅ 强烈建议开启 |
+| | Automatically delete head branches | ✓ 强烈建议开启 |
 | **Collaborators** | 添加协作者 | 直接给仓库权限 |
-| **Branches** | Branch protection rules | ⭐ 核心安全机制 |
+| **Branches** | Branch protection rules | ★ 核心安全机制 |
 | **Actions** | Actions permissions | 控制 Workflow 权限 |
 | **Secrets & Variables** | Actions / Codespaces / Dependabot | CI/CD 密钥管理 |
 | **Security** | Code scanning / Secret scanning | 安全扫描配置 |
@@ -173,7 +173,7 @@ Rebase:
   * feat: add A
 ```
 
-> 💡 建议配置：个人项目用 Squash（历史干净），团队项目用 Merge Commit（可追溯），开源项目按社区约定。
+> 建议配置：个人项目用 Squash（历史干净），团队项目用 Merge Commit（可追溯），开源项目按社区约定。
 
 ### 3.3 Webhook 配置
 
@@ -261,7 +261,7 @@ Allow deletions: false           # 禁止删除分支
 ### 5.1 如何让项目被更多人发现
 
 ```markdown
-# ⭐ GitHub 搜索排名因素（大致权重）
+# ★ GitHub 搜索排名因素（大致权重）
 1. 仓库名与搜索词匹配度
 2. Description 中关键词匹配
 3. Topics 标签
@@ -271,11 +271,11 @@ Allow deletions: false           # 禁止删除分支
 7. 文档质量（README/Wiki）
 
 # ═══ 优化清单 ═══
-✅ 命名清晰：spring-boot-starter-xxx（便于搜索）
-✅ Description 含关键词：A Spring Boot starter for...
-✅ 添加 Topics：java, spring-boot, starter
-✅ README 完善：徽章 + 截图 + 快速开始
-✅ 开源 License
+✓ 命名清晰：spring-boot-starter-xxx（便于搜索）
+✓ Description 含关键词：A Spring Boot starter for...
+✓ 添加 Topics：java, spring-boot, starter
+✓ README 完善：徽章 + 截图 + 快速开始
+✓ 开源 License
 ```
 
 ### 5.2 Star 与 Fork 的意义
@@ -301,15 +301,15 @@ Allow deletions: false           # 禁止删除分支
 
 <!-- 示例：https://github.com/zhangsan -->
 <!-- README.md 内容 -->
-### Hi there 👋
+### Hi there 
 
-- 🔭 I'm currently working on: Spring Cloud microservices
-- 🌱 I'm learning: Rust
-- 👯 I'm looking to collaborate on: Open source Java projects
-- 💬 Ask me about: Java Backend, Distributed Systems
-- 📫 How to reach me: zhangsan@example.com
+- I'm currently working on: Spring Cloud microservices
+- I'm learning: Rust
+- I'm looking to collaborate on: Open source Java projects
+- Ask me about: Java Backend, Distributed Systems
+- How to reach me: zhangsan@example.com
 
-### 🛠 Tech Stack
+### Tech Stack
 ![Java](https://img.shields.io/badge/-Java-007396?logo=java)
 ![Spring](https://img.shields.io/badge/-Spring-6DB33F?logo=spring)
 ```
@@ -404,15 +404,15 @@ Closes #
 
 | 功能 | Free | Team | Enterprise |
 |------|------|------|------------|
-| 公开/私有仓库 | ✅ 无限 | ✅ 无限 | ✅ 无限 |
+| 公开/私有仓库 | ✓ 无限 | ✓ 无限 | ✓ 无限 |
 | Actions 分钟数 | 2000 分钟/月 | 3000 分钟/月 | 50000 分钟/月 |
 | Codespaces | 120核时/月 | 共享额度 | 共享额度 |
 | Packages 存储 | 500MB | 2GB | 50GB |
-| 必需审查者 | ❌ | ✅ | ✅ |
-| Code Owners | ❌ | ✅ | ✅ |
-| 受保护分支 | ✅ | ✅ | ✅ |
-| SAML/SCIM | ❌ | ❌ | ✅ |
-| 审计日志 | ❌ | ❌ | ✅ |
+| 必需审查者 | ✗ | ✓ | ✓ |
+| Code Owners | ✗ | ✓ | ✓ |
+| 受保护分支 | ✓ | ✓ | ✓ |
+| SAML/SCIM | ✗ | ✗ | ✓ |
+| 审计日志 | ✗ | ✗ | ✓ |
 | Copilot | 付费附加 | 付费附加 | 付费附加 |
 | **月费** | $0 | $4/用户 | $21/用户 |
 

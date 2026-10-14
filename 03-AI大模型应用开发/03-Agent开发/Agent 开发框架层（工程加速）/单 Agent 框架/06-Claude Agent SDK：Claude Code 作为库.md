@@ -2,7 +2,7 @@
 
 > 定位：完整 harness 范式的代表——把 Claude Code 的 agent loop、内置工具、上下文管理打包成 Python/TypeScript 库（v2.x，2026-08 基准）
 
-## 📚 目录
+## 目录
 
 1. [定位与四者区分](#1-定位与四者区分)
 2. [双入口：query 与 ClaudeSDKClient](#2-双入口query-与-claudesdkclient)
@@ -27,7 +27,7 @@ Claude Agent SDK = Claude Code 打包为库（Python/TS）
   Managed Agents → 托管 REST API，Anthropic 跑 loop 与沙箱
 ```
 
-> ⚠️ **与其他 Claude 产品的区别**：它**不是** API Tool Runner（`client.beta.messages.tool_runner`，那是 Client SDK 的 beta 辅助，loop 范围更小、无内置工具）；两者不要混用。其他语言没有官方 SDK——用 CLI 子进程 `-p --output-format json` 驱动同一 loop。
+> **与其他 Claude 产品的区别**：它**不是** API Tool Runner（`client.beta.messages.tool_runner`，那是 Client SDK 的 beta 辅助，loop 范围更小、无内置工具）；两者不要混用。其他语言没有官方 SDK——用 CLI 子进程 `-p --output-format json` 驱动同一 loop。
 
 ## 2. 双入口：query 与 ClaudeSDKClient
 
@@ -60,7 +60,7 @@ async def main():
 asyncio.run(main())
 ```
 
-> 💡 **API 形状说明**：2026 现行 API 是 `query()`/`ClaudeSDKClient`/`ClaudeAgentOptions`；早期资料中的 `Agent` 类、`AgentResult`、`SessionMemory` 属于旧/误导信息，不在此版本。
+> **API 形状说明**：2026 现行 API 是 `query()`/`ClaudeSDKClient`/`ClaudeAgentOptions`；早期资料中的 `Agent` 类、`AgentResult`、`SessionMemory` 属于旧/误导信息，不在此版本。
 
 ## 3. 内置工具与自定义工具
 
@@ -110,7 +110,7 @@ options = ClaudeAgentOptions(
   bypassPermissions 全部放行（CI/容器隔离环境专用；TS 需显式 allowDangerouslySkipPermissions）
 ```
 
-> 🎯 **2026 建议**：交互应用用 `default` + 批准回调；自主开发机用 `acceptEdits`；`bypassPermissions` 仅限 CI/容器。
+> **2026 建议**：交互应用用 `default` + 批准回调；自主开发机用 `acceptEdits`；`bypassPermissions` 仅限 CI/容器。
 
 ## 5. 消息流与循环控制
 
@@ -128,11 +128,11 @@ options = ClaudeAgentOptions(
 
 | subtype | 含义 | result 可用? |
 |---------|------|:---:|
-| `success` | 正常完成 | ✅ |
-| `error_max_turns` | 达 max_turns | ❌ |
-| `error_max_budget_usd` | 达成本上限 | ❌ |
-| `error_during_execution` | 执行中错误 | ❌ |
-| `error_max_structured_output_retries` | 结构化输出重试耗尽 | ❌ |
+| `success` | 正常完成 | ✓ |
+| `error_max_turns` | 达 max_turns | ✗ |
+| `error_max_budget_usd` | 达成本上限 | ✗ |
+| `error_during_execution` | 执行中错误 | ✗ |
+| `error_max_structured_output_retries` | 结构化输出重试耗尽 | ✗ |
 
 ### 5.3 循环控制参数
 

@@ -1,6 +1,6 @@
 # 14 - Gradle 核心概念与 Kotlin DSL
 
-> 🎯 Gradle 是 JVM 生态的现代化构建工具，基于 DAG 任务图和可编程 DSL，在构建性能和灵活性上全面超越 Maven — Spring Boot、Android 均已官方推荐
+> Gradle 是 JVM 生态的现代化构建工具，基于 DAG 任务图和可编程 DSL，在构建性能和灵活性上全面超越 Maven — Spring Boot、Android 均已官方推荐
 
 ---
 
@@ -47,7 +47,7 @@ Gradle 是基于 Groovy/Kotlin DSL 的现代化 JVM 构建工具，核心特点�
 │ 2. 配置 (Configuration)                                 │
 │    解析每个 Project 的 build.gradle(.kts)                │
 │    → 构建 Task 依赖图 (DAG)                             │
-│    → ⚠️ 所有配置代码都在这阶段执行                         │
+│    → 所有配置代码都在这阶段执行                         │
 ├─────────────────────────────────────────────────────────┤
 │ 3. 执行 (Execution)                                     │
 │    按 DAG 依赖顺序执行 Task                              │
@@ -56,7 +56,7 @@ Gradle 是基于 Groovy/Kotlin DSL 的现代化 JVM 构建工具，核心特点�
 └─────────────────────────────────────────────────────────┘
 ```
 
-> ⚠️ **关键理解**：配置阶段会执行 `build.gradle` 中除 Task Action 外的所有代码。`doLast`/`doFirst` 中的代码在**执行阶段**运行，其他代码在**配置阶段**运行。
+> **关键理解**：配置阶段会执行 `build.gradle` 中除 Task Action 外的所有代码。`doLast`/`doFirst` 中的代码在**执行阶段**运行，其他代码在**配置阶段**运行。
 
 ---
 
@@ -168,16 +168,16 @@ Gradle 的依赖配置比 Maven Scope 更精细：
 
 | 配置 | 编译期 | 运行期 | 传递性 | 类比 Maven Scope | 使用场景 |
 |------|:---:|:---:|:---:|------|------|
-| `implementation` | ✅ | ✅ | ❌ | compile（推荐） | ⭐ 最常用，内部实现依赖 |
-| `api` | ✅ | ✅ | ✅ | compile | 对外暴露的 API 模块 |
-| `compileOnly` | ✅ | ❌ | ❌ | provided | Lombok、Servlet API |
-| `runtimeOnly` | ❌ | ✅ | ✅ | runtime | JDBC 驱动 |
-| `testImplementation` | ❌ | ❌ | ❌ | test | JUnit、Mockito |
-| `annotationProcessor` | ✅ | ❌ | ❌ | — | Lombok、MapStruct |
+| `implementation` | ✓ | ✓ | ✗ | compile（推荐） | ★ 最常用，内部实现依赖 |
+| `api` | ✓ | ✓ | ✓ | compile | 对外暴露的 API 模块 |
+| `compileOnly` | ✓ | ✗ | ✗ | provided | Lombok、Servlet API |
+| `runtimeOnly` | ✗ | ✓ | ✓ | runtime | JDBC 驱动 |
+| `testImplementation` | ✗ | ✗ | ✗ | test | JUnit、Mockito |
+| `annotationProcessor` | ✓ | ✗ | ✗ | — | Lombok、MapStruct |
 
 ```kotlin
 dependencies {
-    // ⭐ 最常用：implementation
+    // ★ 最常用：implementation
     implementation("org.springframework.boot:spring-boot-starter-web")
 
     // 模块间依赖（api vs implementation）
@@ -252,11 +252,11 @@ gradle wrapper --gradle-version 8.7
 |------|--------|-------|
 | 构建脚本 | `build.gradle(.kts)` | `pom.xml` |
 | DSL 语言 | Groovy/Kotlin（可编程） | XML（声明式） |
-| 灵活性 | ⭐⭐⭐ 高度可编程 | ⭐ 受限于插件 |
-| 构建性能 | ⭐⭐⭐ 增量+缓存+并行 | ⭐⭐ `-T` 并行 |
+| 灵活性 | ★★★ 高度可编程 | ★ 受限于插件 |
+| 构建性能 | ★★★ 增量+缓存+并行 | ★★ `-T` 并行 |
 | 学习曲线 | 陡峭 | 平缓 |
 | Android | 官方 | 需插件 |
-| 约定优于配置 | 灵活但需显式声明 | ⭐⭐⭐ 强约定 |
+| 约定优于配置 | 灵活但需显式声明 | ★★★ 强约定 |
 
 ---
 
@@ -288,9 +288,9 @@ tasks.withType<Test> { useJUnitPlatform() }
 
 | 场景 | 推荐 |
 |------|------|
-| 新项目 / Android / Kotlin | ⭐ **Gradle (Kotlin DSL)** |
+| 新项目 / Android / Kotlin | ★ **Gradle (Kotlin DSL)** |
 | 成熟企业 Java 项目 | Maven（团队熟悉度优先） |
-| 构建速度敏感 | ⭐ **Gradle** |
+| 构建速度敏感 | ★ **Gradle** |
 | CI/CD 标准化 | Maven（简单可靠） |
 
-> 🎯 Gradle 核心价值：构建性能（增量+缓存+并行）+ 灵活性（可编程 DSL）。Kotlin DSL 是推荐选择（类型安全+IDE 支持）。更详细的对比请参见 `17-Maven与Gradle对比选型指南.md`。
+> Gradle 核心价值：构建性能（增量+缓存+并行）+ 灵活性（可编程 DSL）。Kotlin DSL 是推荐选择（类型安全+IDE 支持）。更详细的对比请参见 `17-Maven与Gradle对比选型指南.md`。

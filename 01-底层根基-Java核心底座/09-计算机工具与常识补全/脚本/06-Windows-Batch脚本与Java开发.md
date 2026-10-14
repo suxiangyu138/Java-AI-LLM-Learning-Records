@@ -2,7 +2,7 @@
 
 > `.bat` 是 Windows 原生的"自动化母语"——从 JAVA_HOME 配置到服务管理，从 Maven/Gradle Wrapper 到定时任务
 
-## 📚 目录
+## 目录
 
 1. [Batch 脚本基础语法](#1)
 2. [Java 环境变量与编译运行](#2)
@@ -52,26 +52,26 @@ goto :eof
 
 REM ── 函数（使用标签 + goto :eof 模拟）──
 :compile
-echo 🔨 编译中...
+echo 编译中...
 if not exist "%BUILD_DIR%" mkdir "%BUILD_DIR%"
 dir /s /b "%SRC_DIR%\*.java" > sources.txt
 javac -d "%BUILD_DIR%" @sources.txt
 del sources.txt
-echo ✅ 编译完成
+echo ✓ 编译完成
 goto :eof
 
 :run
-echo 🚀 启动应用...
+echo 启动应用...
 java -cp "%BUILD_DIR%" %MAIN_CLASS%
 goto :eof
 
 :clean
-echo 🧹 清理构建目录...
+echo 清理构建目录...
 if exist "%BUILD_DIR%" rmdir /s /q "%BUILD_DIR%"
 goto :eof
 ```
 
-> 🎯 **核心要点**：`@echo off` 关闭命令回显，`setlocal enabledelayedexpansion` 启用延迟变量展开，`%~dp0` 获取脚本所在目录——这是每个 .bat 脚本的标准开头。
+> **核心要点**：`@echo off` 关闭命令回显，`setlocal enabledelayedexpansion` 启用延迟变量展开，`%~dp0` 获取脚本所在目录——这是每个 .bat 脚本的标准开头。
 
 ### 1.2 变量与字符串操作
 
@@ -119,16 +119,16 @@ echo 结果: %RESULT%             REM 53
 
 REM ── if 字符串比较 ──
 if "%JAVA_HOME%"=="" (
-    echo ❌ JAVA_HOME 未设置
+    echo ✗ JAVA_HOME 未设置
     exit /b 1
 )
 
 REM ── if 数值比较 ──
 set /a VERSION=21
 if %VERSION% GEQ 17 (
-    echo ✅ JDK 版本满足最低要求
+    echo ✓ JDK 版本满足最低要求
 ) else (
-    echo ❌ 需要 JDK 17 以上
+    echo ✗ 需要 JDK 17 以上
 )
 
 REM ── if 文件/目录存在 ──
@@ -215,21 +215,21 @@ for %%d in (
 )
 
 if not defined FOUND_JDK (
-    echo ❌ 未检测到已安装的 JDK，请手动设置 JAVA_HOME
+    echo ✗ 未检测到已安装的 JDK，请手动设置 JAVA_HOME
     exit /b 1
 )
 
 REM 设置 JAVA_HOME 并加入 PATH
 setx JAVA_HOME "%FOUND_JDK%" > nul
-echo ✅ JAVA_HOME 已设置为: %FOUND_JDK%
+echo ✓ JAVA_HOME 已设置为: %FOUND_JDK%
 
 :check_path
 REM 验证 java 命令在 PATH 中
 where java > nul 2>&1
 if %errorlevel% neq 0 (
-    echo ⚠️  java 不在 PATH 中，正在添加...
+    echo  java 不在 PATH 中，正在添加...
     setx PATH "%JAVA_HOME%\bin;%PATH%" > nul
-    echo ✅ 已添加 java 到 PATH
+    echo ✓ 已添加 java 到 PATH
 )
 echo 当前 java 命令路径:
 where java
@@ -259,13 +259,13 @@ set VERSION_STR=%VERSION_STR:"=%
 REM JDK 11+ 可直接运行单文件
 echo %VERSION_STR% | findstr /r "^1[1-9]\." > nul
 if %errorlevel% equ 0 (
-    echo 🚀 JDK 11+ 模式：直接运行单文件
+    echo JDK 11+ 模式：直接运行单文件
     java "%FILE%" %2 %3 %4 %5
     goto :eof
 )
 
 REM JDK 8-10 传统编译+运行
-echo 🔨 JDK 8 模式：先编译后运行
+echo JDK 8 模式：先编译后运行
 set "CLASS_NAME=%~n1"
 javac "%FILE%"
 if %errorlevel% neq 0 exit /b 1
@@ -298,7 +298,7 @@ if exist "mvnw.cmd" (
     set BUILD_CMD=call mvn
     echo 构建工具: Maven (系统安装)
 ) else (
-    echo ❌ 未检测到构建工具
+    echo ✗ 未检测到构建工具
     exit /b 1
 )
 
@@ -312,15 +312,15 @@ for %%m in (%MODULES%) do (
         cd %%m
         %BUILD_CMD% clean package -DskipTests
         if !errorlevel! equ 0 (
-            echo ✅ %%m 构建成功
+            echo ✓ %%m 构建成功
             set /a PASSED+=1
         ) else (
-            echo ❌ %%m 构建失败
+            echo ✗ %%m 构建失败
             set /a FAILED+=1
         )
         cd ..
     ) else (
-        echo ⚠️  模块目录 %%m 不存在，跳过
+        echo  模块目录 %%m 不存在，跳过
     )
 )
 
@@ -404,9 +404,9 @@ if exist "mvnw.cmd" (
     echo [Maven] 升级到 %NEW_MAVEN_VERSION%...
     mvnw.cmd wrapper:wrapper -Dmaven=%NEW_MAVEN_VERSION%
     if %errorlevel% equ 0 (
-        echo ✅ Maven Wrapper 已升级
+        echo ✓ Maven Wrapper 已升级
     ) else (
-        echo ❌ 升级失败
+        echo ✗ 升级失败
     )
 )
 
@@ -414,9 +414,9 @@ if exist "gradlew.bat" (
     echo [Gradle] 升级到 %NEW_GRADLE_VERSION%...
     gradlew.bat wrapper --gradle-version %NEW_GRADLE_VERSION%
     if %errorlevel% equ 0 (
-        echo ✅ Gradle Wrapper 已升级
+        echo ✓ Gradle Wrapper 已升级
     ) else (
-        echo ❌ 升级失败
+        echo ✗ 升级失败
     )
 )
 
@@ -465,13 +465,13 @@ if exist "%PID_FILE%" (
     set /p PID=<"%PID_FILE%"
     tasklist /fi "PID eq !PID!" 2>nul | find /i "!PID!" >nul
     if !errorlevel! equ 0 (
-        echo ⚠️  %APP_NAME% 已在运行 (PID: !PID!)
+        echo  %APP_NAME% 已在运行 (PID: !PID!)
         goto :eof
     )
     del "%PID_FILE%"
 )
 
-echo 🚀 启动 %APP_NAME%...
+echo 启动 %APP_NAME%...
 
 REM 使用 javaw（无控制台窗口）后台启动
 start "!APP_NAME!" /B javaw !JVM_OPTS! -jar "!JAR_FILE!" !APP_OPTS! ^
@@ -481,21 +481,21 @@ REM 获取 PID（需要额外步骤，因为 start /B 不直接返回 PID）
 timeout /t 3 /nobreak > nul
 for /f "tokens=2" %%p in ('tasklist /fi "WINDOWTITLE eq !APP_NAME!" /fo list ^| findstr "PID:"') do (
     echo %%p > "!PID_FILE!"
-    echo ✅ 已启动 (PID: %%p)
+    echo ✓ 已启动 (PID: %%p)
     goto :eof
 )
 
-echo ⚠️  无法获取 PID，但进程已启动
+echo  无法获取 PID，但进程已启动
 goto :eof
 
 :stop
 if not exist "%PID_FILE%" (
-    echo ⚠️  %APP_NAME% 未在运行
+    echo  %APP_NAME% 未在运行
     goto :eof
 )
 
 set /p PID=<"%PID_FILE%"
-echo 🛑 停止 %APP_NAME% (PID: %PID%)...
+echo 停止 %APP_NAME% (PID: %PID%)...
 
 REM 优雅关闭
 taskkill /pid %PID% > nul 2>&1
@@ -510,12 +510,12 @@ if %errorlevel% neq 0 goto :stopped
 if %COUNT% lss 30 goto :wait_stop
 
 REM 强制关闭
-echo ⚠️  强制关闭...
+echo  强制关闭...
 taskkill /f /pid %PID% > nul 2>&1
 
 :stopped
 del "%PID_FILE%" 2>nul
-echo ✅ 已停止
+echo ✓ 已停止
 goto :eof
 
 :restart
@@ -526,26 +526,26 @@ goto :eof
 
 :status
 if not exist "%PID_FILE%" (
-    echo ❌ %APP_NAME% 未运行
+    echo ✗ %APP_NAME% 未运行
     goto :eof
 )
 
 set /p PID=<"%PID_FILE%"
 tasklist /fi "PID eq %PID%" 2>nul | find /i "%PID%" >nul
 if %errorlevel% equ 0 (
-    echo ✅ %APP_NAME% 运行中 (PID: %PID%)
+    echo ✓ %APP_NAME% 运行中 (PID: %PID%)
 ) else (
-    echo ❌ %APP_NAME% 已停止（PID 文件过期）
+    echo ✗ %APP_NAME% 已停止（PID 文件过期）
     del "%PID_FILE%"
 )
 goto :eof
 
 :install
 REM 安装为 Windows 服务（使用 nssm 或 sc）
-echo 🔧 安装 Windows 服务...
+echo 安装 Windows 服务...
 where nssm > nul 2>&1
 if %errorlevel% neq 0 (
-    echo ⚠️  需要 nssm (Non-Sucking Service Manager)
+    echo  需要 nssm (Non-Sucking Service Manager)
     echo 下载: https://nssm.cc/download
     echo 或使用: choco install nssm
     goto :eof
@@ -555,7 +555,7 @@ nssm install %APP_NAME% "%JAVA_HOME%\bin\javaw.exe" ^
 nssm set %APP_NAME% AppDirectory "%APP_HOME%"
 nssm set %APP_NAME% AppStdout "%LOG_FILE%"
 nssm set %APP_NAME% AppStderr "%LOG_FILE%"
-echo ✅ 服务已安装: %APP_NAME%
+echo ✓ 服务已安装: %APP_NAME%
 goto :eof
 ```
 
@@ -585,7 +585,7 @@ nssm set "%SERVICE_NAME%" AppStderr "C:\app\logs\stderr.log"
 nssm set "%SERVICE_NAME%" AppRotateFiles 1
 nssm set "%SERVICE_NAME%" AppRotateSeconds 86400
 
-echo ✅ 服务已安装
+echo ✓ 服务已安装
 echo 启动服务: net start %SERVICE_NAME%
 echo 停止服务: net stop %SERVICE_NAME%
 echo 卸载服务: nssm remove %SERVICE_NAME% confirm
@@ -637,7 +637,7 @@ powershell -Command ^
      Where-Object { $_.LastWriteTime -lt (Get-Date).AddDays(-%RETENTION_DAYS%) } | ^
      Remove-Item -Force"
 
-echo ✅ 日志清理完成
+echo ✓ 日志清理完成
 goto :eof
 ```
 
@@ -658,14 +658,14 @@ echo ============================================
 
 REM 备份现有 JAR
 if exist "%LIB_DIR%" (
-    echo 📦 备份现有 JAR 到 %BACKUP_DIR%...
+    echo 备份现有 JAR 到 %BACKUP_DIR%...
     xcopy "%LIB_DIR%" "%BACKUP_DIR%\" /e /i /y > nul
-    echo ✅ 备份完成
+    echo ✓ 备份完成
 )
 
 REM 列出当前 JAR 版本
 echo.
-echo 📋 当前 JAR 清单:
+echo 当前 JAR 清单:
 for %%f in ("%LIB_DIR%\*.jar") do (
     echo   %%~nxf  (%TIMESTAMP%)
 )
@@ -673,7 +673,7 @@ for %%f in ("%LIB_DIR%\*.jar") do (
 REM 检查是否有 new-jars 目录
 if not exist "new-jars\" (
     echo.
-    echo ⚠️  请将新版本 JAR 放入 new-jars 目录后重新运行
+    echo  请将新版本 JAR 放入 new-jars 目录后重新运行
     goto :eof
 )
 
@@ -683,11 +683,11 @@ set SKIPPED=0
 for %%f in ("new-jars\*.jar") do (
     if exist "%LIB_DIR%\%%~nxf" (
         copy /y "%%f" "%LIB_DIR%\%%~nxf" > nul
-        echo 🔄 更新: %%~nxf
+        echo 更新: %%~nxf
         set /a UPDATED+=1
     ) else (
         copy "%%f" "%LIB_DIR%\" > nul
-        echo ➕ 新增: %%~nxf
+        echo 新增: %%~nxf
         set /a UPDATED+=1
     )
 )
@@ -738,7 +738,7 @@ for /r %%f in (%FILE_PATTERN%) do (
 )
 
 echo.
-echo ✅ 完成，处理了 %COUNT% 个文件
+echo ✓ 完成，处理了 %COUNT% 个文件
 goto :eof
 ```
 
@@ -764,7 +764,7 @@ schtasks /create ^
     /ru SYSTEM ^
     /f
 
-echo ✅ 定时任务已创建: %TASK_NAME%
+echo ✓ 定时任务已创建: %TASK_NAME%
 
 REM 其他常用调度模式：
 REM /sc minute /mo 30          每 30 分钟
@@ -807,21 +807,21 @@ powershell -Command ^
      catch { exit 1 }"
 
 if %errorlevel% equ 0 (
-    echo [%date% %time%] ✅ 服务正常
+    echo [%date% %time%] ✓ 服务正常
     set RESTART_COUNT=0
     goto :wait
 )
 
 REM 健康检查失败
-echo [%date% %time%] ❌ 服务异常
+echo [%date% %time%] ✗ 服务异常
 
 if !RESTART_COUNT! geq %MAX_RESTART% (
-    echo [%date% %time%] 🚨 已达最大重启次数 %MAX_RESTART%，停止监控
+    echo [%date% %time%] 已达最大重启次数 %MAX_RESTART%，停止监控
     goto :eof
 )
 
 set /a RESTART_COUNT+=1
-echo [%date% %time%] 🔄 第 !RESTART_COUNT! 次重启...
+echo [%date% %time%] 第 !RESTART_COUNT! 次重启...
 call restart-service.bat
 
 :wait
@@ -851,7 +851,7 @@ echo ━━━ 阶段1: 代码静态检查 ━━━
 echo 检查是否有未提交的代码...
 git diff --quiet
 if %errorlevel% neq 0 (
-    echo ⚠️  存在未提交的更改:
+    echo  存在未提交的更改:
     git status --short
 )
 
@@ -865,15 +865,15 @@ if exist "mvnw.cmd" (
 ) else if exist "gradlew.bat" (
     call gradlew.bat clean build -x test
 ) else (
-    echo ❌ 未找到构建工具
+    echo ✗ 未找到构建工具
     exit /b 1
 )
 
 if %errorlevel% neq 0 (
-    echo ❌ 构建失败
+    echo ✗ 构建失败
     exit /b 1
 )
-echo ✅ 构建成功
+echo ✓ 构建成功
 
 REM 阶段3: 测试
 echo.
@@ -885,10 +885,10 @@ if exist "mvnw.cmd" (
 )
 
 if %errorlevel% neq 0 (
-    echo ❌ 测试失败
+    echo ✗ 测试失败
     exit /b 1
 )
-echo ✅ 测试通过
+echo ✓ 测试通过
 
 REM 阶段4: 打包
 echo.
@@ -900,7 +900,7 @@ REM 复制 JAR 和配置文件
 for %%f in (target\*.jar build\libs\*.jar) do (
     if exist "%%f" (
         copy "%%f" "%DEPLOY_DIR%\" > nul
-        echo 📦 %%~nxf
+        echo %%~nxf
     )
 )
 
@@ -910,7 +910,7 @@ if exist "config\"             xcopy "config" "%DEPLOY_DIR%\config\" /e /i /y /q
 
 echo.
 echo ================================================
-echo ✅ 构建完成！部署包位置: %DEPLOY_DIR%
+echo ✓ 构建完成！部署包位置: %DEPLOY_DIR%
 echo ================================================
 goto :eof
 ```
@@ -925,16 +925,16 @@ goto :eof
 |------|:---:|:---:|
 | **出现年代** | 1980s (MS-DOS) | 2006 (Windows PowerShell) |
 | **Windows 最低版本** | 所有版本 | Windows 7 / Server 2008 R2+ |
-| **跨平台** | ❌ 仅 Windows | ✅ Windows / Linux / macOS (PS Core) |
+| **跨平台** | ✗ 仅 Windows | ✓ Windows / Linux / macOS (PS Core) |
 | **语法复杂度** | 简单但晦涩 | 丰富但学习曲线较陡 |
-| **字符串处理** | ⭐⭐ 有限 | ⭐⭐⭐⭐⭐ 强大 |
-| **JSON/XML 处理** | ❌ 需要外部工具 | ✅ 原生支持 |
-| **HTTP 请求** | ❌ 基本不可能 | ✅ `Invoke-WebRequest` |
-| **面向对象管道** | ❌ 纯文本管道 | ✅ 对象管道 |
-| **异常处理** | ⚠️ `errorlevel` 检查 | ✅ `try/catch/finally` |
-| **远程执行** | ❌ | ✅ `Invoke-Command` |
-| **执行策略限制** | 无限制 | ⚠️ 默认 Restricted |
-| **启动速度** | ⭐⭐⭐⭐⭐ 极快 | ⭐⭐⭐ 稍慢 |
+| **字符串处理** | ★★ 有限 | ★★★★★ 强大 |
+| **JSON/XML 处理** | ✗ 需要外部工具 | ✓ 原生支持 |
+| **HTTP 请求** | ✗ 基本不可能 | ✓ `Invoke-WebRequest` |
+| **面向对象管道** | ✗ 纯文本管道 | ✓ 对象管道 |
+| **异常处理** | `errorlevel` 检查 | ✓ `try/catch/finally` |
+| **远程执行** | ✗ | ✓ `Invoke-Command` |
+| **执行策略限制** | 无限制 | 默认 Restricted |
+| **启动速度** | ★★★★★ 极快 | ★★★ 稍慢 |
 
 ### 7.2 场景选型建议
 
@@ -966,10 +966,10 @@ powershell -Command ^
     "$r = Invoke-RestMethod -Uri 'http://localhost:8080/api/status'; ^
      if ($r.status -ne 'UP') { exit 1 }"
 
-echo ✅ 混合脚本执行完成
+echo ✓ 混合脚本执行完成
 ```
 
-> 🎯 **核心要点**：不要做"纯 Batch 或纯 PowerShell"的二选一——**Batch 做流程编排，PowerShell 做复杂计算**，这是 Windows 上最务实的脚本策略。
+> **核心要点**：不要做"纯 Batch 或纯 PowerShell"的二选一——**Batch 做流程编排，PowerShell 做复杂计算**，这是 Windows 上最务实的脚本策略。
 
 ---
 
@@ -1051,12 +1051,12 @@ set EXIT_SERVICE_STOP_TIMEOUT=11
 
 REM 使用示例
 if not defined JAVA_HOME (
-    echo ❌ JAVA_HOME 未设置
+    echo ✗ JAVA_HOME 未设置
     exit /b %EXIT_ENV_NOT_SET%
 )
 ```
 
-> 🎯 **核心要点**：Batch 是 Windows 上最"古老"但也是最"稳妥"的自动化方式——Maven Wrapper、Gradle Wrapper 都用 `.cmd`/`.bat`。掌握 Batch 语法是 Windows 平台 Java 开发者的必修课。
+> **核心要点**：Batch 是 Windows 上最"古老"但也是最"稳妥"的自动化方式——Maven Wrapper、Gradle Wrapper 都用 `.cmd`/`.bat`。掌握 Batch 语法是 Windows 平台 Java 开发者的必修课。
 
 ---
 

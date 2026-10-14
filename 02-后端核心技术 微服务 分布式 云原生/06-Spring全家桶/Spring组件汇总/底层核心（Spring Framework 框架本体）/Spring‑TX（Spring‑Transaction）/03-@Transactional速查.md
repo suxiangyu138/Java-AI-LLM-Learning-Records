@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [注解属性全表](#1-注解属性全表)
 2. [生效条件清单](#2-生效条件清单)
@@ -41,7 +41,7 @@
 | `rollbackFor` | RuntimeException/Error | **受检异常默认不回滚**（见 [07-回滚机制与测试速查](07-回滚机制与测试速查.md)） |
 | `transactionManager` | @Primary 管理器 | 多管理器必须显式指定 |
 
-> 🎯 **核心要点**：`readOnly=true` 不是数据库只读锁——是给框架的优化提示（JPA 关 dirty checking、JDBC 部分驱动跳过获取写锁）；真正只读约束在数据库层做。
+> **核心要点**：`readOnly=true` 不是数据库只读锁——是给框架的优化提示（JPA 关 dirty checking、JDBC 部分驱动跳过获取写锁）；真正只读约束在数据库层做。
 
 ### 1.1 属性组合实战
 
@@ -68,7 +68,7 @@ public void saveRow(Row row) { ... }
 | NESTED + noRollbackFor | 保存点部分回滚 + 可容忍业务异常 | 批量导入 |
 | REQUIRED + rollbackFor=Exception | 常规写操作统一回滚 | 团队默认规范 |
 
-> 💡 团队规范建议：**写方法统一 `rollbackFor = Exception.class`**——把"受检异常要不要回滚"的争论用一行配置终结（受检异常语义见 [07-回滚机制与测试速查](07-回滚机制与测试速查.md)）。
+> 团队规范建议：**写方法统一 `rollbackFor = Exception.class`**——把"受检异常要不要回滚"的争论用一行配置终结（受检异常语义见 [07-回滚机制与测试速查](07-回滚机制与测试速查.md)）。
 
 ### 1.2 属性默认值速记
 
@@ -81,7 +81,7 @@ public void saveRow(Row row) { ... }
 | rollbackFor | 运行时异常 + Error | 受检异常需显式声明 |
 | transactionManager | @Primary 管理器 | 多库必须显式指定 |
 
-> 🎯 **默认值心智**：六个默认值里只有"REQUIRED + 运行时回滚"是真正影响语义的；其余（isolation=DEFAULT、timeout=-1）是"不添乱"设计——**改默认值前先问自己：我真的需要吗**，这是事务配置最少化的原则。
+> **默认值心智**：六个默认值里只有"REQUIRED + 运行时回滚"是真正影响语义的；其余（isolation=DEFAULT、timeout=-1）是"不添乱"设计——**改默认值前先问自己：我真的需要吗**，这是事务配置最少化的原则。
 
 ## 2. 生效条件清单
 
@@ -98,18 +98,18 @@ public void saveRow(Row row) { ... }
 @Service
 public class OrderService {
     @Transactional
-    public void create(OrderCmd cmd) { ... }        // ✅ 外部调用生效
+    public void create(OrderCmd cmd) { ... }        // ✓ 外部调用生效
 
     @Transactional
-    private void secret() { ... }                    // ❌ private 永不生效
+    private void secret() { ... }                    // ✗ private 永不生效
 
     public void wrapper() {
-        create(cmd);                                  // ❌ 同类自调用：绕过代理
+        create(cmd);                                  // ✗ 同类自调用：绕过代理
     }
 }
 ```
 
-> 💡 构造器、初始化后回调（@PostConstruct）中调用事务方法同样不生效——代理还没就位/自调用。
+> 构造器、初始化后回调（@PostConstruct）中调用事务方法同样不生效——代理还没就位/自调用。
 
 ### 2.1 代理机制：JDK 接口代理 vs CGLIB
 
@@ -127,7 +127,7 @@ public class OrderService {
   自调用（this.method()）→ 直接到目标方法，拦截器不参与
 ```
 
-> ⚠️ **7.0 迁移重点**：存量"final 类 + @Transactional"在接口代理时代可用（代理对象基于接口生成），CGLIB 时代直接失效——升级时用 IDE 搜索 `final class` 与事务注解共存的位置逐一处理。
+> **7.0 迁移重点**：存量"final 类 + @Transactional"在接口代理时代可用（代理对象基于接口生成），CGLIB 时代直接失效——升级时用 IDE 搜索 `final class` 与事务注解共存的位置逐一处理。
 
 ### 2.2 生效验证的三种手段
 
@@ -152,7 +152,7 @@ class TxActiveTest {
 }
 ```
 
-> 🎯 **推荐组合**：本地用断点看代理类型，CI 用测试兜底，线上用 DEBUG 日志抽检——三种手段覆盖"开发期确认、回归期防退化、线上期定位"三个时段。
+> **推荐组合**：本地用断点看代理类型，CI 用测试兜底，线上用 DEBUG 日志抽检——三种手段覆盖"开发期确认、回归期防退化、线上期定位"三个时段。
 
 ### 2.3 生效条件的底层逻辑
 
@@ -168,7 +168,7 @@ class TxActiveTest {
   - 异常不匹配 → 事务开了但没回滚（语义问题，不是生效问题）
 ```
 
-> 🎯 **分类认知**：把失效场景分成两类处理——"没被拦"（代理/可见性问题，改结构）与"拦了没回滚"（异常/规则问题，改配置）——排查时先归类再动手，效率翻倍。
+> **分类认知**：把失效场景分成两类处理——"没被拦"（代理/可见性问题，改结构）与"拦了没回滚"（异常/规则问题，改配置）——排查时先归类再动手，效率翻倍。
 
 ## 3. 失效场景与原因
 
@@ -184,7 +184,7 @@ class TxActiveTest {
 | @Transactional 与代理初始化顺序 | BeanPostProcessor 时序 | 避免在构造器/@PostConstruct 内依赖事务能力 |
 | 7.0 final 类问题 | CGLIB 不能代理 final 类 | 去掉 final（7.0 默认 CGLIB 后需注意） |
 
-> ⚠️ **7.0 新坑**：Boot 4 默认 CGLIB——**final 类/方法、private 方法都不再被代理**（6.x JDK 接口代理时代 final 类反而可以）；把 @Transactional 放在 final 类上 7.0 会静默失效。
+> **7.0 新坑**：Boot 4 默认 CGLIB——**final 类/方法、private 方法都不再被代理**（6.x JDK 接口代理时代 final 类反而可以）；把 @Transactional 放在 final 类上 7.0 会静默失效。
 
 ### 3.1 更多失效边界与应对代码
 
@@ -206,8 +206,8 @@ public class OrderService {
     }
 
     public void wrapper() {
-        self.create(cmd);                               // ✅ 走代理
-        // this.create(cmd);                            // ❌ 绕过代理
+        self.create(cmd);                               // ✓ 走代理
+        // this.create(cmd);                            // ✗ 绕过代理
     }
 
     @Transactional
@@ -218,7 +218,7 @@ public class OrderService {
 // ③ 编程式：TransactionTemplate 包裹（见 06 篇）
 ```
 
-> 🎯 **失效排查口诀**：调用者是谁、方法 public 吗、类 final 吗、在容器里吗、异常类型对吗——五连问覆盖 95% 失效场景。
+> **失效排查口诀**：调用者是谁、方法 public 吗、类 final 吗、在容器里吗、异常类型对吗——五连问覆盖 95% 失效场景。
 
 ## 4. 拦截器链路：@Transactional 幕后
 
@@ -233,7 +233,7 @@ public class OrderService {
           5. 清理：解除绑定、归还连接
 ```
 
-> 🎯 **核心要点**：@Transactional 本质是 **TransactionInterceptor 的环绕通知**（AOP 概念）——拦截器的环绕逻辑定义在 `TransactionAspectSupport`（事务模板方法），业务方法只是被包裹的执行体；7.0 代理默认 CGLIB 只影响"如何生成代理"，链路不变。
+> **核心要点**：@Transactional 本质是 **TransactionInterceptor 的环绕通知**（AOP 概念）——拦截器的环绕逻辑定义在 `TransactionAspectSupport`（事务模板方法），业务方法只是被包裹的执行体；7.0 代理默认 CGLIB 只影响"如何生成代理"，链路不变。
 
 ### 4.1 TransactionAspectSupport 环绕逻辑细节
 
@@ -259,7 +259,7 @@ invokeWithinTransaction(method, targetClass, invocation)   ← 模板方法
 | 异常吞噬 | 拦截器不吞异常——回滚后原异常继续向外抛（调用方可见） |
 | 编程式兜底 | `TransactionAspectSupport.currentTransactionStatus()` 供捕获异常后标记回滚 |
 
-> 🎯 **核心理解**：拦截器的职责是"编排提交/回滚决策"，业务方法只是被包裹的执行体——try/catch 的边界即事务边界；"方法返回 = 提交点"的直觉来自 completeTransactionAfterReturning 这一步。
+> **核心理解**：拦截器的职责是"编排提交/回滚决策"，业务方法只是被包裹的执行体——try/catch 的边界即事务边界；"方法返回 = 提交点"的直觉来自 completeTransactionAfterReturning 这一步。
 
 ### 4.2 拦截器链路上的其他通知
 
@@ -273,18 +273,18 @@ invokeWithinTransaction(method, targetClass, invocation)   ← 模板方法
 | 异步切面 | `@Async` | 方法另起线程 | 事务边界在调用线程，异步方法内事务另算 |
 
 ```java
-// 典型误区：重试放在事务内（❌）——第一次失败已回滚，重试仍拿旧状态
+// 典型误区：重试放在事务内（✗）——第一次失败已回滚，重试仍拿旧状态
 @Transactional
-@Retryable(maxAttempts = 3)        // ❌ 重试逻辑在事务环绕内
+@Retryable(maxAttempts = 3)        // ✗ 重试逻辑在事务环绕内
 public void pay() { ... }
 
-// 正确姿势：重试在外、事务在内（✅）——每次尝试都是全新事务
-@Retryable(maxAttempts = 3)        // ✅ 重试包事务
+// 正确姿势：重试在外、事务在内（✓）——每次尝试都是全新事务
+@Retryable(maxAttempts = 3)        // ✓ 重试包事务
 @Transactional
 public void pay() { ... }
 ```
 
-> ⚠️ **顺序铁律**：**重试在外、事务在内**——`@Retryable` 在上、`@Transactional` 在下（声明顺序即优先级）；反了会导致"回滚后重试同一脏事务状态"或"重试次数内消耗同一连接"。
+> **顺序铁律**：**重试在外、事务在内**——`@Retryable` 在上、`@Transactional` 在下（声明顺序即优先级）；反了会导致"回滚后重试同一脏事务状态"或"重试次数内消耗同一连接"。
 
 ## 5. 类级 vs 方法级与组合使用
 
@@ -305,7 +305,7 @@ public class OrderQueryService {
 }
 ```
 
-> 💡 团队约定：**读接口类级 readOnly=true、写方法显式覆盖**——语义清晰且给 JPA 优化提示；注意同类的"读方法调写方法"仍是自调用陷阱（读方法代理内调 this.updateStatus 不走代理）。
+> 团队约定：**读接口类级 readOnly=true、写方法显式覆盖**——语义清晰且给 JPA 优化提示；注意同类的"读方法调写方法"仍是自调用陷阱（读方法代理内调 this.updateStatus 不走代理）。
 
 ### 5.1 面试追问与易错点
 
@@ -327,7 +327,7 @@ public class OrderQueryService {
 | 想在事务方法内修改注解参数 | 注解是编译期常量，运行时不可改——动态传播用编程式 |
 | 依赖 Spring Boot 自动代理不生效的旧姿势 | Boot 4 默认 `@EnableTransactionManagement` 已开启，无需手写 |
 
-> 🎯 **@Transactional 专题总结**：注解 = 属性声明（是什么）+ 代理机制（怎么拦）+ 拦截器（怎么做）三层；面试从"失效五连问"切入，再落到"拦截器环绕逻辑"，即覆盖该注解全部考点。
+> **@Transactional 专题总结**：注解 = 属性声明（是什么）+ 代理机制（怎么拦）+ 拦截器（怎么做）三层；面试从"失效五连问"切入，再落到"拦截器环绕逻辑"，即覆盖该注解全部考点。
 
 ---
 

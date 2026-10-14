@@ -2,7 +2,7 @@
 
 > 定位：组件通信全体系、插槽、生命周期、动态组件与异步组件——组件化是 Vue 复用的核心
 
-## 📚 目录
+## 目录
 
 1. [组件基础](#1-组件基础)
 2. [组件通信全景](#2-组件通信全景)
@@ -24,7 +24,7 @@
 </template>
 
 <script setup>
-// ⚠️ 声明 props（只读，不可修改）
+// 声明 props（只读，不可修改）
 const props = defineProps({
     title: { type: String, required: true },
     count: { type: Number, default: 0 },
@@ -49,7 +49,7 @@ const handleClick = () => emit('update', '新数据');
 </template>
 ```
 
-> 🎯 **要点**：SFC 三块（template/script/style）+ props（父传子，只读）+ emit（子传父事件）。`<script setup>` 是 Vue 3 标准写法。
+> **要点**：SFC 三块（template/script/style）+ props（父传子，只读）+ emit（子传父事件）。`<script setup>` 是 Vue 3 标准写法。
 
 ---
 
@@ -72,7 +72,7 @@ const handleClick = () => emit('update', '新数据');
 <!-- Counter.vue：自定义 v-model 组件（双向绑定核心模式） -->
 <script setup>
 const props = defineProps({
-    modelValue: { type: Number, default: 0 },   // ⚠️ v-model 约定名
+    modelValue: { type: Number, default: 0 },   // v-model 约定名
 });
 const emit = defineEmits(['update:modelValue']);
 
@@ -111,7 +111,7 @@ const theme = inject('theme', 'light');      // 默认值
 const userStore = inject('userStore');
 </script>
 
-<!-- ⚠️ 适用：深层嵌套（3 层以上）避免 props 逐层传递 -->
+<!-- 适用：深层嵌套（3 层以上）避免 props 逐层传递 -->
 <!-- 对比 Pinia：全局共享用 Pinia，局部跨层用 provide/inject -->
 ```
 
@@ -121,7 +121,7 @@ const userStore = inject('userStore');
 <!-- 子组件 -->
 <script setup>
 const innerMethod = () => '子组件方法';
-defineExpose({ innerMethod });               // ⚠️ 显式暴露
+defineExpose({ innerMethod });               // 显式暴露
 </script>
 
 <!-- 父组件 -->
@@ -172,13 +172,13 @@ const childRef = ref(null);
 
 <!-- 父组件：定制渲染 -->
 <List :items="items">
-    <template #item="{ item, index }">          <!-- ⚠️ 解构插槽 props -->
+    <template #item="{ item, index }">          <!-- 解构插槽 props -->
         <strong>{{ index + 1 }}. {{ item.name }}</strong>
     </template>
 </List>
 ```
 
-> 🎯 **要点**：插槽 = 组件的内容占位。具名插槽（#title）+ 作用域插槽（子传数据给父渲染）= 组件复用的高阶形态（表格/列表/布局组件必备）。
+> **要点**：插槽 = 组件的内容占位。具名插槽（#title）+ 作用域插槽（子传数据给父渲染）= 组件复用的高阶形态（表格/列表/布局组件必备）。
 
 ---
 
@@ -209,12 +209,12 @@ import { onMounted, onBeforeUnmount, ref } from 'vue';
 const timer = ref(null);
 
 onMounted(() => {
-    // ✅ 挂载后：DOM 可访问、发起请求、启动定时器
+    // ✓ 挂载后：DOM 可访问、发起请求、启动定时器
     timer.value = setInterval(() => { }, 1000);
 });
 
 onBeforeUnmount(() => {
-    // ⚠️ 卸载前：清理定时器/事件监听/连接（防内存泄漏）
+    // 卸载前：清理定时器/事件监听/连接（防内存泄漏）
     clearInterval(timer.value);
 });
 </script>
@@ -227,7 +227,7 @@ onBeforeUnmount(() => {
 更新：父 beforeUpdate → 子 beforeUpdate → 子 updated → 父 updated
 卸载：父 beforeUnmount → 子 beforeUnmount → 子 unmounted → 父 unmounted
 
-⚠️ 面试必答：
+面试必答：
 "子先挂载（mounted 内到子）、
  父后卸载（子先清理）——
  这是父组件等待子组件就绪的保证。"
@@ -250,7 +250,7 @@ const tabs = { TabA, TabB };
 </script>
 
 <template>
-    <!-- ⚠️ :is 动态切换组件 -->
+    <!-- :is 动态切换组件 -->
     <component :is="tabs[currentTab]"></component>
 
     <!-- KeepAlive：缓存组件状态（切换不销毁） -->
@@ -266,7 +266,7 @@ const tabs = { TabA, TabB };
 <script setup>
 import { defineAsyncComponent } from 'vue';
 
-// ⚠️ 懒加载：首次渲染才请求（路由/大组件必用）
+// 懒加载：首次渲染才请求（路由/大组件必用）
 const HeavyChart = defineAsyncComponent(() =>
     import('./HeavyChart.vue')
 );
@@ -286,11 +286,11 @@ const Report = defineAsyncComponent({
 </template>
 ```
 
-> 🎯 **要点**：动态组件（`:is`）+ KeepAlive（缓存状态）是 Tab 页签/多视图切换的标准方案；异步组件（defineAsyncComponent）是包体积优化的核心手段。
+> **要点**：动态组件（`:is`）+ KeepAlive（缓存状态）是 Tab 页签/多视图切换的标准方案；异步组件（defineAsyncComponent）是包体积优化的核心手段。
 
 ---
 
-> 🎯 **核心要点**：组件化体系 = **通信**（props/emit 为主，provide/inject 跨层，v-model 双向，Pinia 全局）+ **插槽**（具名 + 作用域定制渲染）+ **生命周期**（挂载清理对称，防泄漏）+ **动态/异步组件**（切换缓存 + 按需加载）。组件通信方式是 Vue 面试第一大题。
+> **核心要点**：组件化体系 = **通信**（props/emit 为主，provide/inject 跨层，v-model 双向，Pinia 全局）+ **插槽**（具名 + 作用域定制渲染）+ **生命周期**（挂载清理对称，防泄漏）+ **动态/异步组件**（切换缓存 + 按需加载）。组件通信方式是 Vue 面试第一大题。
 
 ---
 

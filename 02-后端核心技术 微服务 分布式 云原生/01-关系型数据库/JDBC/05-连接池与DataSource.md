@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [为什么需要连接池](#1-为什么需要连接池)
 2. [DataSource：连接工厂的标准接口](#2-datasource连接工厂的标准接口)
@@ -43,7 +43,7 @@
 | 控制 | 限制最大连接数（防压垮数据库） |
 | 管理 | 空闲回收/泄漏检测/健康检查 |
 
-> 🎯 **核心要点**：连接池 = "**创建贵（握手+认证）→ 预先建池复用**"——**"getConnection 是借、close 是还"**是理解连接池行为的第一认知（归还而非断开）。
+> **核心要点**：连接池 = "**创建贵（握手+认证）→ 预先建池复用**"——**"getConnection 是借、close 是还"**是理解连接池行为的第一认知（归还而非断开）。
 
 ---
 
@@ -70,9 +70,9 @@ try (Connection conn = ds.getConnection()) {    // 从池中"借"
 | 维度 | DriverManager | DataSource（连接池） |
 |------|:-------------:|:-------------------:|
 | 连接 | 每次新建 | **复用（池化）** |
-| 性能 | 差（高并发） | ✅ 好 |
+| 性能 | 差（高并发） | ✓ 好 |
 | 控制 | 无限制 | 最大连接/超时 |
-| 生产 | ❌ 学习/测试 | ✅ 标准 |
+| 生产 | ✗ 学习/测试 | ✓ 标准 |
 
 **为什么 Spring/框架都注入 DataSource**：
 
@@ -82,7 +82,7 @@ try (Connection conn = ds.getConnection()) {    // 从池中"借"
 监控：连接池暴露统计（活跃/空闲/等待）
 ```
 
-> 🎯 **核心要点**：DataSource = "**连接工厂标准（池化连接的抽象）**"——**"生产一律 DataSource（DriverManager 只教学用）"是规范**；面向接口让换连接池零成本（MyBatis/Spring 都注入它）。
+> **核心要点**：DataSource = "**连接工厂标准（池化连接的抽象）**"——**"生产一律 DataSource（DriverManager 只教学用）"是规范**；面向接口让换连接池零成本（MyBatis/Spring 都注入它）。
 
 ---
 
@@ -125,7 +125,7 @@ DataSource ds = new HikariDataSource(config);
 → 社区基准：比其他池快一个数量级（获取连接的微基准）
 ```
 
-> 🎯 **核心要点**：HikariCP = "**Spring Boot 默认（快：字节码代理 + 无锁设计）**"——**五参数（max/min/timeout/idle/max-lifetime）是调优基础**；生产优先考虑它（除非需要 Druid 的监控）。
+> **核心要点**：HikariCP = "**Spring Boot 默认（快：字节码代理 + 无锁设计）**"——**五参数（max/min/timeout/idle/max-lifetime）是调优基础**；生产优先考虑它（除非需要 Druid 的监控）。
 
 ---
 
@@ -157,13 +157,13 @@ spring:
 
 | 维度 | HikariCP | Druid |
 |------|:--------:|:-----:|
-| 性能 | ✅ 更快 | 中 |
-| 监控 | 基础（metrics） | **✅ 丰富（StatViewServlet）** |
-| SQL 防火墙 | ❌ | ✅ WallFilter |
+| 性能 | ✓ 更快 | 中 |
+| 监控 | 基础（metrics） | **✓ 丰富（StatViewServlet）** |
+| SQL 防火墙 | ✗ | ✓ WallFilter |
 | 生态 | Spring Boot 默认 | 阿里系 |
 | 选型 | **无监控需求首选** | 需要监控/防火墙 |
 
-> 🎯 **核心要点**：Druid = "**功能最全（监控页 + SQL 防火墙）**"——**"默认 HikariCP、要监控/防火墙选 Druid"**是 2026 选型结论；Druid 的 wall 过滤器是额外的注入防线（但预编译已是主防线）。
+> **核心要点**：Druid = "**功能最全（监控页 + SQL 防火墙）**"——**"默认 HikariCP、要监控/防火墙选 Druid"**是 2026 选型结论；Druid 的 wall 过滤器是额外的注入防线（但预编译已是主防线）。
 
 ---
 
@@ -201,7 +201,7 @@ spring:
 → 调优联动：连接池与线程池一起评估（见 Java多线程/06）
 ```
 
-> 🎯 **核心要点**：参数调优 = "**max-pool-size 按并发（核数×2+磁盘起步）+ 排队观察 + 与线程池联动**"——**"连接池 ≤ 线程池"是容量规划的约束**；max-lifetime 必须小于数据库 wait_timeout（防死连接）。
+> **核心要点**：参数调优 = "**max-pool-size 按并发（核数×2+磁盘起步）+ 排队观察 + 与线程池联动**"——**"连接池 ≤ 线程池"是容量规划的约束**；max-lifetime 必须小于数据库 wait_timeout（防死连接）。
 
 ---
 
@@ -237,7 +237,7 @@ spring:
 → 接入 Prometheus（HikariCP metrics 支持）
 ```
 
-> 🎯 **核心要点**：排查 = "**超时先看池是否耗尽 + 泄漏用 leakDetectionThreshold + 监控活跃/等待**"——**"连接泄漏 = 借了没还（close 未执行）"是最高频事故**（TWR 是根治规范）；池参数与线程池联动评估。
+> **核心要点**：排查 = "**超时先看池是否耗尽 + 泄漏用 leakDetectionThreshold + 监控活跃/等待**"——**"连接泄漏 = 借了没还（close 未执行）"是最高频事故**（TWR 是根治规范）；池参数与线程池联动评估。
 
 ---
 

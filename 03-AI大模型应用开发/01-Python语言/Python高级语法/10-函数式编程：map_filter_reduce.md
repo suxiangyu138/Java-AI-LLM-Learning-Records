@@ -1,6 +1,6 @@
 # 10 - 函数式编程：map / filter / reduce
 
-> 🎯 Python 虽然不是纯函数式语言，但内置的 map、filter、reduce + lambda + 推导式，构成了强大的数据处理流水线。AI 开发中数据预处理、特征提取、批量转换——函数式风格一行顶十行
+> Python 虽然不是纯函数式语言，但内置的 map、filter、reduce + lambda + 推导式，构成了强大的数据处理流水线。AI 开发中数据预处理、特征提取、批量转换——函数式风格一行顶十行
 
 ---
 
@@ -28,8 +28,8 @@ squared = list(map(lambda x: x**2, data))
 evens = list(filter(lambda x: x % 2 == 0, data))
 
 # 混合：推导式 + 函数
-names = list(map(str.upper, names))         # map + 已有函数 ✅
-admins = [u for u in users if u.is_admin]  # 推导式 + 条件 ✅
+names = list(map(str.upper, names))         # map + 已有函数 ✓
+admins = [u for u in users if u.is_admin]  # 推导式 + 条件 ✓
 ```
 
 ### 选择建议

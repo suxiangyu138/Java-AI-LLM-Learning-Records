@@ -101,7 +101,7 @@ BITOP OR dau:week1 dau:20260101 dau:20260102 dau:20260103
 BITCOUNT dau:week1
 ```
 
-> 💡 Bitmap 的 BITOP 支持 AND/OR/XOR/NOT 四种运算，可用于复杂的留存分析、用户画像场景。BITFIELD 支持批量设置和原子递增，适用于更复杂的位级操作。
+> Bitmap 的 BITOP 支持 AND/OR/XOR/NOT 四种运算，可用于复杂的留存分析、用户画像场景。BITFIELD 支持批量设置和原子递增，适用于更复杂的位级操作。
 
 ### 1.4 BITFIELD 进阶用法
 
@@ -124,7 +124,7 @@ BITFIELD mybitset OVERFLOW SAT INCRBY u8 0 1
 | 权限控制 | 每个 bit 代表一个权限 | RBAC 位图 |
 | 布尔状态存储 | 多个开关/标志位 | 用户设置 |
 
-> ⚠️ Bitmap 适合稀疏场景（大多数为 0，偶发为 1）。如果几乎所有位都会设置为 1，直接用 Set 会更合适。此外 Bitmap 的 offset 不能重复使用同一个 key 存不同业务的数据。
+> Bitmap 适合稀疏场景（大多数为 0，偶发为 1）。如果几乎所有位都会设置为 1，直接用 Set 会更合适。此外 Bitmap 的 offset 不能重复使用同一个 key 存不同业务的数据。
 
 ---
 
@@ -143,7 +143,7 @@ BITFIELD mybitset OVERFLOW SAT INCRBY u8 0 1
 | 是否可合并 | 可以，PFMERGE 合并多个 HLL |
 | 是否可删除元素 | 不可以，只能 PFADD 添加 |
 
-> 💡 12 KB 的固定内存意味着无论统计 1 万个 UV 还是 1 亿个 UV，都只占用 12 KB。这是 HyperLogLog 最核心的优势。
+> 12 KB 的固定内存意味着无论统计 1 万个 UV 还是 1 亿个 UV，都只占用 12 KB。这是 HyperLogLog 最核心的优势。
 
 ### 2.2 原理简述
 
@@ -226,7 +226,7 @@ public Long getWeekUV(String pageId, LocalDate date) {
 | 命令复杂度 | O(1) 添加，O(n) 返回 | O(1) 添加，O(1) 返回 |
 | 适合场景 | 小规模精确去重 | 海量 UV / PV 统计 |
 
-> 💡 很多公司的 PV/UV 报表使用 HyperLogLog 统计，误差 0.81% 在业务可接受范围内。对精度要求高的场景（如涉及金额、精确计数的场景），请使用 Set 或数据库。
+> 很多公司的 PV/UV 报表使用 HyperLogLog 统计，误差 0.81% 在业务可接受范围内。对精度要求高的场景（如涉及金额、精确计数的场景），请使用 Set 或数据库。
 
 ---
 
@@ -328,7 +328,7 @@ public List<Map<String, Object>> getNearbyShops(String key, double lng, double l
 }
 ```
 
-> 💡 GEO 的 GEORADIUS 和 GEORADIUSBYMEMBER 是 Redis 3.2 引入的原生命令，底层通过 ZSet 的 score 范围查询实现。精度足够满足大多数 LBS 场景，但地理围栏等复杂场景建议使用专业的 GIS 数据库。
+> GEO 的 GEORADIUS 和 GEORADIUSBYMEMBER 是 Redis 3.2 引入的原生命令，底层通过 ZSet 的 score 范围查询实现。精度足够满足大多数 LBS 场景，但地理围栏等复杂场景建议使用专业的 GIS 数据库。
 
 ---
 
@@ -490,7 +490,7 @@ Stream 适用场景：
 └── 发布订阅 → PUB/SUB
 ```
 
-> ⚠️ Redis Stream 适合中小规模的消息场景（QPS 万级）。如果你需要百万 QPS 的消息吞吐、消息持久化到磁盘、存储海量历史消息，请使用 Kafka / RabbitMQ / RocketMQ 等专业消息队列。
+> Redis Stream 适合中小规模的消息场景（QPS 万级）。如果你需要百万 QPS 的消息吞吐、消息持久化到磁盘、存储海量历史消息，请使用 Kafka / RabbitMQ / RocketMQ 等专业消息队列。
 
 ---
 
@@ -639,7 +639,7 @@ public class UserService {
 | 不可扩展 | 容量固定后无法扩容 | 用多个 Bloom Filter 分片 |
 | 无法遍历 | 不能获取已存储的元素 | 仅用于存在性判断 |
 
-> ⚠️ 布隆过滤器说"不存在"一定正确，说"存在"可能误判。业务场景需容忍误判，或在误判后再查一次精确存储兜底。
+> 布隆过滤器说"不存在"一定正确，说"存在"可能误判。业务场景需容忍误判，或在误判后再查一次精确存储兜底。
 
 ---
 
@@ -672,5 +672,5 @@ GEO 基于 ZSet + GeoHash 编码。GeoHash 将经纬度编码为 52 位整数作
 **Q: Bitmap 内存计算？**
 总 bit / 8 / 1024 / 1024 = MB。1 亿用户约 12.5 MB，每个用户每天 1 bit。
 
-> 🎯 高级数据结构的核心价值：用极低的内存成本解决特定的领域问题。Bitmap 解决状态标记、HyperLogLog 解决基数统计、Bloom Filter 解决存在性判断、GEO 解决位置查询、Stream 解决可靠消息。选型时优先考虑内存效率和业务匹配度。
+> 高级数据结构的核心价值：用极低的内存成本解决特定的领域问题。Bitmap 解决状态标记、HyperLogLog 解决基数统计、Bloom Filter 解决存在性判断、GEO 解决位置查询、Stream 解决可靠消息。选型时优先考虑内存效率和业务匹配度。
 

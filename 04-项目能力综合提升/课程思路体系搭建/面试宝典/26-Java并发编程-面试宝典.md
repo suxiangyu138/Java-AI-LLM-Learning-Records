@@ -32,7 +32,7 @@
 | 调用前提 | 无需 | **必须**在`synchronized`块内 |
 | 用途 | 暂停执行、模拟耗时 | 线程间通信协作 |
 
-> 💡 **核心记忆点**：`sleep`抱着锁睡，`wait`放手等通知。
+> **核心记忆点**：`sleep`抱着锁睡，`wait`放手等通知。
 
 ### 4. `synchronized`的底层实现原理是什么？
 **基于Monitor（管程）对象实现，依赖操作系统的Mutex Lock。**
@@ -72,7 +72,7 @@
 | 条件等待 | 一个等待集 | 多个`Condition` |
 | 解锁方式 | 自动释放 | 必须**手动`unlock()`**（常放`finally`） |
 
-> ⚠️ **注意**：`ReentrantLock`必须在`finally`中释放锁，否则异常时锁无法释放导致死锁。
+> **注意**：`ReentrantLock`必须在`finally`中释放锁，否则异常时锁无法释放导致死锁。
 
 ### 9. 线程池的核心参数有哪些？
 **`ThreadPoolExecutor`有7个核心参数**：
@@ -125,7 +125,7 @@
 - **`DiscardOldestPolicy`**：丢弃队列中最旧的任务（队首），然后重新提交。
 - **自定义**：实现`RejectedExecutionHandler`接口。
 
-> 🎯 **阿里开发规约**明确禁止使用`Executors.newFixedThreadPool()`（队列`Integer.MAX_VALUE`）和`Executors.newCachedThreadPool()`（最大线程`Integer.MAX_VALUE`），必须手动创建`ThreadPoolExecutor`。
+> **阿里开发规约**明确禁止使用`Executors.newFixedThreadPool()`（队列`Integer.MAX_VALUE`）和`Executors.newCachedThreadPool()`（最大线程`Integer.MAX_VALUE`），必须手动创建`ThreadPoolExecutor`。
 
 ### 15. AQS是什么？核心原理是什么？
 **AQS（AbstractQueuedSynchronizer）是Java并发包的基石，一个用于构建锁和同步器的框架。** 核心思想：
@@ -141,7 +141,7 @@
 - **Timer不支持循环调度**：`scheduleAtFixedRate`是`ScheduledThreadPoolExecutor`的优点。
 - **Timer无法处理异常**：运行时异常会终止Timer线程；`ScheduledThreadPoolExecutor`是多线程，异常仅影响当前任务。
 
-> 💡 **ScheduledThreadPoolExecutor**本质上是`ThreadPoolExecutor`的子类，使用`DelayedWorkQueue`（无界延迟队列）。
+> **ScheduledThreadPoolExecutor**本质上是`ThreadPoolExecutor`的子类，使用`DelayedWorkQueue`（无界延迟队列）。
 
 ### 17. `ConcurrentHashMap` JDK7和JDK8的区别？
 | 对比项 | JDK7 | JDK8 |
@@ -167,7 +167,7 @@
 - **`RecursiveAction`**：无返回值的任务。
 - **`ForkJoinTask`**：任务抽象基类。
 
-> ⚠️ **适用条件**：任务可拆分的计算密集型场景（如归并排序、矩阵乘法），不适合IO密集型。
+> **适用条件**：任务可拆分的计算密集型场景（如归并排序、矩阵乘法），不适合IO密集型。
 
 ### 20. `LongAdder`的原理是什么？相比`AtomicLong`的优势？
 **LongAdder采用分段CAS + 最终求和**的思想解决高并发下CAS自旋开销大的问题。内部维护一个`base`变量和一个`Cell[]`数组，线程通过hash映射到不同Cell上执行CAS累加，最后求和时`sum() = base + sum(Cells)`。
@@ -195,7 +195,7 @@ JDK 6之后`synchronized`是**可伸缩的锁**，根据竞争程度自动升级
 
 **偏向锁撤销**：当其他线程尝试获取偏向锁时，需**等待全局安全点（SafePoint）**，暂停偏向线程，检查其是否存活。这是偏向锁在JDK 15、JDK 21中被逐步废弃的原因之一。
 
-> 🎯 **字节跳动面试题**："描述一个`synchronized`方法被5个线程轮流调用的锁开销变化。"
+> **字节跳动面试题**："描述一个`synchronized`方法被5个线程轮流调用的锁开销变化。"
 
 ### 2. AQS源码分析——ReentrantLock的lock()流程
 
@@ -224,7 +224,7 @@ public final void acquire(int arg) {
 4. **acquireQueued**：在循环中判断前驱是否为`head`，若是则再次尝试获取锁；否则通过`shouldParkAfterFailedAcquire()`和`parkAndCheckInterrupt()`挂起线程。
 5. **unlock()**：`state-1`，若为0则释放锁，唤醒后继节点的线程（`unparkSuccessor`）。
 
-> 💡 **关键设计**：非公平锁在`acquire()`前后各有一个CAS抢锁机会，而非天然排到队尾。
+> **关键设计**：非公平锁在`acquire()`前后各有一个CAS抢锁机会，而非天然排到队尾。
 
 ### 3. ReentrantLock的公平锁如何实现？
 
@@ -251,7 +251,7 @@ protected final boolean tryAcquire(int acquires) {
 
 **`hasQueuedPredecessors()`逻辑**：如果CLH队列中`head.next`存在且不是当前线程，返回`true`（有前驱），当前线程不能抢锁，排队。如果队列为空或`head.next`是当前线程，返回`false`，可以尝试获取。
 
-> ⚠️ 公平锁不保证绝对公平，线程调度仍然存在不确定性，但**不会出现线程饥饿**。
+> 公平锁不保证绝对公平，线程调度仍然存在不确定性，但**不会出现线程饥饿**。
 
 ### 4. volatile的内存屏障机制
 
@@ -327,7 +327,7 @@ JDK8的扩容叫**transfer()**，多个线程共同完成：
 4. 迁移完成后在旧桶位置设置`ForwardingNode`（`fwd`），标记已完成。
 5. 其他线程在put/get时遇到`fwd`节点，调用`helpTransfer()`协助扩容。
 
-> 🎯 **美团面试题**："JDK8 ConcurrentHashMap在多线程并发put时可能会触发扩容，描述扩容过程中怎么保证数据一致性。"
+> **美团面试题**："JDK8 ConcurrentHashMap在多线程并发put时可能会触发扩容，描述扩容过程中怎么保证数据一致性。"
 
 ### 7. ThreadPoolExecutor的execute()完整流程
 
@@ -401,7 +401,7 @@ finally {
 }
 ```
 
-> ⚠️ **千万注意**：`remove()`会同时删除key和value；`set(null)`只将value置为null，key还是弱引用，Entry还在。必须用`remove()`。
+> **千万注意**：`remove()`会同时删除key和value；`set(null)`只将value置为null，key还是弱引用，Entry还在。必须用`remove()`。
 
 ### 10. CAS的ABA问题及解决方案
 
@@ -535,7 +535,7 @@ CompletableFuture.supplyAsync(() -> riskyOp())
    - 如果在GC线程（`VM Thread`） → 频繁GC导致CPU高，需排查内存泄漏。
 5. **排查GC**：`jstat -gcutil pid 1000`观察GC频率和Full GC情况。
 
-> 💡 **速查口诀**：`top`看进程，`top -H`找线程，`jstack`查堆栈，`jstat`看GC。
+> **速查口诀**：`top`看进程，`top -H`找线程，`jstack`查堆栈，`jstat`看GC。
 
 ### 2. 如何设计一个线程池参数？
 **场景**：一个订单处理系统，峰值500QPS，每个订单处理耗时约50ms（包含DB操作和RPC调用）。
@@ -855,7 +855,7 @@ public class AdderCounter {
 }
 ```
 
-> 💡 **选择建议**：简单计数选`AtomicInteger`；高并发写远多于读选`LongAdder`；有版本号或比较需求选`AtomicStampedReference`。
+> **选择建议**：简单计数选`AtomicInteger`；高并发写远多于读选`LongAdder`；有版本号或比较需求选`AtomicStampedReference`。
 
 ---
 
@@ -1359,7 +1359,7 @@ public class HashedWheelTimer {
 }
 ```
 
-> 🎯 **海量任务优化**：使用分层时间轮（类似Kafka），高层时间轮一个槽代表低层时间轮一圈，节约内存。
+> **海量任务优化**：使用分层时间轮（类似Kafka），高层时间轮一个槽代表低层时间轮一圈，节约内存。
 
 ---
 
@@ -1531,7 +1531,7 @@ public class HashedWheelTimer {
 - [ ] 线程池参数调优（CPU密集型 vs IO密集型）
 - [ ] 阿里Java开发手册并发规约
 
-> 🎯 **面试加分项**：JDK 21虚拟线程（Virtual Threads）——轻量级线程，适用于IO密集型场景，可大幅减少线程池复杂度和上下文切换开销。面试中提到"虚拟线程会改变高并发编程范式"是高级话题。
+> **面试加分项**：JDK 21虚拟线程（Virtual Threads）——轻量级线程，适用于IO密集型场景，可大幅减少线程池复杂度和上下文切换开销。面试中提到"虚拟线程会改变高并发编程范式"是高级话题。
 
 ---
 

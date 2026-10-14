@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [LangGraph Platform 全景](#1-langgraph-platform-全景)
 2. [LangGraph Server：自建 API 服务](#2-langgraph-server自建-api-服务)
@@ -56,11 +56,11 @@ LangGraph Platform 四个组件：
 ```text
 LangGraph Server = 把你的 Graph 包装成 HTTP API 服务
 内置：
-  ✅ REST API（Threads, Runs, Streaming）
-  ✅ Checkpoint 管理（PostgresSaver 自动集成）
-  ✅ 水平扩展（多实例共享 Postgres）
-  ✅ 异步任务（长时间运行的后台任务）
-  ✅ CORS / Auth（可配置）
+  ✓ REST API（Threads, Runs, Streaming）
+  ✓ Checkpoint 管理（PostgresSaver 自动集成）
+  ✓ 水平扩展（多实例共享 Postgres）
+  ✓ 异步任务（长时间运行的后台任务）
+  ✓ CORS / Auth（可配置）
 ```
 
 ### 2.2 项目结构
@@ -197,11 +197,11 @@ curl -X POST http://localhost:8123/threads/user-123/runs/stream \
 
 ```text
 LangGraph Cloud = LangGraph Server 的托管版本
-  ✅ 一键部署（从 GitHub 仓库）
-  ✅ 自动缩放
-  ✅ 内置监控（LangSmith 集成）
-  ✅ 无服务器（按用量计费）
-  ✅ 内置认证
+  ✓ 一键部署（从 GitHub 仓库）
+  ✓ 自动缩放
+  ✓ 内置监控（LangSmith 集成）
+  ✓ 无服务器（按用量计费）
+  ✓ 内置认证
 
 适合：
   → 不想自己运维数据库和服务器
@@ -232,12 +232,12 @@ langgraph deploy \
 
 ```text
 LangGraph Studio 可以：
-  ✅ 可视化 Graph 结构（节点、边、条件分支）
-  ✅ 实时查看每个 Node 的输入/输出
-  ✅ 查看 Checkpoint 历史
-  ✅ 手动触发节点执行（Step-through）
-  ✅ Human-in-the-Loop 调试
-  ✅ LLM Token 和延迟分析
+  ✓ 可视化 Graph 结构（节点、边、条件分支）
+  ✓ 实时查看每个 Node 的输入/输出
+  ✓ 查看 Checkpoint 历史
+  ✓ 手动触发节点执行（Step-through）
+  ✓ Human-in-the-Loop 调试
+  ✓ LLM Token 和延迟分析
 ```
 
 ### 4.2 启动
@@ -274,10 +274,10 @@ langgraph dev --studio-port 8124
 LangGraph Assistant API = 在 LangGraph Server 之上的更高层封装
 
 内置：
-  ✅ 多 Assistant 管理（一个 Server 跑多个 Agent）
-  ✅ Assistant 配置（模型、工具、Prompt 模板）
-  ✅ 版本管理（Assistant v1, v2...）
-  ✅ 内置 Tool 注册
+  ✓ 多 Assistant 管理（一个 Server 跑多个 Agent）
+  ✓ Assistant 配置（模型、工具、Prompt 模板）
+  ✓ 版本管理（Assistant v1, v2...）
+  ✓ 内置 Tool 注册
 ```
 
 ### 5.2 配置 Assistant
@@ -617,7 +617,7 @@ uvicorn app:app \
 
 ---
 
-> 🎯 **核心要点**：LangGraph Server 是生产部署的最优解——内置 REST API + Checkpoint 管理 + 水平扩展能力。对于 Java 团队，推荐架构 4（Spring Boot → LangGraph Server），Java 负责业务和权限，Python 负责 Agent 编排。PostgresSaver 是唯一的生产级 Checkpointer 选择。
+> **核心要点**：LangGraph Server 是生产部署的最优解——内置 REST API + Checkpoint 管理 + 水平扩展能力。对于 Java 团队，推荐架构 4（Spring Boot → LangGraph Server），Java 负责业务和权限，Python 负责 Agent 编排。PostgresSaver 是唯一的生产级 Checkpointer 选择。
 
 ---
 

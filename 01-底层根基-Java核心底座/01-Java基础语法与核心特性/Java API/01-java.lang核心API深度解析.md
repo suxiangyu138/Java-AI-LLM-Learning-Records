@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [Object 类深度剖析](#1-object-类深度剖析)
 2. [String 不可变性与内存模型](#2-string-不可变性与内存模型)
@@ -62,13 +62,13 @@ public boolean equals(Object o) {
 | **传递性** | 若 `x.equals(y)` 且 `y.equals(z)` 则 `x.equals(z)` | 集合中元素行为不一致 |
 | **一致性** | 未修改的对象的多次 `equals` 调用结果不变 | 依赖可变字段会导致集合查找不可预测 |
 
-> 💡 **关于 instanceof 还是 getClass**
+> **关于 instanceof 还是 getClass**
 >
 > - `getClass()` 校验：更严格，子类对象与父类对象永不等价 —— 符合 **对称性**
 > - `instanceof` 校验：允许子类与父类比较，但容易触发 **对称性** 违规
 > - **推荐做法**：若类被设计为可被继承（如抽象类中的逻辑相等），父类用 `instanceof` 并允许子类扩展；若类被设计为 `final`（如 `Integer`、`String`），用 `getClass()` 更安全
 
-> 🎯 **核心要点**：重写 `equals` 必须同时重写 `hashCode`，否则该类在 `HashMap` / `HashSet` / `HashTable` 中行为异常。
+> **核心要点**：重写 `equals` 必须同时重写 `hashCode`，否则该类在 `HashMap` / `HashSet` / `HashTable` 中行为异常。
 
 ### 1.3 hashCode 方法 —— 哈希碰撞与分布
 
@@ -101,7 +101,7 @@ public int hashCode() {
 | `return Objects.hashCode(name) * 31 + age` | 低 | 高（无数组开销） | 热路径优化 |
 | **Lombok `@EqualsAndHashCode`** | 低 | 中等 | 项目已用 Lombok |
 
-> ⚠️ **不要在 hashCode 中使用随机值或线程敏感字段**，否则违反一致性。
+> **不要在 hashCode 中使用随机值或线程敏感字段**，否则违反一致性。
 
 ### 1.4 toString 最佳实践
 
@@ -184,7 +184,7 @@ protected Object clone() throws CloneNotSupportedException {
 | 默认实现 | `super.clone()` | 需要手动实现 |
 | 修改子对象是否影响原对象 | 影响 | 不影响 |
 
-> 💡 **生产实践中推荐用拷贝工厂或序列化代替 clone()**
+> **生产实践中推荐用拷贝工厂或序列化代替 clone()**
 >
 > ```java
 > // 推荐：拷贝构造函数
@@ -238,7 +238,7 @@ StringBuilder sb = (StringBuilder) clazz.getDeclaredConstructor().newInstance();
 | **存在更好的替代** | `try-with-resources`、`Cleaner`（Java 9+）、`AutoCloseable` |
 
 ```java
-// ❌ 已废弃的方式
+// ✗ 已废弃的方式
 @Override
 protected void finalize() throws Throwable {
     try {
@@ -248,12 +248,12 @@ protected void finalize() throws Throwable {
     }
 }
 
-// ✅ 推荐方式：try-with-resources
+// ✓ 推荐方式：try-with-resources
 try (FileInputStream in = new FileInputStream("data.txt")) {
     // 处理文件 ...
 } // 自动关闭，确定及时
 
-// ✅ 或使用 Cleaner（Java 9+）
+// ✓ 或使用 Cleaner（Java 9+）
 public class Resource implements AutoCloseable {
     private static final Cleaner CLEANER = Cleaner.create();
     private final Cleaner.Cleanable cleanable;
@@ -272,7 +272,7 @@ public class Resource implements AutoCloseable {
 }
 ```
 
-> 🎯 **核心要点**：永远不要依赖 `finalize()` 来关闭资源。使用 `try-with-resources`（`AutoCloseable`）或 `Cleaner`（Java 9+）来保证资源确定性释放。
+> **核心要点**：永远不要依赖 `finalize()` 来关闭资源。使用 `try-with-resources`（`AutoCloseable`）或 `Cleaner`（Java 9+）来保证资源确定性释放。
 
 ---
 
@@ -340,7 +340,7 @@ System.out.println(s2 == s3);  // true  —— intern 返回池中对象
 
 #### intern() 的使用建议
 
-> ⚠️ **大量使用 intern() 需要仔细评估**。对重复字符串做 intern 可以节省大量内存，但字符串池的存储和维护本身消耗一定性能。
+> **大量使用 intern() 需要仔细评估**。对重复字符串做 intern 可以节省大量内存，但字符串池的存储和维护本身消耗一定性能。
 
 ```java
 // 场景：亿级日志中的用户 ID 去重
@@ -376,7 +376,7 @@ String s = new String("abc");
 // 所以总共创建了 2 个对象（池中 + 堆中）
 ```
 
-> 💡 **注意**：如果字符串由 `new String("ab" + "c")` 在编译期常量折叠后生成的，行为同上。如果 `new String("a" + new String("b"))` 则涉及 StringBuilder，情况更复杂。
+> **注意**：如果字符串由 `new String("ab" + "c")` 在编译期常量折叠后生成的，行为同上。如果 `new String("a" + new String("b"))` 则涉及 StringBuilder，情况更复杂。
 
 ### 2.4 JDK 9+ 紧凑字符串（Compact Strings）
 
@@ -405,7 +405,7 @@ public int length() {
 }
 ```
 
-> 🎯 **核心要点**：Java 9+ 的 Compact Strings 让英文为主的字符串内存占用降低一半，且对开发者完全透明。日常开发无需主动适配，但面试和性能分析场景要知道底层变化。
+> **核心要点**：Java 9+ 的 Compact Strings 让英文为主的字符串内存占用降低一半，且对开发者完全透明。日常开发无需主动适配，但面试和性能分析场景要知道底层变化。
 
 ### 2.5 == vs equals — 彻底理解
 
@@ -440,7 +440,7 @@ if (inputString.equals("hello")) {   // 若 inputString 为 null 则 NPE
 // 循环拼接字符串时性能差异巨大
 String s = "";
 for (int i = 0; i < 10000; i++) {
-    s += i;        // ❌ 每次循环创建多个临时对象：Integer → String → StringBuilder → String
+    s += i;        // ✗ 每次循环创建多个临时对象：Integer → String → StringBuilder → String
 }
 
 // 推荐方式
@@ -455,8 +455,8 @@ String result = sb.toString();
 
 | 特性 | StringBuilder | StringBuffer |
 |------|--------------|-------------|
-| **线程安全** | ❌ 非线程安全 | ✅ 方法使用 `synchronized` |
-| **性能** | ⭐ 最高（无锁开销） | ⭐⭐ 次之（有锁开销） |
+| **线程安全** | ✗ 非线程安全 | ✓ 方法使用 `synchronized` |
+| **性能** | ★ 最高（无锁开销） | ★★ 次之（有锁开销） |
 | **引入版本** | JDK 1.5 | JDK 1.0（原始） |
 | **适用场景** | **单线程**字符串拼接 | **多线程**共享可变字符串 |
 | **默认容量** | 16 | 16 |
@@ -471,7 +471,7 @@ String result = sb.toString();
 | `StringBuilder.append()` | ~8 ms | 最快 |
 | `StringBuffer.append()` | ~15 ms | 有 synchronized 开销 |
 
-> ⚠️ **StringBuffer 的使用已经很少**。现代 Java 多线程场景中，StringBuilder + 局部变量（每个线程有自己的 StringBuilder）远比 StringBuffer 更高效。StringBuffer 仅在确实需要跨线程共享同一个可变字符串时使用。
+> **StringBuffer 的使用已经很少**。现代 Java 多线程场景中，StringBuilder + 局部变量（每个线程有自己的 StringBuilder）远比 StringBuffer 更高效。StringBuffer 仅在确实需要跨线程共享同一个可变字符串时使用。
 
 #### 常见面试题
 
@@ -518,7 +518,7 @@ String msg = "Hello, %s!".formatted("World");  // "Hello, World!"
 String joined = String.join(", ", "A", "B", "C");  // "A, B, C"
 ```
 
-> 🎯 **核心要点**：String 不可变性是 Java 安全模型和性能优化的基石；非线程安全场景始终用 StringBuilder；`equals` 才是内容比较，`==` 只比引用；JDK 9+ 紧凑字符串对英文场景节省 50% 内存。
+> **核心要点**：String 不可变性是 Java 安全模型和性能优化的基石；非线程安全场景始终用 StringBuilder；`equals` 才是内容比较，`==` 只比引用；JDK 9+ 紧凑字符串对英文场景节省 50% 内存。
 
 ---
 
@@ -601,13 +601,13 @@ System.out.println(c.equals(d));  // true  —— 内容相同
 
 | 类型 | 缓存范围 | 可配置？ |
 |------|---------|:-------:|
-| `Byte` | **全部**（-128 ~ 127） | ❌ |
-| `Short` | -128 ~ 127 | ❌ |
-| `Integer` | -128 ~ 127 | ✅ `-XX:AutoBoxCacheMax=2000` |
-| `Long` | -128 ~ 127 | ❌ |
-| `Character` | 0 ~ 127（ASCII 全量） | ❌ |
-| `Boolean` | `true` / `false` 两个实例 | ❌ |
-| `Float` / `Double` | **不缓存** | ❌ |
+| `Byte` | **全部**（-128 ~ 127） | ✗ |
+| `Short` | -128 ~ 127 | ✗ |
+| `Integer` | -128 ~ 127 | ✓ `-XX:AutoBoxCacheMax=2000` |
+| `Long` | -128 ~ 127 | ✗ |
+| `Character` | 0 ~ 127（ASCII 全量） | ✗ |
+| `Boolean` | `true` / `false` 两个实例 | ✗ |
+| `Float` / `Double` | **不缓存** | ✗ |
 
 ```java
 // 修改 Integer 缓存上限（JVM 参数）
@@ -624,8 +624,8 @@ System.out.println("Cache size: " + cacheData.length);
 ### 3.4 valueOf vs new Integer()
 
 ```java
-Integer a = Integer.valueOf(42);   // ✅ 优先使用 —— 使用缓存
-Integer b = new Integer(42);       // ❌ 避免使用 —— 始终创建新对象（JDK 9 起 marked @Deprecated）
+Integer a = Integer.valueOf(42);   // ✓ 优先使用 —— 使用缓存
+Integer b = new Integer(42);       // ✗ 避免使用 —— 始终创建新对象（JDK 9 起 marked @Deprecated）
 ```
 
 | 方式 | 对象创建策略 | 适用场景 |
@@ -633,12 +633,12 @@ Integer b = new Integer(42);       // ❌ 避免使用 —— 始终创建新对
 | `Integer.valueOf(n)` | 使用缓存（范围内返回缓存对象） | **始终推荐** |
 | `new Integer(n)` | 无论值大小都创建新对象 | 几乎不使用（已废弃） |
 
-> 💡 `new Integer()` / `new Long()` / `new Short()` 在 JDK 9 中已被标记为 `@Deprecated`，建议统一使用 `valueOf()` 或自动装箱。
+> `new Integer()` / `new Long()` / `new Short()` 在 JDK 9 中已被标记为 `@Deprecated`，建议统一使用 `valueOf()` 或自动装箱。
 
 ### 3.5 性能陷阱：循环中装箱的 GC 压力
 
 ```java
-// ❌ 问题代码 —— 大量自动装箱导致 GC 风暴
+// ✗ 问题代码 —— 大量自动装箱导致 GC 风暴
 long sum = 0L;
 for (long i = 0; i < Integer.MAX_VALUE; i++) {
     sum += i;     // Long 类型的 sum 被反复装箱拆箱
@@ -647,7 +647,7 @@ for (long i = 0; i < Integer.MAX_VALUE; i++) {
 // sum = Long.valueOf(sum.longValue() + i);
 // 导致产生大量 Long 临时对象
 
-// ✅ 正确做法 —— 使用基本类型
+// ✓ 正确做法 —— 使用基本类型
 long sum = 0L;
 for (long i = 0; i < Integer.MAX_VALUE; i++) {
     sum += i;     // 基本类型运算，无装箱
@@ -663,14 +663,14 @@ for (long i = 0; i < Integer.MAX_VALUE; i++) {
 // 根本原因：每次运算产生临时 Long 对象 → GC 频繁触发
 ```
 
-> ⚠️ **包装类在集合中是合理的**（泛型不支持基本类型），但在算法计算、循环累加等场景，使用基本类型可避免不必要的 GC 压力。
+> **包装类在集合中是合理的**（泛型不支持基本类型），但在算法计算、循环累加等场景，使用基本类型可避免不必要的 GC 压力。
 
 ### 3.6 parseInt vs valueOf
 
 ```java
 int n1 = Integer.parseInt("42");     // 返回基本类型 int
 Integer n2 = Integer.valueOf("42");  // 返回包装类 Integer
-Integer n3 = Integer.parseInt("42"); // ❌ 编译错误，parseInt 返回 int
+Integer n3 = Integer.parseInt("42"); // ✗ 编译错误，parseInt 返回 int
 ```
 
 | 方法 | 返回类型 | 内部实现 | 适用场景 |
@@ -681,11 +681,11 @@ Integer n3 = Integer.parseInt("42"); // ❌ 编译错误，parseInt 返回 int
 ```java
 // 常见错误
 String s = "123";
-int sum = Integer.parseInt(s) + 456;    // ✅ 直接计算
+int sum = Integer.parseInt(s) + 456;    // ✓ 直接计算
 
 List<Integer> list = new ArrayList<>();
-list.add(Integer.valueOf(s));            // ✅ 显式装箱
-list.add(Integer.parseInt(s));           // ❌ 编译错误
+list.add(Integer.valueOf(s));            // ✓ 显式装箱
+list.add(Integer.parseInt(s));           // ✗ 编译错误
 ```
 
 ### 3.7 比较规则总结
@@ -709,7 +709,7 @@ e == f;              // true  —— Integer 自动拆箱为 int 后比较值
 c.equals(d);         // true  —— 逻辑相等
 ```
 
-> 🎯 **核心要点**：包装类优先使用 `valueOf()`；缓存在 -128~127 范围内；循环计算用基本类型防 GC 压力；比较始终用 `equals` 而非 `==`（除非你知道两侧是否在缓存范围内）。
+> **核心要点**：包装类优先使用 `valueOf()`；缓存在 -128~127 范围内；循环计算用基本类型防 GC 压力；比较始终用 `equals` 而非 `==`（除非你知道两侧是否在缓存范围内）。
 
 ---
 
@@ -766,26 +766,26 @@ long currentNs = System.nanoTime();           // 相对时间（纳秒），用�
 |----------|----------------------|-------------|
 | **含义** | 当前**绝对时间**（wall clock） | 当前 JVM 运行以来的相对**纳秒数** |
 | **精度/分辨率** | 毫秒（实际精度取决于 OS，约 1~15ms） | 纳秒（实际精度取决于硬件，约微秒级） |
-| **单调性** | ❌ 可被系统时间修改、NTP 同步调整 | ✅ 单调递增（同一 JVM 实例内） |
+| **单调性** | ✗ 可被系统时间修改、NTP 同步调整 | ✓ 单调递增（同一 JVM 实例内） |
 | **用途** | 日志时间戳、数据库记录、业务时间 | 性能测试、代码耗时分析 |
 | **JDK 18+ 改进** | `currentTimeMillis()` 精度提升 | — |
 
 ```java
-// ✅ 正确用法
+// ✓ 正确用法
 long start = System.nanoTime();
 // ... 执行代码 ...
 long elapsed = System.nanoTime() - start;
 System.out.printf("耗时: %.2f ms%n", elapsed / 1_000_000.0);
 
-// ❌ 错误用法：用 nanoTime 取"当前时间"
+// ✗ 错误用法：用 nanoTime 取"当前时间"
 System.out.println(new Date(System.nanoTime() / 1_000_000));  // 无意义
 
-// ✅ 记录时间戳应用 currentTimeMillis
+// ✓ 记录时间戳应用 currentTimeMillis
 logger.info("用户登录: userId={}, time={}",
         userId, Instant.now());  // JDK 8+
 ```
 
-> 💡 性能基准测试请使用 JMH（Java Microbenchmark Harness）而非 `nanoTime`，因为 JIT 编译、代码预热等会严重影响单点测量结果。
+> 性能基准测试请使用 JMH（Java Microbenchmark Harness）而非 `nanoTime`，因为 JIT 编译、代码预热等会严重影响单点测量结果。
 
 ### 4.4 System.arraycopy() vs Arrays.copyOf()
 
@@ -853,7 +853,7 @@ envMap.forEach((key, value) ->
 | 对比 | `getProperty()` | `getenv()` |
 |------|----------------|------------|
 | 来源 | JVM 参数 `-Dkey=value` 或 `setProperty()` | 操作系统环境变量 |
-| 运行时修改 | ✅ 可动态修改 | ❌ 只读 |
+| 运行时修改 | ✓ 可动态修改 | ✗ 只读 |
 | 作用域 | JVM 实例级别 | 进程级别 |
 | 敏感信息 | 不推荐存密码 | 不推荐存密码 |
 
@@ -870,7 +870,7 @@ System.gc();  // 只是"建议"JVM 执行 GC，不保证立即执行
 | **是否忽略** | 可通过 `-XX:+DisableExplicitGC` 禁用 |
 | **生产建议** | **永远不要在生产代码中显式调用** |
 
-> ⚠️ **例外**：某些性能基准测试框架（如 JMH）会在 `@TearDown` 阶段调用 `System.gc()` 以减少测试间的 GC 干扰。除此以外，请交给 JVM 自行决定。
+> **例外**：某些性能基准测试框架（如 JMH）会在 `@TearDown` 阶段调用 `System.gc()` 以减少测试间的 GC 干扰。除此以外，请交给 JVM 自行决定。
 
 ### 4.7 Runtime 类深度
 
@@ -906,7 +906,7 @@ rt.halt(1);   // 强制退出，不执行 shutdown hook
 Process process = Runtime.getRuntime().exec("ping google.com");
 ```
 
-> ⚠️ **Runtime.exec() 的安全注意事项**
+> **Runtime.exec() 的安全注意事项**
 
 | 风险类别 | 说明 | 建议 |
 |---------|------|------|
@@ -916,7 +916,7 @@ Process process = Runtime.getRuntime().exec("ping google.com");
 | **资源泄露** | 未调用 `process.destroy()` 可能导致进程残留 | 在 `finally` 中确保销毁 |
 
 ```java
-// ✅ 推荐使用 ProcessBuilder
+// ✓ 推荐使用 ProcessBuilder
 ProcessBuilder pb = new ProcessBuilder(
         "ping", "-c", "4", "google.com"  // 参数分离，避免注入
 );
@@ -936,7 +936,7 @@ int exitCode = process.waitFor();
 System.out.println("Exit code: " + exitCode);
 ```
 
-> 🎯 **核心要点**：`System.out` / `err` 是 PrintStream，可重定向；`nanoTime` 用于测耗时，`currentTimeMillis` 用于取时间戳；`arraycopy` 是 native 最高效；`System.gc()` 不可靠，生产环境绝不用；`Runtime.exec()` 注意安全。
+> **核心要点**：`System.out` / `err` 是 PrintStream，可重定向；`nanoTime` 用于测耗时，`currentTimeMillis` 用于取时间戳；`arraycopy` 是 native 最高效；`System.gc()` 不可靠，生产环境绝不用；`Runtime.exec()` 注意安全。
 
 ---
 
@@ -970,7 +970,7 @@ Math.absExact(-10);      // Java 15+，溢出时抛 ArithmeticException
 Math.abs(-2147483648);   // 若 Java 15 以下，需自行检查
 ```
 
-> ⚠️ `Math.abs(Integer.MIN_VALUE)` 返回负数。因为 Integer.MIN_VALUE = -2,147,483,648，其绝对值为 2,147,483,648，但 int 最大值为 2,147,483,647，正好越界 1。使用 `Math.absExact()`（Java 15+）抛出异常代替静默错误。
+> `Math.abs(Integer.MIN_VALUE)` 返回负数。因为 Integer.MIN_VALUE = -2,147,483,648，其绝对值为 2,147,483,648，但 int 最大值为 2,147,483,647，正好越界 1。使用 `Math.absExact()`（Java 15+）抛出异常代替静默错误。
 
 #### 幂、平方根与指数
 
@@ -1024,8 +1024,8 @@ double d = StrictMath.cos(1.0);
 
 | 特性 | `Math` | `StrictMath` |
 |------|--------|-------------|
-| **平台一致性** | ❌ 不同平台结果最后几位可能不同 | ✅ 结果完全确定、可重现 |
-| **性能** | ⭐ 较快（使用 CPU 平台的 native 实现，如 x86 的 `fsin`） | ⭐ 稍慢（使用 FDMLib 参考实现） |
+| **平台一致性** | ✗ 不同平台结果最后几位可能不同 | ✓ 结果完全确定、可重现 |
+| **性能** | ★ 较快（使用 CPU 平台的 native 实现，如 x86 的 `fsin`） | ★ 稍慢（使用 FDMLib 参考实现） |
 | **实现方式** | 部分委托给 StrictMath，部分用平台相关代码 | 纯 Java 实现（严格遵循 IEEE 754） |
 | **适用场景** | 绝大多数场景（游戏、图形、日常计算） | **科学计算**、加密校验、需要精确可重现结果的场景 |
 
@@ -1038,7 +1038,7 @@ public static double sin(double a) {
 }
 ```
 
-> 💡 **实际上**：在 x86/x64 平台上，`Math.sin()` 通过 native 方法使用 CPU 的 `fsin` 指令，性能比 StrictMath 的 Java 实现快；但在某些平台上结果精度有差异。对绝大多数业务应用，**完全不需要关注这个差异**，用 Math 即可。
+> **实际上**：在 x86/x64 平台上，`Math.sin()` 通过 native 方法使用 CPU 的 `fsin` 指令，性能比 StrictMath 的 Java 实现快；但在某些平台上结果精度有差异。对绝大多数业务应用，**完全不需要关注这个差异**，用 Math 即可。
 
 ### 5.3 Java 9+ Math 新增方法（clamp 等）
 
@@ -1134,11 +1134,11 @@ BigDecimal a = new BigDecimal("0.1");
 BigDecimal b = new BigDecimal("0.2");
 BigDecimal c = a.add(b);          // 0.3 精确
 // 永远不要用 BigDecimal(double) 构造
-new BigDecimal(0.1);              // ❌ 0.100000000000000005551115...
-new BigDecimal("0.1");            // ✅ 0.1
+new BigDecimal(0.1);              // ✗ 0.100000000000000005551115...
+new BigDecimal("0.1");            // ✓ 0.1
 ```
 
-> 🎯 **核心要点**：绝大多数场景用 `Math` 即可，无需关心与 `StrictMath` 的差异；精确运算（`addExact`、`multiplyExact`）可避免整数溢出引入的 bug；浮点数比较使用差值法；金融计算用 `BigDecimal`。
+> **核心要点**：绝大多数场景用 `Math` 即可，无需关心与 `StrictMath` 的差异；精确运算（`addExact`、`multiplyExact`）可避免整数溢出引入的 bug；浮点数比较使用差值法；金融计算用 `BigDecimal`。
 
 ---
 
@@ -1155,7 +1155,7 @@ new BigDecimal("0.1");            // ✅ 0.1
 - 使用 `Objects` 工具类
 
 <details>
-<summary>💡 点击查看参考答案</summary>
+<summary>点击查看参考答案</summary>
 
 ```java
 public class Book {
@@ -1200,7 +1200,7 @@ public class Book {
 }
 ```
 
-> 🎯 **练习题核心**：`equals` 只依赖 `isbn` 字段，同时 `hashCode` 也只依赖 `isbn`。这是"以业务标识进行逻辑相等"的典型模式。
+> **练习题核心**：`equals` 只依赖 `isbn` 字段，同时 `hashCode` 也只依赖 `isbn`。这是"以业务标识进行逻辑相等"的典型模式。
 </details>
 
 ---
@@ -1232,7 +1232,7 @@ public class StringInternQuiz {
 ```
 
 <details>
-<summary>💡 点击查看参考答案</summary>
+<summary>点击查看参考答案</summary>
 
 ```java
 s1 == s2;    // false — s1 是池中对象，s2 是堆中对象
@@ -1244,7 +1244,7 @@ s1 == s7;    // true  — s6.intern() 将新字符串入池，池中有则返回
 s3 == s7;    // true  — 两者都是从池中获取到的 "hello" 对象引用
 ```
 
-> 🎯 **练习题核心**：编译期常量折叠、运行时字符串拼接、`intern()` 方法的行为。
+> **练习题核心**：编译期常量折叠、运行时字符串拼接、`intern()` 方法的行为。
 </details>
 
 ---
@@ -1284,7 +1284,7 @@ public class IntegerCacheQuiz {
 ```
 
 <details>
-<summary>💡 点击查看参考答案</summary>
+<summary>点击查看参考答案</summary>
 
 ```java
 a == b;     // true  — 自动装箱调用 valueOf(100)，100 在 [-128,127] 缓存内，返回同一对象
@@ -1298,7 +1298,7 @@ new Integer(100) == new Integer(100);    // false — 两个不同的堆对象
 new Integer(100).equals(new Integer(100)); // true — equals 比较的是值
 ```
 
-> 🎯 **练习题核心**：Integer 缓存范围、`==` vs `equals`、混合类型比较时的自动拆箱。
+> **练习题核心**：Integer 缓存范围、`==` vs `equals`、混合类型比较时的自动拆箱。
 </details>
 
 ---
@@ -1328,7 +1328,7 @@ for (int i = 0; i < 10000; i++) {
 ```
 
 <details>
-<summary>💡 点击查看参考答案</summary>
+<summary>点击查看参考答案</summary>
 
 性能排序：C > B >> A（差异可达数千倍）。
 
@@ -1356,12 +1356,12 @@ append 10000 个数字字符串，总长度约 38890 个字符，扩容次数大
 - B 方式：约 20 次扩容，线性增长，可控
 - C 方式：无扩容，线性增长，最快
 
-> 🎯 **练习题核心**：预分配 StringBuilder 容量避免多次扩容，是高频字符串操作的关键优化。
+> **练习题核心**：预分配 StringBuilder 容量避免多次扩容，是高频字符串操作的关键优化。
 </details>
 
 ---
 
-> 💡 以上练习建议全部手写一遍，理解 `==` vs `equals`、`intern()` 行为、缓存范围、`StringBuilder` 效率差异，这些是面试和日常开发中最容易出错的点。
+> 以上练习建议全部手写一遍，理解 `==` vs `equals`、`intern()` 行为、缓存范围、`StringBuilder` 效率差异，这些是面试和日常开发中最容易出错的点。
 
 ---
 

@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [Java 生态集成总览](#1-java-生态集成总览)
 2. [Spring AI：VectorStore 配置与使用](#2-spring-aivectorstore-配置与使用)
@@ -39,7 +39,7 @@
 
 **选型建议**：Spring Boot 项目无脑 Spring AI（官方维护、配置即用）；需要更细的检索控制（重排/多路召回编排）用 LangChain4j；两者皆可混合（底层都是同一个 milvus-sdk-java）。
 
-> 🎯 **核心要点**：Java 生态的集成路径 = "**Spring AI（配置化默认）或 LangChain4j（灵活控制）**"，底层共用 `milvus-sdk-java`——**先选框架抽象，再落 SDK 细节**。
+> **核心要点**：Java 生态的集成路径 = "**Spring AI（配置化默认）或 LangChain4j（灵活控制）**"，底层共用 `milvus-sdk-java`——**先选框架抽象，再落 SDK 细节**。
 
 ---
 
@@ -119,7 +119,7 @@ public class ChatWithRag {
 }
 ```
 
-> 🎯 **核心要点**：Spring AI 的集成 = "**配置（yml）+ 注入（VectorStore）+ 三方法（add/similaritySearch/delete）**"——框架替你处理切分、Embedding、Milvus 写入的全部细节；`filterExpression` 是检索过滤的入口（对应 Milvus 的 expr）。
+> **核心要点**：Spring AI 的集成 = "**配置（yml）+ 注入（VectorStore）+ 三方法（add/similaritySearch/delete）**"——框架替你处理切分、Embedding、Milvus 写入的全部细节；`filterExpression` 是检索过滤的入口（对应 Milvus 的 expr）。
 
 ---
 
@@ -167,7 +167,7 @@ List<EmbeddingMatch<TextSegment>> reranked = reranker.rerank(
 | 文档生态 | 与 Boot 文档一体 | 功能多但文档较散 |
 | 适合 | **Spring Boot 标准项目** | 需要细粒度编排的项目 |
 
-> 🎯 **核心要点**：LangChain4j 的价值 = "**更细的检索编排**"——**召回 Top-50 → Cross-Encoder 重排 → Top-5** 是 RAG 质量优化的标准动作（本地 ONNX 重排模型免 API 调用）。Java 重排链路是 LangChain4j 相对 Spring AI 的差异化能力。
+> **核心要点**：LangChain4j 的价值 = "**更细的检索编排**"——**召回 Top-50 → Cross-Encoder 重排 → Top-5** 是 RAG 质量优化的标准动作（本地 ONNX 重排模型免 API 调用）。Java 重排链路是 LangChain4j 相对 Spring AI 的差异化能力。
 
 ---
 
@@ -205,7 +205,7 @@ Java：业务服务（检索 → 重排 → LLM 回答）
 Dify/Coze：低代码 RAG 应用（内置 Milvus 集成，快速搭建）
 ```
 
-> 🎯 **核心要点**：生态分工的行业实践 = "**Python 管"造数据"（管道）、Java 管"用数据"（检索+生成）**"——两端都直连 Milvus，数据管道与业务服务解耦。
+> **核心要点**：生态分工的行业实践 = "**Python 管"造数据"（管道）、Java 管"用数据"（检索+生成）**"——两端都直连 Milvus，数据管道与业务服务解耦。
 
 ---
 
@@ -245,7 +245,7 @@ public class RagController {
 3. **权限过滤**：多租户/权限在检索的 `filterExpression` 中注入（不能只靠 LLM）；
 4. **评估闭环**：上线前用评测集测 Hit Rate/Recall（见 06 模块第 6 节）。
 
-> 🎯 **核心要点**：RAG 集成链路的两个"不要"——**不要无阈值硬回答**（检索不到就明说）、**不要无溯源输出**（答案要能回指原文）——做到这两点，RAG 才从"Demo"变成"产品"。
+> **核心要点**：RAG 集成链路的两个"不要"——**不要无阈值硬回答**（检索不到就明说）、**不要无溯源输出**（答案要能回指原文）——做到这两点，RAG 才从"Demo"变成"产品"。
 
 ---
 
@@ -274,7 +274,7 @@ conversation_log = Collection("session_log") # 短期情景（TTL 过期）
 # ④ 动态写入：对话结束 → 提炼关键信息 → upsert 到记忆库
 ```
 
-> 🎯 **核心要点**：Agent Memory 的 Milvus 实践 = "**按记忆类型分库 + 实体 TTL 过期 + 检索作为工具**"——多 Collection 架构（不同语义空间分开）是召回率的关键（单库混装会导致语义空间混杂，见 `02-RAG检索增强生成/10`）。
+> **核心要点**：Agent Memory 的 Milvus 实践 = "**按记忆类型分库 + 实体 TTL 过期 + 检索作为工具**"——多 Collection 架构（不同语义空间分开）是召回率的关键（单库混装会导致语义空间混杂，见 `02-RAG检索增强生成/10`）。
 
 ---
 

@@ -1,6 +1,6 @@
 # 06 - Agent Skills 实战与最佳实践
 
-> 🎯 从设计到上线：掌握 Skill 的命名、验参、容错、监控、版本管理等生产级最佳实践
+> 从设计到上线：掌握 Skill 的命名、验参、容错、监控、版本管理等生产级最佳实践
 
 ---
 
@@ -39,21 +39,21 @@
 Skill 粒度判断公式：
 
   原子 Skill（对 LLM 暴露）：
-    token_cost < 500 tokens/次  ✅
-    调用频率 > 10 次/会话       ✅
-    可被其他 Skill 复用         ✅
-    LLM 需要在中间干预决策      ✅
+    token_cost < 500 tokens/次  ✓
+    调用频率 > 10 次/会话       ✓
+    可被其他 Skill 复用         ✓
+    LLM 需要在中间干预决策      ✓
 
   复合 Skill（内部组合，对外暴露一个）：
-    3-8 个原子步骤             ✅
-    固定流程，不需要 LLM 决策  ✅
-    整体调用频率高             ✅
+    3-8 个原子步骤             ✓
+    固定流程，不需要 LLM 决策  ✓
+    整体调用频率高             ✓
     
   过粗的 Skill（应该拆分的信号）：
-    description 超过 300 字    ⚠️
-    参数超过 8 个               ⚠️
-    输出结构深度 > 3 层         ⚠️
-    名称包含 "and" 或 "or"     ⚠️
+    description 超过 300 字    
+    参数超过 8 个               
+    输出结构深度 > 3 层         
+    名称包含 "and" 或 "or"     
 ```
 
 ---
@@ -65,13 +65,13 @@ Skill 粒度判断公式：
 ```text
 Skill 命名公式：{动词}_{名词}_{可选限定词}
 
-✅ 好的命名：
+✓ 好的命名：
   search_code         动词+名词，清晰
   analyze_security    动词+名词，明确
   deploy_k8s          动词+名词+限定词
   generate_test_java  动词+名词+限定词
 
-❌ 不好的命名：
+✗ 不好的命名：
   doStuff             太模糊
   handle              不完整
   processData         太泛化
@@ -116,7 +116,7 @@ skill_description:
 ### 2.3 描述验证清单
 
 ```text
-✅ Skill 描述质量检查清单：
+✓ Skill 描述质量检查清单：
 
 □ 读到 description 前两句话就能判断何时使用
 □ when_to_use 覆盖了最常见的 3 种触发场景
@@ -196,11 +196,11 @@ public class ParameterValidator {
 ```text
 好的错误信息 = LLM 能据此调整策略
 
-❌ 坏错误：
+✗ 坏错误：
   "Error: invalid parameter"
   → LLM 不知道哪个参数错了、怎么改
 
-✅ 好错误：
+✓ 好错误：
   {
     "error": "INVALID_PARAMETER",
     "parameter": "max_results",
@@ -219,12 +219,12 @@ public class ParameterValidator {
 
 | 场景 | 策略 | 实现 | 对 LLM 透明 |
 |------|------|------|:---:|
-| **网络超时** | 指数退避重试 | RetryDecorator | ✅ |
-| **限流(429)** | 等待 Retry-After | RateLimitHandler | ✅ |
-| **服务降级** | 返回缓存/默认值 | FallbackHandler | ⚠️ 需告知 |
-| **部分失败** | 返回部分结果+警告 | PartialResultWrapper | ❌ 必须告知 |
-| **数据校验失败** | 立即返回错误 | ValidationError | ❌ 必须告知 |
-| **依赖 Skill 失败** | 跳过/终止/人工 | CircuitBreaker | ⚠️ 需告知 |
+| **网络超时** | 指数退避重试 | RetryDecorator | ✓ |
+| **限流(429)** | 等待 Retry-After | RateLimitHandler | ✓ |
+| **服务降级** | 返回缓存/默认值 | FallbackHandler | 需告知 |
+| **部分失败** | 返回部分结果+警告 | PartialResultWrapper | ✗ 必须告知 |
+| **数据校验失败** | 立即返回错误 | ValidationError | ✗ 必须告知 |
+| **依赖 Skill 失败** | 跳过/终止/人工 | CircuitBreaker | 需告知 |
 
 ### 4.2 弹性模式代码
 
@@ -317,17 +317,17 @@ public class ResilientSkillExecutor {
 ┌─────────────────────────────────────────────────────────┐
 │  Skill 调用必须记录的维度                                  │
 ├─────────────────────────────────────────────────────────┤
-│  📊 调用指标（Metrics）                                    │
+│  调用指标（Metrics）                                    │
 │  • 调用次数（按 skill_name）                              │
 │  • 成功率、失败率                                         │
 │  • P50/P95/P99 延迟                                     │
 │  • Token 消耗（LLM 调用 Skill 的决策 Token）             │
 │                                                          │
-│  📝 调用日志（Logging）                                    │
+│  调用日志（Logging）                                    │
 │  • 调用时间、Skill 名称、输入参数（脱敏）                   │
 │  • 执行耗时、输出摘要、错误信息                             │
 │                                                          │
-│  🔍 调用追踪（Tracing）                                    │
+│  调用追踪（Tracing）                                    │
 │  • TraceID: 完整 Agent 调用链                             │
 │  • SpanID: 单个 Skill 调用                               │
 │  • Parent Span: 上层编排 Skill                            │
@@ -411,20 +411,20 @@ public class SkillObservabilityInterceptor {
 Skill 版本号：MAJOR.MINOR.PATCH
 
   PATCH (1.0.x)：Bug 修复，行为不变
-    ✅ 修复 regex 匹配错误
-    ✅ 优化内部实现，结果不变
+    ✓ 修复 regex 匹配错误
+    ✓ 优化内部实现，结果不变
     → 自动升级，无需通知
 
   MINOR (1.x.0)：新增参数/能力，向后兼容
-    ✅ 新增可选参数
-    ✅ 新增 output 字段
-    ✅ 支持新的输入格式
+    ✓ 新增可选参数
+    ✓ 新增 output 字段
+    ✓ 支持新的输入格式
     → 建议升级，旧调用方不受影响
 
   MAJOR (x.0.0)：破坏性变更
-    ⚠️ 移除参数
-    ⚠️ 修改 output 结构
-    ⚠️ 改变行为语义
+    移除参数
+    修改 output 结构
+    改变行为语义
     → 旧版本保留 N 个月，新调用方用新版本
 ```
 
@@ -499,7 +499,7 @@ public class VersionedSkillRegistry {
 ### 7.2 反模式代码示例
 
 ```java
-// ❌ 反模式 1：万能 Skill
+// ✗ 反模式 1：万能 Skill
 @Tool("处理用户请求")
 public Object handleRequest(String request) {
     // 一个函数里做了搜索、分析、创建、通知所有事
@@ -510,12 +510,12 @@ public Object handleRequest(String request) {
     // LLM 无法精确选择，只能全量传入
 }
 
-// ✅ 正确：拆分为独立 Skill
+// ✓ 正确：拆分为独立 Skill
 @Tool("搜索知识库中的文档") public SearchResult searchDocs(...) { }
 @Tool("分析代码质量")        public AnalysisResult analyzeCode(...) { }
 @Tool("创建工作项")          public WorkItem createTask(...) { }
 
-// ❌ 反模式 4：静默失败
+// ✗ 反模式 4：静默失败
 @Tool("部署服务")
 public String deploy(String serviceName) {
     try {
@@ -525,7 +525,7 @@ public String deploy(String serviceName) {
     }
 }
 
-// ✅ 正确：返回结构化错误
+// ✓ 正确：返回结构化错误
 @Tool("部署服务")
 public DeployResult deploy(String serviceName) {
     try {
@@ -540,13 +540,13 @@ public DeployResult deploy(String serviceName) {
     }
 }
 
-// ❌ 反模式 9：Token 浪费
+// ✗ 反模式 9：Token 浪费
 @Tool("读取文件")
 public String readFile(String path) {
     return Files.readString(Path.of(path));  // 10万行代码全返回！
 }
 
-// ✅ 正确：返回摘要 + 分页接口
+// ✓ 正确：返回摘要 + 分页接口
 @Tool("读取文件")
 public FileContent readFile(String path,
     @ToolParam("起始行，默认1") Integer startLine,
@@ -556,7 +556,7 @@ public FileContent readFile(String path,
 }
 ```
 
-> 🎯 **核心要点**：好的 Skill = 精准的命名描述 + 严格的参数校验 + 内置的容错机制 + 完善的可观测性 + 规范的版本管理。避开十大反模式，Skill 体系才能持续健康运转
+> **核心要点**：好的 Skill = 精准的命名描述 + 严格的参数校验 + 内置的容错机制 + 完善的可观测性 + 规范的版本管理。避开十大反模式，Skill 体系才能持续健康运转
 
 ---
 

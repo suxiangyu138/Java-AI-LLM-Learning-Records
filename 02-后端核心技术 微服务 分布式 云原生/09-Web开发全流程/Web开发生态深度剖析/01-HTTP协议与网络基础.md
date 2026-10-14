@@ -2,7 +2,7 @@
 
 > 定位：HTTP 版本演进、请求响应结构、状态码体系、HTTPS/TLS、Cookie 机制——Web 通信的底层语言
 
-## 📚 目录
+## 目录
 
 1. [HTTP 协议版本演进](#1-http-协议版本演进)
 2. [请求与响应结构](#2-请求与响应结构)
@@ -23,7 +23,7 @@
 | HTTP/3 | QUIC（UDP）+ 0-RTT | 生态普及中 |
 
 ```
-⚠️ 面试必答：
+面试必答：
 "HTTP 演进主线——1.1 持久连接（解决连接开销）、
  2.0 多路复用（解决队头阻塞）、
  3.0 QUIC（解决 TCP 队头阻塞 + 快速握手）。"
@@ -61,13 +61,13 @@
 
 | HTTP 方法 | 语义 | 幂等 |
 |-----------|------|:---:|
-| GET | 查询 | ✅ |
-| POST | 创建 | ❌ |
-| PUT | 全量更新 | ✅ |
-| PATCH | 部分更新 | ❌ |
-| DELETE | 删除 | ✅ |
+| GET | 查询 | ✓ |
+| POST | 创建 | ✗ |
+| PUT | 全量更新 | ✓ |
+| PATCH | 部分更新 | ✗ |
+| DELETE | 删除 | ✓ |
 
-> 🎯 **要点**：请求 = 行 + 头 + 体；响应 = 行 + 头 + 体。**方法语义 + 幂等性**是 API 设计基础（GET/PUT/DELETE 幂等可重试）。
+> **要点**：请求 = 行 + 头 + 体；响应 = 行 + 头 + 体。**方法语义 + 幂等性**是 API 设计基础（GET/PUT/DELETE 幂等可重试）。
 
 ---
 
@@ -81,12 +81,12 @@
 | 5xx | 500-599 | 服务端错误（500 内部/502 网关/503 不可用/504 超时） |
 
 ```
-⚠️ 高频辨析：
+高频辨析：
   401 vs 403：未认证（没登录）vs 无权限（权限不够）
   301 vs 302：永久重定向（SEO）vs 临时重定向
   502 vs 504：网关收到无效响应 vs 网关超时
 
-⚠️ 面试必答：
+面试必答：
 "状态码四类——2xx 成功、3xx 重定向、
  4xx 客户端错、5xx 服务端错；
  401/403、301/302、502/504 是辨析重点。"
@@ -108,7 +108,7 @@ TLS 握手流程：
   ④ 用公钥加密密钥发给服务器
   ⑤ 双方用对称密钥加密通信
 
-⚠️ 面试必答：
+面试必答：
 "HTTPS 两层——证书验证身份（非对称）、
  密钥加密数据（对称）；
  握手的关键是'安全地交换对称密钥'。"
@@ -121,7 +121,7 @@ TLS 握手流程：
   浏览器 ←→ Nginx（443，证书在 Nginx）
   Nginx ←→ Tomcat（内网 HTTP 或 TLS）
   
-⚠️ 面试必答：
+面试必答：
 "证书通常部署在 Nginx 层——
  内部链路（Nginx → Tomcat）可 HTTP；
  全链路加密（mTLS）用于金融等强安全场景。"
@@ -144,11 +144,11 @@ Cookie = 服务器下发、浏览器存储的小文本（≤4KB）
 属性：
   Domain/Path：作用域
   Expires/Max-Age：过期
-  HttpOnly：⚠️ JS 不可读（防 XSS 窃取）
+  HttpOnly：JS 不可读（防 XSS 窃取）
   Secure：仅 HTTPS 传输
   SameSite：CSRF 防护（Lax/Strict）
 
-⚠️ 面试必答：
+面试必答：
 "Cookie 四属性关键——HttpOnly（防 XSS）、
  Secure（防明文）、SameSite（防 CSRF）、
  Domain/Path（作用域）。"
@@ -169,15 +169,15 @@ Cookie = 服务器下发、浏览器存储的小文本（≤4KB）
 | 头 | 作用 | 安全相关 |
 |-----|------|:---:|
 | Content-Type | 内容类型（JSON/表单） | |
-| Authorization | 认证令牌（Bearer JWT） | ✅ |
+| Authorization | 认证令牌（Bearer JWT） | ✓ |
 | Cache-Control | 缓存策略（max-age） | |
-| CORS 头 | 跨域（Access-Control-*） | ✅ |
-| X-Forwarded-For | 真实客户端 IP | ⚠️ 可伪造 |
-| Content-Security-Policy | CSP 内容安全策略 | ✅ 防 XSS |
-| Strict-Transport-Security | HSTS 强制 HTTPS | ✅ |
+| CORS 头 | 跨域（Access-Control-*） | ✓ |
+| X-Forwarded-For | 真实客户端 IP | 可伪造 |
+| Content-Security-Policy | CSP 内容安全策略 | ✓ 防 XSS |
+| Strict-Transport-Security | HSTS 强制 HTTPS | ✓ |
 
 ```
-⚠️ 面试必答：
+面试必答：
 "安全头三件套——CSP（防 XSS 脚本执行）、
  HSTS（强制 HTTPS）、CORS 配置（跨域白名单）；
  认证靠 Authorization 头（JWT）。"
@@ -185,7 +185,7 @@ Cookie = 服务器下发、浏览器存储的小文本（≤4KB）
 
 ---
 
-> 🎯 **核心要点**：HTTP 体系 = **版本演进**（1.1 持久 → 2.0 复用 → 3.0 QUIC）+ **请求响应结构**（行/头/体）+ **状态码四类**（401/403、301/302 辨析）+ **HTTPS**（证书验身份 + 密钥加密）+ **Cookie 四属性**（HttpOnly/Secure/SameSite）+ **安全头**（CSP/HSTS/CORS）。"一次请求的协议层"全在这。
+> **核心要点**：HTTP 体系 = **版本演进**（1.1 持久 → 2.0 复用 → 3.0 QUIC）+ **请求响应结构**（行/头/体）+ **状态码四类**（401/403、301/302 辨析）+ **HTTPS**（证书验身份 + 密钥加密）+ **Cookie 四属性**（HttpOnly/Secure/SameSite）+ **安全头**（CSP/HSTS/CORS）。"一次请求的协议层"全在这。
 
 ---
 

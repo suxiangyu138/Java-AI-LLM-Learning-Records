@@ -23,7 +23,7 @@
 - **DQL**：用来查询表中的数据。核心关键字是 `SELECT`，常配合 `FROM`、`WHERE`、`GROUP BY`、`HAVING`、`ORDER BY`、`LIMIT` 使用。
 - **DCL**：用来管理数据库用户和权限。关键字包括 `GRANT`、`REVOKE`、`CREATE USER`。
 
-> 💡 面试中常问 `TRUNCATE` 属于 DDL 而非 DML，因为它会隐式提交事务且无法回滚。
+> 面试中常问 `TRUNCATE` 属于 DDL 而非 DML，因为它会隐式提交事务且无法回滚。
 
 ### 2. DQL 语句的执行顺序是什么？
 > SQL 的执行顺序与书写顺序不同，理解执行顺序对优化查询至关重要。
@@ -43,7 +43,7 @@ FROM -> WHERE -> GROUP BY -> HAVING -> SELECT -> ORDER BY -> LIMIT
 6. **ORDER BY**：对结果排序
 7. **LIMIT**：分页截取
 
-> 🎯 理解执行顺序有助于优化：`WHERE` 阶段过滤越多，后续处理的数据量越小。
+> 理解执行顺序有助于优化：`WHERE` 阶段过滤越多，后续处理的数据量越小。
 
 ### 3. MySQL 的常用聚合函数有哪些？
 > 聚合函数作用于一组数据并返回单个值，常与 `GROUP BY` 搭配使用。
@@ -56,7 +56,7 @@ FROM -> WHERE -> GROUP BY -> HAVING -> SELECT -> ORDER BY -> LIMIT
 | `MAX()` | 求最大值 | 可用于数值、字符串、日期 |
 | `MIN()` | 求最小值 | 可用于数值、字符串、日期 |
 
-> 💡 `COUNT(*)` 在 InnoDB 中需要扫描全表（没有 MyISAM 那样的独立行数计数器）。
+> `COUNT(*)` 在 InnoDB 中需要扫描全表（没有 MyISAM 那样的独立行数计数器）。
 
 ### 4. 内连接、外连接和自连接的区别？
 > 多表查询的三种核心连接方式。
@@ -75,7 +75,7 @@ FROM -> WHERE -> GROUP BY -> HAVING -> SELECT -> ORDER BY -> LIMIT
 - **行子查询**：返回一行多列。`SELECT * FROM emp WHERE (salary, job) = (SELECT salary, job FROM emp WHERE name = '张三')`
 - **表子查询**：返回多行多列，作为临时表用在 `FROM` 子句中。`SELECT * FROM (SELECT * FROM emp WHERE salary > 5000) t`
 
-> 💡 子查询性能通常不如 JOIN，但也更易读。面试中常问子查询与 JOIN 的优劣对比。
+> 子查询性能通常不如 JOIN，但也更易读。面试中常问子查询与 JOIN 的优劣对比。
 
 ### 6. 事务的 ACID 特性是什么？
 > 事务是一组不可分割的操作单元，ACID 是其四大核心特性。
@@ -87,7 +87,7 @@ FROM -> WHERE -> GROUP BY -> HAVING -> SELECT -> ORDER BY -> LIMIT
 | **I**solation（隔离性） | 并发事务之间相互隔离 | MVCC + 锁机制 |
 | **D**urability（持久性） | 事务提交后数据永久保存 | redo log 保证崩溃恢复 |
 
-> 🎯 面试常问：InnoDB 如何通过 redo log + undo log 保证 A 和 D，通过 MVCC 保证 I，最终实现 C。
+> 面试常问：InnoDB 如何通过 redo log + undo log 保证 A 和 D，通过 MVCC 保证 I，最终实现 C。
 
 ### 7. MySQL 的四种事务隔离级别？
 > 隔离级别从低到高依次是读未提交、读已提交、可重复读、串行化。
@@ -99,7 +99,7 @@ FROM -> WHERE -> GROUP BY -> HAVING -> SELECT -> ORDER BY -> LIMIT
 | REPEATABLE READ（MySQL默认） | 避免 | 避免 | 可能（InnoDB 通过 gap lock 解决） |
 | SERIALIZABLE | 避免 | 避免 | 避免 |
 
-> ⚠️ MySQL InnoDB 在 RR 级别下通过 MVCC + Next-Key Lock 解决了幻读问题，但实际上架级别要求特别严格时仍需 SERIALIZABLE。
+> MySQL InnoDB 在 RR 级别下通过 MVCC + Next-Key Lock 解决了幻读问题，但实际上架级别要求特别严格时仍需 SERIALIZABLE。
 
 ### 8. InnoDB 和 MyISAM 的区别？
 > 两个最常用的存储引擎，5.5 后 InnoDB 成为默认引擎。
@@ -115,7 +115,7 @@ FROM -> WHERE -> GROUP BY -> HAVING -> SELECT -> ORDER BY -> LIMIT
 | 崩溃恢复 | 支持（redo log） | 不支持 |
 | 适用场景 | 事务型、高并发写 | 只读、OLAP 报表 |
 
-> 💡 面试题："为什么不建议使用 MyISAM？" 核心原因：不支持事务 + 表级锁并发低 + 无崩溃恢复能力。
+> 面试题："为什么不建议使用 MyISAM？" 核心原因：不支持事务 + 表级锁并发低 + 无崩溃恢复能力。
 
 ### 9. MySQL 索引的分类有哪些？
 > 按数据结构、物理存储、字段特性等多个维度分类。
@@ -125,7 +125,7 @@ FROM -> WHERE -> GROUP BY -> HAVING -> SELECT -> ORDER BY -> LIMIT
 - **按字段特性**：主键索引、唯一索引、普通索引、全文索引、复合索引（联合索引）
 - **按列数**：单列索引、联合索引
 
-> 🎯 面试常问：InnoDB 为什么必须要有主键？因为聚簇索引依赖主键组织数据。
+> 面试常问：InnoDB 为什么必须要有主键？因为聚簇索引依赖主键组织数据。
 
 ### 10. 最左前缀法则是什么？
 > 联合索引的生效规则——查询从索引的最左列开始，不跳过索引中的列。
@@ -145,7 +145,7 @@ WHERE b = 2                    -- 未从最左列开始
 WHERE c = 3                    -- 未从最左列开始
 ```
 
-> ⚠️ MySQL 优化器会做优化，不保证完全遵循书写顺序，但"跳列"一定会导致后续列索引失效。
+> MySQL 优化器会做优化，不保证完全遵循书写顺序，但"跳列"一定会导致后续列索引失效。
 
 ### 11. 常见的索引失效场景有哪些？
 > 索引不是建了就一定生效，以下场景会导致索引失效。
@@ -161,7 +161,7 @@ WHERE c = 3                    -- 未从最左列开始
 | 字符串不加引号 | 隐式类型转换 | `WHERE name = 123` |
 | 数据分布不均 | 优化器认为全表扫描更快 | 如性别字段（区分度低） |
 
-> 💡 判断索引是否生效：使用 `EXPLAIN` 查看 `key` 字段和 `Extra` 字段。
+> 判断索引是否生效：使用 `EXPLAIN` 查看 `key` 字段和 `Extra` 字段。
 
 ### 12. 什么是回表查询？什么是覆盖索引？
 > 回表和覆盖索引是索引查询中的核心概念，直接影响查询性能。
@@ -182,7 +182,7 @@ SELECT id, name, address FROM user WHERE id = 1;
 -- Extra: NULL（需要回表）
 ```
 
-> 🎯 覆盖索引是 SQL 优化的核心手段之一，能显著减少磁盘 IO。
+> 覆盖索引是 SQL 优化的核心手段之一，能显著减少磁盘 IO。
 
 ### 13. 什么是前缀索引？
 > 对字符串类型的列只索引前 N 个字符，以节省索引空间。
@@ -196,7 +196,7 @@ CREATE INDEX idx_name_prefix ON user (name(5));
 - **缺点**：选择性降低（区分度不如全列索引），且无法使用覆盖索引
 - **选择依据**：计算不同前缀长度的选择性，`COUNT(DISTINCT LEFT(name, N)) / COUNT(*)` 越接近 1 越好
 
-> 💡 通常前缀长度选到区分度接近完整列即可，一般 5~10 个字符。
+> 通常前缀长度选到区分度接近完整列即可，一般 5~10 个字符。
 
 ### 14. 聚集索引和非聚集索引的区别？
 > 区别在于索引中数据的物理存储方式。
@@ -204,7 +204,7 @@ CREATE INDEX idx_name_prefix ON user (name(5));
 - **聚集索引（Clustered Index）**：数据行的物理顺序与索引顺序相同，叶子节点存储完整行数据。InnoDB 主键索引就是聚集索引，一张表只有一个聚集索引。
 - **非聚集索引（Non-Clustered Index）**：叶子节点不存储完整数据，而是存储主键值或行指针。InnoDB 的二级索引都是非聚集索引。一张表可以有多个非聚集索引。
 
-> 🎯 面试常问：InnoDB 中为什么建议使用自增主键？因为自增主键插入时页分裂少，而 UUID 主键会导致频繁的页分裂和索引碎片。
+> 面试常问：InnoDB 中为什么建议使用自增主键？因为自增主键插入时页分裂少，而 UUID 主键会导致频繁的页分裂和索引碎片。
 
 ### 15. 什么是 MVCC？
 > MVCC（Multi-Version Concurrency Control，多版本并发控制）是 InnoDB 实现高并发事务的核心机制。
@@ -214,7 +214,7 @@ CREATE INDEX idx_name_prefix ON user (name(5));
 - **工作流程**：每行数据有多个历史版本，通过 undo log 串联成版本链。事务执行时生成 ReadView，根据可见性规则判断哪个版本可见
 - **可见性规则**：ReadView 中的 `m_ids`（活跃事务列表）决定某版本是否对当前事务可见
 
-> 💡 InnoDB 在 RR 隔离级别下，事务首次执行 SELECT 时生成 ReadView，整个事务期间复用该 ReadView，从而解决了不可重复读。
+> InnoDB 在 RR 隔离级别下，事务首次执行 SELECT 时生成 ReadView，整个事务期间复用该 ReadView，从而解决了不可重复读。
 
 ### 16. 什么是 Next-Key Lock？
 > Next-Key Lock 是 InnoDB 行锁与间隙锁的组合，用于解决幻读问题。
@@ -233,7 +233,7 @@ SELECT * FROM table WHERE id > 5 FOR UPDATE;
 -- 锁定 (5, +∞)
 ```
 
-> ⚠️ Next-Key Lock 是 RR 级别解决幻读的关键，但也是死锁的常见原因。
+> Next-Key Lock 是 RR 级别解决幻读的关键，但也是死锁的常见原因。
 
 ### 17. redo log 和 undo log 的作用？
 > 两种日志分别保证事务的持久性和原子性。
@@ -246,7 +246,7 @@ SELECT * FROM table WHERE id > 5 FOR UPDATE;
 - **redo log 写入流程**：事务提交时先写 redo log buffer -> 刷入 redo log file（WAL 机制）-> 脏页刷新到磁盘
 - **undo log 版本链**：每条记录的修改都会生成 undo log，通过 `DB_ROLL_PTR` 串联形成版本链，用于事务回滚和 MVCC 快照读
 
-> 💡 WAL（Write-Ahead Logging）机制：先写日志再写磁盘，是 MySQL 高性能写入的关键。
+> WAL（Write-Ahead Logging）机制：先写日志再写磁盘，是 MySQL 高性能写入的关键。
 
 ### 18. MySQL 的主从复制原理？
 > 主库将变更写入 binlog，从库通过 IO 线程和 SQL 线程同步数据。
@@ -262,7 +262,7 @@ SELECT * FROM table WHERE id > 5 FOR UPDATE;
 - **同步方式**：异步复制（默认）、半同步复制、全同步复制
 - **复制类型**：基于语句的复制（SBR）、基于行的复制（RBR）、混合模式（MBR）
 
-> 🎯 面试常问：主从延迟的原因及解决方案。常见原因包括：从库单线程回放慢、大事务、主库写入压力过大。
+> 面试常问：主从延迟的原因及解决方案。常见原因包括：从库单线程回放慢、大事务、主库写入压力过大。
 
 ### 19. 分库分表的拆分方式有哪些？
 > 解决单库单表数据量过大问题时的两种拆分策略。
@@ -283,7 +283,7 @@ SELECT * FROM table WHERE id > 5 FOR UPDATE;
 - 时间分片：按年/月/日分片
 ```
 
-> ⚠️ 分库分表后带来的问题：跨库 JOIN、分布式事务、全局主键、跨分片排序分页。
+> 分库分表后带来的问题：跨库 JOIN、分布式事务、全局主键、跨分片排序分页。
 
 ### 20. 读写分离的实现方式？
 > 主库处理写操作，从库处理读操作，分摊压力。
@@ -305,7 +305,7 @@ SELECT * FROM table WHERE id > 5 FOR UPDATE;
 - **预读机制**：InnoDB 会预测即将访问的数据页并提前加载到 Buffer Pool 中
 - **脏页刷新**：修改过的数据页称为脏页，通过后台线程异步刷盘，由 `innodb_io_capacity` 参数控制刷盘速度
 
-> 💡 Buffer Pool 的大小直接影响 MySQL 性能，建议设置为物理内存的 60%-80%。
+> Buffer Pool 的大小直接影响 MySQL 性能，建议设置为物理内存的 60%-80%。
 
 ### 2. B+Tree 和 B-Tree 的区别？为什么 InnoDB 选择 B+Tree？
 > B+Tree 是 B-Tree 的变体，是 InnoDB 索引的底层数据结构。
@@ -323,7 +323,7 @@ SELECT * FROM table WHERE id > 5 FOR UPDATE;
   2. 叶子节点双向链表，范围查询和排序效率极高
   3. 所有查询都要到叶子节点，查询时间稳定
 
-> 🎯 面试高频追问："为什么 B+Tree 比红黑树更适合做数据库索引？" 因为红黑树是二叉树，树高更高，磁盘寻道次数更多。
+> 面试高频追问："为什么 B+Tree 比红黑树更适合做数据库索引？" 因为红黑树是二叉树，树高更高，磁盘寻道次数更多。
 
 ### 3. MVCC 的可见性判断规则详述？
 > MVCC 通过 ReadView 判断版本链中哪个版本对当前事务可见。
@@ -344,7 +344,7 @@ SELECT * FROM table WHERE id > 5 FOR UPDATE;
 | `trx_id in m_ids` | 不可见 | 该版本由活跃事务修改，未提交 |
 | `trx_id not in m_ids` | 可见 | 该版本事务已提交 |
 
-> 💡 RR 级别下，ReadView 在事务第一次 SELECT 时生成，整个事务期间不变；RC 级别下，每条 SELECT 都生成新的 ReadView。
+> RR 级别下，ReadView 在事务第一次 SELECT 时生成，整个事务期间不变；RC 级别下，每条 SELECT 都生成新的 ReadView。
 
 ### 4. InnoDB 行锁有哪些类型？什么情况下会升级为表锁？
 > InnoDB 的行锁类型包括行锁、间隙锁、Next-Key 锁。
@@ -361,7 +361,7 @@ SELECT * FROM table WHERE id > 5 FOR UPDATE;
 - 当访问的表数据量非常大且索引选择性差时，MySQL 可能认为表锁比大量行锁更高效
 - DDL 操作（`ALTER TABLE` 等）需要表级锁
 
-> ⚠️ 这就是为什么 `UPDATE` 操作一定要用索引条件，否则整个表被锁住，并发性能骤降。
+> 这就是为什么 `UPDATE` 操作一定要用索引条件，否则整个表被锁住，并发性能骤降。
 
 ### 5. SQL 优化的一般思路和步骤？
 > 定位慢查询、分析原因、针对性优化的系统化方法。
@@ -381,7 +381,7 @@ SHOW PROFILES;          -- 查看 SQL 执行时间分布
 SHOW PROFILE;           -- 查看某条 SQL 各阶段的耗时
 ```
 
-> 🎯 `EXPLAIN` 的 type 字段排序（从好到差）：`const` > `eq_ref` > `ref` > `range` > `index` > `ALL`。
+> `EXPLAIN` 的 type 字段排序（从好到差）：`const` > `eq_ref` > `ref` > `range` > `index` > `ALL`。
 
 ### 6. ORDER BY 和 GROUP BY 的优化原则？
 > 排序和分组操作如果不当会引起严重的性能问题。
@@ -415,7 +415,7 @@ ORDER BY a, b DESC, c;   -- 可能 filesort（方向不一致）
   3. **计数表**：单独一张表记录行数，利用事务保证一致性
   4. **使用覆盖索引**：`COUNT(*)` 会选最小的二级索引扫描，因为二级索引比聚簇索引小
 
-> 💡 InnoDB 会优先选择最小的二级索引进行 `COUNT(*)` 扫描，而不是主键索引。
+> InnoDB 会优先选择最小的二级索引进行 `COUNT(*)` 扫描，而不是主键索引。
 
 ### 8. LIMIT 深度分页如何优化？
 > 传统 `LIMIT M, N` 在 M 很大时性能极差，因为 MySQL 需要扫描前 M+N 行再丢弃前 M 行。
@@ -455,7 +455,7 @@ INNER JOIN (SELECT id FROM user ORDER BY id LIMIT 100000, 10) AS tmp ON u.id = t
 - **两阶段提交**：保证 redo log 和 binlog 的一致性，防止主从复制数据不一致
 - **binlog 三种格式**：STATEMENT（记录 SQL）、ROW（记录行变更）、MIXED（混合模式）
 
-> 🎯 面试常问：两阶段提交的目的是解决 redo log 和 binlog 的一致性问题。如果先写 redo log 后写 binlog，崩溃时 binlog 会少记录，导致从库数据不一致。
+> 面试常问：两阶段提交的目的是解决 redo log 和 binlog 的一致性问题。如果先写 redo log 后写 binlog，崩溃时 binlog 会少记录，导致从库数据不一致。
 
 ### 10. 什么是自适应哈希索引（Adaptive Hash Index）？
 > InnoDB 根据访问模式自动为热点数据页建立哈希索引，用于加速等值查询。
@@ -484,7 +484,7 @@ INNER JOIN (SELECT id FROM user ORDER BY id LIMIT 100000, 10) AS tmp ON u.id = t
 6. **查看系统资源**：CPU、IO、内存是否异常
 7. **检查表结构变更**：是否最近有 DDL 操作导致统计信息过期
 
-> 💡 常见原因：索引失效、统计信息过期导致优化器选错索引、Buffer Pool 不足、锁等待。
+> 常见原因：索引失效、统计信息过期导致优化器选错索引、Buffer Pool 不足、锁等待。
 
 ### 2. （字节）如何设计一个高效的订单号生成器？
 > 利用 Redis INCR 或雪花算法生成全局唯一订单号。
@@ -529,7 +529,7 @@ SELECT LAST_INSERT_ID();
 ALTER TABLE large_table ADD INDEX idx_col (col) ALGORITHM=INPLACE, LOCK=NONE;
 ```
 
-> ⚠️ `ALGORITHM=COPY` 和 `LOCK=SHARED` 会锁表，影响线上业务。
+> `ALGORITHM=COPY` 和 `LOCK=SHARED` 会锁表，影响线上业务。
 
 ### 4. （阿里）如何解决 MySQL 主从延迟问题？
 > 主从延迟在高并发写入场景下非常常见，需要多维度解决。
@@ -614,7 +614,7 @@ WHERE id = 1 AND version = #{oldVersion} AND stock > 0;
 
 **混合方案**：使用 Redis 做库存扣减前置校验 + MySQL 做最终落盘，Redis 用 Lua 脚本保证原子性。
 
-> 🎯 秒杀场景的最佳实践是"前端限流 + Redis 预扣 + MQ 异步下单 + MySQL 最终一致性"。
+> 秒杀场景的最佳实践是"前端限流 + Redis 预扣 + MQ 异步下单 + MySQL 最终一致性"。
 
 ### 8. （阿里）如何处理大分页问题（百万级偏移量）？
 > 传统 LIMIT 百万级偏移量会扫描并丢弃大量数据，需特殊优化。
@@ -650,7 +650,7 @@ UPDATE user SET status = 1 WHERE name = '张三';
 UPDATE user SET status = 1 WHERE name LIKE '%三';
 ```
 
-> 💡 预防措施：确保 `UPDATE` 和 `DELETE` 的 `WHERE` 条件命中索引，在 WHERE 字段上建立合理索引。
+> 预防措施：确保 `UPDATE` 和 `DELETE` 的 `WHERE` 条件命中索引，在 WHERE 字段上建立合理索引。
 
 ### 10. varchar 和 char 如何选择？
 > 两种字符串类型的选择取决于字段数据的长度特征。
@@ -866,7 +866,7 @@ WHERE product_id = ? AND version = ? AND stock > 0;
 - 分布式事务（Seata AT 模式或 TCC 模式）
 - 跨分片查询（汇总中间层）
 
-> 💡 分库分表的核心原则：根据业务查询模式选择分片键，尽量保证单条查询只落一个分片。
+> 分库分表的核心原则：根据业务查询模式选择分片键，尽量保证单条查询只落一个分片。
 
 ### 3. 设计一个读写分离 + 主从切换的高可用方案
 > 保障数据库高可用，故障时自动切换。
@@ -884,7 +884,7 @@ WHERE product_id = ? AND version = ? AND stock > 0;
 VIP 漂移到新主库 -> 中间件切换数据源 -> 修复旧主库加入从库
 ```
 
-> 💡 关键指标：RTO 控制在 30 秒内，RPO 控制在 1 秒内。
+> 关键指标：RTO 控制在 30 秒内，RPO 控制在 1 秒内。
 
 ### 4. 如何在线迁移 MySQL 数据到新集群？
 > 在线迁移涉及数据全量同步和增量同步两个阶段。

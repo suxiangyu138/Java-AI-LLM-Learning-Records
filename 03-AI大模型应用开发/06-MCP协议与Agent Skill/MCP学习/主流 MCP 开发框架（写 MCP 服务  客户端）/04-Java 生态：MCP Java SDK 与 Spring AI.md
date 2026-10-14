@@ -2,7 +2,7 @@
 
 > 本库主线读者的主场：官方 MCP Java SDK（三层架构、版本线）与 Spring AI 的 MCP 全家桶（starter 矩阵、@Tool 注解、同步/异步）——从依赖坐标到可运行 Server 的完整路径。
 
-## 📚 目录
+## 目录
 
 1. [Java 生态定位](#1-java-生态定位)
 2. [MCP Java SDK：三层架构](#2-mcp-java-sdk三层架构)
@@ -259,7 +259,7 @@ ToolCallbackProvider weatherTools(McpClient mcpClient) {
 5. 2026-03-17 三大变更：注解入核心、传输入 Spring AI、Jackson 3。
 6. Java 最短路径四步：starter → @Tool → 配置 → 部署；SDK 低层留后路。
 
-> 🎯 **核心要点**：Java 生态 = 官方 Java SDK（Tier 2，三层架构：Client/Server→Session→Transport，响应式内核+同步门面）+ Spring AI 全家桶（starter 矩阵覆盖 STDIO/SSE/Streamable/Stateless 全传输、@Tool 注解全能力、客户端配置化注入）+ 版本线（1.1.0 GA、Spring AI 2.0.0-M3 官方化迁移、STATELESS day-one）。**Java 后端写 MCP 的最短路径：加 starter → @Tool 注解 → 配 protocol=STATELESS → 部署**——Spring 生态把 MCP 从"协议工程"降为"配置项"，而 Java SDK 低层类保留协议级定制的后路。
+> **核心要点**：Java 生态 = 官方 Java SDK（Tier 2，三层架构：Client/Server→Session→Transport，响应式内核+同步门面）+ Spring AI 全家桶（starter 矩阵覆盖 STDIO/SSE/Streamable/Stateless 全传输、@Tool 注解全能力、客户端配置化注入）+ 版本线（1.1.0 GA、Spring AI 2.0.0-M3 官方化迁移、STATELESS day-one）。**Java 后端写 MCP 的最短路径：加 starter → @Tool 注解 → 配 protocol=STATELESS → 部署**——Spring 生态把 MCP 从"协议工程"降为"配置项"，而 Java SDK 低层类保留协议级定制的后路。
 
 ---
 

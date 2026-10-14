@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [Seaborn 定位](#1-seaborn-定位)
 2. [set_theme 统一风格](#2-set_theme-统一风格)
@@ -132,7 +132,7 @@ sns.boxplot(data=df, x="Pclass", y="Fare", hue="Sex")          # 分类+分组
 
 **验收动作**：用泰坦尼克数据画六张 Seaborn 图——① `histplot` 年龄 + kde；② `scatterplot` 年龄 × 票价 hue 幸存；③ `boxplot` 舱位 × 票价；④ `barplot` 舱位 × 幸存率 hue 性别；⑤ `relplot` 分面（col=舱位）；⑥ 其中一张做完整混用（ax 指定 + 标题结论 + 参考线 + savefig）——**"六图 + 一图混用 = Seaborn 通过"**。
 
-> 🎯 **核心要点**：Seaborn = 统计可视化的成品库（画布还是 Matplotlib——一行出统计图）；set_theme 统一风格（0.13 起替代 set_style/set_palette——colorblind 起步）；三大图族 = 三种问题（relplot 关系/displot 分布/catplot 分类——先定族再 kind）；hue/col/row 三表达（颜色/列/行——最多三维）；混用姿势（sns 画 + plt 修 + savefig 交）——**"Seaborn 画、Matplotlib 修、savefig 交——一条命令出统计图"**。
+> **核心要点**：Seaborn = 统计可视化的成品库（画布还是 Matplotlib——一行出统计图）；set_theme 统一风格（0.13 起替代 set_style/set_palette——colorblind 起步）；三大图族 = 三种问题（relplot 关系/displot 分布/catplot 分类——先定族再 kind）；hue/col/row 三表达（颜色/列/行——最多三维）；混用姿势（sns 画 + plt 修 + savefig 交）——**"Seaborn 画、Matplotlib 修、savefig 交——一条命令出统计图"**。
 
 ---
 

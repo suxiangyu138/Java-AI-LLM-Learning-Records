@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [会话的本质与安全威胁面](#1-会话的本质与安全威胁面)
 2. [会话固定攻击与防御](#2-会话固定攻击与防御)
@@ -31,7 +31,7 @@
 | 会话失效不彻底 | 登出后 ID 仍可用 | 登出销毁 Session + 清 Cookie |
 | 并发滥用 | 多端同时登录 | 并发会话控制 |
 
-> 🎯 **要点**：会话安全的核心 = "认证前后会话身份要变"（防固定）+ "传输要加密"（防窃取）+ "登出要彻底"（防复活）。
+> **要点**：会话安全的核心 = "认证前后会话身份要变"（防固定）+ "传输要加密"（防窃取）+ "登出要彻底"（防复活）。
 
 ## 2. 会话固定攻击与防御
 
@@ -48,7 +48,7 @@
 
 | 机制 | 行为 | Spring 默认 |
 |------|------|:---:|
-| `changeSessionId` | 认证成功后**更换 Session ID**（保留会话数据） | ✅ 默认 |
+| `changeSessionId` | 认证成功后**更换 Session ID**（保留会话数据） | ✓ 默认 |
 | `migrateSession` | 换 ID 并迁移数据（旧） | 被 changeSessionId 取代 |
 | `newSession` | 认证后建全新会话 | 可选 |
 | `none` | 不处理（危险） | 不推荐 |
@@ -59,7 +59,7 @@ http.sessionManagement(sm -> sm
         .maximumSessions(1));                            // 并发控制（见下节）
 ```
 
-> 💡 **验证方法**：登录前后抓 Cookie 对比 `JSESSIONID` 是否变化——变了说明防固定生效。
+> **验证方法**：登录前后抓 Cookie 对比 `JSESSIONID` 是否变化——变了说明防固定生效。
 
 ## 3. 并发会话控制
 
@@ -104,7 +104,7 @@ public void kickUser(String username) {
 }
 ```
 
-> ⚠️ **集群注意**：默认 `SessionRegistryImpl` 是**本地内存**——多实例部署时踢人只对本实例生效。需要 Redis 共享的会话注册表（Spring Session 或自研）。
+> **集群注意**：默认 `SessionRegistryImpl` 是**本地内存**——多实例部署时踢人只对本实例生效。需要 Redis 共享的会话注册表（Spring Session 或自研）。
 
 ## 4. Remember-Me 令牌机制
 
@@ -158,7 +158,7 @@ http.sessionManagement(sm -> sm
 | `NEVER` | 不主动创建（已有则用） | 半无状态 |
 | `STATELESS` | 完全不使用 Session | **无状态 API** |
 
-> ⚠️ **STATELESS + 表单登录**：无状态策略下 SecurityContext 不持久化——认证信息仅存活于当次请求，表单登录毫无意义（每次请求都要重新认证）。**STATELESS 必须配 JWT/Bearer 认证**（08 篇），这是最常见的配置错配。
+> **STATELESS + 表单登录**：无状态策略下 SecurityContext 不持久化——认证信息仅存活于当次请求，表单登录毫无意义（每次请求都要重新认证）。**STATELESS 必须配 JWT/Bearer 认证**（08 篇），这是最常见的配置错配。
 
 ## 6. 无状态 JWT vs Session：架构取舍
 
@@ -180,7 +180,7 @@ http.sessionManagement(sm -> sm
 登出即时性要求高：JWT + 黑名单（Redis 存 jti）或缩短有效期 + 刷新令牌
 ```
 
-> 🎯 **核心要点**：会话安全四件事——防固定（changeSessionId 默认开）、防劫持（Secure Cookie + HTTPS）、控并发（maximumSessions + SessionRegistry）、可登出（销毁彻底）。架构层面：Session 重"可控"（可踢人可撤销），JWT 重"无状态"（易扩展难撤销）——**没有银弹，按"登出即时性 vs 扩展性"的优先级选择**；微服务网关 + JWT + Redis 黑名单是 2026 年主流组合。
+> **核心要点**：会话安全四件事——防固定（changeSessionId 默认开）、防劫持（Secure Cookie + HTTPS）、控并发（maximumSessions + SessionRegistry）、可登出（销毁彻底）。架构层面：Session 重"可控"（可踢人可撤销），JWT 重"无状态"（易扩展难撤销）——**没有银弹，按"登出即时性 vs 扩展性"的优先级选择**；微服务网关 + JWT + Redis 黑名单是 2026 年主流组合。
 
 ---
 

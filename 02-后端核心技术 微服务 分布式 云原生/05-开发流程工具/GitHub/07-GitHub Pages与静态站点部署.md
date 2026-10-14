@@ -22,19 +22,19 @@
 
 ```
 GitHub Pages：
-  ✅ 免费托管（公开仓库无限，私有仓库有流量限制）
-  ✅ 自动 HTTPS（Let's Encrypt 证书）
-  ✅ 自定义域名支持（含子域名和 apex 域名）
-  ✅ 自动构建（推送即部署）
-  ✅ 全球 CDN（Fastly）
-  ✅ 支持 Jekyll 和任意静态站点生成器
+  ✓ 免费托管（公开仓库无限，私有仓库有流量限制）
+  ✓ 自动 HTTPS（Let's Encrypt 证书）
+  ✓ 自定义域名支持（含子域名和 apex 域名）
+  ✓ 自动构建（推送即部署）
+  ✓ 全球 CDN（Fastly）
+  ✓ 支持 Jekyll 和任意静态站点生成器
 
 限制：
-  ⚠️ 仓库大小 ≤ 1GB
-  ⚠️ 站点大小 ≤ 1GB
-  ⚠️ 带宽 ≤ 100GB/月（软限制）
-  ⚠️ 构建 ≤ 10 次/小时
-  ⚠️ 纯静态（无服务端代码，无数据库）
+  仓库大小 ≤ 1GB
+  站点大小 ≤ 1GB
+  带宽 ≤ 100GB/月（软限制）
+  构建 ≤ 10 次/小时
+  纯静态（无服务端代码，无数据库）
 ```
 
 ### 1.2 站点 URL 规则
@@ -63,7 +63,7 @@ Settings → Pages → Source: Deploy from a branch
   - 适合纯静态 HTML 或 Jekyll 项目
 ```
 
-### 2.2 方式二：GitHub Actions 部署（⭐ 推荐）
+### 2.2 方式二：GitHub Actions 部署（★ 推荐）
 
 ```
 Settings → Pages → Source: GitHub Actions
@@ -162,19 +162,19 @@ CNAME  www   username.github.io.
 # echo "www.example.com" > CNAME
 
 # 4. 等待 DNS 生效 + GitHub 自动签发 HTTPS 证书
-# Settings → Pages → ✅ Enforce HTTPS
+# Settings → Pages → ✓ Enforce HTTPS
 ```
 
 ### 4.2 HTTPS 强制
 
 ```
-1. Settings → Pages → ✅ Enforce HTTPS
+1. Settings → Pages → ✓ Enforce HTTPS
    → 所有 HTTP 请求自动 301 重定向到 HTTPS
 
 2. 证书自动续期
    → GitHub 使用 Let's Encrypt，自动管理
 
-⚠️ 注意：
+注意：
    - 刚配置自定义域名时，HTTPS 可能需要最多 24 小时才可用
    - 如果 DNS 配置错误，证书签发会失败
    - 不要同时使用 Cloudflare 的 Flexible SSL（会导致重定向循环）
@@ -267,14 +267,14 @@ jobs:
 | 生成器 | 语言 | 适用场景 | 构建速度 |
 |--------|------|---------|---------|
 | **Jekyll** | Ruby | GitHub Pages 原生 | 慢（大站点） |
-| **Hugo** | Go | 博客、文档 | ⚡ 极快 |
+| **Hugo** | Go | 博客、文档 | 极快 |
 | **VitePress** | Vue/JS | Vue 生态文档 | 快 |
 | **Docusaurus** | React/JS | 技术文档 | 中 |
 | **MkDocs** | Python | 技术文档 | 快 |
 | **Next.js (Static)** | React/JS | 复杂站点 | 中 |
 | **Astro** | JS | 内容型站点 | 快 |
 
-> 💡 GitHub Pages 原生支持 Jekyll。其他生成器通过 GitHub Actions 构建后部署——在 Actions 中执行构建命令 → 上传产物 → deploy-pages Action 部署。
+> GitHub Pages 原生支持 Jekyll。其他生成器通过 GitHub Actions 构建后部署——在 Actions 中执行构建命令 → 上传产物 → deploy-pages Action 部署。
 
 ---
 

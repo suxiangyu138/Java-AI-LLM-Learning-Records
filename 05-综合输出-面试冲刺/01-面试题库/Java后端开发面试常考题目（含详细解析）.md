@@ -32,7 +32,7 @@
 | **堆** | 对象实例、数组 | 共享 | OOM |
 | **虚拟机栈** | 栈帧（局部变量表/操作数栈） | 私有 | StackOverflow/OOM |
 | **方法区** | 类信息、常量、静态变量（JDK 8+ 元空间） | 共享 | OOM |
-| 程序计数器 | 字节码行号 | 私有 | ❌ |
+| 程序计数器 | 字节码行号 | 私有 | ✗ |
 
 ### Q3：GC 算法？CMS 和 G1 区别？
 
@@ -43,8 +43,8 @@
 
 ### Q4：volatile 能保证原子性吗？
 
-- ✅ 保证**可见性**（修改立即刷新主内存）+ **禁止指令重排**（内存屏障）
-- ❌ 不保证原子性（如 `i++` 分三步：读→算→写），需用 `synchronized` 或 `AtomicInteger`
+- ✓ 保证**可见性**（修改立即刷新主内存）+ **禁止指令重排**（内存屏障）
+- ✗ 不保证原子性（如 `i++` 分三步：读→算→写），需用 `synchronized` 或 `AtomicInteger`
 
 ### Q5：线程池核心参数？
 
@@ -87,8 +87,8 @@ corePoolSize → 队列 → maximumPoolSize → 拒绝策略
 
 | 缓存 | 作用域 | 默认 | 失效条件 |
 |------|--------|:--:|----------|
-| 一级 | SqlSession | ✅ | 关闭 Session / 执行增删改 / clearCache |
-| 二级 | Mapper | ❌ | 执行增删改 / 对象未序列化 |
+| 一级 | SqlSession | ✓ | 关闭 Session / 执行增删改 / clearCache |
+| 二级 | Mapper | ✗ | 执行增删改 / 对象未序列化 |
 
 ### Q5：Spring Cloud 核心组件？
 
@@ -144,10 +144,10 @@ corePoolSize → 队列 → maximumPoolSize → 拒绝策略
 
 | 级别 | 脏读 | 不可重复读 | 幻读 |
 |:--|:--:|:-----:|:--:|
-| Read Uncommitted | ✅ | ✅ | ✅ |
-| Read Committed | ❌ | ✅ | ✅ |
-| **Repeatable Read**（MySQL 默认） | ❌ | ❌ | ✅（MVCC 解决） |
-| Serializable | ❌ | ❌ | ❌ |
+| Read Uncommitted | ✓ | ✓ | ✓ |
+| Read Committed | ✗ | ✓ | ✓ |
+| **Repeatable Read**（MySQL 默认） | ✗ | ✗ | ✓（MVCC 解决） |
+| Serializable | ✗ | ✗ | ✗ |
 
 ### Q3：SQL 优化常用方法？
 

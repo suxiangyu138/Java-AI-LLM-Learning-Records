@@ -1,7 +1,7 @@
 # 06-WebSocket与流式通信
 > 定位：WebSocket 是「一次连接、双向实时」的协议——行情推送、聊天、Agent 任务流、大模型流式输出都靠它；aiohttp 是少数客户端服务端全支持的库。
 
-## 📚 目录
+## 目录
 1. [WebSocket 与 HTTP 的分工](#1-websocket-与-http-的分工)
 2. [客户端连接与收发](#2-客户端连接与收发)
 3. [心跳机制](#3-心跳机制)
@@ -148,7 +148,7 @@ async with session.get("https://llm.example.com/stream",
 4. 设计一个带指数退避的断线重连循环，注意哪些细节？
 5. 服务端广播集合的健壮实现要注意什么？
 
-> 🎯 **核心要点**：WebSocket = 双向长连接，`async for msg in ws` 收 + `send_str/send_bytes/send_json` 发；心跳两端都设（客户端 heartbeat 参数）；重连必须重发订阅；SSE 就是普通流式 GET；大消息先调 `set_max_msg_size`。
+> **核心要点**：WebSocket = 双向长连接，`async for msg in ws` 收 + `send_str/send_bytes/send_json` 发；心跳两端都设（客户端 heartbeat 参数）；重连必须重发订阅；SSE 就是普通流式 GET；大消息先调 `set_max_msg_size`。
 
 ---
 

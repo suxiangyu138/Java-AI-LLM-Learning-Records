@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [标准库的异常日志差在哪](#1-标准库的异常日志差在哪)
 2. [logger.exception 与 catch 装饰器](#2-loggerexception-与-catch-装饰器)
@@ -135,7 +135,7 @@ def fetch_maybe_fail():
 4. `threads=True` 解决什么？它管不了什么类型的异常？
 5. catch 的 onerror 参数适合什么场景？
 
-> 🎯 **核心要点**：loguru 异常三件套 = **exception()（except 块内留痕）+ catch（装饰器自动捕获，任务级容错）+ backtrace/diagnose（完整调用链 + 变量值还原现场）**；安全底线：**diagnose 开发全开、生产关闭**，配合 threads=True 做到全项目异常零遗漏。
+> **核心要点**：loguru 异常三件套 = **exception()（except 块内留痕）+ catch（装饰器自动捕获，任务级容错）+ backtrace/diagnose（完整调用链 + 变量值还原现场）**；安全底线：**diagnose 开发全开、生产关闭**，配合 threads=True 做到全项目异常零遗漏。
 
 ---
 

@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [Map 接口语义](#1-map-接口语义)
 2. [HashMap：使用级 API 全景](#2-hashmap使用级-api-全景)
@@ -41,7 +41,7 @@ for (Map.Entry<String, Integer> e : scores.entrySet()) {
 scores.forEach((k, v) -> System.out.println(k + "=" + v));
 ```
 
-> 🎯 **核心要点**：`put` 返回"旧值或 null"这个返回值经常被忽略——实现"如果键存在就不覆盖"用 `putIfAbsent`，实现"存在就累加"用 `merge`，**不要用 get 再 put 的弱并发模式**。
+> **核心要点**：`put` 返回"旧值或 null"这个返回值经常被忽略——实现"如果键存在就不覆盖"用 `putIfAbsent`，实现"存在就累加"用 `merge`，**不要用 get 再 put 的弱并发模式**。
 
 ---
 
@@ -90,7 +90,7 @@ for (String w : words) freq.merge(w, 1, Integer::sum);   // 存在则 v+1，不�
 Map<String, Object> m = new HashMap<>(200);          // 预期 150 个键 → 150/0.75=200
 ```
 
-> ⚠️ 迭代顺序不可依赖；`put` 大量键时**预估容量**可省 20+ 次 rehash；`HashMap` 允许 1 个 null 键 + 任意 null 值。
+> 迭代顺序不可依赖；`put` 大量键时**预估容量**可省 20+ 次 rehash；`HashMap` 允许 1 个 null 键 + 任意 null 值。
 
 ---
 
@@ -127,7 +127,7 @@ cache.put("d", "4");                       // 超过 3 → 移除最久未访问
 System.out.println(cache.keySet());        // [c, a, d]
 ```
 
-> 🎯 **核心要点**：`removeEldestEntry` 在每次 put 后被回调——return true 表示"最老的该被移除"，这就是 LRU 的全部机制。注意：**不是线程安全**，多线程 LRU 需外层加锁或换 Caffeine 等缓存框架。
+> **核心要点**：`removeEldestEntry` 在每次 put 后被回调——return true 表示"最老的该被移除"，这就是 LRU 的全部机制。注意：**不是线程安全**，多线程 LRU 需外层加锁或换 Caffeine 等缓存框架。
 
 ---
 
@@ -154,7 +154,7 @@ SortedMap<Long, LogEntry> range = logs.subMap(1700000050L, 1700000150L);
 LogEntry v = logs.floorEntry(System.currentTimeMillis() / 1000).getValue();
 ```
 
-> ⚠️ **TreeMap 约束**：key **不可为 null**（比较器无法比较 null，抛 NPE）；key 必须实现 `Comparable` 或构造时传 `Comparator`；排序与 `equals` 建议保持一致（契约同 TreeSet）。复杂度 O(log n)——**需要有序/范围查询才用它，否则 HashMap 更快**。
+> **TreeMap 约束**：key **不可为 null**（比较器无法比较 null，抛 NPE）；key 必须实现 `Comparable` 或构造时传 `Comparator`；排序与 `equals` 建议保持一致（契约同 TreeSet）。复杂度 O(log n)——**需要有序/范围查询才用它，否则 HashMap 更快**。
 
 ---
 
@@ -181,7 +181,7 @@ img = null;                    // 强引用断开 → 下次 GC 后条目被自�
 ```java
 IdentityHashMap<String, Integer> m = new IdentityHashMap<>();
 m.put(new String("a"), 1);
-m.put(new String("a"), 2);     // ✅ 两个不同实例 → 两个条目（普通 HashMap 会合并）
+m.put(new String("a"), 2);     // ✓ 两个不同实例 → 两个条目（普通 HashMap 会合并）
 ```
 
 ### 5.3 EnumMap：枚举键的极致优化
@@ -204,7 +204,7 @@ schedule.put(Day.MON, "开会");
 | 迭代器 | fail-fast | fail-fast |
 | 现状 | 遗留类，官方建议 ConcurrentHashMap | 现代默认 |
 
-> 🎯 **核心要点**：Hashtable 的问题不是"不安全"，而是"用最粗暴的全局锁换来了可有可无的同步"——性能差且无并发收益。**单线程用 HashMap，多线程用 ConcurrentHashMap，Hashtable 没有任何生存空间**（面试必答点）。
+> **核心要点**：Hashtable 的问题不是"不安全"，而是"用最粗暴的全局锁换来了可有可无的同步"——性能差且无并发收益。**单线程用 HashMap，多线程用 ConcurrentHashMap，Hashtable 没有任何生存空间**（面试必答点）。
 
 ---
 
@@ -212,15 +212,15 @@ schedule.put(Day.MON, "开会");
 
 | Map | null 键 | null 值 | 说明 |
 |-----|:-------:|:-------:|------|
-| HashMap | ✅ 1 个 | ✅ | null 键 hash 固定为 0 |
-| LinkedHashMap | ✅ 1 个 | ✅ | 同 HashMap |
-| TreeMap | ❌ | ✅ | 键参与比较，null 无法比较 |
-| Hashtable | ❌ | ❌ | 遗留约束 |
-| **ConcurrentHashMap** | ❌ | ❌ | 避免 get 返回 null 无法区分"没有"与"值是 null" |
-| EnumMap | ❌ | ✅ | 键必须为枚举 |
-| WeakHashMap | ✅ 1 个 | ✅ | 同 HashMap |
+| HashMap | ✓ 1 个 | ✓ | null 键 hash 固定为 0 |
+| LinkedHashMap | ✓ 1 个 | ✓ | 同 HashMap |
+| TreeMap | ✗ | ✓ | 键参与比较，null 无法比较 |
+| Hashtable | ✗ | ✗ | 遗留约束 |
+| **ConcurrentHashMap** | ✗ | ✗ | 避免 get 返回 null 无法区分"没有"与"值是 null" |
+| EnumMap | ✗ | ✓ | 键必须为枚举 |
+| WeakHashMap | ✓ 1 个 | ✓ | 同 HashMap |
 
-> ⚠️ **CHM 禁止 null 的原因**（面试高频）：`map.get(k)` 返回 null 时无法区分"键不存在"与"键存在但值为 null"，而并发场景下无法靠 `containsKey` 再确认（状态可能已变化）——所以干脆从源头禁止。
+> **CHM 禁止 null 的原因**（面试高频）：`map.get(k)` 返回 null 时无法区分"键不存在"与"键存在但值为 null"，而并发场景下无法靠 `containsKey` 再确认（状态可能已变化）——所以干脆从源头禁止。
 
 ---
 
@@ -228,10 +228,10 @@ schedule.put(Day.MON, "开会");
 
 ```text
 需要什么能力？
-├── 快速键值存取、无顺序要求 → HashMap ✅
+├── 快速键值存取、无顺序要求 → HashMap ✓
 ├── 保持插入/访问顺序 → LinkedHashMap（LRU 用访问序 + removeEldestEntry）
 ├── 按键有序、范围查询 → TreeMap
-├── 键是枚举 → EnumMap ✅（性能碾压）
+├── 键是枚举 → EnumMap ✓（性能碾压）
 ├── 键需要"引用身份" → IdentityHashMap
 ├── 缓存与 key 生命周期绑定 → WeakHashMap
 ├── 并发安全 → ConcurrentHashMap（见 06 模块）
@@ -242,12 +242,12 @@ schedule.put(Day.MON, "开会");
 
 | 实现 | put | get | 顺序 | 线程安全 |
 |------|:---:|:---:|------|:-------:|
-| HashMap | O(1) | O(1) | 无 | ❌ |
-| LinkedHashMap | O(1) | O(1) | 插入/访问序 | ❌ |
-| TreeMap | O(log n) | O(log n) | 键序 | ❌ |
-| EnumMap | O(1) | O(1) | 枚举序 | ❌ |
-| ConcurrentHashMap | O(1) | O(1) | 无 | ✅ |
-| Hashtable | O(1) | O(1) | 无 | ✅（全局锁，不推荐） |
+| HashMap | O(1) | O(1) | 无 | ✗ |
+| LinkedHashMap | O(1) | O(1) | 插入/访问序 | ✗ |
+| TreeMap | O(log n) | O(log n) | 键序 | ✗ |
+| EnumMap | O(1) | O(1) | 枚举序 | ✗ |
+| ConcurrentHashMap | O(1) | O(1) | 无 | ✓ |
+| Hashtable | O(1) | O(1) | 无 | ✓（全局锁，不推荐） |
 
 ---
 

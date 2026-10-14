@@ -1,6 +1,6 @@
 # 09 - Kafka 生态与最佳实践
 
-> 🎯 Kafka 不只是消息队列 — Streams、Connect、MirrorMaker 组成完整的数据流平台。掌握生态 + 避坑指南，才算真正的 Kafka 工程师
+> Kafka 不只是消息队列 — Streams、Connect、MirrorMaker 组成完整的数据流平台。掌握生态 + 避坑指南，才算真正的 Kafka 工程师
 
 ---
 
@@ -51,11 +51,11 @@
 Kafka Streams = 构建在 Kafka 之上的轻量级流处理库
 
 特点：
-  ✅ 纯 Java 库（不是独立集群）
-  ✅ 部署在应用进程中（无需额外资源）
-  ✅ Exactly-Once 语义
-  ✅ 有状态处理（窗口、聚合、Join）
-  ✅ 弹性伸缩（基于消费组）
+  ✓ 纯 Java 库（不是独立集群）
+  ✓ 部署在应用进程中（无需额外资源）
+  ✓ Exactly-Once 语义
+  ✓ 有状态处理（窗口、聚合、Join）
+  ✓ 弹性伸缩（基于消费组）
 
 vs Flink / Spark：
   → Streams 轻量、无需集群，适合嵌入微服务
@@ -191,10 +191,10 @@ Worker 模式：
 └─────────────────┘                              └─────────────────┘
 
 典型场景：
-  ✅ 灾备（DR）— 跨数据中心复制
-  ✅ 数据聚合 — 多个集群数据汇总到中心集群
-  ✅ 迁移 — 逐步迁移流量到新集群
-  ✅ 隔离 — 分集群分业务，按需同步
+  ✓ 灾备（DR）— 跨数据中心复制
+  ✓ 数据聚合 — 多个集群数据汇总到中心集群
+  ✓ 迁移 — 逐步迁移流量到新集群
+  ✓ 隔离 — 分集群分业务，按需同步
 ```
 
 ### 4.2 MirrorMaker 2 架构
@@ -208,10 +208,10 @@ MM2（基于 Kafka Connect 框架）
   └── MirrorHeartbeatConnector → 心跳检测可达性
 
 MM2 特性：
-  ✅ Offset 同步（切集群时 Consumer 不重复消费）
-  ✅ Topic 配置同步
-  ✅ 防止循环复制（源标记避免 A→B→A）
-  ✅ 基于 Connect 分布式框架 → 水平扩展
+  ✓ Offset 同步（切集群时 Consumer 不重复消费）
+  ✓ Topic 配置同步
+  ✓ 防止循环复制（源标记避免 A→B→A）
+  ✓ 基于 Connect 分布式框架 → 水平扩展
 ```
 
 ---
@@ -222,37 +222,37 @@ MM2 特性：
 
 ```text
 生产者端：
-  ✅ acks=all（等待所有 ISR 确认）
-  ✅ retries=MAX_INT（无限重试）
-  ✅ enable.idempotence=true（去重）
-  ✅ min.insync.replicas≥2（至少 2 个副本确认）
-  ❌ acks=0 或 acks=1（有丢风险）
+  ✓ acks=all（等待所有 ISR 确认）
+  ✓ retries=MAX_INT（无限重试）
+  ✓ enable.idempotence=true（去重）
+  ✓ min.insync.replicas≥2（至少 2 个副本确认）
+  ✗ acks=0 或 acks=1（有丢风险）
 
 Broker 端：
-  ✅ replication.factor=3（副本数 ≥ 3）
-  ✅ min.insync.replicas=2（ISR 最少 2 个）
-  ✅ unclean.leader.election.enable=false（禁止乱选举）
-  ✅ 至少 3 台 Broker
+  ✓ replication.factor=3（副本数 ≥ 3）
+  ✓ min.insync.replicas=2（ISR 最少 2 个）
+  ✓ unclean.leader.election.enable=false（禁止乱选举）
+  ✓ 至少 3 台 Broker
 
 消费者端：
-  ✅ enable.auto.commit=false（手动提交）
-  ✅ 先处理消息，再提交位移
-  ✅ 业务逻辑幂等
-  ✅ close 前 commitSync()
+  ✓ enable.auto.commit=false（手动提交）
+  ✓ 先处理消息，再提交位移
+  ✓ 业务逻辑幂等
+  ✓ close 前 commitSync()
 ```
 
 ### 5.2 不重复消息清单
 
 ```text
 业务层幂等设计：
-  ✅ 数据库主键/唯一索引 → INSERT ... ON DUPLICATE KEY UPDATE
-  ✅ Redis SET NX / 版本号
-  ✅ 消息中携带业务唯一 ID → 消费前检查 Redis/DB 是否已处理
-  ✅ Kafka 事务（跨 Topic 场景）
+  ✓ 数据库主键/唯一索引 → INSERT ... ON DUPLICATE KEY UPDATE
+  ✓ Redis SET NX / 版本号
+  ✓ 消息中携带业务唯一 ID → 消费前检查 Redis/DB 是否已处理
+  ✓ Kafka 事务（跨 Topic 场景）
 
 不可依赖的：
-  ❌ enable.idempotence=true（仅单 Producer 会话内有用，跨重启无效）
-  ❌ 消费组位移（只防不丢，不防不重）
+  ✗ enable.idempotence=true（仅单 Producer 会话内有用，跨重启无效）
+  ✗ 消费组位移（只防不丢，不防不重）
 ```
 
 ### 5.3 顺序性保证
@@ -264,10 +264,10 @@ Broker 端：
 
 分区有序（推荐）：
   相同业务 Key → 相同 Partition → 单 Consumer 消费
-  ✅ 生产者: key=orderId → orderId 相同的到同一分区
-  ✅ 消费者: max.poll.records 别太大，避免拉取过多乱序
-  ✅ 幂等模式下允许 max.in.flight > 1
-  ❌ 无幂等时: max.in.flight.requests.per.connection = 1
+  ✓ 生产者: key=orderId → orderId 相同的到同一分区
+  ✓ 消费者: max.poll.records 别太大，避免拉取过多乱序
+  ✓ 幂等模式下允许 max.in.flight > 1
+  ✗ 无幂等时: max.in.flight.requests.per.connection = 1
 ```
 
 ---
@@ -400,9 +400,9 @@ Key:   GroupID + Topic + Partition
 Value: 上次提交的 Offset + 元数据
 
 特点：
-  ✅ Compact 策略（只保留最新位移）
-  ✅ 默认 50 个分区
-  ✅ 副本数由 offsets.topic.replication.factor 控制
+  ✓ Compact 策略（只保留最新位移）
+  ✓ 默认 50 个分区
+  ✓ 副本数由 offsets.topic.replication.factor 控制
 ```
 
 ### Q7: ZK 模式 vs KRaft 模式选哪个？
@@ -412,10 +412,10 @@ Value: 上次提交的 Offset + 元数据
 旧集群：评估迁移（Kafka 提供在线迁移工具）
 
 KRaft 优势：
-  ✅ 运维简单（少一套 ZK）
-  ✅ Controller 切换快
-  ✅ 支持更多分区
-  ✅ 单进程部署
+  ✓ 运维简单（少一套 ZK）
+  ✓ Controller 切换快
+  ✓ 支持更多分区
+  ✓ 单进程部署
 
 ZK 模式遗民：
   → Kafka 3.x 仍支持 ZK，但已 deprecated

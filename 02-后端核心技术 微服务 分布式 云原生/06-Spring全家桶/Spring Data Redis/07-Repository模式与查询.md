@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [Repository 是什么：对象化 Redis 的最后一公里](#1-repository-是什么对象化-redis-的最后一公里)
 2. [数据模型：@RedisHash 与二级索引](#2-数据模型redishash-与二级索引)
@@ -42,7 +42,7 @@ public interface UserRepository extends CrudRepository<User, Long> {
 }
 ```
 
-> 💡 注意：这里的 `@Indexed`、`@RedisHash` 与 JPA 的注解**完全不同**（Spring Data 各模块各自定义）。本质是"把 Redis 当文档型存储"使用，与关系型数据库建模思路有显著差异。
+> 注意：这里的 `@Indexed`、`@RedisHash` 与 JPA 的注解**完全不同**（Spring Data 各模块各自定义）。本质是"把 Redis 当文档型存储"使用，与关系型数据库建模思路有显著差异。
 
 ## 2. 数据模型：@RedisHash 与二级索引
 
@@ -61,7 +61,7 @@ public interface UserRepository extends CrudRepository<User, Long> {
    作用：findByName("张三") = SISMEMBER user:name:张三 拿到 id 列表 → MGET user:1001...
 ```
 
-> 🎯 **核心要点**：**每个对象在 Redis 里不是 1 个 key，而是 1 个 hash + N 个索引 set（N = @Indexed 字段数）**。这是理解 Repository 一切开销与陷阱的起点。`@RedisHash("user")` 只是前缀；`@Id` 只是主键；`@Indexed` 是"我要按这个字段查询"的声明——没标 @Indexed 的字段**无法**作为查询条件（会报错或全表扫描）。
+> **核心要点**：**每个对象在 Redis 里不是 1 个 key，而是 1 个 hash + N 个索引 set（N = @Indexed 字段数）**。这是理解 Repository 一切开销与陷阱的起点。`@RedisHash("user")` 只是前缀；`@Id` 只是主键；`@Indexed` 是"我要按这个字段查询"的声明——没标 @Indexed 的字段**无法**作为查询条件（会报错或全表扫描）。
 
 ### 2.2 注解清单
 
@@ -73,7 +73,7 @@ public interface UserRepository extends CrudRepository<User, Long> {
 | `@TimeToLive` | Long/Integer 字段 | 过期秒数（TTL），每次写生效 |
 | `@Reference` | 关联对象字段 | 只存关联 id，不内嵌对象 |
 
-> ⚠️ **@TimeToLive 细节**：保存/更新对象时按字段值刷新 TTL；但**普通字段改动、索引字段删除**等场景的 TTL 行为差异大，测试期务必验证"更新后 TTL 是否符合预期"。
+> **@TimeToLive 细节**：保存/更新对象时按字段值刷新 TTL；但**普通字段改动、索引字段删除**等场景的 TTL 行为差异大，测试期务必验证"更新后 TTL 是否符合预期"。
 
 ## 3. 开启与基础 CRUD
 
@@ -120,13 +120,13 @@ Page<User> findByEmail(String email, Pageable pageable);  // 分页
 
 | 关键词 | 语义 | 实现 | 性能警告 |
 |--------|------|------|:---:|
-| `findByXxx` | 等值 | 索引 set → MGET | ✅ |
-| `And`/`Or` | 组合 | 索引 set 交/并 | ✅ |
-| `Containing` | 模糊 | 索引内扫描 | ⚠️ 大索引慎用 |
-| `GreaterThan`/`Between` | 范围 | **全表扫描过滤** | ❌ 无索引支持 |
-| `Top3`/`First` | 限量 | 结果截断 | ✅ |
+| `findByXxx` | 等值 | 索引 set → MGET | ✓ |
+| `And`/`Or` | 组合 | 索引 set 交/并 | ✓ |
+| `Containing` | 模糊 | 索引内扫描 | 大索引慎用 |
+| `GreaterThan`/`Between` | 范围 | **全表扫描过滤** | ✗ 无索引支持 |
+| `Top3`/`First` | 限量 | 结果截断 | ✓ |
 
-> ⚠️ **性能认知**：范围查询（GreaterThan/Between）在 Redis 上**没有索引**——框架实现是全表遍历过滤，O(N) 且阻塞。Redis Repository 只适合"等值查询为主"的模型，重范围/统计的查询请用 ZSet 或换数据库。
+> **性能认知**：范围查询（GreaterThan/Between）在 Redis 上**没有索引**——框架实现是全表遍历过滤，O(N) 且阻塞。Redis Repository 只适合"等值查询为主"的模型，重范围/统计的查询请用 ZSet 或换数据库。
 
 ### 4.2 排序与 Example
 
@@ -162,7 +162,7 @@ long total = page.getTotalElements();
       → total 就是索引 size
 ```
 
-> ⚠️ **陷阱**：Redis Repository 的分页**不是数据库式延迟分页**——底层还是"全量候选集 + 内存切片"。大索引集的分页照样 O(N)。排序同理：只对当前结果集排序，**全局排序需先全量取出**。
+> **陷阱**：Redis Repository 的分页**不是数据库式延迟分页**——底层还是"全量候选集 + 内存切片"。大索引集的分页照样 O(N)。排序同理：只对当前结果集排序，**全局排序需先全量取出**。
 
 **TTL 维护：**
 
@@ -195,7 +195,7 @@ public class UserSession {
 | 需要精确控制 TTL/序列化 | 框架按固定模型存储，自定义能力弱 |
 | 缓存与 DB 一致性治理 | 无旁路缓存语义，应走 06 篇 Spring Cache |
 
-> 🎯 **核心结论**：Repository 适合"把 Redis 当文档库用的轻模型"，**不适合"把 Redis 当缓存用的高并发场景"**。生产主链路请用 RedisTemplate + Spring Cache；Repository 留给管理后台、原型验证、简单配置存储。
+> **核心结论**：Repository 适合"把 Redis 当文档库用的轻模型"，**不适合"把 Redis 当缓存用的高并发场景"**。生产主链路请用 RedisTemplate + Spring Cache；Repository 留给管理后台、原型验证、简单配置存储。
 
 ### 6.3 性能警告清单
 
@@ -233,9 +233,9 @@ public class UserService {
 }
 ```
 
-> 💡 **决策口诀**：`@Cacheable` 管"热点缓存"，RedisTemplate 管"精确控制"，Repository 管"对象查询"——三者按场景分工，而非互相替代。
+> **决策口诀**：`@Cacheable` 管"热点缓存"，RedisTemplate 管"精确控制"，Repository 管"对象查询"——三者按场景分工，而非互相替代。
 
-> 🎯 **核心要点**：Repository 的甜蜜点与死穴都在数据模型——**1 对象 = 1 hash + N 索引 set**。等值查询它好用（开发快、语义清晰），范围查询它致命（无索引全表扫），高并发它撑不住（key 爆炸 + 无管道）。面试问"什么时候用 Spring Data Redis Repository"，答"轻模型 + 等值查询 + 低频"就是满分答案。
+> **核心要点**：Repository 的甜蜜点与死穴都在数据模型——**1 对象 = 1 hash + N 索引 set**。等值查询它好用（开发快、语义清晰），范围查询它致命（无索引全表扫），高并发它撑不住（key 爆炸 + 无管道）。面试问"什么时候用 Spring Data Redis Repository"，答"轻模型 + 等值查询 + 低频"就是满分答案。
 
 ---
 

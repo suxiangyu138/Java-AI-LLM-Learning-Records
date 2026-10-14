@@ -2,7 +2,7 @@
 
 > 定位：SQL 题的进阶体系——窗口函数全解、SQL 执行顺序、JOIN 与去重陷阱、NULL 三值逻辑、查询优化与索引
 
-## 📚 目录
+## 目录
 
 1. [窗口函数全解](#1-窗口函数全解)
 2. [SQL 执行顺序](#2-sql-执行顺序)
@@ -22,7 +22,7 @@
 GROUP BY：分组后每组合并成一行（失去明细）
 窗口函数：分组后每行保留，额外算"组内值"（不丢明细）
 
-⚠️ 面试必答：
+面试必答：
 "窗口函数 = 在'窗口'（分区）内计算，结果附加到
  每行——与 GROUP BY 的区别是保留明细行。"
 ```
@@ -38,12 +38,12 @@ GROUP BY：分组后每组合并成一行（失去明细）
 | 分位 | NTILE(n) | 分成 n 桶 |
 
 ```
-⚠️ ROW_NUMBER vs RANK vs DENSE_RANK：
+ROW_NUMBER vs RANK vs DENSE_RANK：
   ROW_NUMBER：1,2,3,4（并列也占位）
   RANK：1,1,3,4（并列跳号）
   DENSE_RANK：1,1,2,3（并列不跳号）
 
-⚠️ 面试必答：
+面试必答：
 "三种排名：ROW_NUMBER 不并列、RANK 并列跳号、
  DENSE_RANK 并列不跳号——'第 N 名'题
  用 DENSE_RANK（185 部门前三）。"
@@ -59,8 +59,8 @@ SELECT employee_id,
        SUM(salary) OVER (PARTITION BY department_id ORDER BY salary
                          ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS cum
 FROM employees;
--- ⚠️ ORDER BY 决定窗口内顺序；ROWS 控制滑动范围（累计/滑动）
--- ⚠️ 不加 PARTITION BY = 全表一个窗口
+-- ORDER BY 决定窗口内顺序；ROWS 控制滑动范围（累计/滑动）
+-- 不加 PARTITION BY = 全表一个窗口
 ```
 
 ---
@@ -72,13 +72,13 @@ FROM employees;
 ```
 FROM → JOIN → WHERE → GROUP BY → HAVING → SELECT → DISTINCT → ORDER BY → LIMIT
 
-⚠️ 关键推论：
+关键推论：
   ① WHERE 不能用别名（SELECT 后执行）
   ② HAVING 可以用聚合函数（GROUP BY 后）
   ③ ORDER BY 可以用别名（SELECT 后执行）
   ④ LIMIT 最后（结果已定）
 
-⚠️ 面试必答：
+面试必答：
 "SQL 逻辑顺序 FROM→WHERE→GROUP→HAVING→SELECT→ORDER。
  WHERE 过滤原始行、HAVING 过滤分组——'
  先过滤再分组'是性能关键。"
@@ -97,11 +97,11 @@ HAVING COUNT(*) > 5;                  -- 分组后过滤
 -- ② 别名陷阱
 SELECT salary * 1.1 AS new_salary
 FROM employees
-WHERE new_salary > 5000;              -- ❌ WHERE 先执行，别名不存在
+WHERE new_salary > 5000;              -- ✗ WHERE 先执行，别名不存在
 -- 正确：WHERE salary * 1.1 > 5000 或子查询
 
 -- ③ 分组列选择陷阱
-SELECT department_id, employee_id     -- ⚠️ employee_id 不在 GROUP BY → 非法
+SELECT department_id, employee_id     -- employee_id 不在 GROUP BY → 非法
 FROM employees GROUP BY department_id; --（MySQL 宽松模式除外）
 ```
 
@@ -120,7 +120,7 @@ CROSS JOIN：笛卡尔积
 SELF JOIN：自连接（同一张表两别名）
 NATURAL JOIN：同名列自动等值（少用）
 
-⚠️ 面试必答：
+面试必答：
 "LEFT JOIN 是'保留主表 + 补匹配'——
  无匹配行右表列是 NULL。
  自连接是'同一表扮演两个角色'（180 连续数字）。"
@@ -129,7 +129,7 @@ NATURAL JOIN：同名列自动等值（少用）
 ### 3.2 JOIN 的过滤位置（易错）
 
 ```sql
--- ⚠️ ON vs WHERE 的过滤差异：
+-- ON vs WHERE 的过滤差异：
 -- LEFT JOIN 中 WHERE 右表条件会"变回 INNER"！
 SELECT *
 FROM A LEFT JOIN B ON A.id = B.id
@@ -139,7 +139,7 @@ WHERE B.x IS NOT NULL;              -- 过滤掉 NULL → 等效 INNER JOIN
 SELECT *
 FROM A LEFT JOIN B ON A.id = B.id AND B.x > 0;   -- 不匹配仍保留 A
 
--- ⚠️ 面试必答：
+-- 面试必答：
 "'LEFT JOIN + WHERE 右表条件'会退化——过滤条件
  放 ON（JOIN 时）与 WHERE（结果后）语义不同。"
 ```
@@ -155,13 +155,13 @@ NULL 的三种逻辑值：TRUE / FALSE / UNKNOWN
   任何比较（=、>、<）与 NULL 结果都是 UNKNOWN
   → WHERE 不满足 UNKNOWN → 行被过滤！
 
-⚠️ 常见陷阱：
-  WHERE x = NULL  ❌（永远 UNKNOWN → 空结果）
+常见陷阱：
+  WHERE x = NULL  ✗（永远 UNKNOWN → 空结果）
   正确：WHERE x IS NULL
-  WHERE x <> NULL ❌（同样 UNKNOWN）
+  WHERE x <> NULL ✗（同样 UNKNOWN）
   正确：WHERE x IS NOT NULL
 
-⚠️ 面试必答：
+面试必答：
 "NULL 与任何值比较都是 UNKNOWN（不是 FALSE）——
  判断用 IS NULL / IS NOT NULL，
  任何 =/<> 与 NULL 比较都会过滤掉该行。"
@@ -179,7 +179,7 @@ NULL 的三种逻辑值：TRUE / FALSE / UNKNOWN
   Oracle：NULL 最大
   → 跨库行为不一致（可 ORDER BY col IS NULL 控制）
 
-⚠️ 面试必答：
+面试必答：
 "COUNT(*) 与 COUNT(col) 的区别就是 NULL——
  统计'非空值个数'用 COUNT(col)。
  176 第二高薪水（可能为 NULL）是经典。"
@@ -198,7 +198,7 @@ NULL 的三种逻辑值：TRUE / FALSE / UNKNOWN
 | ROW_NUMBER | 组内取一条 | 每组 Top1 |
 
 ```
-⚠️ 面试表达：
+面试表达：
 "去重三选一：只查重 DISTINCT；
  要聚合 GROUP BY；要'每组一行/第 N 名'
  窗口函数（ROW_NUMBER 取 rn=1）。"
@@ -210,7 +210,7 @@ NULL 的三种逻辑值：TRUE / FALSE / UNKNOWN
 -- 196. 删除重复邮箱（保留 id 最小者）
 DELETE p1 FROM Person p1, Person p2
 WHERE p1.email = p2.email AND p1.id > p2.id;
--- ⚠️ 自连接 + 保留最小 id
+-- 自连接 + 保留最小 id
 -- 或窗口函数版：
 DELETE FROM Person
 WHERE id NOT IN (
@@ -218,7 +218,7 @@ WHERE id NOT IN (
         SELECT id, ROW_NUMBER() OVER (PARTITION BY email ORDER BY id) rn
         FROM Person) t
     WHERE rn = 1);
--- ⚠️ 注意：MySQL 不能直接 DELETE 子查询同表 → 多包一层
+-- 注意：MySQL 不能直接 DELETE 子查询同表 → 多包一层
 ```
 
 ---
@@ -234,7 +234,7 @@ WHERE id NOT IN (
 ④ 小表驱动大表：JOIN 顺序（优化器一般自动）
 ⑤ EXPLAIN 分析：type（ALL=全表扫描应避免）
 
-⚠️ 面试必答：
+面试必答：
 "SQL 优化第一原则：让过滤走索引——
  函数包裹列、隐式类型转换都会破坏索引。"
 ```
@@ -248,7 +248,7 @@ WHERE id NOT IN (
 ④ OR 条件有一侧无索引（失效）
 ⑤ 索引列 IS NOT NULL 有时失效
 
-⚠️ 面试表达：
+面试表达：
 "索引失效五场景：函数包裹、类型转换、
  前导模糊、OR 混合、NULL 判断——
  写 SQL 时保持列'裸用'。"
@@ -293,7 +293,7 @@ WHERE id NOT IN (
 
 ---
 
-> 🎯 **核心要点**：SQL 进阶 = **窗口函数**（排名/聚合/位移）+ **执行顺序**（WHERE 先于 SELECT）+ **JOIN 语义**（ON vs WHERE）+ **NULL 三值** + **优化**（索引裸用）。SQL 题"先画执行顺序，再选工具"是标准姿势。
+> **核心要点**：SQL 进阶 = **窗口函数**（排名/聚合/位移）+ **执行顺序**（WHERE 先于 SELECT）+ **JOIN 语义**（ON vs WHERE）+ **NULL 三值** + **优化**（索引裸用）。SQL 题"先画执行顺序，再选工具"是标准姿势。
 
 ---
 

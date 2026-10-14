@@ -1,6 +1,6 @@
 # 04 - 配置体系与 AGENTS.md
 
-> 🎯 OpenCode 的配置灵魂是 AGENTS.md — 每次会话自动读取的"项目行为准则"。配合 opencode.json 的全局/项目双层配置，构成完整的规则体系
+> OpenCode 的配置灵魂是 AGENTS.md — 每次会话自动读取的"项目行为准则"。配合 opencode.json 的全局/项目双层配置，构成完整的规则体系
 
 ---
 
@@ -77,10 +77,10 @@ opencode            # 进入 TUI
   - model/        # 实体/DTO
 
 ## 禁止事项
-- ❌ 不要修改 src/main/resources/mapper/ 下的 XML 映射文件
-- ❌ 不要直接 push 到 main 分支
-- ❌ 不要引入新的第三方依赖（需先讨论）
-- ❌ 不要删除历史测试用例
+- ✗ 不要修改 src/main/resources/mapper/ 下的 XML 映射文件
+- ✗ 不要直接 push 到 main 分支
+- ✗ 不要引入新的第三方依赖（需先讨论）
+- ✗ 不要删除历史测试用例
 
 ## 测试要求
 - 新增功能必须配套单元测试
@@ -157,12 +157,12 @@ opencode            # 进入 TUI
 
 | 配置项 | 全局（~/.config/opencode/） | 项目（.opencode/） |
 |--------|:---:|:---:|
-| opencode.json | ✅ | ✅（覆盖全局） |
-| AGENTS.md | ❌（无） | ✅（项目特有） |
-| agents/ | ✅ | ✅ |
-| skills/ | ✅ | ✅ |
-| plugins/ | ✅ | ✅ |
-| commands/ | ✅ | ✅ |
+| opencode.json | ✓ | ✓（覆盖全局） |
+| AGENTS.md | ✗（无） | ✓（项目特有） |
+| agents/ | ✓ | ✓ |
+| skills/ | ✓ | ✓ |
+| plugins/ | ✓ | ✓ |
+| commands/ | ✓ | ✓ |
 | 建议放什么 | 通用模型/通用 Skills/通用 Agent | 项目规则/项目工具/项目专用 Agent |
 
 **最佳实践：**
@@ -204,6 +204,6 @@ Skills 兼容：
 
 ---
 
-> 🎯 **核心要点**：配置体系一句话 — **"AGENTS.md 管规则、opencode.json 管行为"**。AGENTS.md 是最重要的配置（构建命令/代码约定/禁止事项/测试要求），团队共享必须提交 Git。从 Claude Code 迁移几乎零成本：CLAUDE.md 自动兼容、~/.claude/skills 自动读取。
+> **核心要点**：配置体系一句话 — **"AGENTS.md 管规则、opencode.json 管行为"**。AGENTS.md 是最重要的配置（构建命令/代码约定/禁止事项/测试要求），团队共享必须提交 Git。从 Claude Code 迁移几乎零成本：CLAUDE.md 自动兼容、~/.claude/skills 自动读取。
 
 **下一模块**：[05-五大扩展点详解](05-五大扩展点详解.md) / **返回总览**：[00-总览](00-OpenCode知识体系总览.md)

@@ -1,6 +1,6 @@
 # 01 - Spring 家族版图全览
 
-> 🎯 Spring 生态 17+ 成员一图看懂 — 每个家族成员的定位、核心模块、适用场景。目标是"提到任何 Spring 项目，立刻说出它在家族中的位置"
+> Spring 生态 17+ 成员一图看懂 — 每个家族成员的定位、核心模块、适用场景。目标是"提到任何 Spring 项目，立刻说出它在家族中的位置"
 
 ---
 
@@ -96,7 +96,7 @@
 | Spring Data JDBC | 关系型 | 轻量 JDBC 抽象（无 JPA 魔法） | 简单 CRUD |
 | Spring JDBC（JdbcTemplate） | 关系型 | 模板化 JDBC | 最底层 |
 
-> 💡 **国内现状**：互联网企业关系型持久层常用 **MyBatis/MyBatis-Plus**（非 Spring 官方）— 因为 SQL 可控、优化方便；Spring Data JPA 更符合"领域模型优先"的官方风格。两者选型见 05 文件。
+> **国内现状**：互联网企业关系型持久层常用 **MyBatis/MyBatis-Plus**（非 Spring 官方）— 因为 SQL 可控、优化方便；Spring Data JPA 更符合"领域模型优先"的官方风格。两者选型见 05 文件。
 
 ---
 
@@ -152,7 +152,7 @@
 | 记忆 | 短期窗口 + 长期向量记忆 + 压缩 |
 | 版本 | 1.0/1.1 稳定线（Boot 3）+ 2.0 前沿线（Boot 4，Java 21+） |
 
-> 💡 详见本体系 04 文件 — Spring AI 是 Java 开发者进入 AI 应用层的官方路径，与 LangChain4j 互为竞争。
+> 详见本体系 04 文件 — Spring AI 是 Java 开发者进入 AI 应用层的官方路径，与 LangChain4j 互为竞争。
 
 ---
 
@@ -175,6 +175,6 @@
 
 ---
 
-> 🎯 **核心要点**：Spring 家族记忆法 — **核心（Framework）→ 开发（Boot）→ 数据（Data）→ 安全（Security）→ 微服务（Cloud/Alibaba）→ AI（Spring AI）→ 周边（Batch/Modulith/…）** 七个层次。面试被问"Spring 生态有哪些"时，按层回答比背清单高一个段位。
+> **核心要点**：Spring 家族记忆法 — **核心（Framework）→ 开发（Boot）→ 数据（Data）→ 安全（Security）→ 微服务（Cloud/Alibaba）→ AI（Spring AI）→ 周边（Batch/Modulith/…）** 七个层次。面试被问"Spring 生态有哪些"时，按层回答比背清单高一个段位。
 
 **下一模块**：[02-Spring版本演进与兼容矩阵](02-Spring版本演进与兼容矩阵.md) / **返回总览**：[00-Spring生态知识体系总览](00-Spring生态知识体系总览.md)

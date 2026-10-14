@@ -1,6 +1,6 @@
 # 04 - LayerNorm 与残差连接
 
-> 🎯 训练 100 层的 Transformer 不崩溃，全靠 LayerNorm 和残差连接。Pre-Norm vs Post-Norm 的选择、DeepNorm 的改进——这些归一化策略直接影响训练稳定性和最终效果
+> 训练 100 层的 Transformer 不崩溃，全靠 LayerNorm 和残差连接。Pre-Norm vs Post-Norm 的选择、DeepNorm 的改进——这些归一化策略直接影响训练稳定性和最终效果
 
 ---
 
@@ -117,8 +117,8 @@ RMSNorm(x) = x / sqrt(mean(x²)) * gamma
   return x / RMS * gamma
 
 为什么用 RMSNorm？
-  ✅ 计算量少 ~30%（不用算均值）
-  ✅ 效果和 LayerNorm 几乎相同
+  ✓ 计算量少 ~30%（不用算均值）
+  ✓ 效果和 LayerNorm 几乎相同
   → Llama/Mistral/Qwen 全部使用 RMSNorm
 ```
 

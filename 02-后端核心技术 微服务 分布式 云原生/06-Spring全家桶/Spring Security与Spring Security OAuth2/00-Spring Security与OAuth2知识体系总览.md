@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [知识体系导图](#1-知识体系导图)
 2. [模块导航](#2-模块导航)
@@ -115,7 +115,7 @@ Spring Security 与 OAuth2 知识体系
 
 **4）OAuth2 是企业级认证的最终答案。** 单点登录、第三方登录、服务间认证全部落在 OAuth2/OIDC 上。Authorization Server 并入核心后，"自己搭授权服务器"的门槛大幅降低，成为 2026 年 Spring 生态的标志性能力。
 
-> 🎯 **核心要点**：Spring Security 的底层逻辑是一条**过滤器链**：认证过滤器负责"你是谁"（Authentication），授权器负责"你能干什么"（Authorization），两者通过 SecurityContext 串联。OAuth2 是这套机制在企业级认证场景的协议化延伸。学它 = 学"安全如何成为框架能力而非业务代码"。
+> **核心要点**：Spring Security 的底层逻辑是一条**过滤器链**：认证过滤器负责"你是谁"（Authentication），授权器负责"你能干什么"（Authorization），两者通过 SecurityContext 串联。OAuth2 是这套机制在企业级认证场景的协议化延伸。学它 = 学"安全如何成为框架能力而非业务代码"。
 
 ## 4. 核心概念速查
 
@@ -181,7 +181,7 @@ Spring Security 与 OAuth2 知识体系
 9. Spring Authorization Server 现在还在单独维护吗？迁移到 7.0 要换什么？
 10. Password grant（密码授权模式）为什么在 OAuth 2.1 里被移除？替代方案是什么？
 
-> 💡 答不上的题，对应的模块序号就是你的学习优先级；答案全在本体系文档里。
+> 答不上的题，对应的模块序号就是你的学习优先级；答案全在本体系文档里。
 
 ---
 

@@ -2,7 +2,7 @@
 
 > 定位：EXPLAIN 实战、VACUUM 调优、连接池、备份恢复、监控、升级——PG 的生产化运营
 
-## 📚 目录
+## 目录
 
 1. [EXPLAIN 执行计划分析](#1-explain-执行计划分析)
 2. [VACUUM 调优](#2-vacuum-调优)
@@ -28,7 +28,7 @@ GROUP BY u.name;
 
 ```
 关键字段：
-  Seq Scan（全表扫描）→ ⚠️ 力争避免
+  Seq Scan（全表扫描）→ 力争避免
   Index Scan（索引扫描）
   Bitmap Index Scan → Bitmap Heap Scan（位图扫描）
   Nested Loop / Hash Join / Merge Join（连接方式）
@@ -36,7 +36,7 @@ GROUP BY u.name;
   rows=1000（预估行数）vs actual time（实际）
   Buffers: shared hit=5（PG 18 默认显示）
 
-⚠️ 面试必答：
+面试必答：
 "EXPLAIN 三看——访问方式（Index/Seq/Bitmap）、
  连接算法（Nested/Hash/Merge）、
  rows 预估 vs 实际偏差（偏差大 = 统计信息过期）。"
@@ -78,10 +78,10 @@ SELECT schemaname, relname, n_dead_tup, n_live_tup,
 FROM pg_stat_user_tables
 WHERE n_dead_tup > 1000
 ORDER BY n_dead_tup DESC;
--- ⚠️ 死元组持续增长 → Autovacuum 跟不上（调参或手动 VACUUM）
+-- 死元组持续增长 → Autovacuum 跟不上（调参或手动 VACUUM）
 ```
 
-> 🎯 **要点**：VACUUM 调优的核心 = 大表降低 scale_factor（防等太久）+ PG 18 的 max_threshold 兜底。死元组监控是 PG DBA 的基本功。
+> **要点**：VACUUM 调优的核心 = 大表降低 scale_factor（防等太久）+ PG 18 的 max_threshold 兜底。死元组监控是 PG DBA 的基本功。
 
 ---
 
@@ -91,14 +91,14 @@ ORDER BY n_dead_tup DESC;
 
 ```sql
 -- 内存分配（默认偏保守，生产必调）
-shared_buffers = 4GB          -- ⚠️ 物理内存 25%（PG 推荐）
+shared_buffers = 4GB          -- 物理内存 25%（PG 推荐）
 work_mem = 64MB               -- 单操作排序/哈希内存（大表查询调大）
 maintenance_work_mem = 512MB  -- VACUUM/CREATE INDEX 内存
 effective_cache_size = 12GB   -- 操作系统缓存估算（指点优化器）
 
 -- 连接
 max_connections = 200
--- ⚠️ 使用连接池（PgBouncer）管理，不要直连 PG 全部连接
+-- 使用连接池（PgBouncer）管理，不要直连 PG 全部连接
 ```
 
 ### 3.2 PG 性能调优公式
@@ -108,7 +108,7 @@ shared_buffers = 物理内存 × 25%（PG 官方推荐）
 effective_cache_size = 物理内存 × 75%
 work_mem = (空闲内存 / max_connections) / 4
 
-⚠️ 使用 PgBouncer（连接池）+ 应用侧 HikariCP 双层连接管理
+使用 PgBouncer（连接池）+ 应用侧 HikariCP 双层连接管理
 ```
 
 ---
@@ -230,7 +230,7 @@ PG 逻辑复制比 MySQL binlog 更灵活（可选择复制）。
 
 ---
 
-> 🎯 **核心要点**：PG 运维体系 = **EXPLAIN 三看**（访问/连接/偏差）+ **VACUUM 调优**（大表 scale_factor + max_threshold）+ **参数调优**（shared_buffers 25% + work_mem）+ **备份**（pg_dump + WAL PITR）+ **监控**（pg_stat_* 视图）+ **升级**（pg_upgrade link）。"VACUUM 是 PG 的生命线，监控死元组是 DBA 基本功"。
+> **核心要点**：PG 运维体系 = **EXPLAIN 三看**（访问/连接/偏差）+ **VACUUM 调优**（大表 scale_factor + max_threshold）+ **参数调优**（shared_buffers 25% + work_mem）+ **备份**（pg_dump + WAL PITR）+ **监控**（pg_stat_* 视图）+ **升级**（pg_upgrade link）。"VACUUM 是 PG 的生命线，监控死元组是 DBA 基本功"。
 
 ---
 

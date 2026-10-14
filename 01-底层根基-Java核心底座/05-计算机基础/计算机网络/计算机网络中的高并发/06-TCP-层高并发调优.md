@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [连接建立：backlog 与 SYN/accept 队列](#1-连接建立backlog-与-synaccept-队列)
 2. [连接关闭：TIME_WAIT 与端口耗尽](#2-连接关闭time_wait-与端口耗尽)
@@ -53,7 +53,7 @@ sysctl -w net.ipv4.tcp_max_syn_backlog=65535  # SYN 队列上限
 # 应用侧：Java ServerSocket(8080, 1024)；Nginx listen 8080 backlog=4096;
 ```
 
-> ⚠️ **症状识别**：`ss -lnt` 看 Recv-Q（accept 队列堆积数）接近上限 → 应用 accept 太慢；`netstat -s | grep -i "SYNs to LISTEN"` 看丢弃。**accept 队列满 ≠ 内核问题，是应用消费慢**。
+> **症状识别**：`ss -lnt` 看 Recv-Q（accept 队列堆积数）接近上限 → 应用 accept 太慢；`netstat -s | grep -i "SYNs to LISTEN"` 看丢弃。**accept 队列满 ≠ 内核问题，是应用消费慢**。
 
 ## 2. 连接关闭：TIME_WAIT 与端口耗尽
 
@@ -85,10 +85,10 @@ sysctl -w net.ipv4.tcp_max_syn_backlog=65535  # SYN 队列上限
 ```bash
 sysctl -w net.ipv4.ip_local_port_range="1024 65535"   # ~6.4 万端口
 sysctl -w net.ipv4.tcp_tw_reuse=1                     # 出站 TIME_WAIT 端口复用
-# ⚠️ tcp_tw_recycle 已废弃（内核 4.12 移除）——NAT 环境下会导致连接异常，勿用
+# tcp_tw_recycle 已废弃（内核 4.12 移除）——NAT 环境下会导致连接异常，勿用
 ```
 
-> 🎯 **核心要点**：TIME_WAIT 是**正确性设计**（防旧报文串扰），不能"消灭"，只能"绕开"——连接复用是最佳解，`tcp_tw_reuse` 是次优解（有语义代价）。
+> **核心要点**：TIME_WAIT 是**正确性设计**（防旧报文串扰），不能"消灭"，只能"绕开"——连接复用是最佳解，`tcp_tw_reuse` 是次优解（有语义代价）。
 
 ## 3. Nagle 与延迟 ACK：40ms 延迟之谜
 
@@ -139,7 +139,7 @@ sysctl -w net.ipv4.tcp_keepalive_intvl=30      # 探测间隔 30s
 sysctl -w net.ipv4.tcp_keepalive_probes=3      # 3 次失败即断开
 ```
 
-> 💡 **区别认知**：TCP keepalive 是内核检测"物理对端活着没"（网络层保活）；HTTP keep-alive 是"连接复用"（性能层优化）——两者名字像，作用完全不同。
+> **区别认知**：TCP keepalive 是内核检测"物理对端活着没"（网络层保活）；HTTP keep-alive 是"连接复用"（性能层优化）——两者名字像，作用完全不同。
 
 ## 5. 连接数上限：fd 与端口
 
@@ -195,7 +195,7 @@ EOF
 sysctl -p
 ```
 
-> ⚠️ **调优纪律**：参数不是"越大越好"——缓冲区大 = 每连接内存高（百万连接撑不住）；`tcp_tw_reuse` 有语义代价；改参数必须压测验证，且标注"为何改"（运维交接）。
+> **调优纪律**：参数不是"越大越好"——缓冲区大 = 每连接内存高（百万连接撑不住）；`tcp_tw_reuse` 有语义代价；改参数必须压测验证，且标注"为何改"（运维交接）。
 
 ## 7. 排查手段
 
@@ -210,7 +210,7 @@ sysctl -p
 
 ## 8. 核心要点与思考题
 
-> 🎯 **本章三句话总结**：
+> **本章三句话总结**：
 > 1. 连接建立看双队列（backlog/somaxconn/SYN 队列），关闭看 TIME_WAIT——短连接下客户端端口池是吞吐天花板，根治靠连接复用；
 > 2. Nagle×延迟 ACK = 40ms 幽灵延迟，交互式服务一律 `setTcpNoDelay(true)`；
 > 3. 百万连接 = 内存预算 + fd 上限 + 内核参数三件套，改参数必须压测留痕。

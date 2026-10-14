@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [旧 API 之痛](#1-旧-api-之痛)
 2. [java.time 设计哲学](#2-javatime-设计哲学)
@@ -28,7 +28,7 @@
 `java.util.Date` 是一个可变对象——它的内部时间值可以被 `setTime()` 等方法随意修改。这意味着你把一个 Date 传给某个方法后，无法保证它在方法执行过程中不被改变。
 
 ```java
-// 🔴 旧 API：Date 可变，破坏封装
+// 旧 API：Date 可变，破坏封装
 public class OrderService {
     private Date deliveryDate;
 
@@ -46,12 +46,12 @@ OrderService service = new OrderService();
 service.setDeliveryDate(new Date());
 
 Date d = service.getDeliveryDate();
-d.setTime(d.getTime() + 100_000_000L); // ⚠️ 直接改内部状态！
+d.setTime(d.getTime() + 100_000_000L); // 直接改内部状态！
 // service.getDeliveryDate() 的值被无声无息地篡改了
 ```
 
 ```java
-// 🟢 java.time：不可变，返回新实例
+// java.time：不可变，返回新实例
 public class OrderService {
     private LocalDateTime deliveryDate;
 
@@ -75,12 +75,12 @@ System.out.println(d == modified);        // false
 `java.util.Date` 的月份从 0 开始（January = 0），而日期从 1 开始。这种不一致是所有 Java 新手必经的"坑"。
 
 ```java
-// 🔴 旧 API：月份从 0 开始
+// 旧 API：月份从 0 开始
 Date date = new Date(121, 0, 1);  // 2021年1月1日? 参数含义不直观
 // 实际：year = 1900 + 121 = 2021, month = 0 = January
 
-Date date2 = new Date(2021, 0, 1); // ⚠️ 你以为的 2021年0月1日（荒谬！）
-// 事实上 year 参数表示 1900 + 2021 = 3921 年 😱
+Date date2 = new Date(2021, 0, 1); // 你以为的 2021年0月1日（荒谬！）
+// 事实上 year 参数表示 1900 + 2021 = 3921 年 
 
 // 最常见的 Bug
 int month = date.getMonth();       // 返回 0 ~ 11
@@ -88,7 +88,7 @@ System.out.println(month + 1);     // 几乎每次都要 +1，且经常忘记
 ```
 
 ```java
-// 🟢 java.time：月份从 1 开始，符合直觉
+// java.time：月份从 1 开始，符合直觉
 LocalDate date = LocalDate.of(2021, 1, 1);  // 2021年1月1日
 int month = date.getMonthValue();           // 1 ~ 12
 Month m = date.getMonth();                  // Month.JANUARY（枚举，不会混淆）
@@ -99,14 +99,14 @@ Month m = date.getMonth();                  // Month.JANUARY（枚举，不会�
 `SimpleDateFormat` 是线程不安全的——它的内部 `Calendar` 对象在 `format()` 和 `parse()` 过程中会修改共享状态。生产环境中，静态共享 `SimpleDateFormat` 在高并发下会导致解析结果错乱、数值溢出，甚至 JVM crash。
 
 ```java
-// 🔴 旧 API：SimpleDateFormat 线程不安全
+// 旧 API：SimpleDateFormat 线程不安全
 public class DateUtils {
     // 静态共享 —— 多线程下灾难！
     private static final SimpleDateFormat sdf =
             new SimpleDateFormat("yyyy-MM-dd");
 
     public static Date parse(String source) throws ParseException {
-        return sdf.parse(source);  // ⚠️ 并发调用时内部 Calendar 被多线程篡改
+        return sdf.parse(source);  // 并发调用时内部 Calendar 被多线程篡改
     }
 }
 
@@ -117,23 +117,23 @@ public class DateUtils {
 ```
 
 ```java
-// ❌ "修正"方案 1：每次创建新实例（性能差）
+// ✗ "修正"方案 1：每次创建新实例（性能差）
 public static Date parse(String source) throws ParseException {
     return new SimpleDateFormat("yyyy-MM-dd").parse(source); // GC 压力大
 }
 
-// ❌ "修正"方案 2：加 synchronized（吞吐量暴跌）
+// ✗ "修正"方案 2：加 synchronized（吞吐量暴跌）
 public static synchronized Date parse(String source) throws ParseException {
     return sdf.parse(source); // 多线程排队，相当于单线程
 }
 
-// ❌ "修正"方案 3：ThreadLocal（代码繁琐）
+// ✗ "修正"方案 3：ThreadLocal（代码繁琐）
 private static final ThreadLocal<SimpleDateFormat> TL =
         ThreadLocal.withInitial(() -> new SimpleDateFormat("yyyy-MM-dd"));
 ```
 
 ```java
-// 🟢 java.time：DateTimeFormatter 是线程安全的
+// java.time：DateTimeFormatter 是线程安全的
 private static final DateTimeFormatter FORMATTER =
         DateTimeFormatter.ofPattern("yyyy-MM-dd"); // 不可变，线程安全
 
@@ -148,14 +148,14 @@ public static LocalDate parse(String source) {
 `Calendar` 的设计充满了误导。最典型的陷阱是 `set()` 不会立即重新计算——它只会标记字段为"被修改"，直到你调用 `get()`、`getTime()` 或 `add()` 时才触发重新计算。
 
 ```java
-// 🔴 旧 API：Calendar 的反直觉行为
+// 旧 API：Calendar 的反直觉行为
 Calendar cal = Calendar.getInstance();
 cal.set(Calendar.MONTH, Calendar.DECEMBER); // 设置到 12 月
 cal.set(Calendar.DAY_OF_MONTH, 31);          // 12 月 31 日
 cal.set(Calendar.YEAR, 2024);                 // 2024 年
 // 到现在一切正常：2024-12-31
 
-cal.set(Calendar.DAY_OF_MONTH, 32);           // ⚠️ 没有立即报错！
+cal.set(Calendar.DAY_OF_MONTH, 32);           // 没有立即报错！
 // 内部 lenient 模式自动溢出，变成了 2025-01-01
 // 但如果你没调用 get()，程序毫无察觉
 
@@ -163,11 +163,11 @@ cal.set(Calendar.DAY_OF_MONTH, 32);           // ⚠️ 没有立即报错！
 cal.set(2024, Calendar.OCTOBER, 31);          // 2024-10-31
 cal.set(Calendar.MONTH, Calendar.NOVEMBER);   // 设置月份为 11 月
 // 直观想法：2024-11-31 → 但 11 月只有 30 天
-// 自动修正为 2024-12-01 😱
+// 自动修正为 2024-12-01 
 ```
 
 ```java
-// 🟢 java.time：清晰的 API，没有意外
+// java.time：清晰的 API，没有意外
 LocalDate date = LocalDate.of(2024, 12, 31);
 // LocalDate.of(2024, 12, 32) → 抛出 DateTimeException: Invalid value
 // 不会默默溢出，立即失败
@@ -181,7 +181,7 @@ LocalDate nov30 = oct31.withMonth(11); // 自动取 11 月 30 日（有效值）
 ### 1.5 Date 和 Calendar 互转的繁琐
 
 ```java
-// 🔴 旧 API：互转需要大量样板代码
+// 旧 API：互转需要大量样板代码
 // Date → Calendar
 Date date = new Date();
 Calendar cal = Calendar.getInstance();
@@ -202,7 +202,7 @@ int second = c.get(Calendar.SECOND);
 ```
 
 ```java
-// 🟢 java.time：一行获取所需
+// java.time：一行获取所需
 LocalDateTime now = LocalDateTime.now();
 int year = now.getYear();           // 直接
 int month = now.getMonthValue();    // 1 ~ 12，不需要 +1
@@ -221,7 +221,7 @@ int day = now.getDayOfMonth();
 | `Date.getYear()` | 返回 year - 1900，完全反直觉 |
 
 ```java
-// 🟢 java.time 命名一览
+// java.time 命名一览
 // 类名即含义：
 // LocalDate     = 只有日期（年月日）
 // LocalTime     = 只有时间（时分秒纳秒）
@@ -232,7 +232,7 @@ int day = now.getDayOfMonth();
 // Period        = 日期量（年月日）
 ```
 
-> 🎯 **核心要点**：旧 API 的根源问题：可变性、月份从 0、线程不安全、API 反直觉。java.time 用不可变对象 + 职责单一 + 工厂方法三个原则一次性解决了所有问题。
+> **核心要点**：旧 API 的根源问题：可变性、月份从 0、线程不安全、API 反直觉。java.time 用不可变对象 + 职责单一 + 工厂方法三个原则一次性解决了所有问题。
 
 ---
 
@@ -403,7 +403,7 @@ LocalDate date = LocalDate.now();
 // 可以通过 TemporalQuery 统一查询
 ```
 
-> 🎯 **核心要点**：java.time 的设计哲学概括为三点——不可变对象保证线程安全，职责单一避免概念混淆，工厂方法提供灵活创建。理解这三点，就能自然而然地理解整个包的 API 设计。
+> **核心要点**：java.time 的设计哲学概括为三点——不可变对象保证线程安全，职责单一避免概念混淆，工厂方法提供灵活创建。理解这三点，就能自然而然地理解整个包的 API 设计。
 
 ---
 
@@ -626,7 +626,7 @@ LocalDateTime dt3 = date.atStartOfDay();      // 2024-12-25T00:00
 LocalDateTime dt4 = time.atDate(date);        // 2024-12-25T14:30
 ```
 
-> 🎯 **核心要点**：LocalDate/LocalTime/LocalDateTime 是日常最常用的三个类。记住创建三剑客——`now()`、`of()`、`parse()`，修改三兄弟——`with`、`plus`、`minus`，以及比较工具——`isBefore`/`isAfter`/`until`，就能覆盖 80% 的日常需求。
+> **核心要点**：LocalDate/LocalTime/LocalDateTime 是日常最常用的三个类。记住创建三剑客——`now()`、`of()`、`parse()`，修改三兄弟——`with`、`plus`、`minus`，以及比较工具——`isBefore`/`isAfter`/`until`，就能覆盖 80% 的日常需求。
 
 ---
 
@@ -663,7 +663,7 @@ Instant fromEpochSecondNano = Instant.ofEpochSecond(1_704_067_200L, 123_456_789L
 
 // 从字符串解析（ISO 8601，末尾必须带 Z）
 Instant parsed = Instant.parse("2024-12-25T06:30:00Z");
-// Instant.parse("2024-12-25T06:30:00") → ❌ DateTimeException（缺少 Z）
+// Instant.parse("2024-12-25T06:30:00") → ✗ DateTimeException（缺少 Z）
 
 // 从 Date 转换（旧 API 互转）
 Instant fromDate = new Date().toInstant();
@@ -747,7 +747,7 @@ void testExpired() {
 
     LocalDateTime notExpired = LocalDateTime.of(2024, 12, 26, 0, 0);
     assertFalse(validator.isExpired(notExpired));
-    // 无论真实时间如何，固定时钟保证结果可预测 ✅
+    // 无论真实时间如何，固定时钟保证结果可预测 ✓
 }
 
 // 生产代码
@@ -777,7 +777,7 @@ Duration duration = Duration.between(earlier, later);
 long millisBetween = ChronoUnit.MILLIS.between(earlier, later);
 ```
 
-> 🎯 **核心要点**：Instant 是 UTC 时间线上的纳秒瞬时点，适合跨时区传输和时间戳存储。Clock 抽象让时间相关代码可测试——通过固定时钟消除时间不确定性。
+> **核心要点**：Instant 是 UTC 时间线上的纳秒瞬时点，适合跨时区传输和时间戳存储。Clock 抽象让时间相关代码可测试——通过固定时钟消除时间不确定性。
 
 ---
 
@@ -875,7 +875,7 @@ ZonedDateTime meetingInLondon =
 ZonedDateTime wrong = meetingInBeijing.withZoneSameLocal(
         ZoneId.of("America/New_York"));
 // 2024-12-25T14:00-05:00[America/New_York]
-// ⚠️ 这表示"纽约 14:00"，和北京 14:00 不是同一时刻！
+// 这表示"纽约 14:00"，和北京 14:00 不是同一时刻！
 ```
 
 ### 5.4 夏令时（DST）边界行为
@@ -997,7 +997,7 @@ OffsetDateTime o = OffsetDateTime.now();
 | `Pacific/Auckland` | 奥克兰 | +12:00 | 有 |
 | `UTC` | UTC | +00:00 | 无 |
 
-> 🎯 **核心要点**：业务逻辑用 ZonedDateTime 保留完整时区规则，API/DB 传输用 OffsetDateTime 只保留偏移量。时区转换用 `withZoneSameInstant()`（改时区不改时刻），不要用 `withZoneSameLocal()`（本地时间不变但含义变了）。
+> **核心要点**：业务逻辑用 ZonedDateTime 保留完整时区规则，API/DB 传输用 OffsetDateTime 只保留偏移量。时区转换用 `withZoneSameInstant()`（改时区不改时刻），不要用 `withZoneSameLocal()`（本地时间不变但含义变了）。
 
 ---
 
@@ -1174,7 +1174,7 @@ System.out.printf("工作: %d年%d个月%n",
 | 标准化 | 无（纳秒永远正确） | normalized() 将 12 月转 1 年 |
 | 负值 | 支持 | 支持 |
 
-> 🎯 **核心要点**：处理时间量（Instant/LocalTime）用 Duration，处理日期量（LocalDate）用 Period。Duration 精度到纳秒适合计时，Period 适合年龄、租期等人文日期计算。
+> **核心要点**：处理时间量（Instant/LocalTime）用 Duration，处理日期量（LocalDate）用 Period。Duration 精度到纳秒适合计时，Period 适合年龄、租期等人文日期计算。
 
 ---
 
@@ -1439,7 +1439,7 @@ System.out.println(dt.format(localized));
 // 2024年12月25日 星期三 14:30:45
 ```
 
-> 🎯 **核心要点**：DateTimeFormatter 是不可变且线程安全的，可以放心声明为 `static final`。`ofPattern` 覆盖 90% 的需求，`DateTimeFormatterBuilder` 处理剩余 10% 的复杂场景。不再需要 `ThreadLocal<SimpleDateFormat>` 这种丑陋的模式。
+> **核心要点**：DateTimeFormatter 是不可变且线程安全的，可以放心声明为 `static final`。`ofPattern` 覆盖 90% 的需求，`DateTimeFormatterBuilder` 处理剩余 10% 的复杂场景。不再需要 `ThreadLocal<SimpleDateFormat>` 这种丑陋的模式。
 
 ---
 
@@ -1606,7 +1606,7 @@ LocalDate quarterStart = someDate.with(MyAdjusters.firstDayOfQuarter());
 // 2024-10-01（Q4 第一天）
 ```
 
-> 🎯 **核心要点**：TemporalAdjusters 提供了"下周一""本月最后一天"等常用调整器。内置工厂方法不够用时，用 Lambda 或实现接口创建自定义调整器。这是策略模式在 Java API 中的经典应用。
+> **核心要点**：TemporalAdjusters 提供了"下周一""本月最后一天"等常用调整器。内置工厂方法不够用时，用 Lambda 或实现接口创建自定义调整器。这是策略模式在 Java API 中的经典应用。
 
 ---
 
@@ -1870,7 +1870,7 @@ public final class DateConvertUtils {
 }
 ```
 
-> 🎯 **核心要点**：所有新旧 API 互转的路径都是"先转 Instant，再转目标类型"。理解了这个思路，任何组合都能推导出来。对于 GregorianCalendar 可以使用 `toZonedDateTime()` 捷径。
+> **核心要点**：所有新旧 API 互转的路径都是"先转 Instant，再转目标类型"。理解了这个思路，任何组合都能推导出来。对于 GregorianCalendar 可以使用 `toZonedDateTime()` 捷径。
 
 ---
 
@@ -2127,7 +2127,7 @@ times.forEach((city, zdt) ->
 | 9 | 忽略 DST 直接算时差 | 使用 `ZonedDateTime` + `Duration.between` | DST 切换时偏移量会变化 |
 | 10 | `getMonth()` 返回 `Month` 枚举却被当成数字 | 使用 `getMonthValue()` 获取 1~12 | 类型安全与转型需求分离 |
 
-> 🎯 **核心要点**：最佳实践一句话总结——**新代码全用 java.time，旧代码通过 `Date.toInstant()` 桥接**。当有日期运算需求时，先想想"这是日期还是时间？用 Period 还是 Duration？需不需要时区？"
+> **核心要点**：最佳实践一句话总结——**新代码全用 java.time，旧代码通过 `Date.toInstant()` 桥接**。当有日期运算需求时，先想想"这是日期还是时间？用 Period 还是 Duration？需不需要时区？"
 
 ---
 

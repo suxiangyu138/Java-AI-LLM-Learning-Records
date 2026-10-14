@@ -1,7 +1,7 @@
 # 01-Listener 基础与八大分类
 > 事件模型、八大监听器分类、触发时机表——"监听器家族全家福"
 
-## 📚 目录
+## 目录
 1. [事件模型](#1-事件模型)
 2. [八大监听器分类](#2-八大监听器分类)
 3. [生命周期监听器（三个）](#3-生命周期监听器三个)
@@ -26,7 +26,7 @@
   → 调用对应回调方法
 ```
 
-> 🎯 **理解方式**：与观察者模式完全一致——**监听器"订阅"容器事件，容器"发布"事件时自动通知**。
+> **理解方式**：与观察者模式完全一致——**监听器"订阅"容器事件，容器"发布"事件时自动通知**。
 
 ## 2. 八大监听器分类
 
@@ -42,7 +42,7 @@
   + 2 个会话特殊绑定 = 8
 ```
 
-> 🎯 **八大监听器框架**：**3 个对象 × 2 类事件（生命周期+属性）= 6 个** + 2 个会话绑定——记住这个乘法就记住了分类。
+> **八大监听器框架**：**3 个对象 × 2 类事件（生命周期+属性）= 6 个** + 2 个会话绑定——记住这个乘法就记住了分类。
 
 ## 3. 生命周期监听器（三个）
 
@@ -84,7 +84,7 @@ public class RequestListener implements ServletRequestListener {
 | HttpSessionListener | sessionCreated/Destroyed | 会话创建/销毁 |
 | ServletRequestListener | requestInitialized/Destroyed | 请求开始/结束 |
 
-> 🎯 **最常用的是 ServletContextListener**：应用启动时做初始化（缓存预热/配置加载/定时任务启动）——见 [02](02-ServletContextListener与启动初始化.md)。
+> **最常用的是 ServletContextListener**：应用启动时做初始化（缓存预热/配置加载/定时任务启动）——见 [02](02-ServletContextListener与启动初始化.md)。
 
 ## 4. 属性监听器（三个）
 
@@ -109,7 +109,7 @@ public class SessionAttrListener implements HttpSessionAttributeListener {
 | HttpSessionAttributeListener | attributeAdded/Removed/Replaced |
 | ServletRequestAttributeListener | attributeAdded/Removed/Replaced |
 
-> 💡 属性监听器三个接口结构相同（增/删/改三方法）——**区别只在于监听哪个对象的属性**（Context/Session/Request）。
+> 属性监听器三个接口结构相同（增/删/改三方法）——**区别只在于监听哪个对象的属性**（Context/Session/Request）。
 
 ## 5. 会话绑定监听器（两个）
 
@@ -140,7 +140,7 @@ public class Data implements HttpSessionActivationListener {
 | HttpSessionBindingListener | 对象放入/移出 Session | 对象自身感知（如释放资源） |
 | HttpSessionActivationListener | 会话钝化/激活（序列化） | 分布式 Session 迁移（见会话体系） |
 
-> 💡 **绑定监听器与普通监听器的区别**：普通监听器是"全局监听 Session"；绑定监听器是"对象自己感知被放入/移出"——**由对象实现接口，不是注册全局监听**。
+> **绑定监听器与普通监听器的区别**：普通监听器是"全局监听 Session"；绑定监听器是"对象自己感知被放入/移出"——**由对象实现接口，不是注册全局监听**。
 
 ## 6. 触发时机总表
 
@@ -157,7 +157,7 @@ public class Data implements HttpSessionActivationListener {
 
 ## 7. 核心要点
 
-> 🎯 **核心要点**：
+> **核心要点**：
 > - 事件模型：容器（事件源）→ 事件对象 → 监听器回调（观察者模式）；
 > - 八大分类框架：**3 对象 × 2 事件 = 6 + 2 会话绑定**；
 > - 生命周期三监听器：Context（应用）/Session（会话）/Request（请求）；

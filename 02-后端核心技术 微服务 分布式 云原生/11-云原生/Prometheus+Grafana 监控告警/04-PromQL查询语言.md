@@ -1,6 +1,6 @@
 # 04 - PromQL 查询语言
 
-> 🎯 PromQL 是 Prometheus 的灵魂 — 从选择器到聚合函数、从 rate/irate 到 histogram_quantile，掌握查询语言才能真正发挥指标数据的价值
+> PromQL 是 Prometheus 的灵魂 — 从选择器到聚合函数、从 rate/irate 到 histogram_quantile，掌握查询语言才能真正发挥指标数据的价值
 
 ---
 
@@ -34,7 +34,7 @@ http_requests_total[5m]
 rate(http_requests_total[5m])   # → 转为 Instant Vector，可绘图
 ```
 
-> ⚠️ **常见错误**：直接用 `http_requests_total[5m]` 画图会报错。Range Vector 必须配合 `rate()`/`increase()`/`avg_over_time()` 等函数使用。
+> **常见错误**：直接用 `http_requests_total[5m]` 画图会报错。Range Vector 必须配合 `rate()`/`increase()`/`avg_over_time()` 等函数使用。
 
 ---
 
@@ -75,7 +75,7 @@ rate(http_requests_total[5m]) / rate(http_requests_total[5m] offset 1w)
 
 ## 3. rate 与 irate（核心！）
 
-> ⚠️ **Counter 类型必须用 rate/irate 求速率！直接用 Counter 值是累计值，没有监控意义。**
+> **Counter 类型必须用 rate/irate 求速率！直接用 Counter 值是累计值，没有监控意义。**
 
 | 函数 | 计算方式 | 适用场景 | 灵敏度 |
 |------|----------|----------|:---:|
@@ -245,4 +245,4 @@ up{job="spring-boot-apps"} == 0
 predict_linear(node_filesystem_avail_bytes{mountpoint="/"}[4h], 3600) <= 0
 ```
 
-> 🎯 **记忆口诀**：Counter 用 rate、Gauge 直接用、Histogram 用 histogram_quantile + rate、聚合用 by/without、对比用 offset。
+> **记忆口诀**：Counter 用 rate、Gauge 直接用、Histogram 用 histogram_quantile + rate、聚合用 by/without、对比用 offset。

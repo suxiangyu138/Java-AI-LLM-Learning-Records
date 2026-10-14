@@ -28,7 +28,7 @@
 | 方法 | 支持 broadcasting、ufunc、fancy indexing | 仅支持基本索引切片 |
 | 内存 | 更紧凑，无对象头开销 | 每个元素是 PyObject，开销大 |
 
-> 💡 **面试关键词**："同质连续内存"、"向量化"、"broadcasting"、"避免 Python 循环"
+> **面试关键词**："同质连续内存"、"向量化"、"broadcasting"、"避免 Python 循环"
 
 **Q2：ndarray 的 shape 和 dtype 是什么？**
 
@@ -53,7 +53,7 @@ print(a + b)
 #  [14 25 36]]
 ```
 
-> ⚠️ **常见错误**：`(3,)` 与 `(3, 1)` 不同，`(3,)` 只能与 `(1, 3)` 或 `(n, 3)` 广播，不能与 `(3, n)` 直接广播。
+> **常见错误**：`(3,)` 与 `(3, 1)` 不同，`(3,)` 只能与 `(1, 3)` 或 `(n, 3)` 广播，不能与 `(3, n)` 直接广播。
 
 **Q4：什么是 ufunc（universal function）？**
 
@@ -87,7 +87,7 @@ print(df.loc['x':'y'])  # 标签切片，包含终点
 print(df.iloc[0:2])     # 位置切片，不包含终点
 ```
 
-> 💡 **记忆口诀**：`loc` = label-based，`iloc` = integer position-based。
+> **记忆口诀**：`loc` = label-based，`iloc` = integer position-based。
 
 **Q7：groupby 的常见用法？**
 
@@ -115,7 +115,7 @@ pd.concat([df1, df2], axis=0)  # 行拼接
 pd.concat([df1, df2], axis=1)  # 列拼接
 ```
 
-> 🎯 **总结**：合并用 `merge`（类似 SQL JOIN），索引对齐用 `join`，简单拼接用 `concat`。
+> **总结**：合并用 `merge`（类似 SQL JOIN），索引对齐用 `join`，简单拼接用 `concat`。
 
 **Q9：pivot_table 的用途？**
 
@@ -152,7 +152,7 @@ plt.show()
 sns.scatterplot(data=df, x='x', y='y', hue='category')
 ```
 
-> 💡 **面试要点**：Seaborn 的 `hue`（颜色分组）、`col`/`row`（分面）是快速探索数据的利器。
+> **面试要点**：Seaborn 的 `hue`（颜色分组）、`col`/`row`（分面）是快速探索数据的利器。
 
 ### 1.4 数据清洗基础
 
@@ -231,7 +231,7 @@ indices = [1, 3, 5, 7]
 print(arr[indices])  # [1 3 5 7] — fancy indexing
 ```
 
-> ⚠️ **性能提示**：Fancy indexing 返回**新数组的拷贝**（而非 view），因为索引不连续导致无法用 strides 描述。大数据量时优先使用切片或 `take()`。
+> **性能提示**：Fancy indexing 返回**新数组的拷贝**（而非 view），因为索引不连续导致无法用 strides 描述。大数据量时优先使用切片或 `take()`。
 
 **字节面试真题**：解释 `arr[1:5]` 与 `arr[[1,2,3,4]]` 的区别。
 - 前者返回 **view**（共享内存），修改会影响原数组
@@ -255,7 +255,7 @@ print(s1 + s2)
 # c     NaN   ← 不存在的标签自动 NaN
 ```
 
-> 💡 **面试点**：Pandas 的自动对齐既是优点（免去手动排序）也是坑点（可能意外产生 NaN）。
+> **面试点**：Pandas 的自动对齐既是优点（免去手动排序）也是坑点（可能意外产生 NaN）。
 
 **Q17：groupby 的 split-apply-combine 机制？**
 
@@ -308,7 +308,7 @@ pt = df.pivot_table(values='sales', index='region',
 pt_equiv = df.groupby(['region', 'product'])['sales'].sum().unstack()
 ```
 
-> 🎯 **核心区别**：`pivot_table` 自动处理缺失值（fill_value）、支持 margins（总计行/列）、聚合函数更灵活。
+> **核心区别**：`pivot_table` 自动处理缺失值（fill_value）、支持 margins（总计行/列）、聚合函数更灵活。
 
 ### 2.4 可视化原理
 
@@ -639,7 +639,7 @@ def quick_eda(df):
    └──────────┘  └──────────┘  └──────────┘
 ```
 
-> 💡 **关键设计决策**：
+> **关键设计决策**：
 > 1. 使用 `pd.read_sql()` + `chunksize` 避免 OOM
 > 2. 数据清洗逻辑封装为 Pipeline（参考 sklearn Pipeline 思路）
 > 3. 指标计算用 SQL 还是 Pandas？小数据量用 Pandas 更灵活，大数据量下沉到数据库
@@ -677,7 +677,7 @@ def cohens_d(a, b):
 sns.boxplot(data=df, x='group', y='metric_1')
 ```
 
-> ⚠️ **常见面试追问**：
+> **常见面试追问**：
 > - 多重比较如何修正？（Bonferroni / Benjamini-Hochberg）
 > - 指标不服从正态分布怎么办？（Mann-Whitney U 检验）
 > - 如何避免辛普森悖论？（分层分析 + 卡方检验）
@@ -728,7 +728,7 @@ class OrderMonitor:
 
 ## 六、常见坑点与最佳实践
 
-> ⚠️ 本部分汇总面试中高频出现的踩坑知识点。
+> 本部分汇总面试中高频出现的踩坑知识点。
 
 ### 6.1 常见坑点速查表
 
@@ -775,13 +775,13 @@ clean_df = (df
     .drop_duplicates())
 ```
 
-> 💡 **Pandas 2.0 新特性**：支持 PyArrow 后端（`pd.set_option('mode.dtype_backend', 'pyarrow')`），大幅提升性能和内存效率，支持缺失值友好的 `int64` 类型。
+> **Pandas 2.0 新特性**：支持 PyArrow 后端（`pd.set_option('mode.dtype_backend', 'pyarrow')`），大幅提升性能和内存效率，支持缺失值友好的 `int64` 类型。
 
 ---
 
 ## 七、面试回答模板（Top 5）
 
-> 🎯 以下模板帮助你在面试中组织语言，清晰有逻辑地表达。
+> 以下模板帮助你在面试中组织语言，清晰有逻辑地表达。
 
 ### 模板 1：如何优化 Pandas 代码性能？
 
@@ -829,7 +829,7 @@ clean_df = (df
 
 ## 八、快速查漏补缺 Checklist
 
-> ✅ 面试前对照检查，确保无知识盲区。
+> ✓ 面试前对照检查，确保无知识盲区。
 
 ### NumPy 必会
 
@@ -889,7 +889,7 @@ clean_df = (df
 
 ---
 
-> 🎯 **面试必胜策略**：
+> **面试必胜策略**：
 > 1. **基础题**（一、六）：快速准确回答，展示扎实基础
 > 2. **原理题**（二）：展示深度理解，提到源码机制和设计思想
 > 3. **实战题**（三、四）：手写代码要边写边解释，先说思路再动笔

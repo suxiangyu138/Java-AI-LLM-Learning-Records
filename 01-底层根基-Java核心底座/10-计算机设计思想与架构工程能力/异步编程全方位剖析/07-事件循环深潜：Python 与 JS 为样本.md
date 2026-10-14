@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [事件循环的内部结构：三个角色](#1-事件循环的内部结构三个角色)
 2. [调度顺序：就绪队列与等待队列](#2-调度顺序就绪队列与等待队列)
@@ -124,15 +124,15 @@ http.createServer((req, res) => { ... });          // 事件循环
 # 事故现场：看似无害的一行
 @app.get("/search")
 async def search(q: str):
-    time.sleep(0.5)                        # ❌ 阻塞事件循环 0.5s——全服务卡顿
-    result = requests.get(SEARCH_API).json()  # ❌ 同步 IO 同理
+    time.sleep(0.5)                        # ✗ 阻塞事件循环 0.5s——全服务卡顿
+    result = requests.get(SEARCH_API).json()  # ✗ 同步 IO 同理
     return result
 
 # 正确姿势
 @app.get("/search")
 async def search(q: str):
-    await asyncio.sleep(0.5)               # ✅ 异步睡眠：让出循环
-    result = await httpx.get(SEARCH_API)   # ✅ 异步客户端
+    await asyncio.sleep(0.5)               # ✓ 异步睡眠：让出循环
+    result = await httpx.get(SEARCH_API)   # ✓ 异步客户端
     # 或：阻塞任务丢线程池
     result = await asyncio.to_thread(sync_fn)
 ```
@@ -141,11 +141,11 @@ async def search(q: str):
 
 这条铁律的**检测手段**也顺带给齐：线上"周期性卡顿"的请求——用 py-spy 采样看事件循环线程当前栈（是否停在同步调用上）；结合"卡顿间隔 = 某阻塞调用的时长"这个特征，就能把嫌疑锁定到具体调用点。**"先采样再怀疑"是异步排障与同步排障最大的方法论差异**——同步靠栈一步到位，异步要先抓"循环停在哪"。
 
-> 🎯 **核心要点**：事件循环 = 就绪队列 + 等待注册表 + 多路复用器——挂起只是"移入等待表"，单线程十万连接的结构秘密；uvloop 用 C 实现追平 Node，libuv 线程池与 to_thread 是"循环管网络、池管阻塞"的通用分工；阻塞调用混入循环 = 全服务停摆的灾难模型，是第一铁律的由来。
+> **核心要点**：事件循环 = 就绪队列 + 等待注册表 + 多路复用器——挂起只是"移入等待表"，单线程十万连接的结构秘密；uvloop 用 C 实现追平 Node，libuv 线程池与 to_thread 是"循环管网络、池管阻塞"的通用分工；阻塞调用混入循环 = 全服务停摆的灾难模型，是第一铁律的由来。
 
 ## 7. 核心要点与思考题
 
-> 🎯 **本章三句话总结**：
+> **本章三句话总结**：
 > 1. 循环三角色（就绪队列/等待注册表/复用器）解释"挂起不占线程"；调度顺序的两陷阱是长任务饿死与微任务反转；
 > 2. asyncio 调度链"注册→事件→唤醒→恢复"四环节是排障地图；uvloop 把 Python 循环性能拉到 Node 档；
 > 3. 阻塞混入循环 = 全服务停摆；铁律：循环线程里只有 await 与 CPU 快操作。

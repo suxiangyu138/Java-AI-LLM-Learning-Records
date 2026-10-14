@@ -1,6 +1,6 @@
 # 03 - Java CLI 框架：Picocli 实战
 
-> 🎯 Picocli 是 Java 命令行工具的首选框架 — 注解驱动、子命令支持、自动生成帮助文档、Gradle/Maven 插件一键打包
+> Picocli 是 Java 命令行工具的首选框架 — 注解驱动、子命令支持、自动生成帮助文档、Gradle/Maven 插件一键打包
 
 ---
 
@@ -8,7 +8,7 @@
 
 | 框架 | 特点 | 适用 |
 |------|------|------|
-| **Picocli** | 注解驱动/体积小/彩色帮助/子命令/GraalVM | ⭐ 首选 |
+| **Picocli** | 注解驱动/体积小/彩色帮助/子命令/GraalVM | ★ 首选 |
 | **JCommander** | 老牌/简单 | 简单场景 |
 | **Spring Shell** | Spring 集成/REPL交互式 | 大型内部工具 |
 
@@ -111,4 +111,4 @@ native-image -jar app.jar app
 ./app greet 张三 -c 3     # 启动 5ms vs JVM 500ms
 ```
 
-> 🎯 **Picocli 三件套**：`@Command` 声明程序/子命令、`@Option` 选项参数、`@Parameters` 位置参数。打包用 assembly plugin → 分发一个 JAR 即可。
+> **Picocli 三件套**：`@Command` 声明程序/子命令、`@Option` 选项参数、`@Parameters` 位置参数。打包用 assembly plugin → 分发一个 JAR 即可。

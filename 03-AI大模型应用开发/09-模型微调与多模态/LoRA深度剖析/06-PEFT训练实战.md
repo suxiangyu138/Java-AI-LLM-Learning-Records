@@ -137,7 +137,7 @@ model.base_model.model.some_layer.weight               # 访问原始权重
 | OOM at step 1（QLoRA） | 页缓存未预热/批次过大 | 先小 batch 验证，开 gradient_checkpointing |
 | 训练 loss 不动 | 数据格式错（chat template 未套） | 用 tokenizer.apply_chat_template 再 tokenize |
 
-> 🎯 **核心要点**：工程链路的三条铁律——版本钉死（peft/transformers/bnb 三位一体）、参数化一旦开始不中途改（rslora/loftq/α 决定检查点可续性）、训练范式决定 LR 量级（SFT 2e-4、DPO/GRPO 5e-6）。跑通这条链路后，LoRA 训练只是"换数据换配置"的流水线。最后一道防线是训练资产的组织规范——配置指纹命名 + 数据 hash，让每个实验都可追溯可回滚。
+> **核心要点**：工程链路的三条铁律——版本钉死（peft/transformers/bnb 三位一体）、参数化一旦开始不中途改（rslora/loftq/α 决定检查点可续性）、训练范式决定 LR 量级（SFT 2e-4、DPO/GRPO 5e-6）。跑通这条链路后，LoRA 训练只是"换数据换配置"的流水线。最后一道防线是训练资产的组织规范——配置指纹命名 + 数据 hash，让每个实验都可追溯可回滚。
 
 ---
 

@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [为什么 Redis 是响应式家族的天然成员](#1-为什么-redis-是响应式家族的天然成员)
 2. [ReactiveRedisTemplate 三件套](#2-reactiveredistemplate-三件套)
@@ -21,8 +21,8 @@
 
 | 驱动 | 同步 | 响应式 | 说明 |
 |------|:---:|:---:|------|
-| **Lettuce** | ✅ RedisTemplate | ✅ **ReactiveRedisTemplate（原生）** | Netty 非阻塞，共享连接 |
-| Jedis | ✅ | ⚠️（阻塞模型，不推荐） | 响应式场景直接排除 |
+| **Lettuce** | ✓ RedisTemplate | ✓ **ReactiveRedisTemplate（原生）** | Netty 非阻塞，共享连接 |
+| Jedis | ✓ | （阻塞模型，不推荐） | 响应式场景直接排除 |
 
 ```text
 响应式全链路（2026 主流组合）：
@@ -31,7 +31,7 @@
   全程非阻塞：一个线程同时服务 N 个请求（IO 等待期间线程去干别的）
 ```
 
-> 🎯 面试必答：**"Redis 响应式和同步怎么选？"**——响应式项目（WebFlux 全链路）**Redis 必须用 ReactiveRedisTemplate**（同步模板会阻塞事件循环线程）；传统 MVC 项目用同步模板即可——**判断标准只有一个：你的 HTTP 层是 WebFlux 还是 MVC**（[阻塞陷阱](#5-阻塞陷阱与性能)）。
+> 面试必答：**"Redis 响应式和同步怎么选？"**——响应式项目（WebFlux 全链路）**Redis 必须用 ReactiveRedisTemplate**（同步模板会阻塞事件循环线程）；传统 MVC 项目用同步模板即可——**判断标准只有一个：你的 HTTP 层是 WebFlux 还是 MVC**（[阻塞陷阱](#5-阻塞陷阱与性能)）。
 
 ## 2. ReactiveRedisTemplate 三件套
 
@@ -87,7 +87,7 @@ ReactiveRedisTemplate<String, Object> reactiveRedisTemplate(ReactiveRedisConnect
 | 序列化 | 与同步 RedisTemplate **同一套约定**（key String/value JSON）——否则同步写响应式读乱码 |
 | 连接模型 | Lettuce **共享连接 + 非阻塞**（不需要池化，[02 篇](02-快速开始与连接配置速查.md) 3 节） |
 
-> ⚠️ **双模板一致性问题**：项目同时用 RedisTemplate（同步）和 ReactiveRedisTemplate 时，**序列化器必须完全一致**（复制配置）——两条路径读写同一批 key，不一致 = 跨端乱码（[03 篇](03-序列化器与实体映射速查.md) 铁律）。
+> **双模板一致性问题**：项目同时用 RedisTemplate（同步）和 ReactiveRedisTemplate 时，**序列化器必须完全一致**（复制配置）——两条路径读写同一批 key，不一致 = 跨端乱码（[03 篇](03-序列化器与实体映射速查.md) 铁律）。
 
 ### 2.3 响应式 Lua 与消息
 
@@ -124,7 +124,7 @@ ReactiveRedisCacheManager cacheManager(ReactiveRedisConnectionFactory factory) {
 public Mono<Product> getProduct(Long id) { return productRepository.findById(id); }
 ```
 
-> 💡 响应式缓存与同步缓存**同一个注解**（@Cacheable），区别在 CacheManager 实现（ReactiveRedisCacheManager）——响应式方法（返回 Mono/Flux）配响应式 CacheManager，同步方法配同步的，别混用。
+> 响应式缓存与同步缓存**同一个注解**（@Cacheable），区别在 CacheManager 实现（ReactiveRedisCacheManager）——响应式方法（返回 Mono/Flux）配响应式 CacheManager，同步方法配同步的，别混用。
 
 ### 3.2 响应式语义缓存（AI 链路）
 
@@ -168,7 +168,7 @@ public class ProductReactiveService {
 }
 ```
 
-> 🎯 面试必答：**"响应式项目里数据库和 Redis 怎么配合？"**——Cache-Aside 响应式版：`redis.get → switchIfEmpty(db.find) → 回填`；写路径 `R2DBC 事务更新 + ReactiveRedis 删缓存`——**全链路 Mono/Flux 贯穿**，任何一环 block 都会破坏非阻塞（[R2DBC 08 篇](../../Spring%20Data%20系列【数据访问层】/Spring%20Data%20R2DBC/08-WebFlux响应式集成速查.md) 阻塞陷阱同源）。
+> 面试必答：**"响应式项目里数据库和 Redis 怎么配合？"**——Cache-Aside 响应式版：`redis.get → switchIfEmpty(db.find) → 回填`；写路径 `R2DBC 事务更新 + ReactiveRedis 删缓存`——**全链路 Mono/Flux 贯穿**，任何一环 block 都会破坏非阻塞（[R2DBC 08 篇](../../Spring%20Data%20系列【数据访问层】/Spring%20Data%20R2DBC/08-WebFlux响应式集成速查.md) 阻塞陷阱同源）。
 
 ## 5. 阻塞陷阱与性能
 
@@ -185,7 +185,7 @@ public class ProductReactiveService {
 // 反模式：WebFlux 控制器里用同步模板（block 事件循环）
 @GetMapping("/products/{id}")
 public Mono<Product> get(@PathVariable Long id) {
-    Product p = redisTemplate.opsForValue().get("product:" + id);  // ❌ 同步 IO 在 Netty 线程
+    Product p = redisTemplate.opsForValue().get("product:" + id);  // ✗ 同步 IO 在 Netty 线程
     return Mono.justOrEmpty(p);
 }
 ```
@@ -206,7 +206,7 @@ Flux.fromIterable(products)
         .then();
 ```
 
-> 💡 响应式批量的优势：**并发度可调 + 背压天然**——比管道"一把梭"更精细（管道要么全发要么分批，响应式按需拉取）；大批量导入的响应式姿势（[R2DBC 07 篇](../../Spring%20Data%20系列【数据访问层】/Spring%20Data%20R2DBC/07-性能优化与批量速查.md) 流式思路同源）。
+> 响应式批量的优势：**并发度可调 + 背压天然**——比管道"一把梭"更精细（管道要么全发要么分批，响应式按需拉取）；大批量导入的响应式姿势（[R2DBC 07 篇](../../Spring%20Data%20系列【数据访问层】/Spring%20Data%20R2DBC/07-性能优化与批量速查.md) 流式思路同源）。
 
 ## 6. 响应式测试
 
@@ -246,7 +246,7 @@ class ReactiveRedisCacheTest {
 | 清理 | 测试后清 key（FLUSHDB 或按前缀删——**别连生产 Redis 跑测试**） |
 | 时序 | 过期/延迟类断言用 `Mono.delay` 推进（勿 sleep） |
 
-> 🎯 测试三坑（与 R2DBC 系列一致）：① 别连生产 Redis（数据污染）；② 断言必须 StepVerifier（`.block()` 会掩盖时序）；③ 同步与响应式模板的序列化一致性要在测试里验证（双模板互通测试必写）。
+> 测试三坑（与 R2DBC 系列一致）：① 别连生产 Redis（数据污染）；② 断言必须 StepVerifier（`.block()` 会掩盖时序）；③ 同步与响应式模板的序列化一致性要在测试里验证（双模板互通测试必写）。
 
 ---
 

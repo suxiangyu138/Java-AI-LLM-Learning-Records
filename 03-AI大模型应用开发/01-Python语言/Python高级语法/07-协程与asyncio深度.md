@@ -1,6 +1,6 @@
 # 07 - 协程与 asyncio 深度
 
-> 🎯 协程是 Python 异步编程的核心——比线程轻量 1000 倍，AI API 并发调用、流式数据处理、WebSocket 实时通信的基石。掌握 `async/await` + 事件循环，就掌握了 Python 高性能 I/O 的秘密
+> 协程是 Python 异步编程的核心——比线程轻量 1000 倍，AI API 并发调用、流式数据处理、WebSocket 实时通信的基石。掌握 `async/await` + 事件循环，就掌握了 Python 高性能 I/O 的秘密
 
 ---
 

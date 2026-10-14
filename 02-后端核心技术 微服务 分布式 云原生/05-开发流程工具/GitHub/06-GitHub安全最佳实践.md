@@ -28,15 +28,15 @@ Settings → Security → Security overview
 ┌─────────────────────────────────────────────────────────┐
 │ Security Coverage                                       │
 │                                                          │
-│ Code scanning     ✅ Enabled (CodeQL)                    │
-│ Secret scanning   ✅ Enabled (Push protection + Alerts)  │
-│ Dependabot        ✅ Enabled (Alerts + Security updates) │
-│ Branch protection ✅ Enabled (main branch)               │
+│ Code scanning     ✓ Enabled (CodeQL)                    │
+│ Secret scanning   ✓ Enabled (Push protection + Alerts)  │
+│ Dependabot        ✓ Enabled (Alerts + Security updates) │
+│ Branch protection ✓ Enabled (main branch)               │
 │                                                          │
 │ Risk Summary:                                            │
-│   🔴 3 Critical alerts                                  │
-│   🟡 12 High alerts                                     │
-│   🔵 45 Medium alerts                                   │
+│   3 Critical alerts                                  │
+│   12 High alerts                                     │
+│   45 Medium alerts                                   │
 └─────────────────────────────────────────────────────────┘
 ```
 
@@ -46,12 +46,12 @@ Settings → Security → Security overview
 |--------|------|--------|
 | 分支保护 | Settings → Branches | main 分支强制保护 |
 | CODEOWNERS | `.github/CODEOWNERS` | 核心目录需专人审批 |
-| Dependabot alerts | Settings → Security | ✅ 开启 |
-| Dependabot security updates | Settings → Security | ✅ 开启（自动 PR） |
-| Secret scanning | Settings → Security | ✅ 开启 + Push 保护 |
-| Code scanning | Settings → Security | ✅ 开启（CodeQL） |
-| 删除分支限制 | Branch protection | ✅ 禁止删除 |
-| Force Push | Branch protection | ✅ 禁止 |
+| Dependabot alerts | Settings → Security | ✓ 开启 |
+| Dependabot security updates | Settings → Security | ✓ 开启（自动 PR） |
+| Secret scanning | Settings → Security | ✓ 开启 + Push 保护 |
+| Code scanning | Settings → Security | ✓ 开启（CodeQL） |
+| 删除分支限制 | Branch protection | ✓ 禁止删除 |
+| Force Push | Branch protection | ✓ 禁止 |
 | Signed commits | Branch protection | 推荐开启 |
 | 私有仓库 | Settings → General | 按需选择 |
 
@@ -86,8 +86,8 @@ Branch name pattern: main
 # ═══ 禁止操作 ═══
 ☑ Lock branch                          # 只读，禁止任何推送
 ☑ Do not allow bypassing
-☐ Allow force pushes                   # ❌ 禁止
-☐ Allow deletions                      # ❌ 禁止
+☐ Allow force pushes                   # ✗ 禁止
+☐ Allow deletions                      # ✗ 禁止
 ```
 
 ### 2.2 保护规则的层级
@@ -243,7 +243,7 @@ updates:
    - 发现密钥/Token 后告警
    - GitHub 自动吊销对应服务的 Token
 
-2. Push protection（推送保护，⭐ 推荐）
+2. Push protection（推送保护，★ 推荐）
    - 在 push 之前拦截
    - 检测到密钥 → 阻止推送
    - 支持 200+ 服务商（AWS, Azure, Google Cloud, OpenAI...）
@@ -269,21 +269,21 @@ git push origin main
 ### 5.2 防止密钥泄露的最佳实践
 
 ```java
-// ❌ 绝对不要在代码中硬编码
+// ✗ 绝对不要在代码中硬编码
 String apiKey = "sk-abc123xyz456";  // 危险！
 String dbPassword = "admin123";     // 危险！
 
-// ✅ 使用环境变量
+// ✓ 使用环境变量
 String apiKey = System.getenv("OPENAI_API_KEY");
 
-// ✅ 使用配置文件 + .gitignore
+// ✓ 使用配置文件 + .gitignore
 // application-local.yml (加入 .gitignore)
 String apiKey = config.getApiKey();
 
-// ✅ GitHub Actions 中使用 Secrets
+// ✓ GitHub Actions 中使用 Secrets
 // ${{ secrets.OPENAI_API_KEY }}
 
-// ✅ 使用密钥管理服务
+// ✓ 使用密钥管理服务
 // AWS Secrets Manager / Azure Key Vault / HashiCorp Vault
 ```
 
@@ -390,28 +390,28 @@ gh advisory create \
 ### 8.1 必做安全设置
 
 ```
-✅ 1. 启用双因素认证（2FA）
+✓ 1. 启用双因素认证（2FA）
    Settings → Password and authentication → Enable 2FA
    - Authenticator App（推荐，TOTP）
    - Security Key（最安全，硬件密钥如 YubiKey）
    - SMS（不推荐，SIM Swap 风险）
 
-✅ 2. 使用 SSH Key 替代密码
+✓ 2. 使用 SSH Key 替代密码
    ssh-keygen -t ed25519 -C "email@example.com"
    gh ssh-key add ~/.ssh/id_ed25519.pub
 
-✅ 3. 创建 Personal Access Token（代替密码用于 CLI/API）
+✓ 3. 创建 Personal Access Token（代替密码用于 CLI/API）
    Settings → Developer settings → Personal access tokens → Fine-grained
-   ✅ 精确权限（只给需要的仓库和权限）
-   ✅ 设置过期时间（7天/30天/自定义）
-   ❌ 不要用 Classic Token（权限太大）
+   ✓ 精确权限（只给需要的仓库和权限）
+   ✓ 设置过期时间（7天/30天/自定义）
+   ✗ 不要用 Classic Token（权限太大）
 
-✅ 4. 开启 GPG 签名（防 commit 伪造）
+✓ 4. 开启 GPG 签名（防 commit 伪造）
    gpg --gen-key
    git config --global user.signingkey YOUR_KEY_ID
    git config --global commit.gpgsign true
 
-✅ 5. 审查授权的 OAuth Apps 和 GitHub Apps
+✓ 5. 审查授权的 OAuth Apps 和 GitHub Apps
    Settings → Applications → Authorized OAuth Apps
    定期清理不再需要的授权
 ```
@@ -448,17 +448,17 @@ git commit -S -m "feat: add login"
 
 | 功能 | Free | Team | Enterprise | 说明 |
 |------|------|------|------------|------|
-| Dependabot Alerts | ✅ | ✅ | ✅ | 依赖漏洞告警 |
-| Dependabot Security Updates | ✅ | ✅ | ✅ | 自动修复 PR |
-| Secret Scanning Alerts | ✅ | ✅ | ✅ | 已推送代码扫描 |
-| Push Protection | ✅ | ✅ | ✅ | 推送前拦截 |
-| CodeQL (Code Scanning) | ✅ | ✅ | ✅ | 代码漏洞扫描 |
-| Branch Protection | ✅ | ✅ | ✅ | 分支保护规则 |
-| CODEOWNERS | ❌ | ✅ | ✅ | 代码所有权 |
-| Required Reviewers | ❌ | ✅ | ✅ | 强制审批 |
-| SAML SSO | ❌ | ❌ | ✅ | 单点登录 |
-| Audit Log | ❌ | ❌ | ✅ | 审计日志 |
-| IP Allow List | ❌ | ❌ | ✅ | IP 白名单 |
+| Dependabot Alerts | ✓ | ✓ | ✓ | 依赖漏洞告警 |
+| Dependabot Security Updates | ✓ | ✓ | ✓ | 自动修复 PR |
+| Secret Scanning Alerts | ✓ | ✓ | ✓ | 已推送代码扫描 |
+| Push Protection | ✓ | ✓ | ✓ | 推送前拦截 |
+| CodeQL (Code Scanning) | ✓ | ✓ | ✓ | 代码漏洞扫描 |
+| Branch Protection | ✓ | ✓ | ✓ | 分支保护规则 |
+| CODEOWNERS | ✗ | ✓ | ✓ | 代码所有权 |
+| Required Reviewers | ✗ | ✓ | ✓ | 强制审批 |
+| SAML SSO | ✗ | ✗ | ✓ | 单点登录 |
+| Audit Log | ✗ | ✗ | ✓ | 审计日志 |
+| IP Allow List | ✗ | ✗ | ✓ | IP 白名单 |
 
 ---
 

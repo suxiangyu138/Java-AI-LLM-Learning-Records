@@ -1,6 +1,6 @@
 # 03 - BeautifulSoup 与 HTML 解析
 
-> 🎯 获取 HTML 只是第一步，从中提取结构化数据才是核心。本文覆盖 BS4 + XPath + 正则三套解析方案及其各自的最佳场景
+> 获取 HTML 只是第一步，从中提取结构化数据才是核心。本文覆盖 BS4 + XPath + 正则三套解析方案及其各自的最佳场景
 
 ---
 
@@ -31,11 +31,11 @@ soup = BeautifulSoup(html, "html5lib")        # 最宽容，像浏览器一样�
 
 | 解析器 | 速度 | 容错性 | 依赖 |
 |------|:---:|:---:|------|
-| `html.parser` | ⭐⭐ | ⭐⭐ | 无（内置） |
-| `lxml` | ⭐⭐⭐⭐⭐ | ⭐⭐⭐ | `pip install lxml` |
-| `html5lib` | ⭐ | ⭐⭐⭐⭐⭐ | `pip install html5lib` |
+| `html.parser` | ★★ | ★★ | 无（内置） |
+| `lxml` | ★★★★★ | ★★★ | `pip install lxml` |
+| `html5lib` | ★ | ★★★★★ | `pip install html5lib` |
 
-> 🎯 推荐：开发用 `lxml`（速度最快），遇到不规范 HTML 用 `html5lib`
+> 推荐：开发用 `lxml`（速度最快），遇到不规范 HTML 用 `html5lib`
 
 ### 1.2 核心查找方法
 
@@ -195,7 +195,7 @@ match = re.search(pattern, html, re.DOTALL)
 | 提取邮箱/手机/URL | 正则 | 模式匹配，非结构依赖 |
 | 提取特定格式字符串 | 正则 | 最灵活 |
 
-> ⚠️ **Golden Rule**：不要用正则解析 HTML 结构（`<div>.*?</div>`），用 BS4/XPath。正则只用于**提取文本模式**（邮箱、JSON 块等）
+> **Golden Rule**：不要用正则解析 HTML 结构（`<div>.*?</div>`），用 BS4/XPath。正则只用于**提取文本模式**（邮箱、JSON 块等）
 
 ## 5. 解析策略选择
 

@@ -2,7 +2,7 @@
 
 > 把自研 Server 接进真实客户端：`claude mcp add` 命令、mcp.json 配置格式、/mcp 界面管理、项目级 vs 全局、连接失败排查——"自己写的工具被 AI 用起来"的最后一公里。
 
-## 📚 目录
+## 目录
 
 1. [Claude Code 的 MCP 支持](#1-claude-code-的-mcp-支持)
 2. [方式一：claude mcp add 命令](#2-方式一claude-mcp-add-命令)
@@ -52,7 +52,7 @@ claude mcp add --transport http demo-server http://127.0.0.1:8080/mcp
 claude mcp add --scope user demo-server -- uv run python server.py
 ```
 
-> ⚠️ 在**项目目录内**运行 `claude mcp add` 默认是项目级（写入 `.mcp.json` 并通常建议提交到仓库，团队共享）；加 `--scope user` 才是全局。
+> 在**项目目录内**运行 `claude mcp add` 默认是项目级（写入 `.mcp.json` 并通常建议提交到仓库，团队共享）；加 `--scope user` 才是全局。
 
 ## 3. 方式二：mcp.json 配置文件
 
@@ -133,7 +133,7 @@ Claude：正在调用 get_current_time(timezone=Asia/Shanghai)...
 | 维度 | 项目级（.mcp.json） | 全局（~/.config/claude/mcp.json） |
 |---|---|---|
 | 生效范围 | 当前项目目录 | 所有项目 |
-| 团队共享 | ✅（提交进仓库） | ❌ 仅本机 |
+| 团队共享 | ✓（提交进仓库） | ✗ 仅本机 |
 | 适用 | 项目专属工具（本项目的脚本、数据库等） | 通用工具（浏览器、搜索、系统命令） |
 | 环境变量 | 注意勿提交密钥 | 个人密钥安全 |
 
@@ -153,7 +153,7 @@ Claude：正在调用 get_current_time(timezone=Asia/Shanghai)...
 
 **排障顺序铁律**：终端手跑 Server → curl（HTTP）或 printf（stdio）手测 → Inspector 验证 → 再查 Claude Code 配置。**层层递进，不要跳级**。
 
-> 🎯 **核心要点**：接入 Claude Code 的本质是"把 `command + args + env` 这份启动描述交给客户端"——与 03 篇 Client 的 `StdioServerParameters` 完全同构。配置就三件事：**路径要绝对、环境变量要到位、先 Inspector 验证再接入**。自己写的 Server 第一次被模型调用时，MCP 全链路就真正闭环了。
+> **核心要点**：接入 Claude Code 的本质是"把 `command + args + env` 这份启动描述交给客户端"——与 03 篇 Client 的 `StdioServerParameters` 完全同构。配置就三件事：**路径要绝对、环境变量要到位、先 Inspector 验证再接入**。自己写的 Server 第一次被模型调用时，MCP 全链路就真正闭环了。
 
 ---
 

@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [知识体系导图](#1-知识体系导图)
 2. [模块导航](#2-模块导航)
@@ -149,7 +149,7 @@ Spring Batch 知识体系（Spring Batch 6.0.x / Spring Boot 4.0.x）
 **路线 C：面试冲刺** —— 10 → 01 → 06
 先刷面试题建立全局框架，再回补领域模型与容错细节，答出 6.0 版本差异是加分项。
 
-> 💡 所有模块均以 **Spring Batch 6.0.x + Spring Boot 4.0.x** 为准；涉及版本差异处标注 5.x 旧写法，便于迁移对照。
+> 所有模块均以 **Spring Batch 6.0.x + Spring Boot 4.0.x** 为准；涉及版本差异处标注 5.x 旧写法，便于迁移对照。
 
 ## 7. 快速自测 10 题
 
@@ -166,7 +166,7 @@ Spring Batch 知识体系（Spring Batch 6.0.x / Spring Boot 4.0.x）
 
 ## 8. 版本窗口与参考来源
 
-> ⚠️ **版本窗口**：本文档体系编写于 2026-08，以 Spring Batch **6.0.4** / Spring Boot **4.0.x** / Spring Framework **7.0** 为准；5.2.x 为最后一个社区版系列，5.1.x 仅存商业维护。内容经 2026-08 网络检索核实。
+> **版本窗口**：本文档体系编写于 2026-08，以 Spring Batch **6.0.4** / Spring Boot **4.0.x** / Spring Framework **7.0** 为准；5.2.x 为最后一个社区版系列，5.1.x 仅存商业维护。内容经 2026-08 网络检索核实。
 
 - Spring Batch 6.0.4 / 5.2.6 发布公告（2026-06-10）：https://spring.io/blog/2026/06/10/spring-batch-6-0-4-and-5-2-6-available-now
 - Spring Batch 6.0 新特性官方文档：https://docs.spring.io/spring-batch/reference/6.0-SNAPSHOT/whatsnew.html
@@ -180,6 +180,6 @@ Spring Batch 知识体系（Spring Batch 6.0.x / Spring Boot 4.0.x）
 
 ---
 
-> 🎯 **核心要点**：Spring Batch 6.0 是配合 Spring Boot 4 / Spring Framework 7 的重构大版本——默认无库运行、JobParameters 变 record、retry 换内核、API 大改名。学本体系的关键是**用 6.0 视角**理解"Chunk 事务边界 + 声明式容错 + 元数据驱动运维"这三大设计支柱。
+> **核心要点**：Spring Batch 6.0 是配合 Spring Boot 4 / Spring Framework 7 的重构大版本——默认无库运行、JobParameters 变 record、retry 换内核、API 大改名。学本体系的关键是**用 6.0 视角**理解"Chunk 事务边界 + 声明式容错 + 元数据驱动运维"这三大设计支柱。
 
 **下一模块**：[01-批处理核心模型与领域对象](01-批处理核心模型与领域对象.md)

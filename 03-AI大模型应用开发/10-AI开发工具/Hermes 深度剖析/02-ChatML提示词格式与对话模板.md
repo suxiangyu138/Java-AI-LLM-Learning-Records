@@ -1,6 +1,6 @@
 # 02 - ChatML 提示词格式与对话模板
 
-> 🎯 ChatML（Chat Markup Language）是 Hermes 系列的核心对话协议，等同于 OpenAI 的对话格式。掌握 ChatML 的正确书写方式，是高效驾驭 Hermes 模型（尤其是 Function Calling）的前提
+> ChatML（Chat Markup Language）是 Hermes 系列的核心对话协议，等同于 OpenAI 的对话格式。掌握 ChatML 的正确书写方式，是高效驾驭 Hermes 模型（尤其是 Function Calling）的前提
 
 ---
 
@@ -41,7 +41,7 @@ You are Hermes, a helpful assistant.<|im_end|>
 Function Calling 是指...<|im_end|>
 ```
 
-> ⚠️ **关键细节**：`<\|im_start\|>` 后**紧跟角色名**（同一行），角色名后**换行**才开始内容。最后一个 `<\|im_start\|>assistant\n` 后**不跟任何内容**，等待模型生成
+> **关键细节**：`<\|im_start\|>` 后**紧跟角色名**（同一行），角色名后**换行**才开始内容。最后一个 `<\|im_start\|>assistant\n` 后**不跟任何内容**，等待模型生成
 
 ## 2. 四种角色详解
 
@@ -55,7 +55,7 @@ Function Calling 是指...<|im_end|>
 ### System Prompt 最佳实践
 
 ```text
-✅ 好的 System Prompt（Hermes 会严格遵循）
+✓ 好的 System Prompt（Hermes 会严格遵循）
 <|im_start|>system
 You are Hermes, a function calling AI model. You are provided with
 function signatures within <tools></tools> XML tags. You may call
@@ -66,12 +66,12 @@ plug into functions.
 </tools>
 For each function call, return JSON inside <tool_call> tags.<|im_end|>
 
-❌ 差的 System Prompt（太模糊）
+✗ 差的 System Prompt（太模糊）
 <|im_start|>system
 你是一个助手。<|im_end|>
 ```
 
-> 💡 Hermes 3 的 "aggressively follows" 特性意味着：你给它的 system prompt 越具体，它的行为越可控。这既是优势（可控性极强）也是责任（prompt 质量直接影响表现）
+> Hermes 3 的 "aggressively follows" 特性意味着：你给它的 system prompt 越具体，它的行为越可控。这既是优势（可控性极强）也是责任（prompt 质量直接影响表现）
 
 ## 3. 完整对话示例
 
@@ -118,7 +118,7 @@ Return function calls as: <tool_call>{"name":"...","arguments":{...}}</tool_call
 123 + 456 = 579<|im_end|>
 ```
 
-> 🎯 **关键模式**：用户提问 → 模型输出 `<tool_call>` → `tool` 角色反馈结果 → 模型给出最终自然语言答案
+> **关键模式**：用户提问 → 模型输出 `<tool_call>` → `tool` 角色反馈结果 → 模型给出最终自然语言答案
 
 ## 4. 代码实现：apply_chat_template
 
@@ -137,7 +137,7 @@ messages = [
     {"role": "user", "content": "Hello, who are you?"},
 ]
 
-# ⚠️ 务必设置 add_generation_prompt=True
+# 务必设置 add_generation_prompt=True
 # 这会在末尾追加 <|im_start|>assistant\n，让模型开始生成
 gen_input = tokenizer.apply_chat_template(
     messages,
@@ -225,7 +225,7 @@ Hello<|eot_id|>
 Hi!<|eot_id|>
 ```
 
-> ⚠️ **迁移注意**：DeepHermes 3 使用 Llama-Chat 格式，与 Hermes 3 的 ChatML **不兼容**。升级时务必更新 tokenizer 调用和 prompt 模板
+> **迁移注意**：DeepHermes 3 使用 Llama-Chat 格式，与 Hermes 3 的 ChatML **不兼容**。升级时务必更新 tokenizer 调用和 prompt 模板
 
 ## 核心要点回顾
 

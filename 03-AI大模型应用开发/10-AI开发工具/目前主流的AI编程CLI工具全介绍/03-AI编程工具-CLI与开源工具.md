@@ -1,10 +1,10 @@
 # CLI 与开源 AI 编程工具
 
-> 🔓 Aider（Git原生开源）、Cline（审批门控）、Codex CLI（OpenAI沙盒）、Amazon Q（AWS免费层）、Augment Code（SWE-bench榜首）
+> Aider（Git原生开源）、Cline（审批门控）、Codex CLI（OpenAI沙盒）、Amazon Q（AWS免费层）、Augment Code（SWE-bench榜首）
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [Aider](#1-aider)
 2. [Cline](#2-cline)
@@ -68,7 +68,7 @@ MCP 支持 → 连接任何 MCP 服务器
 云任务运行器 → 长任务后台并行执行
 
 最适合：已有 ChatGPT 订阅的 OpenAI 生态用户
-⚠️ 2026.04 起 token 额度制，重度使用可能额外付费
+2026.04 起 token 额度制，重度使用可能额外付费
 ```
 
 ---
@@ -83,7 +83,7 @@ MCP 支持 → 连接任何 MCP 服务器
 ```text
 AWS 原生 → 自动感知 IAM、生成 IaC
 IP 赔偿 → Pro 层知识产权侵权赔偿
-⚠️ 2026.05 停止新注册，迁移至新产品 "Kiro"
+2026.05 停止新注册，迁移至新产品 "Kiro"
 ```
 
 ---
@@ -117,7 +117,7 @@ SWE-bench Pro 第一 → MongoDB/Spotify/Webflow 客户
 
 ---
 
-> 🎯 开源免费选 **Aider**/**Cline**，ChatGPT 用户选 **Codex CLI**，大企业选 **Augment Code**。
+> 开源免费选 **Aider**/**Cline**，ChatGPT 用户选 **Codex CLI**，大企业选 **Augment Code**。
 
 ---
 

@@ -80,7 +80,7 @@ Blackwell 把这条路堵死又打开：FP4 Tensor Core 只认 E2M1 格式（NVF
 
 两个要点：**4-bit 矩阵指令是 2025-2026 的新战场，仅 NVIDIA/AMD 两条线**；其余平台（含 TPU）的矩阵指令仍停在 INT8/BF16——它们的"4-bit 部署"全部是软件反量化，收益只有内存侧。这也是 09 篇端侧部分的核心矛盾：NPU 算力再强，位宽支持不到 4-bit，量化就吃不到全量红利。
 
-> 🎯 **核心要点**：Tensor Core 是量化收益的落点，约每两代解锁一个更低精度（Turing INT8 → Hopper FP8 → Blackwell FP4）；矩阵乘按 tile 执行（mma.sync/CUTLASS 分层），FP4 的打包格式把解包约束写进内核 schedule——这就是 FP4 内核工程难的根源；反量化必须在片上 SRAM 完成，任何"反量化回 HBM"的实现都会让量化白做；INT4 在旧卡上只能 CUDA Core 反量化，因此只省内存不涨吞吐；稀疏（2:4）可与量化叠加但主要用于 MoE；4-bit 原生指令只有 NVIDIA/AMD 两条线，TPU/CPU/NPU 仍是 INT8/BF16 上限。
+> **核心要点**：Tensor Core 是量化收益的落点，约每两代解锁一个更低精度（Turing INT8 → Hopper FP8 → Blackwell FP4）；矩阵乘按 tile 执行（mma.sync/CUTLASS 分层），FP4 的打包格式把解包约束写进内核 schedule——这就是 FP4 内核工程难的根源；反量化必须在片上 SRAM 完成，任何"反量化回 HBM"的实现都会让量化白做；INT4 在旧卡上只能 CUDA Core 反量化，因此只省内存不涨吞吐；稀疏（2:4）可与量化叠加但主要用于 MoE；4-bit 原生指令只有 NVIDIA/AMD 两条线，TPU/CPU/NPU 仍是 INT8/BF16 上限。
 
 ---
 

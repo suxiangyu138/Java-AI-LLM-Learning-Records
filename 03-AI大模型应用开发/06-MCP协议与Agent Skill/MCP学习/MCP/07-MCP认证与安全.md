@@ -1,6 +1,6 @@
 # 07 - MCP 认证与安全
 
-> 🎯 MCP Server 面向多个 LLM Client 提供服务，安全是生产级部署的底线 — 认证、授权、传输加密、输入净化一个不能少
+> MCP Server 面向多个 LLM Client 提供服务，安全是生产级部署的底线 — 认证、授权、传输加密、输入净化一个不能少
 
 ---
 
@@ -313,7 +313,7 @@ def require_permission(tool_name: str):
             if required["risk"] in ("high", "critical"):
                 if not ctx.confirmed:
                     raise ToolError(
-                        f"⚠️ 高风险操作：{tool_name}\n"
+                        f"高风险操作：{tool_name}\n"
                         f"请确认是否继续\n"
                         f"建议：检查参数后重新调用"
                     )
@@ -329,7 +329,7 @@ def require_permission(tool_name: str):
 @require_permission("deploy_alert")  # 自动检查权限
 async def deploy_alert(city: str, alert_type: str, message: str):
     """发布天气预警（需要 weather:alert 权限）"""
-    return f"✅ 预警已发布到 {city}"
+    return f"✓ 预警已发布到 {city}"
 ```
 
 ### 4.3 参数级过滤
@@ -383,16 +383,16 @@ server:
 stdio 传输的安全性：
 
   天然安全特性：
-  ✅ 进程隔离 — Server 在独立进程中运行
-  ✅ 无网络暴露 — 不接受外部连接
-  ✅ OS 级权限控制 — 依赖操作系统用户权限
+  ✓ 进程隔离 — Server 在独立进程中运行
+  ✓ 无网络暴露 — 不接受外部连接
+  ✓ OS 级权限控制 — 依赖操作系统用户权限
 
   仍需注意：
-  ⚠️ Server 进程继承 Client 进程的权限
+  Server 进程继承 Client 进程的权限
      → 如果 Client 以 root 运行，Server 也可以做任何事
-  ⚠️ 环境变量中的敏感信息（API Key 等）
+  环境变量中的敏感信息（API Key 等）
      → 使用 Secret Manager 而非环境变量
-  ⚠️ stdio 无认证 — 任何能启动进程的用户都能调用
+  stdio 无认证 — 任何能启动进程的用户都能调用
      → 依赖 OS 用户隔离
 ```
 
@@ -540,7 +540,7 @@ async def read_file(path: str):
     → 防 DDoS
 ```
 
-> 🎯 **核心要点**：公开服务必须 OAuth 2.0、所有远程传输必须 TLS、高风险 Tool 必须 Tool-Level ACL、所有输入必须净化、每次调用必须记录审计日志
+> **核心要点**：公开服务必须 OAuth 2.0、所有远程传输必须 TLS、高风险 Tool 必须 Tool-Level ACL、所有输入必须净化、每次调用必须记录审计日志
 
 ---
 

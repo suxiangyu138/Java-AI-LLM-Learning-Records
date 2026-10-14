@@ -1,7 +1,7 @@
 # 07-服务端Web框架
 > 定位：`web.Application` 是轻量级异步 Web 框架——路由、中间件、静态资源、WebSocket 服务端一应俱全；适合内部 API、代理网关、推送服务，与 FastAPI 分层不竞争。
 
-## 📚 目录
+## 目录
 1. [Application 骨架](#1-application-骨架)
 2. [路由与路径参数](#2-路由与路径参数)
 3. [请求对象全解](#3-请求对象全解)
@@ -156,7 +156,7 @@ FastAPI 基于 Starlette，面向「对外业务 API」：Pydantic 请求校验�
 4. `web.json_response` 与 `web.json_bytes_response` 的差异（3.14）？
 5. aiohttp 服务端与 FastAPI 的选型标准？
 
-> 🎯 **核心要点**：服务端 = Application（路由+中间件+生命周期钩子）；RouteTableDef 装饰器式注册；异常兜底放中间件；大文件上传用 multipart 流式、下载用 FileResponse；生产 Gunicorn worker ≥3.13.4；对外 API 交给 FastAPI，aiohttp 做内部基础件。
+> **核心要点**：服务端 = Application（路由+中间件+生命周期钩子）；RouteTableDef 装饰器式注册；异常兜底放中间件；大文件上传用 multipart 流式、下载用 FileResponse；生产 Gunicorn worker ≥3.13.4；对外 API 交给 FastAPI，aiohttp 做内部基础件。
 
 ---
 

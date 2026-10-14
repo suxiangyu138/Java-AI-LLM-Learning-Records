@@ -1,7 +1,7 @@
 # 08 Gradio 与 Spaces 应用
 > 模型的"门面"：Gradio 组件与事件、Blocks 布局、Spaces 云端部署与生产接入
 
-## 📚 目录
+## 目录
 1. [Gradio 定位：模型 Demo 的事实标准](#1-gradio-定位模型-demo-的事实标准)
 2. [Interface：最快 Demo](#2-interface最快-demo)
 3. [核心组件速查](#3-核心组件速查)
@@ -33,7 +33,7 @@ Gradio 的生态地位：HF Spaces 数十万应用中，Gradio 占绝对主流
 | 定位 | Demo/交互工具 | 生产 API |
 | 结合 | — | 可内嵌 Gradio（挂载） |
 
-> 🎯 **核心要点**：Gradio 解决"**模型给谁看/谁用**"——把模型包装成带界面的应用，几分钟可交付。生产高并发 API 用 FastAPI（Python 异步 + FastAPI 体系），Gradio 做演示/内网工具。
+> **核心要点**：Gradio 解决"**模型给谁看/谁用**"——把模型包装成带界面的应用，几分钟可交付。生产高并发 API 用 FastAPI（Python 异步 + FastAPI 体系），Gradio 做演示/内网工具。
 
 ## 2. Interface：最快 Demo
 
@@ -65,7 +65,7 @@ demo.launch()          # 本地 http://127.0.0.1:7860
 | `theme` | 主题样式 |
 | `share=True` | 生成公网链接（临时） |
 
-> 💡 `fn` 可以是同步函数（Gradio 自动线程池）或 async 函数（流式友好，§5）——同步模型调用直接写即可。
+> `fn` 可以是同步函数（Gradio 自动线程池）或 async 函数（流式友好，§5）——同步模型调用直接写即可。
 
 ## 3. 核心组件速查
 
@@ -92,7 +92,7 @@ gr.Label(num_top_classes=3)                  # 分类置信度
 
 | 组件类型 | 场景 |
 |---------|------|
-| Textbox/Markdown | ⭐ 文本模型 90% 场景 |
+| Textbox/Markdown | ★ 文本模型 90% 场景 |
 | Slider/Dropdown | 参数调节（temperature/top_p） |
 | Image/Audio | 多模态模型 |
 | Dataframe | 表格/结构化输出 |
@@ -103,7 +103,7 @@ gr.Label(num_top_classes=3)                  # 分类置信度
 ```python
 # Blocks：自由布局 + 多组件联动 + 事件链
 with gr.Blocks(title="客服 Agent") as demo:
-    gr.Markdown("# 🛎️ 智能客服演示")
+    gr.Markdown("# 智能客服演示")
 
     with gr.Row():                             # 横向布局
         with gr.Column(scale=2):               # 左列（占 2/3）
@@ -136,7 +136,7 @@ with gr.Blocks(title="客服 Agent") as demo:
 | 多组件联动 | 事件链（滑块 → 重新生成） |
 | Queue | `demo.queue()` 排队机制（流式/并发必需） |
 
-> 🎯 **核心要点**：**Blocks = "带状态的交互应用"**——比 Interface 多三样：布局、多组件联动、对话状态。客服/Agent 类 Demo 用 Blocks + Chatbot + queue() 是标准组合。
+> **核心要点**：**Blocks = "带状态的交互应用"**——比 Interface 多三样：布局、多组件联动、对话状态。客服/Agent 类 Demo 用 Blocks + Chatbot + queue() 是标准组合。
 
 ## 5. 模型推理接入：流式与并发
 
@@ -160,14 +160,14 @@ def stream_chat(message, history, temperature):
                                 temperature=temperature, do_sample=True,
                                 streamer=TextIteratorStreamer(tokenizer)):
         text += token
-        yield text                      # ⭐ 逐段 yield → 前端打字机
+        yield text                      # ★ 逐段 yield → 前端打字机
 
 with gr.Blocks() as demo:
     chatbot = gr.Chatbot()
     msg = gr.Textbox()
     msg.submit(stream_chat, [msg, chatbot, gr.Slider(0, 2, 0.7)], [chatbot])
 
-demo.queue()          # ⭐ 流式必须开 queue（管理并发请求）
+demo.queue()          # ★ 流式必须开 queue（管理并发请求）
 demo.launch()
 ```
 
@@ -178,7 +178,7 @@ demo.launch()
 | `demo.queue()` | 排队机制（流式/并发必需） |
 | 全局模型 | 加载一次，函数闭包引用 |
 
-> ⚠️ Gradio 并发纪律：**模型只加载一次（模块级）**，不能每次请求加载；并发请求走 `queue()` 排队（默认限流）；多用户并发时注意显存（单模型 + 批处理）。高并发生产还是 FastAPI + vLLM（04 章 §6）。
+> Gradio 并发纪律：**模型只加载一次（模块级）**，不能每次请求加载；并发请求走 `queue()` 排队（默认限流）；多用户并发时注意显存（单模型 + 批处理）。高并发生产还是 FastAPI + vLLM（04 章 §6）。
 
 ## 6. Spaces：云端部署
 
@@ -198,7 +198,7 @@ Spaces = HF 托管的应用运行环境（免费/付费 GPU）
 ```markdown
 ---
 title: 客服助手 Demo
-emoji: 🛎️
+emoji: 
 colorFrom: blue
 colorTo: green
 sdk: gradio
@@ -223,7 +223,7 @@ git clone https://huggingface.co/spaces/my-org/cs-demo
 | 版本 | 锁定 gradio 版本（升级破坏兼容） |
 | 私有 Space | 团队内部用（private=True） |
 
-> 🎯 **核心要点**：Spaces = "**把 Demo 变成可访问的 URL**"——代码 push 即上线，适合给客户/同事/面试展示。GPU 付费按秒计费，演示完记得停（睡眠设置）。
+> **核心要点**：Spaces = "**把 Demo 变成可访问的 URL**"——代码 push 即上线，适合给客户/同事/面试展示。GPU 付费按秒计费，演示完记得停（睡眠设置）。
 
 ## 7. 生产化：Gradio vs FastAPI
 
@@ -246,7 +246,7 @@ api.mount("/demo", demo.app)      # Gradio 面板在 /demo
 # API 主路径照常业务
 ```
 
-> 💡 生产架构建议：**API 走 FastAPI（认证/限流/监控，FastAPI 体系），Demo 面板挂 /demo 给内部用**——一份模型服务两种入口。
+> 生产架构建议：**API 走 FastAPI（认证/限流/监控，FastAPI 体系），Demo 面板挂 /demo 给内部用**——一份模型服务两种入口。
 
 ## 8. 常见坑
 

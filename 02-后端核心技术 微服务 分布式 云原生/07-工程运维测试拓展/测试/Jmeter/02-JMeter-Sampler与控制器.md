@@ -1,10 +1,10 @@
 # JMeter Sampler 与控制器
 
-> 📡 HTTP/JDBC/TCP Sampler 请求发送 + 逻辑控制器控制执行流程 —— 请求采样与流程编排
+> HTTP/JDBC/TCP Sampler 请求发送 + 逻辑控制器控制执行流程 —— 请求采样与流程编排
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [Sampler 采样器概述](#1-sampler-采样器概述)
 2. [HTTP Request Sampler](#2-http-request-sampler)
@@ -88,14 +88,14 @@ HTTP Request 的 Advanced 标签：
   Embedded Resources：
     → Retrieve All Embedded Resources：下载内嵌资源（JS/CSS/图片）
     → 模拟真实浏览器行为
-    → ⚠️ 不要用来压静态资源 CDN
+    → 不要用来压静态资源 CDN
 
   Source Address：
     → 绑定特定 IP（多网卡场景）
 
   Redirect Automatically vs Follow Redirects：
     → Follow Redirects：跟踪重定向且每个重定向单独统计
-    → 推荐 ✅
+    → 推荐 ✓
 ```
 
 ### 2.3 HTTP Request Defaults
@@ -154,7 +154,7 @@ HTTP Request Defaults（配置元件）：
   → 执行后在 View Results Tree 中查看响应
   → 显示 JMeter Variables + Properties + System Properties
 
-  ⚠️ 正式压测时务必删除或禁用！影响性能
+  正式压测时务必删除或禁用！影响性能
 ```
 
 ### 3.3 Java Request（自定义扩展）
@@ -263,7 +263,7 @@ If Controller
 
 ---
 
-> 🎯 **核心要点**：HTTP Request Sampler 是绝对主力（90%+ 场景），HTTP Request Defaults 减少重复配置，Transaction Controller 合并多请求为一个业务事务统计整体耗时。
+> **核心要点**：HTTP Request Sampler 是绝对主力（90%+ 场景），HTTP Request Defaults 减少重复配置，Transaction Controller 合并多请求为一个业务事务统计整体耗时。
 
 ---
 

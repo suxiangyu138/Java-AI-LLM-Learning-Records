@@ -99,7 +99,7 @@ Connector 发送通知（邮件/Webhook/钉钉/企业微信/Serverless）
 }
 ```
 
-> ⚠️ 注意：9.x 中连接器密钥加密存储（`.kibana_security` 索引）；Webhook 生产环境务必 HTTPS。
+> 注意：9.x 中连接器密钥加密存储（`.kibana_security` 索引）；Webhook 生产环境务必 HTTPS。
 
 ---
 
@@ -241,7 +241,7 @@ xpack.monitoring.elasticsearch.password: "xxx"
 直达链接：https://kibana.example.com/...（预过滤的 Discover 深链）
 ```
 
-> 🎯 **核心要点**：Kibana 告警 = **规则（条件 + 频率）+ 连接器（通道）+ 分组去重（收敛）** 三件套；9.x 中规则执行已下沉 ES 侧。生产落地顺序：先启 Stack Monitoring 看基线 → 再建规则（带分组与恢复）→ 接双通道。告警设计三句诀：**分组收敛不轰炸、阈值基于基线、恢复必报闭环**。
+> **核心要点**：Kibana 告警 = **规则（条件 + 频率）+ 连接器（通道）+ 分组去重（收敛）** 三件套；9.x 中规则执行已下沉 ES 侧。生产落地顺序：先启 Stack Monitoring 看基线 → 再建规则（带分组与恢复）→ 接双通道。告警设计三句诀：**分组收敛不轰炸、阈值基于基线、恢复必报闭环**。
 
 ---
 

@@ -1,7 +1,7 @@
 # 03-GitHub Actions 与制品管理
 > Actions 工作流实战、制品仓库选型（Harbor/Nexus/GitHub Packages）、镜像与依赖管理——"构建产物去哪、怎么管、怎么用"
 
-## 📚 目录
+## 目录
 1. [GitHub Actions 核心概念](#1-github-actions-核心概念)
 2. [Java 项目 Actions 实战](#2-java-项目-actions-实战)
 3. [Actions 高级模式](#3-actions-高级模式)
@@ -150,7 +150,7 @@ on:
 | 依赖仓库 | **Nexus** / Artifactory | Maven 依赖（私有库/代理中央库） |
 | 构建产物 | CI 系统内置 | 报告/日志/归档 |
 
-> 🎯 **制品管理的核心价值**：**每个可部署物都有唯一版本、可追溯来源、可安全存储**——"线上跑的镜像"能反查到"哪个 commit 构建的"。
+> **制品管理的核心价值**：**每个可部署物都有唯一版本、可追溯来源、可安全存储**——"线上跑的镜像"能反查到"哪个 commit 构建的"。
 
 ## 5. Harbor：镜像仓库实践
 
@@ -174,7 +174,7 @@ docker push harbor.example.com/prod/order-service:1.0.3
 # harbor 扫描结果作为部署门禁（API 查询或 Webhook）
 ```
 
-> 💡 镜像 tag 规范：`仓库/项目/应用:版本-环境`（`prod/order-service:1.0.3`）；**禁止 latest**——回滚需要精确版本。
+> 镜像 tag 规范：`仓库/项目/应用:版本-环境`（`prod/order-service:1.0.3`）；**禁止 latest**——回滚需要精确版本。
 
 ## 6. Nexus：依赖与制品仓库
 
@@ -237,11 +237,11 @@ mvn deploy   # 推送到 Nexus（releases/snapshots 仓库）
 | 蓝绿异常 | Service selector 切回蓝环境 |
 | 配置回滚 | Nacos 配置历史版本 |
 
-> 🎯 **可回滚的前提是制品可追溯**：镜像 tag 含版本/流水线 ID + 保留策略不删旧版 + 部署记录留痕——三件套缺一不可。
+> **可回滚的前提是制品可追溯**：镜像 tag 含版本/流水线 ID + 保留策略不删旧版 + 部署记录留痕——三件套缺一不可。
 
 ## 8. 核心要点
 
-> 🎯 **核心要点**：
+> **核心要点**：
 > - Actions：事件驱动 + needs 门禁链 + environment 审批 + secrets；
 > - 制品双仓库：Harbor（镜像，扫描/保留/复制）+ Nexus（依赖，私有/代理）；
 > - 镜像 tag 规范：版本-环境，禁止 latest，CI 用 SHA/流水线 ID；

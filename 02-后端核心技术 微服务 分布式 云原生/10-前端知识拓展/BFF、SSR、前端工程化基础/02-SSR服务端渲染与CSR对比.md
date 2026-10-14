@@ -1,6 +1,6 @@
 # 02 - SSR 服务端渲染与 CSR 对比
 
-> 🎯 SSR vs CSR 不是信念之争而是场景之选 — 理解两者的渲染流程和 SEO/TTFB 权衡，后端才能理解为什么有时候"页面是服务端拼好的"
+> SSR vs CSR 不是信念之争而是场景之选 — 理解两者的渲染流程和 SEO/TTFB 权衡，后端才能理解为什么有时候"页面是服务端拼好的"
 
 ---
 
@@ -34,8 +34,8 @@ SSR（Server-Side Rendering — Next.js/Nuxt）：
 
 | 维度 | CSR | SSR |
 |------|:---:|:---:|
-| 首屏速度 | 慢（等 JS 加载+执行） | ⭐ 快（直出 HTML） |
-| SEO | ❌ 差（爬虫看空壳） | ✅ 好（HTML 有内容） |
+| 首屏速度 | 慢（等 JS 加载+执行） | ★ 快（直出 HTML） |
+| SEO | ✗ 差（爬虫看空壳） | ✓ 好（HTML 有内容） |
 | 服务端压力 | 低（静态文件） | 高（渲染吃 CPU） |
 | 开发体验 | 简单 | 复杂（区分服务端/客户端代码） |
 | **适用** | 后台管理系统、工具 | 官网、电商、内容站 |
@@ -68,7 +68,7 @@ ISR（Incremental Static Regeneration）：
 ```javascript
 // Next.js SSR 示例 — 服务端获取数据
 export async function getServerSideProps(context) {
-  // ⭐ 这段代码在服务端执行！
+  // ★ 这段代码在服务端执行！
   const res = await fetch(`https://api.example.com/users/${context.params.id}`);
   const user = await res.json();
   return { props: { user } };    // 数据注入组件
@@ -113,4 +113,4 @@ SSR 场景下后端的注意事项：
 缺点：每次渲染都调 API → 接口 QPS 放大
 ```
 
-> 🎯 **后端记住**：CSR = 前端静态文件 + 后端纯 API（默认模式）；SSR = Node.js 服务端渲染 + 后端纯 API（后端不变！）。当看到前端需求文档上出现 Next.js/Nuxt 时，意味着接口性能要更好、缓存更重要。
+> **后端记住**：CSR = 前端静态文件 + 后端纯 API（默认模式）；SSR = Node.js 服务端渲染 + 后端纯 API（后端不变！）。当看到前端需求文档上出现 Next.js/Nuxt 时，意味着接口性能要更好、缓存更重要。

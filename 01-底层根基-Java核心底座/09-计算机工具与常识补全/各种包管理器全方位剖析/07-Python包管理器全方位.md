@@ -6,7 +6,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [Python 包管理的历史包袱](#1-python-包管理的历史包袱)
 2. [虚拟环境原理（PEP 405）](#2-虚拟环境原理pep-405)
@@ -49,7 +49,7 @@ Python 的历史包袱（与 Java/前端对比）
 
 ## 2. 虚拟环境原理（PEP 405）
 
-> 🎯 **虚拟环境 = 独立的 site-packages 目录 + 可执行文件路径**——Python 依赖隔离的唯一正统方式：
+> **虚拟环境 = 独立的 site-packages 目录 + 可执行文件路径**——Python 依赖隔离的唯一正统方式：
 
 ```text
 虚拟环境本质（PEP 405，Python 3.3+ 内置）
@@ -76,13 +76,13 @@ pip install -r requirements.txt
 uv init && uv add <pkg>        # 自动建 .venv + 安装 + 锁文件
 ```
 
-> 💡 **uv/poetry 会自动创建并管理 .venv**——不需要手动 `python -m venv` + activate；CI 里也不激活，直接用 `.venv/bin/python` 或 `uv run`。
+> **uv/poetry 会自动创建并管理 .venv**——不需要手动 `python -m venv` + activate；CI 里也不激活，直接用 `.venv/bin/python` 或 `uv run`。
 
 ---
 
 ## 3. pip：官方默认
 
-> 🎯 **pip 的优势 = 无处不在**（官方标配、文档最全）；短板 = 弱解析、无锁文件、依赖漂移。
+> **pip 的优势 = 无处不在**（官方标配、文档最全）；短板 = 弱解析、无锁文件、依赖漂移。
 
 ```bash
 # 核心命令
@@ -109,13 +109,13 @@ pip 的短板（2026 已明显落后）
 └── 结论：pip 适合「装个包跑脚本」；工程项目用 uv/poetry
 ```
 
-> ⚠️ **pip install 进全局的警告**：2026 年 pip 已默认 PEP 668 保护（externally-managed-environment）——系统 Python 拒绝 pip install（强制用 venv/uv）；这是好事，别绕过（`--break-system-packages` 仅限容器等特例）。
+> **pip install 进全局的警告**：2026 年 pip 已默认 PEP 668 保护（externally-managed-environment）——系统 Python 拒绝 pip install（强制用 venv/uv）；这是好事，别绕过（`--break-system-packages` 仅限容器等特例）。
 
 ---
 
 ## 4. uv：2026 的新王者
 
-> 🎯 **uv 是 Astral（Rust 团队）用 Rust 写的 Python 工具链**——单二进制替代 pip + virtualenv + poetry + pyenv + pipx，速度 10-100 倍，2026 已事实主流：
+> **uv 是 Astral（Rust 团队）用 Rust 写的 Python 工具链**——单二进制替代 pip + virtualenv + poetry + pyenv + pipx，速度 10-100 倍，2026 已事实主流：
 
 ```bash
 # 安装（单二进制，10 秒级）
@@ -174,7 +174,7 @@ add-bounds = "major"       # ★ 重要：应用项目建议开启（见第 8 �
 
 ## 5. poetry：完整项目治理
 
-> 🎯 **poetry 是 pyproject 时代的先行者**——完整项目治理（构建/打包/发布/依赖分组），2019-2024 的 Python 新项目主流，2026 被 uv 分流但仍是可靠选择：
+> **poetry 是 pyproject 时代的先行者**——完整项目治理（构建/打包/发布/依赖分组），2019-2024 的 Python 新项目主流，2026 被 uv 分流但仍是可靠选择：
 
 ```bash
 poetry new my-project        # 创建
@@ -193,18 +193,18 @@ poetry update <pkg>          # 升级
 | 速度 | 慢（纯 Python 解析） | 快 10-50 倍 |
 | 解析器 | 完整求解 | 完整求解（更快） |
 | 锁文件 | poetry.lock | uv.lock（跨平台统一格式） |
-| Python 版本管理 | ❌ | ✅ 内置 |
-| 打包发布 | ✅ | ⚠️ uv build 起步，成熟度低 |
-| 项目治理 | ✅ 成熟 | ✅ 快速追赶 |
+| Python 版本管理 | ✗ | ✓ 内置 |
+| 打包发布 | ✓ | uv build 起步，成熟度低 |
+| 项目治理 | ✓ 成熟 | ✓ 快速追赶 |
 | 维护体验 | 稳 | UX 争议（见第 8 节） |
 
-> 💡 **选型**：需要发布库/完整发布链路 → poetry 仍稳；纯应用开发/追求速度 → uv。**uv 不做「发布到 PyPI 的库开发」主推**——库发布仍用 hatchling/setuptools + twine。
+> **选型**：需要发布库/完整发布链路 → poetry 仍稳；纯应用开发/追求速度 → uv。**uv 不做「发布到 PyPI 的库开发」主推**——库发布仍用 hatchling/setuptools + twine。
 
 ---
 
 ## 6. conda：二进制环境
 
-> 🎯 **conda 是「环境管理器 + 二进制包管理器」**——AI/数据科学的标配（CUDA/NumPy 等二进制库随包分发，pip 做不到）：
+> **conda 是「环境管理器 + 二进制包管理器」**——AI/数据科学的标配（CUDA/NumPy 等二进制库随包分发，pip 做不到）：
 
 ```text
 conda 与 pip 的本质区别
@@ -228,13 +228,13 @@ miniconda vs anaconda
 └── 2026 注意：Anaconda 商业授权政策（大企业注意）
 ```
 
-> ⚠️ **conda + pip 混用的纪律**：conda 装二进制底座，pip 装纯 Python 包——**先 conda 后 pip**，别反着（pip 覆盖 conda 管理文件会破坏环境）。
+> **conda + pip 混用的纪律**：conda 装二进制底座，pip 装纯 Python 包——**先 conda 后 pip**，别反着（pip 覆盖 conda 管理文件会破坏环境）。
 
 ---
 
 ## 7. 依赖解析与锁文件
 
-> 🎯 **Python 解析的特殊性**：site-packages 同一包只能有一个版本 → 解析器必须「一次算对」全局一致解：
+> **Python 解析的特殊性**：site-packages 同一包只能有一个版本 → 解析器必须「一次算对」全局一致解：
 
 ```text
 Python 依赖解析（vs Maven/npm 对比）
@@ -275,7 +275,7 @@ uv sync --no-group dev      # 跳过 dev
 
 ## 8. uv 的 UX 争议与对策
 
-> 🎯 **2026.05 Hacker News 榜首热议**（Kevin Renskers 文章「uv is fantastic, but its package management UX is a mess」）——uv 快归快，**维护期体验比 pnpm/poetry 倒退**：
+> **2026.05 Hacker News 榜首热议**（Kevin Renskers 文章「uv is fantastic, but its package management UX is a mess」）——uv 快归快，**维护期体验比 pnpm/poetry 倒退**：
 
 **争议一：没有 `uv outdated` 命令**：
 
@@ -327,13 +327,13 @@ uv sync --no-group dev      # 跳过 dev
 └── 对策：按需逐包升级（uv add pkg@latest）+ 锁文件 review
 ```
 
-> 💡 **客观评价**：速度/整合无出其右 + 官方正视 UX（--bounds 已做）；对工程团队，配好 `[tool.uv] add-bounds="major"` 后这三点都可规避。
+> **客观评价**：速度/整合无出其右 + 官方正视 UX（--bounds 已做）；对工程团队，配好 `[tool.uv] add-bounds="major"` 后这三点都可规避。
 
 ---
 
 ## 9. AI/数据科学场景实践
 
-> 🎯 **2026 AI 开发（本仓库主线）的 Python 环境实践**——结合 [[Python虚拟环境]] 系列的落地：
+> **2026 AI 开发（本仓库主线）的 Python 环境实践**——结合 [[Python虚拟环境]] 系列的落地：
 
 ```text
 AI 项目环境三板斧
@@ -359,7 +359,7 @@ AI 项目环境三板斧
 
 ## 10. 核心要点
 
-> 🎯 **核心要点**：
+> **核心要点**：
 > 1. **2026 格局**：uv（新王者）· pip+venv（官方默认）· poetry（完整治理）· conda（二进制环境）
 > 2. **虚拟环境是铁律**：PEP 405 隔离，uv 自动管理 .venv 免手动激活
 > 3. **uv 三合一**：Python 版本 + 虚拟环境 + 依赖锁文件（uv.lock 跨平台）

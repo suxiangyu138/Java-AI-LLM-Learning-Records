@@ -1,6 +1,6 @@
 # 06 - Headless 模式与 CI 集成
 
-> 🎯 OpenCode 的无头模式让 AI 编程 Agent 直接嵌入流水线 — GitHub Actions 自动 Review PR、Cron 定时任务、Webhook 触发。无人类确认环境下的安全强制是关键
+> OpenCode 的无头模式让 AI 编程 Agent 直接嵌入流水线 — GitHub Actions 自动 Review PR、Cron 定时任务、Webhook 触发。无人类确认环境下的安全强制是关键
 
 ---
 
@@ -175,6 +175,6 @@ CI 事件触发 → OpenCode 自主完成"思考→调用工具→读结果→�
 
 ---
 
-> 🎯 **核心要点**：Headless 模式让 AI 编程 Agent 变成 CI 流水线中的"自动修复工" — **PR 自动 Review + 构建失败自动修复 + 每日健康检查**。三个安全铁律：**① `--auto` 只用于 CI ② 必须设置超时（--timeout）③ 安全在工具层强制（破坏性命令物理不可执行），而非仅靠提示词**。
+> **核心要点**：Headless 模式让 AI 编程 Agent 变成 CI 流水线中的"自动修复工" — **PR 自动 Review + 构建失败自动修复 + 每日健康检查**。三个安全铁律：**① `--auto` 只用于 CI ② 必须设置超时（--timeout）③ 安全在工具层强制（破坏性命令物理不可执行），而非仅靠提示词**。
 
 **下一模块**：[07-生产实践与安全](07-生产实践与安全.md) / **返回总览**：[00-总览](00-OpenCode知识体系总览.md)

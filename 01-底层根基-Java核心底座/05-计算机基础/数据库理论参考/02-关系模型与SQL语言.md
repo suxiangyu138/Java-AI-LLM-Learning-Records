@@ -216,7 +216,7 @@ SELECT * FROM users u
 WHERE EXISTS (SELECT 1 FROM orders o WHERE o.user_id = u.id);
 ```
 
-> 💡 **EXISTS vs IN**：EXISTS 是相关子查询，一行匹配就返回 true（适合子表大）；IN 先算子查询结果集（适合子表小）。通常 EXISTS 性能更好。
+> **EXISTS vs IN**：EXISTS 是相关子查询，一行匹配就返回 true（适合子表大）；IN 先算子查询结果集（适合子表小）。通常 EXISTS 性能更好。
 
 ---
 
@@ -313,4 +313,4 @@ GRANT SELECT, INSERT ON bookstore.* TO 'app_user'@'localhost';
 REVOKE DELETE ON bookstore.* FROM 'app_user'@'localhost';
 ```
 
-> 🎯 **SQL 执行顺序必须理解——这是写复杂查询不出错的根本。** 建议刷 50+ 道 LeetCode 数据库题以应对面试手写 SQL。
+> **SQL 执行顺序必须理解——这是写复杂查询不出错的根本。** 建议刷 50+ 道 LeetCode 数据库题以应对面试手写 SQL。

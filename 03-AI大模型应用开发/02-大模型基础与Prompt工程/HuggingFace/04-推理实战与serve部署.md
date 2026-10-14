@@ -1,7 +1,7 @@
 # 04 推理实战与 serve 部署
 > 从一行 pipeline 到生产服务：pipeline 家族、generate 参数、transformers serve 与 vLLM 分工
 
-## 📚 目录
+## 目录
 1. [pipeline：一行代码推理](#1-pipeline一行代码推理)
 2. [generate 参数全解](#2-generate-参数全解)
 3. [对话与 chat template](#3-对话与-chat-template)
@@ -42,7 +42,7 @@ pipeline("image-classification", model=...)  # 图像分类
 | v5 新特性 | **原生异步推理**（async pipeline）、量化 MoE 一等支持 |
 | 生产用途 | 快速验证/小流量/原型 |
 
-> 🎯 **核心要点**：pipeline = "**任务的抽象**"——不用关心类名、输入格式、后处理。它是学习与原型的最快路径；生产高流量场景换 serve/vLLM（§4/§6）。
+> **核心要点**：pipeline = "**任务的抽象**"——不用关心类名、输入格式、后处理。它是学习与原型的最快路径；生产高流量场景换 serve/vLLM（§4/§6）。
 
 ## 2. generate 参数全解
 
@@ -58,7 +58,7 @@ outputs = model.generate(
     num_beams=1,                     # beam search（>1 质量高但慢）
     num_return_sequences=1,          # 返回几条
     eos_token_id=tokenizer.eos_token_id,   # 终止符
-    pad_token_id=tokenizer.pad_token_id,   # 填充符（⚠️ 必须设）
+    pad_token_id=tokenizer.pad_token_id,   # 填充符（必须设）
 )
 text = tokenizer.decode(outputs[0], skip_special_tokens=True)
 ```
@@ -74,7 +74,7 @@ text = tokenizer.decode(outputs[0], skip_special_tokens=True)
 | `num_beams` | 束搜索 | 质量优先 3-5（慢） |
 | `use_cache=True` | KV 缓存加速 | 保持默认 True（v5 训练默认 False 与此无关） |
 
-> ⚠️ **generate 两个必设**：`pad_token_id`（未设会警告/报错）与 `eos_token_id`（不设可能停不下来）。解码后 `skip_special_tokens=True` 去掉特殊 token（`<|im_end|>` 等）。
+> **generate 两个必设**：`pad_token_id`（未设会警告/报错）与 `eos_token_id`（不设可能停不下来）。解码后 `skip_special_tokens=True` 去掉特殊 token（`<|im_end|>` 等）。
 
 ## 3. 对话与 chat template
 
@@ -90,7 +90,7 @@ messages = [
     {"role": "user", "content": "我的订单 20260801001 到哪了？"},
 ]
 
-# ⭐ chat template：自动套用模型的对话格式（<|im_start|> 等特殊 token）
+# ★ chat template：自动套用模型的对话格式（<|im_start|> 等特殊 token）
 inputs = tokenizer.apply_chat_template(
     messages,
     tokenize=True,          # v5 返回 BatchEncoding，直接喂模型
@@ -110,7 +110,7 @@ print(tokenizer.decode(outputs[0][inputs.shape[1]:], skip_special_tokens=True))
 | v5 返回 BatchEncoding | 直接 `**inputs` 喂模型（02 章 §3 迁移坑） |
 | `add_generation_prompt` | 让模型知道"该你回答了" |
 
-> 🎯 **核心要点**：**手写对话模板 = 自找麻烦**。`apply_chat_template` 一行解决格式问题，换模型不换代码。多轮对话 = 把历史消息全放 messages 列表（上下文管理在调用侧，07 章 Datasets 有数据侧视角）。
+> **核心要点**：**手写对话模板 = 自找麻烦**。`apply_chat_template` 一行解决格式问题，换模型不换代码。多轮对话 = 把历史消息全放 messages 列表（上下文管理在调用侧，07 章 Datasets 有数据侧视角）。
 
 ## 4. transformers serve：一条命令起服务
 
@@ -138,13 +138,13 @@ print(resp.choices[0].message.content)
 
 | 场景 | 用 serve | 用 vLLM |
 |------|:---:|:---:|
-| 开发/原型 | ✅ | — |
-| 内网小流量（<50 QPS） | ✅ | — |
-| 生产高并发（100+ QPS） | — | ✅ |
-| 多卡张量并行生产 | 支持 | ✅ 更成熟 |
-| 不想装额外依赖 | ✅（内置） | — |
+| 开发/原型 | ✓ | — |
+| 内网小流量（<50 QPS） | ✓ | — |
+| 生产高并发（100+ QPS） | — | ✓ |
+| 多卡张量并行生产 | 支持 | ✓ 更成熟 |
+| 不想装额外依赖 | ✓（内置） | — |
 
-> 🎯 **核心要点**：`transformers serve` = "**HF 自带的 OpenAI 兼容服务器**"——开发、内网、小流量场景一条命令搞定，零额外依赖；生产大流量再上 vLLM（§6 对比）。2026 年"起个 LLM 服务"的最低门槛就是这条命令。
+> **核心要点**：`transformers serve` = "**HF 自带的 OpenAI 兼容服务器**"——开发、内网、小流量场景一条命令搞定，零额外依赖；生产大流量再上 vLLM（§6 对比）。2026 年"起个 LLM 服务"的最低门槛就是这条命令。
 
 ## 5. v5 推理新能力：连续批处理与分页注意力
 
@@ -166,7 +166,7 @@ model = AutoModelForCausalLM.from_pretrained(
 | Paged attention | KV 缓存碎片化浪费显存 | 长上下文/高并发省显存 |
 | 动态权重加载 | 启动慢/重复转换 | 加载即优化（02 章 §4） |
 
-> 💡 这些能力 vLLM 早已实现（2024-2025），v5 把它们收进 Transformers——**"低配版 vLLM"进标准库**。理解：连续批处理 = 服务端动态拼批；分页注意力 = KV 缓存按页分配（模型推理部署体系有原理深潜）。
+> 这些能力 vLLM 早已实现（2024-2025），v5 把它们收进 Transformers——**"低配版 vLLM"进标准库**。理解：连续批处理 = 服务端动态拼批；分页注意力 = KV 缓存按页分配（模型推理部署体系有原理深潜）。
 
 ## 6. 与 vLLM 的分工
 
@@ -188,7 +188,7 @@ model = AutoModelForCausalLM.from_pretrained(
   混合 → serve 兜底 + vLLM 扩容（同一 OpenAI 协议，切换无感）
 ```
 
-> 🎯 **核心要点**：**协议统一（OpenAI 兼容）让引擎切换无感**——serve/vLLM/llama.cpp 客户端代码完全一样，只是 `base_url` 不同。生产架构 = "协议在前，引擎在后"，随时可换。
+> **核心要点**：**协议统一（OpenAI 兼容）让引擎切换无感**——serve/vLLM/llama.cpp 客户端代码完全一样，只是 `base_url` 不同。生产架构 = "协议在前，引擎在后"，随时可换。
 
 ## 7. 推理性能基线
 
@@ -199,7 +199,7 @@ model = AutoModelForCausalLM.from_pretrained(
 | 总吞吐（QPS） | 系统容量 | serve: 低 / vLLM: 高 |
 | 显存占用 | 卡选择 | bf16 ≈ 14GB + KV 缓存 |
 
-> 💡 量化与吞吐的关系：**4bit 量化显存省 70%，但吞吐可能略降**（反量化开销）——卡不够用才量化，卡够用 bf16 吞吐更好。压测方法论与调优见 09 章 + 模型推理部署体系。
+> 量化与吞吐的关系：**4bit 量化显存省 70%，但吞吐可能略降**（反量化开销）——卡不够用才量化，卡够用 bf16 吞吐更好。压测方法论与调优见 09 章 + 模型推理部署体系。
 
 ## 8. 核心要点
 

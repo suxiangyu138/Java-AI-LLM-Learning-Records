@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [兼容的意义](#1-兼容的意义)
 2. [支持的端点](#2-支持的端点)
@@ -118,7 +118,7 @@ for chunk in stream:                          # 逐块接收（打字机效果�
 
 **验收动作**：① 用 OpenAI SDK 调 vLLM（切换三处——跑通对话）；② 流式输出体验（逐字打印）；③ 用 /v1/models 和 /health 验证；④ 写"切换备忘"（OpenAI → vLLM 的三处改动）——**"兼容认知 + 端点 + 切换 + 流式 = API 接入能力"**——**练习纪律**：切完必测（对话 + 流式）——"切换成功 = 同样代码不同模型都跑通"。
 
-> 🎯 **核心要点**：兼容 = 生态白嫖（**OpenAI API 是事实标准——vLLM 兼容它 = 兼容整个生态——切换成本一行**）；**端点三件套（chat/completions 主力/embeddings RAG/health 监控——/v1/models 验证）**；**切换三处（base_url/api_key 占位/model 名——SDK 是电话 base_url 是拨号——其余代码不动）**；**流式（stream=True 打字机效果——SSE）+ 工具调用（Function Calling——Agent 场景）**——"你的 OpenAI 代码只改 base_url 一行就能接 vLLM——切换成本 = 一行配置"。
+> **核心要点**：兼容 = 生态白嫖（**OpenAI API 是事实标准——vLLM 兼容它 = 兼容整个生态——切换成本一行**）；**端点三件套（chat/completions 主力/embeddings RAG/health 监控——/v1/models 验证）**；**切换三处（base_url/api_key 占位/model 名——SDK 是电话 base_url 是拨号——其余代码不动）**；**流式（stream=True 打字机效果——SSE）+ 工具调用（Function Calling——Agent 场景）**——"你的 OpenAI 代码只改 base_url 一行就能接 vLLM——切换成本 = 一行配置"。
 
 ---
 

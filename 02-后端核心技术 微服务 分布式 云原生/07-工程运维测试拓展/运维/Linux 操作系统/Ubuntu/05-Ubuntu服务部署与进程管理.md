@@ -1,10 +1,10 @@
 # Ubuntu 服务部署与进程管理
 
-> 🚀 systemd 服务管理、Spring Boot 部署、Nginx 反向代理、日志轮转、进程守护 —— Java 应用生产化部署
+> systemd 服务管理、Spring Boot 部署、Nginx 反向代理、日志轮转、进程守护 —— Java 应用生产化部署
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [systemd 服务管理](#1-systemd-服务管理)
 2. [Spring Boot 生产部署](#2-spring-boot-生产部署)
@@ -140,9 +140,9 @@ HEALTH_URL="http://localhost:8080/actuator/health"
 HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" $HEALTH_URL)
 
 if [ "$HTTP_CODE" -eq 200 ]; then
-    echo "✅ 部署成功！v${NEW_VERSION}"
+    echo "✓ 部署成功！v${NEW_VERSION}"
 else
-    echo "❌ 健康检查失败！HTTP ${HTTP_CODE}"
+    echo "✗ 健康检查失败！HTTP ${HTTP_CODE}"
     echo "回滚中..."
     sudo systemctl stop ${APP_NAME}
     # 恢复旧版本...
@@ -302,7 +302,7 @@ jmap -dump:live,file=heap.hprof PID  # 堆 dump
 
 ---
 
-> 🎯 **核心要点**：**systemd** 管理服务生命周期（开机启动+自动重启），**Nginx** 做反向代理和静态资源，**logrotate** 管日志轮转（`copytruncate` 对 Java 很重要），**jstack/jmap** 做线上排查。
+> **核心要点**：**systemd** 管理服务生命周期（开机启动+自动重启），**Nginx** 做反向代理和静态资源，**logrotate** 管日志轮转（`copytruncate` 对 Java 很重要），**jstack/jmap** 做线上排查。
 
 ---
 

@@ -102,7 +102,7 @@ TRUNCATE TABLE t_user;
 | `DOUBLE` | 8 | 双精度浮点 | 科学计算 |
 | `DECIMAL(m,n)` | 变长 | 定点数，精确 | **金额/财务必用** |
 
-> ⚠️ **金额必须使用 DECIMAL**，禁止使用 DOUBLE/FLOAT，避免精度丢失。
+> **金额必须使用 DECIMAL**，禁止使用 DOUBLE/FLOAT，避免精度丢失。
 
 ### 字符串类型
 
@@ -381,7 +381,7 @@ DROP VIEW IF EXISTS v_user_order;
 SHOW CREATE VIEW v_user_order;
 ```
 
-> 💡 **视图的优点**：简化复杂查询、提高安全性（隐藏表结构）、逻辑封装。但**不提升查询性能**——执行视图本质还是执行内部的 SELECT。
+> **视图的优点**：简化复杂查询、提高安全性（隐藏表结构）、逻辑封装。但**不提升查询性能**——执行视图本质还是执行内部的 SELECT。
 
 ---
 
@@ -403,7 +403,7 @@ DROP INDEX idx_username ON t_user;
 EXPLAIN SELECT * FROM t_user WHERE username = 'zhangsan';
 ```
 
-> 💡 **索引不是越多越好**——每个索引增加写入开销和存储空间，需根据查询模式权衡。
+> **索引不是越多越好**——每个索引增加写入开销和存储空间，需根据查询模式权衡。
 
 ---
 
@@ -435,7 +435,7 @@ REVOKE DELETE ON java_shop.* FROM 'app_user'@'localhost';
 DROP USER 'app_user'@'localhost';
 ```
 
-> ⚠️ **生产环境权限最小化原则**：只授予业务需要的权限，避免使用 `ALL PRIVILEGES`。
+> **生产环境权限最小化原则**：只授予业务需要的权限，避免使用 `ALL PRIVILEGES`。
 
 ---
 
@@ -469,7 +469,7 @@ default-storage-engine=InnoDB
 default-character-set=utf8mb4
 ```
 
-> 🎯 **本文是日常开发高频操作的速查参考**，深入原理（MVCC、锁机制、B+树索引等）请参见同目录下 `01-MySQL核心原理.md`。
+> **本文是日常开发高频操作的速查参考**，深入原理（MVCC、锁机制、B+树索引等）请参见同目录下 `01-MySQL核心原理.md`。
 
 ---
 

@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [Java 端：URI vs URL 的核心差异](#1-java-端uri-vs-url-的核心差异)
 2. [URL.equals() 的 DNS 陷阱](#2-urlequals-的-dns-陷阱)
@@ -27,15 +27,15 @@
 | 定位 | 纯**语法**标识符，只管字符串合法性 | 语法 + **协议处理器**，要有办法访问 |
 | 构造时行为 | **纯字符串校验**，不联网 | 某些操作会触发 DNS / 连接 |
 | 支持 Scheme | 任意合法 scheme | 只支持内置协议处理器（http/https/file/jar/ftp...） |
-| `equals` / `hashCode` | 不联网，纯字符串比较 | **会做 DNS 解析 + IP 比对** ❌ |
-| 线程安全 | ✅ 不可变对象 | ⚠️ `equals`/`hashCode` 有同步锁 |
+| `equals` / `hashCode` | 不联网，纯字符串比较 | **会做 DNS 解析 + IP 比对** ✗ |
+| 线程安全 | ✓ 不可变对象 | `equals`/`hashCode` 有同步锁 |
 | Java 20+ | — | 所有 String 构造器标记 `@Deprecated` |
 | 推荐场景 | **解析、拼接、校验、归一化** | 真正要打开连接时 |
 
 ```java
 // 第一原则：优先用 URI，需要网络 I/O 时才转 URL
-URI  uri = URI.create("https://api.example.com/v1/users/42?name=tom");  // ✅
-URL  url = uri.toURL();                                                   // ✅
+URI  uri = URI.create("https://api.example.com/v1/users/42?name=tom");  // ✓
+URL  url = uri.toURL();                                                   // ✓
 ```
 
 ### 1.2 URI 三大构造方式
@@ -60,7 +60,7 @@ System.out.println(u3.toASCIIString());
 // ↑ 自动编码了空格等非法字符
 ```
 
-> ⚠️ **多参构造的自动编码范围有限**：只编码非法字符（空格、中文等），**不编码保留字符**（`&`、`=`、`?`、`#` 等）。所以 Query 值里含 `&` 时仍需先手工编码。
+> **多参构造的自动编码范围有限**：只编码非法字符（空格、中文等），**不编码保留字符**（`&`、`=`、`?`、`#` 等）。所以 Query 值里含 `&` 时仍需先手工编码。
 
 ### 1.3 URI 常用方法速查
 
@@ -93,23 +93,23 @@ u.compareTo(u2);      // 字典序比较（不联网）
 ```java
 URI u = URI.create("https://a.com/%E4%B8%AD%E6%96%87/a%2Fb%3Fc?kw=%E4%B8%AD");
 
-// ❌ 解码版 —— 丢失原始结构
+// ✗ 解码版 —— 丢失原始结构
 u.getPath();        // "/中文/a/b?c" → %2F 变成了真 /，%3F 变成了真 ?
                      // 层级信息完全丢失！
 
-// ✅ 原始版 —— 保真
+// ✓ 原始版 —— 保真
 u.getRawPath();     // "/%E4%B8%AD%E6%96%87/a%2Fb%3Fc"
 
-// ❌ 用 getPath() 做安全校验
+// ✗ 用 getPath() 做安全校验
 if (u.getPath().startsWith("/safe/")) { ... }
 // 攻击者：https://a.com/%2e%2e%2fetc%2Fpasswd
 // u.getPath() → "/../etc/passwd" → 绕过前缀检查
 
-// ✅ 用 getRawPath() 做安全校验
+// ✓ 用 getRawPath() 做安全校验
 if (!u.getRawPath().startsWith("/safe/")) { reject; }
 ```
 
-> 🎯 **铁律**：**做安全校验、路径拼接、签名计算时，一律用 `getRaw*` 系列方法**。`get*` 系列只有在最终展示给用户或用做业务参数值时使用。
+> **铁律**：**做安全校验、路径拼接、签名计算时，一律用 `getRaw*` 系列方法**。`get*` 系列只有在最终展示给用户或用做业务参数值时使用。
 
 ---
 
@@ -128,7 +128,7 @@ if (!u.getRawPath().startsWith("/safe/")) { reject; }
 URL u1 = new URL("https://google.com/a");
 URL u2 = new URL("https://google.com/a");
 
-// ❌ 每次比较都可能发起 DNS 查询！
+// ✗ 每次比较都可能发起 DNS 查询！
 boolean same = u1.equals(u2);  // 慢 + 不确定（DNS 轮询返回不同 IP → false）
 ```
 
@@ -141,11 +141,11 @@ boolean same = u1.equals(u2);  // 慢 + 不确定（DNS 轮询返回不同 IP �
 | **阻塞风险** | DNS 不可达时 `equals()` 卡住几十秒 | 线程池被打满 |
 
 ```java
-// ❌ 经典事故场景：URL 当缓存 Key
+// ✗ 经典事故场景：URL 当缓存 Key
 Map<URL, CachedPage> cache = new HashMap<>();
 // 每次 cache.get(key) 都可能触发 DNS 解析，把缓存变成了网络 IO 放大器
 
-// ✅ 正确做法：用 URI 或 String 当 Key
+// ✓ 正确做法：用 URI 或 String 当 Key
 Map<String, CachedPage> cache = new HashMap<>();
 cache.put(uri.toASCIIString(), page);
 ```
@@ -153,19 +153,19 @@ cache.put(uri.toASCIIString(), page);
 ### 2.3 正确替代
 
 ```java
-// ✅ 比大小 / 去重 / Map Key → 用 URI（纯字符串比较）
+// ✓ 比大小 / 去重 / Map Key → 用 URI（纯字符串比较）
 URI uri1 = URI.create("https://a.com/p");
 URI uri2 = URI.create("https://a.com/p");
 boolean same = uri1.equals(uri2);             // true，纯字符串比较，不联网
 int hash = uri1.hashCode();                   // 只依赖字符串，稳定
 
-// ✅ 需要比较"是否指向同一资源" → 先归一化再比较 String
+// ✓ 需要比较"是否指向同一资源" → 先归一化再比较 String
 String norm1 = UrlNormalizer.canonicalize("HTTPS://A.COM:443/p/");
 String norm2 = UrlNormalizer.canonicalize("https://a.com/p");
 boolean same = norm1.equals(norm2);           // true
 ```
 
-> ⚠️ **`URI.equals()` 的注意事项**：它对大小写、编码形态**敏感**。`URI.create("https://A.COM/p")` 与 `URI.create("https://a.com/p")` **不相等**。做"指向同一资源"判断前须先归一化。
+> **`URI.equals()` 的注意事项**：它对大小写、编码形态**敏感**。`URI.create("https://A.COM/p")` 与 `URI.create("https://a.com/p")` **不相等**。做"指向同一资源"判断前须先归一化。
 
 ---
 
@@ -217,10 +217,10 @@ UriComponentsBuilder.fromUriString("https://a.com")
 UriComponentsBuilder.fromUriString("https://a.com")
     .path("/users/{name}")
     .buildAndExpand(URLEncoder.encode("张 三", UTF_8))   // 变量值已编码
-    .encode()                                           // ❌ 双重编码！变成 %25E4...
+    .encode()                                           // ✗ 双重编码！变成 %25E4...
     .toUriString();
 
-// ✅ 正确写法
+// ✓ 正确写法
 UriComponentsBuilder.fromUriString("https://a.com")
     .path("/users/{name}")
     .build(Map.of("name", URLEncoder.encode("张 三", UTF_8)))  // build() 带 Map 不编码
@@ -295,7 +295,7 @@ builder.queryParam("kw", "a", null, "b");  // → kw=a&kw&kw=b
 
 // 坑 3：buildAndExpand 遇到未赋值的变量
 UriComponentsBuilder.fromUriString("https://a.com/{a}/{b}")
-    .buildAndExpand(Map.of("a", "x"));    // ❌ IllegalArgumentException: b not provided
+    .buildAndExpand(Map.of("a", "x"));    // ✗ IllegalArgumentException: b not provided
 // 解决：确保所有 {name} 都有值，或用 build() 不展开
 ```
 
@@ -336,7 +336,7 @@ HttpUrl base = HttpUrl.parse("https://a.com/api/v1/");
 // addPathSegment —— 自动编码，编码 / 防止层级混淆
 base.newBuilder()
     .addPathSegment("my file.txt")      // → /api/v1/my%20file.txt
-    .addPathSegment("a/b")              // → /api/v1/my%20file.txt/a%2Fb  ✅ / 被编码
+    .addPathSegment("a/b")              // → /api/v1/my%20file.txt/a%2Fb  ✓ / 被编码
     .build();
 
 // addPathSegments —— 每段独立编码
@@ -419,11 +419,11 @@ UriUtils.decode("my%20file.txt", UTF_8);   // "my file.txt"
 |------|:---:|:---:|:---:|------|
 | `encodePath` | `%20` | 不编码 | `%2B` | 全路径 |
 | `encodePathSegment` | `%20` | `%2F` | `%2B` | **单段路径**（推荐） |
-| `encodeQuery` | `+` ⚠️ | `%2F` | `%2B` | 整条 Query（废弃） |
+| `encodeQuery` | `+` | `%2F` | `%2B` | 整条 Query（废弃） |
 | `encodeQueryParam` | `%20` | `%2F` | `%2B` | **单个参数值**（推荐） |
 | `encodeFragment` | `%20` | 不编码 | `%2B` | Fragment |
 
-> 🎯 **推荐组合**：Path 段用 `encodePathSegment`，Query 值用 `encodeQueryParam`。不要用 `encodeQuery`（它按 `application/x-www-form-urlencoded` 把空格编成 `+`）。
+> **推荐组合**：Path 段用 `encodePathSegment`，Query 值用 `encodeQueryParam`。不要用 `encodeQuery`（它按 `application/x-www-form-urlencoded` 把空格编成 `+`）。
 
 ### 5.2 UriTemplate —— URI 模板变量
 
@@ -504,7 +504,7 @@ new URL("https://a.com/my file.txt").href;
 // "https://a.com/my%20file.txt"       ← 自动编码空格
 
 new URL("https://a.com/path\\back").href;
-// "https://a.com/path/back"           ← 自动把反斜杠转成正斜杠 ✅
+// "https://a.com/path/back"           ← 自动把反斜杠转成正斜杠 ✓
 
 // ② 自动 trim + 清理
 new URL(" https://a.com/p  ").href;
@@ -522,13 +522,13 @@ new URL("HTTPS://API.Example.COM/Path").href;
 ```java
 // Java 侧对比：同样的输入直接抛异常
 URI.create("https://a.com/my file.txt");
-// ❌ URISyntaxException: Illegal character in path
+// ✗ URISyntaxException: Illegal character in path
 
 URI.create(" https://a.com/p ");
-// ❌ URISyntaxException: Illegal character in scheme
+// ✗ URISyntaxException: Illegal character in scheme
 ```
 
-> 🎯 **解析器差异攻击根源**：同一字符串，WHATWG 能解析出 `host=A.com`，RFC 3986 解析出 `host=B.com` 或直接抛异常。安全过滤时必须考虑两端解析结果可能不同（详见 06 篇）。
+> **解析器差异攻击根源**：同一字符串，WHATWG 能解析出 `host=A.com`，RFC 3986 解析出 `host=B.com` 或直接抛异常。安全过滤时必须考虑两端解析结果可能不同（详见 06 篇）。
 
 ### 6.3 修改 URL 组件
 
@@ -635,7 +635,7 @@ const sp2 = new URLSearchParams({ name: "a b" });
 sp2.toString();  // "name=a+b"   ← 空格变成 +
 ```
 
-> ⚠️ **`+` 的二义性**：`URLSearchParams.toString()` 把空格编成 `+`。若后端严格按 RFC 3986 解析（如 Go `net/url` 的 `QueryUnescape`），`+` 不会被解成空格，导致值变成 `"a+b"` 而非 `"a b"`。跨语言通信时建议后端统一用 RFC 3986 规则。
+> **`+` 的二义性**：`URLSearchParams.toString()` 把空格编成 `+`。若后端严格按 RFC 3986 解析（如 Go `net/url` 的 `QueryUnescape`），`+` 不会被解成空格，导致值变成 `"a+b"` 而非 `"a b"`。跨语言通信时建议后端统一用 RFC 3986 规则。
 
 ### 7.4 实际案例：前端分页封装
 
@@ -676,16 +676,16 @@ Node.js 提供了两套 URL API：
 
 | API | 引入 | 符合标准 | 推荐 |
 |-----|------|:---:|:---:|
-| **WHATWG URL** | 全局可用（Node 10+） | WHATWG URL Standard | ✅ **推荐** |
-| **Legacy `url` 模块** | `require('url')` | Node.js 自有 | ❌ 仅维护老代码 |
+| **WHATWG URL** | 全局可用（Node 10+） | WHATWG URL Standard | ✓ **推荐** |
+| **Legacy `url` 模块** | `require('url')` | Node.js 自有 | ✗ 仅维护老代码 |
 
 ```javascript
-// ✅ 推荐：WHATWG URL（Node 10+ 全局可用，无需 require）
+// ✓ 推荐：WHATWG URL（Node 10+ 全局可用，无需 require）
 const u = new URL("https://a.com/p?q=1");
 u.hostname;   // "a.com"
 u.searchParams.get("q");  // "1"
 
-// ❌ 旧式（仍可用但不推荐新代码使用）
+// ✗ 旧式（仍可用但不推荐新代码使用）
 const url = require("url");
 const parsed = url.parse("https://a.com/p?q=1", true);
 parsed.query.q;  // "1"
@@ -700,7 +700,7 @@ const url = require("url");
 url.resolve("https://a.com/docs/guide/", "intro.html");
 // "https://a.com/docs/guide/intro.html"
 
-// ✅ 替代：使用 WHATWG URL
+// ✓ 替代：使用 WHATWG URL
 new URL("intro.html", "https://a.com/docs/guide/").href;
 
 // ② url.format —— URL 对象 → 字符串
@@ -772,7 +772,7 @@ app.use(async (ctx) => {
 |------|------|----|
 | 编码 Query 值 | `UriUtils.encodeQueryParam(s, UTF_8)` | `encodeURIComponent(s)` |
 | 编码 Path 段 | `UriUtils.encodePathSegment(s, UTF_8)` | `encodeURIComponent(s)` |
-| 编码整条 URL | — | `encodeURI(s)` ⚠️ |
+| 编码整条 URL | — | `encodeURI(s)` |
 | 解码 | `UriUtils.decode(s, UTF_8)` | `decodeURIComponent(s)` |
 
 ### 9.3 拼接 URL
@@ -799,7 +799,7 @@ app.use(async (ctx) => {
 
 ---
 
-> 🎯 **本篇核心要点**
+> **本篇核心要点**
 > 1. Java 优先用 `URI` 而非 `URL`——`URL.equals()` 会做 DNS 解析
 > 2. Spring 项目字符串拼 URL 的唯一正解是 `UriComponentsBuilder`
 > 3. 无 Spring 时用 OkHttp `HttpUrl`，自动编码 + 不可变 + 比 `URI.create()` 更友好

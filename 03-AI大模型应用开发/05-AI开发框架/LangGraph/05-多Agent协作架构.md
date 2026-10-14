@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [多 Agent 协作模式全景](#1-多-agent-协作模式全景)
 2. [Supervisor 模式：主 Agent 分配任务](#2-supervisor-模式主-agent-分配任务)
@@ -321,7 +321,7 @@ builder.add_conditional_edges("math_agent", swarm_router)
 │ 用户感知      │ 可能感知切换         │ 感知是一个Agent      │
 │ 适用场景      │ 明确的任务分工       │ 模糊边界、自由对话    │
 │ 实现复杂度    │ 中等                │ 较高（需处理上下文）  │
-│ 灵活度        │ ⭐⭐⭐              │ ⭐⭐⭐⭐⭐            │
+│ 灵活度        │ ★★★              │ ★★★★★            │
 └──────────────┴─────────────────────┴─────────────────────┘
 ```
 
@@ -459,7 +459,7 @@ Map-Reduce 并行执行：
 ### 7.2 State-based 通信最佳实践
 
 ```python
-# ✅ 好的 State 设计（支持多 Agent 通信）
+# ✓ 好的 State 设计（支持多 Agent 通信）
 class MultiAgentState(TypedDict):
     # 共享对话历史
     messages: Annotated[list, operator.add]
@@ -485,7 +485,7 @@ class MultiAgentState(TypedDict):
 
 ---
 
-> 🎯 **核心要点**：Supervisor 模式是最高频的多 Agent 模式，简单可靠。Swarm/Handoff 模式让用户体验最优（感觉不到 Agent 切换）。实际系统中，通常是多种模式的组合——顶层的 Supervisor 分配任务，每个 Worker 内部可能用 Map-Reduce 加速。
+> **核心要点**：Supervisor 模式是最高频的多 Agent 模式，简单可靠。Swarm/Handoff 模式让用户体验最优（感觉不到 Agent 切换）。实际系统中，通常是多种模式的组合——顶层的 Supervisor 分配任务，每个 Worker 内部可能用 Map-Reduce 加速。
 
 ---
 

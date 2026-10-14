@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [DevSecOps：安全左移](#1-devsecops安全左移)
 2. [扫描家族：SAST / DAST / 依赖 / 容器](#2-扫描家族sast--dast--依赖--容器)
@@ -76,7 +76,7 @@ approval_policy:
 4. Masked/Protected/File 变量的分工？恶意 MR 攻击场景？
 5. Secrets Manager 与 CI 变量的对比？2026 智能安全三件？
 
-> 🎯 **核心要点**：DevSecOps = **"扫描在合并前（SAST/依赖每 MR 必跑）+ 门禁在合并时（高危阻止/要求批准）+ 凭证治理（Masked/Protected/Secrets Manager）"**——"**不安全的代码进不了 main**"；2026 主线是"**扫描自动修复 + AI 逻辑审查**"。
+> **核心要点**：DevSecOps = **"扫描在合并前（SAST/依赖每 MR 必跑）+ 门禁在合并时（高危阻止/要求批准）+ 凭证治理（Masked/Protected/Secrets Manager）"**——"**不安全的代码进不了 main**"；2026 主线是"**扫描自动修复 + AI 逻辑审查**"。
 
 ---
 

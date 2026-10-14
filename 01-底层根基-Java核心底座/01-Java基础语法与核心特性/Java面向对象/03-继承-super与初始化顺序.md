@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [继承的本质与单继承限制](#1-继承的本质与单继承限制)
 2. [子类继承了什么、不继承什么](#2-子类继承了什么不继承什么)
@@ -56,7 +56,7 @@ public class Manager extends Employee {
 | 类 implements 接口 | 多实现 | 接口只定义契约，冲突由默认方法规则解决（见 05 模块） |
 | 接口 extends 接口 | 多继承 | 同上，无状态冲突 |
 
-> 💡 单继承 + 多接口是 Java 的经典权衡：牺牲"实现的复用面"换取**语义确定性**。
+> 单继承 + 多接口是 Java 的经典权衡：牺牲"实现的复用面"换取**语义确定性**。
 
 ---
 
@@ -64,10 +64,10 @@ public class Manager extends Employee {
 
 | 父类成员 | 子类是否可见/可用 | 说明 |
 |---------|:----------------:|------|
-| `public` / `protected` 字段与方法 | ✅ | 直接使用 |
-| `default` 成员 | 同包 ✅ / 跨包 ❌ | 包私有是作用域边界 |
-| `private` 字段与方法 | ❌ | 不可见（但**存在于**子类对象中） |
-| **构造器** | ❌ | 不继承，需用 `super(...)` 显式调用 |
+| `public` / `protected` 字段与方法 | ✓ | 直接使用 |
+| `default` 成员 | 同包 ✓ / 跨包 ✗ | 包私有是作用域边界 |
+| `private` 字段与方法 | ✗ | 不可见（但**存在于**子类对象中） |
+| **构造器** | ✗ | 不继承，需用 `super(...)` 显式调用 |
 | `static` 方法 | 可见但**不是继承** | 重名同参叫"隐藏"，受引用类型影响（见 04 模块） |
 
 ```java
@@ -79,13 +79,13 @@ public class Parent {
 
 public class Child extends Parent {
     public void test() {
-        System.out.println(visible);  // ✅ 可访问
-        // System.out.println(secret); // ❌ 编译错误
+        System.out.println(visible);  // ✓ 可访问
+        // System.out.println(secret); // ✗ 编译错误
     }
 }
 ```
 
-> 🎯 **核心要点**：private 成员"不被继承访问，但被继承存在"——`new Child()` 在堆中分配的内存包含父类所有字段（含 private），只是子类代码无法直接操作它们。
+> **核心要点**：private 成员"不被继承访问，但被继承存在"——`new Child()` 在堆中分配的内存包含父类所有字段（含 private），只是子类代码无法直接操作它们。
 
 ---
 
@@ -114,7 +114,7 @@ public class Manager extends Employee {
 }
 ```
 
-> ⚠️ **易错点**：① 子类构造器不写 `super(...)` 时，编译器自动插入**无参** `super()`——若父类没有无参构造器则编译失败，此时必须显式调用带参父类构造器；② `this(...)` 与 `super(...)` 互斥且都必须在第一行。
+> **易错点**：① 子类构造器不写 `super(...)` 时，编译器自动插入**无参** `super()`——若父类没有无参构造器则编译失败，此时必须显式调用带参父类构造器；② `this(...)` 与 `super(...)` 互斥且都必须在第一行。
 
 ---
 
@@ -133,13 +133,13 @@ public class Parent {
 
 public class Child extends Parent {
     @Override
-    public String make() throws FileNotFoundException {   // ✅ 权限变宽、协变返回、异常变窄
+    public String make() throws FileNotFoundException {   // ✓ 权限变宽、协变返回、异常变窄
         return "child result";
     }
 }
 ```
 
-> 💡 **@Override 注解为什么必须加**：它让编译器校验上述规则——写错签名时，不加注解会"静默地变成重载"，行为诡异且难以排查；加注解则直接编译报错。
+> **@Override 注解为什么必须加**：它让编译器校验上述规则——写错签名时，不加注解会"静默地变成重载"，行为诡异且难以排查；加注解则直接编译报错。
 
 ---
 
@@ -160,7 +160,7 @@ public class Base {
 }
 ```
 
-> ⚠️ **final 变量 ≠ 不可变对象**：`final List<String> list = new ArrayList<>()` 只是引用不能重新指向，`list.add()` 仍然可以修改集合内容。要真正不可变需配合不可变类/不可变集合（见 02 模块）。
+> **final 变量 ≠ 不可变对象**：`final List<String> list = new ArrayList<>()` 只是引用不能重新指向，`list.add()` 仍然可以修改集合内容。要真正不可变需配合不可变类/不可变集合（见 02 模块）。
 
 ---
 
@@ -202,7 +202,7 @@ public class Child extends Parent {
 2. **实例初始化自上而下**：父类实例块/字段 → 父类构造器 → 子类实例块/字段 → 子类构造器。
 3. **实例块与字段初始化按声明顺序**，且都在构造器体之前。
 
-> ⚠️ **重写陷阱**：若父类构造器调用了**被子类重写的方法**，此时子类字段尚未初始化（值为默认值）——这是著名的"构造器调用可重写方法"反模式，导致读到 null/0。
+> **重写陷阱**：若父类构造器调用了**被子类重写的方法**，此时子类字段尚未初始化（值为默认值）——这是著名的"构造器调用可重写方法"反模式，导致读到 null/0。
 
 ```java
 public class Parent {
@@ -218,7 +218,7 @@ public class Child extends Parent {
 new Child();   // 输出 null，而不是 "child" —— 因为父类构造器先执行，name 还是默认值
 ```
 
-> 🎯 **核心要点**：父类构造器执行时，子类字段还是默认值。因此**构造器内只调用 private/final 方法**，绝不调用可重写方法。
+> **核心要点**：父类构造器执行时，子类字段还是默认值。因此**构造器内只调用 private/final 方法**，绝不调用可重写方法。
 
 ---
 

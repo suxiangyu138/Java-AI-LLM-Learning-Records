@@ -27,7 +27,7 @@
 | **Advisors** | 拦截链——日志、安全、RAG 上下文增强 |
 | **VectorStore** | 向量数据库抽象（Redis/ PGVector/ Milvus） |
 
-> 💡 Spring AI 对标 LangChain4j，但深度集成 Spring 生态（Bean 管理、事务、配置、AOP）。
+> Spring AI 对标 LangChain4j，但深度集成 Spring 生态（Bean 管理、事务、配置、AOP）。
 
 ### 2. Spring AI vs LangChain4j — 关键对比
 > 两者都是 Java 生态的 LLM 框架，面试高频问题。
@@ -45,7 +45,7 @@
 | 社区生态 | Spring 生态（Cloud、Boot、AI） | 更灵活但分散 |
 | 学习曲线 | 平缓（Spring Boot 风格） | 较陡（Function-Call 需手动） |
 
-> 🎯 选型建议：已有 Spring Boot 项目用 Spring AI；非 Spring 项目或需要 LangChain 兼容性用 LangChain4j。
+> 选型建议：已有 Spring Boot 项目用 Spring AI；非 Spring 项目或需要 LangChain 兼容性用 LangChain4j。
 
 ### 3. ChatClient vs ChatModel vs StreamingChatModel
 > 三种模型调用方式的区别。
@@ -94,7 +94,7 @@ public class FlightTools {
 }
 ```
 
-> 💡 `@ToolParam` 上的 `description` 对 LLM 推理至关重要，直接影响工具调用准确率。
+> `@ToolParam` 上的 `description` 对 LLM 推理至关重要，直接影响工具调用准确率。
 
 ### 5. Advisor 是什么？责任链模式如何工作？
 > Advisor = LLM 交互拦截器，基于责任链（Chain of Responsibility）模式。
@@ -119,7 +119,7 @@ public Advisor sensitiveWordAdvisor() {
 }
 ```
 
-> 🎯 面试回答：Advisor 基于责任链模式，每个 Advisor 可以决定是否拦截或放行，最终由 `next.next()` 传递到链尾。
+> 面试回答：Advisor 基于责任链模式，每个 Advisor 可以决定是否拦截或放行，最终由 `next.next()` 传递到链尾。
 
 ### 6. 什么是 RAG？Spring AI 如何实现 RAG 管线？
 > RAG = Retrieval-Augmented Generation，检索增强生成。
@@ -171,7 +171,7 @@ public Advisor ragAdvisor(VectorStore vectorStore) {
 | **Agentic Chunking** | LLM 判断切分点 | 质量最高 | 最慢最贵 |
 | **Document Specific** | 按文档结构切分（段落/章节） | 结构清晰 | 依赖文档格式 |
 
-> 💡 生产实践：Recursive Chunking（段落级） + 20% Token Overlap 是最常用的方案。
+> 生产实践：Recursive Chunking（段落级） + 20% Token Overlap 是最常用的方案。
 
 ### 8. 什么是 MCP？三种传输机制的区别？
 > MCP = Model Context Protocol，LLM 与外部工具之间的标准化通信协议。
@@ -182,7 +182,7 @@ public Advisor ragAdvisor(VectorStore vectorStore) {
 | **SSE** | Server-Sent Events | 远程服务、实时推送 |
 | **Streamable HTTP** | 可流式 HTTP 长连接 | 跨网络、企业级分布式部署 |
 
-> 🎯 STDIO 适合本地安全隔离，SSE/Streamable HTTP 适合分布式微服务架构。
+> STDIO 适合本地安全隔离，SSE/Streamable HTTP 适合分布式微服务架构。
 
 ### 9. Memory 管理如何实现多轮对话？
 > Spring AI 使用 `ChatMemory` + `Advisor` 实现记忆。
@@ -323,7 +323,7 @@ public String rewriteQuery(String original) {
 └─────────────────────────────────────┘
 ```
 
-> 💡 当 Tools 超过 30 个时，Skill 的分组策略可以显著提升 LLM 的工具选择准确率。
+> 当 Tools 超过 30 个时，Skill 的分组策略可以显著提升 LLM 的工具选择准确率。
 
 ### 17. DeepSeek 深度思考与流式响应的实现
 > DeepSeek 支持深度思考模式（reasoning），Spring AI 通过 StreamingChatModel 实现流式打字机效果。
@@ -375,7 +375,7 @@ public interface Advisor {
 
 责任链顺序：`List<Advisor>` → `BeforeAdvisor.before()` → `AroundAdvisor.around()` → `ChatModel` → `AfterAdvisor.after()`。
 
-> 🎯 面试要点：Advisor 链的调用顺序由 `@Order` 注解控制，类似于 Spring 的 `Filter` 链。
+> 面试要点：Advisor 链的调用顺序由 `@Order` 注解控制，类似于 Spring 的 `Filter` 链。
 
 ### 2. Tools 参数推理的原理与痛点
 > LLM 调用 Tool 时，JSON Schema 由 `@ToolParam` 注解自动生成。
@@ -501,7 +501,7 @@ public McpClient stdioClient() {
 | Pooling | 取 CLS Token 或 Mean Pooling |
 | Normalization | L2 归一化，余弦相似度 |
 
-> 💡 余弦相似度 = `cos(A,B) = (A·B)/(||A||·||B||)`，值越接近 1 语义越相似。
+> 余弦相似度 = `cos(A,B) = (A·B)/(||A||·||B||)`，值越接近 1 语义越相似。
 
 ### 8. Spring AI vs Dify 企业级选型对比
 | 对比维度 | Spring AI | Dify |
@@ -513,7 +513,7 @@ public McpClient stdioClient() {
 | 工作流编排 | 代码编排 | 拖拽编排 |
 | 适用团队 | Java 全栈团队 | 非技术团队也可用 |
 
-> 🎯 选型：深度定制 + Java 团队 → Spring AI；快速验证 + 业务团队 → Dify。
+> 选型：深度定制 + Java 团队 → Spring AI；快速验证 + 业务团队 → Dify。
 
 ---
 
@@ -1108,4 +1108,4 @@ Spring AI 通过两个层面实现 Tools：第一是 `@Tool` 注解，开发者�
 
 ---
 
-> 🎯 此面试宝典覆盖约 90% 的 Java AI Agent 面试考点。重点掌握：Tools 实践、Advisor 责任链、RAG 全流程、Memory 架构设计。祝面试顺利！
+> 此面试宝典覆盖约 90% 的 Java AI Agent 面试考点。重点掌握：Tools 实践、Advisor 责任链、RAG 全流程、Memory 架构设计。祝面试顺利！

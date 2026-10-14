@@ -2,7 +2,7 @@
 
 > 调通模型后第一件要做的事：让回答可控。本 Demo 用三个递进的小实验（角色任务约束、few-shot 示例、JSON 结构化输出）建立 Prompt 工程的最小方法论，让大模型从"会聊天"变成"能干活"。
 
-## 📚 目录
+## 目录
 
 1. [目标与验收](#1-目标与验收)
 2. [Prompt 三要素：角色、任务、约束](#2-prompt-三要素角色任务约束)
@@ -124,14 +124,14 @@ def run_eval(questions_and_expect: list[tuple[str, list[str]]]) -> None:
     for question, expect in questions_and_expect:
         result = extract_skills(question)
         hit = all(k in result for k in expect)
-        print(f"{'✅' if hit else '❌'} {question} → {result}（期望 {expect}）")
+        print(f"{'✓' if hit else '✗'} {question} → {result}（期望 {expect}）")
 
 run_eval(TEST_CASES)
 ```
 
 记住边界：**Prompt 工程调的是"模型的表达"**，模型本身能力不够时（数学、长逻辑），调提示词只能小幅改善——该换模型就换模型（flash 换 pro），该上 RAG 就上 RAG（把知识补进上下文）。"提示词不行先加示例、示例不行再换模型、换模型不行上 RAG"就是迭代的优先级顺序。
 
-> 🎯 **核心要点**：Prompt 工程的最小方法论是**三件套起步、few-shot 教会、JSON 约束产出、模板集中管理、防御式解析**。本 Demo 跑完这三个实验，你就具备构建 06 篇 RAG 检索提示词和 07 篇工具调用提示词的全部基础。
+> **核心要点**：Prompt 工程的最小方法论是**三件套起步、few-shot 教会、JSON 约束产出、模板集中管理、防御式解析**。本 Demo 跑完这三个实验，你就具备构建 06 篇 RAG 检索提示词和 07 篇工具调用提示词的全部基础。
 
 ---
 

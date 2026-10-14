@@ -1,10 +1,10 @@
 # WSL2 与 Windows 互操作
 
-> 🔗 文件系统互访（/mnt/c/ vs \\\\wsl$\\）、路径映射、跨 OS 程序调用、性能陷阱与最佳实践 —— WSL2 与 Windows 无缝协作的完整指南
+> 文件系统互访（/mnt/c/ vs \\\\wsl$\\）、路径映射、跨 OS 程序调用、性能陷阱与最佳实践 —— WSL2 与 Windows 无缝协作的完整指南
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [文件系统互访](#1-文件系统互访)
 2. [性能陷阱：跨文件系统 I/O](#2-性能陷阱跨文件系统-io)
@@ -40,7 +40,7 @@ sudo mount -t drvfs D:\\projects /mnt/projects
 # === /etc/fstab 自动挂载 ===
 # 编辑 /etc/fstab，添加：
 # D:\projects /mnt/projects drvfs defaults 0 0
-# ⚠️ 注意：WSL2 中推荐在 /etc/wsl.conf 的 [automount] 配置
+# 注意：WSL2 中推荐在 /etc/wsl.conf 的 [automount] 配置
 ```
 
 ### 1.2 从 Windows 访问 WSL2 文件
@@ -99,13 +99,13 @@ WIN_HOME=$(wslpath -u "$(cmd.exe /c echo %USERPROFILE% 2>/dev/null | tr -d '\r')
 
 | 操作 | WSL2 Linux 内 (ext4) | WSL2 访问 /mnt/c/ (9P) | 差距 |
 |------|:---:|:---:|:---:|
-| **小文件读取** | ✅ 极快 | ⚠️ 慢 3-5x | 网络协议开销 |
-| **大量小文件（node_modules）** | ✅ 快 | ❌ 慢 10-20x | 每个文件需网络往返 |
-| **Git 操作** | ✅ 快 | ❌ 极慢（尤其是 `git status`） | 需要遍历大量文件 |
-| **Java 编译（Maven/Gradle）** | ✅ 快 | ❌ 慢 5-10x | 读取 + 写入大量 .class |
-| **数据库文件（SQLite）** | ✅ 极快 | ❌ 不适合 | 频繁随机读写 |
-| **大文件顺序读写** | ✅ 极快 | ⚠️ 慢 1.5-2x | 带宽瓶颈 |
-| **IDE 索引（IntelliJ）** | ✅ 快 | ❌ 极慢 | 读取整个项目文件 |
+| **小文件读取** | ✓ 极快 | 慢 3-5x | 网络协议开销 |
+| **大量小文件（node_modules）** | ✓ 快 | ✗ 慢 10-20x | 每个文件需网络往返 |
+| **Git 操作** | ✓ 快 | ✗ 极慢（尤其是 `git status`） | 需要遍历大量文件 |
+| **Java 编译（Maven/Gradle）** | ✓ 快 | ✗ 慢 5-10x | 读取 + 写入大量 .class |
+| **数据库文件（SQLite）** | ✓ 极快 | ✗ 不适合 | 频繁随机读写 |
+| **大文件顺序读写** | ✓ 极快 | 慢 1.5-2x | 带宽瓶颈 |
+| **IDE 索引（IntelliJ）** | ✓ 快 | ✗ 极慢 | 读取整个项目文件 |
 
 ### 2.2 跨文件系统慢的根本原因
 
@@ -143,7 +143,7 @@ cd /mnt/c/same-project       # NTFS 上同一项目
 time git status              # → ~3s (慢 60 倍！)
 ```
 
-> 🎯 **核心原则**：**项目代码永远放在 WSL2 的 ext4 文件系统内**（`~/projects/`），不要放在 `/mnt/c/` 下。
+> **核心原则**：**项目代码永远放在 WSL2 的 ext4 文件系统内**（`~/projects/`），不要放在 `/mnt/c/` 下。
 
 ---
 
@@ -210,13 +210,13 @@ param(
     [string]$ProjectPath = "~/projects/myapp"
 )
 
-Write-Host "🔄 Pulling latest code..." -ForegroundColor Yellow
+Write-Host "Pulling latest code..." -ForegroundColor Yellow
 wsl bash -c "cd $ProjectPath && git pull"
 
-Write-Host "🔨 Building..." -ForegroundColor Yellow
+Write-Host "Building..." -ForegroundColor Yellow
 wsl bash -c "cd $ProjectPath && mvn clean package -DskipTests"
 
-Write-Host "🚀 Starting application..." -ForegroundColor Green
+Write-Host "Starting application..." -ForegroundColor Green
 wsl bash -c "cd $ProjectPath && java -jar target/*.jar"
 
 # 运行后自动打开浏览器
@@ -292,10 +292,10 @@ echo $WSLENV               # Windows→WSL 共享的环境变量列表
 
 ```bash
 # WSLg 自动同步以下内容：
-# ✅ DISPLAY (Wayland 显示)
-# ✅ WAYLAND_DISPLAY
-# ✅ PULSE_SERVER (音频)
-# ✅ XDG_RUNTIME_DIR
+# ✓ DISPLAY (Wayland 显示)
+# ✓ WAYLAND_DISPLAY
+# ✓ PULSE_SERVER (音频)
+# ✓ XDG_RUNTIME_DIR
 
 # 手动设置
 export DISPLAY=$(cat /etc/resolv.conf | grep nameserver | awk '{print $2}'):0.0
@@ -316,12 +316,12 @@ pbpaste
 
 | 文件类型 | 放哪里 | 原因 |
 |---------|--------|------|
-| **Java 项目代码** | ✅ WSL2 `~/projects/` (ext4) | 编译/构建/I/O 全在高速 ext4 |
-| **前端项目 (Node.js)** | ✅ WSL2 `~/projects/` (ext4) | node_modules 小文件多，NTFS 极慢 |
-| **Python 项目** | ✅ WSL2 `~/projects/` (ext4) | pip/conda 在 Linux 原生更好 |
-| **Docker 数据** | ✅ WSL2 ext4 | Docker Engine 原生 Linux |
-| **Maven ~/.m2** | ✅ WSL2 ext4 | 依赖下载在 ext4，速度快 |
-| **数据库文件 (SQLite)** | ✅ WSL2 ext4 | 随机读写多，NTFS 不适合 |
+| **Java 项目代码** | ✓ WSL2 `~/projects/` (ext4) | 编译/构建/I/O 全在高速 ext4 |
+| **前端项目 (Node.js)** | ✓ WSL2 `~/projects/` (ext4) | node_modules 小文件多，NTFS 极慢 |
+| **Python 项目** | ✓ WSL2 `~/projects/` (ext4) | pip/conda 在 Linux 原生更好 |
+| **Docker 数据** | ✓ WSL2 ext4 | Docker Engine 原生 Linux |
+| **Maven ~/.m2** | ✓ WSL2 ext4 | 依赖下载在 ext4，速度快 |
+| **数据库文件 (SQLite)** | ✓ WSL2 ext4 | 随机读写多，NTFS 不适合 |
 | **IDE 配置** | Windows 默认 | IDEA/VS Code 设置不涉及 I/O 性能 |
 | **文档/笔记** | Windows 或 WSL2 均可 | 无 I/O 敏感 |
 | **照片/视频/大文件** | Windows (NTFS) | 不涉及编译，空间管理方便 |
@@ -353,23 +353,23 @@ D:\
 ### 5.3 Git 项目跨系统同步的坑
 
 ```text
-❌ 错误做法：
+✗ 错误做法：
   在 /mnt/c/Users/xxx/projects/ 下 git clone
   → git status 慢 60 倍
   → Maven 编译慢 10 倍
   → IDE 索引慢 10 倍
 
-✅ 正确做法：
+✓ 正确做法：
   cd ~/projects
   git clone git@github.com:user/repo.git
   → 一切操作在 ext4 上，速度正常
 
-✅ 偶尔需要从 Windows 访问代码时：
+✓ 偶尔需要从 Windows 访问代码时：
   explorer.exe ~/projects/myapp
   → 仅在需要时通过 \\wsl$\ 访问
 ```
 
-> 🎯 **黄金法则**：**WSL2 内的代码用 WSL2 的工具构建，Windows 的代码用 Windows 的工具构建。永远不要交叉。**
+> **黄金法则**：**WSL2 内的代码用 WSL2 的工具构建，Windows 的代码用 Windows 的工具构建。永远不要交叉。**
 
 ---
 

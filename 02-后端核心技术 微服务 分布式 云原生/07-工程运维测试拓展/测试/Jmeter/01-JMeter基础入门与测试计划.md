@@ -1,10 +1,10 @@
 # JMeter 基础入门与测试计划
 
-> 🔰 从零开始：安装配置、GUI 界面详解、Test Plan 结构、Thread Group 线程模型、元件执行顺序
+> 从零开始：安装配置、GUI 界面详解、Test Plan 结构、Thread Group 线程模型、元件执行顺序
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [JMeter 简介](#1-jmeter-简介)
 2. [安装与目录结构](#2-安装与目录结构)
@@ -36,11 +36,11 @@ Apache JMeter = 100% Java 开发的性能测试工具
   k6          → Go + JS, 云原生友好
 
 JMeter 优势：
-  ✅ 开源免费
-  ✅ GUI + CLI 双模式
-  ✅ 插件生态丰富
-  ✅ 分布式压测支持
-  ✅ 多协议支持
+  ✓ 开源免费
+  ✓ GUI + CLI 双模式
+  ✓ 插件生态丰富
+  ✓ 分布式压测支持
+  ✓ 多协议支持
 ```
 
 ---
@@ -94,7 +94,7 @@ apache-jmeter-5.6.3/
 │                     │                                   │
 │   左侧：树形导航     │     右侧：元件配置面板              │
 │                     │                                   │
-│   📁 Test Plan      │  Name: HTTP Request               │
+│   Test Plan      │  Name: HTTP Request               │
 │   ├── Thread Group  │  Comments: ...                    │
 │   │   ├── HTTP Req  │  ┌───────────────────────────┐   │
 │   │   │   ├── Assert│  │ Protocol: https           │   │
@@ -107,13 +107,13 @@ apache-jmeter-5.6.3/
 └─────────────────────┴───────────────────────────────────┘
 
 常用图标：
-  📁 Test Plan             → 根节点，全局配置
-  👥 Thread Group          → 虚拟用户组
-  🌐 HTTP Request          → HTTP 请求采样器
-  ✅ Response Assertion    → 断言
-  📊 View Results Tree     → 调试用结果树
-  📈 Aggregate Report      → 聚合报告
-  ⚙️ CSV Data Set Config   → 数据驱动配置
+  Test Plan             → 根节点，全局配置
+  Thread Group          → 虚拟用户组
+  HTTP Request          → HTTP 请求采样器
+  ✓ Response Assertion    → 断言
+  View Results Tree     → 调试用结果树
+  Aggregate Report      → 聚合报告
+  CSV Data Set Config   → 数据驱动配置
 ```
 
 ---
@@ -287,7 +287,7 @@ CLI 模式（正式压测）：
 
 ---
 
-> 🎯 **核心要点**：Test Plan 是根，Thread Group 定义并发模型，Sampler 发请求，Assertion 验结果，Listener 看数据。**正式压测务必用 CLI 模式**，GUI 只用于调试。
+> **核心要点**：Test Plan 是根，Thread Group 定义并发模型，Sampler 发请求，Assertion 验结果，Listener 看数据。**正式压测务必用 CLI 模式**，GUI 只用于调试。
 
 ---
 

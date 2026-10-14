@@ -28,7 +28,7 @@
 | translate | 字典映射 | ★★★ |
 | ruby | 任意脚本逻辑（兜底） | ★★ |
 
-> 🎯 解析性能排序：**Dissect（最快）> Grok > Ruby（最慢但最灵活）**——能用 dissect 不用 grok，能用 grok 不用 ruby。
+> 解析性能排序：**Dissect（最快）> Grok > Ruby（最慢但最灵活）**——能用 dissect 不用 grok，能用 grok 不用 ruby。
 
 ---
 
@@ -85,7 +85,7 @@ content: "订单超时 request_id=20260807140001"
    ↓ 可继续加模式细化（建议一个 message 最多 2-3 个 grok）
 ```
 
-> ⚠️ Grok 性能注意：**模式越多越慢**；`GREEDYDATA` 放最后；长 message 用 dissect 更优。
+> Grok 性能注意：**模式越多越慢**；`GREEDYDATA` 放最后；长 message 用 dissect 更优。
 
 ---
 
@@ -177,7 +177,7 @@ filter {
 # 效果：password=123456 → password=***
 ```
 
-> 🎯 数据合规要点：**日志入库前完成脱敏**（手机号/身份证/密码/Token），比入库后清理更可靠。
+> 数据合规要点：**日志入库前完成脱敏**（手机号/身份证/密码/Token），比入库后清理更可靠。
 
 ---
 
@@ -263,7 +263,7 @@ filter {
 | 嵌套过深 | 拆平（mutate + 引用）或保留嵌套 |
 | 大 JSON | 性能考虑先 dissect 切再 json |
 
-> 💡 结构化日志（JSON）是日志治理的方向——**应用侧输出 JSON 格式日志，Logstash 侧直接 json 解析，减少 grok 负担**。
+> 结构化日志（JSON）是日志治理的方向——**应用侧输出 JSON 格式日志，Logstash 侧直接 json 解析，减少 grok 负担**。
 
 ---
 
@@ -360,7 +360,7 @@ filter {
 | ua.name / ua.os | 浏览器/系统 | 终端分析 |
 | geoip.city_name | 城市 | 地图可视化 |
 
-> 🎯 实战要点：**解析一次、富化三件（时间/UA/IP）**——日期覆盖 @timestamp、UA 拆浏览器、IP 转地理，一套管道让原始日志变成可分析的结构化数据。
+> 实战要点：**解析一次、富化三件（时间/UA/IP）**——日期覆盖 @timestamp、UA 拆浏览器、IP 转地理，一套管道让原始日志变成可分析的结构化数据。
 
 ---
 
@@ -402,7 +402,7 @@ output {
 | 匹配顺序 | 常用分支放前（条件 if 包 grok） |
 | 解析失败率高 | 检查模式与日志格式漂移（配置版本化） |
 
-> 🎯 **核心要点**：过滤插件五件套——**Grok（复杂解析）、Dissect（快速切分）、Mutate（字段手术）、Date（时间校准）、JSON（结构化）**，再加富化三兄弟（GeoIP/UA/Translate）。工程铁律：**固定格式用 dissect、@timestamp 必须用 date 覆盖、敏感字段入库前脱敏、解析失败路由独立索引盯配置漂移**。
+> **核心要点**：过滤插件五件套——**Grok（复杂解析）、Dissect（快速切分）、Mutate（字段手术）、Date（时间校准）、JSON（结构化）**，再加富化三兄弟（GeoIP/UA/Translate）。工程铁律：**固定格式用 dissect、@timestamp 必须用 date 覆盖、敏感字段入库前脱敏、解析失败路由独立索引盯配置漂移**。
 
 ---
 

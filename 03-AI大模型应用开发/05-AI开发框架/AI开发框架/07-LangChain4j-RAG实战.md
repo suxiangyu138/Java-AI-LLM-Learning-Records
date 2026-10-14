@@ -1,6 +1,6 @@
 # 07 - LangChain4j RAG 实战
 
-> 🎯 LangChain4j 的 RAG = DocumentLoader（加载）→ Splitter（分块）→ EmbeddingStore（向量化入库）→ ContentRetriever（检索）→ LLM（生成）。30+ 加载器覆盖几乎所有数据源
+> LangChain4j 的 RAG = DocumentLoader（加载）→ Splitter（分块）→ EmbeddingStore（向量化入库）→ ContentRetriever（检索）→ LLM（生成）。30+ 加载器覆盖几乎所有数据源
 
 ---
 
@@ -115,7 +115,7 @@ interface RagAssistant {
         你是企业知识库助手。请基于提供的参考文档回答。
         回答格式：
         [答案]
-        📎 来源：{文档名称}
+        来源：{文档名称}
         """)
     String answer(@MemoryId String sessionId, @UserMessage String question);
 }
@@ -226,6 +226,6 @@ Assistant agent = AiServices.builder(Assistant.class)
 
 ---
 
-> 🎯 **核心要点**：LangChain4j RAG 的标准五步 — **加载→分块→向量化→入库→检索生成**。三个生产级优化必做：① **HyDE 查询改写**（提升召回率）② **混合检索 Dense + BM25 + RRF**（语义+关键词互补）③ **CrossEncoder 重排序**（粗排→精排）。向量存储一旦上线就换掉 InMemory → Milvus/Chroma 持久化。
+> **核心要点**：LangChain4j RAG 的标准五步 — **加载→分块→向量化→入库→检索生成**。三个生产级优化必做：① **HyDE 查询改写**（提升召回率）② **混合检索 Dense + BM25 + RRF**（语义+关键词互补）③ **CrossEncoder 重排序**（粗排→精排）。向量存储一旦上线就换掉 InMemory → Milvus/Chroma 持久化。
 
 **下一模块**：[08-LangChain4j Agent与高级特性](08-LangChain4j-Agent与高级特性.md) / **返回总览**：[00-总览](00-Java-AI开发框架体系总览.md)

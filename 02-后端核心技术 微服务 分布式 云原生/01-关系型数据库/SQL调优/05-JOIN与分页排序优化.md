@@ -6,7 +6,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [JOIN 的三种执行算法](#1-join-的三种执行算法)
 2. [驱动表：小表驱动大表](#2-驱动表小表驱动大表)
@@ -50,13 +50,13 @@
 └── 金句：8.0+ 升级最大的红利之一 = Hash Join——老经验要更新
 ```
 
-> 💡 **EXPLAIN 识别算法**：Extra 列显示 `Using join buffer (hash join)` = Hash Join；`Nested loop` = NLJ；`Using join buffer (block nested loop)` = BNL（8.0 下通常是 hash join 显示）。
+> **EXPLAIN 识别算法**：Extra 列显示 `Using join buffer (hash join)` = Hash Join；`Nested loop` = NLJ；`Using join buffer (block nested loop)` = BNL（8.0 下通常是 hash join 显示）。
 
 ---
 
 ## 2. 驱动表：小表驱动大表
 
-> 🎯 **驱动表 = 外层循环的表**——小表驱动大表是 JOIN 优化的第一原则：
+> **驱动表 = 外层循环的表**——小表驱动大表是 JOIN 优化的第一原则：
 
 ```text
 为什么小表驱动大表
@@ -85,7 +85,7 @@
 
 ## 3. 被驱动表必须走索引
 
-> 🎯 **JOIN 性能的生死线**——被驱动表连接列必须有索引：
+> **JOIN 性能的生死线**——被驱动表连接列必须有索引：
 
 ```text
 没有索引的后果
@@ -110,7 +110,7 @@
 
 ## 4. 子查询与 EXISTS / IN 的选择
 
-> 🎯 **8.0+ 子查询优化已成熟**——旧经验「IN 比 EXISTS 慢」大多已过时：
+> **8.0+ 子查询优化已成熟**——旧经验「IN 比 EXISTS 慢」大多已过时：
 
 ```text
 8.0+ 优化器对子查询的改写
@@ -141,7 +141,7 @@
 
 ## 5. 深分页：OFFSET 之痛
 
-> 🎯 **OFFSET 越大越慢**——LIMIT 999990, 10 要扫描 100 万行再丢弃：
+> **OFFSET 越大越慢**——LIMIT 999990, 10 要扫描 100 万行再丢弃：
 
 ```text
 OFFSET 深分页的真相
@@ -172,13 +172,13 @@ OFFSET 深分页的真相
 └── ES 搜索分页（深度分页有 search_after）
 ```
 
-> ⚠️ **深分页排查**：慢日志里 `LIMIT 大OFFSET` 形态的 SQL——统一改游标分页。
+> **深分页排查**：慢日志里 `LIMIT 大OFFSET` 形态的 SQL——统一改游标分页。
 
 ---
 
 ## 6. 排序优化：让 ORDER BY 走索引
 
-> 🎯 **排序两种实现**：索引有序（免费）vs filesort（文件排序，贵）——目标是前者：
+> **排序两种实现**：索引有序（免费）vs filesort（文件排序，贵）——目标是前者：
 
 ```text
 filesort 的代价
@@ -189,13 +189,13 @@ filesort 的代价
 
 让 ORDER BY 走索引的条件（联合索引设计）
 ├── ① ORDER BY 列顺序与索引列顺序一致（最左前缀）
-│   └── 索引 (a, b)：ORDER BY a, b ✅ / ORDER BY b, a ❌
+│   └── 索引 (a, b)：ORDER BY a, b ✓ / ORDER BY b, a ✗
 ├── ② 排序方向一致（全升或全降）
-│   └── ORDER BY a ASC, b DESC ⚠️（8.0 前不支持混排索引——8.0+ 支持）
+│   └── ORDER BY a ASC, b DESC （8.0 前不支持混排索引——8.0+ 支持）
 ├── ③ WHERE 等值条件与 ORDER BY 组成前缀
-│   └── WHERE a = 1 ORDER BY b → 索引 (a, b) ✅
+│   └── WHERE a = 1 ORDER BY b → 索引 (a, b) ✓
 ├── ④ 排序列不能被表达式包裹
-│   └── ORDER BY DATE(create_time) ❌（函数破坏有序性）
+│   └── ORDER BY DATE(create_time) ✗（函数破坏有序性）
 └── ⑤ LIMIT 也有帮助（索引有序 → 取前 N 行即停）
 
 GROUP BY 同理
@@ -208,7 +208,7 @@ GROUP BY 同理
 
 ## 7. 核心要点
 
-> 🎯 **核心要点**：
+> **核心要点**：
 > 1. **三种算法**：NLJ（被驱动走索引）/ BNL（无索引兜底）/ **Hash Join（8.0.18+ 无索引等值飞跃）**
 > 2. **小表驱动大表**：外层循环少一次，总开销少一大截（STRAIGHT_JOIN 强制）
 > 3. **被驱动表必须走索引**：JOIN 性能生死线——连接列类型一致防隐式转换

@@ -26,12 +26,12 @@ Zookeeper是Apache开源的分布式协调服务，基于ZAB协议实现强一�
 | PERSISTENT_SEQUENTIAL | 持久化+ZK自动递增编号 | 命名服务 |
 | EPHEMERAL_SEQUENTIAL | 临时+自动编号 | 分布式锁核心实现 |
 
-> 💡 EPHEMERAL节点不能创建子节点。SEQUENTIAL节点序号单调递增且唯一，由ZK内部维护。
+> EPHEMERAL节点不能创建子节点。SEQUENTIAL节点序号单调递增且唯一，由ZK内部维护。
 
 ### 1.3 Watcher机制原理
 客户端在ZNode上注册Watcher，当节点数据/子节点/连接状态变化时，服务端异步发送通知给客户端。**三特性**：一次性触发（触发后失效，需重新注册）、轻量级推送（仅含事件类型+路径，不含数据内容）、异步串行（回调在EventThread中排队执行）。
 
-> ⚠️ 一次性触发是高频陷阱——监听到变化后未重新注册则后续变更无法感知。
+> 一次性触发是高频陷阱——监听到变化后未重新注册则后续变更无法感知。
 
 ### 1.4 ZAB协议
 ZAB（Zookeeper Atomic Broadcast）是ZK保证一致性的核心协议，分两阶段：**崩溃恢复**（Leader宕机后选举新Leader+数据同步）和**消息广播**（Leader生成zxid，以Proposal发给Follower，过半ACK后Commit）。保证同时最多一个Leader对外服务，事务按zxid全局有序执行。
@@ -46,7 +46,7 @@ ZAB（Zookeeper Atomic Broadcast）是ZK保证一致性的核心协议，分两�
 | Follower | 读请求，转发写请求，参与选举 | 是 |
 | Observer | 只读扩展，不参与选举和投票 | 否 |
 
-> 💡 Observer数量不受奇数限制，可在不影响写性能的前提下水平扩展读能力。
+> Observer数量不受奇数限制，可在不影响写性能的前提下水平扩展读能力。
 
 ### 1.7 Session会话管理
 客户端与服务端通过TCP长连接建立Session，设置`sessionTimeout`（通常5-10s）。ZK采用**分桶策略**管理大量会话，将超时时间相近的Session放入同一桶中批量处理过期检查，时间复杂度O(1)。客户端心跳Ping维持活跃，断开后重连且超时前恢复则Session保留，否则EPHEMERAL节点自动删除。
@@ -58,7 +58,7 @@ ZAB（Zookeeper Atomic Broadcast）是ZK保证一致性的核心协议，分两�
 | Redis锁 | SETNX+Lua+Redlock | 性能极高 | 主从切换丢锁风险（AP） |
 | 数据库锁 | SELECT FOR UPDATE | 实现简单 | 性能瓶颈 |
 
-> 💡 一致性要求极高（金融场景）选ZK；性能要求高且允许少量锁丢失选Redis。
+> 一致性要求极高（金融场景）选ZK；性能要求高且允许少量锁丢失选Redis。
 
 ### 1.9 Curator框架
 Netflix开源的高阶ZK客户端。核心能力：自动重连/会话恢复、ExponentialBackoffRetry重试策略、InterProcessMutex可重入锁、NodeCache/PathChildrenCache/TreeCache自动处理Watcher重新注册。面试推荐使用Curator而非原生API。
@@ -74,7 +74,7 @@ Quorum机制需要`n/2+1`节点同意。3节点集群容1台宕机，4节点同�
 | 监听 | Watcher一次性 | 长轮询 | 轮询 | 阻塞查询 | Watch长轮询 |
 | 场景 | 分布式协调/锁 | 配置/注册中心 | 注册中心(AP) | 注册/配置/网络 | K8s/K-V |
 
-> 🎯 选型：需要锁/选举选ZK；Spring Cloud生态选Nacos；K8s生态选Etcd；只做注册且接受AP选Eureka。
+> 选型：需要锁/选举选ZK；Spring Cloud生态选Nacos；K8s生态选Etcd；只做注册且接受AP选Eureka。
 
 ### 1.12 ZK的CAP为什么是CP
 网络分区时ZK停止写入，选择Quorum大的一侧继续服务，少数分区拒绝写请求直到分区恢复。选举期间有几十到几百毫秒不可用窗口，这是CP模型下放弃可用性（A）的代价。
@@ -97,7 +97,7 @@ Quorum机制需要`n/2+1`节点同意。3节点集群容1台宕机，4节点同�
 | 复杂度 | 中等 | 高（难理解） | 低（易实现） |
 | 实现 | Zookeeper | Chubby | Etcd/Consul |
 
-> 💡 ZAB要求Leader的zxid必须最新；Raft允许落后节点当选后通过日志复制追赶。ZAB同步支持DIFF/TRUNC/SNAP三种模式。
+> ZAB要求Leader的zxid必须最新；Raft允许落后节点当选后通过日志复制追赶。ZAB同步支持DIFF/TRUNC/SNAP三种模式。
 
 ### 2.4 Watcher机制详解
 **注册**：客户端调`getData("/path", watcher)` -> 封装WatchRegistration附加到Packet -> 服务端存储到WatchManager。**触发**：写操作提交后，服务端从WatchManager查找关联Watcher -> 异步发送WatchedEvent -> 客户端EventThread回调process()。**移除**：触发后自动移除；连接断开时清理；节点删除时全部移除。
@@ -345,12 +345,12 @@ public class ZkDistributedLock {
 ### 5.1 基于ZK的分布式锁服务
 **需求**：高可用分布式锁，支持可重入、超时释放、阻塞/非阻塞获取。**方案**：Curator连接ZK集群 -> InterProcessMutex（可重入）和InterProcessReadWriteLock（读写锁）-> acquire(timeout, unit)超时控制 -> ConcurrentMap记录重入次数 -> EPHEMERAL节点兜底客户端宕机自动释放。**高可用**：集群至少3节点，sessionTimeout设3-5s，开启Curator自动重连。
 
-> 🎯 EPHEMERAL节点天然解决"客户端挂了"的问题，这是ZK对比Redis锁的最大安全优势。
+> EPHEMERAL节点天然解决"客户端挂了"的问题，这是ZK对比Redis锁的最大安全优势。
 
 ### 5.2 基于ZK的服务注册与发现
 **数据模型**：`/services/{serviceName}/{instanceId}`（临时节点存IP:Port）。**注册**：服务启动创建临时节点，session断开自动删除。**发现**：消费者通过PathChildrenCache监听子节点变化 -> 更新本地缓存 -> 轮询/随机路由。**容量**：单节点子节点建议<1000，大规模用Observer扩展读能力。
 
-> 💡 ZK服务发现优势是Watch实时推送而非Eureka轮询；短板是写瓶颈。
+> ZK服务发现优势是Watch实时推送而非Eureka轮询；短板是写瓶颈。
 
 ### 5.3 基于ZK的配置中心
 **数据模型**：`/config-center/{appName}/{configKey}`。**实时推送**：客户端通过NodeCache监听配置节点 -> 变更时Watcher通知 -> 更新本地缓存。**版本管理**：利用Stat.version做乐观锁。示例：监听数据库配置变更 -> 重建HikariCP连接池。
@@ -375,7 +375,7 @@ public class ZkDistributedLock {
 | 版本 | 并发更新版本号冲突 | setData()带version做乐观锁，失败重试 |
 | 部署 | 2节点集群一台宕机即不可用 | 最少3节点，生产建议5节点 |
 
-> ⚠️ Watcher一次性是最高频坑点。配置中心必须解决"监听回调中重新注册Watcher"问题，Curator的NodeCache已自动处理。
+> Watcher一次性是最高频坑点。配置中心必须解决"监听回调中重新注册Watcher"问题，Curator的NodeCache已自动处理。
 
 ---
 
@@ -396,7 +396,7 @@ public class ZkDistributedLock {
 ### 7.5 "为什么ZK适合做注册中心/配置中心"
 > 三点原因：一是**临时节点**天然适合服务实例注册，session断开自动注销；二是**Watcher实时性**优于Eureka的轮询；三是**ZAB强一致性**不会读到旧数据。局限：不适合数千以上大规模实例（Leader写入压力），不适合存储配置变更历史。
 
-> 🎯 回答要体现选型思维，同时说明适合和不适合的场景，对比Nacos/Eureka。
+> 回答要体现选型思维，同时说明适合和不适合的场景，对比Nacos/Eureka。
 
 ---
 
@@ -423,4 +423,4 @@ public class ZkDistributedLock {
 - [ ] 能说出ZK的ACL五种权限控制模式
 - [ ] 能解释ZAB与Paxos/Raft的核心差异
 
-> 💡 优先掌握前10个核心知识点，覆盖80%的ZK面试问题。代码题重点练Curator的三个Cache和InterProcessMutex。
+> 优先掌握前10个核心知识点，覆盖80%的ZK面试问题。代码题重点练Curator的三个Cache和InterProcessMutex。

@@ -21,7 +21,7 @@ LangChain是一个**大语言模型（LLM）应用开发框架**，旨在解决L
 - **工具集成困难**：提供标准化的Tool Calling和Agent机制
 - **状态管理复杂**：通过LangGraph支持有状态、多步骤的工作流编排
 
-> 💡 面试中可强调：LangChain的核心理念是"LLM应用开发的乐高积木"，组件化、可组合是其最大特色。
+> 面试中可强调：LangChain的核心理念是"LLM应用开发的乐高积木"，组件化、可组合是其最大特色。
 
 ### 1.2 LangChain V1.3相比旧版本的新特性？
 LangChain V1.3架构做了重大调整：
@@ -74,7 +74,7 @@ LangGraph是LangChain团队推出的**有状态图编排框架**，用于构建�
 | 难以中断和恢复 | 支持Human-in-the-Loop中断 |
 | 单Agent为主 | 原生支持多智能体协作 |
 
-> 🎯 面试亮点：LangGraph的核心理念——将Agent逻辑建模为"节点（Node）+ 边（Edge）"的有向图，Node执行业务逻辑，Edge控制流转路径。
+> 面试亮点：LangGraph的核心理念——将Agent逻辑建模为"节点（Node）+ 边（Edge）"的有向图，Node执行业务逻辑，Edge控制流转路径。
 
 ### 1.7 MCP协议是什么？
 MCP（Model Context Protocol）是Anthropic推出的**模型上下文协议**，旨在标准化LLM与外部工具/数据源的交互方式。MCP定义了三种核心资源：
@@ -127,7 +127,7 @@ result = rag_chain.invoke({"input": "什么是LangChain？"})
 | Cohere Embeddings | 支持1000+维度 | 企业级应用 |
 | 稀疏Embedding（SPLADE） | 关键词匹配强 | 专业术语多的场景 |
 
-> ⚠️ 面试常问：Embedding模型选型需关注**维度、推理延迟、语义理解能力**，中文场景推荐BGE或m3e。
+> 面试常问：Embedding模型选型需关注**维度、推理延迟、语义理解能力**，中文场景推荐BGE或m3e。
 
 ### 1.10 重排算法（Reranker）的作用？
 Reranker在检索后进行**二次排序**，解决向量检索"语义相近但相关性不够"的问题：
@@ -274,7 +274,7 @@ chain = prompt | model | output_parser
 
 **组件化思想**：每个组件（提示模板、模型、输出解析器、检索器）都是独立的Runnable，可以任意排列组合，极大提高了代码复用性。
 
-> 🎯 面试亮点：LCEL的流式支持是V1.3的重要改进，每个Runnable节点都必须实现 `transform()` 方法，使得整个管道天然支持流式输出。
+> 面试亮点：LCEL的流式支持是V1.3的重要改进，每个Runnable节点都必须实现 `transform()` 方法，使得整个管道天然支持流式输出。
 
 ### 2.2 Agent执行机制：ReAct循环与Tool Calling
 

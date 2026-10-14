@@ -1,10 +1,10 @@
 # Windows 环境配置与 Java 开发
 
-> ☕ JAVA_HOME 为什么配了却不起作用？Path 搜索优先级到底是什么？多 JDK 如何丝滑切换？IDEA 启动太慢怎么办？—— Java 开发者在 Windows 上必须搞懂的环境配置全攻略
+> JAVA_HOME 为什么配了却不起作用？Path 搜索优先级到底是什么？多 JDK 如何丝滑切换？IDEA 启动太慢怎么办？—— Java 开发者在 Windows 上必须搞懂的环境配置全攻略
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [环境变量深度解析](#1-环境变量深度解析)
 2. [JDK 安装与 JAVA_HOME 配置](#2-jdk-安装与-java_home-配置)
@@ -40,7 +40,7 @@
 | **优先级** | **Path 中用户变量在前面** | 系统变量在后面 |
 | **推荐用途** | 开发工具路径、个人偏好 | 系统级通用配置 |
 
-> ⚠️ **关键陷阱**：Path 变量的拼接顺序是 **用户 Path 在前 → 系统 Path 在后**。如果有两个 java.exe，用户 Path 中的那个优先被找到。
+> **关键陷阱**：Path 变量的拼接顺序是 **用户 Path 在前 → 系统 Path 在后**。如果有两个 java.exe，用户 Path 中的那个优先被找到。
 
 ### 1.3 环境变量生效机制
 
@@ -192,10 +192,10 @@ function global:Use-Java {
         # 移除已有的 Java bin 路径，插入新的
         $env:PATH = ($env:PATH -split ';' | Where-Object { $_ -notlike "*\Java\*" -and $_ -notlike "*\jdk*" }) -join ';'
         $env:PATH = "$env:JAVA_HOME\bin;$env:PATH"
-        Write-Host "✅ 已切换至 JDK $version" -ForegroundColor Green
+        Write-Host "✓ 已切换至 JDK $version" -ForegroundColor Green
         java --version
     } else {
-        Write-Host "❌ 未找到 JDK $version at $jdkPath" -ForegroundColor Red
+        Write-Host "✗ 未找到 JDK $version at $jdkPath" -ForegroundColor Red
     }
 }
 
@@ -226,7 +226,7 @@ File → Project Structure → Project → SDK
   - Maven/Gradle 的 JRE（Settings → Build Tools → Gradle/Maven）
 ```
 
-> 💡 **最佳实践**：命令行脚本用 PowerShell 函数切换，IDE 项目用 Project SDK 配置，两者互不干扰。
+> **最佳实践**：命令行脚本用 PowerShell 函数切换，IDE 项目用 Project SDK 配置，两者互不干扰。
 
 ---
 
@@ -345,7 +345,7 @@ org.gradle.daemon=true
 | `TEMP` / `TMP` | `%USERPROFILE%\AppData\Local\Temp` | 临时文件目录 |
 | `HOME` / `USERPROFILE` | `C:\Users\xxx` | 用户主目录（Git、SSH 等用到） |
 
-> ⚠️ **CLASSPATH 警告**：现代 Java 开发不建议设置全局 CLASSPATH 环境变量，交由 IDE（IDEA/Eclipse）或构建工具（Maven/Gradle）管理类路径更安全。
+> **CLASSPATH 警告**：现代 Java 开发不建议设置全局 CLASSPATH 环境变量，交由 IDE（IDEA/Eclipse）或构建工具（Maven/Gradle）管理类路径更安全。
 
 ---
 

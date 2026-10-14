@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [AI 场景框架地图：三种角色](#1-ai-场景框架地图三种角色)
 2. [模型服务：FastAPI 的统治区](#2-模型服务fastapi-的统治区)
@@ -112,21 +112,21 @@ def get_order(request, oid: int):
 
 | 集成面 | Django | FastAPI | Flask |
 |--------|:---:|:---:|:---:|
-| OpenAI 官方 SDK | ✅ 可用 | ✅ 原生异步 | ✅ 可用 |
-| LangChain（python 版） | ✅ 可用 | ✅ 推荐形态 | ✅ 可用 |
-| 流式响应 | 🧩 异步视图有限 | ✅ 原生 | 🧩 生成器 |
-| WebSocket（Agent 对话） | 🧩 Channels | ✅ 原生 | 🧩 Flask-Sock |
-| vLLM/Ollama 对接 | ✅ 可用 | ✅ 生态默认 | ✅ 可用 |
+| OpenAI 官方 SDK | ✓ 可用 | ✓ 原生异步 | ✓ 可用 |
+| LangChain（python 版） | ✓ 可用 | ✓ 推荐形态 | ✓ 可用 |
+| 流式响应 | 异步视图有限 | ✓ 原生 | 生成器 |
+| WebSocket（Agent 对话） | Channels | ✓ 原生 | Flask-Sock |
+| vLLM/Ollama 对接 | ✓ 可用 | ✓ 生态默认 | ✓ 可用 |
 
 结论：**SDK 层三者都能用（Python 语言优势），差异集中在"流式与长连接"**——Agent 对话（WebSocket 双向）、LLM 流式（SSE）在 FastAPI 是原生姿势，Django（Channels）与 Flask（扩展）都要绕路。**"我的 AI 产品需要流式对话"——这一条就足以把 ② 层应用后端推向 FastAPI**（或 Django + FastAPI sidecar）。
 
 补充一个 2026 年正在升温的**Agent 平台模式**：以 FastAPI 为核心构建"Agent 网关"——统一接收对话请求、按意图路由到不同 Agent（检索型/工具型/多模型）、流式回传推理过程（`thought`/`tool_call` 事件走 SSE）、会话记忆与用量计费落库。这套网关用 Django 也能做（Channels + DRF），但**事件流式 + 工具调用的并发编排在 FastAPI 的异步模型里写起来自然一个量级**——OpenAI 兼容的流式协议（`data:` 分块）几乎是为 async 生成器量身定做的。对本仓库「03-Agent开发」与「Function Calling」体系的学习者，这个模式就是"把 Agent 知识装进 Web 框架"的完整落点。
 
-> 🎯 **核心要点**：AI 场景框架地图 = 模型服务 FastAPI（统治区）+ 应用后端 FastAPI/Django（按团队）+ 平台后台 Django（统治区）；sidecar 混合模式用于"Django 存量 + 异步新增"；Django Ninja 是"全栈要契约"的桥接；流式与 WebSocket 需求是 AI 项目选 FastAPI 的决定性理由。
+> **核心要点**：AI 场景框架地图 = 模型服务 FastAPI（统治区）+ 应用后端 FastAPI/Django（按团队）+ 平台后台 Django（统治区）；sidecar 混合模式用于"Django 存量 + 异步新增"；Django Ninja 是"全栈要契约"的桥接；流式与 WebSocket 需求是 AI 项目选 FastAPI 的决定性理由。
 
 ## 7. 核心要点与思考题
 
-> 🎯 **本章三句话总结**：
+> **本章三句话总结**：
 > 1. 三层地图：模型服务 FastAPI（vLLM/流式/兼容 API）、平台后台 Django（Admin/任务/认证）、应用后端按团队选；
 > 2. sidecar = Django 主 + FastAPI 边车（反向代理分流、JWT 共享、独立扩容），存量融合而非绿地默认；
 > 3. Django Ninja 让"全栈 + 现代 API 契约"兼得；流式/WebSocket 需求是 AI 项目选 FastAPI 的决定性理由。

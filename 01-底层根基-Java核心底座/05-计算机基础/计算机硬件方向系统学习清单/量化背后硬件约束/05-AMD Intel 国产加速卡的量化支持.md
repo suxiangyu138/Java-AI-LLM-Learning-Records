@@ -73,17 +73,17 @@ CPU 场景的量化和 GPU 有一个本质差异：**CPU 没有原生 4-bit 矩�
 
 | 平台 | 原生量化精度 | 4-bit 加速 | 推理引擎 | 成熟度 |
 |------|------------|:---:|---------|-------|
-| NVIDIA Blackwell | FP8/NVFP4/MXFP4 | ✅ 原生 | TRT-LLM/vLLM/SGLang | 生产级 |
-| AMD MI355X | FP8/MXFP4/MXFP6 | ✅ 原生 | ATOM/vLLM(AITER)/sglang | 生产级（有坑） |
-| NVIDIA Hopper/Ampere | FP8/INT8 | ❌ 软件回退 | vLLM 等 | 生产级 |
-| Intel Gaudi 3 | FP8（INC） | ❌ | vLLM-gaudi | 生产级（Llama 系限定） |
-| Xeon CPU | INT8（AMX） | ❌ | vLLM CPU/INC | 生产级 |
+| NVIDIA Blackwell | FP8/NVFP4/MXFP4 | ✓ 原生 | TRT-LLM/vLLM/SGLang | 生产级 |
+| AMD MI355X | FP8/MXFP4/MXFP6 | ✓ 原生 | ATOM/vLLM(AITER)/sglang | 生产级（有坑） |
+| NVIDIA Hopper/Ampere | FP8/INT8 | ✗ 软件回退 | vLLM 等 | 生产级 |
+| Intel Gaudi 3 | FP8（INC） | ✗ | vLLM-gaudi | 生产级（Llama 系限定） |
+| Xeon CPU | INT8（AMX） | ✗ | vLLM CPU/INC | 生产级 |
 | Ascend NPU | MXFP8/MXFP4 | 部分 | MindIE | 快速演进 |
-| 手机 NPU | INT8/INT16 | ❌ | ONNX Runtime/QNN/CoreML | 生产级（格式受限） |
+| 手机 NPU | INT8/INT16 | ✗ | ONNX Runtime/QNN/CoreML | 生产级（格式受限） |
 
 选型的核心动作是：**找到你的目标模型在目标平台上"原生精度上限"在哪一行**——上限以下随便选，上限以上的格式全部是"省内存不加速"。
 
-> 🎯 **核心要点**：AMD MI355X 是唯一原生 FP4 竞品（MFMA 块缩放指令直吃 MXFP4，1T MoE 单节点可部署，成本约为 B200 的 3/4 但软件成熟度有短板）；Intel Gaudi 3 走 FP8 无 FP4；Xeon CPU 的量化甜点是 AMX INT8；Ascend 对齐 MX 生态。FP8 是 2026 年跨平台公共子集，FP4 是两强（Blackwell/MI355X）之争。
+> **核心要点**：AMD MI355X 是唯一原生 FP4 竞品（MFMA 块缩放指令直吃 MXFP4，1T MoE 单节点可部署，成本约为 B200 的 3/4 但软件成熟度有短板）；Intel Gaudi 3 走 FP8 无 FP4；Xeon CPU 的量化甜点是 AMX INT8；Ascend 对齐 MX 生态。FP8 是 2026 年跨平台公共子集，FP4 是两强（Blackwell/MI355X）之争。
 
 ---
 

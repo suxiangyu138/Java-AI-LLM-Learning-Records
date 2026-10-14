@@ -1,6 +1,6 @@
 # 09 - Git 与 IDE 集成
 
-> 🎯 命令行 Git 是基础，IDE Git 是效率。IDEA/Cursor/VS Code 的 Git 集成让你在不离开编辑器的情况下完成 90% 的 Git 操作
+> 命令行 Git 是基础，IDE Git 是效率。IDEA/Cursor/VS Code 的 Git 集成让你在不离开编辑器的情况下完成 90% 的 Git 操作
 
 ---
 

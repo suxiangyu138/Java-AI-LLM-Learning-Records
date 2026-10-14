@@ -90,7 +90,7 @@ PMD 的核心假设：
 └─────────────────────┴───────────────────────────────────────┘
 ```
 
-> 🎯 PMD 和 SpotBugs 是互补关系而非替代关系。**PMD 管编码规范和质量，SpotBugs 管运行时 Bug**。两者配合使用可构建全面的代码质量防护体系。
+> PMD 和 SpotBugs 是互补关系而非替代关系。**PMD 管编码规范和质量，SpotBugs 管运行时 Bug**。两者配合使用可构建全面的代码质量防护体系。
 
 ---
 
@@ -271,7 +271,7 @@ public class ShoppingCart {
             total += item.getPrice() * item.getQuantity();
         }
 
-        // ❌ UnusedLocalVariable: discountRate 声明了但从未使用
+        // ✗ UnusedLocalVariable: discountRate 声明了但从未使用
         double discountRate = 0.9;
 
         return total;
@@ -291,7 +291,7 @@ public class ShoppingCart {
             total += item.getPrice() * item.getQuantity();
         }
 
-        // ✅ 移除未使用变量，或使用它
+        // ✓ 移除未使用变量，或使用它
         return applyDiscount(total);
     }
 
@@ -320,7 +320,7 @@ public class OrderProcessor {
         // 校验逻辑
     }
 
-    // ❌ UnusedPrivateMethod: 从未被调用
+    // ✗ UnusedPrivateMethod: 从未被调用
     private void sendConfirmationEmail(Order order) {
         // 发送邮件
     }
@@ -334,7 +334,7 @@ public class OrderProcessor {
 **修正方案**：
 
 ```java
-// ✅ 移除未使用的私有方法，或添加上调用
+// ✓ 移除未使用的私有方法，或添加上调用
 ```
 
 ### 5.3 CyclomaticComplexity（圈复杂度）
@@ -355,7 +355,7 @@ public class OrderProcessor {
 ```java
 public class OrderService {
 
-    // ❌ CyclomaticComplexity = 11（默认阈值 10，违规）
+    // ✗ CyclomaticComplexity = 11（默认阈值 10，违规）
     public String getOrderStatus(Order order) {
         if (order == null) {                     // +1
             return "INVALID";
@@ -403,7 +403,7 @@ public class OrderService {
 ```java
 public class OrderService {
 
-    // ✅ 通过策略模式分解，每个方法复杂度 ≤ 5
+    // ✓ 通过策略模式分解，每个方法复杂度 ≤ 5
     public String getOrderStatus(Order order) {
         if (order == null || order.isCancelled() || order.isRefunded()) {
             return getTerminalStatus(order);
@@ -446,7 +446,7 @@ public class OrderService {
 **类别**：Design
 
 ```java
-// ❌ TooManyMethods: 此类包含了 25+ 个方法
+// ✗ TooManyMethods: 此类包含了 25+ 个方法
 public class UserService {
     // 用户 CRUD
     public void createUser(User user) { /* ... */ }
@@ -479,7 +479,7 @@ public class UserService {
 **修正方案**：
 
 ```java
-// ✅ 拆分为多个职责单一的类
+// ✓ 拆分为多个职责单一的类
 public class UserCrudService { /* 用户 CRUD */ }
 public class PasswordService { /* 密码管理 */ }
 public class RoleAssignmentService { /* 角色权限 */ }
@@ -497,12 +497,12 @@ public class AuditLogService { /* 日志审计 */ }
 public class MathUtils {
 
     public double calculate(int a, int b, int c) {
-        // ❌ UselessParentheses
+        // ✗ UselessParentheses
         return (a * b) + (c);          // 外层括号多余
     }
 
     public boolean isValid(int x, int y) {
-        // ❌ UselessParentheses
+        // ✗ UselessParentheses
         if ((x > 0) && (y > 0)) {      // 没必要为每个条件加括号
             return true;
         }
@@ -515,11 +515,11 @@ public class MathUtils {
 
 ```java
 public double calculate(int a, int b, int c) {
-    return a * b + c;                  // ✅ 移除多余括号
+    return a * b + c;                  // ✓ 移除多余括号
 }
 
 public boolean isValid(int x, int y) {
-    return x > 0 && y > 0;            // ✅ 简洁明了
+    return x > 0 && y > 0;            // ✓ 简洁明了
 }
 ```
 
@@ -535,7 +535,7 @@ public class User {
     private String name;
     private int age;
 
-    // ❌ UnnecessaryConstructor: 编译器会自动生成无参构造器
+    // ✗ UnnecessaryConstructor: 编译器会自动生成无参构造器
     public User() {
         // 没有任何操作
     }
@@ -552,7 +552,7 @@ public class User {
 
 ```java
 public class User {
-    // ✅ 移除空的无参构造器，或添加初始化逻辑
+    // ✓ 移除空的无参构造器，或添加初始化逻辑
     public User() {
         this.name = "default";
         this.age = 0;
@@ -571,7 +571,7 @@ public class FileService {
 
     public String readFile(String path) {
         try {
-            // ❌ AvoidCatchingGenericException
+            // ✗ AvoidCatchingGenericException
             // 捕获 Exception 过于宽泛，隐藏了 NullPointerException、
             // ArrayIndexOutOfBoundsException 等非预期异常
             byte[] data = Files.readAllBytes(Paths.get(path));
@@ -597,7 +597,7 @@ public class FileService {
         } catch (NoSuchFileException e) {
             logger.warn("File not found: {}", path);
             return "";
-        } catch (IOException e) {        // ✅ 捕获具体异常
+        } catch (IOException e) {        // ✓ 捕获具体异常
             logger.error("IO error reading file: {}", path, e);
             throw new UncheckedIOException("Failed to read: " + path, e);
         }
@@ -614,7 +614,7 @@ public class FileService {
 ```java
 public class DataService {
 
-    // ❌ PreserveStackTrace: 新异常没有包装原异常
+    // ✗ PreserveStackTrace: 新异常没有包装原异常
     public User findUser(Long id) {
         try {
             return userRepository.findById(id)
@@ -632,13 +632,13 @@ public class DataService {
 ```java
 public class DataService {
 
-    // ✅ 保留原始异常堆栈
+    // ✓ 保留原始异常堆栈
     public User findUser(Long id) {
         try {
             return userRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
         } catch (EntityNotFoundException e) {
-            throw new ServiceException("Failed to find user: " + id, e);  // ✅
+            throw new ServiceException("Failed to find user: " + id, e);  // ✓
         }
     }
 }
@@ -656,16 +656,16 @@ public class DataService {
 public class OrderProcessor {
 
     public void process(Order order) {
-        // ❌ ShortVariable: 变量名 "o" 无法表达含义
+        // ✗ ShortVariable: 变量名 "o" 无法表达含义
         Order o = order;
 
-        // ❌ ShortVariable: "i" 含义不明确
+        // ✗ ShortVariable: "i" 含义不明确
         for (int i = 0; i < 10; i++) {
             // ...
         }
     }
 
-    // ❌ LongVariable: 变量名过长
+    // ✗ LongVariable: 变量名过长
     private static final int MAXIMUM_NUMBER_OF_RETRY_ATTEMPTS_BEFORE_ALERTING = 3;
 }
 ```
@@ -676,14 +676,14 @@ public class OrderProcessor {
 public class OrderProcessor {
 
     public void process(Order order) {
-        final Order currentOrder = order;  // ✅ 命名有意义
+        final Order currentOrder = order;  // ✓ 命名有意义
 
-        for (int retryCount = 0; retryCount < 10; retryCount++) {  // ✅
+        for (int retryCount = 0; retryCount < 10; retryCount++) {  // ✓
             // ...
         }
     }
 
-    private static final int MAX_RETRIES = 3;  // ✅ 适当长度
+    private static final int MAX_RETRIES = 3;  // ✓ 适当长度
 }
 ```
 
@@ -800,7 +800,7 @@ mvn pmd:cpd-check             # CPD 检查，超标则构建失败
 | 相同结构但类型不同的代码（泛型可解决） | 建议提取 |
 | 相同语义但实现略有不同（策略模式场景） | 可能不需要 |
 
-> ⚠️ CPD 基于 token 匹配而非 AST 匹配，因此变量名不同不影响检测结果。例如以下两段代码会被检测为重复：
+> CPD 基于 token 匹配而非 AST 匹配，因此变量名不同不影响检测结果。例如以下两段代码会被检测为重复：
 
 ```java
 // 代码块 A
@@ -886,7 +886,7 @@ PMD Report (target/pmd/pmd.html)
 </configuration>
 ```
 
-> 💡 推荐采用**渐进式策略**：新项目从 `maxAllowedViolations=0` 开始，设置 `failurePriority=2`。遗留项目可先放宽阈值，逐步改进后收紧。
+> 推荐采用**渐进式策略**：新项目从 `maxAllowedViolations=0` 开始，设置 `failurePriority=2`。遗留项目可先放宽阈值，逐步改进后收紧。
 
 ### 7.4 自定义报告格式
 
@@ -968,7 +968,7 @@ public class LegacyAdapter {
 </configuration>
 ```
 
-> ⚠️ 使用 `@SuppressWarnings` 应附带注释说明理由。过度使用抑制机制会使静态分析失去意义。
+> 使用 `@SuppressWarnings` 应附带注释说明理由。过度使用抑制机制会使静态分析失去意义。
 
 ---
 
@@ -1109,7 +1109,7 @@ pmd pmd -dir src/main/java/MyFile.java -format xml -rulesets rulesets/java/quick
 pmd-designer
 ```
 
-> 💡 PMD 7.x 提供了一个基于 Web 的规则设计器，可以在浏览器中编写和测试 XPath 规则，实时查看 AST 结构和匹配结果。
+> PMD 7.x 提供了一个基于 Web 的规则设计器，可以在浏览器中编写和测试 XPath 规则，实时查看 AST 结构和匹配结果。
 
 ---
 
@@ -1126,14 +1126,14 @@ pmd-designer
 | **检测能力** | 死代码、复杂度、命名 | 缩进、命名、Javadoc | 空指针、并发、序列化 |
 | **自定义规则** | XPath / Java | 扩展 Checks（Java） | 扩展 Detectors（Java+ASM） |
 | **误报率** | 中高 | 低 | 中 |
-| **风格检查** | ✅ 有限 | ✅ 核心能力 | ❌ |
-| **Bug 检测** | ✅ 中等 | ❌ | ✅ 深入 |
-| **重复代码** | ✅ CPD 模块 | ❌ | ❌ |
+| **风格检查** | ✓ 有限 | ✓ 核心能力 | ✗ |
+| **Bug 检测** | ✓ 中等 | ✗ | ✓ 深入 |
+| **重复代码** | ✓ CPD 模块 | ✗ | ✗ |
 | **报告格式** | XML/HTML/CSV/Text | XML/HTML/Plain | XML/HTML/XSLT |
 | **规则数量** | 300+ | 150+ | 400+ |
 | **学习曲线** | 中 | 低 | 中高 |
-| **IDE 集成** | ✅ IntelliJ/Eclipse | ✅ IntelliJ/Eclipse | ✅ IntelliJ/Eclipse |
-| **CI/CD 集成** | ✅ | ✅ | ✅ |
+| **IDE 集成** | ✓ IntelliJ/Eclipse | ✓ IntelliJ/Eclipse | ✓ IntelliJ/Eclipse |
+| **CI/CD 集成** | ✓ | ✓ | ✓ |
 
 ### 10.2 分工定位
 
@@ -1187,7 +1187,7 @@ SonarQube
 └── SpotBugs 规则    → SonarQube Java Analyzer
 ```
 
-> 🎯 **推荐配置策略**：CI 流水线中同时运行 PMD + SpotBugs + Checkstyle，各自的报告可聚合到 SonarQube 进行统一展示和质量门禁。
+> **推荐配置策略**：CI 流水线中同时运行 PMD + SpotBugs + Checkstyle，各自的报告可聚合到 SonarQube 进行统一展示和质量门禁。
 
 ---
 
@@ -1364,7 +1364,7 @@ PMD 7.x 相对于 6.x 的主要变化：
 | **AST 变化** | Record、Sealed Class、Pattern Matching 支持 |
 | **性能提升** | 分析速度显著提升，内存占用降低 |
 
-> 💡 PMD 7.x 的规则引用格式发生变化：旧版 `rulesets/java/basic.xml` 已废弃，应使用 `category/java/bestpractices.xml` 等新格式。
+> PMD 7.x 的规则引用格式发生变化：旧版 `rulesets/java/basic.xml` 已废弃，应使用 `category/java/bestpractices.xml` 等新格式。
 
 ### 11.5 常用命令速查
 
@@ -1389,4 +1389,4 @@ pmd rules --list
 
 ---
 
-> 🎯 PMD 是 Java 源码静态分析的中坚力量，擅长发现死代码、复杂度问题和易错模式。与 Checkstyle（风格）和 SpotBugs（字节码缺陷）配合可构建完整的静态分析防护网。其 CPD 模块是轻量级重复代码检测的绝佳选择。在 SonarQube 普及前，PMD + Checkstyle + SpotBugs 是三件套黄金组合，即使在 SonarQube 时代，它们作为 CI 流水线中的独立检查环节仍有不可替代的价值。
+> PMD 是 Java 源码静态分析的中坚力量，擅长发现死代码、复杂度问题和易错模式。与 Checkstyle（风格）和 SpotBugs（字节码缺陷）配合可构建完整的静态分析防护网。其 CPD 模块是轻量级重复代码检测的绝佳选择。在 SonarQube 普及前，PMD + Checkstyle + SpotBugs 是三件套黄金组合，即使在 SonarQube 时代，它们作为 CI 流水线中的独立检查环节仍有不可替代的价值。

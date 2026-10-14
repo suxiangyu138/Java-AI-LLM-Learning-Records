@@ -1,6 +1,6 @@
 # 02 - GitHub Copilot 深度使用
 
-> 🎯 Copilot = 补全 + Chat + Agent + CLI — 最成熟的 AI 编码工具，覆盖从 IDE 到终端的全场景
+> Copilot = 补全 + Chat + Agent + CLI — 最成熟的 AI 编码工具，覆盖从 IDE 到终端的全场景
 
 ## 1. 基础定义
 

@@ -6,7 +6,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [LCEL 是什么](#1-lcel-是什么)
 2. [Runnable 协议](#2-runnable-协议)
@@ -48,7 +48,7 @@ LCEL 的本质
 
 ## 2. Runnable 协议
 
-> 🎯 **Runnable 是 LCEL 的基石**——任何实现统一接口的对象都可以用 `|` 连接：PromptTemplate、Model、Parser、Tool、Retriever，甚至普通函数（RunnableLambda 包装）。
+> **Runnable 是 LCEL 的基石**——任何实现统一接口的对象都可以用 `|` 连接：PromptTemplate、Model、Parser、Tool、Retriever，甚至普通函数（RunnableLambda 包装）。
 
 ```python
 from langchain_core.runnables import Runnable  # 接口抽象
@@ -71,14 +71,14 @@ class Runnable(Generic[Input, Output]):
 
 | 方法 | 同步 | 异步 | 批量 | 流式 | 典型场景 |
 |------|:---:|:---:|:---:|:---:|------|
-| `invoke` | ✅ | | | | 单次调用（调试/服务） |
-| `ainvoke` | | ✅ | | | FastAPI/异步服务 |
-| `batch` | ✅ | | ✅ | | 离线批量处理 |
-| `abatch` | | ✅ | ✅ | | 并发批量 |
-| `stream` | ✅ | | | ✅ | 逐 token 输出（前端打字机） |
-| `astream` | | ✅ | | ✅ | 异步流式 |
+| `invoke` | ✓ | | | | 单次调用（调试/服务） |
+| `ainvoke` | | ✓ | | | FastAPI/异步服务 |
+| `batch` | ✓ | | ✓ | | 离线批量处理 |
+| `abatch` | | ✓ | ✓ | | 并发批量 |
+| `stream` | ✓ | | | ✓ | 逐 token 输出（前端打字机） |
+| `astream` | | ✓ | | ✓ | 异步流式 |
 
-> 💡 **金句**：六个方法「同源」——一个链实现了 invoke，其余方法自动可用（LangChain 内部做数据流拆分），零改动切换。
+> **金句**：六个方法「同源」——一个链实现了 invoke，其余方法自动可用（LangChain 内部做数据流拆分），零改动切换。
 
 ```python
 # 三态同源示例
@@ -97,7 +97,7 @@ for chunk in model.stream("写一首诗"):       # 流式
 
 ## 3. 管道符与 RunnableSequence
 
-> 🎯 **管道符 `|` 是最核心的语法糖**——左侧输出自动注入右侧输入（链内部完成格式适配，无需胶水代码）。
+> **管道符 `|` 是最核心的语法糖**——左侧输出自动注入右侧输入（链内部完成格式适配，无需胶水代码）。
 
 ```python
 from langchain_core.prompts import ChatPromptTemplate
@@ -134,7 +134,7 @@ chain.invoke({"role": ..., "question": ...})
     └── 输出: str ← 最终结果
 ```
 
-> ⚠️ **输入类型自动适配的规则**：链组件间传 dict / str / Message 时，LCEL 内部会尝试兼容（`_transform` 钩子）；若类型不匹配且无法转换，会在 invoke 时报 `TypeError`——排查时逐段打印中间输出即可定位。
+> **输入类型自动适配的规则**：链组件间传 dict / str / Message 时，LCEL 内部会尝试兼容（`_transform` 钩子）；若类型不匹配且无法转换，会在 invoke 时报 `TypeError`——排查时逐段打印中间输出即可定位。
 
 **等价写法（底层）**：
 
@@ -150,7 +150,7 @@ chain = prompt.pipe(model).pipe(parser)
 
 ## 4. 并行执行 RunnableParallel
 
-> 🎯 **`RunnableParallel` 让多个链并发跑同一输入**——典型场景：一次检索多种来源、多个视角分析后汇总。
+> **`RunnableParallel` 让多个链并发跑同一输入**——典型场景：一次检索多种来源、多个视角分析后汇总。
 
 ```python
 from langchain_core.runnables import RunnableParallel
@@ -179,7 +179,7 @@ chain = (preprocess_prompt
          | final_chain)                              # 合并收口
 ```
 
-> 💡 **RunnablePassthrough 传原样**：`RunnablePassthrough()` 直接透传输入不处理，常用在并行字典里保留原始输入（如 `RunnableParallel(context=retriever, question=RunnablePassthrough())`）。
+> **RunnablePassthrough 传原样**：`RunnablePassthrough()` 直接透传输入不处理，常用在并行字典里保留原始输入（如 `RunnableParallel(context=retriever, question=RunnablePassthrough())`）。
 
 ---
 
@@ -215,13 +215,13 @@ branch = RunnableBranch(
 )
 ```
 
-> ⚠️ **RunnableBranch 注意**：条件函数接收的是**整个输入 dict**（含上游字段），不是路由字符串本身——常见坑是把 `x["route"]` 写成 `x`。
+> **RunnableBranch 注意**：条件函数接收的是**整个输入 dict**（含上游字段），不是路由字符串本身——常见坑是把 `x["route"]` 写成 `x`。
 
 ---
 
 ## 6. 流式输出
 
-> 🎯 **LCEL 链天然支持逐 token 流式**——只要每一环都实现 `stream`（模型支持 token 级流式即可，parser 会逐段转换）。
+> **LCEL 链天然支持逐 token 流式**——只要每一环都实现 `stream`（模型支持 token 级流式即可，parser 会逐段转换）。
 
 ```python
 chain = prompt | model | StrOutputParser()
@@ -242,7 +242,7 @@ for chunk in chain.stream({"role": "顾问", "question": "什么是 Agent？"}):
 
 ## 7. 错误处理与回退
 
-> 🎯 **生产环境必备**：LLM 调用失败/超时是常态，必须配置重试与回退。
+> **生产环境必备**：LLM 调用失败/超时是常态，必须配置重试与回退。
 
 ```python
 # ① 重试：对指定异常类型指数退避重试
@@ -262,7 +262,7 @@ fallback_chain = prompt | robust_model.with_fallbacks([cheap_model]) | parser
 model = model.bind(max_tokens=2048).with_config({"timeout": 60})
 ```
 
-> ⚠️ **重试注意事项**：只重试**可重试**的异常（网络超时/限流），不要重试「输入错误/上下文超长」——重试也必败且浪费 token。此原则即 v1.3 `ToolRetryMiddleware` 的修复点（#38845：只重试可重试异常）。
+> **重试注意事项**：只重试**可重试**的异常（网络超时/限流），不要重试「输入错误/上下文超长」——重试也必败且浪费 token。此原则即 v1.3 `ToolRetryMiddleware` 的修复点（#38845：只重试可重试异常）。
 
 ---
 
@@ -310,7 +310,7 @@ chain = RunnableLambda(lambda x: (print("INPUT:", x), x)[1]) | chain
 
 ## 9. LCEL vs create_agent
 
-> 🎯 **1.x 的核心决策点**——确定性 vs 自主性：
+> **1.x 的核心决策点**——确定性 vs 自主性：
 
 | 维度 | LCEL | create_agent |
 |------|:---:|:---:|
@@ -332,7 +332,7 @@ chain = RunnableLambda(lambda x: (print("INPUT:", x), x)[1]) | chain
 
 ## 10. 核心要点
 
-> 🎯 **核心要点**：
+> **核心要点**：
 > 1. **LCEL = 管道符组合**：`prompt | model | parser`，声明式表达数据流
 > 2. **Runnable 六方法同源**：invoke/ainvoke/batch/stream 零切换
 > 3. **RunnableParallel 并发**：多源检索、多视角分析后汇总

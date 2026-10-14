@@ -1,10 +1,10 @@
 # JMeter 断言与监听器
 
-> ✅ 响应断言、JSON 断言、大小断言、持续时间断言 + 聚合报告、Dashboard、结果树 —— 验证与结果分析
+> ✓ 响应断言、JSON 断言、大小断言、持续时间断言 + 聚合报告、Dashboard、结果树 —— 验证与结果分析
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [断言概述](#1-断言概述)
 2. [常用断言详解](#2-常用断言详解)
@@ -177,7 +177,7 @@ assert json.data.name.length() >= 2 : "名字至少两个字符";
   Response 标签：
     → 查看原始响应文本/JSON/HTML
 
-  ⚠️ 压测时禁用！大量数据会 OOM + 严重拖慢测试
+  压测时禁用！大量数据会 OOM + 严重拖慢测试
 ```
 
 ---
@@ -284,7 +284,7 @@ Dashboard 报告内容：
 
 ---
 
-> 🎯 **核心要点**：**调试用 View Results Tree，压测用 Aggregate Report**。断言优先用 Response Assertion + JSON Assertion，复杂逻辑用 JSR223 (Groovy)。最终报告靠 HTML Dashboard。
+> **核心要点**：**调试用 View Results Tree，压测用 Aggregate Report**。断言优先用 Response Assertion + JSON Assertion，复杂逻辑用 JSR223 (Groovy)。最终报告靠 HTML Dashboard。
 
 ---
 

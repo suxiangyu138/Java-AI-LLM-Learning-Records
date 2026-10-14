@@ -1,6 +1,6 @@
 # 04 - npm Scripts 与前端工程化
 
-> 🎯 npm scripts 是前端工程化的"粘合剂" — 开发、构建、测试、部署全流程通过 scripts 串起来。Java 后端在 CI/CD 中主要接触的就是 `npm run build`
+> npm scripts 是前端工程化的"粘合剂" — 开发、构建、测试、部署全流程通过 scripts 串起来。Java 后端在 CI/CD 中主要接触的就是 `npm run build`
 
 ---
 
@@ -95,7 +95,7 @@ my-microservice/
 ├── pom.xml                          # Java 后端
 ├── src/main/java/...
 ├── src/main/resources/
-│   └── static/                      # ⚠️ 前端构建产物放这里
+│   └── static/                      # 前端构建产物放这里
 └── frontend/                        # 前端项目（独立目录）
     ├── package.json
     ├── vite.config.ts
@@ -176,7 +176,7 @@ jobs:
         with:
           node-version: '20'
           cache: 'npm'
-      - run: npm ci                    # ⭐ CI 用 ci 不用 install
+      - run: npm ci                    # ★ CI 用 ci 不用 install
       - run: npm run lint
       - run: npm test
       - run: npm run build
@@ -191,7 +191,7 @@ jobs:
 FROM node:20-alpine AS build
 WORKDIR /app
 COPY package.json package-lock.json ./
-RUN npm ci                              # ⭐ CI 严格安装（利用 Docker 缓存层）
+RUN npm ci                              # ★ CI 严格安装（利用 Docker 缓存层）
 COPY . .
 RUN npm run build
 
@@ -200,4 +200,4 @@ COPY --from=build /app/dist /usr/share/nginx/html
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 ```
 
-> 🎯 **后端记住**：`npm ci` 是 CI 环境的标配（严格按 lock、速度快、确定性构建）。Docker 多阶段构建中先 COPY `package*.json` 再 `npm ci`，利用 Docker 缓存层避免每次重复安装依赖。
+> **后端记住**：`npm ci` 是 CI 环境的标配（严格按 lock、速度快、确定性构建）。Docker 多阶段构建中先 COPY `package*.json` 再 `npm ci`，利用 Docker 缓存层避免每次重复安装依赖。

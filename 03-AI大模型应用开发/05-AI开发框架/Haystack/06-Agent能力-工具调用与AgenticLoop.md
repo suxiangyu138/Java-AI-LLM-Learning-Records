@@ -2,7 +2,7 @@
 
 > Haystack 的 Agent 是一等公民：完整工具调用循环（模型→工具→模型）、四种工具形态（Tool/ComponentTool/PipelineTool/Toolset）、2.10 新增 AgenticLoop——偏保守务实的 Agent 实现。
 
-## 📚 目录
+## 目录
 
 1. [Agent 设计理念](#1-agent-设计理念)
 2. [工具调用循环](#2-工具调用循环)
@@ -264,7 +264,7 @@ pipeline.connect("router.agent", "agent.messages")
 | "Agent 一定比管道强" | 简单流程管道更可控更便宜 |
 | "HITL 拖慢一切" | 只对高危操作设（低频） |
 
-> 🎯 核心要点：Agent = 工具调用循环组件（保守务实、可嵌套）；四种工具形态（Tool/ComponentTool/PipelineTool/Toolset）实现"管道→Agent→子管道"嵌套；AgenticLoop/MCP/HITL 是 2.10 的生产化补全；管道化价值 = 路由分流 + 组合 + 可观测；安全基线五条（白名单/HITL/轮次兜底/错误转消息/审计）。
+> 核心要点：Agent = 工具调用循环组件（保守务实、可嵌套）；四种工具形态（Tool/ComponentTool/PipelineTool/Toolset）实现"管道→Agent→子管道"嵌套；AgenticLoop/MCP/HITL 是 2.10 的生产化补全；管道化价值 = 路由分流 + 组合 + 可观测；安全基线五条（白名单/HITL/轮次兜底/错误转消息/审计）。
 
 ---
 

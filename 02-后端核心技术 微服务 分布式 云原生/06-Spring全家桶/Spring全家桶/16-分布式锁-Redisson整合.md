@@ -1,5 +1,5 @@
 # 16-分布式锁-Redisson整合
-> 🎯 Redisson是Redis官方推荐的Java分布式锁框架 — 从锁误删、看门狗、RedLock到Lua原子性，彻底掌握生产级分布式锁的实现与坑
+> Redisson是Redis官方推荐的Java分布式锁框架 — 从锁误删、看门狗、RedLock到Lua原子性，彻底掌握生产级分布式锁的实现与坑
 
 ---
 
@@ -21,7 +21,7 @@
 - **归属**：Spring全家桶与微服务 → 分布式中间件整合 → 层级2 P1 就业必备
 - **前置依赖**：Java并发（JUC）+ Redis基础 + Spring Boot + Lua脚本基础
 - **后续衔接**：分布式事务 Seata → 微服务全链路治理
-- **重要性**：⭐⭐⭐⭐⭐（高并发分布式系统面试必考、实战必备）
+- **重要性**：★★★★★（高并发分布式系统面试必考、实战必备）
 
 ### 1.2 三层学习目标
 
@@ -131,20 +131,20 @@ if (flag) {
 
 Redisson 是 Redis 官方推荐的 Java 客户端，提供了 **分布式锁（Lock）、集合（Collection）、队列（Queue）、计数器（AtomicLong）** 等 30+ 种分布式数据结构和同步器。
 
-> 💡 Redisson 本质是一个运行在 JVM 上的 **内存数据网格（In-Memory Data Grid）**，其分布式锁的功能远远超过原生 SETNX。
+> Redisson 本质是一个运行在 JVM 上的 **内存数据网格（In-Memory Data Grid）**，其分布式锁的功能远远超过原生 SETNX。
 
 #### 2.2.2 Redisson 核心特性矩阵
 
 | 特性 | Redisson | 原生 SETNX | 说明 |
 |------|----------|------------|------|
-| 自动续期（Watch Dog） | ✅ 内置 | ❌ 需手动实现 | 业务未完成时自动延长锁TTL |
-| 可重入 | ✅ 支持 | ❌ 需手动实现 | 基于Redis Hash记录线程+重入计数 |
-| 锁等待 | ✅ tryLock支持 | ❌ 不支持 | 可配置等待超时时间 |
-| 公平锁 | ✅ FairLock | ❌ 不支持 | 按请求顺序排队 |
-| 读写锁 | ✅ RReadWriteLock | ❌ 不支持 | 读读并发、读写互斥 |
-| 信号量 | ✅ RSemaphore | ❌ 不支持 | 限流、资源池控制 |
-| 原子释放 | ✅ Lua脚本 | ❌ 需自行实现 | 检查+删除原子操作 |
-| 红锁（RedLock） | ✅ RedissonRedLock | ❌ 不支持 | 多主节点容灾 |
+| 自动续期（Watch Dog） | ✓ 内置 | ✗ 需手动实现 | 业务未完成时自动延长锁TTL |
+| 可重入 | ✓ 支持 | ✗ 需手动实现 | 基于Redis Hash记录线程+重入计数 |
+| 锁等待 | ✓ tryLock支持 | ✗ 不支持 | 可配置等待超时时间 |
+| 公平锁 | ✓ FairLock | ✗ 不支持 | 按请求顺序排队 |
+| 读写锁 | ✓ RReadWriteLock | ✗ 不支持 | 读读并发、读写互斥 |
+| 信号量 | ✓ RSemaphore | ✗ 不支持 | 限流、资源池控制 |
+| 原子释放 | ✓ Lua脚本 | ✗ 需自行实现 | 检查+删除原子操作 |
+| 红锁（RedLock） | ✓ RedissonRedLock | ✗ 不支持 | 多主节点容灾 |
 
 ---
 
@@ -184,7 +184,7 @@ Redisson 是 Redis 官方推荐的 Java 客户端，提供了 **分布式锁（L
 </dependencies>
 ```
 
-> ⚠️ `redisson-spring-boot-starter` 会替换 Spring Boot 默认的 RedisTemplate 自动配置。如果需要同时使用 Redisson 和 RedisTemplate，需要额外配置。
+> `redisson-spring-boot-starter` 会替换 Spring Boot 默认的 RedisTemplate 自动配置。如果需要同时使用 Redisson 和 RedisTemplate，需要额外配置。
 
 #### 2.3.2 application.yml 配置
 
@@ -457,7 +457,7 @@ private void innerMethod(String userId, RLock lock) {
 | 指定秒数（如 10L） | 到期自动释放，不启动 Watch Dog | 业务执行时间固定且有上限 |
 | 不设置 | 调用 `lock()` 走 Watch Dog；`tryLock(wait, unit)` leaseTime=30 秒 | 需要兜底超时 |
 
-> 💡 **最佳实践**：如果能预估业务执行时间，优先设置 `leaseTime` 避免 Watch Dog 的额外开销；如果不能预估（如复杂计算、远程调用），使用 Watch Dog 自动续期。
+> **最佳实践**：如果能预估业务执行时间，优先设置 `leaseTime` 避免 Watch Dog 的额外开销；如果不能预估（如复杂计算、远程调用），使用 Watch Dog 自动续期。
 
 ---
 
@@ -505,7 +505,7 @@ public RedissonClient redissonClient() {
 }
 ```
 
-> ⚠️ **Watch Dog 的触发条件**：仅当使用 `lock.lock()` 或 `lock.tryLock(waitTime, -1, unit)` 且 `leaseTime` 为 `-1` 时，Watch Dog 才会启动。如果显式指定了 `leaseTime`，则到期强制释放，不启动 Watch Dog。
+> **Watch Dog 的触发条件**：仅当使用 `lock.lock()` 或 `lock.tryLock(waitTime, -1, unit)` 且 `leaseTime` 为 `-1` 时，Watch Dog 才会启动。如果显式指定了 `leaseTime`，则到期强制释放，不启动 Watch Dog。
 
 #### 2.5.4 Watch Dog 源码核心逻辑（伪代码）
 
@@ -619,7 +619,7 @@ else
 end;
 ```
 
-> 💡 Redis 使用内置的 Lua 5.1 解释器，脚本内不能使用 `math.random`、`os.time` 等部分标准库函数。需随机数时建议从客户端传入。
+> Redis 使用内置的 Lua 5.1 解释器，脚本内不能使用 `math.random`、`os.time` 等部分标准库函数。需随机数时建议从客户端传入。
 
 ---
 
@@ -755,7 +755,7 @@ public class RateLimiterService {
 }
 ```
 
-> ⚠️ `trySetPermits` 只在信号量不存在时设置成功。如需重置，先 `delete()` 再 `trySetPermits()`。
+> `trySetPermits` 只在信号量不存在时设置成功。如需重置，先 `delete()` 再 `trySetPermits()`。
 
 #### 2.8.3 信号量使用场景
 
@@ -838,13 +838,13 @@ public class DistributedTaskService {
 ```
 时间线：
 1. 客户端A 向 Master 请求锁，写入成功
-2. Master 在异步复制给 Slave 之前崩溃 ❌
+2. Master 在异步复制给 Slave 之前崩溃 ✗
 3. Slave 晋升为新的 Master（但无锁数据）
 4. 客户端B 向新的 Master 请求同一把锁 → 也成功了
 5. 此时客户端A 和 客户端B 同时认为自己持有锁 → 互斥性被破坏
 ```
 
-> ⚠️ **核心问题**：Redis 主从使用的是异步复制，Master 宕机，锁数据丢失。
+> **核心问题**：Redis 主从使用的是异步复制，Master 宕机，锁数据丢失。
 
 #### 2.10.2 RedLock 算法原理
 
@@ -860,8 +860,8 @@ RedLock 由 Redis 作者 **antirez** 提出，使用 **N/2+1** 个互相独立�
 │  3. 计算成功加锁的节点数 count              │
 │  4. 计算总耗时 elapsed = now() - T1        │
 │  5. 判断：count >= 3 且 elapsed < leaseTime │
-│     ✅ 成功 → 持有锁（剩余有效期=leaseTime-elapsed）│
-│     ❌ 失败 → 向所有节点发解锁请求             │
+│     ✓ 成功 → 持有锁（剩余有效期=leaseTime-elapsed）│
+│     ✗ 失败 → 向所有节点发解锁请求             │
 └─────────────────────────────────────────┘
 ```
 
@@ -931,7 +931,7 @@ public class RedLockService {
 | **异步复制无法解决** | RedLock 假设节点独立，但实际生产多是主从 | 中 |
 | **Martin Kleppmann 的批评** | 指出 RedLock 的安全性与 ZooKeeper 相比不可靠 | 参考 |
 
-> 🎯 **结论**：RedLock 提供了理论上的安全保证，但实际生产中大多数场景使用**单节点 + 哨兵**或**Redis Cluster** 即可满足需求。只有对一致性要求极高的场景（如金融交易）才考虑 RedLock 或替换为 ZooKeeper/etcd。
+> **结论**：RedLock 提供了理论上的安全保证，但实际生产中大多数场景使用**单节点 + 哨兵**或**Redis Cluster** 即可满足需求。只有对一致性要求极高的场景（如金融交易）才考虑 RedLock 或替换为 ZooKeeper/etcd。
 
 ---
 
@@ -942,14 +942,14 @@ public class RedLockService {
 | 维度 | Redis（Redisson） | MySQL（`SELECT ... FOR UPDATE`） | ZooKeeper（临时ZNode + Watcher） |
 |------|------------------|-------------------------------|--------------------------------|
 | **原理** | 内存键值对 + Lua脚本 | 行锁 + 事务隔离 | 临时顺序节点 + 会话超时 |
-| **性能** | ⭐⭐⭐⭐⭐ 微秒级 | ⭐⭐ 毫秒级（磁盘IO） | ⭐⭐⭐ 毫秒级 |
-| **可靠性** | ⭐⭐⭐ 异步复制可能丢锁 | ⭐⭐⭐⭐ ACID保证 | ⭐⭐⭐⭐⭐ ZAB协议强一致 |
-| **可重入** | ✅ 内置支持 | ❌ 需自行实现 | ❌ 需自行实现 |
-| **死锁防护** | ✅ 过期时间 + Watch Dog | ❌ 无超时，事务回滚需要主动处理 | ✅ Session过期自动删除 |
-| **公平排队** | ✅ FairLock | ❌ 数据库锁队列 | ✅ 顺序节点天然有序 |
-| **锁超时** | ✅ 可配置 | ❌ 依赖 `lock_wait_timeout` | ✅ Session超时时间 |
-| **Watch/通知** | ✅ Pub/Sub 锁通知 | ❌ 需轮询 | ✅ Watcher 通知 |
-| **运维成本** | ⭐⭐⭐ 低（已有Redis） | ⭐⭐⭐⭐⭐ 无额外组件 | ⭐⭐⭐ 额外维护ZK集群 |
+| **性能** | ★★★★★ 微秒级 | ★★ 毫秒级（磁盘IO） | ★★★ 毫秒级 |
+| **可靠性** | ★★★ 异步复制可能丢锁 | ★★★★ ACID保证 | ★★★★★ ZAB协议强一致 |
+| **可重入** | ✓ 内置支持 | ✗ 需自行实现 | ✗ 需自行实现 |
+| **死锁防护** | ✓ 过期时间 + Watch Dog | ✗ 无超时，事务回滚需要主动处理 | ✓ Session过期自动删除 |
+| **公平排队** | ✓ FairLock | ✗ 数据库锁队列 | ✓ 顺序节点天然有序 |
+| **锁超时** | ✓ 可配置 | ✗ 依赖 `lock_wait_timeout` | ✓ Session超时时间 |
+| **Watch/通知** | ✓ Pub/Sub 锁通知 | ✗ 需轮询 | ✓ Watcher 通知 |
+| **运维成本** | ★★★ 低（已有Redis） | ★★★★★ 无额外组件 | ★★★ 额外维护ZK集群 |
 | **适用场景** | 高并发、可接受最终一致 | 强事务、已有MySQL | 强一致性、配置中心 |
 
 #### 2.11.2 选型建议
@@ -971,7 +971,7 @@ public class RedLockService {
 #### 3.1.1 问题复现
 
 ```java
-// ❌ 错误代码 — 锁误删
+// ✗ 错误代码 — 锁误删
 public void wrongUnlock(String key) {
     String lockKey = "lock:" + key;
     // 设置锁，过期时间10秒
@@ -985,7 +985,7 @@ public void wrongUnlock(String key) {
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         } finally {
-            // ❌ 此时删除的是其他线程的锁（线程B在这5秒内获取了锁）
+            // ✗ 此时删除的是其他线程的锁（线程B在这5秒内获取了锁）
             stringRedisTemplate.delete(lockKey);
         }
     }
@@ -1001,12 +1001,12 @@ public void wrongUnlock(String key) {
 | T10 | 锁过期自动删除 | — |
 | T12 | 仍执行业务中 | SETNX lock=1 成功 |
 | T15 | 执行 finally delete | — |
-| T16 | — | 执行业务中，锁被A删除 ❌ |
+| T16 | — | 执行业务中，锁被A删除 ✗ |
 
 #### 3.1.2 解决方案 — UUID 标记 + Lua 原子删除
 
 ```java
-// ✅ 正确代码 — 使用 UUID 标记锁的归属
+// ✓ 正确代码 — 使用 UUID 标记锁的归属
 public void correctUnlock(String key) {
     String lockKey = "lock:" + key;
     String requestId = UUID.randomUUID().toString(); // 唯一标识
@@ -1033,12 +1033,12 @@ public void correctUnlock(String key) {
 }
 ```
 
-> 💡 **Redisson 默认解决**：使用 Redisson 时，`RLock` 内部自动使用 UUID:threadId 作为线程标识，配合 Lua 脚本释放锁，天然避免锁误删。
+> **Redisson 默认解决**：使用 Redisson 时，`RLock` 内部自动使用 UUID:threadId 作为线程标识，配合 Lua 脚本释放锁，天然避免锁误删。
 
 ### 3.2 未设置 leaseTime 导致的死锁
 
 ```java
-// ❌ 危险 — lock() 不设超时，且未解锁
+// ✗ 危险 — lock() 不设超时，且未解锁
 public void dangerousLock(String key) {
     RLock lock = redissonClient.getLock(key);
     lock.lock(); // 获取锁，Watch Dog 会持续续期
@@ -1046,12 +1046,12 @@ public void dangerousLock(String key) {
 }
 ```
 
-> ⚠️ **千万注意**：`lock()` 和 `unlock()` 必须成对使用，`unlock()` 必须在 `finally` 块中调用，否则 Watch Dog 会一直续期，导致其他线程永远无法获取锁。
+> **千万注意**：`lock()` 和 `unlock()` 必须成对使用，`unlock()` 必须在 `finally` 块中调用，否则 Watch Dog 会一直续期，导致其他线程永远无法获取锁。
 
 ### 3.3 Redisson 与 RedisTemplate 冲突
 
 ```java
-// ❌ 问题：引入 redisson-spring-boot-starter 后，RedisTemplate 自动配置失效
+// ✗ 问题：引入 redisson-spring-boot-starter 后，RedisTemplate 自动配置失效
 // 解决方案：手动配置 RedisTemplate Bean
 @Bean
 public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory factory) {
@@ -1073,7 +1073,7 @@ public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory factor
 
 ### 3.5 RedLock 时钟依赖问题
 
-> ⚠️ RedLock 的多数节点判定依赖时间精度。如果某个 Redis 节点的系统时钟发生跳跃（如 NTP 同步），可能导致锁被错误释放或重复获取。生产环境使用 RedLock 时要确保所有节点的时间同步（启用 NTP 服务）。
+> RedLock 的多数节点判定依赖时间精度。如果某个 Redis 节点的系统时钟发生跳跃（如 NTP 同步），可能导致锁被错误释放或重复获取。生产环境使用 RedLock 时要确保所有节点的时间同步（启用 NTP 服务）。
 
 ---
 
@@ -1515,7 +1515,7 @@ class OrderConcurrencyTest {
 ================================
 ```
 
-> 🎯 **关键设计要点**：
+> **关键设计要点**：
 > 1. **锁粒度**：`lock:order:create:{userId}:{productId}` 按用户+商品分片，避免全局限锁
 > 2. **幂等标记**：使用 `idempotentToken` 标记已处理的请求，过期时间 24 小时
 > 3. **tryLock 策略**：等待 1 秒获取锁，获取后 5 秒自动释放（不启动 Watch Dog），适用于执行时间可控的订单场景
@@ -1967,4 +1967,4 @@ public class OrderService {
 
 ---
 
-> 🎯 **总结**：Redisson 分布式锁是 Redis 生态中最为成熟的分布式锁解决方案，它通过 RLock/RReadWriteLock/RSemaphore/RCountDownLatch 四种核心同步器覆盖了分布式环境下绝大多数的并发控制需求。掌握 Watch Dog 续期机制、Lua 脚本原子性、锁误删防范三大核心技术，配合合理的锁粒度设计，即可在生产环境中构建高可用的分布式锁体系。对于金融级强一致场景，仍需综合评估 RedLock 的局限性，必要时引入 ZooKeeper 或 etcd。
+> **总结**：Redisson 分布式锁是 Redis 生态中最为成熟的分布式锁解决方案，它通过 RLock/RReadWriteLock/RSemaphore/RCountDownLatch 四种核心同步器覆盖了分布式环境下绝大多数的并发控制需求。掌握 Watch Dog 续期机制、Lua 脚本原子性、锁误删防范三大核心技术，配合合理的锁粒度设计，即可在生产环境中构建高可用的分布式锁体系。对于金融级强一致场景，仍需综合评估 RedLock 的局限性，必要时引入 ZooKeeper 或 etcd。

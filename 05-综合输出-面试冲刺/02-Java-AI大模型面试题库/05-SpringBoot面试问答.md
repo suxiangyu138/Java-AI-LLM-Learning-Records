@@ -1,5 +1,5 @@
 # SpringBoot 必做项目清单 面试问答
-> 🎯 基于 SpringBoot 项目实战清单，涵盖面试高频问题与完美解答方案，帮助你在面试中脱颖而出。
+> 基于 SpringBoot 项目实战清单，涵盖面试高频问题与完美解答方案，帮助你在面试中脱颖而出。
 
 ## 目录
 1. [基础概念与核心原理](#1-基础概念与核心原理)
@@ -11,7 +11,7 @@
 
 ## 1. 基础概念与核心原理
 
-> 💡 面试官在这一环节考察你的基本功是否扎实
+> 面试官在这一环节考察你的基本功是否扎实
 
 ### Q1：请说一下 SpringBoot 自动配置的原理，`@SpringBootApplication` 做了什么？
 
@@ -74,7 +74,7 @@ public class RedisAutoConfiguration {
 | `@ConditionalOnExpression` | SpEL 表达式为 true 时生效 | 复杂条件判断 |
 | `@ConditionalOnWebApplication` | Web 应用时生效 | 区分 Web/非 Web |
 
-> 💡 理解自动配置原理的关键在于**条件化注册**——Spring Boot 不是一股脑加载所有配置，而是按"你引入了什么依赖"来判断"你需要什么配置"。
+> 理解自动配置原理的关键在于**条件化注册**——Spring Boot 不是一股脑加载所有配置，而是按"你引入了什么依赖"来判断"你需要什么配置"。
 
 **延伸追问应对：** 如果问"怎么自定义 Starter？"，回答需要做四件事：1. 写自动配置类 2. 定义配置属性类（`@ConfigurationProperties`）3. 在 `META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports` 中注册 4. 打包为独立 jar。
 
@@ -175,7 +175,7 @@ public class BusinessException extends RuntimeException {
 }
 ```
 
-> 💡 好的异常处理要**分类清晰**——业务异常给用户友好的提示，系统异常给技术排查信息，不要把堆栈信息直接吐给前端。
+> 好的异常处理要**分类清晰**——业务异常给用户友好的提示，系统异常给技术排查信息，不要把堆栈信息直接吐给前端。
 
 ---
 
@@ -286,7 +286,7 @@ private String status;
 
 ## 2. 项目实战深度问答
 
-> 💡 面试官会深挖你的项目细节，验证你"真的做过"而不是"背过"
+> 面试官会深挖你的项目细节，验证你"真的做过"而不是"背过"
 
 ### Q4：你做的个人博客后端的整体架构和核心设计是什么样的？
 
@@ -625,7 +625,7 @@ public void setProductCache(Long id, Product product) {
 
 ## 3. 进阶与系统设计
 
-> 💡 这是拉开差距的环节，考察架构思维
+> 这是拉开差距的环节，考察架构思维
 
 ### Q7：怎么设计一个高可用的文件上传下载系统？
 
@@ -853,7 +853,7 @@ public Flux<ServerSentEvent<String>> streamChat(@RequestParam String question,
 
 ## 4. 场景题与故障排查
 
-> 💡 考察实际解决问题的能力
+> 考察实际解决问题的能力
 
 ### Q9：SpringBoot 项目启动报错 "Failed to configure a DataSource"，怎么排查？
 
@@ -1019,7 +1019,7 @@ public class SecurityConfig {
 
 ---
 
-## 💎 面试加分金句
+## 面试加分金句
 
 1. "SpringBoot 的自动配置用好了是神器，不理解时就是玄学。我踩过很多坑后总结了一个原则：**自动配置出问题时，先去检查类路径上有没有预期之外的 jar**。"
 2. "我坚持代码分层规范：Controller 只做参数校验和结果封装，Service 只做业务逻辑，DAO 只做数据访问。**每一层都只做一件事**，这是代码可维护性的基石。"
@@ -1029,7 +1029,7 @@ public class SecurityConfig {
 
 ---
 
-## 📋 高频追问清单
+## 高频追问清单
 
 | 追问方向 | 应对策略 |
 |----------|----------|
@@ -1041,7 +1041,7 @@ public class SecurityConfig {
 
 ---
 
-## 🔗 关联知识点
+## 关联知识点
 
 - [Spring必做项目清单-面试问答](Spring必做项目清单-面试问答.md) — IoC/AOP/事务原理
 - [SpringMVC必做项目清单-面试问答](SpringMVC必做项目清单-面试问答.md) — MVC 架构与请求处理

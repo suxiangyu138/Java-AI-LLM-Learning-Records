@@ -53,7 +53,7 @@ JUC 并发协同工具家族
 | 是否基于AQS | 是 (共享模式) | 否 (ReentrantLock+Condition) | 是 (共享模式) | 否 | 是 (共享模式) |
 | 主要用途 | 等待完成 | 等待到齐 | 限流控制 | 数据交换 | 分阶段任务 |
 
-> 💡 JUC工具类的底层核心是AQS（AbstractQueuedSynchronizer），CountDownLatch和Semaphore基于AQS共享模式实现，CyclicBarrier通过ReentrantLock+Condition组合实现，Exchanger使用CAS+自旋实现，Phaser则是AQS共享模式的扩展。
+> JUC工具类的底层核心是AQS（AbstractQueuedSynchronizer），CountDownLatch和Semaphore基于AQS共享模式实现，CyclicBarrier通过ReentrantLock+Condition组合实现，Exchanger使用CAS+自旋实现，Phaser则是AQS共享模式的扩展。
 
 ---
 
@@ -114,7 +114,7 @@ public class CountDownLatchDemo {
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
                 } finally {
-                    latch.countDown(); // ⚠️ 必须放在 finally 中
+                    latch.countDown(); // 必须放在 finally 中
                 }
             }, "Service-" + i).start();
         }
@@ -148,7 +148,7 @@ public class CountDownLatchDemo {
 - **多任务汇总：** 多个线程分别计算，主线程汇总结果
 - **压测模拟：** N 个线程同时准备，主线程一声令下同时执行
 
-> ⚠️ CountDownLatch 是一次性的，计数器归零后不能复用。如果需要循环等待，应使用 CyclicBarrier。
+> CountDownLatch 是一次性的，计数器归零后不能复用。如果需要循环等待，应使用 CyclicBarrier。
 
 ---
 
@@ -246,7 +246,7 @@ public class CyclicBarrierDemo {
 2. **屏障回调：** 最后一个到达的线程会执行 BarrierAction，可用于汇总或过渡逻辑
 3. **破坏检测：** 线程中断或超时会导致屏障破坏（BrokenBarrierException），其他等待线程需要处理
 
-> 💡 屏障回调（BarrierAction）的执行线程是最后一个到达屏障的线程，不是单独的线程，因此回调中不应执行耗时操作。
+> 屏障回调（BarrierAction）的执行线程是最后一个到达屏障的线程，不是单独的线程，因此回调中不应执行耗时操作。
 
 ### 3.5 使用 reset() 实现多轮等待
 
@@ -283,13 +283,13 @@ for (int i = 0; i < 3; i++) {
 | 对比维度 | CountDownLatch | CyclicBarrier |
 |---------|---------------|---------------|
 | **计数器方向** | 递减（向下数） | 递增（向上数到 parties） |
-| **可重用性** | ❌ 一次性，用完即废 | ✅ 可调用 reset() 循环使用 |
+| **可重用性** | ✗ 一次性，用完即废 | ✓ 可调用 reset() 循环使用 |
 | **等待机制** | 一个线程等待多个线程 | 多个线程互相等待 |
 | **参与者感知** | 计数线程不感知彼此 | 所有线程互相感知 |
-| **回调** | 无 | ✅ 支持 BarrierAction |
+| **回调** | 无 | ✓ 支持 BarrierAction |
 | **使用场景** | 等待结束（一等多） | 等待到齐（多等多） |
 
-> ⚠️ 最容易混淆的点：CountDownLatch 是**一个线程等待多个线程完成**（一等多），CyclicBarrier 是**多个线程互相等待直到全部到齐**（多等多）。CountDownLatch 侧重"事件是否发生"，CyclicBarrier 侧重"所有线程是否到齐"。
+> 最容易混淆的点：CountDownLatch 是**一个线程等待多个线程完成**（一等多），CyclicBarrier 是**多个线程互相等待直到全部到齐**（多等多）。CountDownLatch 侧重"事件是否发生"，CyclicBarrier 侧重"所有线程是否到齐"。
 
 ### 4.2 场景选择指南
 
@@ -379,7 +379,7 @@ Semaphore 维护一组许可证，线程在执行前需要先获取许可证，�
 线程1: acquire() → 许可证: 3 → 2  → 执行 → release() → 许可证: 2 → 3
 线程2: acquire() → 许可证: 2 → 1  → 执行 → release() → 许可证: 1 → 2
 线程3: acquire() → 许可证: 1 → 0  → 执行 → release() → 许可证: 0 → 1
-线程4: acquire() ⛔ 阻塞等待... (直到有线程 release)
+线程4: acquire() 阻塞等待... (直到有线程 release)
 ```
 
 ### 5.2 核心API
@@ -433,7 +433,7 @@ public class SemaphoreDemo {
                             Thread.sleep(1000); // 模拟数据库查询
                             System.out.println("任务 " + taskId + " 查询完成，释放连接");
                         } finally {
-                            semaphore.release(); // ⚠️ 必须在 finally 中释放
+                            semaphore.release(); // 必须在 finally 中释放
                         }
                     } else {
                         System.out.println("任务 " + taskId + " ✗ 获取连接超时，稍后重试");
@@ -458,8 +458,8 @@ public class SemaphoreDemo {
 任务 1 ☆ 获取连接，开始查询
 任务 2 ☆ 获取连接，开始查询
 任务 3 ☆ 获取连接，开始查询
-任务 4 等待获取连接 (可用: 0)  ⛔ 等待
-任务 5 等待获取连接 (可用: 0)  ⛔ 等待
+任务 4 等待获取连接 (可用: 0)  等待
+任务 5 等待获取连接 (可用: 0)  等待
 任务 1 查询完成，释放连接
 任务 4 ☆ 获取连接，开始查询
 ...
@@ -480,7 +480,7 @@ Semaphore fair = new Semaphore(3, true);
 Semaphore unfair = new Semaphore(3, false); // 默认
 ```
 
-> 💡 Semaphore 的 release() 方法不需要由 acquire() 的线程调用——任何线程都可以释放许可证，这是与锁的重要区别。
+> Semaphore 的 release() 方法不需要由 acquire() 的线程调用——任何线程都可以释放许可证，这是与锁的重要区别。
 
 ### 5.5 典型应用场景
 
@@ -580,7 +580,7 @@ public class ExchangerDemo {
 [生产者] 收到处理结果: Processed-3
 ```
 
-> ⚠️ Exchanger 仅适用于两个线程之间的点对点交换。如果超过两个线程需要交换数据，应使用 ConcurrentHashMap 等并发容器或其他方案。
+> Exchanger 仅适用于两个线程之间的点对点交换。如果超过两个线程需要交换数据，应使用 ConcurrentHashMap 等并发容器或其他方案。
 
 ### 6.4 典型应用场景
 
@@ -704,14 +704,14 @@ public class PhaserDemo {
 
 | 需求 | CyclicBarrier | Phaser |
 |------|---------------|--------|
-| 固定参与者数量 | ✅ 简洁 | ✅ 支持 |
-| 动态增减参与者 | ❌ 不支持 | ✅ register/arriveAndDeregister |
-| 多阶段同步 | ❌ 需手动 reset | ✅ 原生支持多阶段 |
-| 阶段回调 | ✅ BarrierAction | ✅ 重写 onAdvance |
-| 终止控制 | ❌ 不支持 | ✅ forceTermination |
-| 获取等待线程数 | ✅ getNumberWaiting | ✅ getArrivedParties |
+| 固定参与者数量 | ✓ 简洁 | ✓ 支持 |
+| 动态增减参与者 | ✗ 不支持 | ✓ register/arriveAndDeregister |
+| 多阶段同步 | ✗ 需手动 reset | ✓ 原生支持多阶段 |
+| 阶段回调 | ✓ BarrierAction | ✓ 重写 onAdvance |
+| 终止控制 | ✗ 不支持 | ✓ forceTermination |
+| 获取等待线程数 | ✓ getNumberWaiting | ✓ getArrivedParties |
 
-> 💡 当参与者数量固定且只有单阶段同步时，使用 CyclicBarrier 更简洁。当需要多阶段同步或参与者数量可能变化时，Phaser 是更好的选择。
+> 当参与者数量固定且只有单阶段同步时，使用 CyclicBarrier 更简洁。当需要多阶段同步或参与者数量可能变化时，Phaser 是更好的选择。
 
 ### 7.5 Phaser 的 onAdvance 高级用法
 
@@ -742,11 +742,11 @@ Phaser phaser = new Phaser(3) {
 | 核心语义 | 等待完成 | 等待到齐 | 限流控制 | 数据交换 | 分阶段同步 |
 | 参与者方向 | 一等多 | 多等多 | 多争多 | 一对一 | 多等多 |
 | 计数器方向 | 递减 | 递增 | 许可证数量 | N/A | 阶段+参与者 |
-| 可重用 | ❌ | ✅ reset() | ✅ 自动 | ✅ 自动 | ✅ 自动 |
-| 是否支持超时 | ✅ | ✅ | ✅ | ✅ | ✅ |
-| 是否可中断 | ✅ | ✅ | ✅ | ✅ | ✅ |
-| 回调机制 | ❌ | ✅ BarrierAction | ❌ | ❌ | ✅ onAdvance |
-| 动态参与者 | ❌ | ❌ | ❌ | ❌ | ✅ |
+| 可重用 | ✗ | ✓ reset() | ✓ 自动 | ✓ 自动 | ✓ 自动 |
+| 是否支持超时 | ✓ | ✓ | ✓ | ✓ | ✓ |
+| 是否可中断 | ✓ | ✓ | ✓ | ✓ | ✓ |
+| 回调机制 | ✗ | ✓ BarrierAction | ✗ | ✗ | ✓ onAdvance |
+| 动态参与者 | ✗ | ✗ | ✗ | ✗ | ✓ |
 | 内部实现 | AQS 共享 | ReentrantLock+Condition | AQS 共享 | CAS+自旋 | AQS 共享 |
 | 底层源码核心类 | Sync (内部类) | Generation, lock, trip | Sync (内部类) | Participant, Node | QNode, root |
 
@@ -775,7 +775,7 @@ Phaser phaser = new Phaser(3) {
 | Exchanger | 只有一方到达导致永久阻塞 | 使用带超时的 exchange 方法 |
 | Phaser | 参与者注册/注销不匹配 | 使用 try/finally 确保注销；注意 phase 溢出 |
 
-> 🎯 核心要诀：JUC 并发工具的使用可以总结为一句话——**先定语义再选工具**。你是想"等待完成"（CountDownLatch）？还是"等待到齐"（CyclicBarrier/Phaser）？还是"控制并发"（Semaphore）？还是"交换数据"（Exchanger）？确定语义后再选择对应工具，自然水到渠成。
+> 核心要诀：JUC 并发工具的使用可以总结为一句话——**先定语义再选工具**。你是想"等待完成"（CountDownLatch）？还是"等待到齐"（CyclicBarrier/Phaser）？还是"控制并发"（Semaphore）？还是"交换数据"（Exchanger）？确定语义后再选择对应工具，自然水到渠成。
 
 ---
 
@@ -883,7 +883,7 @@ public class SeckillSimulation {
 | CyclicBarrier | 分阶段：先查库存再扣减 | 设置超时防止屏障破坏导致的死等 |
 | AtomicInteger | 替代锁实现原子库存扣减 | CAS 高性能，但 ABA 问题不影响此处 |
 
-> 🎯 在高并发实战中，**工具组合使用**远比单一工具更常见。限流 + 协同 + 计数的组合能有效应对大多数秒杀、抢购、排队等场景。
+> 在高并发实战中，**工具组合使用**远比单一工具更常见。限流 + 协同 + 计数的组合能有效应对大多数秒杀、抢购、排队等场景。
 
 ---
 
@@ -1001,7 +1001,7 @@ Semaphore 适合：限制同时访问资源的线程数
 RateLimiter 适合：平滑限制请求速率，允许突发流量
 ```
 
-> 🎯 面试核心：JUC 工具类的高频考点集中在 **CountDownLatch vs CyclicBarrier 的区别**、**Semaphore 的限流原理**以及**Phaser 的多阶段同步优势**。手写代码时需特别注意异常处理（finally 释放）、超时设置和线程中断的响应。
+> 面试核心：JUC 工具类的高频考点集中在 **CountDownLatch vs CyclicBarrier 的区别**、**Semaphore 的限流原理**以及**Phaser 的多阶段同步优势**。手写代码时需特别注意异常处理（finally 释放）、超时设置和线程中断的响应。
 
 ---
 

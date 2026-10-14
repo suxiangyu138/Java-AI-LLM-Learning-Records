@@ -1,6 +1,6 @@
 # 05 - 服务容错：Sentinel 熔断降级
 
-> 🎯 Sentinel 是阿里开源的流量防卫兵 — 流控削峰、熔断兜底、系统自适应保护，替代已停维的 Hystrix，是 Spring Cloud Alibaba 的容错标准组件
+> Sentinel 是阿里开源的流量防卫兵 — 流控削峰、熔断兜底、系统自适应保护，替代已停维的 Hystrix，是 Spring Cloud Alibaba 的容错标准组件
 
 ---
 
@@ -186,10 +186,10 @@ public User getUser(@PathVariable Long id) { ... }
 
 ## 5. 规则持久化
 
-> ⚠️ 默认规则存在内存中，重启 Sentinel 控制台丢失。
+> 默认规则存在内存中，重启 Sentinel 控制台丢失。
 
 ```yaml
-# 方式1：Nacos 持久化（⭐ 推荐）
+# 方式1：Nacos 持久化（★ 推荐）
 spring:
   cloud:
     sentinel:
@@ -209,4 +209,4 @@ spring:
             rule-type: degrade
 ```
 
-> 🎯 **容错体系**：QPS 流控防刷、慢调用熔断兜底、系统规则保全局、热点规则精细化。规则统一持久化到 Nacos，实现配置即代码。
+> **容错体系**：QPS 流控防刷、慢调用熔断兜底、系统规则保全局、热点规则精细化。规则统一持久化到 Nacos，实现配置即代码。

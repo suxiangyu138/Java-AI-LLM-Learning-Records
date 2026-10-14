@@ -36,7 +36,7 @@ REST = Representational State Transfer
 ## 2. URL 设计规范
 
 ```text
-✅ 好的 URL 设计：
+✓ 好的 URL 设计：
   GET     /api/v1/users              # 获取用户列表
   GET     /api/v1/users/123          # 获取单个用户
   GET     /api/v1/users/123/orders   # 获取用户订单（嵌套资源）
@@ -45,7 +45,7 @@ REST = Representational State Transfer
   PATCH   /api/v1/users/123          # 部分更新
   DELETE  /api/v1/users/123          # 删除用户
 
-❌ 差的 URL 设计：
+✗ 差的 URL 设计：
   GET  /api/getUserList              # 动词在 URL 中
   POST /api/createUser               # 同上
   GET  /api/users?id=123             # 应该用路径参数

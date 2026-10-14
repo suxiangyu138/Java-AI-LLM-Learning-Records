@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [组件一句话定位](#1-组件一句话定位)
 2. [版本现状（2026-08）](#2-版本现状2026-08)
@@ -33,7 +33,7 @@
     （全部可用 Java DSL 的 IntegrationFlow 一行式声明）
 ```
 
-> 🎯 **一句话**：Spring Integration = "消息中间件无关的 EIP 实现"——把集成逻辑写成流程图（DSL），底层可切换内存/文件/JDBC/Kafka/AMQP/JMS 等任意通道。
+> **一句话**：Spring Integration = "消息中间件无关的 EIP 实现"——把集成逻辑写成流程图（DSL），底层可切换内存/文件/JDBC/Kafka/AMQP/JMS 等任意通道。
 
 ## 2. 版本现状（2026-08）
 
@@ -52,7 +52,7 @@
 - `IntegrationPatternType` 新增 `message_store` 模式；`ExpressionEvaluatingMessageProcessor` 改进；
 - 大量修复：防止文件写出输出目录（安全）、Redis/JDBC LockRegistry 竞态、gRPC inbound 错误传播等。
 
-> 💡 版本线对应：SI 7.x = Boot 4 / SF 7；SI 6.x = Boot 3 / SF 6——与 Boot 大版本强绑定，禁止跨线混搭。
+> 版本线对应：SI 7.x = Boot 4 / SF 7；SI 6.x = Boot 3 / SF 6——与 Boot 大版本强绑定，禁止跨线混搭。
 
 ## 3. 能力地图
 
@@ -79,7 +79,7 @@
 | 04 集成地图 | [消息队列理论与实战](../../../../03-消息队列/消息队列理论与实战/00-消息队列知识体系总览.md) | SI 是"中间件无关"抽象层，MQ 是底层传输 |
 | 04 集成地图 | [Spring Batch 深度体系-08 调度、运维与可观测性](../../../Spring Batch/08-调度、运维与可观测性.md) | 事件触发批处理（消息到达 → 启 Job） |
 
-> 💡 Spring Integration 生态位说明：它常与 Spring Batch（离线批）、Spring AMQP/Kafka（在线消息）、Spring Cloud Stream（消息驱动微服务）配合使用——本仓库暂无 SI 独立深度体系，需要深入时以 [官方参考文档](https://docs.spring.io/spring-integration/reference/) 为准。
+> Spring Integration 生态位说明：它常与 Spring Batch（离线批）、Spring AMQP/Kafka（在线消息）、Spring Cloud Stream（消息驱动微服务）配合使用——本仓库暂无 SI 独立深度体系，需要深入时以 [官方参考文档](https://docs.spring.io/spring-integration/reference/) 为准。
 
 ## 5. 快速上手 3 步
 
@@ -104,7 +104,7 @@ class BasicFlowConfig {
 }
 ```
 
-> 💡 运行即得：默认 `errorChannel` 捕获异常；端点自动注册为 Bean；`@MessagingGateway` 可把接口变成发送代理。
+> 运行即得：默认 `errorChannel` 捕获异常；端点自动注册为 Bean；`@MessagingGateway` 可把接口变成发送代理。
 
 ## 6. 速查导航
 
@@ -139,6 +139,6 @@ class BasicFlowConfig {
 
 ---
 
-> 🎯 **核心要点**：Spring Integration 是"用消息流实现 EIP 的粘合层"——DSL 是心智入口，通道适配器是扩展点，errorChannel/MessageStore/LockRegistry 是生产三件套；7.1.0 的新鲜点（CloudEvents、gRPC DSL、message_store 模式）值得在方案评审时提及。
+> **核心要点**：Spring Integration 是"用消息流实现 EIP 的粘合层"——DSL 是心智入口，通道适配器是扩展点，errorChannel/MessageStore/LockRegistry 是生产三件套；7.1.0 的新鲜点（CloudEvents、gRPC DSL、message_store 模式）值得在方案评审时提及。
 
 **下一模块**：[01-模块清单](01-模块清单.md)

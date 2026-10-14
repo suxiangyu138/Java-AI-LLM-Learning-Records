@@ -1,6 +1,6 @@
 # 06 - Kimi 在开发框架中的集成
 
-> 🎯 Kimi 兼容 OpenAI 协议 = 天然适配所有主流 AI 框架 — LangChain4j、Spring AI、OpenAI SDK、OpenClaw 全部改配置即可接入。本章给出各框架的完整接入代码
+> Kimi 兼容 OpenAI 协议 = 天然适配所有主流 AI 框架 — LangChain4j、Spring AI、OpenAI SDK、OpenClaw 全部改配置即可接入。本章给出各框架的完整接入代码
 
 ---
 
@@ -189,7 +189,7 @@ llm_with_tools = llm.bind_tools([get_weather])
 }
 ```
 
-> 💡 **为什么 K2.6 是 OpenClaw 最佳搭档**：工具调用稳定（Toolathlon +79.9%）+ 5 天长程自主 + 256K 上下文 — 完美匹配 OpenClaw 的持续 Agent 场景。
+> **为什么 K2.6 是 OpenClaw 最佳搭档**：工具调用稳定（Toolathlon +79.9%）+ 5 天长程自主 + 256K 上下文 — 完美匹配 OpenClaw 的持续 Agent 场景。
 
 ---
 
@@ -216,6 +216,6 @@ Kimi K2.6 已首发登陆的第三方平台（一个 API Key 全搞定）：
 
 ---
 
-> 🎯 **核心要点**：Kimi 集成一句话 — **"OpenAI 兼容 = 所有框架零成本接入"**。LangChain4j/Spring AI 只需改 `baseUrl` + `modelName`；Python LangChain 改 `base_url`；OpenClaw 配 `openai-compatible` 类型。所有下游代码（AiServices/ChatClient/工具调用）完全不用改。
+> **核心要点**：Kimi 集成一句话 — **"OpenAI 兼容 = 所有框架零成本接入"**。LangChain4j/Spring AI 只需改 `baseUrl` + `modelName`；Python LangChain 改 `base_url`；OpenClaw 配 `openai-compatible` 类型。所有下游代码（AiServices/ChatClient/工具调用）完全不用改。
 
 **下一模块**：[07-Kimi选型与生态对比](07-Kimi选型与生态对比.md) / **返回总览**：[00-总览](00-Kimi知识体系总览.md)

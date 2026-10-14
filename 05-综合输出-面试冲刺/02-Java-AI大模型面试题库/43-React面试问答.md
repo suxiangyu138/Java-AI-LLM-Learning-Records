@@ -1,5 +1,5 @@
 # React 面试问答清单
-> 🎯 基于项目实战清单，涵盖面试高频问题与完美解答方案，帮助你在面试中脱颖而出。
+> 基于项目实战清单，涵盖面试高频问题与完美解答方案，帮助你在面试中脱颖而出。
 
 ## 目录
 1. [基础概念与核心原理](#1-基础概念与核心原理)
@@ -11,7 +11,7 @@
 
 ## 1. 基础概念与核心原理
 
-> 💡 面试官在这一环节考察你的基本功是否扎实
+> 面试官在这一环节考察你的基本功是否扎实
 
 ### Q1：React 中 useState 的更新是同步还是异步？如何获取最新状态？
 
@@ -161,7 +161,7 @@ function Parent() {
 }
 ```
 
-> ⚠️ **注意：** 不要滥用 `React.memo` 和 `useMemo`。对于简单的渲染，浅比较的开销可能比重新渲染更大。只有在对性能有实际影响时才使用。
+> **注意：** 不要滥用 `React.memo` 和 `useMemo`。对于简单的渲染，浅比较的开销可能比重新渲染更大。只有在对性能有实际影响时才使用。
 
 **延伸追问应对：**
 
@@ -180,11 +180,11 @@ React 组件间通信有 5 种主要方式，根据组件关系选择最合适�
 
 | 通信方式 | 适用场景 | 缺点 | 推荐度 |
 |---------|---------|------|--------|
-| **Props 父传子** | 父子直接通信 | 层级深时 Prop Drilling | ⭐⭐⭐⭐⭐ |
-| **回调函数 子传父** | 子组件通知父组件 | 同样存在 Prop Drilling | ⭐⭐⭐⭐⭐ |
-| **Context / Provider** | 跨层级共享全局数据 | 引起消费组件全部重渲染 | ⭐⭐⭐⭐ |
-| **状态管理库（Zustand/Redux）** | 复杂应用全局状态 | 增加依赖体积 | ⭐⭐⭐⭐ |
-| **ref + useImperativeHandle** | 父组件调用子组件方法 | 打破单向数据流 | ⭐⭐⭐ |
+| **Props 父传子** | 父子直接通信 | 层级深时 Prop Drilling | ★★★★★ |
+| **回调函数 子传父** | 子组件通知父组件 | 同样存在 Prop Drilling | ★★★★★ |
+| **Context / Provider** | 跨层级共享全局数据 | 引起消费组件全部重渲染 | ★★★★ |
+| **状态管理库（Zustand/Redux）** | 复杂应用全局状态 | 增加依赖体积 | ★★★★ |
+| **ref + useImperativeHandle** | 父组件调用子组件方法 | 打破单向数据流 | ★★★ |
 
 ```jsx
 // 方案 1：Props + 回调（最基本的父子通信）
@@ -220,7 +220,7 @@ const Child = forwardRef((props, ref) => {
 // 父组件中：childRef.current.focus()
 ```
 
-> 💡 **面试提示：** 当被问到组件通信时，主动引出 Props Drilling 问题及其解决方案（Context + 组合模式），能展现你的工程化思考。
+> **面试提示：** 当被问到组件通信时，主动引出 Props Drilling 问题及其解决方案（Context + 组合模式），能展现你的工程化思考。
 
 **延伸追问应对：**
 
@@ -255,7 +255,7 @@ handleClick = () => console.log('React事件'); // 先执行
 // 原因：React 事件委托在 root 节点处理，冒泡比 document 晚
 ```
 
-> ⚠️ **警告：** 在 React 事件处理函数中调用 `e.stopPropagation()` 只能阻止 React 合成事件的冒泡，不能阻止原生事件的冒泡。如果需要同时阻止，需要调用 `e.nativeEvent.stopPropagation()`。
+> **警告：** 在 React 事件处理函数中调用 `e.stopPropagation()` 只能阻止 React 合成事件的冒泡，不能阻止原生事件的冒泡。如果需要同时阻止，需要调用 `e.nativeEvent.stopPropagation()`。
 
 **延伸追问应对：**
 
@@ -265,7 +265,7 @@ handleClick = () => console.log('React事件'); // 先执行
 
 ## 2. 项目实战深度问答
 
-> 💡 面试官会深挖你的项目细节
+> 面试官会深挖你的项目细节
 
 ### Q6：你在 TodoList 项目中如何实现 localStorage 持久化？考虑过哪些边界情况？
 
@@ -323,7 +323,7 @@ function useLocalStorage(key, initialValue) {
 3. **数据格式异常：** 用户可能手动修改了存储值导致 `JSON.parse` 失败，使用 `try/catch` 兜底返回默认值。
 4. **同 key 多 Tab 同步：** 使用 `window.addEventListener('storage', handleStorageChange)` 监听其他 Tab 的修改。
 
-> 💡 **告诉面试官：** "我封装了 `useLocalStorage` 自定义 Hook，将持久化逻辑与 UI 层完全解耦，不仅在 TodoList 中使用，在暗黑模式主题持久化中也复用了同一 Hook。"
+> **告诉面试官：** "我封装了 `useLocalStorage` 自定义 Hook，将持久化逻辑与 UI 层完全解耦，不仅在 TodoList 中使用，在暗黑模式主题持久化中也复用了同一 Hook。"
 
 **延伸追问应对：**
 
@@ -683,7 +683,7 @@ function CartPage() {
 }
 ```
 
-> 💡 **设计要点：** 总价、全选状态、选中数量都是通过 `useMemo` 从 `items` 派生计算出来的，而不是额外存储在 state 中。这遵循了"最小状态原则"——**任何能从现有状态计算出来的值，都不应该单独存储**，避免了状态不一致的问题。
+> **设计要点：** 总价、全选状态、选中数量都是通过 `useMemo` 从 `items` 派生计算出来的，而不是额外存储在 state 中。这遵循了"最小状态原则"——**任何能从现有状态计算出来的值，都不应该单独存储**，避免了状态不一致的问题。
 
 **父子组件通信：**
 
@@ -818,7 +818,7 @@ export const userApi = {
 export default request;
 ```
 
-> ⚠️ **并发请求 Token 刷新的关键设计：** 如果不做 `refreshPromise` 的共享，多个并发的 401 请求会同时触发多次 Token 刷新请求，导致后端的 refreshToken 被重复消费而失效。使用一个全局 Promise 变量，让所有等待刷新的请求共享同一个刷新结果，是生产环境的标准做法。
+> **并发请求 Token 刷新的关键设计：** 如果不做 `refreshPromise` 的共享，多个并发的 401 请求会同时触发多次 Token 刷新请求，导致后端的 refreshToken 被重复消费而失效。使用一个全局 Promise 变量，让所有等待刷新的请求共享同一个刷新结果，是生产环境的标准做法。
 
 **延伸追问应对：**
 
@@ -829,7 +829,7 @@ export default request;
 
 ## 3. 进阶与系统设计
 
-> 💡 这是拉开差距的环节
+> 这是拉开差距的环节
 
 ### Q11：如果让你设计一个 RBAC 权限管理系统，前端层面如何实现完整的权限控制方案？
 
@@ -939,7 +939,7 @@ function filterRoutesByPermission(routes, permissions) {
 | 按钮层 | PermissionBoundary / usePermission | 无权限按钮不可见 |
 | API 层 | Axios 拦截器处理 403 | 即使绕过前端也无法调用接口 |
 
-> 🎯 **面试加分点：** 主动提出——"真正的权限安全在后端，前端权限控制是为了更好的用户体验（隐藏不可操作的元素），不能单纯依赖前端做安全防护。"
+> **面试加分点：** 主动提出——"真正的权限安全在后端，前端权限控制是为了更好的用户体验（隐藏不可操作的元素），不能单纯依赖前端做安全防护。"
 
 **延伸追问应对：**
 
@@ -1172,7 +1172,7 @@ const counterSlice = createSlice({
 // 需要 Provider 包裹整个应用
 ```
 
-> 🎯 **面试建议：** 对于新项目或中小型项目，我推荐 Zustand，因为它零样板代码、TypeScript 开箱即用、且包体积极小。对于大型团队和大规模项目（如电商平台），Redux Toolkit 的规范约束和成熟生态更适合团队协作。
+> **面试建议：** 对于新项目或中小型项目，我推荐 Zustand，因为它零样板代码、TypeScript 开箱即用、且包体积极小。对于大型团队和大规模项目（如电商平台），Redux Toolkit 的规范约束和成熟生态更适合团队协作。
 
 **延伸追问应对：**
 
@@ -1183,7 +1183,7 @@ const counterSlice = createSlice({
 
 ## 4. 场景题与故障排查
 
-> 💡 考察实际解决问题的能力
+> 考察实际解决问题的能力
 
 ### Q14：线上页面白屏了，如何排查和定位问题？
 
@@ -1261,7 +1261,7 @@ function ErrorFallback({ error, resetErrorBoundary }) {
 - 检查是否是非正常路由路径导致未匹配到任何路由
 - SPA 应用需确认 Nginx 等服务器做了 `try_files` 配置，否则路由刷新会 404
 
-> 🎯 **面试加分点：** 在项目中，我构建了"前端监控体系"（Sentry / 自建埋点），监控 JS Error、资源加载失败、API 异常，一旦出现白屏类问题能第一时间告警。同时配置了 Error Boundary 兜底展示"页面异常"提示，而不是直接白屏。
+> **面试加分点：** 在项目中，我构建了"前端监控体系"（Sentry / 自建埋点），监控 JS Error、资源加载失败、API 异常，一旦出现白屏类问题能第一时间告警。同时配置了 Error Boundary 兜底展示"页面异常"提示，而不是直接白屏。
 
 **延伸追问应对：**
 
@@ -1358,7 +1358,7 @@ function App() {
 - 修改操作后未触发对应查询的失效（invalidation）
 - **解决方案：** 在 mutate 操作后手动调用 `queryClient.invalidateQueries()`
 
-> 💡 **排查工具：** 使用 React DevTools 的 Profiler 录制操作过程，直观看到哪些组件重新渲染了、哪些没有，20 秒内定位"数据变了但视图没更新"的原因。
+> **排查工具：** 使用 React DevTools 的 Profiler 录制操作过程，直观看到哪些组件重新渲染了、哪些没有，20 秒内定位"数据变了但视图没更新"的原因。
 
 **延伸追问应对：**
 
@@ -1493,7 +1493,7 @@ function estimateTokens(text) {
 | IndexedDB | 全部对话完整历史 | >=250MB | 历史查询、检索 |
 | 后端数据库 | 全量数据持久化 | 无限制 | 多端同步、长期存储 |
 
-> 🎯 **面试加分点：** 当历史消息过多时，我会对旧消息做**总结摘要**（使用 LLM 对每轮对话生成摘要），代替完整消息发送给后端，在保留上下文信息的同时大幅降低 Token 消耗。
+> **面试加分点：** 当历史消息过多时，我会对旧消息做**总结摘要**（使用 LLM 对每轮对话生成摘要），代替完整消息发送给后端，在保留上下文信息的同时大幅降低 Token 消耗。
 
 **延伸追问应对：**
 
@@ -1525,8 +1525,8 @@ interface ButtonProps {
 }
 
 // 使用联合类型约束枚举值，而非 string
-// ❌ 错误：type ButtonProps = { variant: string };
-// ✅ 正确：type ButtonProps = { variant: 'primary' | 'secondary' };
+// ✗ 错误：type ButtonProps = { variant: string };
+// ✓ 正确：type ButtonProps = { variant: 'primary' | 'secondary' };
 
 function Button({ variant, size = 'md', children, ...rest }: ButtonProps) {
   return <button className={`btn btn-${variant} btn-${size}`} {...rest}>{children}</button>;
@@ -1639,7 +1639,7 @@ function useAsync<T>(fn: () => Promise<T>, deps: any[] = []): UseAsyncResult<T> 
 
 ---
 
-## 💎 面试加分金句
+## 面试加分金句
 
 - "React 的核心思想是 **UI = f(state)** —— 视图是状态的纯函数。理解了这个公式，就能理解为什么 React 强调不可变数据和单向数据流。"
 - "性能优化的第一原则是**不要过早优化**，先用 Profiler 定位真正的瓶颈，再针对性优化。90% 的性能问题都来自 10% 的代码。"
@@ -1647,7 +1647,7 @@ function useAsync<T>(fn: () => Promise<T>, deps: any[] = []): UseAsyncResult<T> 
 - "AI 对话前端最核心的三个体验点：**流式输出（不卡等待）**、**打字动画（有反馈感）**、**自动滚动（不丢失上下文）**。"
 - "TypeScript 在 React 项目中的价值不是'写类型'，而是**让非法状态在编译期就被发现**。一个精心设计的类型系统能消除一整类运行时错误。"
 
-## 📋 高频追问清单
+## 高频追问清单
 
 | 追问方向 | 应对策略 |
 |----------|---------|
@@ -1659,7 +1659,7 @@ function useAsync<T>(fn: () => Promise<T>, deps: any[] = []): UseAsyncResult<T> 
 | 构建工具对比 | Vite（开发服务器 esbuild 预构建 + 生产 Rollup）vs Webpack（全部打包） |
 | React Native | 了解 React Native 的桥接层（Bridge -> JSI）和新架构（Fabric、TurboModules） |
 
-## 🔗 关联知识点
+## 关联知识点
 
 - **状态管理：** Zustand / Redux Toolkit / Jotai / React Query
 - **路由：** React Router v6（loader、action、defer 新特性）

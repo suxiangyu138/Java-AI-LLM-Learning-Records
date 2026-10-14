@@ -174,7 +174,7 @@ set ANTHROPIC_API_KEY=sk-ant-xxx
 - **Copilot Chat**（`Ctrl+Shift+I`）：聊天式编程助手
 - **Agent Mode**：可以创建/编辑文件、运行终端命令
 - **代码审查**：选中代码 → 右键 → Copilot → Review
-- **生成 commit message**：源代码管理面板里的 ✨ 按钮
+- **生成 commit message**：源代码管理面板里的 按钮
 
 #### 快捷键（VS Code 中）
 
@@ -186,7 +186,7 @@ set ANTHROPIC_API_KEY=sk-ant-xxx
 | `Alt+\` | 触发补全 |
 | `Ctrl+→` | 逐词接受 |
 
-> ℹ️ 需要 GitHub 账号登录，首次使用会提示登录。需要 Copilot 订阅（个人 $10/月）。
+> 需要 GitHub 账号登录，首次使用会提示登录。需要 Copilot 订阅（个人 $10/月）。
 
 ---
 
@@ -331,7 +331,7 @@ result = Runner.run_sync(agent, "你好")
 print(result.final_output)
 ```
 
-> ℹ️ 需要 `OPENAI_API_KEY` 环境变量。
+> 需要 `OPENAI_API_KEY` 环境变量。
 
 ---
 
@@ -446,7 +446,7 @@ result = team.kickoff()
 | GroupChat | 多 Agent 群聊 |
 | Tool | 工具注册 |
 
-> ⚠️ **注意**：AutoGen 分 v0.4（旧版，`import autogen`）和 v0.7（新版，`import autogen_agentchat`）。当前安装的是新版 v0.7.5，导入方式不同。
+> **注意**：AutoGen 分 v0.4（旧版，`import autogen`）和 v0.7（新版，`import autogen_agentchat`）。当前安装的是新版 v0.7.5，导入方式不同。
 
 ---
 

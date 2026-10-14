@@ -329,7 +329,7 @@ jobs:
 
   "forwardPorts": [8080, 3306, 6379],
 
-  "postCreateCommand": "mvn dependency:resolve -q && echo '✅ Spring Boot 环境就绪'",
+  "postCreateCommand": "mvn dependency:resolve -q && echo '✓ Spring Boot 环境就绪'",
 
   "remoteEnv": {
     "SPRING_PROFILES_ACTIVE": "dev",
@@ -391,7 +391,7 @@ gh codespace ports
 gh codespace ports visibility 8080:public
 # → 获得公网 URL：https://orange-potato-abc-8080.preview.app.github.dev
 
-# 端口在浏览器中打开（VS Code → Ports tab → 🌐 图标）
+# 端口在浏览器中打开（VS Code → Ports tab → 图标）
 ```
 
 ### 6.2 Java 调试

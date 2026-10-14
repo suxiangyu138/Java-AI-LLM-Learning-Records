@@ -1,10 +1,10 @@
 # VPN 安全与排错
 
-> 🔒 DNS 泄露防护、Kill Switch 机制、Split Tunneling 策略、MTU 问题诊断、日志分析 —— 让 VPN 真正安全可靠
+> DNS 泄露防护、Kill Switch 机制、Split Tunneling 策略、MTU 问题诊断、日志分析 —— 让 VPN 真正安全可靠
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [DNS 泄露](#1-dns-泄露)
 2. [Kill Switch](#2-kill-switch)
@@ -143,8 +143,8 @@ echo "如果看到本地 ISP 的 DNS 服务器 = DNS 泄露"
   你的流量 → WireGuard 隧道 → VPN 服务器 → 互联网
 
 VPN 断开时：
-  ❌ 没有 Kill Switch → 你的流量 → 直接走本地网络 → ISP 看到一切
-  ✅ 有 Kill Switch   → 你的流量 → 被防火墙拦截 → 无网络 = 无泄露
+  ✗ 没有 Kill Switch → 你的流量 → 直接走本地网络 → ISP 看到一切
+  ✓ 有 Kill Switch   → 你的流量 → 被防火墙拦截 → 无网络 = 无泄露
 ```
 
 ### 2.2 WireGuard Kill Switch 实现
@@ -238,7 +238,7 @@ sudo ip netns exec vpn-ns sudo -u $USER firefox
 echo "VPN 连接时 IP: $(curl -s ifconfig.me)"
 echo "手动断开 VPN..."
 sudo wg-quick down wg0
-echo "断开后 IP: $(timeout 5 curl -s ifconfig.me || echo '无法连接 ✅ Kill Switch 生效')"
+echo "断开后 IP: $(timeout 5 curl -s ifconfig.me || echo '无法连接 ✓ Kill Switch 生效')"
 ```
 
 ---
@@ -282,8 +282,8 @@ AllowedIPs = 10.1.0.0/16, 10.2.0.0/16, 172.16.0.0/12
 # 而不是 0.0.0.0/0 (全隧道)
 
 # 这意味着：
-# ✅ 10.1.x.x, 10.2.x.x, 172.16.x.x → 走 VPN
-# ✅ 其余所有 IP → 走本地网络
+# ✓ 10.1.x.x, 10.2.x.x, 172.16.x.x → 走 VPN
+# ✓ 其余所有 IP → 走本地网络
 ```
 
 ### 3.3 高级 Split Tunneling（策略路由）
@@ -409,30 +409,30 @@ PostDown = iptables -t mangle -D FORWARD -p tcp --tcp-flags SYN,RST SYN -j TCPMS
 ### 5.1 WireGuard 安全清单
 
 ```text
-✅ 密钥管理
+✓ 密钥管理
    □ 服务器私钥权限：chmod 600 /etc/wireguard/server_private.key
    □ 客户端私钥绝不外传
    □ 定期轮换密钥（建议 3-6 个月）
    □ 已失效的设备密钥及时删除
 
-✅ 访问控制
+✓ 访问控制
    □ AllowedIPs 精确控制（不用 0.0.0.0/0 当 AllowedIPs 用于对端限制）
    □ 每个客户端独立 Peer（不共享密钥）
    □ 使用最小权限：客户端只能访问必要的 IP
 
-✅ 网络层安全
+✓ 网络层安全
    □ DNS 泄露已防护
    □ Kill Switch 已配置
    □ 防火墙只开放必要端口
    □ UFW/iptables 限制非 VPN 流量
 
-✅ 系统安全
+✓ 系统安全
    □ 系统定期更新（unattended-upgrades）
    □ SSH 禁用密码登录，仅用密钥
    □ Fail2ban 配置 SSH 和 VPN 端口
    □ 关闭不必要的服务
 
-✅ 监控
+✓ 监控
    □ 定期检查 wg show 输出（自动化脚本）
    □ 流量异常告警（突然增大或从未知 Peer 收发包）
    □ 日志定期检查
@@ -555,10 +555,10 @@ NC='\033[0m'
 
 check() {
     if [ $? -eq 0 ]; then
-        echo -e "${GREEN}✅ $1${NC}"
+        echo -e "${GREEN}✓ $1${NC}"
         return 0
     else
-        echo -e "${RED}❌ $1${NC}"
+        echo -e "${RED}✗ $1${NC}"
         return 1
     fi
 }
@@ -600,9 +600,9 @@ echo "  默认路由: $DEFAULT_ROUTE"
 echo "--- 转发层 ---"
 IP_FORWARD=$(sysctl -n net.ipv4.ip_forward)
 if [ "$IP_FORWARD" = "1" ]; then
-    echo -e "${GREEN}✅ IP 转发已开启${NC}"
+    echo -e "${GREEN}✓ IP 转发已开启${NC}"
 else
-    echo -e "${YELLOW}⚠️  IP 转发未开启 (如果是客户端则正常)${NC}"
+    echo -e "${YELLOW} IP 转发未开启 (如果是客户端则正常)${NC}"
 fi
 
 # L5: DNS
@@ -705,7 +705,7 @@ iperf3 -c <VPN服务器公网IP> -t 10
 # OpenVPN 可能损失 15-30%
 ```
 
-> 🎯 **核心要点**：VPN 安全的三个基石 —— **DNS 防泄露**（别人不知道你去哪）、**Kill Switch**（断开也不暴露）、**MTU 正确**（不丢包性能好）。排查问题时从上到下（接口→连接→路由→转发→DNS→MTU）层层排除，不跳步。
+> **核心要点**：VPN 安全的三个基石 —— **DNS 防泄露**（别人不知道你去哪）、**Kill Switch**（断开也不暴露）、**MTU 正确**（不丢包性能好）。排查问题时从上到下（接口→连接→路由→转发→DNS→MTU）层层排除，不跳步。
 
 ---
 

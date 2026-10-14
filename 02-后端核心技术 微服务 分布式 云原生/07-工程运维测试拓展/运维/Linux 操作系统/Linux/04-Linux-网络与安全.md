@@ -1,10 +1,10 @@
 # 04 - Linux 网络与安全
 
-> 🎯 网络是服务的"血管"、安全是服务的"免疫系统" — 从 TCP/IP 配置到防火墙策略、从 SSH 远程管理到入侵排查，后端工程师必须能独立保障服务的连通性和安全性
+> 网络是服务的"血管"、安全是服务的"免疫系统" — 从 TCP/IP 配置到防火墙策略、从 SSH 远程管理到入侵排查，后端工程师必须能独立保障服务的连通性和安全性
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [网络配置](#1-网络配置)
 2. [网络诊断工具集](#2-网络诊断工具集)
@@ -160,7 +160,7 @@ firewall-cmd --reload
 firewall-cmd --permanent --add-service=http
 firewall-cmd --permanent --add-service=https
 
-# ═══ 来源 IP 白名单（⭐ 推荐） ═══
+# ═══ 来源 IP 白名单（★ 推荐） ═══
 firewall-cmd --permanent --add-rich-rule='
   rule family="ipv4"
   source address="192.168.1.0/24"
@@ -227,7 +227,7 @@ ssh -p 22 root@192.168.1.100
 ssh -i ~/.ssh/id_rsa -p 2222 deploy@api.example.com
 
 # ═══ 密钥对管理 ═══
-# 生成 ED25519 密钥（⭐ 推荐，比 RSA 更快更安全）
+# 生成 ED25519 密钥（★ 推荐，比 RSA 更快更安全）
 ssh-keygen -t ed25519 -C "deploy@example.com"
 
 # 生成 RSA 4096 密钥（兼容旧系统）
@@ -252,7 +252,7 @@ sftp -P 2222 deploy@server
 # > put app.jar
 # > get /var/log/app.log
 
-# rsync（增量同步，⭐ 推荐大文件/目录）
+# rsync（增量同步，★ 推荐大文件/目录）
 rsync -avzP --delete ./target/ deploy@server:/opt/myapp/
 ```
 
@@ -329,15 +329,15 @@ sudo systemctl reload sshd     # 重载配置（不中断现有连接）
 
 | 措施 | 命令/配置 | 优先级 |
 |------|-----------|:---:|
-| 禁用 root SSH 登录 | `/etc/ssh/sshd_config`: `PermitRootLogin no` | 🔴 |
-| 修改 SSH 默认端口 | `/etc/ssh/sshd_config`: `Port 2222` | 🟡 |
-| 仅密钥登录 | `/etc/ssh/sshd_config`: `PasswordAuthentication no` | 🔴 |
-| 限制登录用户 | `/etc/ssh/sshd_config`: `AllowUsers deploy` | 🟡 |
-| 安装 fail2ban | `yum install fail2ban -y` | 🟡 |
-| 配置防火墙 | 仅开放必要端口（80/443/SSH） | 🔴 |
-| 定期更新系统 | `yum update -y` | 🔴 |
-| 禁用不需要的服务 | `systemctl disable --now <service>` | 🟢 |
-| 审计日志 | `auditd` + `/var/log/secure` | 🟡 |
+| 禁用 root SSH 登录 | `/etc/ssh/sshd_config`: `PermitRootLogin no` | |
+| 修改 SSH 默认端口 | `/etc/ssh/sshd_config`: `Port 2222` | |
+| 仅密钥登录 | `/etc/ssh/sshd_config`: `PasswordAuthentication no` | |
+| 限制登录用户 | `/etc/ssh/sshd_config`: `AllowUsers deploy` | |
+| 安装 fail2ban | `yum install fail2ban -y` | |
+| 配置防火墙 | 仅开放必要端口（80/443/SSH） | |
+| 定期更新系统 | `yum update -y` | |
+| 禁用不需要的服务 | `systemctl disable --now <service>` | |
+| 审计日志 | `auditd` + `/var/log/secure` | |
 
 ### 5.2 fail2ban 防暴力破解
 

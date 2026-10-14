@@ -1,6 +1,6 @@
 # 03 - LangChain Agent Hooks 与 Middleware
 
-> 🎯 LangChain 1.x 用 AgentMiddleware（Hooks）替代旧版回调机制 — 在模型调用和工具执行的前后插入拦截逻辑。与 Spring AI Advisor、Web 中间件同源：洋葱模型 + 顺序控制 + 状态共享
+> LangChain 1.x 用 AgentMiddleware（Hooks）替代旧版回调机制 — 在模型调用和工具执行的前后插入拦截逻辑。与 Spring AI Advisor、Web 中间件同源：洋葱模型 + 顺序控制 + 状态共享
 
 ---
 
@@ -34,7 +34,7 @@ agent = create_agent(
 )
 ```
 
-> ⚠️ 这些 Hook 不是旧版的 Callbacks（事件回调）— 它们可以**修改状态、中断执行、控制流程**，而非仅仅是观察。
+> 这些 Hook 不是旧版的 Callbacks（事件回调）— 它们可以**修改状态、中断执行、控制流程**，而非仅仅是观察。
 
 ---
 
@@ -162,6 +162,6 @@ def route_to_human(state, runtime):
 
 ---
 
-> 🎯 **核心要点**：LangChain Middleware 的三个关键认知 — ① **洋葱模型**（before 正序 → LLM → after 逆序）② **wrap vs node**（包裹式可控调用次数，节点式单向执行）③ **状态驱动**（返回 dict 可直接改变 Agent 行为，包括 `jump_to` 中断）。生产 Agent 必配：Summarization + HumanInTheLoop + ModelCallLimit。
+> **核心要点**：LangChain Middleware 的三个关键认知 — ① **洋葱模型**（before 正序 → LLM → after 逆序）② **wrap vs node**（包裹式可控调用次数，节点式单向执行）③ **状态驱动**（返回 dict 可直接改变 Agent 行为，包括 `jump_to` 中断）。生产 Agent 必配：Summarization + HumanInTheLoop + ModelCallLimit。
 
 **下一模块**：[04-Spring AI Advisor拦截器机制](04-Spring%20AI%20Advisor拦截器机制.md) / **返回总览**：[00-Hook总览](00-Hook知识体系总览.md)

@@ -2,7 +2,7 @@
 
 > 定位：强连通分量的理论纵深——Tarjan 算法原理推导（dfn/low/栈）、缩点 DAG 化、SCC 的四大应用（最少加边/可达性/DP/2-SAT）、无向图桥与割点
 
-## 📚 目录
+## 目录
 
 1. [Tarjan 算法原理推导](#1-tarjan-算法原理推导)
 2. [缩点：有向图 → DAG](#2-缩点有向图--dag)
@@ -26,7 +26,7 @@
 判定：DFS 栈中节点 u 的子节点 v：
   low[v] >= dfn[u] → u 是 SCC 根 → 弹出栈中 u 之后的所有节点 = 一个 SCC
 
-⚠️ 直觉：
+直觉：
   low[v] >= dfn[u] 意味着 v 的子树"翻不出" u 之上
   → u 是这个强连通分量的"出口"（根）
 ```
@@ -51,7 +51,7 @@ void tarjan(int u, List<Integer>[] graph) {
             tarjan(v, graph);
             low[u] = Math.min(low[u], low[v]);    // ③ 子节点更新 low
         } else if (inStack[v]) {           // ④ 回边（栈中 = 同 SCC 候选）
-            low[u] = Math.min(low[u], dfn[v]);    // ⚠️ 用 dfn 非 low！
+            low[u] = Math.min(low[u], dfn[v]);    // 用 dfn 非 low！
         }
     }
 
@@ -66,10 +66,10 @@ void tarjan(int u, List<Integer>[] graph) {
         result.add(comp);
     }
 }
-// ⚠️ 为什么回边用 dfn[v] 而非 low[v]：
+// 为什么回边用 dfn[v] 而非 low[v]：
 //   low[v] 可能包含"已弹出的 SCC"的信息（会串号）
 //   dfn[v] 保证只利用"仍在栈中"的祖先信息
-// ⚠️ 复杂度：O(V + E)（每个节点/边恰好一次）
+// 复杂度：O(V + E)（每个节点/边恰好一次）
 ```
 
 ### 1.3 手推示例
@@ -98,11 +98,11 @@ DFS 顺序：
 缩点：把每个 SCC 压缩成一个节点
   → 原图变成 DAG（有向无环图）！
 
-⚠️ 为什么重要：
+为什么重要：
   DAG 上可以拓扑排序 → 可以 DP → 可以贪心
   原图的复杂环结构 → 压缩为"无环骨架"
 
-⚠️ 面试必答：
+面试必答：
 "缩点把任意有向图变成 DAG——
  环被压缩成节点，图论问题（可达性/最长路/最小加边）
  全部落到 DAG 上求解。这是 SCC 的最大价值。"
@@ -128,10 +128,10 @@ void buildDAG(List<Integer>[] graph) {
     for (int i = 0; i < compCount; i++) dag[i] = new ArrayList<>();
     for (int u = 0; u < n; u++)
         for (int v : graph[u])
-            if (compId[u] != compId[v])    // ⚠️ 只保留跨 SCC 边
+            if (compId[u] != compId[v])    // 只保留跨 SCC 边
                 dag[compId[u]].add(compId[v]);
 }
-// ⚠️ DAG 性质：无环（SCC 定义保证）
+// DAG 性质：无环（SCC 定义保证）
 // 应用：可达性（缩点后拓扑 DP）、最长路径（有向图最长路）
 ```
 
@@ -149,12 +149,12 @@ void buildDAG(List<Integer>[] graph) {
   答案 = max(in0, out0)
   特例：原图本身强连通（1 个 SCC）→ 答案 0
 
-⚠️ 直觉：
+直觉：
   入度 0 的 SCC 需要"被进入"（加入边）
   出度 0 的 SCC 需要"能出去"（加出边）
   每条边同时解决一个入 0 和一个出 0 → 取 max
 
-⚠️ 面试必答：
+面试必答：
 "最少加边 = max(入度 0 的 SCC 数, 出度 0 的 SCC 数)。
  每条新边同时补一个'源头'和一个'尽头'。"
 ```
@@ -179,7 +179,7 @@ int minEdgesToStronglyConnected(List<Integer>[] graph) {
         if (!hasIn[i]) in0++;
         if (!hasOut[i]) out0++;
     }
-    if (compCount == 1) return 0;          // ⚠️ 已强连通
+    if (compCount == 1) return 0;          // 已强连通
     return Math.max(in0, out0);            // 结论
 }
 // 应用场景：
@@ -196,13 +196,13 @@ int minEdgesToStronglyConnected(List<Integer>[] graph) {
 ```
 有向图上的 DP 问题（最长路/最大值）：
   ① 环 → 无法直接 DP（无限循环）
-  ② 缩点 → DAG → 拓扑序 DP ⭐
+  ② 缩点 → DAG → 拓扑序 DP ★
 
-⚠️ 通用流程：
+通用流程：
   Tarjan 缩点 → 拓扑排序 → 按拓扑序 DP
-  ⚠️ SCC 内部也可做 DP（环内累积）
+  SCC 内部也可做 DP（环内累积）
 
-⚠️ 面试必答：
+面试必答：
 "有向图 DP 的前提是 DAG——有环就缩点。
  缩点后按拓扑序 DP，答案 = 所有 SCC 的
  聚合值。2065 路径最大价值就是模板。"
@@ -240,8 +240,8 @@ int maxPathValue(List<Integer>[] graph, int[] values) {
     }
     return (int) best;
 }
-// ⚠️ 注意：2065 有起点终点限制 → 加"只从起点可达"过滤
-// ⚠️ 面试表达："环内价值先聚合（SCC 和），
+// 注意：2065 有起点终点限制 → 加"只从起点可达"过滤
+// 面试表达："环内价值先聚合（SCC 和），
 //   DAG 上拓扑 DP 取最大——'缩点+DP'两步走。"
 ```
 
@@ -258,9 +258,9 @@ int maxPathValue(List<Integer>[] graph, int[] values) {
 
 无向图桥的判定：
   边 (u, v)（v 是 u 的子节点）是桥 ⟺ low[v] > dfn[u]
-  ⚠️ 注意无向图"父边"要跳过（否则回边误判）
+  注意无向图"父边"要跳过（否则回边误判）
 
-⚠️ 面试必答：
+面试必答：
 "Tarjan 一套 dfn/low 思想双用——
  有向图判 SCC（low[v] >= dfn[u]），
  无向图判桥（low[v] > dfn[u]）。
@@ -278,11 +278,11 @@ List<int[]> bridges = new ArrayList<>();
 void findBridges(int u, int parent, List<Integer>[] graph) {
     dfn[u] = low[u] = ++timer;
     for (int v : graph[u]) {
-        if (v == parent) continue;         // ⚠️ 跳过父边（无向图）
+        if (v == parent) continue;         // 跳过父边（无向图）
         if (dfn[v] == 0) {
             findBridges(v, u, graph);
             low[u] = Math.min(low[u], low[v]);
-            if (low[v] > dfn[u]) {         // ⚠️ 桥判定（严格大于）
+            if (low[v] > dfn[u]) {         // 桥判定（严格大于）
                 bridges.add(new int[]{u, v});
             }
         } else {
@@ -290,8 +290,8 @@ void findBridges(int u, int parent, List<Integer>[] graph) {
         }
     }
 }
-// ⚠️ 重边处理：有重边时"父边跳过"会漏判 → 用边编号跳过
-// ⚠️ 割点判定（根节点特判）：
+// 重边处理：有重边时"父边跳过"会漏判 → 用边编号跳过
+// 割点判定（根节点特判）：
 //   非根 u 是割点 ⟺ 存在子 v 使 low[v] >= dfn[u]
 //   根是割点 ⟺ 有 ≥ 2 个子节点
 ```
@@ -311,11 +311,11 @@ void findBridges(int u, int parent, List<Integer>[] graph) {
 | 边双连通 | 无向（无桥） | 缩桥后 | Tarjan + 缩点 |
 
 ```
-⚠️ 关系：
+关系：
   有向强连通 → 无向边双连通的"方向版"
   缩 SCC / 缩桥 → 都得到"树/DAG"结构
 
-⚠️ 面试表达：
+面试表达：
 "Tarjan 思想是图论连通性的统一框架——
  dfn/low 的比值判定四件事：SCC、桥、割点、
  双连通分量。记住判定式差异即可。"
@@ -361,7 +361,7 @@ void findBridges(int u, int parent, List<Integer>[] graph) {
 
 ---
 
-> 🎯 **核心要点**：强连通体系 = **Tarjan**（dfn/low + 栈，O(V+E)）+ **缩点**（环 → DAG）+ **四大应用**（最少加边/可达性/DP/2-SAT）+ **无向图变体**（桥 low[v]>dfn[u]、割点）。"有环就缩点，缩点成 DAG"是图论难题的通解思路。
+> **核心要点**：强连通体系 = **Tarjan**（dfn/low + 栈，O(V+E)）+ **缩点**（环 → DAG）+ **四大应用**（最少加边/可达性/DP/2-SAT）+ **无向图变体**（桥 low[v]>dfn[u]、割点）。"有环就缩点，缩点成 DAG"是图论难题的通解思路。
 
 ---
 

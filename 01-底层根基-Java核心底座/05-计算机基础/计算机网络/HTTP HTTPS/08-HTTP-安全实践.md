@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [威胁模型：Web 应用四大攻击面](#1-威胁模型web-应用四大攻击面)
 2. [注入攻击与防御](#2-注入攻击与防御)
@@ -36,11 +36,11 @@
 ### 2.1 SQL 注入
 
 ```java
-// ❌ 危险：字符串拼接
+// ✗ 危险：字符串拼接
 String sql = "SELECT * FROM users WHERE name = '" + name + "'";
 // 输入: ' OR '1'='1 → 全表查询！输入: '; DROP TABLE users; -- → 删表
 
-// ✅ 正确：参数化查询（预编译）
+// ✓ 正确：参数化查询（预编译）
 PreparedStatement ps = conn.prepareStatement(
     "SELECT * FROM users WHERE name = ?");
 ps.setString(1, name);        // 参数与 SQL 结构分离，注入无效
@@ -108,7 +108,7 @@ Content-Security-Policy: default-src 'self';
 | `default-src` | 兜底 |
 | `upgrade-insecure-requests` | 页面内 HTTP 资源自动升级 HTTPS |
 
-> ⚠️ **部署注意**：CSP 收紧会误伤内联脚本/第三方组件——先 `Content-Security-Policy-Report-Only` 观察违规报告，再逐步收紧。
+> **部署注意**：CSP 收紧会误伤内联脚本/第三方组件——先 `Content-Security-Policy-Report-Only` 观察违规报告，再逐步收紧。
 
 ## 4. CSRF 与点击劫持
 
@@ -156,11 +156,11 @@ add_header Referrer-Policy "strict-origin-when-cross-origin" always;
 
 ```text
 原则：最小授权 + 精确匹配
-  ❌ Access-Control-Allow-Origin: *（配合凭据时非法）
-  ❌ 允许全部 Header/方法（扩大攻击面）
-  ❌ 来源用正则模糊匹配（example.com.evil.com 绕过）
+  ✗ Access-Control-Allow-Origin: *（配合凭据时非法）
+  ✗ 允许全部 Header/方法（扩大攻击面）
+  ✗ 来源用正则模糊匹配（example.com.evil.com 绕过）
 
-✅ 规范：
+✓ 规范：
   白名单精确到协议+域名+端口
   Allow-Credentials 与具体 Origin 配对
   预检缓存（Max-Age）合理（3600s 内）
@@ -195,7 +195,7 @@ corsConfigurationSource.setAllowCredentials(true);
 ```text
 提交 hstspreload.org 后浏览器内置：
   首次访问（无任何 HSTS 信息）也直接 HTTPS
-  ⚠️ 提交前必须确认全子域 HTTPS 就绪（否则子域永久不可访问 HTTP）
+  提交前必须确认全子域 HTTPS 就绪（否则子域永久不可访问 HTTP）
 ```
 
 ## 8. 证书与密钥运维
@@ -212,7 +212,7 @@ corsConfigurationSource.setAllowCredentials(true);
 
 ## 9. 核心要点与思考题
 
-> 🎯 **本章三句话总结**：
+> **本章三句话总结**：
 > 1. 纵深防御五层：HTTPS 强制（传输）+ 输入校验（注入）+ 输出编码与 CSP（XSS）+ SameSite/Token（CSRF）+ 安全头与监控（基建）；
 > 2. 安全头是"免费的最优防护"：HSTS + CSP + X-Content-Type-Options + Referrer-Policy 四件套必配；
 > 3. CORS 最小授权、证书自动续期、日志不泄敏——安全是配置与流程，不是单一技术。

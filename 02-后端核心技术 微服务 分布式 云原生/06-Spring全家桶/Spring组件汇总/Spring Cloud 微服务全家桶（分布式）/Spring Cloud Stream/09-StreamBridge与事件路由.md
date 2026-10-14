@@ -1,7 +1,7 @@
 # 09-StreamBridge 与事件路由
 > 程序化消息出口：StreamBridge 发送与动态目的地、事件路由 MessageRoutingCallback、REST 集成、批量发送与响应式限制
 
-## 📚 目录
+## 目录
 1. [为什么需要 StreamBridge](#1-为什么需要-streambridge)
 2. [基础用法与绑定解析](#2-基础用法与绑定解析)
 3. [显式声明源：spring.cloud.stream.source](#3-显式声明源springcloudstreamsource)
@@ -70,7 +70,7 @@ streamBridge.send("order-out-0",
                 .build());
 ```
 
-> 💡 用 `Message` 重载可传递 `partitionKey`/`contentType` 等头，动态目的地场景尤其重要（无绑定配置可依赖时，头是唯一的路由信息源）。
+> 用 `Message` 重载可传递 `partitionKey`/`contentType` 等头，动态目的地场景尤其重要（无绑定配置可依赖时，头是唯一的路由信息源）。
 
 ## 3. 显式声明源：spring.cloud.stream.source
 
@@ -92,7 +92,7 @@ spring:
 | `source: restOrder` | `restOrder-out-0` | 显式源，绑定名 = `<name>-out-0` |
 | 不声明 + 动态目的地 | 无 | 见第 4 节，惰性创建 |
 
-> ⚠️ 显式源声明后绑定受 `bindings` 配置约束（destination/分区/类型转换均生效）；不声明则退化为动态目的地，只有 send 那一刻才建资源。
+> 显式源声明后绑定受 `bindings` 配置约束（destination/分区/类型转换均生效）；不声明则退化为动态目的地，只有 send 那一刻才建资源。
 
 ## 4. 动态目的地
 
@@ -109,7 +109,7 @@ streamBridge.send("orders-" + tenantId, payload);   // 每个租户一个 Topic
 | 类型转换 | 按消息头 content-type 或默认 JSON |
 | 风险 | 名字失控 → 资源爆炸；生产建议对动态名做白名单/规范化 |
 
-> ⚠️ **资源爆炸是动态目的地最大风险**：高基数键（用户 ID、请求 ID）直接做目的地名会建出海量 Topic/Exchange。只允许低基数维度（租户、业务线）动态化，其余静态绑定。
+> **资源爆炸是动态目的地最大风险**：高基数键（用户 ID、请求 ID）直接做目的地名会建出海量 Topic/Exchange。只允许低基数维度（租户、业务线）动态化，其余静态绑定。
 
 ## 5. 事件路由与 MessageRoutingCallback
 
@@ -156,7 +156,7 @@ public MessageRoutingCallback routingCallback() {
 | 兜底 | 未命中时回退到默认消费函数 |
 | 版本 | 5.0.0 起文档完善（issue #3198 补充官方示例） |
 
-> 💡 **路由 vs 组合**：`definition: a;b` + MessageRoutingCallback = **运行时按消息分流**；`definition: a\|b` = **编译期管道串联**。分流要回调，串联用管道。
+> **路由 vs 组合**：`definition: a;b` + MessageRoutingCallback = **运行时按消息分流**；`definition: a\|b` = **编译期管道串联**。分流要回调，串联用管道。
 
 ## 6. REST 入口集成实战
 
@@ -212,7 +212,7 @@ events.forEach(e -> streamBridge.send("order-out-0", e));
 | 批量消息 API | 构造批量 `Message`（`SpringMessage` 头 `amqp_batchedHeaders`） |
 | 异步化 | 高频发送场景用响应式桥接或线程池封装（注意顺序性诉求） |
 
-> ⚠️ **性能易错点**：`send` 是同步调用，循环发送会阻塞调用线程等待缓冲/确认；高吞吐入口（HTTP/定时任务）建议批量构造 + binder 缓冲参数，而不是放大线程数。
+> **性能易错点**：`send` 是同步调用，循环发送会阻塞调用线程等待缓冲/确认；高吞吐入口（HTTP/定时任务）建议批量构造 + binder 缓冲参数，而不是放大线程数。
 
 ## 8. 已知限制与规避
 
@@ -225,7 +225,7 @@ events.forEach(e -> streamBridge.send("order-out-0", e));
 
 ## 9. 核心要点
 
-> 🎯 **核心要点**：
+> **核心要点**：
 > - StreamBridge = 流外代码（REST/定时/回调）→ 消息目的地的程序化出口；
 > - 解析顺序：绑定名 → 目的地 → 动态目的地（最后者资源自动建，名字要可控）；
 > - 无 Supplier 时用 `spring.cloud.stream.source` 显式声明源，绑定才可配置化；

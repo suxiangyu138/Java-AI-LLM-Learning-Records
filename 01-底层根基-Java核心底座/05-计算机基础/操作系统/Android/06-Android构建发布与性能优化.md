@@ -1,10 +1,10 @@
 # Android 构建发布与性能优化
 
-> 📦 Gradle 多模块构建、APK 到 AAB 的进化、签名体系的完整链路、ProGuard/R8 代码混淆、四大性能维度优化、Google Play 发布全流程 —— 从代码到上线的最后一公里
+> Gradle 多模块构建、APK 到 AAB 的进化、签名体系的完整链路、ProGuard/R8 代码混淆、四大性能维度优化、Google Play 发布全流程 —— 从代码到上线的最后一公里
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [Gradle 多模块构建](#1-gradle-多模块构建)
 2. [APK vs AAB 编译产物](#2-apk-vs-aab-编译产物)
@@ -143,9 +143,9 @@ kotlin.daemon.jvmargs=-Xmx3g
 | **包含** | 所有架构、语言、DPI | 全部资源 + Google Play 动态切片 |
 | **大小** | 全量（50MB+ 不罕见） | 上传完整，下载按需（省 20-35%） |
 | **签名** | 上传 Play 签名或自签名 | **Play 签名（推荐）** |
-| **Google Play** | 可上传 | ✅ **新应用必须** (2021.08+) |
-| **本地安装** | ✅ adb install | ❌ 需通过 bundletool 转 APK |
-| **动态功能** | ❌ | ✅ Dynamic Feature Modules |
+| **Google Play** | 可上传 | ✓ **新应用必须** (2021.08+) |
+| **本地安装** | ✓ adb install | ✗ 需通过 bundletool 转 APK |
+| **动态功能** | ✗ | ✓ Dynamic Feature Modules |
 
 ### 2.2 构建命令
 
@@ -193,10 +193,10 @@ aapt2 dump badging app-release.apk
 
 ```text
 为什么 Android 需要签名？
-├── 🔒 身份验证：证明 APK 的作者是你
-├── 🔐 完整性：确保 APK 没被篡改
-├── 🔄 升级验证：Google Play 只允许同签名的升级
-└── 🔑 权限保护：相同签名的应用可以共享数据
+├── 身份验证：证明 APK 的作者是你
+├── 完整性：确保 APK 没被篡改
+├── 升级验证：Google Play 只允许同签名的升级
+└── 权限保护：相同签名的应用可以共享数据
 
 签名类型：
 ├── debug.keystore   → Android Studio 自动生成（开发用）
@@ -228,7 +228,7 @@ keytool -list -v -keystore my-release-key.jks
 android {
     signingConfigs {
         create("release") {
-            // ⚠️ 绝不要把密码 hardcode！用环境变量或 keystore.properties
+            // 绝不要把密码 hardcode！用环境变量或 keystore.properties
             storeFile = file("../my-release-key.jks")
             storePassword = System.getenv("KEYSTORE_PASSWORD") ?: "password"
             keyAlias = System.getenv("KEY_ALIAS") ?: "my-key-alias"
@@ -257,7 +257,7 @@ KEY_ALIAS=your_key_alias
 KEY_PASSWORD=your_key_password
 ```
 
-> ⚠️ **致命错误**：丢失发布签名文件 = **永远无法更新已上线的应用**。必须备份到安全位置（包括 Google Play 签名密钥）。
+> **致命错误**：丢失发布签名文件 = **永远无法更新已上线的应用**。必须备份到安全位置（包括 Google Play 签名密钥）。
 
 ---
 
@@ -343,7 +343,7 @@ app/build/outputs/mapping/release/
 # Play Console → 版本 → App Bundle 资源管理器 → 上传 mapping.txt
 ```
 
-> ⚠️ **务必保存 mapping.txt**：没有它，线上 Crash 堆栈全是 `a.b.c.d()`，完全无法定位问题。
+> **务必保存 mapping.txt**：没有它，线上 Crash 堆栈全是 `a.b.c.d()`，完全无法定位问题。
 
 ---
 

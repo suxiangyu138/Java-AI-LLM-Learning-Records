@@ -1,6 +1,6 @@
 # 07 - 自定义 Starter 与扩展点实战
 
-> 🎯 把前 6 个模块的机制知识转化为工业级产出 — 从零写一个生产级 Spring Boot Starter，包含 @AutoConfiguration、.imports 文件、条件装配、配置属性绑定、健康检查全流程。附扩展点选型速查
+> 把前 6 个模块的机制知识转化为工业级产出 — 从零写一个生产级 Spring Boot Starter，包含 @AutoConfiguration、.imports 文件、条件装配、配置属性绑定、健康检查全流程。附扩展点选型速查
 
 ---
 
@@ -201,6 +201,6 @@ my:
 
 ---
 
-> 🎯 **核心要点**：自定义 Starter 是把"机制理解"转化为"工业产出"的标准路径。最重要的三件事：① `.imports 文件（Boot 4 新标准）`② `@AutoConfiguration + @ConditionalOnMissingBean（允许用户覆盖）`③ `配置属性绑定（@ConfigurationProperties + metadata 生成）`。一个好的 Starter = 用户引入依赖 + 写两行配置即可用，零额外代码。
+> **核心要点**：自定义 Starter 是把"机制理解"转化为"工业产出"的标准路径。最重要的三件事：① `.imports 文件（Boot 4 新标准）`② `@AutoConfiguration + @ConditionalOnMissingBean（允许用户覆盖）`③ `配置属性绑定（@ConfigurationProperties + metadata 生成）`。一个好的 Starter = 用户引入依赖 + 写两行配置即可用，零额外代码。
 
 **返回总览**：[00-深度剖析总览](00-Spring生态深度剖析总览.md)

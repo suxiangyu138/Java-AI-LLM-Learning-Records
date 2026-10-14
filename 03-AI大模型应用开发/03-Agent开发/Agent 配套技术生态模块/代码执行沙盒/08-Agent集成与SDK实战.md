@@ -60,7 +60,7 @@ await sandbox.kill();
 | `code-interpreter-v1` | 代码执行/数据分析（默认；run_code/runCode 执行、跨调用上下文持久、PTY 终端） |
 | 自定义 | `Template().from_template("code-interpreter-v1")` 预装依赖，版本化缓存（0.4.x） |
 
-> ⚠️ 生产必须**按 `template_id` 固定版本**（如 0.4.3），不要用 `latest` 别名——模板变更导致行为漂移、回归难查。
+> 生产必须**按 `template_id` 固定版本**（如 0.4.3），不要用 `latest` 别名——模板变更导致行为漂移、回归难查。
 
 ## 3. 集成模式
 
@@ -75,7 +75,7 @@ from langchain_community.tools import E2BCodeInterpreterTool
 
 - E2B / OpenSandbox / jupyter-interpreter-mcp 均提供 MCP server——沙箱能力直接注册为 MCP 工具，LLM 侧零胶水
 - **Claude Agent SDK 方案**：`@wasmagent/claude-agent-sdk` 把 WASM 沙箱内核（QuickJS/Pyodide/Wasmtime/远程）直接替换宿主 bash 工具——同进程、无容器、无远程 shell
-- ⚠️ 教训：**MCP server 自身必须沙箱化**（Wassette 模式：工具作为 WASM Component 跑在 Wasmtime），否则"工具调用 = 宿主调用"（见 [09-安全攻防案例与加固](09-安全攻防案例与加固.md) 的 MCP loopback 提权）
+- 教训：**MCP server 自身必须沙箱化**（Wassette 模式：工具作为 WASM Component 跑在 Wasmtime），否则"工具调用 = 宿主调用"（见 [09-安全攻防案例与加固](09-安全攻防案例与加固.md) 的 MCP loopback 提权）
 
 ### 3.3 自建 K8s 沙箱池
 

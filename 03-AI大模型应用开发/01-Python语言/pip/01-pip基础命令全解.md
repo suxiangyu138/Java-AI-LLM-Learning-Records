@@ -1,6 +1,6 @@
 # 01 - pip 基础命令全解
 
-> 🎯 pip 是每个 Python 开发者每天都要用的工具。掌握 install/uninstall/list/freeze/check 五大核心命令及其进阶用法，能解决 90% 的包管理需求
+> pip 是每个 Python 开发者每天都要用的工具。掌握 install/uninstall/list/freeze/check 五大核心命令及其进阶用法，能解决 90% 的包管理需求
 
 ---
 

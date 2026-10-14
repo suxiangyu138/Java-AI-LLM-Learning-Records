@@ -2,7 +2,7 @@
 
 > Jackson 是标准答案，但 Gson 的简洁和 Fastjson2 的极速，在特定场景下是无法忽视的选择
 
-## 📚 目录
+## 目录
 
 1. [Gson 核心实战](#1)
 2. [Gson vs Jackson 选型](#2)
@@ -149,14 +149,14 @@ class UserDeserializer implements JsonDeserializer<User> {
 |------|------|---------|
 | **包体积** | ~240 KB | ~1.5 MB (core + databind + annotations) |
 | **依赖** | 零外部依赖 | 3 个核心 JAR |
-| **API 简洁度** | ⭐⭐⭐⭐⭐ | ⭐⭐⭐ |
-| **注解丰富度** | ⭐⭐⭐ | ⭐⭐⭐⭐⭐ |
-| **多格式支持** | ❌ 仅 JSON | ✅ JSON/XML/YAML/CSV |
-| **流式 API** | ✅ JsonReader/Writer | ✅ JsonParser/Generator |
-| **树模型** | ✅ JsonElement | ✅ JsonNode |
-| **多态处理** | ⚠️ 需手动实现 | ✅ @JsonTypeInfo |
-| **Spring 集成** | ⚠️ 需手动配置 | ✅ 默认集成 |
-| **性能** | ⭐⭐⭐ | ⭐⭐⭐⭐ |
+| **API 简洁度** | ★★★★★ | ★★★ |
+| **注解丰富度** | ★★★ | ★★★★★ |
+| **多格式支持** | ✗ 仅 JSON | ✓ JSON/XML/YAML/CSV |
+| **流式 API** | ✓ JsonReader/Writer | ✓ JsonParser/Generator |
+| **树模型** | ✓ JsonElement | ✓ JsonNode |
+| **多态处理** | 需手动实现 | ✓ @JsonTypeInfo |
+| **Spring 集成** | 需手动配置 | ✓ 默认集成 |
+| **性能** | ★★★ | ★★★★ |
 
 ### 2.2 场景选型
 
@@ -177,8 +177,8 @@ class UserDeserializer implements JsonDeserializer<User> {
 ### 3.1 为什么是 Fastjson2？
 
 ```
-Fastjson 1.x → 已 EOL（停止维护） → ❌ 禁止新项目使用
-Fastjson2     → 全新架构、安全重构   → ✅ 高性能场景可选
+Fastjson 1.x → 已 EOL（停止维护） → ✗ 禁止新项目使用
+Fastjson2     → 全新架构、安全重构   → ✓ 高性能场景可选
 ```
 
 ```xml
@@ -269,7 +269,7 @@ path.set(JSON.parse(json), "Updated Title");
 // 2.x: com.alibaba.fastjson2.JSON
 
 // ── 不兼容变更 ──
-// ❌ 1.x                                    ✅ 2.x
+// ✗ 1.x                                    ✓ 2.x
 JSON.DEFAULT_GENERATE_FEATURE              JSONWriter.Feature 枚举
 JSON.DEFAULT_PARSER_FEATURE                JSONReader.Feature 枚举
 SerializeConfig.getGlobalInstance()        JSON.config()
@@ -342,13 +342,13 @@ public class SafeFastjsonConfig {
 
 | 安全特性 | Jackson | Gson | Fastjson2 | Fastjson 1.x |
 |------|:---:|:---:|:---:|:---:|
-| **SafeMode（禁用多态）** | ✅ 默认禁用 | ✅ 不支持多态 | ✅ 默认安全 | ❌ 默认不安全 |
-| **类型白名单** | ✅ | N/A | ✅ | ⚠️ 绕过历史 |
-| **输入大小限制** | ✅ StreamReadConstraints | ❌ | ❌（自行校验） | ❌ |
-| **CVE 历史** | 极少 | 极少 | 较少（注重架构安全） | ⚠️ 数十个 RCE |
-| **安全建议** | 保持默认 | 保持默认 | 启用 SafeMode | 🚫 立即停用 |
+| **SafeMode（禁用多态）** | ✓ 默认禁用 | ✓ 不支持多态 | ✓ 默认安全 | ✗ 默认不安全 |
+| **类型白名单** | ✓ | N/A | ✓ | 绕过历史 |
+| **输入大小限制** | ✓ StreamReadConstraints | ✗ | ✗（自行校验） | ✗ |
+| **CVE 历史** | 极少 | 极少 | 较少（注重架构安全） | 数十个 RCE |
+| **安全建议** | 保持默认 | 保持默认 | 启用 SafeMode | 立即停用 |
 
-> 🎯 **核心要点**：Fastjson2 从架构层面解决了 1.x 的安全问题——默认不启用 AutoType、白名单优先、无黑名单绕过。但仍建议**显式配置 SafeMode**，此为生产环境底线。
+> **核心要点**：Fastjson2 从架构层面解决了 1.x 的安全问题——默认不启用 AutoType、白名单优先、无黑名单绕过。但仍建议**显式配置 SafeMode**，此为生产环境底线。
 
 ---
 
@@ -360,11 +360,11 @@ public class SafeFastjsonConfig {
 
 | 场景 | Jackson 2.18 | Fastjson2 2.0 | Gson 2.12 |
 |------|:---:|:---:|:---:|
-| **简单 POJO 序列化** | 1,189 ops/ms | 1,234 ops/ms 🏆 | 892 ops/ms |
-| **复杂对象序列化** | 921 ops/ms 🏆 | 856 ops/ms | 542 ops/ms |
-| **大文本反序列化** | 712 ops/ms 🏆 | 647 ops/ms | 498 ops/ms |
-| **序列化内存峰值** | 120 MB | 95 MB 🏆 | 180 MB |
-| **反序列化内存峰值** | 140 MB | 105 MB 🏆 | 200 MB dividends |
+| **简单 POJO 序列化** | 1,189 ops/ms | 1,234 ops/ms | 892 ops/ms |
+| **复杂对象序列化** | 921 ops/ms | 856 ops/ms | 542 ops/ms |
+| **大文本反序列化** | 712 ops/ms | 647 ops/ms | 498 ops/ms |
+| **序列化内存峰值** | 120 MB | 95 MB | 180 MB |
+| **反序列化内存峰值** | 140 MB | 105 MB | 200 MB dividends |
 
 ### 5.2 综合评分
 
@@ -393,7 +393,7 @@ Spring集成   ★★★★★   ★★☆☆☆   ★★★☆☆
 └── 多库并存              → 不推荐（版本冲突、行为不一致）
 ```
 
-> 🎯 **核心要点**：**首选 Jackson，辅助 Gson（轻量场景）或 Fastjson2（性能场景）**。三库混用是反模式——除非有明确的、不可替代的场景需求。
+> **核心要点**：**首选 Jackson，辅助 Gson（轻量场景）或 Fastjson2（性能场景）**。三库混用是反模式——除非有明确的、不可替代的场景需求。
 
 ---
 

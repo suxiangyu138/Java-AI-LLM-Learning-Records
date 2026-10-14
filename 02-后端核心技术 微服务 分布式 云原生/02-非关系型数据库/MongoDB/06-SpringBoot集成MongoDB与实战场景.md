@@ -81,7 +81,7 @@ public class Address {
 }
 ```
 
-> 💡 `@Field` 可实现 Java 驼峰与 MongoDB 下划线字段名的映射。
+> `@Field` 可实现 Java 驼峰与 MongoDB 下划线字段名的映射。
 
 ### 2.2 Repository
 
@@ -283,7 +283,7 @@ public List<Map> lookupExample() {
 }
 ```
 
-> ⚠️ `$lookup` 性能远低于关系型 JOIN，尽量用嵌入文档替代。
+> `$lookup` 性能远低于关系型 JOIN，尽量用嵌入文档替代。
 
 ### 4.3 聚合管道操作符对照
 
@@ -556,7 +556,7 @@ public class SensorData {
 }
 ```
 
-> 💡 MongoDB 5.0+ 提供 Time Series 集合，建表时指定 `timeseries: { timeField: "timestamp", metaField: "deviceId", granularity: "seconds" }` 即可自动优化存储。
+> MongoDB 5.0+ 提供 Time Series 集合，建表时指定 `timeseries: { timeField: "timestamp", metaField: "deviceId", granularity: "seconds" }` 即可自动优化存储。
 
 ### 8.2 批量写入与查询
 
@@ -647,13 +647,13 @@ public class LbsService {
 
 | 场景 | 原因 | 推荐度 |
 |------|------|:------:|
-| 用户画像（标签多变） | 无 Schema，不同用户不同标签 | ⭐⭐⭐⭐⭐ |
-| 内容管理（文章/商品） | 嵌套文档自然表达，字段灵活 | ⭐⭐⭐⭐⭐ |
-| IoT 时序数据 | 高吞吐写入，分片集群扩展 | ⭐⭐⭐⭐ |
-| LBS 附近的人 | 地理空间索引，原生支持 | ⭐⭐⭐⭐ |
-| 日志存储 | JSON 格式，capped collection | ⭐⭐⭐⭐ |
-| 实时分析 | 聚合管道 | ⭐⭐⭐ |
-| 缓存/会话 | TTL 索引自动过期 | ⭐⭐⭐ |
+| 用户画像（标签多变） | 无 Schema，不同用户不同标签 | ★★★★★ |
+| 内容管理（文章/商品） | 嵌套文档自然表达，字段灵活 | ★★★★★ |
+| IoT 时序数据 | 高吞吐写入，分片集群扩展 | ★★★★ |
+| LBS 附近的人 | 地理空间索引，原生支持 | ★★★★ |
+| 日志存储 | JSON 格式，capped collection | ★★★★ |
+| 实时分析 | 聚合管道 | ★★★ |
+| 缓存/会话 | TTL 索引自动过期 | ★★★ |
 
 ### 10.2 不适合场景
 
@@ -669,11 +669,11 @@ public class LbsService {
 ```text
 数据结构是否灵活（字段多变）？
   ├─ 是 → 是否需要 Geo/聚合/数组？
-  │      ├─ 是 → MongoDB ✅
+  │      ├─ 是 → MongoDB ✓
   │      └─ 否 → MySQL（简单 CRUD）
   └─ 否 → 数据量预判？
-         ├─ 超大（TB 级）→ MongoDB 分片 ✅
-         └─ 常规（GB 级）→ MySQL ✅
+         ├─ 超大（TB 级）→ MongoDB 分片 ✓
+         └─ 常规（GB 级）→ MySQL ✓
 ```
 
 ---
@@ -692,4 +692,4 @@ public class LbsService {
 
 **Q: Geo 查询实现？** Spring Data NearQuery / Box / Circle，底层 2dsphere 索引。
 
-> 🎯 **极简总结**：CRUD 用 Repository，复杂查询用 Template，嵌入优于引用，反范式减少关联，索引加速查询。
+> **极简总结**：CRUD 用 Repository，复杂查询用 Template，嵌入优于引用，反范式减少关联，索引加速查询。

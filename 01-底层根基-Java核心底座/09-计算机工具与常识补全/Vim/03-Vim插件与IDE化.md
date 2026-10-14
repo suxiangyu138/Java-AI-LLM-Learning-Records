@@ -6,7 +6,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [插件生态全景（2026）](#1-插件生态全景2026)
 2. [插件管理器](#2-插件管理器)
@@ -90,7 +90,7 @@ call plug#end()
 |------|:---:|:---:|
 | 适用 | **Neovim** | Vim/Neovim 通用 |
 | 配置 | Lua（模块化） | VimScript |
-| 按需加载 | ✅ 强大 | 基础 |
+| 按需加载 | ✓ 强大 | 基础 |
 | 2026 选择 | **Neovim 首选** | 纯 Vim 用户 |
 
 ---
@@ -262,7 +262,7 @@ require("nvim-treesitter.configs").setup({
 })
 ```
 
-> ⚠️ **2026 踩坑提醒**：Neovim 0.12.0 的 Treesitter 0.10+ 发生「断代大迁移」（核心 API 变化）——升级后插件可能连环报错，**升级 Neovim 前确认 Treesitter 与插件兼容**（`:TSUpdate` 后测试）。
+> **2026 踩坑提醒**：Neovim 0.12.0 的 Treesitter 0.10+ 发生「断代大迁移」（核心 API 变化）——升级后插件可能连环报错，**升级 Neovim 前确认 Treesitter 与插件兼容**（`:TSUpdate` 后测试）。
 
 ---
 
@@ -288,13 +288,13 @@ require("mason-lspconfig").setup({
 
 | 能力 | 纯 Vim | Vim + LSP | IDEA |
 |------|:---:|:---:|:---:|
-| 补全 | 字典级 | ✅ 项目级 | ✅✅ |
-| 跳转定义 | 无 | ✅ | ✅✅ |
-| 重构 | 无 | 基础（重命名） | ✅✅ 完整 |
-| 调试 | 无 | 需额外（nvim-dap） | ✅✅ |
+| 补全 | 字典级 | ✓ 项目级 | ✓✓ |
+| 跳转定义 | 无 | ✓ | ✓✓ |
+| 重构 | 无 | 基础（重命名） | ✓✓ 完整 |
+| 调试 | 无 | 需额外（nvim-dap） | ✓✓ |
 | 内存 | 极小 | 中 | 重 |
 
-> 🎯 **2026 结论**：**Java 重度开发仍推荐 IDEA**（重构/调试生态无对手）；Neovim 适合：远程开发、轻量修改、Java 之外的日常语言（Python/TS/Go/Lua）。Java 场景 Neovim 作为「轻量编辑器」而非「IDE 替代」。
+> **2026 结论**：**Java 重度开发仍推荐 IDEA**（重构/调试生态无对手）；Neovim 适合：远程开发、轻量修改、Java 之外的日常语言（Python/TS/Go/Lua）。Java 场景 Neovim 作为「轻量编辑器」而非「IDE 替代」。
 
 ---
 
@@ -304,13 +304,13 @@ require("mason-lspconfig").setup({
 |------|:---:|:---:|
 | 配置 | VimScript | **Lua（现代）** |
 | 异步 | 有限 | **原生异步（Job/Channel）** |
-| 内置终端 | 有限 | ✅ `:terminal` |
+| 内置终端 | 有限 | ✓ `:terminal` |
 | LSP | 插件方案 | **内置客户端** |
-| Treesitter | 无 | ✅ 原生集成 |
+| Treesitter | 无 | ✓ 原生集成 |
 | 插件生态 | 存量丰富 | **2026 主流** |
-| 服务器场景 | ✅ 预装 | 需安装 |
+| 服务器场景 | ✓ 预装 | 需安装 |
 
-> 🎯 **选择建议**：**新环境直接学 Neovim**（Vim 按键 100% 兼容 + 现代能力）；服务器无 Neovim 时用 Vim 也不慌（按键相同）——**学的是「Vim 键位」，平台选 Neovim**。
+> **选择建议**：**新环境直接学 Neovim**（Vim 按键 100% 兼容 + 现代能力）；服务器无 Neovim 时用 Vim 也不慌（按键相同）——**学的是「Vim 键位」，平台选 Neovim**。
 
 ---
 
@@ -374,7 +374,7 @@ require("lazy").setup({
 
 ## 10. 核心要点
 
-> 🎯 **核心要点**：
+> **核心要点**：
 > 1. 2026 生态：Neovim 0.12+ + Lua 配置 + lazy.nvim + LSP + Treesitter——现代开发环境平台
 > 2. 必装插件：fzf-lua（搜索）/blink.cmp（补全）/trouble（诊断）/Oil（文件）/toggleterm（终端）
 > 3. LSP 提供 IDE 级能力（补全/跳转/诊断/重命名）——Mason 自动装语言服务器

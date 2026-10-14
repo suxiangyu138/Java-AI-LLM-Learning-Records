@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [Pub/Sub vs Stream：两套消息模型对比](#1-pubsub-vs-stream两套消息模型对比)
 2. [Pub/Sub 基础：RedisMessageListenerContainer](#2-pubsub-基础redismessagelistenercontainer)
@@ -20,15 +20,15 @@
 
 | 维度 | Pub/Sub（发布订阅） | Stream（日志型队列） |
 |------|:---:|:---:|
-| 消息持久化 | ❌ 不落盘，发送即消费，无订阅者则丢失 | ✅ 落盘（RDB/AOF），可回放 |
+| 消息持久化 | ✗ 不落盘，发送即消费，无订阅者则丢失 | ✓ 落盘（RDB/AOF），可回放 |
 | 消费方式 | 广播：所有订阅者都收到 | 消费组内瓜分：一条消息只被组内一个成员消费 |
-| 离线消费 | ❌ 订阅期间外的消息收不到 | ✅ 新消费者可从任意位置读（$ 最新 / 0 最旧 / ID） |
+| 离线消费 | ✗ 订阅期间外的消息收不到 | ✓ 新消费者可从任意位置读（$ 最新 / 0 最旧 / ID） |
 | 确认机制 | 无 | XACK 确认；未确认进入 pending 可重投 |
 | 消费者位移 | 无 | 组内游标（last-delivered-id）自动维护 |
 | 消息规模 | 轻量广播 | 大流量队列，可修剪（XTRIM） |
 | 适用场景 | 即时广播：通知、刷新信号、WebSocket 推送联动 | 可靠任务队列：订单处理、异步通知、事件驱动 |
 
-> 🎯 **一句话选型**：要"广播 + 不在乎丢失" → Pub/Sub；要"可靠 + 组消费 + 重放" → Stream。生产消息中间件的硬需求（持久化、确认、重试）只有 Stream 能满足。
+> **一句话选型**：要"广播 + 不在乎丢失" → Pub/Sub；要"可靠 + 组消费 + 重放" → Stream。生产消息中间件的硬需求（持久化、确认、重试）只有 Stream 能满足。
 
 ## 2. Pub/Sub 基础：RedisMessageListenerContainer
 
@@ -83,7 +83,7 @@ public class NotifyHandler {
 | `MessageListenerAdapter` | 把消息委托给 POJO 方法（无需实现接口） |
 | `Message` | 原始字节：body + channel（序列化由你处理） |
 
-> ⚠️ **注意**：Pub/Sub 订阅是**独占连接**——容器与 RedisTemplate 共用 factory 时，订阅走专用连接（Lettuce 共享连接下自动切换），无需你手动管理；但**一个容器实例的并发默认较小**，高吞吐订阅者注意调 `setSubscriptionExecutor`。
+> **注意**：Pub/Sub 订阅是**独占连接**——容器与 RedisTemplate 共用 factory 时，订阅走专用连接（Lettuce 共享连接下自动切换），无需你手动管理；但**一个容器实例的并发默认较小**，高吞吐订阅者注意调 `setSubscriptionExecutor`。
 
 ### 2.2 发送端
 
@@ -134,7 +134,7 @@ public class NotifyListeners {
 | `@Header` 参数 | 注入通道等消息头 |
 | `RedisMessageSendingTemplate` | 与监听器配对的发送模板（同一 MessageConverter 体系） |
 
-> 💡 **面试点**：@RedisListener 是 2026.0.0 的核心新特性——把"注册监听器 + 手动转换"进化成"注解 + MIME 协商"，也是 Spring 消息抽象（Messaging）在 Redis 上的落地。功能上等价于经典 `MessageListenerContainer` 的声明式封装。
+> **面试点**：@RedisListener 是 2026.0.0 的核心新特性——把"注册监听器 + 手动转换"进化成"注解 + MIME 协商"，也是 Spring 消息抽象（Messaging）在 Redis 上的落地。功能上等价于经典 `MessageListenerContainer` 的声明式封装。
 
 ## 4. MessageConverter 与消息转换
 
@@ -157,7 +157,7 @@ public MessageListenerAdapter adapter(NotifyHandler handler) {
 | `GenericJackson2JsonRedisSerializer` 包装 | 多态消息 |
 | 自定义 MessageConverter | 专用协议 |
 
-> ⚠️ **Pub/Sub 与 Stream 的序列化注意**：容器回调收到的是字节，`MessageListenerAdapter` 帮你转换；`@RedisListener` 按 `consumes` 自动转换。**发送端与接收端的转换器必须对称**，否则"发送 JSON、接收按 String 解析"会拿到带引号的 JSON 串。
+> **Pub/Sub 与 Stream 的序列化注意**：容器回调收到的是字节，`MessageListenerAdapter` 帮你转换；`@RedisListener` 按 `consumes` 自动转换。**发送端与接收端的转换器必须对称**，否则"发送 JSON、接收按 String 解析"会拿到带引号的 JSON 串。
 
 ## 5. Stream 消费组集成
 
@@ -261,7 +261,7 @@ XPENDING stream:orders group:order             # pending 条数 + 最老消息�
 XINFO GROUPS stream:orders                     # 各消费组积压
 ```
 
-> 💡 **设计建议**：消费逻辑幂等（唯一业务 ID + 去重），失败重试 3 次仍失败写入死信 stream + 告警——这是 Stream 队列的"生产级三件套"。
+> **设计建议**：消费逻辑幂等（唯一业务 ID + 去重），失败重试 3 次仍失败写入死信 stream + 告警——这是 Stream 队列的"生产级三件套"。
 
 ## 7. 场景选型与生产清单
 
@@ -285,7 +285,7 @@ XINFO GROUPS stream:orders                     # 各消费组积压
 - [ ] 发送/接收序列化对称（MIME 与转换器一致）；
 - [ ] 4.1 新特性 @RedisListener 需要 `@EnableRedisListeners` 激活。
 
-> 🎯 **核心要点**：Pub/Sub 是"广播 + 即发即弃"的轻通道，Stream 是"持久 + 消费组 + 确认"的可靠队列——**可靠性需求是分水岭**。2026 年的 @RedisListener 把监听做成声明式注解（MIME 协商 + 自动转换器），面试新特性题必答；生产可靠性题答"Stream + 手动 ACK + 死信 + 幂等消费"即满分。
+> **核心要点**：Pub/Sub 是"广播 + 即发即弃"的轻通道，Stream 是"持久 + 消费组 + 确认"的可靠队列——**可靠性需求是分水岭**。2026 年的 @RedisListener 把监听做成声明式注解（MIME 协商 + 自动转换器），面试新特性题必答；生产可靠性题答"Stream + 手动 ACK + 死信 + 幂等消费"即满分。
 
 ---
 

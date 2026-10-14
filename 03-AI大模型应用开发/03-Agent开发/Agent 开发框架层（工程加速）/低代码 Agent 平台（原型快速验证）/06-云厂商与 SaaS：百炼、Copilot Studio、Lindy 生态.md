@@ -2,7 +2,7 @@
 
 > 定位：非自托管阵营全景——阿里云百炼（Agent 2.0）深潜 + 微软/Google/AWS 大厂平台 + Lindy/Relevance AI/Voiceflow 等 SaaS 新锐 + 企业落地治理（2026-08 基准）
 
-## 📚 目录
+## 目录
 
 1. [阵营概览](#1-阵营概览)
 2. [阿里云百炼：Agent 2.0 深潜](#2-阿里云百炼agent-20-深潜)
@@ -44,7 +44,7 @@
 | 内置工具 | **沙箱环境**运行：bash、write、read、edit、glob、grep、download_file；默认关闭、按需开启 |
 | 知识库 | 作为技能（工具）由 Agent 自主规划调用，提升准确率减少幻觉 |
 
-> 💡 **机制要点**：百炼 Agent 2.0 的"工具统一化"与 Dify Agent 沙箱、Anthropic 的 Claude Code 思路同源——**所有能力都是工具，模型自主编排**。这是 2026 年 Agent 平台的设计共识。
+> **机制要点**：百炼 Agent 2.0 的"工具统一化"与 Dify Agent 沙箱、Anthropic 的 Claude Code 思路同源——**所有能力都是工具，模型自主编排**。这是 2026 年 Agent 平台的设计共识。
 
 ### 2.3 配套能力
 
@@ -81,7 +81,7 @@ Gartner 将微软、Google、AWS 划入 NCAB 象限 **Pacesetter（领跑者）*
 | Google Agent Builder | Vertex AI + Gemini 生态 | 生态锁定 |
 | AWS Bedrock Agents | AWS 全栈集成（Lambda/S3/API Gateway） | 深度依赖 AWS |
 
-> 💡 **判断**：大厂平台适合"存量生态决定一切"的企业（已有 M365/AWS）——选它们本质是选生态，而不是选 Agent 能力；Agent 能力本身三家都与开源平台同源（都是 tool-calling + RAG 编排）。
+> **判断**：大厂平台适合"存量生态决定一切"的企业（已有 M365/AWS）——选它们本质是选生态，而不是选 Agent 能力；Agent 能力本身三家都与开源平台同源（都是 tool-calling + RAG 编排）。
 
 ## 5. SaaS 新锐：Lindy / Relevance AI / Voiceflow
 
@@ -129,7 +129,7 @@ Gartner 2026 调研的核心结论——**落地障碍不是技术，是编排�
 - 所有权/审批不清
 - 成本不可见
 
-> ⚠️ **治理清单（企业落地必备）**：Agent 注册表（谁/什么/权限/数据域）→ 统一审批流 → 成本标签 → 权限最小化 → 审计日志 → 失败/降级预案。
+> **治理清单（企业落地必备）**：Agent 注册表（谁/什么/权限/数据域）→ 统一审批流 → 成本标签 → 权限最小化 → 审计日志 → 失败/降级预案。
 
 ## 7. 云厂商 vs 开源 vs SaaS 选型
 
@@ -163,7 +163,7 @@ Gartner 2026 调研的核心结论——**落地障碍不是技术，是编排�
 
 ## 8. 核心要点
 
-> 🎯 **核心要点**：
+> **核心要点**：
 > 1. **百炼 Agent 2.0**（2026-07 基准）核心变化：知识库/MCP 统一为工具、规划-执行-反思过程透明——与 Dify Agent、Claude Code 同一设计共识
 > 2. **百炼 CLI**（2026-05-29 开源）让平台能力 CLI 化，原生兼容 Claude Code/Qoder/OpenClaw——"平台 ↔ 本地 Agent"双向打通
 > 3. 大厂平台（Copilot Studio 等）本质是**生态选择**而非能力选择

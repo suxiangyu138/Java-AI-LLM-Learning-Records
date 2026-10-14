@@ -2,7 +2,7 @@
 
 > 构建脚本是软件交付的"生产线蓝图"——从 Maven/Gradle Wrapper 锁定版本，到 CI/CD 流水线编排，一键式交付
 
-## 📚 目录
+## 目录
 
 1. [Maven Wrapper (mvnw)](#1)
 2. [Gradle Wrapper (gradlew)](#2)
@@ -50,9 +50,9 @@ wrapperUrl=https://repo.maven.apache.org/maven2/org/apache/maven/wrapper/maven-w
 
 | 维度 | mvnw（推荐） | mvn（系统安装） |
 |------|:---:|:---:|
-| **版本一致性** | ✅ 项目锁定版本 | ❌ 各人可能不同 |
-| **环境依赖** | ✅ 只需 JDK | ❌ 需预装 Maven |
-| **CI/CD 友好** | ✅ 零安装 | ⚠️ 需预装 |
+| **版本一致性** | ✓ 项目锁定版本 | ✗ 各人可能不同 |
+| **环境依赖** | ✓ 只需 JDK | ✗ 需预装 Maven |
+| **CI/CD 友好** | ✓ 零安装 | 需预装 |
 | **版本升级** | 修改 properties 文件 | 系统级升级 |
 | **文件体积** | ~50KB + jar | 无需文件 |
 
@@ -86,7 +86,7 @@ wrapperUrl=https://repo.maven.apache.org/maven2/org/apache/maven/wrapper/maven-w
 ./mvnw compile -pl changed-module -am   # -am: also make dependencies
 ```
 
-> 🎯 **核心要点**：新项目一律使用 Wrapper（mvnw 或 gradlew），这是"克隆即构建"的基础——任何人 clone 项目后都能直接构建，环境差异归零。
+> **核心要点**：新项目一律使用 Wrapper（mvnw 或 gradlew），这是"克隆即构建"的基础——任何人 clone 项目后都能直接构建，环境差异归零。
 
 ---
 
@@ -593,14 +593,14 @@ pipeline {
     post {
         success {
             emailext(
-                subject: "✅ ${env.JOB_NAME} #${env.BUILD_NUMBER} 构建成功",
+                subject: "✓ ${env.JOB_NAME} #${env.BUILD_NUMBER} 构建成功",
                 body: "构建详情: ${env.BUILD_URL}",
                 to: 'dev-team@company.com'
             )
         }
         failure {
             emailext(
-                subject: "❌ ${env.JOB_NAME} #${env.BUILD_NUMBER} 构建失败",
+                subject: "✗ ${env.JOB_NAME} #${env.BUILD_NUMBER} 构建失败",
                 body: "构建详情: ${env.BUILD_URL}\n\n变更:\n${currentBuild.changeSets}",
                 to: '${currentBuild.changeSets.authorEmail}'
             )
@@ -731,43 +731,43 @@ echo "  镜像标签: ${TAG}"
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 
 # 步骤1：编译
-echo "🔨 编译项目..."
+echo "编译项目..."
 ./mvnw clean package -DskipTests -P"${ENVIRONMENT}"
 
 # 步骤2：构建 Docker 镜像
-echo "🐳 构建 Docker 镜像..."
+echo "构建 Docker 镜像..."
 docker build -t "${DOCKER_REGISTRY}/${APP_NAME}:${TAG}" .
 docker tag "${DOCKER_REGISTRY}/${APP_NAME}:${TAG}" \
            "${DOCKER_REGISTRY}/${APP_NAME}:${ENVIRONMENT}"
 
 # 步骤3：推送镜像
-echo "📤 推送镜像..."
+echo "推送镜像..."
 docker push "${DOCKER_REGISTRY}/${APP_NAME}:${TAG}"
 docker push "${DOCKER_REGISTRY}/${APP_NAME}:${ENVIRONMENT}"
 
 # 步骤4：部署（以 Docker Compose 为例）
 if [[ "${ENVIRONMENT}" == "production" ]]; then
-    echo "⚠️  生产环境部署需手动确认"
+    echo " 生产环境部署需手动确认"
     read -p "确认部署到生产环境? (yes/no): " confirm
     [[ "${confirm}" != "yes" ]] && { echo "已取消"; exit 0; }
 fi
 
-echo "🚀 部署服务..."
+echo "部署服务..."
 docker compose -f "docker-compose-${ENVIRONMENT}.yml" pull
 docker compose -f "docker-compose-${ENVIRONMENT}.yml" up -d --remove-orphans
 
 # 步骤5：健康检查
-echo "🏥 健康检查..."
+echo "健康检查..."
 for i in {1..30}; do
     if curl -sf http://localhost:8080/actuator/health > /dev/null 2>&1; then
-        echo "✅ 服务健康检查通过"
+        echo "✓ 服务健康检查通过"
         exit 0
     fi
     echo "   等待... (${i}/30)"
     sleep 2
 done
 
-echo "❌ 健康检查超时"
+echo "✗ 健康检查超时"
 docker compose logs --tail=50
 exit 1
 ```
@@ -803,15 +803,15 @@ elif curl -sf "${HEALTH_URL}:${GREEN_PORT}/actuator/health" > /dev/null 2>&1; th
     CURRENT_PORT=${GREEN_PORT}
     NEW_PORT=${BLUE_PORT}
 else
-    echo "❌ 无运行中的服务"
+    echo "✗ 无运行中的服务"
     exit 1
 fi
 
-echo "🟢 当前活跃端口: ${CURRENT_PORT}"
-echo "🔵 新部署端口:   ${NEW_PORT}"
+echo "当前活跃端口: ${CURRENT_PORT}"
+echo "新部署端口:   ${NEW_PORT}"
 
 # ── 部署新版本 ──
-echo "🚀 在端口 ${NEW_PORT} 启动新版本..."
+echo "在端口 ${NEW_PORT} 启动新版本..."
 docker run -d \
     --name "${APP_NAME}-${NEW_PORT}" \
     -p "${NEW_PORT}:8080" \
@@ -819,7 +819,7 @@ docker run -d \
     "${APP_NAME}:${NEW_VERSION}"
 
 # ── 等待新服务就绪 ──
-echo "⏳ 等待新服务就绪..."
+echo "等待新服务就绪..."
 for i in {1..60}; do
     if curl -sf "${HEALTH_URL}:${NEW_PORT}/actuator/health" > /dev/null 2>&1; then
         break
@@ -828,21 +828,21 @@ for i in {1..60}; do
 done
 
 if ! curl -sf "${HEALTH_URL}:${NEW_PORT}/actuator/health" > /dev/null 2>&1; then
-    echo "❌ 新服务启动超时"
+    echo "✗ 新服务启动超时"
     docker stop "${APP_NAME}-${NEW_PORT}" && docker rm "${APP_NAME}-${NEW_PORT}"
     exit 1
 fi
 
 # ── 切换流量（通过 Nginx reload）──
-echo "🔄 切换流量 -> ${NEW_PORT}"
+echo "切换流量 -> ${NEW_PORT}"
 sed -i "s/${CURRENT_PORT}/${NEW_PORT}/g" /etc/nginx/sites-enabled/${APP_NAME}
 nginx -s reload
 
 # ── 优雅关闭旧服务 ──
-echo "🛑 关闭旧服务 (端口 ${CURRENT_PORT})..."
+echo "关闭旧服务 (端口 ${CURRENT_PORT})..."
 docker stop "${APP_NAME}-${CURRENT_PORT}" && docker rm "${APP_NAME}-${CURRENT_PORT}"
 
-echo "✅ 蓝绿部署完成：${NEW_PORT} 已成为活跃端口"
+echo "✓ 蓝绿部署完成：${NEW_PORT} 已成为活跃端口"
 ```
 
 ### 6.2 回滚脚本
@@ -860,11 +860,11 @@ readonly BACKUP_DIR="/opt/backups/${APP_NAME}"
 LATEST_BACKUP=$(ls -t "${BACKUP_DIR}"/*.jar 2>/dev/null | head -1)
 
 if [[ -z "${LATEST_BACKUP}" ]]; then
-    echo "❌ 无可用备份"
+    echo "✗ 无可用备份"
     exit 1
 fi
 
-echo "⏪ 回滚到: ${LATEST_BACKUP}"
+echo "回滚到: ${LATEST_BACKUP}"
 
 # 停止当前服务
 sudo systemctl stop "${APP_NAME}"
@@ -880,9 +880,9 @@ sleep 10
 
 # 验证
 if curl -sf http://localhost:8080/actuator/health > /dev/null 2>&1; then
-    echo "✅ 回滚成功，服务正常运行"
+    echo "✓ 回滚成功，服务正常运行"
 else
-    echo "❌ 回滚后服务异常，请手动检查"
+    echo "✗ 回滚后服务异常，请手动检查"
     exit 1
 fi
 ```
@@ -994,7 +994,7 @@ exec java \
     -jar myapp.jar
 ```
 
-> 🎯 **核心要点**：敏感信息（密码、密钥、Token）绝不硬编码在配置文件中——使用环境变量、Secrets Manager、HashiCorp Vault 等安全存储方案。
+> **核心要点**：敏感信息（密码、密钥、Token）绝不硬编码在配置文件中——使用环境变量、Secrets Manager、HashiCorp Vault 等安全存储方案。
 
 ---
 

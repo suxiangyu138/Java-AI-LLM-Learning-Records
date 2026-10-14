@@ -2,7 +2,7 @@
 
 > 定位：Session 机制、SSL/TLS 配置、认证 Realm 体系、安全最佳实践——Tomcat 安全面试核心
 
-## 📚 目录
+## 目录
 
 1. [Session 会话机制](#1-session-会话机制)
 2. [Session 的分布式问题](#2-session-的分布式问题)
@@ -22,7 +22,7 @@ Session 机制（无状态 HTTP 的会话方案）：
   ② 响应 Set-Cookie: JSESSIONID=xxx
   ③ 后续请求携带 Cookie → 服务端匹配 Session
 
-⚠️ 面试必答：
+面试必答：
 "HTTP 无状态 → Session 用 Cookie 携带
  JSESSIONID 维持会话；服务端存
  Session 数据（内存/持久化）。"
@@ -37,7 +37,7 @@ Session 机制（无状态 HTTP 的会话方案）：
   ② 主动失效（invalidate()）
   ③ 应用重启（内存 Session 丢失）
 
-⚠️ 面试必答：
+面试必答：
 "Session 失效三时机——超时、invalidate、
  重启丢失（内存型）；登出必须调
  invalidate() 防会话固定攻击。"
@@ -54,7 +54,7 @@ session.invalidate();                     // 登出销毁
 <session-config>
     <session-timeout>30</session-timeout>
     <cookie-config>
-        <http-only>true</http-only>       <!-- ⚠️ JS 不可读（防 XSS 窃取） -->
+        <http-only>true</http-only>       <!-- JS 不可读（防 XSS 窃取） -->
         <secure>true</secure>             <!-- 仅 HTTPS 传输 -->
     </cookie-config>
 </session-config>
@@ -71,7 +71,7 @@ session.invalidate();                     // 登出销毁
   用户请求到 Node A 登录 → Session 在 A
   下次请求负载均衡到 Node B → 找不到 Session！
 
-⚠️ 面试必答：
+面试必答：
 "集群 Session 问题是'会话黏性 vs 共享'——
  负载均衡换节点就丢登录态。"
 ```
@@ -82,10 +82,10 @@ session.invalidate();                     // 登出销毁
 |------|------|------|
 | Session 黏性 | LB 固定同一节点 | 简单但单点故障 |
 | Session 复制 | 节点间同步（Tomcat 集群） | 小集群（同步开销） |
-| **集中存储** | Session 放 Redis/DB | ✅ 现代标准 |
+| **集中存储** | Session 放 Redis/DB | ✓ 现代标准 |
 
 ```
-⚠️ 现代实践（面试必答）：
+现代实践（面试必答）：
   Spring Session + Redis：Session 存 Redis
   → 任意节点可服务、节点增减无感
   → 对比：Tomcat 自带集群复制（SimpleTcpCluster）
@@ -136,13 +136,13 @@ keytool -list -keystore conf/keystore.p12 -storetype PKCS12
 ### 3.2 TLS 最佳实践
 
 ```
-✅ TLS 1.2+（禁用 1.0/1.1）
-✅ 证书密码不硬编码（环境变量/密管）
-✅ HTTP 强制跳转 HTTPS（RewriteValve）
-✅ HSTS 头（Strict-Transport-Security）
-✅ 生产用 CA 证书（非自签名）
+✓ TLS 1.2+（禁用 1.0/1.1）
+✓ 证书密码不硬编码（环境变量/密管）
+✓ HTTP 强制跳转 HTTPS（RewriteValve）
+✓ HSTS 头（Strict-Transport-Security）
+✓ 生产用 CA 证书（非自签名）
 
-⚠️ 面试必答：
+面试必答：
 "HTTPS 三件套——证书（PKCS12）、
  连接器 SSLEnabled、HTTP→HTTPS 跳转；
  TLS 1.2 起步、HSTS 增强。"
@@ -160,7 +160,7 @@ Realm = Tomcat 的认证领域（用户/角色存储）
 
 内置 Realm：
   MemoryRealm（内存，演示）
-  JDBCRealm / DataSourceRealm（数据库）✅ 生产
+  JDBCRealm / DataSourceRealm（数据库）✓ 生产
   JAASRealm（对接 JAAS）
 ```
 
@@ -193,7 +193,7 @@ Realm = Tomcat 的认证领域（用户/角色存储）
 ```
 
 ```
-⚠️ 面试必答：
+面试必答：
 "Realm 是 Tomcat 的认证后端——
  数据库 Realm + 表单登录 + 安全约束
  是传统 Servlet 应用的鉴权方案；
@@ -228,11 +228,11 @@ Realm = Tomcat 的认证领域（用户/角色存储）
 | 慢速攻击 | connectionTimeout + maxKeepAliveRequests |
 | 反序列化 | 升级版本 + 限制 Manager 访问 |
 
-> 🎯 **要点**：Tomcat 安全 = **会话安全**（http-only Cookie + invalidate）+ **传输安全**（TLS）+ **认证安全**（Realm/Spring Security）+ **部署安全**（最小权限/端口/更新）。安全清单是面试"Tomcat 安全怎么做"的标准答案。
+> **要点**：Tomcat 安全 = **会话安全**（http-only Cookie + invalidate）+ **传输安全**（TLS）+ **认证安全**（Realm/Spring Security）+ **部署安全**（最小权限/端口/更新）。安全清单是面试"Tomcat 安全怎么做"的标准答案。
 
 ---
 
-> 🎯 **核心要点**：会话与安全体系 = **Session 机制**（JSESSIONID + 三失效时机）+ **分布式会话**（Spring Session Redis 是现代答案）+ **TLS**（证书 + 跳转 + HSTS）+ **Realm 认证**（数据库 Realm）+ **安全清单**（端口/参数/更新）。"集群会话怎么解决"与"HTTPS 怎么配"是两大必考题。
+> **核心要点**：会话与安全体系 = **Session 机制**（JSESSIONID + 三失效时机）+ **分布式会话**（Spring Session Redis 是现代答案）+ **TLS**（证书 + 跳转 + HSTS）+ **Realm 认证**（数据库 Realm）+ **安全清单**（端口/参数/更新）。"集群会话怎么解决"与"HTTPS 怎么配"是两大必考题。
 
 ---
 

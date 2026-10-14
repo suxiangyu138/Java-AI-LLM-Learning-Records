@@ -28,7 +28,7 @@
 | 内存淘汰 | 多种策略 | LRU |
 | 多线程 | 6.0+ 网络 I/O 多线程 | 多线程 |
 
-> 💡 Redis 的核心优势：数据结构丰富、持久化保障、支持分布式集群。
+> Redis 的核心优势：数据结构丰富、持久化保障、支持分布式集群。
 
 ### 2. Redis 为什么这么快？
 > Redis 单机 QPS 可达 10w+，主要得益于多方面原因。
@@ -39,7 +39,7 @@
 4. **高效的数据结构**：简单动态字符串（SDS）、双端链表、压缩列表、跳表等针对场景优化的数据结构
 5. **RESP 协议**：二进制安全、解析高效的 Redis 序列化协议
 
-> 🎯 面试常问："Redis 单线程为什么还这么快？" 核心回答点：内存 + 单线程无锁竞争 + epoll IO 多路复用。
+> 面试常问："Redis 单线程为什么还这么快？" 核心回答点：内存 + 单线程无锁竞争 + epoll IO 多路复用。
 
 ### 3. Redis 支持哪些数据类型？各自的应用场景？
 > Redis 支持五大基础类型和多种高级类型。
@@ -56,7 +56,7 @@
 | **BitMap** | String 位操作 | 位运算，内存占用极小 | 签到统计、布隆过滤器 |
 | **Stream** | 紧凑链表 | 消息队列，支持消费者组 | 消息队列、事件流 |
 
-> 💡 面试常问：ZSet 的底层实现是 ZipList + SkipList。当元素少于 128 且长度小于 64 字节时用 ZipList，否则用 SkipList。
+> 面试常问：ZSet 的底层实现是 ZipList + SkipList。当元素少于 128 且长度小于 64 字节时用 ZipList，否则用 SkipList。
 
 ### 4. String 类型的基本操作有哪些？
 > String 是 Redis 最基础也最常用的数据类型。
@@ -102,7 +102,7 @@ APPEND key "append"     # 追加字符串
 - **两者结合**：定期删除负责主动清理，惰性删除作为兜底。只靠定期删除会漏，只靠惰性删除会导致内存泄漏。
 - **如果过期 key 没被清理掉怎么办？** 当内存超过 `maxmemory` 时，触发内存淘汰策略。
 
-> 💡 面试必问：Redis 的过期删除不是定时扫描所有 key，而是随机抽样的，避免 CPU 过载。
+> 面试必问：Redis 的过期删除不是定时扫描所有 key，而是随机抽样的，避免 CPU 过载。
 
 ### 6. Redis 的内存淘汰策略有哪些？
 > 当内存使用达到 `maxmemory` 上限时，Redis 根据配置的策略淘汰 key。
@@ -118,7 +118,7 @@ APPEND key "append"     # 追加字符串
 | **volatile-random** | 从设置了过期时间的 key 中随机淘汰 | 简单场景 |
 | **allkeys-random** | 从所有 key 中随机淘汰 | 简单场景 |
 
-> 🎯 最常用的配置：`maxmemory-policy allkeys-lru`。Redis 4.0 之后引入了 LFU 策略。
+> 最常用的配置：`maxmemory-policy allkeys-lru`。Redis 4.0 之后引入了 LFU 策略。
 
 ### 7. RDB 和 AOF 两种持久化的区别？
 > Redis 提供两种持久化方式，各有优劣。
@@ -147,7 +147,7 @@ appendfsync everysec    # 每秒 fsync，默认配置
 # appendfsync no        # 由 OS 决定，不安全
 ```
 
-> 🎯 最佳实践：两者同时开启。RDB 用于快速恢复和备份，AOF 用于数据安全保障。Redis 4.0+ 支持混合持久化。
+> 最佳实践：两者同时开启。RDB 用于快速恢复和备份，AOF 用于数据安全保障。Redis 4.0+ 支持混合持久化。
 
 ### 8. 主从复制的原理是什么？
 > 主从复制是 Redis 高可用的基础，支持一主多从架构。
@@ -171,7 +171,7 @@ replicaof <master-ip> <master-port>   # 6.x 语法
 masterauth <password>
 ```
 
-> 💡 主从复制是异步的，主库不等待从库确认。这是数据一致性和性能之间的权衡。
+> 主从复制是异步的，主库不等待从库确认。这是数据一致性和性能之间的权衡。
 
 ### 9. Redis 哨兵（Sentinel）的作用？
 > Redis Sentinel 是 Redis 的高可用解决方案，自动监控和故障转移。
@@ -187,7 +187,7 @@ masterauth <password>
 - 客观下线后哨兵进行故障转移投票（Raft 一致性算法）
 - 选择新的主库（优先选择优先级最高、数据最完整的从库）
 
-> ⚠️ 哨兵至少需要 3 个节点（奇数个）才能实现高可用，避免"脑裂"场景。
+> 哨兵至少需要 3 个节点（奇数个）才能实现高可用，避免"脑裂"场景。
 
 ### 10. Redis 集群的哈希槽机制？
 > Redis Cluster 通过哈希槽将数据分布到多个节点。
@@ -211,7 +211,7 @@ CLUSTER GETKEYSINSLOT slot 10 # 查看槽中的 key
 - `MOVED`：哈希槽已永久迁移到其他节点，客户端更新本地缓存
 - `ASK`：哈希槽正在迁移中，客户端重定向到目标节点
 
-> 🎯 哈希槽优势：添加或删除节点时只需迁移部分槽和数据，无需全量 rehash。
+> 哈希槽优势：添加或删除节点时只需迁移部分槽和数据，无需全量 rehash。
 
 ### 11. 什么是缓存穿透？如何解决？
 > 缓存穿透是指查询不存在的数据，每次都会穿透缓存直达数据库。
@@ -242,7 +242,7 @@ public Object query(String key) {
 }
 ```
 
-> ⚠️ 布隆过滤器存在一定误判率（判断存在可能不存在，但判断不存在一定不存在）。
+> 布隆过滤器存在一定误判率（判断存在可能不存在，但判断不存在一定不存在）。
 
 ### 12. 什么是缓存击穿？如何解决？
 > 缓存击穿是指某个热点 key 在缓存失效的瞬间被大量并发请求同时穿透到数据库。
@@ -298,7 +298,7 @@ int randomTTL = baseTTL + new Random().nextInt(600);
 redis.set(key, value, randomTTL);
 ```
 
-> 🎯 面试三连问：缓存穿透、缓存击穿、缓存雪崩是 Redis 面试最高频的三大问题，必须熟练掌握。
+> 面试三连问：缓存穿透、缓存击穿、缓存雪崩是 Redis 面试最高频的三大问题，必须熟练掌握。
 
 ### 14. Redis 的发布订阅机制？
 > Redis Pub/Sub 是一种消息通信模式，发送者（publisher）发送消息，订阅者（subscriber）接收消息。
@@ -315,7 +315,7 @@ PSUBSCRIBE pattern*      # 模式订阅（支持通配符）
 - **限制**：无法回溯历史消息，没有消息确认机制
 - **替代方案**：Redis 5.0+ Stream 提供了更完善的消息队列功能
 
-> 💡 Pub/Sub 适合实时性要求高、允许丢消息的场景；消息队列需求应优先使用 Stream。
+> Pub/Sub 适合实时性要求高、允许丢消息的场景；消息队列需求应优先使用 Stream。
 
 ### 15. Redis 事务是如何工作的？
 > Redis 事务通过 MULTI, EXEC, DISCARD, WATCH 命令实现。
@@ -340,7 +340,7 @@ EXEC              # 如果 key1 在 WATCH 后被修改，EXEC 返回 nil
   - Redis 事务是"一次性提交，依次执行"，中间失败不会回滚已执行的命令
   - Redis 事务的隔离性通过单线程保证
 
-> ⚠️ Redis 事务只是保证"一组命令的原子性执行"，不提供传统意义的事务回滚。
+> Redis 事务只是保证"一组命令的原子性执行"，不提供传统意义的事务回滚。
 
 ### 16. Redis 是单线程的吗？6.0 后的多线程模型？
 > 理解 Redis 多线程演进对面试很重要。
@@ -365,7 +365,7 @@ io-threads 4
 io-threads-do-reads yes
 ```
 
-> 💡 多线程 I/O 在纯内存操作瓶颈不在 CPU 时效果不明显，主要在网络开销大时有改善。
+> 多线程 I/O 在纯内存操作瓶颈不在 CPU 时效果不明显，主要在网络开销大时有改善。
 
 ---
 
@@ -445,7 +445,7 @@ level 0: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9
 4. 新写入操作直接在 `ht[1]` 上进行
 5. 当所有 bucket 迁移完毕，`rehashidx` 置为 -1，`ht[0]` 指向 `ht[1]`，释放旧 `ht[0]`
 
-> 💡 渐进式 rehash 的巧妙之处：将一次性大规模数据迁移分散到每个操作中，保证 Redis 服务不卡顿。
+> 渐进式 rehash 的巧妙之处：将一次性大规模数据迁移分散到每个操作中，保证 Redis 服务不卡顿。
 
 ### 5. Redis 的 reactor 模型和 epoll 机制？
 > Redis 基于 I/O 多路复用（epoll/kqueue/select）实现高性能网络处理。
@@ -467,7 +467,7 @@ level 0: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9
 - **文件事件**：Socket 的可读/可写事件（客户端连接、读写请求）
 - **时间事件**：定时任务（过期 key 清理、AOF 刷盘等）
 
-> 🎯 面试常问：Redis 通过 epoll 实现单线程处理大量并发连接，但核心瓶颈从来不在 CPU 而在内存和网络。
+> 面试常问：Redis 通过 epoll 实现单线程处理大量并发连接，但核心瓶颈从来不在 CPU 而在内存和网络。
 
 ---
 
@@ -528,7 +528,7 @@ ZRANGEBYSCORE leaderboard:202607 100 200 WITHSCORES
 - 月榜：`leaderboard:202607`
 - 使用 `UNION` 或定时聚合计算
 
-> 💡 排行榜更新时使用 `ZINCRBY` 原子增减分数，避免并发问题。
+> 排行榜更新时使用 `ZINCRBY` 原子增减分数，避免并发问题。
 
 ### 3. （美团）Redis 如何实现附近的人功能？
 > 利用 Redis 的 Geo 数据结构实现 LBS 功能。
@@ -573,7 +573,7 @@ PFCOUNT page:uv:202607
   - 无法精确统计，但误差可控
 - **适用场景**：日活/月活 UV、页面访问去重计数
 
-> ⚠️ 如果要求精确计数（如订单数），使用 Set 或 String 自增；如果允许小误差（UV），使用 HyperLogLog。
+> 如果要求精确计数（如订单数），使用 Set 或 String 自增；如果允许小误差（UV），使用 HyperLogLog。
 
 ### 5. Redis 实现消息队列的几种方式对比？
 > Redis 提供了三种消息队列实现方式。
@@ -596,7 +596,7 @@ XGROUP CREATE mystream group1 $                # 创建消费者组
 XREADGROUP GROUP group1 consumer1 COUNT 1 BLOCK 2000 STREAMS mystream >  # 消费者组消费
 ```
 
-> 🎯 面试常问：Redis Stream vs Kafka？回答要点：Kafka 适合大数据量、需要分区、长期存储的场景；Stream 适合轻量级、低延迟、Redis 生态内的场景。
+> 面试常问：Redis Stream vs Kafka？回答要点：Kafka 适合大数据量、需要分区、长期存储的场景；Stream 适合轻量级、低延迟、Redis 生态内的场景。
 
 ### 6. （字节）如何用 Redis 实现用户签到和连续签到统计？
 > BitMap 是实现签到功能的最佳工具。
@@ -653,7 +653,7 @@ public int getContinuousSignDays(long userId, int year, int month) {
   - 读写分离（从节点分担读压力）
   - 散列热 key（加随机后缀拆分为多个 key）
 
-> 💡 监控大 key 和热 key 是 Redis 运维的日常功课，建议在 Redis 配置中开启慢查询日志辅助定位。
+> 监控大 key 和热 key 是 Redis 运维的日常功课，建议在 Redis 配置中开启慢查询日志辅助定位。
 
 ---
 
@@ -953,7 +953,7 @@ public void updateData(Long id, String data) {
 MySQL binlog -> Canal -> MQ -> 消费端同步 Redis
 ```
 
-> 🎯 没有完美的强一致性方案，只能做到最终一致性。如果业务要求强一致，建议直接读数据库。
+> 没有完美的强一致性方案，只能做到最终一致性。如果业务要求强一致，建议直接读数据库。
 
 ### 5. Redis 脑裂问题及解决方案
 > 脑裂（Split-Brain）发生在网络分区场景下。

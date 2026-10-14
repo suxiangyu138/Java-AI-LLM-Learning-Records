@@ -1,6 +1,6 @@
 # 06 - API 网关：Spring Cloud Gateway
 
-> 🎯 Spring Cloud Gateway 基于 WebFlux（响应式），性能远超 Zuul 1.x — 统一鉴权、路由转发、限流熔断、跨域处理，微服务的第一道关卡
+> Spring Cloud Gateway 基于 WebFlux（响应式），性能远超 Zuul 1.x — 统一鉴权、路由转发、限流熔断、跨域处理，微服务的第一道关卡
 
 ---
 
@@ -23,7 +23,7 @@
     <groupId>org.springframework.cloud</groupId>
     <artifactId>spring-cloud-starter-gateway</artifactId>
 </dependency>
-<!-- ⚠️ Gateway 基于 WebFlux，不能引入 spring-boot-starter-web -->
+<!-- Gateway 基于 WebFlux，不能引入 spring-boot-starter-web -->
 ```
 
 ### 三大核心
@@ -50,7 +50,7 @@ spring:
       routes:
         # ═══ 用户服务 ═══
         - id: user-service
-          uri: lb://user-service              # ⭐ lb:// = 负载均衡
+          uri: lb://user-service              # ★ lb:// = 负载均衡
           predicates:
             - Path=/api/users/**
           filters:
@@ -103,7 +103,7 @@ spring:
 
 ## 3. 自定义过滤器
 
-### 3.1 GlobalFilter（⭐ 鉴权场景）
+### 3.1 GlobalFilter（★ 鉴权场景）
 
 ```java
 @Component
@@ -231,4 +231,4 @@ spring:
             - RewritePath=/order-service/(?<segment>.*), /$\{segment}
 ```
 
-> 🎯 **最佳实践**：Gateway 统一鉴权、按 Path 路由、Sentinel 网关层限流降级、Knife4j 聚合 API 文档。Gateway 自身做到轻量无状态，业务逻辑留给后端服务。
+> **最佳实践**：Gateway 统一鉴权、按 Path 路由、Sentinel 网关层限流降级、Knife4j 聚合 API 文档。Gateway 自身做到轻量无状态，业务逻辑留给后端服务。

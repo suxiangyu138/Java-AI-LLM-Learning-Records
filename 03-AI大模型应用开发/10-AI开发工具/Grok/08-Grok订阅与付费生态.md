@@ -1,10 +1,10 @@
 # 08 - Grok 订阅与付费生态（2026.07）
 
-> 🎯 2026 年 Grok 的付费生态经历了最大变化——SpaceXAI 整合了 Cursor、Grok 4.5 以 $2/$6 的颠覆性定价入局、SuperGrok 与 Cursor Pro 权益打通。理解每档方案的差异是性价比选型的关键
+> 2026 年 Grok 的付费生态经历了最大变化——SpaceXAI 整合了 Cursor、Grok 4.5 以 $2/$6 的颠覆性定价入局、SuperGrok 与 Cursor Pro 权益打通。理解每档方案的差异是性价比选型的关键
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [订阅方案全景（2026.07）](#1-订阅方案全景202607)
 2. [X 平台免费版](#2-x-平台免费版)
@@ -21,26 +21,26 @@
 ```text
 Grok 付费生态（2026.07 最新）
 │
-├── 🆓 X 免费版 — $0/月
+├── X 免费版 — $0/月
 │   ├── 每 2h 10 次基础 Grok 查询
 │   └── 适合：轻度体验
 │
-├── ⭐ X Premium+ — $16/月
+├── ★ X Premium+ — $16/月
 │   ├── Grok 4.5 完整能力 + X 蓝 V
 │   ├── DeepSearch + Aurora + Thinking Mode
 │   └── 适合：X 活跃用户 + Grok 深度用户
 │
-├── 🚀 SuperGrok — $30/月
+├── SuperGrok — $30/月
 │   ├── 无限查询 + Early Access
 │   ├── 独立于 X 的账号体系 + 跨平台同步
 │   └── 适合：高频专业用户
 │
-├── 💻 Cursor Pro — $20/月
+├── Cursor Pro — $20/月
 │   ├── 含 Grok 4.5 Agent 调用额度
 │   ├── IDE 内原生编程体验 ← 2026 新增入口！
 │   └── 适合：开发者首选
 │
-└── 💰 xAI API — 按量付费
+└── xAI API — 按量付费
     ├── grok-4.5: $2 in / $6 out per 1M ← Token 效率 4.2×
     ├── grok-3-mini: $0.30 in / $4 out
     └── 适合：代码集成 / 高频批量调用
@@ -53,9 +53,9 @@ Grok 付费生态（2026.07 最新）
 | 维度 | 限额 |
 |------|------|
 | Grok 查询 | 每 2 小时 10 次 |
-| 图片分析 | ✅ 计次 |
-| DeepSearch | ❌ |
-| Aurora 图像生成 | ❌（或极有限） |
+| 图片分析 | ✓ 计次 |
+| DeepSearch | ✗ |
+| Aurora 图像生成 | ✗（或极有限） |
 
 ---
 
@@ -65,13 +65,13 @@ Grok 付费生态（2026.07 最新）
 |------|:---:|:---:|
 | Grok 模型 | 基础 | **Grok 4.5 完整** |
 | 查询频率 | 10次/2h | 50次/2h |
-| DeepSearch | ❌ | ✅ |
-| Thinking Mode | ❌ | ✅ |
-| Aurora 图像生成 | ❌ | ✅ |
-| X 蓝 V 认证 | ❌ | ✅ |
-| 广告减半 | ❌ | ✅ |
+| DeepSearch | ✗ | ✓ |
+| Thinking Mode | ✗ | ✓ |
+| Aurora 图像生成 | ✗ | ✓ |
+| X 蓝 V 认证 | ✗ | ✓ |
+| 广告减半 | ✗ | ✓ |
 
-> 💡 $16/月获得 Grok 4.5 完整能力仍然极具竞争力——对标 ChatGPT Plus ($20) 和 Claude Pro ($20)。
+> $16/月获得 Grok 4.5 完整能力仍然极具竞争力——对标 ChatGPT Plus ($20) 和 Claude Pro ($20)。
 
 ---
 
@@ -80,10 +80,10 @@ Grok 付费生态（2026.07 最新）
 | 维度 | Premium+ | SuperGrok ($30/月) |
 |------|:---:|:---:|
 | Grok 查询 | 50次/2h | 更高（接近无限） |
-| 绑定 X | ✅ 必须 | ❌ 独立 |
-| Early Access | ❌ | ✅ |
-| 专属支持 | ❌ | ✅ |
-| Cursor 集成 | ❌ | ⚠️ 部分权益 |
+| 绑定 X | ✓ 必须 | ✗ 独立 |
+| Early Access | ✗ | ✓ |
+| 专属支持 | ✗ | ✓ |
+| Cursor 集成 | ✗ | 部分权益 |
 
 ---
 
@@ -115,13 +115,13 @@ Grok 4.5 API：输出 ~16K tokens → $0.10
 
 | 功能 | Cursor Pro ($20/月) |
 |------|:---:|
-| Grok 4.5 补全 | ✅ |
-| Grok 4.5 Agent | ✅ 含额度 |
-| Grok 4.5 Chat | ✅ 侧边栏 |
-| IDE 集成 | ✅ 原生（不需要 API Key） |
+| Grok 4.5 补全 | ✓ |
+| Grok 4.5 Agent | ✓ 含额度 |
+| Grok 4.5 Chat | ✓ 侧边栏 |
+| IDE 集成 | ✓ 原生（不需要 API Key） |
 | 适合 | 开发者首选入口 |
 
-> 💡 **推荐**：Java 开发者用 Cursor Pro ($20/月) 作为 Grok 4.5 的主力入口，IDE 内原生体验 + Agent 编程能力。
+> **推荐**：Java 开发者用 Cursor Pro ($20/月) 作为 Grok 4.5 的主力入口，IDE 内原生体验 + Agent 编程能力。
 
 ---
 
@@ -129,13 +129,13 @@ Grok 4.5 API：输出 ~16K tokens → $0.10
 
 | 角色 | 推荐方案 | 月费 |
 |------|------|:---:|
-| 👨‍💻 **开发者** | Cursor Pro + DeepSeek API (省钱) | $20-25 |
-| 💼 **职场人 + X 用户** | X Premium+ | $16 |
-| 🔬 **研究员** | SuperGrok | $30 |
-| 🏢 **企业团队** | Cursor Business + xAI API | 按需 |
-| 🆓 **学生/学习者** | X 免费版 + DeepSeek 免费 | $0 |
+| ‍**开发者** | Cursor Pro + DeepSeek API (省钱) | $20-25 |
+| **职场人 + X 用户** | X Premium+ | $16 |
+| **研究员** | SuperGrok | $30 |
+| **企业团队** | Cursor Business + xAI API | 按需 |
+| **学生/学习者** | X 免费版 + DeepSeek 免费 | $0 |
 
-> 🎯 **核心要点**：2026 年 Grok 付费生态的最大变化——Cursor Pro ($20/月) 成为开发者的 Grok 4.5 最佳入口。Token 效率优势意味着即使用 API 按量付费，高频使用场景下的成本也远低于竞品。
+> **核心要点**：2026 年 Grok 付费生态的最大变化——Cursor Pro ($20/月) 成为开发者的 Grok 4.5 最佳入口。Token 效率优势意味着即使用 API 按量付费，高频使用场景下的成本也远低于竞品。
 
 ---
 

@@ -2,7 +2,7 @@
 
 > LlamaIndex 的核心主张："RAG 的瓶颈不是模型，而是数据管道"——检索是第一抽象，数据接入/解析/检索是它的主场；2026 年这一判断成为行业共识。
 
-## 📚 目录
+## 目录
 
 1. [LlamaIndex 是什么](#1-llamaindex-是什么)
 2. [核心主张：数据管道是瓶颈](#2-核心主张数据管道是瓶颈)
@@ -185,7 +185,7 @@ LlamaIndex：检索优先（数据接入/解析/检索最专）
 ⑤ Workflows 编排（多步/多文档）
 ```
 
-> 🎯 核心要点：LlamaIndex = 检索第一抽象的数据框架——连接（300+）/解析（LlamaParse）/索引（四种）/检索（QueryEngine）/编排（Workflows）；核心主张"RAG 瓶颈是数据管道"已成为 2026 共识；vs LangChain（检索 vs 编排）、vs Haystack（数据 vs 管道）；适用"数据复杂场景"，生产常与 LangGraph 混用；六个误区校准认知。
+> 核心要点：LlamaIndex = 检索第一抽象的数据框架——连接（300+）/解析（LlamaParse）/索引（四种）/检索（QueryEngine）/编排（Workflows）；核心主张"RAG 瓶颈是数据管道"已成为 2026 共识；vs LangChain（检索 vs 编排）、vs Haystack（数据 vs 管道）；适用"数据复杂场景"，生产常与 LangGraph 混用；六个误区校准认知。
 
 ---
 

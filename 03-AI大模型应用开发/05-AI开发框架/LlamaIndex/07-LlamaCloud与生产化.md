@@ -2,7 +2,7 @@
 
 > 托管层全景：LlamaParse/Extract/Cloud Index/Sheets 产品矩阵、内置评估器与 OTel/LlamaTrace 可观测、SOC 2 合规与积分定价——从开源框架到生产平台的完整路径。
 
-## 📚 目录
+## 目录
 
 1. [LlamaCloud 定位与更名](#1-llamacloud-定位与更名)
 2. [产品矩阵](#2-产品矩阵)
@@ -212,7 +212,7 @@ LlamaTrace：LlamaIndex 专用可观测仪表板
 
 ## 8. 生产化落地清单
 
-| 类别 | 检查项 | ✅ |
+| 类别 | 检查项 | ✓ |
 |---|---|---|
 | 解析 | 文档类型 → 级别路由（成本分层） | ☐ |
 | 版本 | Parse API version 固定 | ☐ |
@@ -252,7 +252,7 @@ LlamaCloud 生产化 = 阶段 5 思想的托管版：
 | "更名说明业务萎缩" | 是聚焦（解析为核心的重塑） |
 | "积分制很贵" | 免费 10K/月 + 分层路由可控制 |
 
-> 🎯 核心要点：LlamaCloud 正在以 LlamaParse 为核心重塑（2026-02 更名）；产品矩阵（Parse/Extract/Index/Sheets/Split）覆盖数据全链路；托管索引内置增量同步（阶段 3 的平台版）；内置评估器 = RAGAS 思想内建；SOC 2/GDPR/HIPAA + 积分制定价；落地走八项清单；开源/托管/混合三路径按团队选。
+> 核心要点：LlamaCloud 正在以 LlamaParse 为核心重塑（2026-02 更名）；产品矩阵（Parse/Extract/Index/Sheets/Split）覆盖数据全链路；托管索引内置增量同步（阶段 3 的平台版）；内置评估器 = RAGAS 思想内建；SOC 2/GDPR/HIPAA + 积分制定价；落地走八项清单；开源/托管/混合三路径按团队选。
 
 ---
 

@@ -1,10 +1,10 @@
 # Windows 系统基础与演进
 
-> 🏗️ 从 Windows 1.0 到 Windows 11，从 MS-DOS 内核到 NT 架构 —— 理解你每天都在用的操作系统是如何运转的
+> 从 Windows 1.0 到 Windows 11，从 MS-DOS 内核到 NT 架构 —— 理解你每天都在用的操作系统是如何运转的
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [Windows 版本演进简史](#1-windows-版本演进简史)
 2. [Windows 系统架构概览](#2-windows-系统架构概览)
@@ -39,7 +39,7 @@
 | Windows Server 2019 | Win10 1809 | Kubernetes 支持 |
 | Windows Server 2022 | Win10 21H2 | 安全核心服务器 |
 
-> 💡 **关键认知**：自 Windows 10 起，微软转向"Windows as a Service"（服务化），不再发布大版本号，而是持续通过半年频道的功能更新迭代。
+> **关键认知**：自 Windows 10 起，微软转向"Windows as a Service"（服务化），不再发布大版本号，而是持续通过半年频道的功能更新迭代。
 
 ---
 
@@ -83,7 +83,7 @@
 | **WSL 子系统** | 用户态 | Linux 二进制兼容层 |
 | **NTDLL.dll** | 用户态底层 | 用户态到内核态的入口（系统调用网关） |
 
-> 🎯 **核心要点**：Java 程序（java.exe）运行在用户态，JVM 的线程最终映射到内核线程，由 NT Kernel 统一调度。
+> **核心要点**：Java 程序（java.exe）运行在用户态，JVM 的线程最终映射到内核线程，由 NT Kernel 统一调度。
 
 ---
 
@@ -131,7 +131,7 @@ reg export "HKLM\SOFTWARE\JavaSoft" C:\backup\java.reg
 reg import C:\backup\java.reg
 ```
 
-> ⚠️ **警告**：直接编辑注册表有风险，修改前建议先导出备份。环境变量优先用 `setx` 或系统设置 GUI 操作。
+> **警告**：直接编辑注册表有风险，修改前建议先导出备份。环境变量优先用 `setx` 或系统设置 GUI 操作。
 
 ---
 
@@ -167,7 +167,7 @@ reg import C:\backup\java.reg
 | **进程管理** | Windows 没有 `kill -9`，用 `taskkill /F /PID` |
 | **文件锁** | Windows 上文件被占用时无法删除，Linux 上可以删除正在使用的文件 |
 
-> 🎯 **核心要点**：Windows 和 Linux 最大的思维差异在于 —— Windows 是 **API 驱动**（Win32 API），Linux 是 **文件驱动**（一切皆文件）。
+> **核心要点**：Windows 和 Linux 最大的思维差异在于 —— Windows 是 **API 驱动**（Win32 API），Linux 是 **文件驱动**（一切皆文件）。
 
 ---
 
@@ -192,7 +192,7 @@ reg import C:\backup\java.reg
 | JDK 21 | Windows 10 / Server 2019 | 当前 LTS |
 | JDK 24 | Windows 10 / Server 2019 | 最新特性版 |
 
-> 💡 **建议**：2026 年新项目优先选择 JDK 21 LTS，老旧项目维护 JDK 8/11。
+> **建议**：2026 年新项目优先选择 JDK 21 LTS，老旧项目维护 JDK 8/11。
 
 ---
 

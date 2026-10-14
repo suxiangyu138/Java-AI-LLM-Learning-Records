@@ -1,6 +1,6 @@
 # 00 - Spring 生态深度剖析总览
 
-> 🎯 源码级内部分析 — 不讨论"Spring 能做什么"，只剖析"Spring 内部怎么运转"。聚焦三大引擎：Bean 生命周期后处理器链、Boot 启动内核与自动配置机制、MVC 请求处理全链路。与现有的「生态全景」和「全家桶原理纵深」互补，定位**最底层机制层**
+> 源码级内部分析 — 不讨论"Spring 能做什么"，只剖析"Spring 内部怎么运转"。聚焦三大引擎：Bean 生命周期后处理器链、Boot 启动内核与自动配置机制、MVC 请求处理全链路。与现有的「生态全景」和「全家桶原理纵深」互补，定位**最底层机制层**
 
 ---
 
@@ -19,28 +19,28 @@
 ```
 Spring 生态深度剖析（8个文件 — 机制层，看懂内部如何运转）
 │
-├── 🧬 后处理器（01）
+├── 后处理器（01）
 │   └── 01-Bean生命周期与PostProcessor扩展体系.md  # 两大扩展基石 + 五大扩展点 + 完整时序
 │
-├── 🚀 启动内核（02）
+├── 启动内核（02）
 │   └── 02-SpringBoot启动流程与自动配置内核.md    # Boot 4 启动五阶段 + @Conditional 条件树
 │
-├── 🔄 循环依赖（03）
+├── 循环依赖（03）
 │   └── 03-循环依赖与三级缓存深度剖析.md          # getSingleton 源码/三级缓存迁移/AOP 代理唯一性
 │
-├── 🎭 AOP 与事务（04）
+├── AOP 与事务（04）
 │   └── 04-AOP代理创建与事务管理内核.md            # 代理创建决策 + 事务传播行为源码链路
 │
-├── 🌐 MVC 链路（05）
+├── MVC 链路（05）
 │   └── 05-DispatcherServlet请求处理全链路.md      # doDispatch 八阶段 + 参数解析 + 返回值处理
 │
-├── 📡 事件驱动（06）
+├── 事件驱动（06）
 │   └── 06-事件驱动模型与ApplicationContext内部机制.md  # 事件广播/监听器注册/上下文 refresh 12 步
 │
-├── 🔧 自定义 Starter（07）
+├── 自定义 Starter（07）
 │   └── 07-自定义Starter与扩展点实战.md            # 自动配置开发 + @AutoConfiguration + 工业级 Starter
 │
-└── 📌 00-Spring生态深度剖析总览.md                 # ← 本文件
+└── 00-Spring生态深度剖析总览.md                 # ← 本文件
 ```
 
 ---
@@ -50,13 +50,13 @@ Spring 生态深度剖析（8个文件 — 机制层，看懂内部如何运转�
 | # | 文件 | 核心内容 | 级别 |
 |---|------|----------|:---:|
 | 00 | 深度剖析总览 | 全景导航 + 定位关系 + 路线 + 速查 | — |
-| 01 | Bean生命周期与PostProcessor | BFPP/BPP/InstantiationAware/smart 五大扩展点含时序 | ⭐⭐⭐ |
-| 02 | Boot启动流程与自动配置 | SpringApplication.run 五阶段 + ImportCandidates + @Conditional | ⭐⭐⭐ |
-| 03 | 循环依赖与三级缓存 | singletonsCurrentlyInCreation + getSingleton 逐行分析 | ⭐⭐⭐ |
-| 04 | AOP代理与事务管理 | 代理创建决策链 + TransactionInterceptor 传播行为 | ⭐⭐⭐ |
-| 05 | DispatcherServlet 全链路 | doDispatch 八阶段 + 参数解析复合器 + 返回值处理器 | ⭐⭐ |
-| 06 | 事件驱动与Context | refresh 12 步 + 事件广播器 + 监听器注册策略 | ⭐⭐ |
-| 07 | 自定义Starter实战 | @AutoConfiguration + .imports 文件 + 工业级 Starter 模板 | ⭐⭐ |
+| 01 | Bean生命周期与PostProcessor | BFPP/BPP/InstantiationAware/smart 五大扩展点含时序 | ★★★ |
+| 02 | Boot启动流程与自动配置 | SpringApplication.run 五阶段 + ImportCandidates + @Conditional | ★★★ |
+| 03 | 循环依赖与三级缓存 | singletonsCurrentlyInCreation + getSingleton 逐行分析 | ★★★ |
+| 04 | AOP代理与事务管理 | 代理创建决策链 + TransactionInterceptor 传播行为 | ★★★ |
+| 05 | DispatcherServlet 全链路 | doDispatch 八阶段 + 参数解析复合器 + 返回值处理器 | ★★ |
+| 06 | 事件驱动与Context | refresh 12 步 + 事件广播器 + 监听器注册策略 | ★★ |
+| 07 | 自定义Starter实战 | @AutoConfiguration + .imports 文件 + 工业级 Starter 模板 | ★★ |
 
 ---
 
@@ -70,7 +70,7 @@ Spring 生态深度剖析（8个文件 — 机制层，看懂内部如何运转�
 ├─────────────────────────────────────────────┤
 │ 06-Spring全家桶（28文件） — 「原理层」      │  ← IoC/AOP/事务/MVC/Boot自动装配/微服务全链路
 ├─────────────────────────────────────────────┤
-│ Spring生态深度剖析（8文件） — 「机制层」🆕  │  ← PostProcessor/Boot启动内核/缓存/MVC链路
+│ Spring生态深度剖析（8文件） — 「机制层」 │  ← PostProcessor/Boot启动内核/缓存/MVC链路
 └─────────────────────────────────────────────┘
 ```
 
@@ -81,20 +81,20 @@ Spring 生态深度剖析（8个文件 — 机制层，看懂内部如何运转�
 | 代码 | 示意代码为主 | 源码骨架 + 关键方法调用链 |
 | 目标 | 面试答出原理 | 面试答到"源码级理解" |
 
-> 💡 **用法**：先刷全家桶建立原理基线 → 再读本体系理解内部机制 → 需要版本/新特性/选型时查生态全景。
+> **用法**：先刷全家桶建立原理基线 → 再读本体系理解内部机制 → 需要版本/新特性/选型时查生态全景。
 
 ---
 
 ## 4. 阅读路线推荐
 
-### 🟢 核心三件（必读，半天）
+### 核心三件（必读，半天）
 
 ```text
 01- PostProcessor 体系 → 02- Boot 启动内核 → 03- 循环依赖
 产出：能画出 Bean 生命周期完整时序、能解释 Boot 4 自动配置为什么改用 .imports、能讲清"三级缓存必要性"
 ```
 
-### 🔵 全栈机制（深入，1 天）
+### 全栈机制（深入，1 天）
 
 ```text
 04- AOP 与事务 → 05- MVC 全链路 → 06- 事件驱动与 Context → 07- 自定义 Starter
@@ -121,6 +121,6 @@ Spring 生态深度剖析（8个文件 — 机制层，看懂内部如何运转�
 
 ---
 
-> 🎯 **核心要点**：本体系的目标不是"知道 Spring 有三级缓存"，而是"能画出 getSingleton 的判断分支、能解释 earlySingletonExposure 为什么是 boolean、能在面试中主动画出 Bean 生命周期的 5 大扩展点时序"。三句话概括：**PostProcessor 是扩展机、refresh 是发动机、三级缓存是精巧设计**。
+> **核心要点**：本体系的目标不是"知道 Spring 有三级缓存"，而是"能画出 getSingleton 的判断分支、能解释 earlySingletonExposure 为什么是 boolean、能在面试中主动画出 Bean 生命周期的 5 大扩展点时序"。三句话概括：**PostProcessor 是扩展机、refresh 是发动机、三级缓存是精巧设计**。
 
 **下一模块**：[01-Bean生命周期与PostProcessor扩展体系](01-Bean生命周期与PostProcessor扩展体系.md)

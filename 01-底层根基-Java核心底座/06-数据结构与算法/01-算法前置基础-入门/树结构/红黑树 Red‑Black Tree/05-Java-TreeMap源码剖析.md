@@ -2,7 +2,7 @@
 
 > 红黑树在 Java 的标准实现：TreeMap/TreeSet 底层、节点结构与旋转、HashMap 的树化门槛（链表 ≥ 8 转红黑树）——工程视角验证理论。
 
-## 📚 目录
+## 目录
 
 1. [TreeMap 与红黑树](#1-treemap-与红黑树)
 2. [节点结构与基本操作](#2-节点结构与基本操作)
@@ -100,7 +100,7 @@ private void rotateLeft(Entry<K,V> p) {
 }
 ```
 
-> 💡 与 03 模块的手写旋转对比：源码多了 parent 指针维护——TreeMap 用三向链表（left/right/parent），删除修复（04 模块）需要向上回溯。
+> 与 03 模块的手写旋转对比：源码多了 parent 指针维护——TreeMap 用三向链表（left/right/parent），删除修复（04 模块）需要向上回溯。
 
 ## 3. HashMap 树化：红黑树的另一舞台
 
@@ -129,7 +129,7 @@ if (binCount >= TREEIFY_THRESHOLD - 1) {   // binCount >= 7 → 长度 ≥ 8
    此时树化兜底防最坏 O(n)
 ```
 
-> ⚠️ **面试必答**：HashMap 树化不是常态优化，而是**恶意哈希（HashDoS）防御**——正常数据下链表 ≥ 8 的概率是千万分之六。详见[哈希体系](../../哈希（散列）结构/00-哈希（散列）结构知识体系总览.md)与[Java 有关 Hash 的一切](../../../../01-Java基础语法与核心特性/Java有关Hash的一切/00-Hash总览.md)。
+> **面试必答**：HashMap 树化不是常态优化，而是**恶意哈希（HashDoS）防御**——正常数据下链表 ≥ 8 的概率是千万分之六。详见[哈希体系](../../哈希（散列）结构/00-哈希（散列）结构知识体系总览.md)与[Java 有关 Hash 的一切](../../../../01-Java基础语法与核心特性/Java有关Hash的一切/00-Hash总览.md)。
 
 ## 4. TreeMap vs HashMap 选型
 
@@ -156,7 +156,7 @@ if (binCount >= TREEIFY_THRESHOLD - 1) {   // binCount >= 7 → 长度 ≥ 8
 | TreeMap 允许 null 键？ | 自然序不允许（compareTo NPE） |
 | 旋转在源码里出现在哪？ | fixAfterInsertion / fixAfterDeletion |
 
-> 🎯 **核心要点**：源码验收——能讲 TreeMap.put 三步（BST 定位 → 红节点 → 修复）；HashMap 树化阈值的**泊松分布论证**（千万分之六）是面试杀手锏；「要有序选 TreeMap、要速度选 HashMap」的选型一句话；红黑树 + parent 指针的结构设计（与 AVL 的对比见 06 模块）。
+> **核心要点**：源码验收——能讲 TreeMap.put 三步（BST 定位 → 红节点 → 修复）；HashMap 树化阈值的**泊松分布论证**（千万分之六）是面试杀手锏；「要有序选 TreeMap、要速度选 HashMap」的选型一句话；红黑树 + parent 指针的结构设计（与 AVL 的对比见 06 模块）。
 
 ---
 

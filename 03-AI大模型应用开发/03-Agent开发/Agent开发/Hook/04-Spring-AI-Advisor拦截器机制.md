@@ -1,6 +1,6 @@
 # 04 - Spring AI Advisor 拦截器机制
 
-> 🎯 Spring AI 的 Advisor = 适配 AI 对话场景的拦截器 — 洋葱模型 + 栈式顾问链 + 框架自动追加末端 LLM 调用。Java 后端最熟悉的 Hook 范式：与 Spring MVC Interceptor 同源设计
+> Spring AI 的 Advisor = 适配 AI 对话场景的拦截器 — 洋葱模型 + 栈式顾问链 + 框架自动追加末端 LLM 调用。Java 后端最熟悉的 Hook 范式：与 Spring MVC Interceptor 同源设计
 
 ---
 
@@ -150,6 +150,6 @@ ChatClient client = ChatClient.builder(chatModel)
 
 ---
 
-> 🎯 **核心要点**：Spring AI Advisor = **栈式链实现洋葱模型**（order 排序→压栈→pop 递归执行→框架追加末端 LLM 调用）。生产标配：**MessageChatMemoryAdvisor（记忆）+ SafeGuardAdvisor（安全）+ LoggingAdvisor（可观测）+ QuestionAnswerAdvisor（RAG）**。Java 后端的优势 — 这跟写 Spring MVC Interceptor 完全一个套路。
+> **核心要点**：Spring AI Advisor = **栈式链实现洋葱模型**（order 排序→压栈→pop 递归执行→框架追加末端 LLM 调用）。生产标配：**MessageChatMemoryAdvisor（记忆）+ SafeGuardAdvisor（安全）+ LoggingAdvisor（可观测）+ QuestionAnswerAdvisor（RAG）**。Java 后端的优势 — 这跟写 Spring MVC Interceptor 完全一个套路。
 
 **下一模块**：[05-Spring AI Alibaba Hooks与Interceptors](05-Spring%20AI%20Alibaba%20Hooks与Interceptors.md) / **返回总览**：[00-Hook总览](00-Hook知识体系总览.md)

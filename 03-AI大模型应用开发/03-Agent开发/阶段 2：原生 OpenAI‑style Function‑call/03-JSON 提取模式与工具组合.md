@@ -2,7 +2,7 @@
 
 > 定位：非工具场景的结构化输出——JSON Mode vs json_schema、强制调用做提取、与工具调用的组合矩阵（2026-08 基准）
 
-## 📚 目录
+## 目录
 
 1. [三条结构化路线对比](#1-三条结构化路线对比)
 2. [JSON Mode（json_object）：旧方案的边界](#2-json-modejson_object旧方案的边界)
@@ -19,7 +19,7 @@
 | JSON Mode（旧） | `response_format: {"type": "json_object"}` | ★★★（只保证合法 JSON，不保证 schema） | 旧模型兼容 / 无 schema 场景 |
 | 强制工具调用 | `tool_choice` 锁定 + 提取工具 | ★★★★（~99%） | 无 strict 支持的供应商 / 统一工具管线 |
 
-> 🎯 **核心要点**：三种路线的本质差异是**"约束在哪一层"**——strict 在采样层（物理约束）、JSON Mode 在语法层（结构约束）、工具调用在协议层（调用约束）。约束越靠前，保证越强。
+> **核心要点**：三种路线的本质差异是**"约束在哪一层"**——strict 在采样层（物理约束）、JSON Mode 在语法层（结构约束）、工具调用在协议层（调用约束）。约束越靠前，保证越强。
 
 ## 2. JSON Mode（json_object）：旧方案的边界
 
@@ -42,7 +42,7 @@ data = json.loads(response.choices[0].message.content)
 | 前提 | system 消息必须含"json"字样（API 硬性要求） |
 | 2026 定位 | 旧模型回退方案；新模型一律用 json_schema |
 
-> ⚠️ **JSON Mode 的典型翻车**：字段名漂移（`price` vs `Price` vs `售价`）、类型漂移（数字变字符串）、多余嵌套——解析后仍需防御性校验。
+> **JSON Mode 的典型翻车**：字段名漂移（`price` vs `Price` vs `售价`）、类型漂移（数字变字符串）、多余嵌套——解析后仍需防御性校验。
 
 ## 3. 强制工具调用做提取
 
@@ -117,10 +117,10 @@ def extract_with_schema(client, user_text, model_cls) -> dict:
 
 | 组合 | 行为 | 结论 |
 |------|------|------|
-| `response_format` + `tool_choice: auto` | strict 从第一 token 生效，**抑制工具调用**——模型输出 schema 形状的假答案 | ❌ 同一轮不要叠加 |
-| `response_format` + 无工具 | 正常结构化输出 | ✅ |
-| `tool_choice` 锁定 + strict 工具 schema | 工具参数受约束，调用正常 | ✅（注意 parallel 关闭） |
-| strict + parallel_tool_calls | 并行交错可能破坏单调用形状保证 | ⚠️ 精确形状需求时关闭并行 |
+| `response_format` + `tool_choice: auto` | strict 从第一 token 生效，**抑制工具调用**——模型输出 schema 形状的假答案 | ✗ 同一轮不要叠加 |
+| `response_format` + 无工具 | 正常结构化输出 | ✓ |
+| `tool_choice` 锁定 + strict 工具 schema | 工具参数受约束，调用正常 | ✓（注意 parallel 关闭） |
+| strict + parallel_tool_calls | 并行交错可能破坏单调用形状保证 | 精确形状需求时关闭并行 |
 
 **回合分离原则（黄金法则）**：
 
@@ -129,7 +129,7 @@ def extract_with_schema(client, user_text, model_cls) -> dict:
 最终回答轮次：才应用 response_format（结构化收尾）
 ```
 
-> 💡 这与失败模式体系 04 篇的"延迟结构化（Deferred Structuring）"同源——约束只作用于该作用的位置。
+> 这与失败模式体系 04 篇的"延迟结构化（Deferred Structuring）"同源——约束只作用于该作用的位置。
 
 ## 6. 选型决策树
 
@@ -144,7 +144,7 @@ def extract_with_schema(client, user_text, model_cls) -> dict:
 └─ 否 → 单轮提取，按上树
 ```
 
-> 🎯 **核心要点**：JSON 提取的工程本质是"**把不可控的自由文本变成可控的结构**"。三条路线记住一句话——**strict 优先、工具兜底、JSON Mode 兼容**；与工具叠加时永远回合分离。
+> **核心要点**：JSON 提取的工程本质是"**把不可控的自由文本变成可控的结构**"。三条路线记住一句话——**strict 优先、工具兜底、JSON Mode 兼容**；与工具叠加时永远回合分离。
 
 ---
 

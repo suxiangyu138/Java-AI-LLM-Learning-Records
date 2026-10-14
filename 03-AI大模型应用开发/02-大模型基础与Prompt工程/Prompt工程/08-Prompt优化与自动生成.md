@@ -1,6 +1,6 @@
 # 08 - Prompt 优化与自动生成
 
-> 🎯 手工调 Prompt 靠经验，自动优化靠系统 — DSPy 用程序化方式优化 Prompt，APE 让 LLM 自己写 Prompt
+> 手工调 Prompt 靠经验，自动优化靠系统 — DSPy 用程序化方式优化 Prompt，APE 让 LLM 自己写 Prompt
 
 ---
 
@@ -228,7 +228,7 @@ def evaluate_prompts(candidates, val_set, llm):
 | **可复现性** | 低 | 高 | 中 |
 | **Token 成本** | 低 | 中 | 高（搜索过程） |
 | **适用场景** | 少量 Prompt | 批量/生产 | 快速原型 |
-| **需要标注数据** | 可选 | ✅ 需要 | ✅ 需要 |
+| **需要标注数据** | 可选 | ✓ 需要 | ✓ 需要 |
 
 ```text
 推荐策略：

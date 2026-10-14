@@ -1,7 +1,7 @@
 # 04-Vue3语法与uni-api
 > 定位：页面开发的两大基础——Vue3 组合式 API（响应式/计算/监听）与 uni 全局 API（请求/导航/交互/存储）；「模板语法是 Vue 的、能力 API 是 uni 的」。
 
-## 📚 目录
+## 目录
 1. [Vue3 组合式 API](#1-vue3-组合式-api)
 2. [模板语法要点](#2-模板语法要点)
 3. [uni 全局 API 全景](#3-uni-全局-api-全景)
@@ -121,7 +121,7 @@ console.log('除 H5 外都编译')
 4. 导航四件套与传参姿势？
 5. 条件编译的三种形式与平台标识？
 
-> 🎯 **核心要点**：组合式 API（script setup）是 2026 标准；模板语法注意小程序限制（无 v-html——rich-text 替代）；uni API 是跨端封装（先查 uni 再查平台）；导航四件套（navigateTo/redirectTo/switchTab/navigateBack——tab 页只能 switchTab）；传参小数据 url 大数据状态（字符串要转换）；showLoading 配对 hide；条件编译隔离平台差异。
+> **核心要点**：组合式 API（script setup）是 2026 标准；模板语法注意小程序限制（无 v-html——rich-text 替代）；uni API 是跨端封装（先查 uni 再查平台）；导航四件套（navigateTo/redirectTo/switchTab/navigateBack——tab 页只能 switchTab）；传参小数据 url 大数据状态（字符串要转换）；showLoading 配对 hide；条件编译隔离平台差异。
 
 ---
 

@@ -86,7 +86,7 @@ public class MyObject {
 - 弱引用+定时清理机制防止内存泄漏
 - Netty内部大量使用：`PooledByteBuf`、`ChannelOutboundBuffer.Entry`等
 
-> 💡 Recycler的优势：无锁（线程私有栈）、批量回收、弱引用自动清理。
+> Recycler的优势：无锁（线程私有栈）、批量回收、弱引用自动清理。
 
 ### 1.3 FastThreadLocal
 
@@ -167,7 +167,7 @@ protected void run() {
 | 灵活度 | 固定协议（HTTP） | 可自定协议，更灵活 |
 | 内存管理 | 普通Byte数组 | PooledByteBuf+引用计数 |
 
-> 🎯 Netty适合长连接、高并发场景（IM、推送、RPC），Tomcat更适合HTTP短连接场景。
+> Netty适合长连接、高并发场景（IM、推送、RPC），Tomcat更适合HTTP短连接场景。
 
 ### 1.6 EpollEventLoopGroup vs NioEventLoopGroup
 
@@ -302,7 +302,7 @@ if (ioRatio == 100) {
 }
 ```
 
-> ⚠️ ioRatio不是IO时间占比。ioRatio=50表示IO和任务各占一半时间。
+> ioRatio不是IO时间占比。ioRatio=50表示IO和任务各占一半时间。
 
 ### 2.5 Recycler对象池的内部实现机制
 
@@ -328,7 +328,7 @@ public abstract class Recycler<T> {
 }
 ```
 
-> 💡 **跨线程回收**：当持有对象的线程A被另一个线程B回收时，对象放入B的`WeakOrderQueue`，A下次pop()时转移回自己的Stack。
+> **跨线程回收**：当持有对象的线程A被另一个线程B回收时，对象放入B的`WeakOrderQueue`，A下次pop()时转移回自己的Stack。
 
 ### 2.6 Netty的accept/read/write流程
 
@@ -707,7 +707,7 @@ public class RpcClientProxy {
 | 业务线程直接调Channel.write() | Channel非线程安全 | 通过channel.eventLoop().execute()提交任务 |
 | DefaultFileRegion文件被删除 | FileChannel关闭前文件不可移动 | 使用ChunkedNioFile或FileHolder管理生命周期 |
 
-> 💡 **Netty内存泄漏检测级别**：DISABLED（不检测）、SIMPLE（1%抽样）、ADVANCED（详细追踪分配路径）、PARANOID（全部检测，性能差）。
+> **Netty内存泄漏检测级别**：DISABLED（不检测）、SIMPLE（1%抽样）、ADVANCED（详细追踪分配路径）、PARANOID（全部检测，性能差）。
 
 ---
 

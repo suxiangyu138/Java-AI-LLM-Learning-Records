@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [StringRedisTemplate：与 RedisTemplate 的分工](#1-stringredistemplate与-redistemplate-的分工)
 2. [Lua 脚本机制与 Redis 的执行模型](#2-lua-脚本机制与-redis-的执行模型)
@@ -36,7 +36,7 @@ public StringRedisTemplate stringRedisTemplate(RedisConnectionFactory factory) {
 
 **关键认知：两者操作的是同一 Redis，但序列化规则不同。** 用 `RedisTemplate`（JSON）写入的 key，用 `StringRedisTemplate` 读会得到 JSON 字符串（可读、但仍是字符串）；用 JDK 序列化的 key，两边都读不了。
 
-> ⚠️ **混用事故**：同一业务 key 绝不能一会儿用 RedisTemplate（对象）写、一会儿用 StringRedisTemplate 写——一个 key 两种序列化产物，数据互相覆盖且语义错乱。**按 key 前缀划分职责**：`cache:*` 走对象模板，`counter:*`/`lock:*` 走字符串模板。
+> **混用事故**：同一业务 key 绝不能一会儿用 RedisTemplate（对象）写、一会儿用 StringRedisTemplate 写——一个 key 两种序列化产物，数据互相覆盖且语义错乱。**按 key 前缀划分职责**：`cache:*` 走对象模板，`counter:*`/`lock:*` 走字符串模板。
 
 ```java
 @Resource
@@ -74,7 +74,7 @@ redis.call('EXPIRE', KEYS[1], ARGV[2])
 redis.pcall('GET', KEYS[1])              -- 容错版：出错返回 err 表而非终止
 ```
 
-> 💡 `call` vs `pcall`：`call` 出错会终止脚本并向客户端抛错；`pcall` 捕获错误返回 err 表。**脚本内错误会让已执行部分生效吗？** 会——Redis 对脚本不做整体回滚（与事务不同），已写的 key 保留。所以脚本逻辑要写对。
+> `call` vs `pcall`：`call` 出错会终止脚本并向客户端抛错；`pcall` 捕获错误返回 err 表。**脚本内错误会让已执行部分生效吗？** 会——Redis 对脚本不做整体回滚（与事务不同），已写的 key 保留。所以脚本逻辑要写对。
 
 ## 3. DefaultRedisScript 使用全解
 
@@ -124,7 +124,7 @@ public Long decrStock(String key, int qty) {
 | 返回 null | 脚本返回 nil → Java 得到 null |
 | 多结果 | `ResultType.LIST` 或自定义 `List<...>` |
 
-> ⚠️ **集群注意**：脚本中所有 KEYS 必须属于同一个 hash slot（Redis Cluster 按 key 路由）。跨 key 脚本要么保证 key 同槽（`{user:1001}` 花括号哈希标签），要么拆脚本。
+> **集群注意**：脚本中所有 KEYS 必须属于同一个 hash slot（Redis Cluster 按 key 路由）。跨 key 脚本要么保证 key 同槽（`{user:1001}` 花括号哈希标签），要么拆脚本。
 
 ## 4. 脚本缓存与 evalsha
 
@@ -145,7 +145,7 @@ public Long decrStock(String key, int qty) {
 }
 ```
 
-> 💡 **机制细节**：Spring 的 `DefaultRedisScript` 在每次 execute 时会先尝试 EVALSHA，命中缓存则只传 20 字节哈希；未命中（`NOSCRIPT` 错误）自动降级 EVAL。**对应用完全透明**，无需手工管理脚本缓存。
+> **机制细节**：Spring 的 `DefaultRedisScript` 在每次 execute 时会先尝试 EVALSHA，命中缓存则只传 20 字节哈希；未命中（`NOSCRIPT` 错误）自动降级 EVAL。**对应用完全透明**，无需手工管理脚本缓存。
 
 ## 5. 经典脚本实战
 
@@ -167,7 +167,7 @@ public boolean tryAcquire(String userId, int limit, int windowSeconds) {
 }
 ```
 
-> 💡 **注意**：固定窗口在窗口边界会突刺（窗口末段+下窗口初段可双倍通过）。严格限流改用**滑动窗口**（ZSet 时间戳方案）或 05 篇的 Redis 模块内实现，但多数场景固定窗口已足够。
+> **注意**：固定窗口在窗口边界会突刺（窗口末段+下窗口初段可双倍通过）。严格限流改用**滑动窗口**（ZSet 时间戳方案）或 05 篇的 Redis 模块内实现，但多数场景固定窗口已足够。
 
 ### 5.2 防抖（限流：N 秒内只放行一次）
 
@@ -204,7 +204,7 @@ private static final String UNLOCK_SCRIPT =
         "end";
 ```
 
-> 🎯 **要点**：分布式锁三个原子动作（加锁、续期、释放）全部走脚本/原子命令，**任何"先判断后操作"的分步实现都有误删/误续风险**。生产可直接用 Redisson（看门狗内置），但面试要能讲出底层脚本。
+> **要点**：分布式锁三个原子动作（加锁、续期、释放）全部走脚本/原子命令，**任何"先判断后操作"的分步实现都有误删/误续风险**。生产可直接用 Redisson（看门狗内置），但面试要能讲出底层脚本。
 
 ## 6. Lua 陷阱与安全边界
 
@@ -227,7 +227,7 @@ redis-cli SCRIPT LOAD "..."                                # 手动加载看 sha
 redis-cli --eval ./myscript.lua key1 key2 , arg1 arg2       # 文件调试（注意逗号分隔）
 ```
 
-> 🎯 **核心要点**：StringRedisTemplate 解决"读写一致与可读性"，Lua 脚本解决"复杂逻辑的原子性"。三句话记忆——①脚本把多步操作压成一次原子执行；②KEYS 必须参数化传入（集群路由依据）；③脚本里只做轻量操作，重逻辑是阻塞事故源。生产高频原子场景（限流/防抖/锁/扣减）都有标准脚本模板，掌握后一通百通。
+> **核心要点**：StringRedisTemplate 解决"读写一致与可读性"，Lua 脚本解决"复杂逻辑的原子性"。三句话记忆——①脚本把多步操作压成一次原子执行；②KEYS 必须参数化传入（集群路由依据）；③脚本里只做轻量操作，重逻辑是阻塞事故源。生产高频原子场景（限流/防抖/锁/扣减）都有标准脚本模板，掌握后一通百通。
 
 ---
 

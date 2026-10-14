@@ -1,5 +1,5 @@
 # MyBatis 持久层面试问答清单
-> 🎯 基于 MyBatis 实战项目清单，涵盖从基础 CRUD 到企业级缓存优化的面试高频问题与完美解答方案，帮助你在面试中脱颖而出。
+> 基于 MyBatis 实战项目清单，涵盖从基础 CRUD 到企业级缓存优化的面试高频问题与完美解答方案，帮助你在面试中脱颖而出。
 
 ## 目录
 1. [基础概念与核心原理](#1-基础概念与核心原理)
@@ -11,7 +11,7 @@
 
 ## 1. 基础概念与核心原理
 
-> 💡 面试官在这一环节考察你的基本功是否扎实
+> 面试官在这一环节考察你的基本功是否扎实
 
 ### Q1：MyBatis #{} 和 ${} 有什么区别？各自的使用场景是什么？
 
@@ -58,7 +58,7 @@ public String validateTableName(String tableName) {
 }
 ```
 
-> ⚠️ **安全警示**：`${}` 如果没有白名单校验，用户传入恶意参数会导致 SQL 注入。比如 `${tableName}` 传入 `"user; DROP TABLE user; --"`，可以直接删除表。
+> **安全警示**：`${}` 如果没有白名单校验，用户传入恶意参数会导致 SQL 注入。比如 `${tableName}` 传入 `"user; DROP TABLE user; --"`，可以直接删除表。
 
 **延伸追问应对：** 面试官可能追问"MyBatis 是如何防止 SQL 注入的"，从预编译机制回答：MyBatis 底层使用 JDBC 的 PreparedStatement，参数通过 `setXxx()` 方法设置，数据库驱动会自动对特殊字符进行转义，从根本上避免 SQL 注入。
 
@@ -151,7 +151,7 @@ MyBatis 提供了丰富的动态 SQL 标签，用于解决复杂的 SQL 拼接�
 
 **执行原理：** MyBatis 在解析 Mapper XML 时，会将动态 SQL 标签解析为一个个的 SqlNode 对象，形成一棵 SqlNode 树。在执行时，遍历这棵树，根据传入的参数值动态拼接 SQL 语句。核心类是 `DynamicSqlSource` 和 `SqlNode`。
 
-> 💡 **面试亮点**：如果能说出动态 SQL 的底层实现是基于 OGNL 表达式引擎进行条件判断，面试官会觉得你对 MyBatis 的理解更深一层。
+> **面试亮点**：如果能说出动态 SQL 的底层实现是基于 OGNL 表达式引擎进行条件判断，面试官会觉得你对 MyBatis 的理解更深一层。
 
 ---
 
@@ -238,13 +238,13 @@ mybatis-plus:
     lazy-load-trigger-methods: ""  # 任何方法调用都会触发懒加载
 ```
 
-> ⚠️ **性能关键**：大数据量场景下尽量不要使用嵌套查询（`select` 属性），因为它会执行 N+1 次 SQL。优先使用 JOIN 连表查询加适当的分页。
+> **性能关键**：大数据量场景下尽量不要使用嵌套查询（`select` 属性），因为它会执行 N+1 次 SQL。优先使用 JOIN 连表查询加适当的分页。
 
 ---
 
 ## 2. 项目实战深度问答
 
-> 💡 面试官会深挖你的项目细节，验证你"真的做过"而不是"背过"
+> 面试官会深挖你的项目细节，验证你"真的做过"而不是"背过"
 
 ### Q4：你们项目中的多表关联权限管理系统是怎么实现的？用到了哪些 MyBatis 特性？
 
@@ -344,7 +344,7 @@ public class PermissionService {
 }
 ```
 
-> 💡 **面试加分**：除了实现查询，我们还在 Redis 中缓存了用户的权限数据，避免每次请求都访问数据库。当管理员修改角色权限时，通过 `@CacheEvict` 清除相关用户的缓存。
+> **面试加分**：除了实现查询，我们还在 Redis 中缓存了用户的权限数据，避免每次请求都访问数据库。当管理员修改角色权限时，通过 `@CacheEvict` 清除相关用户的缓存。
 
 ---
 
@@ -420,7 +420,7 @@ public class User {
 | 动态 SQL 复杂 | MyBatis-Plus Wrapper + 手写混用 | 简单条件用 Wrapper，复杂逻辑手写 |
 | 新项目快速开发 | MyBatis-Plus | 开发效率高，代码量减少 70% |
 
-> 🎯 **最佳实践**：实际项目中，我们采用 **MyBatis-Plus 做 80% 的常规操作 + 手写 MyBatis 做 20% 的复杂查询** 的策略，兼顾开发效率和灵活性。
+> **最佳实践**：实际项目中，我们采用 **MyBatis-Plus 做 80% 的常规操作 + 手写 MyBatis 做 20% 的复杂查询** 的策略，兼顾开发效率和灵活性。
 
 ---
 
@@ -479,13 +479,13 @@ List<User> pageUsers(@Param("status") Integer status, @Param("name") String name
                      @Param("offset") Integer offset, @Param("limit") Integer limit);
 ```
 
-> ⚠️ **关键经验**：PageHelper 原理是使用 ThreadLocal 存储分页参数，在拦截器中拦截 Mapper 调用并拼接分页 SQL。但由于 ThreadLocal 在线程池场景下需要手动清理，否则会出现"分页参数错乱"的诡异 Bug。**每次使用一定要在 finally 块中调用 clearPage()**。
+> **关键经验**：PageHelper 原理是使用 ThreadLocal 存储分页参数，在拦截器中拦截 Mapper 调用并拼接分页 SQL。但由于 ThreadLocal 在线程池场景下需要手动清理，否则会出现"分页参数错乱"的诡异 Bug。**每次使用一定要在 finally 块中调用 clearPage()**。
 
 ---
 
 ## 3. 进阶与系统设计
 
-> 💡 这是拉开差距的环节，考察架构思维
+> 这是拉开差距的环节，考察架构思维
 
 ### Q7：MyBatis 的一级缓存和二级缓存在什么场景下会出现问题？
 
@@ -567,7 +567,7 @@ public void batchUpdateUserStatus(List<Long> ids, Integer status) {
 }
 ```
 
-> 🎯 **我的建议**：在分布式微服务架构下，**不建议开启 MyBatis 二级缓存**。因为多个微服务实例共享的缓存一致性无法保证，且可能和 Redis 缓存冲突。Redis 做分布式缓存就够了，MyBatis 的二级缓存更适合单体应用。
+> **我的建议**：在分布式微服务架构下，**不建议开启 MyBatis 二级缓存**。因为多个微服务实例共享的缓存一致性无法保证，且可能和 Redis 缓存冲突。Redis 做分布式缓存就够了，MyBatis 的二级缓存更适合单体应用。
 
 ---
 
@@ -661,13 +661,13 @@ public void handleStockDeduct(StockMessage message) {
 }
 ```
 
-> 💡 **架构经验**：在高并发场景下，数据库乐观锁的写入能力有限（单表 1000 TPS 左右）。所以先通过 Redis 预扣扛流量（单机 10 万 QPS），MQ 做缓冲，数据库通过乐观锁做最终写入。这样的"缓存层 + MQ 层 + 数据库层"三层方案，可以支撑秒杀级别的并发量。
+> **架构经验**：在高并发场景下，数据库乐观锁的写入能力有限（单表 1000 TPS 左右）。所以先通过 Redis 预扣扛流量（单机 10 万 QPS），MQ 做缓冲，数据库通过乐观锁做最终写入。这样的"缓存层 + MQ 层 + 数据库层"三层方案，可以支撑秒杀级别的并发量。
 
 ---
 
 ## 4. 场景题与故障排查
 
-> 💡 考察实际解决问题的能力
+> 考察实际解决问题的能力
 
 ### Q9：线上突然发现一条慢 SQL 导致接口超时，你怎么定位和优化？
 
@@ -739,7 +739,7 @@ CREATE INDEX idx_covering ON orders(user_id, status, create_time, id, amount);
 </select>
 ```
 
-> 💡 **优化原则**：一条查询的性能 80% 由索引决定，20% 由 SQL 写法决定。优化的顺序是：先看 EXPLAIN -> 加合适的索引 -> 改写 SQL。不要一上来就想着改代码，改索引往往是性价比最高的方案。
+> **优化原则**：一条查询的性能 80% 由索引决定，20% 由 SQL 写法决定。优化的顺序是：先看 EXPLAIN -> 加合适的索引 -> 改写 SQL。不要一上来就想着改代码，改索引往往是性价比最高的方案。
 
 ---
 
@@ -808,7 +808,7 @@ public class BatchService {
 }
 ```
 
-> ⚠️ **经验教训**：我曾经接手过一个项目，用户导出功能跑几十万行数据时直接 OOM。排查发现查询没有分页，全量数据加载到内存中，然后用 Java 逐条处理。优化后改用 MyBatis 游标查询 + 流式写入，内存占用从 2GB 降到 20MB。
+> **经验教训**：我曾经接手过一个项目，用户导出功能跑几十万行数据时直接 OOM。排查发现查询没有分页，全量数据加载到内存中，然后用 Java 逐条处理。优化后改用 MyBatis 游标查询 + 流式写入，内存占用从 2GB 降到 20MB。
 
 ---
 
@@ -848,18 +848,18 @@ public class BatchService {
   └── 否 -> MyBatis-Plus（ORM 自动生成 SQL）
 ```
 
-> 🎯 **我的结论**：如果项目以复杂联表查询为主，或者有 DBA 团队主导 SQL 审核，**选 MyBatis**；如果是标准 CRUD 为主，团队有 JPA 经验，**选 JPA**。国内企业级项目 MyBatis 占比超过 70%，所以从就业角度看，MyBatis 是必选项。
+> **我的结论**：如果项目以复杂联表查询为主，或者有 DBA 团队主导 SQL 审核，**选 MyBatis**；如果是标准 CRUD 为主，团队有 JPA 经验，**选 JPA**。国内企业级项目 MyBatis 占比超过 70%，所以从就业角度看，MyBatis 是必选项。
 
 ---
 
-## 💎 面试加分金句
+## 面试加分金句
 - "MyBatis 不是 ORM 框架，它是一个'半自动化'的数据映射框架——它不做对象关联映射，而是把 SQL 的控制权完全交给开发者。"
 - "我在项目中始终坚持的原则是：能用 `#{}` 绝不用 `${}`，必须用 `${}` 的时候一定有白名单校验，这是数据安全的底线。"
 - "`association` 和 `collection` 的选择标准很简单：返回一个对象用前者，返回列表用后者。"
 - "N+1 查询是 MyBatis 最高频的性能问题，解决思路也很简单：能用 JOIN 别用嵌套查询。"
 - "MyBatis-Plus 解决的是 80% 的常规 CRUD，剩下的 20% 复杂查询还是要靠手写 SQL——高手懂得在框架和灵活性之间找到平衡。"
 
-## 📋 高频追问清单
+## 高频追问清单
 | 追问方向 | 应对策略 |
 |----------|----------|
 | MyBatis 中 `resultType` 和 `resultMap` 的区别？ | resultType 自动映射，resultMap 自定义映射 |
@@ -869,7 +869,7 @@ public class BatchService {
 | MyBatis 如何防止 SQL 注入？ | 预编译 + `#{}` 参数替换 + 输入校验 |
 | MyBatis-Plus 的 `selectOne` 如果查到多条会怎样？ | 抛出异常 `TooManyResultsException` |
 
-## 🔗 关联知识点
+## 关联知识点
 - [Spring 7个必做项目面试问答](./Spring7个必做项目-面试问答.md)
 - [Maven面试问答](./Maven必做项目清单-面试问答.md)
 - [SpringCloudAlibaba面试问答](./SpringCloudAlibaba必做项目-面试问答.md)

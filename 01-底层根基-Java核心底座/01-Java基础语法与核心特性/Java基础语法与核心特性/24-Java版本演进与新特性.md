@@ -35,7 +35,7 @@
 | 定位 | 企业生产唯一推荐 | 尝鲜新特性，禁止线上使用 |
 | 代表版本 | JDK 8、11、17、21 | JDK 9/10、12~16、18~20 |
 
-> 💡 生产环境只选 LTS 版本，非 LTS 仅供本地技术调研。
+> 生产环境只选 LTS 版本，非 LTS 仅供本地技术调研。
 
 ---
 
@@ -152,7 +152,7 @@ Files.readString(Path.of("data.txt"));      // 读文件
 Files.writeString(Path.of("out.txt"), s);   // 写文件
 ```
 
-> ⚠️ JDK 11 移除 Java EE 模块（JAXB、CORBA），升级需补充 Maven 依赖。
+> JDK 11 移除 Java EE 模块（JAXB、CORBA），升级需补充 Maven 依赖。
 
 ---
 
@@ -242,7 +242,7 @@ try (var executor = Executors.newVirtualThreadPerTaskExecutor()) {
 Thread vt = Thread.startVirtualThread(() -> System.out.println("虚拟线程"));
 ```
 
-> 💡 虚拟线程适用于 IO 密集型任务（HTTP 调用、DB 查询），不适用于 CPU 密集型计算。
+> 虚拟线程适用于 IO 密集型任务（HTTP 调用、DB 查询），不适用于 CPU 密集型计算。
 
 ### 5.2 未命名模式与变量
 
@@ -296,7 +296,7 @@ for (String s : list) { ... }              // 底层 Iterator
 // 数组：反糖为普通 for
 for (int n : arr) { ... }                  // 底层 for(int i=0;...)
 
-// ⚠️ 遍历时不可增删集合，否则 ConcurrentModificationException
+// 遍历时不可增删集合，否则 ConcurrentModificationException
 ```
 
 ### 6.4 其他语法糖速查
@@ -318,7 +318,7 @@ list.forEach(item -> System.out.println(item));   // invokedynamic
 list.forEach(System.out::println);                // 方法引用简化
 ```
 
-> 🎯 所有语法糖均在编译期解糖，运行期无特殊逻辑。泛型擦除、装箱拆箱、foreach 为面试最高频。
+> 所有语法糖均在编译期解糖，运行期无特殊逻辑。泛型擦除、装箱拆箱、foreach 为面试最高频。
 
 ---
 
@@ -443,4 +443,4 @@ module com.example.user {
 入门：JDK 8（教程最丰富） → 进阶：JDK 17（新特性） → 前沿：JDK 21（虚拟线程）
 ```
 
-> 🎯 LTS 是生产唯一选择。JDK 8 入门、JDK 17 新项目、JDK 21 高并发为当前主流路线。
+> LTS 是生产唯一选择。JDK 8 入门、JDK 17 新项目、JDK 21 高并发为当前主流路线。

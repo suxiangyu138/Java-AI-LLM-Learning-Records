@@ -1,6 +1,6 @@
 # 06 - Grok 在开发框架中的集成
 
-> 🎯 Grok 兼容 OpenAI 协议 = 所有主流框架零成本接入 — LangChain4j、Spring AI、Python LangChain、OpenClaw 全部改 baseUrl 即用。本章给出完整接入代码
+> Grok 兼容 OpenAI 协议 = 所有主流框架零成本接入 — LangChain4j、Spring AI、Python LangChain、OpenClaw 全部改 baseUrl 即用。本章给出完整接入代码
 
 ---
 
@@ -166,10 +166,10 @@ llm_with_tools = llm.bind_tools([search_x_tweets])
 }
 ```
 
-> 💡 **OpenClaw + Grok 的组合优势：** OpenClaw 的长链路 Agent 需要超长上下文（2M 整库加载）+ Grok 的实时 X 数据（舆情监控 Agent）— 天然匹配。
+> **OpenClaw + Grok 的组合优势：** OpenClaw 的长链路 Agent 需要超长上下文（2M 整库加载）+ Grok 的实时 X 数据（舆情监控 Agent）— 天然匹配。
 
 ---
 
-> 🎯 **核心要点**：Grok 集成一句话 — **"OpenAI 兼容 = 所有框架零成本接入"**。所有框架只需改 `baseUrl`（api.x.ai/v1）+ `model`（grok-4.5/grok-4-1-fast/grok-4.3/grok-4.20）。OpenClaw + Grok 4.1 Fast（2M 上下文）是长链路 Agent 的理想组合。
+> **核心要点**：Grok 集成一句话 — **"OpenAI 兼容 = 所有框架零成本接入"**。所有框架只需改 `baseUrl`（api.x.ai/v1）+ `model`（grok-4.5/grok-4-1-fast/grok-4.3/grok-4.20）。OpenClaw + Grok 4.1 Fast（2M 上下文）是长链路 Agent 的理想组合。
 
 **下一模块**：[07-Grok选型与生态对比](07-Grok选型与生态对比.md) / **返回总览**：[00-总览](00-Grok-API知识体系总览.md)

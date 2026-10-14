@@ -42,7 +42,7 @@ GC Roots 是垃圾收集器判断对象是否存活的根引用集合，包括�
 6. **所有被 synchronized 持有的对象**。
 7. **反映 Java 虚拟机内部情况的 JMXBean、JVMTI 回调等**。
 
-> 💡 **Tip**：在 GC 根节点枚举时，必须暂停所有用户线程（STW），但 CMS 和 G1 可以通过 `-XX:+UsePerfData` 等参数配合 OopMap 加速根节点扫描。
+> **Tip**：在 GC 根节点枚举时，必须暂停所有用户线程（STW），但 CMS 和 G1 可以通过 `-XX:+UsePerfData` 等参数配合 OopMap 加速根节点扫描。
 
 ### 1.4 对象一定分配在堆中吗？
 
@@ -52,7 +52,7 @@ GC Roots 是垃圾收集器判断对象是否存活的根引用集合，包括�
 2. **同步消除**：如果对象未逃逸，对其加的锁会被消除（如 `StringBuffer` 在方法内使用时）。
 3. **标量替换**：将对象成员变量分解为多个局部变量存储。
 
-> 🎯 **示例**：`-XX:+DoEscapeAnalysis -XX:+EliminateAllocations` 开启逃逸分析后，简单 POJO 可能在栈上分配而非堆中。
+> **示例**：`-XX:+DoEscapeAnalysis -XX:+EliminateAllocations` 开启逃逸分析后，简单 POJO 可能在栈上分配而非堆中。
 
 ### 1.5 强、软、弱、虚引用区别？
 
@@ -63,7 +63,7 @@ GC Roots 是垃圾收集器判断对象是否存活的根引用集合，包括�
 | **弱引用** | 下一次 GC 时回收 | `ThreadLocalMap` 的 Key、WeakHashMap | 是，回收后入队 |
 | **虚引用** | 任何时候可能回收 | 跟踪对象回收（NIO DirectBuffer 清理） | 是，但无法通过 get() 获取对象 |
 
-> ⚠️ **注意**：虚引用 `PhantomReference` 的 `get()` 永远返回 `null`，必须配合 `ReferenceQueue` 使用，其作用是在对象被回收时得到通知，从而执行资源释放。
+> **注意**：虚引用 `PhantomReference` 的 `get()` 永远返回 `null`，必须配合 `ReferenceQueue` 使用，其作用是在对象被回收时得到通知，从而执行资源释放。
 
 ### 1.6 OOM 一定会导致 JVM 退出吗？
 
@@ -74,7 +74,7 @@ GC Roots 是垃圾收集器判断对象是否存活的根引用集合，包括�
 3. **Unable to create new native thread**：线程数超限，可能导致整个进程不稳定。
 4. **Direct buffer memory**：直接内存溢出，NIO 相关操作会抛出异常。
 
-> 💡 **关键点**：JVM 进程退出取决于 OOM 发生的线程是否为守护线程、是否被 `UncaughtExceptionHandler` 捕获。在生产环境中建议配置 `-XX:+ExitOnOutOfMemoryError` 或 `-XX:+CrashOnOutOfMemoryError` 让 JVM 在 OOM 时主动退出。
+> **关键点**：JVM 进程退出取决于 OOM 发生的线程是否为守护线程、是否被 `UncaughtExceptionHandler` 捕获。在生产环境中建议配置 `-XX:+ExitOnOutOfMemoryError` 或 `-XX:+CrashOnOutOfMemoryError` 让 JVM 在 OOM 时主动退出。
 
 ### 1.7 内存泄漏和内存溢出的区别？
 
@@ -113,7 +113,7 @@ GC Roots 是垃圾收集器判断对象是否存活的根引用集合，包括�
 5. 操作系统发送信号（如 `SIGKILL`, `SIGTERM`）。
 6. 使用 `jstack` / `jmap` 等外部工具强制终止进程。
 
-> 💡 **守护线程（Daemon Thread）**不会阻止 JVM 退出，GC 线程就是典型的守护线程。当所有用户线程结束时，JVM 会直接终止所有守护线程并退出。
+> **守护线程（Daemon Thread）**不会阻止 JVM 退出，GC 线程就是典型的守护线程。当所有用户线程结束时，JVM 会直接终止所有守护线程并退出。
 
 ### 1.11 JVM 内存为什么要分代？
 
@@ -123,7 +123,7 @@ GC Roots 是垃圾收集器判断对象是否存活的根引用集合，包括�
 - **老年代（Old Generation）**：存放经过多轮 GC 后仍存活的长生命周期对象，GC 频率低但单次耗时长，使用标记-整理或标记-清除算法。
 - **元空间（Metaspace）**：存放类元信息，使用本地内存。
 
-> 💡 **不分代会怎样？** 每次 GC 都需要扫描整个堆，效率极低。分代后，大部分对象在新生代就被回收，只有少数对象晋升老年代，大幅降低 Full GC 频率。
+> **不分代会怎样？** 每次 GC 都需要扫描整个堆，效率极低。分代后，大部分对象在新生代就被回收，只有少数对象晋升老年代，大幅降低 Full GC 频率。
 
 ### 1.12 GC 在任意时刻都能进行吗？
 
@@ -133,7 +133,7 @@ GC Roots 是垃圾收集器判断对象是否存活的根引用集合，包括�
 - **安全区域（SafeRegion）**：对于处于 Sleep 或 Blocked 状态的线程，无法主动到达安全点，它们会标记自己进入安全区域，GC 期间不会影响它们。
 - **STW（Stop The World）**：GC 根节点枚举、全局安全点同步等阶段必须暂停所有用户线程。
 
-> ⚠️ **避免 GC 不必要的触发**：频繁的 System.gc() 会触发 Full GC，应尽量避免显式调用。
+> **避免 GC 不必要的触发**：频繁的 System.gc() 会触发 Full GC，应尽量避免显式调用。
 
 ### 1.13 对象的创建过程？
 
@@ -165,7 +165,7 @@ GC Roots 是垃圾收集器判断对象是否存活的根引用集合，包括�
 2. **实例数据（Instance Data）**：各字段的实际值，按声明顺序和大小对齐存储。
 3. **对齐填充（Padding）**：保证对象起始地址是 8 字节的整数倍。
 
-> 💡 对象大小可通过 `jol-core`（Java Object Layout）工具查看。
+> 对象大小可通过 `jol-core`（Java Object Layout）工具查看。
 
 ### 1.16 如何判断对象仍然存活？
 
@@ -174,7 +174,7 @@ GC Roots 是垃圾收集器判断对象是否存活的根引用集合，包括�
 1. **引用计数法（Reference Counting）**：每个对象维护一个引用计数器，为 0 时回收。缺点是无法解决**循环引用**问题（A 引用 B，B 引用 A，但外部无引用）。
 2. **可达性分析（Reachability Analysis）**：从 GC Roots 出发向下搜索，遍历的路径称为**引用链（Reference Chain）**。当一个对象到 GC Roots 没有任何引用链相连，则判定为可回收。JVM 采用此算法。
 
-> 🎯 **可达性分析 + finalize()**：对象第一次被标记后，如果覆盖了 `finalize()` 且未执行过，会进入 F-Queue 队列等待 Finalizer 线程执行。如果在此方法中重新建立引用链，对象可自救。但不推荐使用，因为执行时机不可控。
+> **可达性分析 + finalize()**：对象第一次被标记后，如果覆盖了 `finalize()` 且未执行过，会进入 F-Queue 队列等待 Finalizer 线程执行。如果在此方法中重新建立引用链，对象可自救。但不推荐使用，因为执行时机不可控。
 
 ### 1.17 垃圾收集算法有哪些？
 
@@ -222,7 +222,7 @@ STW 是指垃圾回收过程中，JVM 暂停所有用户线程的现象。在以
 4. **CMS 重新标记**（Remark）：修正并发标记期间变动的引用。
 5. **G1 初始标记/最终标记/清理**：各阶段都有短暂 STW。
 
-> 💡 减少 STW 时间是 JVM 优化的核心目标，G1 和 ZGC 通过并发标记、增量回收等方式大幅缩减 STW 时间。
+> 减少 STW 时间是 JVM 优化的核心目标，G1 和 ZGC 通过并发标记、增量回收等方式大幅缩减 STW 时间。
 
 ---
 
@@ -263,7 +263,7 @@ G1（Garbage First）将堆划分为 2048 个 **Region**（1MB~32MB），每个 
 年轻代 GC（Young GC） → 并发标记周期（Concurrent Marking） → 混合回收（Mixed GC） → Full GC（若并发失败）
 ```
 
-> 💡 G1 是 JDK 9+ 的默认收集器，目标是**可预测的停顿时间**，通过 `-XX:MaxGCPauseMillis=200` 设置。
+> G1 是 JDK 9+ 的默认收集器，目标是**可预测的停顿时间**，通过 `-XX:MaxGCPauseMillis=200` 设置。
 
 ### 2.3 ZGC 收集器原理
 
@@ -281,7 +281,7 @@ ZGC 是 JDK 11 引入的低延迟垃圾收集器，**停顿时间不超过 10ms*
 // -XX:+UseZGC -Xmx16g -XX:ZCollectionInterval=120 -XX:ZAllocationSpikeTolerance=5
 ```
 
-> 🎯 ZGC 适合大堆（几百 GB 以上）、低延迟要求严格（<10ms）的服务。
+> ZGC 适合大堆（几百 GB 以上）、低延迟要求严格（<10ms）的服务。
 
 ### 2.4 Shenandoah GC 原理
 
@@ -330,7 +330,7 @@ Shenandoah 是 OpenJDK 12 引入的、与 ZGC 类似的低延迟 GC，采用了�
 - **增量更新（Incremental Update）**：CMS 采用，当黑色对象引用白色对象时，将黑色变回灰色重新扫描。
 - **SATB（Snapshot At The Beginning）**：G1 采用，记录标记开始时所有存活对象的快照，标记过程中新增的引用全部记录（通过写屏障），最终标记时重新处理。
 
-> ⚠️ **SATB vs 增量更新**：SATB 可能产生更多浮动垃圾但避免多次扫描，增量更新更精确但需要重扫黑色对象。
+> **SATB vs 增量更新**：SATB 可能产生更多浮动垃圾但避免多次扫描，增量更新更精确但需要重扫黑色对象。
 
 ### 2.6 对象头结构（Mark Word）
 
@@ -388,7 +388,7 @@ JIT（Just-In-Time）编译是 JVM 将热机代码编译为本地机器码的过
    - **Tier 4**：C2 编译器（深度优化，生成高性能机器码）。
 3. **常见优化**：方法内联、逃逸分析、去虚拟化、循环展开、锁消除等。
 
-> 💡 `-XX:+PrintCompilation` 可打印 JIT 编译日志，观察方法被编译的时机。
+> `-XX:+PrintCompilation` 可打印 JIT 编译日志，观察方法被编译的时机。
 
 ### 2.9 类加载器源码分析（双亲委派模型）
 
@@ -451,7 +451,7 @@ TLAB（Thread Local Allocation Buffer）是新生代中每个线程私有的分�
 
 **参数控制**：`-XX:+UseTLAB`（默认启用）、`-XX:TLABSize`、`-XX:TLABWasteTargetPercent`（默认 1%）。
 
-> 🎯 **TLAB 的意义**：将堆空间逻辑上按线程划分，大幅减少并发分配时的 CAS 竞争，提升分配效率数十倍。
+> **TLAB 的意义**：将堆空间逻辑上按线程划分，大幅减少并发分配时的 CAS 竞争，提升分配效率数十倍。
 
 ### 2.11 CMS 重新标记（Remark）详解
 
@@ -1237,7 +1237,7 @@ IF (GC 日志诊断 = Concurrent Mode Failure 频繁)
 
 ### 6.2 最佳实践总结
 
-> 💡 **生产环境 JVM 参数模板（Spring Boot / 微服务）**：
+> **生产环境 JVM 参数模板（Spring Boot / 微服务）**：
 
 ```bash
 # ===== 堆设置 =====
@@ -1404,4 +1404,4 @@ IF (GC 日志诊断 = Concurrent Mode Failure 频繁)
 
 ---
 
-> 🎯 **总结**：JVM 面试考察的是三个层次——**基础概念**（内存模型、类加载、GC 算法）、**实战能力**（调优经验、排障方法）和**原理深度**（源码级理解 CMS/G1/ZGC、三色标记、JIT 编译）。建议结合自己项目中遇到的实际案例进行准备，比背诵知识点更有说服力。
+> **总结**：JVM 面试考察的是三个层次——**基础概念**（内存模型、类加载、GC 算法）、**实战能力**（调优经验、排障方法）和**原理深度**（源码级理解 CMS/G1/ZGC、三色标记、JIT 编译）。建议结合自己项目中遇到的实际案例进行准备，比背诵知识点更有说服力。

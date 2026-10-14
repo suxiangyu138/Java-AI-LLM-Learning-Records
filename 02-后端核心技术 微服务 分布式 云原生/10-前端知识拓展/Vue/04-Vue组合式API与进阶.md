@@ -2,7 +2,7 @@
 
 > 定位：组合式 API 全解（setup/computed/watch 进阶）、自定义指令、Teleport、Suspense、组合式函数（Composables）
 
-## 📚 目录
+## 目录
 
 1. [组合式 API vs 选项式 API](#1-组合式-api-vs-选项式-api)
 2. [组合式函数 Composables](#2-组合式函数-composables)
@@ -47,7 +47,7 @@ onMounted(() => console.log('mounted'));
 | 按需组织 | 相关逻辑集中（vs 选项散落） |
 | 更好的 tree-shaking | 按需导入 API |
 
-> 🎯 **要点**：组合式 = "按逻辑组织"而非"按选项组织"——同一功能的 data/computed/methods 聚合在一起，可整体抽取复用。
+> **要点**：组合式 = "按逻辑组织"而非"按选项组织"——同一功能的 data/computed/methods 聚合在一起，可整体抽取复用。
 
 ---
 
@@ -56,7 +56,7 @@ onMounted(() => console.log('mounted'));
 ### 2.1 什么是 Composables
 
 ```javascript
-// ⚠️ Composables = 以 use 开头的组合式函数（Vue 3 复用之王）
+// Composables = 以 use 开头的组合式函数（Vue 3 复用之王）
 // useMouse.js
 import { ref, onMounted, onBeforeUnmount } from 'vue';
 
@@ -71,7 +71,7 @@ export function useMouse() {
     onMounted(() => window.addEventListener('mousemove', update));
     onBeforeUnmount(() => window.removeEventListener('mousemove', update));
 
-    return { x, y };                       // ⚠️ 返回响应式状态
+    return { x, y };                       // 返回响应式状态
 }
 ```
 
@@ -90,12 +90,12 @@ const keyword = useDebounce('搜索词', 300); // 复用防抖逻辑
 
 | 维度 | Mixins（Vue 2） | Composables |
 |------|:---:|:---:|
-| 命名冲突 | ❌ 属性合并冲突 | ✅ 解构重命名 |
+| 命名冲突 | ✗ 属性合并冲突 | ✓ 解构重命名 |
 | 数据来源 | 隐式（this.xxx） | 显式（返回值） |
-| 类型推导 | ❌ 弱 | ✅ 强 |
-| 组合嵌套 | ❌ | ✅（composable 调 composable） |
+| 类型推导 | ✗ 弱 | ✓ 强 |
+| 组合嵌套 | ✗ | ✓（composable 调 composable） |
 
-> 🎯 **要点**：Composables 是 Vue 3 的复用标准（替代 mixin）——"use 前缀 + 返回响应式状态 + 内部管理生命周期"是黄金模板。
+> **要点**：Composables 是 Vue 3 的复用标准（替代 mixin）——"use 前缀 + 返回响应式状态 + 内部管理生命周期"是黄金模板。
 
 ---
 
@@ -111,7 +111,7 @@ const data = ref(null);
 
 // watchEffect：自动收集依赖（无需显式指定）
 watchEffect(async () => {
-    // ⚠️ 内部读取的响应式数据变化都会重新执行
+    // 内部读取的响应式数据变化都会重新执行
     data.value = await fetchData(id.value);
 });
 // 对比 watch：watch 需要显式指定监听源
@@ -138,7 +138,7 @@ watch(() => state.user.profile.age, cb);
 // 清理副作用（防竞态：快速切换时旧请求作废）
 watch(id, async (newId, oldId, onCleanup) => {
     let cancelled = false;
-    onCleanup(() => cancelled = true);      // ⚠️ 下次触发前执行
+    onCleanup(() => cancelled = true);      // 下次触发前执行
     const result = await fetchData(newId);
     if (!cancelled) data.value = result;    // 竞态保护
 });
@@ -149,7 +149,7 @@ watch(id, async (newId, oldId, onCleanup) => {
 ## 4. 自定义指令
 
 ```javascript
-// ⚠️ 自定义指令：复用 DOM 操作（v-focus/v-click-outside 等）
+// 自定义指令：复用 DOM 操作（v-focus/v-click-outside 等）
 // directives/focus.js
 export const vFocus = {
     mounted(el) {                            // 挂载时
@@ -168,7 +168,7 @@ export const vClickOutside = {
         document.addEventListener('click', el._clickOutside);
     },
     unmounted(el) {
-        document.removeEventListener('click', el._clickOutside);  // ⚠️ 清理
+        document.removeEventListener('click', el._clickOutside);  // 清理
     },
 };
 ```
@@ -187,7 +187,7 @@ const open = ref(true);
 </template>
 ```
 
-> 🎯 **要点**：自定义指令钩子（mounted/updated/unmounted）+ 卸载清理是标准模板。指令适合"纯 DOM 操作"（聚焦/滚动/点击外部），逻辑复用用 composables。
+> **要点**：自定义指令钩子（mounted/updated/unmounted）+ 卸载清理是标准模板。指令适合"纯 DOM 操作"（聚焦/滚动/点击外部），逻辑复用用 composables。
 
 ---
 
@@ -196,7 +196,7 @@ const open = ref(true);
 ### 5.1 Teleport（传送门）
 
 ```vue
-<!-- ⚠️ Teleport：把内容渲染到指定 DOM 位置（脱离组件树） -->
+<!-- Teleport：把内容渲染到指定 DOM 位置（脱离组件树） -->
 <!-- 解决：弹窗/遮罩被父组件 overflow/层级遮挡的问题 -->
 <template>
     <Teleport to="body">
@@ -215,7 +215,7 @@ const open = ref(true);
 ### 5.2 Suspense（异步组件等待）
 
 ```vue
-<!-- ⚠️ Suspense：异步组件/异步 setup 的等待占位 -->
+<!-- Suspense：异步组件/异步 setup 的等待占位 -->
 <template>
     <Suspense>
         <template #default>
@@ -245,7 +245,7 @@ const open = ref(true);
 import { shallowRef, markRaw } from 'vue';
 
 // ① 浅响应（大数据不需要深层响应时）
-const bigList = shallowRef([]);          // ⚠️ 数组内部不响应（替换整体才更新）
+const bigList = shallowRef([]);          // 数组内部不响应（替换整体才更新）
 
 // ② markRaw：跳过响应式（静态大对象/第三方实例）
 const chartInstance = markRaw(new Chart());   // 不代理（省开销）
@@ -269,11 +269,11 @@ const chartInstance = markRaw(new Chart());   // 不代理（省开销）
 | 静态内容 | v-once + v-memo |
 | 网络 | 缓存 + 请求合并 |
 
-> 🎯 **要点**：性能优化分层——**渲染层**（shallowRef/markRaw/v-memo）、**加载层**（异步组件/路由懒加载）、**交互层**（防抖节流）。面试答"从这三层优化"即完整。
+> **要点**：性能优化分层——**渲染层**（shallowRef/markRaw/v-memo）、**加载层**（异步组件/路由懒加载）、**交互层**（防抖节流）。面试答"从这三层优化"即完整。
 
 ---
 
-> 🎯 **核心要点**：组合式进阶 = **Composables**（use 函数复用，替代 mixin）+ **watch 进阶**（watchEffect/竞态清理）+ **自定义指令**（DOM 操作 + 卸载清理）+ **Teleport/Suspense**（传送门/异步等待）+ **性能优化**（shallowRef/异步组件/v-memo）。这五块是 Vue 3 从"会用"到"进阶"的分水岭。
+> **核心要点**：组合式进阶 = **Composables**（use 函数复用，替代 mixin）+ **watch 进阶**（watchEffect/竞态清理）+ **自定义指令**（DOM 操作 + 卸载清理）+ **Teleport/Suspense**（传送门/异步等待）+ **性能优化**（shallowRef/异步组件/v-memo）。这五块是 Vue 3 从"会用"到"进阶"的分水岭。
 
 ---
 

@@ -1,6 +1,6 @@
 # 04 - AOP 代理创建与事务管理内核
 
-> 🎯 AOP 代理的创建决策链 + @Transactional 事务传播行为的内部链路。核心问题：代理什么时候创建？事务什么时候开启/挂起？七种传播行为在源码中如何体现？
+> AOP 代理的创建决策链 + @Transactional 事务传播行为的内部链路。核心问题：代理什么时候创建？事务什么时候开启/挂起？七种传播行为在源码中如何体现？
 
 ---
 
@@ -205,6 +205,6 @@ DefaultAopProxyFactory#createAopProxy()               # JDK vs CGLIB 决策
 
 ---
 
-> 🎯 **核心要点**：AOP 三大核心问题 — ① 代理何时创建（afterInitialization）② JDK vs CGLIB 怎么选（有接口且非强制可选 JDK、无接口强制 CGLIB、Boot 默认 CGLIB）③ 为什么自调用事务失效（this 绕过代理、事务拦截器未触发）。事务传播的核心在 `getTransaction()` — REQUIRED 是加入或新建、REQUIRES_NEW 是挂起新建、NESTED 是保存点。
+> **核心要点**：AOP 三大核心问题 — ① 代理何时创建（afterInitialization）② JDK vs CGLIB 怎么选（有接口且非强制可选 JDK、无接口强制 CGLIB、Boot 默认 CGLIB）③ 为什么自调用事务失效（this 绕过代理、事务拦截器未触发）。事务传播的核心在 `getTransaction()` — REQUIRED 是加入或新建、REQUIRES_NEW 是挂起新建、NESTED 是保存点。
 
 **下一模块**：[05-DispatcherServlet请求处理全链路](05-DispatcherServlet请求处理全链路.md) / **返回总览**：[00-深度剖析总览](00-Spring生态深度剖析总览.md)

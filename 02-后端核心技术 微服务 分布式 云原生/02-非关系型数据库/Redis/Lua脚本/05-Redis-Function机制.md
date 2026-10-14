@@ -1,7 +1,7 @@
 # Redis Function 机制
 > Redis 7.0+ 官方推荐的编程形态：命名库、持久化与复制、版本化热更新、FCALL 调用——以及从 EVAL 迁移的完整路线
 
-## 📚 目录
+## 目录
 1. [为什么要有 Function](#1-为什么要有-function)
 2. [库（Library）：Function 的载体](#2-库libraryfunction-的载体)
 3. [注册与调用：FUNCTION/FCALL 命令族](#3-注册与调用functionfcall-命令族)
@@ -28,7 +28,7 @@ Function 的答案：把脚本变成"数据集的一部分"
   · 一次注册，所有客户端按名调用
 ```
 
-> 🎯 定位一句话：**Function 是 Lua 脚本的"产品化"**——从"客户端临时递给服务器的代码"升级为"服务器管理的、持久化的、可版本化的服务端函数库"。
+> 定位一句话：**Function 是 Lua 脚本的"产品化"**——从"客户端临时递给服务器的代码"升级为"服务器管理的、持久化的、可版本化的服务端函数库"。
 
 ## 2. 库（Library）：Function 的载体
 
@@ -44,7 +44,7 @@ end
 
 -- 注册函数：redis.register_function(name, callback, flags)
 redis.register_function('getUserScore', function(keys, args)
-    local key = buildKey(args[1])      -- 复用辅助函数 ✅（EVAL 做不到）
+    local key = buildKey(args[1])      -- 复用辅助函数 ✓（EVAL 做不到）
     return redis.call('HGET', key, 'score')
 end, { 'no-writes' })                  -- flags：只读
 
@@ -62,7 +62,7 @@ end)
 | `function(keys, args)` | 回调签名：**keys 和 args 是数组参数**（不再是全局 KEYS/ARGV） |
 | 库内复用 | 库内函数/变量可互相调用（EVAL 无此能力） |
 
-> ⚠️ 签名差异：**Function 回调是 `function(keys, args)` 形式**（参数数组），不再是 EVAL 的全局 `KEYS[i]`/`ARGV[i]`——但依然**从 1 开始索引**：`keys[1]`、`args[1]`。
+> 签名差异：**Function 回调是 `function(keys, args)` 形式**（参数数组），不再是 EVAL 的全局 `KEYS[i]`/`ARGV[i]`——但依然**从 1 开始索引**：`keys[1]`、`args[1]`。
 
 ## 3. 注册与调用：FUNCTION/FCALL 命令族
 
@@ -97,7 +97,7 @@ FUNCTION KILL        # 终止运行中的函数
 | `FUNCTION FLUSH` | 清空（同步/异步模式） |
 | `FUNCTION KILL` | 终止卡住函数（对应 SCRIPT KILL） |
 
-> 💡 运维视角：**FUNCTION DUMP/RESTORE 是脚本的"备份"**——迁移集群/灾备时脚本库随数据一起走，不再有"新集群没脚本"的 NOSCRIPT 灾难。
+> 运维视角：**FUNCTION DUMP/RESTORE 是脚本的"备份"**——迁移集群/灾备时脚本库随数据一起走，不再有"新集群没脚本"的 NOSCRIPT 灾难。
 
 ## 4. Function vs EVAL 全面对比
 
@@ -107,14 +107,14 @@ FUNCTION KILL        # 终止运行中的函数
 | 重启后 | 缓存丢（NOSCRIPT） | **存活（RDB/AOF）** |
 | 从库 | 需各从库加载 | **自动复制** |
 | 命名 | SHA1 | **人类可读** |
-| 版本管理 | ❌ | ✅（库级 version） |
+| 版本管理 | ✗ | ✓（库级 version） |
 | 热更新 | 客户端重发 | `FUNCTION LOAD REPLACE` |
-| 代码复用 | ❌ 脚本间不可调用 | ✅ 库内函数互调 |
-| 备份迁移 | 手工脚本管理 | ✅ FUNCTION DUMP |
+| 代码复用 | ✗ 脚本间不可调用 | ✓ 库内函数互调 |
+| 备份迁移 | 手工脚本管理 | ✓ FUNCTION DUMP |
 | 调试可读性 | SHA1 难读 | 名称即文档 |
 | 2026 定位 | 一次性/探索/调试 | **生产首选** |
 
-> 🎯 2026 检索结论（OneUptime/官方文档一致）：**新项目在 Redis 7.0+ 上直接用 Function**；EVAL 保留给"临时验证、一次性修复、Redis < 7 环境"。
+> 2026 检索结论（OneUptime/官方文档一致）：**新项目在 Redis 7.0+ 上直接用 Function**；EVAL 保留给"临时验证、一次性修复、Redis < 7 环境"。
 
 ## 5. 版本化与热更新
 
@@ -148,7 +148,7 @@ redis-cli -x FUNCTION LOAD REPLACE < mylib-v2.lua
 | 回滚 | 重新加载旧版本库即可 |
 | CI/CD | 脚本库文件入库 → 发布流水线 FUNCTION LOAD |
 
-> 🎯 这是 Function 相对 EVAL 的**杀手级价值**：业务脚本升级 = 一条 FUNCTION LOAD 命令，**无需改任何客户端代码、无需等所有服务重启**——EVAL 时代改脚本意味着全链路发版。
+> 这是 Function 相对 EVAL 的**杀手级价值**：业务脚本升级 = 一条 FUNCTION LOAD 命令，**无需改任何客户端代码、无需等所有服务重启**——EVAL 时代改脚本意味着全链路发版。
 
 ## 6. 只读函数与 flags
 
@@ -170,7 +170,7 @@ end, { 'no-writes' })       -- 声明只读
 | `allow-oom` | 允许在内存超限（OOM）时仍执行（默认 OOM 时写函数拒绝） |
 | 缺省 | 可读写（默认） |
 
-> 💡 与 EVAL_RO 对应：**FCALL_RO 是 Function 的只读入口**（7.0+）；配合 `no-writes` 标记，只读函数能安全地在从库/副本执行——读写分离架构下的推送查询场景友好。
+> 与 EVAL_RO 对应：**FCALL_RO 是 Function 的只读入口**（7.0+）；配合 `no-writes` 标记，只读函数能安全地在从库/副本执行——读写分离架构下的推送查询场景友好。
 
 ## 7. 从 EVAL 迁移到 Function
 
@@ -210,13 +210,13 @@ end, { 'no-writes' })       -- 声明只读
 
 ```text
 适用边界速记：
-  ✅ 生产/多端共享/热更新/长期维护 → Function
-  ✅ 一次性调试、数据修复 → EVAL
-  ✅ 老版本 Redis（<7.0）→ EVAL
-  ❌ 临时脚本别注册 Function（会持久化+复制，成为长期包袱）
+  ✓ 生产/多端共享/热更新/长期维护 → Function
+  ✓ 一次性调试、数据修复 → EVAL
+  ✓ 老版本 Redis（<7.0）→ EVAL
+  ✗ 临时脚本别注册 Function（会持久化+复制，成为长期包袱）
 ```
 
-> 🎯 面试金句：**"Function 是 Redis 7.0 把 Lua 脚本产品化的机制——命名库、RDB 持久化、自动复制、版本化热更新；2026 年官方建议新生产代码用 Function，EVAL 退居一次性场景"**。
+> 面试金句：**"Function 是 Redis 7.0 把 Lua 脚本产品化的机制——命名库、RDB 持久化、自动复制、版本化热更新；2026 年官方建议新生产代码用 Function，EVAL 退居一次性场景"**。
 
 ---
 

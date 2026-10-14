@@ -1,6 +1,6 @@
 # 09 - Nginx Kubernetes 与微服务
 
-> 🎯 在云原生架构中，Nginx 的角色从传统反向代理升级为 K8s Ingress Controller — 统一入口、灰度发布、TLS 终结，微服务网关的最佳拍档
+> 在云原生架构中，Nginx 的角色从传统反向代理升级为 K8s Ingress Controller — 统一入口、灰度发布、TLS 终结，微服务网关的最佳拍档
 
 ---
 

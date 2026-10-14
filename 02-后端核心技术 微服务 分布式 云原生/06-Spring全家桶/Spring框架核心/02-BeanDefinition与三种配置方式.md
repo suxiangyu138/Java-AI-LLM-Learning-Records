@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [BeanDefinition：Bean 的图纸](#1-beandefinitionbean-的图纸)
 2. [配置方式演进：XML → 注解 → JavaConfig](#2-配置方式演进xml--注解--javaconfig)
@@ -47,7 +47,7 @@ ctx.registerBeanDefinition("orderService",
 ctx.refresh();
 ```
 
-> 🎯 **核心要点**：**BeanFactoryPostProcessor 改的是图纸（BeanDefinition），BeanPostProcessor 改的是成品（Bean 实例）**——这个区分是理解 Spring 扩展体系的第一把钥匙（源码细节见 `Spring生态深度剖析/01`）。
+> **核心要点**：**BeanFactoryPostProcessor 改的是图纸（BeanDefinition），BeanPostProcessor 改的是成品（Bean 实例）**——这个区分是理解 Spring 扩展体系的第一把钥匙（源码细节见 `Spring生态深度剖析/01`）。
 
 ---
 
@@ -63,16 +63,16 @@ ctx.refresh();
 
 | 能力 | XML | 注解 | JavaConfig |
 |------|:---:|:----:|:----------:|
-| 声明自己的类为 Bean | ✅ | ✅（@Component） | ✅（@Bean） |
-| 声明第三方类为 Bean | ✅ | ❌（无法改别人的类） | ✅（@Bean 工厂方法） |
-| 条件逻辑装配 | 弱 | 弱 | ✅（Java 代码任意写） |
-| 编译期检查 | ❌（运行时才暴露） | ✅ | ✅ |
-| 重构友好 | ❌（字符串脆弱） | ✅ | ✅ |
+| 声明自己的类为 Bean | ✓ | ✓（@Component） | ✓（@Bean） |
+| 声明第三方类为 Bean | ✓ | ✗（无法改别人的类） | ✓（@Bean 工厂方法） |
+| 条件逻辑装配 | 弱 | 弱 | ✓（Java 代码任意写） |
+| 编译期检查 | ✗（运行时才暴露） | ✓ | ✓ |
+| 重构友好 | ✗（字符串脆弱） | ✓ | ✓ |
 
 **为什么要用 JavaConfig 注册第三方类**：
 
 ```java
-// ❌ 第三方类无法加 @Component —— 只能靠配置
+// ✗ 第三方类无法加 @Component —— 只能靠配置
 @Configuration
 public class CacheConfig {
 
@@ -85,7 +85,7 @@ public class CacheConfig {
 }
 ```
 
-> 🎯 **核心要点**：**自己写的类用 @Component 扫描；第三方/条件性/参数复杂的 Bean 用 @Configuration + @Bean**——这是现代 Spring 配置的标准分工。XML 仅存于遗留系统。
+> **核心要点**：**自己写的类用 @Component 扫描；第三方/条件性/参数复杂的 Bean 用 @Configuration + @Bean**——这是现代 Spring 配置的标准分工。XML 仅存于遗留系统。
 
 ---
 
@@ -126,7 +126,7 @@ FilterType.REGEX            // 类名正则
 FilterType.CUSTOM           // 自定义 TypeFilter
 ```
 
-> ⚠️ **经典坑**：Spring Boot 主类放在 `com.example`，而某个 `@Configuration` 放在 `com.example.other` 包外 → 扫描不到 → "Bean 找不到"。排查第一步：确认类的包在扫描范围内。
+> **经典坑**：Spring Boot 主类放在 `com.example`，而某个 `@Configuration` 放在 `com.example.other` 包外 → 扫描不到 → "Bean 找不到"。排查第一步：确认类的包在扫描范围内。
 
 ---
 
@@ -166,7 +166,7 @@ public class DataSourceConfig {
 | 创建时机 | 容器直接实例化 | 方法被容器调用返回 |
 | 可控性 | 弱（全靠反射默认） | 强（Java 代码完全可控） |
 
-> 💡 **CGLIB 代理细节**（与 05 模块 AOP 呼应）：`@Configuration` 类本身被 CGLIB 代理——`@Bean` 方法被拦截后先查单例缓存，命中直接返回。**@Component 类没有这个行为**——所以 @Component 里的 @Bean 方法（反模式）每次调用都会新建。
+> **CGLIB 代理细节**（与 05 模块 AOP 呼应）：`@Configuration` 类本身被 CGLIB 代理——`@Bean` 方法被拦截后先查单例缓存，命中直接返回。**@Component 类没有这个行为**——所以 @Component 里的 @Bean 方法（反模式）每次调用都会新建。
 
 ---
 
@@ -200,7 +200,7 @@ public class RedisCacheConfig { ... }
 
 **条件装配的判断时机**：BeanDefinition **注册阶段**（`ConditionEvaluator` 在解析配置类时求值）——早于 Bean 创建，所以它是"图纸级"开关。
 
-> 🎯 **核心要点**：`@ConditionalOnMissingBean` 是"默认实现 + 允许覆盖"的标准姿势——框架提供默认 Bean，业务方想自定义就注册自己的，自动配置自动退让（`Spring生态深度剖析/02` 有自动配置内核）。
+> **核心要点**：`@ConditionalOnMissingBean` 是"默认实现 + 允许覆盖"的标准姿势——框架提供默认 Bean，业务方想自定义就注册自己的，自动配置自动退让（`Spring生态深度剖析/02` 有自动配置内核）。
 
 ---
 
@@ -232,7 +232,7 @@ public class MyRegistrar implements BeanRegistrar {
 | API 设计 | 分散在容器上 | 集中、可测试 |
 | 版本 | 6.x | **7.0+** |
 
-> ⚠️ 版本提示：Spring Framework 7.0 是代际升级——`javax.annotation`/`javax.inject` 已被**完全移除**（静默忽略，不报错——迁移陷阱），必须换 `jakarta.*`；`spring-jcl` 模块移除（用 Apache Commons Logging 1.3）。迁移细节见 `Spring生态/03-SpringBoot4与SpringFramework7新特性.md`。
+> 版本提示：Spring Framework 7.0 是代际升级——`javax.annotation`/`javax.inject` 已被**完全移除**（静默忽略，不报错——迁移陷阱），必须换 `jakarta.*`；`spring-jcl` 模块移除（用 Apache Commons Logging 1.3）。迁移细节见 `Spring生态/03-SpringBoot4与SpringFramework7新特性.md`。
 
 ---
 

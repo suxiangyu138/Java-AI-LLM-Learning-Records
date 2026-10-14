@@ -1,7 +1,7 @@
 # 01-pypdf与python-docx是什么
 > 定位：Python 文档处理双件套——pypdf 管 PDF 读写的纯 Python 库、python-docx 管 Word 文档的读写库；2026 年 PDF 侧唯一维护线是 pypdf，PyPDF2 只是历史曾用名。
 
-## 📚 目录
+## 目录
 1. [双件套的分工](#1-双件套的分工)
 2. [PyPDF2 死亡史与 pypdf 诞生](#2-pypdf2-死亡史与-pypdf-诞生)
 3. [2026 基线](#3-2026-基线)
@@ -91,7 +91,7 @@ from pypdf import PdfReader              # 2026 唯一正确写法
 4. 「PDF 是排版格式不是数据格式」怎么理解？
 5. 与 unstructured 的分工口诀是什么？
 
-> 🎯 **核心要点**：pypdf 管 PDF、python-docx 管 Word，各管一端；PyPDF2 已死（2024 停止维护、3.12+ 静默失败、未打补丁 CVE），2026 一律 pypdf；批量解析交给 unstructured，精细操作用双件套。
+> **核心要点**：pypdf 管 PDF、python-docx 管 Word，各管一端；PyPDF2 已死（2024 停止维护、3.12+ 静默失败、未打补丁 CVE），2026 一律 pypdf；批量解析交给 unstructured，精细操作用双件套。
 
 ---
 

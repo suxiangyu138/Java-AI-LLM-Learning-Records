@@ -2,7 +2,7 @@
 
 > 定位：LangChain 不是"一个库"——五大组件的分工地图、安装姿势、与手写/原生代码的对应关系（2026-08 基准）
 
-## 📚 目录
+## 目录
 
 1. [五大组件地图](#1-五大组件地图)
 2. [安装与版本窗口](#2-安装与版本窗口)
@@ -35,7 +35,7 @@ LangChain 生态（2026-08）
 | LangGraph | 状态机引擎 | 框架自动使用；04 篇手动下沉 |
 | LangSmith | 可观测 | 06 篇入门 |
 
-> 🎯 **核心要点**：`create_agent` 来自 **langchain**（不是 langgraph.prebuilt）——这是 2026 版最重要的导入变化。老的 `AgentExecutor`（langchain.agents）已进维护期。
+> **核心要点**：`create_agent` 来自 **langchain**（不是 langgraph.prebuilt）——这是 2026 版最重要的导入变化。老的 `AgentExecutor`（langchain.agents）已进维护期。
 
 ## 2. 安装与版本窗口
 
@@ -54,7 +54,7 @@ pip install langchain langchain-openai langgraph
 | AgentExecutor | **维护期至 2026-12**，官方禁止新代码使用 |
 | 供应商包 | langchain-openai / langchain-deepseek / langchain-anthropic 等 |
 
-> ⚠️ **教程陷阱**：网上大量教程（2024-2025）仍教 `AgentExecutor` + `create_react_agent`——2026 学它们等于学"维护期 API"。本阶段一律使用 `create_agent`。
+> **教程陷阱**：网上大量教程（2024-2025）仍教 `AgentExecutor` + `create_react_agent`——2026 学它们等于学"维护期 API"。本阶段一律使用 `create_agent`。
 
 ## 3. 与手写代码的对应表
 
@@ -69,7 +69,7 @@ pip install langchain langchain-openai langgraph
 | 手写 checkpointer/记忆 | `checkpointer` 参数 | 持久化一行配置 |
 | 手写 response_format | `response_format` 参数 | 与 Pydantic 集成 |
 
-> 💡 **费曼练习**：看到框架任何"黑盒行为"，尝试回答"这对应我手写代码里的哪一段？"——对不上，说明你还没真正理解框架。
+> **费曼练习**：看到框架任何"黑盒行为"，尝试回答"这对应我手写代码里的哪一段？"——对不上，说明你还没真正理解框架。
 
 ## 4. 框架帮你做了什么（价值分析）
 
@@ -82,7 +82,7 @@ pip install langchain langchain-openai langgraph
 | 跨模型/供应商 | 手写适配层 | 包即用 | **大** |
 | 错误/边界处理 | 中 | 参数级 | **中** |
 
-> 🎯 **核心要点**：框架价值的真实分布——**基础循环你自己 60 行就写了，价值不大；记忆/流式/可观测/多 Agent/跨供应商才是框架的护城河**。这也决定了选型：简单单工具 Agent 手写即可，生产能力密集的场景用框架。
+> **核心要点**：框架价值的真实分布——**基础循环你自己 60 行就写了，价值不大；记忆/流式/可观测/多 Agent/跨供应商才是框架的护城河**。这也决定了选型：简单单工具 Agent 手写即可，生产能力密集的场景用框架。
 
 ## 5. 框架的代价
 
@@ -93,7 +93,7 @@ pip install langchain langchain-openai langgraph
 | 与供应商原生能力脱节 | 新能力（如 Responses API）框架适配滞后 | 需要时用原生（阶段 2 能力） |
 | 依赖重 | 安装包多、升级联动 | 按需安装、虚拟环境隔离 |
 
-> 💡 **2026 生产共识**：LangChain + LangGraph 组合使用——LangChain 提供整合与高层 API，LangGraph 提供状态机运行时；需要节点级控制时下沉 StateGraph（04 篇）。
+> **2026 生产共识**：LangChain + LangGraph 组合使用——LangChain 提供整合与高层 API，LangGraph 提供状态机运行时；需要节点级控制时下沉 StateGraph（04 篇）。
 
 ---
 

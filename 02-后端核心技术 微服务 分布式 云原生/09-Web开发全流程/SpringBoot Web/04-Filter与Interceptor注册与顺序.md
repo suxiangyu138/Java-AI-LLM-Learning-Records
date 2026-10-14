@@ -1,7 +1,7 @@
 # Filter 与 Interceptor 注册与顺序
 > Boot 中 Filter 的三条注册路径、OncePerRequestFilter、拦截器注册与顺序编排，以及 Filter / Interceptor / AOP 三层拦截的选型决策——请求横切能力的完整地图
 
-## 📚 目录
+## 目录
 1. [Filter 注册三路径](#1-filter-注册三路径)
 2. [OncePerRequestFilter 与经典基类](#2-onceperrequestfilter-与经典基类)
 3. [顺序控制：FilterRegistrationBean vs @Order](#3-顺序控制filterregistrationbean-vs-order)
@@ -55,7 +55,7 @@ public SomeFilter someFilter() {          // Boot 检测到 Filter 类型 Bean
 | @WebFilter + 扫描 | 声明式、就近 | 无法注入、**无法排序** | 简单场景/遗留代码 |
 | 直接 @Bean | 简洁 | 顺序控制弱（@Order） | 单体 Filter |
 
-> ⚠️ **路径二的致命短板**：@WebFilter 的 Filter 是容器直接实例化（非 Spring Bean），**不能注入依赖**；且多个 @WebFilter 顺序不确定。需要依赖或顺序的 Filter 一律走路径一。
+> **路径二的致命短板**：@WebFilter 的 Filter 是容器直接实例化（非 Spring Bean），**不能注入依赖**；且多个 @WebFilter 顺序不确定。需要依赖或顺序的 Filter 一律走路径一。
 
 ## 2. OncePerRequestFilter 与经典基类
 
@@ -81,14 +81,14 @@ public class TraceIdFilter extends OncePerRequestFilter {
 }
 ```
 
-> 🎯 为什么是 OncePerRequestFilter：**转发/异步请求会让 Filter 执行多次**（REQUEST/ASYNC/ERROR 各过一次链），基类内部用"已执行标记"保证只跑一遍业务逻辑；`shouldNotFilter` 可按请求跳过（如静态资源）。
+> 为什么是 OncePerRequestFilter：**转发/异步请求会让 Filter 执行多次**（REQUEST/ASYNC/ERROR 各过一次链），基类内部用"已执行标记"保证只跑一遍业务逻辑；`shouldNotFilter` 可按请求跳过（如静态资源）。
 
 | 经典场景 | 放 Filter（OncePerRequestFilter） | 原因 |
 |---------|-------------------------------|------|
-| traceId 注入 | ✅ | 必须拦最早（Filter 在最外层） |
-| 请求体日志 | ✅ | 需要包装 Request（Body 单次读） |
-| 登录校验 | ✅/Interceptor | 见 §5 决策表 |
-| 响应耗时统计 | ✅ | 包住整个链路 |
+| traceId 注入 | ✓ | 必须拦最早（Filter 在最外层） |
+| 请求体日志 | ✓ | 需要包装 Request（Body 单次读） |
+| 登录校验 | ✓/Interceptor | 见 §5 决策表 |
+| 响应耗时统计 | ✓ | 包住整个链路 |
 
 ## 3. 顺序控制：FilterRegistrationBean vs @Order
 
@@ -101,9 +101,9 @@ Filter 顺序决定因素（优先级从高到低）：
 
 | 方式 | 生效范围 | 推荐 |
 |------|---------|------|
-| `bean.setOrder(1)` | 路径一专属 | ✅ 首选 |
+| `bean.setOrder(1)` | 路径一专属 | ✓ 首选 |
 | `@Order(1)` | 路径三（Bean） | 次选 |
-| 无 | 路径二（注解） | ❌ 顺序随机 |
+| 无 | 路径二（注解） | ✗ 顺序随机 |
 
 ```java
 // 生产铁律：所有有顺序要求的 Filter 统一走 FilterRegistrationBean 并编号
@@ -114,7 +114,7 @@ Filter 顺序决定因素（优先级从高到低）：
 // 5 = 限流
 ```
 
-> ⚠️ 与容器内置 Filter 的协调：Boot 内置 Filter（CharacterEncodingFilter 等）的默认顺序见 `OrderedCharacterEncodingFilter`（`Ordered.HIGHEST_PRECEDENCE` 附近）——自定义 Filter 想比它们更外/更内，用 `setOrder` 显式越过即可。
+> 与容器内置 Filter 的协调：Boot 内置 Filter（CharacterEncodingFilter 等）的默认顺序见 `OrderedCharacterEncodingFilter`（`Ordered.HIGHEST_PRECEDENCE` 附近）——自定义 Filter 想比它们更外/更内，用 `setOrder` 显式越过即可。
 
 ## 4. HandlerInterceptor 注册与顺序
 
@@ -146,7 +146,7 @@ afterCompletion 逆序：Login → TraceId
 | Filter 能看到 | 所有请求（含静态资源、错误页） |
 | Interceptor 能看到 | 已路由到 Handler 的请求 + HandlerMethod 对象 |
 
-> 💡 Interceptor 想拿 HandlerMethod 做精细化控制（如方法级注解鉴权）是 Filter 做不到的——这就是 `@RequiresPermission` 类注解拦截器存在的理由。
+> Interceptor 想拿 HandlerMethod 做精细化控制（如方法级注解鉴权）是 Filter 做不到的——这就是 `@RequiresPermission` 类注解拦截器存在的理由。
 
 ## 5. Filter / Interceptor / AOP 三层分工
 
@@ -156,8 +156,8 @@ afterCompletion 逆序：Login → TraceId
 | 时机 | 进 Servlet 前/响应后 | Controller 前/后/完成 | 目标方法调用前后（任意 Bean） |
 | 能拦 | 一切请求 | Controller 映射请求 | Spring Bean 方法 |
 | 访问 | ServletRequest/Response | HandlerMethod、ModelAndView | 方法参数、返回值、注解 |
-| 依赖注入 | 需 FilterRegistrationBean | ✅ 天然 Bean | ✅ 天然 Bean |
-| 异常可见 | 部分（dispatch 时） | ✅ afterCompletion | ✅ @AfterThrowing |
+| 依赖注入 | 需 FilterRegistrationBean | ✓ 天然 Bean | ✓ 天然 Bean |
+| 异常可见 | 部分（dispatch 时） | ✓ afterCompletion | ✓ @AfterThrowing |
 | 典型场景 | 编码/traceId/CORS/压缩 | 鉴权/日志/参数校验 | 事务/审计/限流注解 |
 
 ### 选型决策树
@@ -169,7 +169,7 @@ afterCompletion 逆序：Login → TraceId
 只是登录校验 + 能控制范围 → Interceptor（首选）
 ```
 
-> 🎯 经验结论：**鉴权用 Interceptor（范围可控 + 能拿 HandlerMethod）、traceId/编码用 Filter（必须最外）、事务/审计用 AOP（切方法）**——三者不是竞争关系，是分工。与 [Filter 体系对比章节](../Filter%20过滤器/05-Filter-vs-Interceptor-vs-AOP.md) 结论一致，本体系补 Boot 侧注册细节。
+> 经验结论：**鉴权用 Interceptor（范围可控 + 能拿 HandlerMethod）、traceId/编码用 Filter（必须最外）、事务/审计用 AOP（切方法）**——三者不是竞争关系，是分工。与 [Filter 体系对比章节](../Filter%20过滤器/05-Filter-vs-Interceptor-vs-AOP.md) 结论一致，本体系补 Boot 侧注册细节。
 
 ## 6. 典型组合场景
 
@@ -195,12 +195,12 @@ public class RequestLogFilter extends OncePerRequestFilter {
                 new ContentCachingResponseWrapper(response);
         filterChain.doFilter(requestWrapper, responseWrapper);
         // 日志：requestWrapper.getContentAsByteArray() / responseWrapper...
-        responseWrapper.copyBodyToResponse();   // ⚠️ 包装类必须回写，否则客户端收不到响应！
+        responseWrapper.copyBodyToResponse();   // 包装类必须回写，否则客户端收不到响应！
     }
 }
 ```
 
-> ⚠️ 请求/响应包装的两个铁律：**① 包装类要一路传下去**（后续组件必须继续用包装对象）；**② ContentCachingResponseWrapper 必须 copyBodyToResponse()**——否则响应被吞，客户端拿到空响应（高频故障）。
+> 请求/响应包装的两个铁律：**① 包装类要一路传下去**（后续组件必须继续用包装对象）；**② ContentCachingResponseWrapper 必须 copyBodyToResponse()**——否则响应被吞，客户端拿到空响应（高频故障）。
 
 ---
 

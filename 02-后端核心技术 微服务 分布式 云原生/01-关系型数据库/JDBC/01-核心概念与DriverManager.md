@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [JDBC 是什么](#1-jdbc-是什么)
 2. [JDBC 规范演进](#2-jdbc-规范演进)
@@ -42,7 +42,7 @@ JDBC 驱动（Driver 实现）—— 每个数据库一个（MySQL Connector/J�
 | Statement | SQL 执行器 | 命令 |
 | ResultSet | 查询结果集 | 游标 |
 
-> 🎯 **核心要点**：JDBC = "**标准接口 + 厂商驱动**"——**Java 代码面向接口编程，换数据库只换驱动与 URL**（这是它 20 多年长盛不衰的设计）。
+> **核心要点**：JDBC = "**标准接口 + 厂商驱动**"——**Java 代码面向接口编程，换数据库只换驱动与 URL**（这是它 20 多年长盛不衰的设计）。
 
 ---
 
@@ -67,7 +67,7 @@ JDBC 驱动（Driver 实现）—— 每个数据库一个（MySQL Connector/J�
 → 老教程的"Class.forName 加载驱动"在 JDK 6+ 已是历史
 ```
 
-> 🎯 **核心要点**：JDBC 演进 = "**自动加载驱动（4.0）+ TWR 关闭（4.1）+ java.time 支持（4.2）**"——**老教程三件套（Class.forName/手动关闭/Date 转换）在现代已是反模式**。
+> **核心要点**：JDBC 演进 = "**自动加载驱动（4.0）+ TWR 关闭（4.1）+ java.time 支持（4.2）**"——**老教程三件套（Class.forName/手动关闭/Date 转换）在现代已是反模式**。
 
 ---
 
@@ -104,7 +104,7 @@ Class.forName("org.postgresql.Driver");
 ④ Class.forName 何时还需要？—— 极少数"驱动未实现 ServiceLoader"的旧驱动
 ```
 
-> 🎯 **核心要点**：驱动加载 = "**JDBC 4 自动注册（ServiceLoader）**"——**"Class.forName 已不需要"是现代面试题**（老教程过时点）；多驱动按 URL 前缀自动匹配。
+> **核心要点**：驱动加载 = "**JDBC 4 自动注册（ServiceLoader）**"——**"Class.forName 已不需要"是现代面试题**（老教程过时点）；多驱动按 URL 前缀自动匹配。
 
 ---
 
@@ -137,7 +137,7 @@ String url = "jdbc:oracle:thin:@localhost:1521:ORCL";
 | rewriteBatchedStatements | 批处理改写 | 批处理性能差（见 06 模块） |
 | useUnicode | Unicode 支持 | 与编码配合 |
 
-> 🎯 **核心要点**：URL = "**jdbc:子协议:地址 + 参数**"——**MySQL 的 serverTimezone/characterEncoding 必配**（时区与乱码两大事故的源头）；`&` 连接参数是连接池/框架配置的基础。
+> **核心要点**：URL = "**jdbc:子协议:地址 + 参数**"——**MySQL 的 serverTimezone/characterEncoding 必配**（时区与乱码两大事故的源头）；`&` 连接参数是连接池/框架配置的基础。
 
 ---
 
@@ -148,7 +148,7 @@ String url = "jdbc:oracle:thin:@localhost:1521:ORCL";
 try (Connection conn = DriverManager.getConnection(url, user, password)) {
     // 使用连接
 }
-// ✅ TWR 自动关闭（JDBC 4.1，Connection 实现 AutoCloseable）
+// ✓ TWR 自动关闭（JDBC 4.1，Connection 实现 AutoCloseable）
 
 // 生产：连接池获取（见 05 模块）
 // DataSource ds = new HikariDataSource(config);
@@ -165,7 +165,7 @@ try (Connection conn = DriverManager.getConnection(url, user, password)) {
    连接池连接 close = 归还池中（不是真断开！）
 ```
 
-> 🎯 **核心要点**：Connection = "**昂贵的会话（创建慢）+ 一连接一事务 + 关闭语义因来源而异**"——**"连接池的 close 是归还"是最重要的认知差**（很多人误以为会真断开）；TWR 是现代关闭规范。
+> **核心要点**：Connection = "**昂贵的会话（创建慢）+ 一连接一事务 + 关闭语义因来源而异**"——**"连接池的 close 是归还"是最重要的认知差**（很多人误以为会真断开）；TWR 是现代关闭规范。
 
 ---
 
@@ -219,7 +219,7 @@ public class JdbcCrud {
 
 **七步的记忆**（面试必背）：**① 连接 → ② Statement → ③ 执行 → ④ 结果 → ⑤ 处理 → ⑥ 关闭 → ⑦ 异常**——TWR 让"关闭"自动化（④⑤ 合并为 try-with-resources）。
 
-> 🎯 **核心要点**：七步 CRUD = "**连接 → 预编译 → 执行 → 结果 → 遍历 → 异常 → 关闭**"——**TWR 管理资源 + PreparedStatement 防注入**是现代手写 JDBC 的两个铁律（02 模块详述）。
+> **核心要点**：七步 CRUD = "**连接 → 预编译 → 执行 → 结果 → 遍历 → 异常 → 关闭**"——**TWR 管理资源 + PreparedStatement 防注入**是现代手写 JDBC 的两个铁律（02 模块详述）。
 
 ---
 

@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [推导式全家桶](#1-推导式全家桶)
 2. [解包的九种用法](#2-解包的九种用法)
@@ -77,7 +77,7 @@ print(all(isinstance(x, int) for x in nums))
 print(max(items, key=lambda d: d["score"]))
 ```
 
-> 💡 推导式在 3.12+（PEP 709）会被内联，不再创建独立函数帧，比等价的 for 循环快约 10%。而 `[...]` 与 `(...)` 的差别是**内存**：前者立刻物化全部结果，后者常量内存。
+> 推导式在 3.12+（PEP 709）会被内联，不再创建独立函数帧，比等价的 for 循环快约 10%。而 `[...]` 与 `(...)` 的差别是**内存**：前者立刻物化全部结果，后者常量内存。
 
 ---
 
@@ -129,10 +129,10 @@ def wrapper(*args, **kwargs): return target(*args, **kwargs)
 # zip / enumerate：几乎所有「带索引/配对」的循环都该用它们
 names, scores = ["A", "B", "C"], [90, 85, 88]
 
-for i, name in enumerate(names, start=1):        # ✅ 不要 range(len(names))
+for i, name in enumerate(names, start=1):        # ✓ 不要 range(len(names))
     print(i, name)
 
-for name, score in zip(names, scores):           # ✅ 不要用索引对齐
+for name, score in zip(names, scores):           # ✓ 不要用索引对齐
     print(name, score)
 
 print(dict(zip(names, scores)))                  # 两列表 → 字典
@@ -196,7 +196,7 @@ print(slice(-5, None, 2).indices(10))    # (5, 10, 2)
 | 分块 | `[s[i:i+n] for i in range(0, len(s), n)]` |
 | 分块（3.12+） | `list(itertools.batched(s, n))` |
 
-> ⚠️ 切片产生**浅拷贝**：`copy = matrix[:]` 之后 `copy[0].append(x)` 会影响原矩阵。深拷贝要 `copy.deepcopy`（见 02 章）。
+> 切片产生**浅拷贝**：`copy = matrix[:]` 之后 `copy[0].append(x)` 会影响原矩阵。深拷贝要 `copy.deepcopy`（见 02 章）。
 
 ---
 
@@ -213,22 +213,22 @@ if a < b < c < d: ...
 if x == y == z: ...
 
 # 短路取值
-name = user_input or "默认值"            # 空字符串/None/0 都会取默认值 ⚠️
+name = user_input or "默认值"            # 空字符串/None/0 都会取默认值 
 name = user_input if user_input is not None else "默认值"   # 更精确
 config = a or b or c or {}
 
 # and 短路做守卫
 result = obj and obj.method()           # obj 为假则返回 obj 本身
-length = data and len(data)             # ⚠️ data=[] 时返回 [] 而非 0
+length = data and len(data)             # data=[] 时返回 [] 而非 0
 
 # in 代替多重 ==
 if cmd in ("start", "run", "go"): ...   # 而不是 cmd=="start" or ...
 if ext in {".jpg", ".png", ".gif"}: ... # 集合更快（O(1)）
 
 # 真值判断
-if items: ...                           # ✅ 而不是 if len(items) > 0
-if not items: ...                       # ✅ 而不是 if items == []
-if x is None: ...                       # ✅ None 必须用 is
+if items: ...                           # ✓ 而不是 if len(items) > 0
+if not items: ...                       # ✓ 而不是 if items == []
+if x is None: ...                       # ✓ None 必须用 is
 ```
 
 ```python
@@ -266,9 +266,9 @@ while (chunk := stream.read(8192)):
     hasher.update(chunk)
 
 # ② 推导式里避免重复计算
-# ❌ 计算两次
+# ✗ 计算两次
 results = [expensive(x) for x in data if expensive(x) > 0]
-# ✅ 只算一次
+# ✓ 只算一次
 results = [y for x in data if (y := expensive(x)) > 0]
 
 # ③ if 里同时赋值和判断
@@ -291,11 +291,11 @@ if any((found := x) > 10 for x in nums):
 ```
 
 ```python
-# ⚠️ 什么时候不要用
+# 什么时候不要用
 # ① 只是普通赋值 → 用 =
 # x := 5           # SyntaxError，必须加括号 (x := 5)
 # ② 让代码更难读
-result = [y := f(x), y**2, y**3]        # ❌ 副作用藏在列表里
+result = [y := f(x), y**2, y**3]        # ✗ 副作用藏在列表里
 # ③ 在 lambda / 全局赋值场景滥用
 ```
 
@@ -369,13 +369,13 @@ match shape:
 ```
 
 ```python
-# ⚠️ 陷阱：裸名字是「捕获」不是「比较」
+# 陷阱：裸名字是「捕获」不是「比较」
 SUCCESS = 200
 match status:
-    case SUCCESS:   ...          # ❌ 这是把 status 赋值给 SUCCESS，永远匹配！
-    case Status.OK: ...          # ✅ 带点的名字才是值比较
-    case 200:       ...          # ✅ 字面量
-    case x if x == SUCCESS: ...  # ✅ 用 guard
+    case SUCCESS:   ...          # ✗ 这是把 status 赋值给 SUCCESS，永远匹配！
+    case Status.OK: ...          # ✓ 带点的名字才是值比较
+    case 200:       ...          # ✓ 字面量
+    case x if x == SUCCESS: ...  # ✓ 用 guard
 ```
 
 | 模式类型 | 语法 | 用途 |
@@ -390,7 +390,7 @@ match status:
 | 守卫 | `case x if x > 0:` | 附加条件 |
 | as | `case Point() as p:` | 匹配 + 绑定整体 |
 
-> 🎯 `match` 最适合的场景：**解析嵌套 JSON、处理 AST、状态机、LLM 的 tool_call 分派**。如果只是值到值的映射，字典分派表更简单也更快。
+> `match` 最适合的场景：**解析嵌套 JSON、处理 AST、状态机、LLM 的 tool_call 分派**。如果只是值到值的映射，字典分派表更简单也更快。
 
 ---
 
@@ -454,7 +454,7 @@ f"{'\n'.join(['a','b'])}"                     # 3.12+ 合法
 | `Template` | 慢 | 好 | 处理不可信的用户模板（安全） |
 | `logging` 的 `%s` | — | — | **日志必须用它**：`log.info("x=%s", x)` 延迟求值，未启用级别时零开销 |
 
-> ⚠️ 日志里不要用 f-string：`log.debug(f"data={huge_obj}")` 即使 DEBUG 关闭也会执行昂贵的 `repr`。正确写法 `log.debug("data=%s", huge_obj)`。
+> 日志里不要用 f-string：`log.debug(f"data={huge_obj}")` 即使 DEBUG 关闭也会执行昂贵的 `repr`。正确写法 `log.debug("data=%s", huge_obj)`。
 
 ---
 
@@ -535,7 +535,7 @@ secrets.token_hex(16)                                      # 安全随机（不�
 
 ## 9. 反模式对照表
 
-| ❌ 非 Pythonic | ✅ Pythonic | 原因 |
+| ✗ 非 Pythonic | ✓ Pythonic | 原因 |
 |--------------|-----------|------|
 | `for i in range(len(xs)): xs[i]` | `for x in xs:` | 直接迭代 |
 | `for i in range(len(xs)): i, xs[i]` | `for i, x in enumerate(xs):` | 内置支持 |
@@ -568,19 +568,19 @@ secrets.token_hex(16)                                      # 安全随机（不�
 
 ```python
 # EAFP vs LBYL：Python 偏好 EAFP（先做再处理异常）
-# ❌ LBYL：检查后仍可能竞态（文件在检查后被删）
+# ✗ LBYL：检查后仍可能竞态（文件在检查后被删）
 if os.path.exists(path):
     with open(path) as f: data = f.read()
 
-# ✅ EAFP：直接做，处理具体异常
+# ✓ EAFP：直接做，处理具体异常
 try:
     with open(path) as f: data = f.read()
 except FileNotFoundError:
     data = ""
 
 # 但异常不能滥用于正常控制流（异常有开销）
-# ❌ 用异常做循环退出
-# ✅ 用 in / get / 条件判断处理「预期会经常发生」的情况
+# ✗ 用异常做循环退出
+# ✓ 用 in / get / 条件判断处理「预期会经常发生」的情况
 ```
 
 ```python

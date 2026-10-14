@@ -6,7 +6,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [Stream 是什么](#1-stream-是什么)
 2. [四大核心特性](#2-四大核心特性)
@@ -58,14 +58,14 @@ List<String> result = list.stream()
 
 ## 2. 四大核心特性
 
-> 🎯 **Stream 四大特性**——理解它们就理解 Stream 的行为边界：
+> **Stream 四大特性**——理解它们就理解 Stream 的行为边界：
 
 | 特性 | 含义 | 影响 |
 |------|------|------|
 | **惰性求值** | 中间操作不执行，终止操作才触发 | 没 collect = 什么都没发生 |
 | **非侵入** | 不修改数据源（集合不变） | filter/map 产生新流 |
 | **一次性** | 流只能消费一次 | 二次终止操作抛异常 |
-| **可并行** | parallelStream 利用多核 | ⚠️ 有陷阱（见 05 篇） |
+| **可并行** | parallelStream 利用多核 | 有陷阱（见 05 篇） |
 
 ```text
 各特性的代码体现
@@ -74,7 +74,7 @@ list.stream().filter(x -> x > 10).map(x -> x * 2);
 // ③ 一次性：
 Stream<String> stream = list.stream();
 stream.forEach(System.out::println);
-stream.count();   // ❌ IllegalStateException（已消费）
+stream.count();   // ✗ IllegalStateException（已消费）
 // ② 非侵入：
 list.stream().filter(x -> x > 10).toList();
 // 原 list 不变（filter 产生新流）
@@ -86,7 +86,7 @@ list.stream().filter(x -> x > 10).toList();
 
 ### 3.1 执行时序
 
-> 🎯 **惰性求值**：中间操作只是「构建管道」，遇到终止操作才真正处理数据——**且是「逐元素」处理而非「分阶段」处理**：
+> **惰性求值**：中间操作只是「构建管道」，遇到终止操作才真正处理数据——**且是「逐元素」处理而非「分阶段」处理**：
 
 ```text
 错误理解（分阶段）：
@@ -119,7 +119,7 @@ Stream.of(1, 2, 3, 4, 5, 6)
 ├── ③ 资源节约：不处理多余元素
 └── ④ 管道灵活：中间操作可复用（同一管道多个终止）
 
-⚠️ 代价
+代价
 ├── ① 忘记终止操作 = 白写（什么都不执行）
 ├── ② 排障困难（看不到中间结果——用 peek 调试）
 └── ③ 有状态操作（sorted）需全量（惰性失效）
@@ -144,16 +144,16 @@ Stream 生命周期
 ### 4.2 一次性陷阱
 
 ```java
-// ❌ 错误：同一流消费两次
+// ✗ 错误：同一流消费两次
 Stream<String> stream = list.stream();
-stream.count();          // 第一次消费 ✅
-stream.collect(toList()); // ❌ IllegalStateException: stream has already been operated upon
+stream.count();          // 第一次消费 ✓
+stream.collect(toList()); // ✗ IllegalStateException: stream has already been operated upon
 
-// ✅ 正确：需要多次操作 → 重新创建流（成本低）
+// ✓ 正确：需要多次操作 → 重新创建流（成本低）
 long count = list.stream().count();
 List<String> result = list.stream().filter(...).toList();
 
-// ⚠️ 为什么设计成一次性
+// 为什么设计成一次性
 // ① 管道构建成本低（重新创建比复用便宜）
 // ② 避免状态混乱（流有内部状态：位置/短路标记）
 ```
@@ -173,8 +173,8 @@ List<String> result = list.stream().filter(...).toList();
 中间操作两类
 ├── 无状态：filter/map/peek（每个元素独立）
 ├── 有状态：sorted/distinct/limit/skip（需记录状态）
-│   ├── ⚠️ sorted 需全量（惰性失效——全读完才排序）
-│   └── ⚠️ 无限流上慎用有状态操作（永远等不完）
+│   ├── sorted 需全量（惰性失效——全读完才排序）
+│   └── 无限流上慎用有状态操作（永远等不完）
 
 终止操作两类
 ├── 短路：findFirst/anyMatch/allMatch（找到即停）
@@ -192,10 +192,10 @@ List<String> result = list.stream().filter(...).toList();
 
 示例对比
 list.stream().map(expensive).filter(...).limit(3)
-// ❌ map 处理了全部元素（浪费）
+// ✗ map 处理了全部元素（浪费）
 
 list.stream().filter(...).limit(3).map(expensive)
-// ✅ 只对 3 个元素做昂贵转换
+// ✓ 只对 3 个元素做昂贵转换
 ```
 
 ---
@@ -207,7 +207,7 @@ list.stream().filter(...).limit(3).map(expensive)
 | 表达 | 怎么做（命令式） | 数据存储 | 要什么（声明式） |
 | 可读性 | 嵌套时差 | - | **复杂处理最佳** |
 | 性能 | 简单场景好 | - | 简单场景略慢 |
-| 惰性 | 无 | 无 | ✅ |
+| 惰性 | 无 | 无 | ✓ |
 | 并行 | 手动 | 无 | **一行 parallel()** |
 | 调试 | 直观 | 直观 | 需 peek |
 
@@ -225,7 +225,7 @@ list.stream().filter(...).limit(3).map(expensive)
 ## 7. Stream 的适用边界
 
 ```text
-✅ 适合
+✓ 适合
 ├── 集合过滤/转换/排序/去重
 ├── 分组/聚合统计（groupingBy/summarizing）
 ├── 扁平化（flatMap 多层结构）
@@ -233,7 +233,7 @@ list.stream().filter(...).limit(3).map(expensive)
 ├── 文件行处理（Files.lines）
 └── 数据生成（Stream.iterate/generate）
 
-❌ 不适合
+✗ 不适合
 ├── 简单遍历（for 更直观）
 ├── 需要下标操作（Stream 无下标）
 ├── 需要精确中断（Stream 靠短路近似）
@@ -246,7 +246,7 @@ list.stream().filter(...).limit(3).map(expensive)
 
 ## 8. 核心要点
 
-> 🎯 **核心要点**：
+> **核心要点**：
 > 1. Stream = 元素序列的函数式处理管道（不存数据只处理）
 > 2. 四大特性：惰性求值/非侵入/一次性/可并行——**没 collect = 什么都没发生**
 > 3. 惰性求值是逐元素流水线（非分阶段）——短路操作高效的原因

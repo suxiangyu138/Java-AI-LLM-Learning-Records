@@ -20,7 +20,7 @@
 ### 1. 什么是ACID？什么是BASE？
 **ACID** 是数据库事务的四大特性：Atomicity（原子性）、Consistency（一致性）、Isolation（隔离性）、Durability（持久性），适用于单机数据库。**BASE** 是分布式系统的设计哲学：Basically Available（基本可用）、Soft State（软状态）、Eventually Consistent（最终一致性），强调牺牲强一致性换取可用性和分区容错性。分布式系统通常选择 BASE 而非 ACID。
 
-> 💡 面试时先答定义，然后补一句："分布式场景下追求ACID会导致性能急剧下降，因此大部分分布式事务方案走BASE路线。"
+> 面试时先答定义，然后补一句："分布式场景下追求ACID会导致性能急剧下降，因此大部分分布式事务方案走BASE路线。"
 
 ### 2. CAP 定理是什么？为什么分布式系统中只能选CP或AP？
 CAP 定理指出一个分布式系统最多只能同时满足 Consistency（强一致性）、Availability（可用性）、Partition Tolerance（分区容错性）中的两个。由于网络分区（P）是必然发生的，因此实际只能在 C 和 A 之间二选一。ZooKeeper 选 CP（牺牲可用性保证一致性），Eureka 选 AP（牺牲一致性保证可用性）。
@@ -28,7 +28,7 @@ CAP 定理指出一个分布式系统最多只能同时满足 Consistency（强�
 ### 3. 2PC 和 3PC 的区别？
 2PC（两阶段提交）分为 Prepare 和 Commit 两个阶段，存在 **同步阻塞** 和 **Coordinator单点故障** 问题。3PC（三阶段提交）引入 CanCommit、PreCommit、DoCommit 三个阶段，并增加了超时中断机制——参与者在等待超时后会自动中断事务。3PC 缓解了 2PC 的阻塞问题，但依然无法完全解决数据一致性问题。
 
-> ⚠️ 实际生产中用 2PC 的很少，因为性能太差。Seata AT 模式在 2PC 基础上做了优化，才是工程级的方案。
+> 实际生产中用 2PC 的很少，因为性能太差。Seata AT 模式在 2PC 基础上做了优化，才是工程级的方案。
 
 ### 4. TCC 和 2PC 的本质区别？
 TCC（Try-Confirm-Cancel）是 **业务层面** 的补偿型事务，而 2PC 是 **资源层面** 的锁协议。TCC 的三个阶段都由业务代码实现：Try 做资源检查和预留，Confirm 做实际提交，Cancel 做回滚补偿。TCC 不持有数据库锁，性能远高于 2PC，但需要业务方实现空回滚和幂等控制。
@@ -167,7 +167,7 @@ public void createOrder(Order order) {
 }
 ```
 
-> 💡 面试重点：AT 模式对业务代码 **零侵入**，但需要所有参与分支的数据源支持 undo log。
+> 面试重点：AT 模式对业务代码 **零侵入**，但需要所有参与分支的数据源支持 undo log。
 
 ### 4. Netty 主从 Reactor 线程模型源码级分析
 Netty 的 `EventLoopGroup` 实现了主从 Reactor。`NioEventLoop` 内部封装了一个 Selector 和任务队列。主 Reactor（Boss）注册 `OP_ACCEPT` 事件，接收到新连接后将 `NioSocketChannel` 注册到从 Reactor（Worker）的 Selector 上。Worker 注册 `OP_READ` 事件并处理读写。Pipeline 上链式执行 ChannelHandler，每个 Handler 可指定是否在 IO 线程执行。
@@ -260,7 +260,7 @@ public interface Protocol {
 }
 ```
 
-> 🎯 Dubbo 几乎是纯 SPI 架构，从协议、序列化、负载均衡到集群容错，所有组件都可扩展。
+> Dubbo 几乎是纯 SPI 架构，从协议、序列化、负载均衡到集群容错，所有组件都可扩展。
 
 ### 10. 可靠消息最终一致性方案详解
 方案分4个环节：**1）生产者发送消息前先写本地消息表**，与业务操作在一个本地事务中。**2）独立消息服务（或 MQ）轮询未发送的消息**，定时任务扫描本地消息表中 status=0 的记录。**3）消息服务投递消息到 MQ**，消费者消费后调用回调解锁。**4）消费者幂等消费**，通过唯一业务 ID（如 order_id）判断是否已消费过。
@@ -308,7 +308,7 @@ public class SagaOrchestrator {
 ### 12. Redlock 算法原理
 Redlock 要求在 N 个独立 Redis 节点（通常 N=5）上同时加锁：**1）获取当前时间戳 T1。2）依次在 N 个节点上加锁**，每个加锁的超时时间远小于锁的过期时间。**3）计算加锁消耗的时间（T2 - T1）**。如果成功加锁数 >= N/2 + 1 且总耗时小于锁的有效时间，则加锁成功。**4）加锁失败则依次解锁所有节点**。Redlock 的核心思想是通过多数派投票避免单点故障，但也有争议（Martin Kleppmann 曾撰文批评 Redlock 不是一个可靠的分布式锁）。
 
-> ⚠️ Redlock 在极端情况下（时钟漂移、GC 暂停）仍可能失效，实际项目中多数公司用 Redis 哨兵 + Redisson 看门狗已经足够。
+> Redlock 在极端情况下（时钟漂移、GC 暂停）仍可能失效，实际项目中多数公司用 Redis 哨兵 + Redisson 看门狗已经足够。
 
 ---
 
@@ -705,7 +705,7 @@ public class BloomFilterCache {
 - **降级**：如果 DB 不可用，切到本地内存临时 ID 生成（如用 IP 做机器标识的 Snowflake）。
 - **监控**：每分钟号段消耗速度、DB 压力、切换次数等指标上报。
 
-> 💡 美团 Leaf 落地就是这种架构，支撑了美团全业务的 ID 生成。
+> 美团 Leaf 落地就是这种架构，支撑了美团全业务的 ID 生成。
 
 ### 2. 设计分布式事务解决方案选型
 **决策树**：
@@ -844,7 +844,7 @@ public class RpcDecoder extends ByteToMessageDecoder {
 
 ## 八、快速查漏补缺 Checklist
 
-> 🎯 面试前逐项自检，打勾的表示已掌握，空心的需要重点复习。
+> 面试前逐项自检，打勾的表示已掌握，空心的需要重点复习。
 
 - [ ] 我能够清晰解释 CAP 定理，并举例说明 ZooKeeper(CP) vs Eureka(AP) 的选择
 - [ ] 我能对比 2PC / 3PC / TCC / Saga / Seata AT 的优缺点和适用场景

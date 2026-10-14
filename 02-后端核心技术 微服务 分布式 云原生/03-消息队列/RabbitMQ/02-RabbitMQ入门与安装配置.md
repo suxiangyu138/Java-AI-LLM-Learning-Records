@@ -118,7 +118,7 @@ Application
         └── Channel 2
 ```
 
-> 💡 **最佳实践**：应用级别创建 1-2 个 Connection，每个线程使用独立的 Channel。Channel 是线程安全的，建议用完即关。
+> **最佳实践**：应用级别创建 1-2 个 Connection，每个线程使用独立的 Channel。Channel 是线程安全的，建议用完即关。
 
 ### 2.5 队列类型
 
@@ -137,7 +137,7 @@ Application
 | 类型 | 匹配方式 | 场景 |
 |------|----------|------|
 | **Direct** | `RoutingKey` = `BindingKey` 精确匹配 | 一对一、订单回调、支付通知 |
-| **Topic** ⭐ | `*` 匹配一个单词，`#` 匹配零或多个 | 日志收集、多服务分类订阅 |
+| **Topic** ★ | `*` 匹配一个单词，`#` 匹配零或多个 | 日志收集、多服务分类订阅 |
 | **Fanout** | 无视 RoutingKey，全队列广播 | 公告推送、缓存刷新、配置广播 |
 | **Headers** | 消息头属性匹配（key-value）| 复杂路由（几乎不用）|
 
@@ -166,7 +166,7 @@ channel.basicPublish("direct.exchange", "order.create", null, msg.getBytes());
 channel.queueBind("order.queue", "direct.exchange", "order.create");
 ```
 
-### 3.3 Topic Exchange ⭐
+### 3.3 Topic Exchange ★
 
 ```text
 路由键: "log.error"
@@ -188,14 +188,14 @@ channel.queueBind("order.queue", "direct.exchange", "order.create");
 
 | Binding Key | Routing Key | 匹配 |
 |:-----------:|:-----------:|:----:|
-| `log.#` | `log.error` | ✅ |
-| `log.#` | `log.info.order` | ✅（# 匹配多级）|
-| `log.*` | `log.error` | ✅ |
-| `log.*` | `log.info.order` | ❌（* 只匹配一级）|
-| `#` | 任意 | ✅（匹配所有）|
-| `*.error` | `order.error` | ✅ |
-| `*.error` | `log.error` | ✅ |
-| `*.error` | `log.info.error` | ❌ |
+| `log.#` | `log.error` | ✓ |
+| `log.#` | `log.info.order` | ✓（# 匹配多级）|
+| `log.*` | `log.error` | ✓ |
+| `log.*` | `log.info.order` | ✗（* 只匹配一级）|
+| `#` | 任意 | ✓（匹配所有）|
+| `*.error` | `order.error` | ✓ |
+| `*.error` | `log.error` | ✓ |
+| `*.error` | `log.info.error` | ✗ |
 
 ### 3.4 Fanout Exchange
 
@@ -231,7 +231,7 @@ AMQP.BasicProperties props = new AMQP.BasicProperties.Builder()
 channel.basicPublish("headers.exchange", "", props, msg.getBytes());
 ```
 
-> ⚠️ Headers Exchange 性能较差，实践中基本被 Topic 替代，了解即可。
+> Headers Exchange 性能较差，实践中基本被 Topic 替代，了解即可。
 
 ---
 
@@ -304,7 +304,7 @@ Producer               Exchange              Queue              Consumer
 | **Push（推）** | Broker 主动推送 | `basicConsume` | 实时性高，多数场景 |
 | **Pull（拉）** | Consumer 主动拉取 | `basicGet` | 批量处理、手动控制 |
 
-> 💡 **推荐 Push 模式**：大多数业务场景使用 Push。Pull 模式适合消费者需要自主控制节奏的场景。
+> **推荐 Push 模式**：大多数业务场景使用 Push。Pull 模式适合消费者需要自主控制节奏的场景。
 
 ---
 
@@ -431,7 +431,7 @@ curl http://localhost:5672    # AMQP 端口
 - **默认账号**：`guest / guest`
 - **限制**：仅本地访问（默认禁止远程登录）
 
-> ⚠️ **远程访问**：生产环境请创建新用户并分配权限，不要使用 guest。
+> **远程访问**：生产环境请创建新用户并分配权限，不要使用 guest。
 
 ### 6.2 核心操作流程
 
@@ -557,7 +557,7 @@ rabbitmqctl list_queues name messages messages_ready messages_unacknowledged con
 # 格式化输出
 rabbitmqctl list_queues -q name messages_ready messages_unacknowledged
 
-# 清空队列（⚠️ 生产慎用）
+# 清空队列（生产慎用）
 rabbitmqctl purge_queue myqueue
 
 # 删除队列
@@ -638,14 +638,14 @@ rabbitmqctl eval 'rabbit_diagnostics:maybe_stuck().'
 
 | 选型因素 | RabbitMQ | Kafka | RocketMQ |
 |----------|:--------:|:-----:|:--------:|
-| 中小项目 | ⭐⭐⭐ | ⭐ | ⭐⭐ |
-| 复杂路由 | ⭐⭐⭐ | ⭐ | ⭐⭐ |
-| 消息可靠性 | ⭐⭐⭐ | ⭐⭐ | ⭐⭐⭐ |
-| 运维友好度 | ⭐⭐⭐ | ⭐⭐ | ⭐⭐⭐ |
-| 社区生态 | ⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐ |
-| 超高吞吐 | ⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐ |
-| 延迟时间 | ⭐⭐⭐（us级） | ⭐⭐（ms级） | ⭐⭐（ms级）|
-| 多协议支持 | ⭐⭐⭐ | ⭐ | ⭐⭐ |
+| 中小项目 | ★★★ | ★ | ★★ |
+| 复杂路由 | ★★★ | ★ | ★★ |
+| 消息可靠性 | ★★★ | ★★ | ★★★ |
+| 运维友好度 | ★★★ | ★★ | ★★★ |
+| 社区生态 | ★★★ | ★★★ | ★★ |
+| 超高吞吐 | ★★ | ★★★ | ★★★ |
+| 延迟时间 | ★★★（us级） | ★★（ms级） | ★★（ms级）|
+| 多协议支持 | ★★★ | ★ | ★★ |
 
 ### 8.2 行业最佳实践
 
@@ -667,7 +667,7 @@ rabbitmqctl eval 'rabbit_diagnostics:maybe_stuck().'
 | **社区文档丰富** | 官方文档 + Spring 深度集成 |
 | **Spring 生态** | `spring-boot-starter-amqp` 开箱即用 |
 
-> 💡 **选型口诀**：中小项目用 Rabbit，电商金融 Rocket，大数据日志找 Kafka。
+> **选型口诀**：中小项目用 Rabbit，电商金融 Rocket，大数据日志找 Kafka。
 
 ### 8.4 入门避坑总结
 
@@ -682,4 +682,4 @@ rabbitmqctl eval 'rabbit_diagnostics:maybe_stuck().'
 | 不配重试机制 | 消费失败直接丢弃消息 |
 | 忽略死信队列 | 核心业务必须配置 DLX |
 
-> 🎯 **RabbitMQ 入门三步走**：1) Docker 拉起服务 2) 理解四种 Exchange 3) Spring Boot starter 跑通生产消费。
+> **RabbitMQ 入门三步走**：1) Docker 拉起服务 2) 理解四种 Exchange 3) Spring Boot starter 跑通生产消费。

@@ -77,7 +77,7 @@ NVLink 的带宽史本身就是 GPU 集群的算力史：1.0（2016，P100，160
 
 **第四，版本号的领先不等于可用的领先**——UALink 2.0 发布于 1.0 硬件尚未出货之时、Gen7 规范先于硬件两年落地，规格纸面竞争总快于产品落地；采购以"能下单、能验收"为唯一标准，路线图只用来预判下一轮升级窗口——纸面领先与可用之间的差距，正是 2026 年互连市场最常踩的坑。
 
-> 🎯 **核心要点**：2026 年互连格局是分工制——PCIe 管宿主与外设的通用通道（Gen7 x16 单向 256 GB/s），NVLink 管 NVIDIA GPU 直连（6.0 达 3.6 TB/s，14× PCIe Gen6），UALink 是开放阵营的反击（2.0 引入 In-Network Compute，但落后 NVLink 一代带宽），CXL 管内存池化（4.0 基于 Gen7、多机架）；选型口诀：**训练看 NVLink/UALink，容量看 CXL，兼容性永远靠 PCIe**。
+> **核心要点**：2026 年互连格局是分工制——PCIe 管宿主与外设的通用通道（Gen7 x16 单向 256 GB/s），NVLink 管 NVIDIA GPU 直连（6.0 达 3.6 TB/s，14× PCIe Gen6），UALink 是开放阵营的反击（2.0 引入 In-Network Compute，但落后 NVLink 一代带宽），CXL 管内存池化（4.0 基于 Gen7、多机架）；选型口诀：**训练看 NVLink/UALink，容量看 CXL，兼容性永远靠 PCIe**。
 
 ---
 

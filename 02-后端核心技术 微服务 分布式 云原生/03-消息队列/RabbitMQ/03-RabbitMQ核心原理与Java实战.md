@@ -24,7 +24,7 @@
 </dependency>
 ```
 
-> 💡 `spring-boot-starter-amqp` 自动引入 `spring-rabbit` 和 `amqp-client`。无需额外指定版本，Spring Boot 管理依赖版本。
+> `spring-boot-starter-amqp` 自动引入 `spring-rabbit` 和 `amqp-client`。无需额外指定版本，Spring Boot 管理依赖版本。
 
 ### 1.2 application.yml 基础配置
 
@@ -88,7 +88,7 @@ spring:
 |--------|:--:|:---:|:---:|
 | `ack-mode` | auto | auto | **manual** |
 | `prefetch` | 10 | 5 | 1 |
-| 死信队列 | ❌ | ✅ | ✅ |
+| 死信队列 | ✗ | ✓ | ✓ |
 | 密码存储 | 明文 | 明文 | **加密** |
 | 日志级别 | debug | debug | info |
 
@@ -373,7 +373,7 @@ spring:
           max-interval: 10000     # 最大间隔（ms）
 ```
 
-> ⚠️ 重试耗尽后抛出 `AmqpRejectAndDontRequeueException`，消息被拒绝且不重新入队 → 转入死信队列。设置合理最大值（推荐 3 次）。
+> 重试耗尽后抛出 `AmqpRejectAndDontRequeueException`，消息被拒绝且不重新入队 → 转入死信队列。设置合理最大值（推荐 3 次）。
 
 ---
 
@@ -612,7 +612,7 @@ public boolean processOrderPayment(String orderId, PaymentInfo payment) {
 | 数据库唯一键 | 强一致 | 性能瓶颈 | DB 操作场景 |
 | 业务状态机 | 零额外成本 | 业务耦合 | 订单状态变更 |
 
-> 🎯 **幂等核心原则**：先校验再执行，防止重复操作。推荐 msgId + Redis + 唯一索引组合使用。
+> **幂等核心原则**：先校验再执行，防止重复操作。推荐 msgId + Redis + 唯一索引组合使用。
 
 ---
 
@@ -672,4 +672,4 @@ public class RabbitTemplateConfig {
 | **消费者** | 手动 ACK + 异常 NACK + 幂等校验 + 死信兜底 |
 | **监控** | Web 界面监控队列/连接 + 日志 + 死信告警 |
 
-> 💡 **核心口诀**：生产发交换，交换绑队列；直连精准配，主题模糊追；广播全推送，死信兜底幂等防重。
+> **核心口诀**：生产发交换，交换绑队列；直连精准配，主题模糊追；广播全推送，死信兜底幂等防重。

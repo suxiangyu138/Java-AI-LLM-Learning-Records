@@ -1,7 +1,7 @@
 # 09-Git 标签、子模块与 Monorepo
 > 版本里程碑（tag/SemVer/Releases）、多仓库共享代码（submodule/subtree）、大仓管理（Monorepo）——发布与多仓治理全景
 
-## 📚 目录
+## 目录
 1. [标签：轻量 vs 注解](#1-标签轻量-vs-注解)
 2. [tag 命令全集](#2-tag-命令全集)
 3. [SemVer 语义化版本](#3-semver-语义化版本)
@@ -26,14 +26,14 @@
 | 是否可签名 | 否 | 是 |
 | 推荐 | 临时标记、个人使用 | **生产发布唯一推荐** |
 
-> ⚠️ **标签与分支的区别**：标签**不可移动**，一旦创建永远指向同一个 commit；分支可移动。不要用标签做"当前版本"概念——用分支。标签只用于**标记历史中的里程碑**。
+> **标签与分支的区别**：标签**不可移动**，一旦创建永远指向同一个 commit；分支可移动。不要用标签做"当前版本"概念——用分支。标签只用于**标记历史中的里程碑**。
 
 ## 2. tag 命令全集
 
 ```bash
 # === 创建 ===
 git tag v1.0.0                                    # 轻量标签
-git tag -a v1.0.0 -m "Release version 1.0.0"      # 注解标签（⭐ 发布用）
+git tag -a v1.0.0 -m "Release version 1.0.0"      # 注解标签（★ 发布用）
 git tag -a v0.9.0 a1b2c3d -m "Beta release"       # 给过去的 commit 打标签
 git tag -s v1.0.0 -m "已签名发布"                  # GPG 签名标签（企业级安全）
 
@@ -143,12 +143,12 @@ jobs:
 | 维度 | Git Submodule | Git Subtree | Monorepo |
 |------|:---:|:---:|:---:|
 | 原理 | 主仓库记录子仓库的 commit 引用 | 子仓库历史合并到主仓库 | 所有代码在同一个仓库 |
-| 子仓库独立性 | ✅ 完全独立 | ❌ 合并到主仓库 | ❌ 不独立 |
-| 子仓库历史 | ✅ 保留 | ✅ 保留（可 squash） | — |
-| 更新子仓库 | ⚠️ 手动 2 步 | 双向同步命令 | — |
-| clone 复杂度 | ⚠️ 需额外步骤 | ✅ 普通 clone | ✅ 普通 clone |
-| 跨项目原子提交 | ❌ | ✅ | ✅ |
-| 权限控制 | ✅ 细粒度 | ⚠️ 粗粒度 | ❌ 单一 |
+| 子仓库独立性 | ✓ 完全独立 | ✗ 合并到主仓库 | ✗ 不独立 |
+| 子仓库历史 | ✓ 保留 | ✓ 保留（可 squash） | — |
+| 更新子仓库 | 手动 2 步 | 双向同步命令 | — |
+| clone 复杂度 | 需额外步骤 | ✓ 普通 clone | ✓ 普通 clone |
+| 跨项目原子提交 | ✗ | ✓ | ✓ |
+| 权限控制 | ✓ 细粒度 | 粗粒度 | ✗ 单一 |
 | 适合团队规模 | 中大型 | 小型 | 任何 |
 
 | 场景 | 推荐 |
@@ -187,7 +187,7 @@ git add .gitmodules lib/shared-utils
 git commit -m "chore: add shared-utils as submodule"
 ```
 
-> 💡 27 独有细节：主仓库 `.git/modules/` 存储子仓库的实际代码和历史；主仓库中 `libs/common/` 是子仓库的 working directory。
+> 27 独有细节：主仓库 `.git/modules/` 存储子仓库的实际代码和历史；主仓库中 `libs/common/` 是子仓库的 working directory。
 
 ### 6.3 克隆 / 更新 / 状态
 
@@ -228,10 +228,10 @@ git commit -m "chore: remove shared-utils submodule"
 ### 6.5 子模块的坑
 
 ```text
-❌ 忘记 --recurse-submodules，克隆后代码不完整
-❌ 子模块改了没提交，主仓库记录了新 SHA 但子模块没 push
-❌ git pull 不会自动更新子模块（需要 git submodule update）
-❌ 切换分支后子模块可能处于旧 commit
+✗ 忘记 --recurse-submodules，克隆后代码不完整
+✗ 子模块改了没提交，主仓库记录了新 SHA 但子模块没 push
+✗ git pull 不会自动更新子模块（需要 git submodule update）
+✗ 切换分支后子模块可能处于旧 commit
 ```
 
 ```bash
@@ -393,7 +393,7 @@ mvn -pl services/user-service clean verify         # 只构建 user-service
 mvn -pl services/user-service -am clean verify     # 构建 user-service 及其依赖的 common
 ```
 
-> 🎯 **选型第一原则**：能用 jar 包依赖解决的不要用 Submodule/Subtree；源码级引用只在频繁修改公共组件且需要原子提交时才用；小团队优先 Monorepo（Maven 多模块），大团队用多仓库 + 内部 Maven 仓库。
+> **选型第一原则**：能用 jar 包依赖解决的不要用 Submodule/Subtree；源码级引用只在频繁修改公共组件且需要原子提交时才用；小团队优先 Monorepo（Maven 多模块），大团队用多仓库 + 内部 Maven 仓库。
 
 ## 10. 多仓库管理工具
 
@@ -440,7 +440,7 @@ done
 
 ## 11. 核心要点
 
-> 🎯 **核心要点**：
+> **核心要点**：
 > - 标签是"不可移动的里程碑"：注解标签 + SemVer + GitHub Release 是发布三件套；
 > - Changelog 自动生成：standard-version（JS）/ git-cliff（Rust）/ Actions 模板三选一；
 > - 共享代码三策略：Submodule（指针/独立）、Subtree（拷贝/简单）、Monorepo（原子/统一）；

@@ -1,6 +1,6 @@
 # 05 - MCP Server 开发实战
 
-> 🎯 用 Python/TypeScript/Java 三种语言构建生产级 MCP Server — 从 Hello World 到多工具+多资源+流式输出的完整 Server
+> 用 Python/TypeScript/Java 三种语言构建生产级 MCP Server — 从 Hello World 到多工具+多资源+流式输出的完整 Server
 
 ---
 
@@ -83,7 +83,7 @@ def get_weather(city: str, unit: str = "celsius") -> str:
 
     data = weather_data.get(city)
     if not data:
-        return f"❌ 城市 '{city}' 不在支持范围内。支持：{', '.join(weather_data.keys())}"
+        return f"✗ 城市 '{city}' 不在支持范围内。支持：{', '.join(weather_data.keys())}"
 
     temp = data["temp"]
     if unit == "fahrenheit":
@@ -238,7 +238,7 @@ async def deploy_weather_alert(
     message: str
 ) -> str:
     """
-    发布天气预警。⚠️ 会向用户发送通知！
+    发布天气预警。会向用户发送通知！
 
     Args:
         city: 目标城市
@@ -249,7 +249,7 @@ async def deploy_weather_alert(
     await require_permission("alert:create")
 
     alert = await alert_service.create(city, alert_type, message)
-    return f"✅ 预警已发布: ID={alert.id}, 覆盖城市={city}, 预计送达{alert.estimated_recipients}人"
+    return f"✓ 预警已发布: ID={alert.id}, 覆盖城市={city}, 预计送达{alert.estimated_recipients}人"
 
 
 # ===== 资源定义 =====
@@ -389,7 +389,7 @@ const TOOLS: Tool[] = [
   {
     name: "deploy_weather_alert",
     description:
-      "发布天气预警。⚠️ 会向用户发送通知！使用前需确认",
+      "发布天气预警。会向用户发送通知！使用前需确认",
     inputSchema: {
       type: "object",
       properties: {
@@ -480,7 +480,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
           content: [
             {
               type: "text",
-              text: `✅ 预警已发布: ID=${alert.id}, 覆盖城市=${city}`,
+              text: `✓ 预警已发布: ID=${alert.id}, 覆盖城市=${city}`,
             },
           ],
           isError: false,
@@ -512,7 +512,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
       content: [
         {
           type: "text",
-          text: `❌ 执行失败: ${(error as Error).message}`,
+          text: `✗ 执行失败: ${(error as Error).message}`,
         },
       ],
       isError: true,
@@ -710,7 +710,7 @@ public class WeatherMcpServerApplication {
                     // 业务错误：返回 isError=true
                     return new CallToolResult(
                         List.of(new TextContent(
-                            "❌ " + e.getMessage() + "\n请使用 list_cities 查看支持的城市"
+                            "✗ " + e.getMessage() + "\n请使用 list_cities 查看支持的城市"
                         )),
                         true   // isError = true
                     );
@@ -831,7 +831,7 @@ async def test_get_weather_invalid_city():
     assert "不在支持范围内" in result.content[0].text
 ```
 
-> 🎯 **核心要点**：Python 适合快速原型（fastmcp 封装最友好）、TypeScript 适合全栈 Node.js 项目（官方 SDK）、Java 适合 Spring 生态企业项目。三种语言都支持 stdio 和 Streamable HTTP 双传输
+> **核心要点**：Python 适合快速原型（fastmcp 封装最友好）、TypeScript 适合全栈 Node.js 项目（官方 SDK）、Java 适合 Spring 生态企业项目。三种语言都支持 stdio 和 Streamable HTTP 双传输
 
 ---
 

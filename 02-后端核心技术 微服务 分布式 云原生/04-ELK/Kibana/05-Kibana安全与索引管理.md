@@ -42,7 +42,7 @@
 → 双重通过才放行
 ```
 
-> ⚠️ 常见误解：Kibana 的「只读」不等于 ES 只读——Discover 能看数据是因为 ES 角色给了 `read` 索引权限；要给用户「只看 Discover」需同时配两层的只读。
+> 常见误解：Kibana 的「只读」不等于 ES 只读——Discover 能看数据是因为 ES 角色给了 `read` 索引权限；要给用户「只看 Discover」需同时配两层的只读。
 
 ---
 
@@ -108,7 +108,7 @@ Stack Management → Spaces → Create space
 用户侧：角色里分配 spaces 列表 → 登录后空间切换器选择
 ```
 
-> 💡 多租户实践：**一个 ES 集群 + 多个 Space** = 团队资源隔离的标准姿势；数据隔离靠索引前缀（`order-logs-*`）+ ES 角色。
+> 多租户实践：**一个 ES 集群 + 多个 Space** = 团队资源隔离的标准姿势；数据隔离靠索引前缀（`order-logs-*`）+ ES 角色。
 
 ---
 
@@ -181,7 +181,7 @@ Logstash/Filebeat 写入 logs-xxx-2026.08.07
 → rollover 自动滚动新索引 → ILM 按策略降温清理
 ```
 
-> 🎯 面试要点：**ILM = 日志数据的「冰箱」**——热数据快、冷数据省、到期自动删，是控制 ES 磁盘成本的核心机制。
+> 面试要点：**ILM = 日志数据的「冰箱」**——热数据快、冷数据省、到期自动删，是控制 ES 磁盘成本的核心机制。
 
 ---
 
@@ -222,7 +222,7 @@ GET /_ilm/policy/logs-policy
 DELETE /logs-2026.08.01
 ```
 
-> ⚠️ 生产禁忌：Dev Tools 对具备写入权限的用户是「裸奔的枪」——`DELETE`、`_forcemerge`、`_reindex` 都直接生效，权限给到 team 时需培训规范。
+> 生产禁忌：Dev Tools 对具备写入权限的用户是「裸奔的枪」——`DELETE`、`_forcemerge`、`_reindex` 都直接生效，权限给到 team 时需培训规范。
 
 ---
 
@@ -261,7 +261,7 @@ DELETE /logs-2026.08.01
 | 6 | 定期轮换 | 服务账号密码定期更换 |
 | 7 | 外网隔离 | Kibana 不直接暴露公网，走 VPN/网关 |
 
-> 🎯 **核心要点**：Kibana 安全 = **ES 索引权限（数据层）+ Kibana 功能权限（功能层）+ Spaces（资源层）** 三层叠加；索引管理 = **模板 + ILM + Data Stream** 三件套管住日志生命周期；Dev Tools 是调试利器也是权限放大器。生产落地的三个「必须」：ILM 必须配（否则磁盘爆炸）、权限必须最小化、HTTPS 必须开。
+> **核心要点**：Kibana 安全 = **ES 索引权限（数据层）+ Kibana 功能权限（功能层）+ Spaces（资源层）** 三层叠加；索引管理 = **模板 + ILM + Data Stream** 三件套管住日志生命周期；Dev Tools 是调试利器也是权限放大器。生产落地的三个「必须」：ILM 必须配（否则磁盘爆炸）、权限必须最小化、HTTPS 必须开。
 
 ---
 

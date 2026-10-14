@@ -1,6 +1,6 @@
 # 09 - PyTorch 实战：完整训练管线
 
-> 🎯 从数据到部署的端到端训练管线 — Checkpoint 断点续训、TensorBoard 可视化、混合精度加速、Early Stopping 防过拟合
+> 从数据到部署的端到端训练管线 — Checkpoint 断点续训、TensorBoard 可视化、混合精度加速、Early Stopping 防过拟合
 
 ---
 
@@ -236,9 +236,9 @@ writer.close()
   参数更新 → FP32（精度保证）
   
   BF16 优势：
-  ✅ 指数位与 FP32 相同（8位）→ 动态范围大，不易溢出
-  ✅ 不需要 Loss Scaling（FP16 需要）
-  ✅ LLM 训练标配
+  ✓ 指数位与 FP32 相同（8位）→ 动态范围大，不易溢出
+  ✓ 不需要 Loss Scaling（FP16 需要）
+  ✓ LLM 训练标配
 
 显存节省：约 40%
 速度提升：约 1.5~2×

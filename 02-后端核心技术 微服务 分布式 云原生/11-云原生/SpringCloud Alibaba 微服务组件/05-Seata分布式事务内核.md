@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [Seata 事务架构深度回顾](#1-seata-事务架构深度回顾)
 2. [AT 模式内核：Undo Log 机制](#2-at-模式内核undo-log-机制)
@@ -128,7 +128,7 @@ CREATE TABLE undo_log (
     branch_id BIGINT NOT NULL,
     xid VARCHAR(128) NOT NULL,
     context VARCHAR(128),
-    rollback_info LONGBLOB NOT NULL,  -- ⭐ 反向 SQL（JSON 格式）
+    rollback_info LONGBLOB NOT NULL,  -- ★ 反向 SQL（JSON 格式）
     log_status INT NOT NULL,          -- 状态
     log_created DATETIME NOT NULL,
     log_modified DATETIME NOT NULL,
@@ -411,8 +411,8 @@ public interface AccountTccService {
 │ 代码侵入性    │ 无（只改数据源代理）   │ 高（三接口全手写）    │
 │ 资源支持      │ 仅数据库              │ 数据库/Redis/MQ/...  │
 │ 一致性        │ 最终一致（有脏写窗口） │ 强一致（资源预留）     │
-│ 性能          │ ⭐⭐⭐⭐ 高           │ ⭐⭐⭐ 中             │
-│ 全局锁        │ ✅ 需要              │ ❌ 业务字段控制      │
+│ 性能          │ ★★★★ 高           │ ★★★ 中             │
+│ 全局锁        │ ✓ 需要              │ ✗ 业务字段控制      │
 │ 适用场景      │ 通用 CRUD            │ 核心资金链路          │
 │ 空回滚        │ 不涉及               │ 需处理（Try 未执行但  │
 │              │                      │  Cancel 被调用）     │
@@ -452,15 +452,15 @@ Saga = 每个步骤有正向操作 + 反向补偿
   补偿 Step 1 ← 补偿 Step 2
 
 适用场景：
-  ✅ 长事务（几分钟到几小时）
-  ✅ 老系统改造（无法加 TCC 接口）
-  ✅ 跨组织/跨系统的业务流程
+  ✓ 长事务（几分钟到几小时）
+  ✓ 老系统改造（无法加 TCC 接口）
+  ✓ 跨组织/跨系统的业务流程
 
 特点：
-  ✅ 无全局锁（每步独立提交）
-  ⚠️ 隔离性弱（中途数据可见）
-  ✅ 可配置重试策略
-  ✅ 支持异步/消息驱动的 Saga
+  ✓ 无全局锁（每步独立提交）
+  隔离性弱（中途数据可见）
+  ✓ 可配置重试策略
+  ✓ 支持异步/消息驱动的 Saga
 ```
 
 ### 6.2 Saga 状态机
@@ -548,7 +548,7 @@ Saga = 每个步骤有正向操作 + 反向补偿
 
 ---
 
-> 🎯 **核心要点**：AT 模式的"无侵入"背后是 Undo Log 自动生成反向 SQL + DataSource 代理 + FOR UPDATE 全局锁的组合。TCC 强一致性但代码侵入大，Saga 适合长事务。选型关键不是"哪个模式好"，而是"你的业务最受不了什么"——是数据不一致（选 TCC），还是开发太慢（选 AT），还是性能差（选 Saga）。
+> **核心要点**：AT 模式的"无侵入"背后是 Undo Log 自动生成反向 SQL + DataSource 代理 + FOR UPDATE 全局锁的组合。TCC 强一致性但代码侵入大，Saga 适合长事务。选型关键不是"哪个模式好"，而是"你的业务最受不了什么"——是数据不一致（选 TCC），还是开发太慢（选 AT），还是性能差（选 Saga）。
 
 ---
 

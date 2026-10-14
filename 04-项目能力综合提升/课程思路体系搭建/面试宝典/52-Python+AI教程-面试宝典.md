@@ -22,7 +22,7 @@
 | **可变 (Mutable)** | list, dict, set, bytearray | `lst = [1,2]; lst[0]=99` |
 | **不可变 (Immutable)** | int, float, str, tuple, frozenset, bytes | `s = "hi"; s[0]="H"` 报错 |
 
-> 💡 不可变类型作为 dict 的 key，而 list 不可以。函数参数的默认值不要用可变类型（如 `def f(lst=[])` 是经典坑点）。
+> 不可变类型作为 dict 的 key，而 list 不可以。函数参数的默认值不要用可变类型（如 `def f(lst=[])` 是经典坑点）。
 
 ### 1.2 列表推导式与生成器
 
@@ -75,7 +75,7 @@ def slow_add(a, b):
     return a + b
 ```
 
-> 🎯 面试要点：`@wraps` 的作用、带参数的装饰器（三层嵌套）、类装饰器（`__call__`）。
+> 面试要点：`@wraps` 的作用、带参数的装饰器（三层嵌套）、类装饰器（`__call__`）。
 
 ### 1.4 GIL 是什么？
 
@@ -86,7 +86,7 @@ GIL（Global Interpreter Lock）是 CPython 解释器中的**全局互斥锁**�
 | CPU 密集型 | 多线程退化为串行，性能不升反降 | `multiprocessing`、C 扩展（numpy） |
 | I/O 密集型 | 影响小，线程在等待 I/O 时释放 GIL | 多线程或 `asyncio` |
 
-> ⚠️ GIL 不是 Python 语言的限制，是 CPython 实现的限制。Jython、IronPython 没有 GIL。
+> GIL 不是 Python 语言的限制，是 CPython 实现的限制。Jython、IronPython 没有 GIL。
 
 ### 1.5 面向对象三大特性
 
@@ -204,7 +204,7 @@ async def read_async():         # 异步路由，在主事件循环运行
 | **类型校验** | 基于 Pydantic 自动验证请求/响应 |
 | **高性能** | 与 Node.js / Go 相近的吞吐量 |
 
-> 💡 面试点：FastAPI 同时支持同步和异步路由。同步路由在**线程池**中运行，异步路由在**事件循环**中运行。
+> 面试点：FastAPI 同时支持同步和异步路由。同步路由在**线程池**中运行，异步路由在**事件循环**中运行。
 
 ### 1.10 Ollama 本地部署原理
 
@@ -518,7 +518,7 @@ del a, b   # 引用计数不为 0，无法回收
 | 标记-清除 | 分代阈值触发 | 循环引用对象 |
 | 分代回收 | 每代计数器超过阈值 | 同代所有容器对象 |
 
-> 🎯 面试亮点：`gc.get_threshold()` 返回 `(700, 10, 10)` 表示第 0 代每分配 700 个对象触发一次 GC。
+> 面试亮点：`gc.get_threshold()` 返回 `(700, 10, 10)` 表示第 0 代每分配 700 个对象触发一次 GC。
 
 ### 2.2 大模型 API 调用：HTTP 流式 / SSE / Tokenization
 
@@ -581,7 +581,7 @@ import time
 
 df = pd.DataFrame({"a": range(1_000_000), "b": range(1_000_000, 2_000_000)})
 
-# 方法 1：循环（最慢 ❌）
+# 方法 1：循环（最慢 ✗）
 def with_loop():
     result = []
     for i in range(len(df)):
@@ -592,7 +592,7 @@ def with_loop():
 def with_apply():
     return df.apply(lambda row: row["a"] + row["b"], axis=1)  # ~200ms
 
-# 方法 3：vectorization（最快 ✅）
+# 方法 3：vectorization（最快 ✓）
 def with_vector():
     return df["a"] + df["b"]  # ~1ms — 利用 numpy 底层 C 实现
 ```
@@ -644,7 +644,7 @@ async def get_item(item_id: int):
 | 多进程 | `uvicorn main:app --workers 4` | 多 Worker，生产部署 |
 | 热重载 | `uvicorn main:app --reload` | 开发时自动重启 |
 
-> ⚠️ FastAPI 中 `async def` 路由自动在事件循环中运行；`def` 路由在线程池中运行。大量 I/O 操作应使用 `async def`。
+> FastAPI 中 `async def` 路由自动在事件循环中运行；`def` 路由在线程池中运行。大量 I/O 操作应使用 `async def`。
 
 ### 2.5 爬虫反爬策略
 
@@ -2276,4 +2276,4 @@ class RAGPipeline:
 
 ---
 
-> 🎯 **面试核心策略**：Python+AI 面试的核心亮点在于**将 Python 技能应用到 AI 场景**。准备 2-3 个完整项目（AI 聊天助手、数据分析 Dashboard、RAG 知识库），用 FastAPI + Streamlit 做出可演示的 Demo，面试时现场展示或讲解架构，远胜于背诵理论。黑马程序员教程中的 **AI 汉字谜盒** 项目是极佳的面试 Demo：融合了 FastAPI 路由、Pydantic 校验、会话管理、LLM 调用、前端演示，单项目覆盖 80% 面试考点。
+> **面试核心策略**：Python+AI 面试的核心亮点在于**将 Python 技能应用到 AI 场景**。准备 2-3 个完整项目（AI 聊天助手、数据分析 Dashboard、RAG 知识库），用 FastAPI + Streamlit 做出可演示的 Demo，面试时现场展示或讲解架构，远胜于背诵理论。黑马程序员教程中的 **AI 汉字谜盒** 项目是极佳的面试 Demo：融合了 FastAPI 路由、Pydantic 校验、会话管理、LLM 调用、前端演示，单项目覆盖 80% 面试考点。

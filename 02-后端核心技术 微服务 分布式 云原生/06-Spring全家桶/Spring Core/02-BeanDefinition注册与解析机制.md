@@ -30,7 +30,7 @@ BeanDefinition = bean 的「图纸/元数据」
 | Bean 实例 | 建好的房子 |
 | BeanPostProcessor | 装修队（入住前/后） |
 
-> 🎯 核心认知：**Spring 容器先注册「定义」，再按定义创建「实例」**——refresh() 的 ⑤ 是「改图纸」阶段，⑪ 是「按图纸施工」阶段。
+> 核心认知：**Spring 容器先注册「定义」，再按定义创建「实例」**——refresh() 的 ⑤ 是「改图纸」阶段，⑪ 是「按图纸施工」阶段。
 
 ---
 
@@ -145,7 +145,7 @@ parse(configClass)
   └─ 处理接口 default 方法 / 父类（完整配置类链）
 ```
 
-> 🎯 面试要点：**@ComponentScan 本质也是「注册 BeanDefinition」**——扫描器（ClassPathBeanDefinitionScanner）把包下所有被 @Component 系注解标记的类注册进容器，之后和其他定义一样走生命周期。
+> 面试要点：**@ComponentScan 本质也是「注册 BeanDefinition」**——扫描器（ClassPathBeanDefinitionScanner）把包下所有被 @Component 系注解标记的类注册进容器，之后和其他定义一样走生命周期。
 
 ---
 
@@ -218,7 +218,7 @@ public class GlobalConfigPostProcessor implements BeanFactoryPostProcessor {
 }
 ```
 
-> ⚠️ 与 BeanPostProcessor 的区别（高频面试）：**BeanFactoryPostProcessor 改「定义」（bean 还没创建），BeanPostProcessor 改「实例」（bean 创建后）**——一个是图纸阶段，一个是施工阶段。
+> 与 BeanPostProcessor 的区别（高频面试）：**BeanFactoryPostProcessor 改「定义」（bean 还没创建），BeanPostProcessor 改「实例」（bean 创建后）**——一个是图纸阶段，一个是施工阶段。
 
 ---
 
@@ -256,7 +256,7 @@ public interface BeanRegistrar {
   核心注册机制（BeanDefinition 注册表 + 后置处理器）不变。」
 ```
 
-> 🎯 **核心要点**：BeanDefinition 机制一句话 = **「先注册图纸（三种途径），⑤ 步可改图（BeanFactoryPostProcessor），⑪ 步按图施工（创建实例）」**。记忆锚点：注解解析的发动机是 ConfigurationClassPostProcessor（⑤ 第一个执行）；@ComponentScan 本质是扫描注册器；BeanFactoryPostProcessor 改定义 vs BeanPostProcessor 改实例。Spring 7.0 的 BeanRegistrar 是注册机制的模块化升级，底层注册表机制不变。
+> **核心要点**：BeanDefinition 机制一句话 = **「先注册图纸（三种途径），⑤ 步可改图（BeanFactoryPostProcessor），⑪ 步按图施工（创建实例）」**。记忆锚点：注解解析的发动机是 ConfigurationClassPostProcessor（⑤ 第一个执行）；@ComponentScan 本质是扫描注册器；BeanFactoryPostProcessor 改定义 vs BeanPostProcessor 改实例。Spring 7.0 的 BeanRegistrar 是注册机制的模块化升级，底层注册表机制不变。
 
 ---
 

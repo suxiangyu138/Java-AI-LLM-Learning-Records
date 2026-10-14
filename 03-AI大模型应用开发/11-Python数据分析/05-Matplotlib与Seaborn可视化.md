@@ -1,6 +1,6 @@
 # 05 - Matplotlib 与 Seaborn 可视化
 
-> 🎯 一张好图胜过千行数据。Matplotlib 是 Python 绘图的"画布"，Seaborn 是它的"颜值插件"。掌握 5 种核心图表，覆盖 90% 的分析场景
+> 一张好图胜过千行数据。Matplotlib 是 Python 绘图的"画布"，Seaborn 是它的"颜值插件"。掌握 5 种核心图表，覆盖 90% 的分析场景
 
 ---
 

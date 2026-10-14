@@ -2,7 +2,7 @@
 
 > 微软的多智能体对话框架——"智能体即对话参与者"，曾经的多 Agent 编排标杆（54k+ stars）；2025 年末与 Semantic Kernel 合并为 Microsoft Agent Framework（MAF 1.0 于 2026-04 GA），AutoGen 进入维护模式。本体系完整覆盖其思想、用法与迁移。
 
-## 📚 目录
+## 目录
 
 1. [知识体系导图](#1-知识体系导图)
 2. [模块导航](#2-模块导航)
@@ -81,7 +81,7 @@ AutoGen（微软 · 多智能体对话框架 · 54k+ stars）
 **路线三：生产/迁移视角（1 天）**
 07 生态分裂 → 08 MAF 迁移 → 对照本仓库 `LangGraph/` 体系学习迁移方向
 
-> ⚠️ 2026 学习建议：AutoGen 的思想（对话编排）仍值得学，但**新项目官方推荐直接用 Microsoft Agent Framework（MAF）**——本体系 08 篇给出迁移路径；老项目（v0.2 代码）看 AG2。
+> 2026 学习建议：AutoGen 的思想（对话编排）仍值得学，但**新项目官方推荐直接用 Microsoft Agent Framework（MAF）**——本体系 08 篇给出迁移路径；老项目（v0.2 代码）看 AG2。
 
 ## 4. 核心概念速查
 
@@ -105,11 +105,11 @@ AutoGen（微软 · 多智能体对话框架 · 54k+ stars）
 
 ```
 AutoGen 当前状态（2026-08 基准）：
-✅ 进入维护模式——不再新增功能，仅 bug 修复与安全补丁
-✅ GitHub 54k+ stars（历史峰值）
-✅ 2025 年末与 Semantic Kernel 合并 → Microsoft Agent Framework
-✅ MAF 1.0 于 2026-04-03 全面可用（GA，MIT 许可证）
-✅ 新项目官方推荐直接用 MAF
+✓ 进入维护模式——不再新增功能，仅 bug 修复与安全补丁
+✓ GitHub 54k+ stars（历史峰值）
+✓ 2025 年末与 Semantic Kernel 合并 → Microsoft Agent Framework
+✓ MAF 1.0 于 2026-04-03 全面可用（GA，MIT 许可证）
+✓ 新项目官方推荐直接用 MAF
 ```
 
 ### 对本体系学习的意义

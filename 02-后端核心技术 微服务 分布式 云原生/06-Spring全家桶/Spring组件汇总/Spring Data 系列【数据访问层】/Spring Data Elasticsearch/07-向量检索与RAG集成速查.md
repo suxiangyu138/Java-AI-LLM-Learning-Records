@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [向量检索在 ES 中的定位](#1-向量检索在-es-中的定位)
 2. [dense_vector 字段配置速查](#2-dense_vector-字段配置速查)
@@ -32,12 +32,12 @@ RAG 链路中的 ES 位置：
 
 | 方案 | 向量库能力 | 与全文检索结合 | 运维成本 |
 |------|:---:|:---:|------|
-| **ES 9（本组件）** | ✅ kNN + HNSW | ✅ 原生（混合检索） | 中（已有 ES 则最低） |
-| Milvus | ✅ 最强 | ⚠️ 需配合 ES/BM25 | 高（独立集群） |
-| Redis Stack | ✅ 基础 | ⚠️ | 低（但大规模弱） |
-| PgVector | ✅ 中 | ⚠️ 扩展 | 低 |
+| **ES 9（本组件）** | ✓ kNN + HNSW | ✓ 原生（混合检索） | 中（已有 ES 则最低） |
+| Milvus | ✓ 最强 | 需配合 ES/BM25 | 高（独立集群） |
+| Redis Stack | ✓ 基础 | | 低（但大规模弱） |
+| PgVector | ✓ 中 | 扩展 | 低 |
 
-> 🎯 **选型结论（2026）**：**已有 ES 集群的项目，向量检索首选 ES 9 本身**——一个集群同时扛"全文搜索 + 向量检索 + 聚合"，避免 Milvus 双集群运维；只有向量规模超大（亿级+）、对召回延迟极其苛刻才考虑独立向量库。完整选型对比见 [08-向量数据库总览](../../../../../03-AI大模型应用开发/08-向量数据库/向量数据库/00-向量数据库知识体系总览.md)。
+> **选型结论（2026）**：**已有 ES 集群的项目，向量检索首选 ES 9 本身**——一个集群同时扛"全文搜索 + 向量检索 + 聚合"，避免 Milvus 双集群运维；只有向量规模超大（亿级+）、对召回延迟极其苛刻才考虑独立向量库。完整选型对比见 [08-向量数据库总览](../../../../../03-AI大模型应用开发/08-向量数据库/向量数据库/00-向量数据库知识体系总览.md)。
 
 ### 1.1 两种向量类型
 
@@ -46,7 +46,7 @@ RAG 链路中的 ES 位置：
 | dense_vector | `FieldType.Dense_Vector` | 语义检索（主流） | 稠密向量（float/int8），维度固定 |
 | sparse_vector | `FieldType.Sparse_Vector` | 稀疏词权重 | 与 BM25 思路同源，少场景用 |
 
-> 💡 本系列重点讲 dense_vector；稀疏向量（如 ELSER 模型产物）在 ES 中也有支持，但工程上仍是稠密向量的天下。
+> 本系列重点讲 dense_vector；稀疏向量（如 ELSER 模型产物）在 ES 中也有支持，但工程上仍是稠密向量的天下。
 
 ## 2. dense_vector 字段配置速查
 
@@ -83,7 +83,7 @@ public class KnowledgeChunk {
 | `knnSimilarity` | 相似度度量（5.4+） | `Cosine`（默认）/ `L2Norm` / `DotProduct` |
 | `knnIndexOptions` | 向量索引参数（5.4+） | HNSW 参数或 FLAT |
 
-> ⚠️ **维度锁死警告**：dims 在创建索引时定死，**不可改**——换 Embedding 模型（如 bge-large→bge-m3，1024→4096）必须重建索引！换模型前先确认新旧维度，规划好重建窗口。
+> **维度锁死警告**：dims 在创建索引时定死，**不可改**——换 Embedding 模型（如 bge-large→bge-m3，1024→4096）必须重建索引！换模型前先确认新旧维度，规划好重建窗口。
 
 ### 2.1 相似度度量选型
 
@@ -93,7 +93,7 @@ public class KnowledgeChunk {
 | `L2Norm` | 欧氏距离（越小越相似） | 归一化向量或特定模型 |
 | `DotProduct` | 点积 | 模型输出已归一化时（与余弦等价且更快） |
 
-> 💡 **经验法则**：不确定时选 Cosine——绝大多数中文开源模型（bge 系列、gte 系列）都按余弦语义训练；部分模型输出自带归一化，可切 DotProduct 省一步计算。**同索引内度量不可变，选错要重建**。
+> **经验法则**：不确定时选 Cosine——绝大多数中文开源模型（bge 系列、gte 系列）都按余弦语义训练；部分模型输出自带归一化，可切 DotProduct 省一步计算。**同索引内度量不可变，选错要重建**。
 
 ## 3. kNN 检索（NativeQuery）
 
@@ -125,7 +125,7 @@ hits.getSearchHit(0).getScore();
 | `filter` | 过滤条件 | 结合 docId/租户过滤，大幅减少无效候选 |
 | `preFilter` / `postFilter` | 过滤时机 | 见 4.2 |
 
-> 🎯 **kNN 是近似搜索**：HNSW 不保证 100% 精确 Top-K——`numCandidates` 越高越接近暴力精确；对召回率敏感的场景（对账、精确匹配）用 `knn` + 大 numCandidates 或 FLAT 索引。
+> **kNN 是近似搜索**：HNSW 不保证 100% 精确 Top-K——`numCandidates` 越高越接近暴力精确；对召回率敏感的场景（对账、精确匹配）用 `knn` + 大 numCandidates 或 FLAT 索引。
 
 ## 4. 混合检索：BM25 + kNN
 
@@ -165,7 +165,7 @@ NativeQuery query = NativeQuery.builder()
 | 双路召回 + 应用侧 RRF | 应用代码 | 可定制权重 | 两次请求、代码多 |
 | Rerank 模型精排 | 独立模型（BGE-Reranker） | 质量最高 | 额外延迟/成本 |
 
-> 🎯 **2026 推荐链路**：**BM25 + kNN 双路召回 → RRF 融合 → （可选）Rerank 精排 → Top-K**——前两步是标配，第三步按预算取舍；检索质量评估方法见 [RAG-07 混合检索与Rerank](../../../../../03-AI大模型应用开发/04-RAG检索增强生成/07-混合检索与Rerank.md)。
+> **2026 推荐链路**：**BM25 + kNN 双路召回 → RRF 融合 → （可选）Rerank 精排 → Top-K**——前两步是标配，第三步按预算取舍；检索质量评估方法见 [RAG-07 混合检索与Rerank](../../../../../03-AI大模型应用开发/04-RAG检索增强生成/07-混合检索与Rerank.md)。
 
 ## 5. 向量索引算法选型（HNSW / FLAT / INT8）
 
@@ -186,7 +186,7 @@ NativeQuery query = NativeQuery.builder()
 | FLAT | **100% 精确** | 高（不压缩） | 低 | ≤ 万级、精度敏感 |
 | INT8 量化（HNSW/FLAT） | 略降 | **省 4 倍** | 中 | 内存吃紧的大规模 |
 
-> 💡 面试高频问"为什么 HNSW 是默认"：图结构 + 多尺度的思想——每层稀疏跳转 + 底层精搜，复杂度从 O(n) 降到对数级；精度与速度通过 numCandidates/efSearch 权衡。`KnnAlgorithmType` 枚举（DEFAULT/FLAT/HNSW/INT8_FLAT/INT8_HNSW）在注解层直接可选，5.4+ 起配置粒度更细。
+> 面试高频问"为什么 HNSW 是默认"：图结构 + 多尺度的思想——每层稀疏跳转 + 底层精搜，复杂度从 O(n) 降到对数级；精度与速度通过 numCandidates/efSearch 权衡。`KnnAlgorithmType` 枚举（DEFAULT/FLAT/HNSW/INT8_FLAT/INT8_HNSW）在注解层直接可选，5.4+ 起配置粒度更细。
 
 ## 6. 与 Spring AI / RAG 集成
 
@@ -197,7 +197,7 @@ NativeQuery query = NativeQuery.builder()
 EmbeddingModel embeddingModel;      // OpenAI / Ollama(bge-m3) / DashScope 等
 
 // ② 写入：切片 → 向量化 → 存 ES（本组件）
-@Transactional // ❌ 不行——ES 无事务；用"先删后写 + 失败补偿"
+@Transactional // ✗ 不行——ES 无事务；用"先删后写 + 失败补偿"
 public void indexChunk(KnowledgeChunk chunk) {
     float[] vector = embeddingModel.embed(chunk.getContent());
     chunk.setEmbedding(vector);
@@ -226,7 +226,7 @@ public List<KnowledgeChunk> retrieve(String question) {
 | 评估 | 召回率/准确率回归（换模型/切参数后必测） | [RAG-08 评估与质量保障](../../../../../03-AI大模型应用开发/04-RAG检索增强生成/08-RAG评估与质量保障.md) |
 | 生产运维 | 增量更新（upsert）、删除（文档下线） | 本系列 08 篇 |
 
-> ⚠️ **RAG 生产三坑**：① 换 Embedding 模型 = 重建索引（dims 锁死）；② **向量与原文必须同文档**（kNN 只返回向量字段 + 其他字段，别把原文丢到另一个索引）；③ 检索质量必须有回归基准——"感觉准了"不算数，用评估集量化。
+> **RAG 生产三坑**：① 换 Embedding 模型 = 重建索引（dims 锁死）；② **向量与原文必须同文档**（kNN 只返回向量字段 + 其他字段，别把原文丢到另一个索引）；③ 检索质量必须有回归基准——"感觉准了"不算数，用评估集量化。
 
 ### 6.3 文档级元数据过滤（RAG 必备）
 
@@ -254,7 +254,7 @@ NativeQuery query = NativeQuery.builder()
 | 数据一致性 | 删除文档后向量残留 | 文档主键=ES _id，删除走 deleteById（RAG 运维脚本） |
 | 隐私合规 | 外部 API Embedding 出网 | 数据敏感用本地模型（Ollama/bge-m3），向量字段加 `@Field(index=false)` 选项按需 |
 
-> 🎯 **面试收尾**："ES 能当向量数据库用吗？"——能，且 2026 年是**首选默认**：kNN + HNSW + 混合检索原生支持，一套集群解决全文+向量；极限规模（亿级+高并发）再评估专用向量库（[Milvus](../../../../../03-AI大模型应用开发/08-向量数据库/Milvus/00-Milvus知识体系总览.md)）。回答加分项：提 dims 锁死、量化压缩、RRF 融合三个工程细节。
+> **面试收尾**："ES 能当向量数据库用吗？"——能，且 2026 年是**首选默认**：kNN + HNSW + 混合检索原生支持，一套集群解决全文+向量；极限规模（亿级+高并发）再评估专用向量库（[Milvus](../../../../../03-AI大模型应用开发/08-向量数据库/Milvus/00-Milvus知识体系总览.md)）。回答加分项：提 dims 锁死、量化压缩、RRF 融合三个工程细节。
 
 ---
 

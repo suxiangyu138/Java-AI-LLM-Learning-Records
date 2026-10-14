@@ -2,7 +2,7 @@
 
 > 定位：变量声明、运算符、条件与循环、解构赋值、字符串与数组方法——JS 语法地基
 
-## 📚 目录
+## 目录
 
 1. [变量声明：var / let / const](#1-变量声明var--let--const)
 2. [运算符](#2-运算符)
@@ -20,9 +20,9 @@
 | 维度 | var | let | const |
 |------|:---:|:---:|:---:|
 | 作用域 | 函数级 | 块级 | 块级 |
-| 变量提升 | ✅（undefined） | ⚠️ TDZ | ⚠️ TDZ |
-| 重复声明 | ✅ | ❌ | ❌ |
-| 重新赋值 | ✅ | ✅ | ❌（引用不可改） |
+| 变量提升 | ✓（undefined） | TDZ | TDZ |
+| 重复声明 | ✓ | ✗ | ✗ |
+| 重新赋值 | ✓ | ✓ | ✗（引用不可改） |
 | 全局挂载 | window.x | 不挂 | 不挂 |
 
 ```javascript
@@ -30,16 +30,16 @@
 console.log(a);      // undefined（var 提升）
 var a = 1;
 
-console.log(b);      // ❌ ReferenceError（TDZ 暂时性死区）
+console.log(b);      // ✗ ReferenceError（TDZ 暂时性死区）
 let b = 2;
 
 // const 的正确语义：引用不可变（对象内容可变）
 const obj = { x: 1 };
-obj.x = 2;           // ✅ 允许（改内容）
-obj = {};            // ❌ 不允许（改引用）
+obj.x = 2;           // ✓ 允许（改内容）
+obj = {};            // ✗ 不允许（改引用）
 ```
 
-> 🎯 **要点**：默认 `const`、需要改时 `let`、永远不用 `var`（现代规范）。TDZ 与块级作用域是面试高频点。
+> **要点**：默认 `const`、需要改时 `let`、永远不用 `var`（现代规范）。TDZ 与块级作用域是面试高频点。
 
 ---
 
@@ -66,7 +66,7 @@ const name = user?.name ?? '匿名';
 ```javascript
 // 逻辑运算符（短路求值）
 const isAdmin = user && user.role === 'admin';   // 短路
-const color = theme || 'light';                  // 取默认（⚠️ 0/'' 也会被替换）
+const color = theme || 'light';                  // 取默认（0/'' 也会被替换）
 
 // 逻辑赋值（ES2021）
 a ||= b;        // a = a || b
@@ -112,16 +112,16 @@ const status = isLogin ? '已登录' : '未登录';
 // for 传统
 for (let i = 0; i < 10; i++) { }
 
-// for...of（值迭代，推荐 ✅）
+// for...of（值迭代，推荐 ✓）
 for (const item of items) { }
 
-// for...in（键迭代，⚠️ 遍历对象属性，数组别用）
+// for...in（键迭代，遍历对象属性，数组别用）
 for (const key in obj) { }
 
 // while / do-while
 while (condition) { }
 
-// ⚠️ 数组遍历方法论：
+// 数组遍历方法论：
 items.forEach(x => ...);              // 遍历
 items.map(x => x * 2);                // 映射（返回新数组）
 items.filter(x => x > 0);             // 过滤
@@ -152,7 +152,7 @@ const { address: { city } } = user;
 // 剩余收集
 const { name, ...rest } = user;    // rest = {age, address}
 
-// 函数参数解构（常用 ✅）
+// 函数参数解构（常用 ✓）
 function greet({ name, age }) {
     return `你好，${name}（${age} 岁）`;
 }
@@ -225,7 +225,7 @@ const tagged = (strs, ...values) => strs.join('|') + values.join('+');
 | 聚合 | reduce | 任意返回值 |
 | 查找 | find / findIndex / includes | 单值 |
 | 判断 | some / every | 布尔 |
-| 排序 | sort / reverse | 原地修改 ⚠️ |
+| 排序 | sort / reverse | 原地修改 |
 | 增删 | push/pop/shift/unshift/splice | 原地修改 |
 | 切片 | slice / concat | 返回新数组 |
 | 展平 | flat / flatMap（ES2019） | 降维 |
@@ -251,11 +251,11 @@ const byCity = users.reduce((acc, u) => {
 [1, 2, 3].flatMap(x => [x, x * 2]);  // [1,2,2,4,3,6]
 ```
 
-> 🎯 **要点**：map/filter 返回新数组（不可变）、sort/splice 原地修改（注意副本）；链式调用 + reduce 分组是数据处理的标准姿势。
+> **要点**：map/filter 返回新数组（不可变）、sort/splice 原地修改（注意副本）；链式调用 + reduce 分组是数据处理的标准姿势。
 
 ---
 
-> 🎯 **核心要点**：基础语法 = **const/let 声明**（默认 const + TDZ）+ **严格相等**（=== 永远）+ **解构**（参数/交换/默认值）+ **模板字符串** + **数组方法链**。这些是 JS 日常编码的 90% 语法面。
+> **核心要点**：基础语法 = **const/let 声明**（默认 const + TDZ）+ **严格相等**（=== 永远）+ **解构**（参数/交换/默认值）+ **模板字符串** + **数组方法链**。这些是 JS 日常编码的 90% 语法面。
 
 ---
 

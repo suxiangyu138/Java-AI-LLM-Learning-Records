@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [TypeAdapter：无模型校验](#1-typeadapter无模型校验)
 2. [判别联合：按 tag 分派](#2-判别联合按-tag-分派)
@@ -143,7 +143,7 @@ class Model(BaseModel):
 4. SecretStr 的价值？Strict 系列与 ConfigDict(strict=True) 的区别？
 5. PrivateAttr 的定位？2.13 的默认工厂新能力？
 
-> 🎯 **核心要点**：高级武器库 = **TypeAdapter（无模型校验/批量 JSON 直验）+ 判别联合（多态数据按 tag 一步分派）+ pydantic-settings（配置加载即校验）+ SecretStr（密钥天然脱敏）**——"**不值得建模型的用 TypeAdapter，多态的用判别联合，部署配置交给 Settings**"。
+> **核心要点**：高级武器库 = **TypeAdapter（无模型校验/批量 JSON 直验）+ 判别联合（多态数据按 tag 一步分派）+ pydantic-settings（配置加载即校验）+ SecretStr（密钥天然脱敏）**——"**不值得建模型的用 TypeAdapter，多态的用判别联合，部署配置交给 Settings**"。
 
 ---
 

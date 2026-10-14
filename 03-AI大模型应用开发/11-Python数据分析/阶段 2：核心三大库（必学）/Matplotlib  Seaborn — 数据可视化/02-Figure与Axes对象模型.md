@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [为什么必须学对象模型](#1-为什么必须学对象模型)
 2. [四级对象体系](#2-四级对象体系)
@@ -152,7 +152,7 @@ fig.savefig("out.png", dpi=300)                   # 交付高清（08 篇深讲�
 
 **验收动作**：用 OO API 重画 01 篇的三张图（每个都是 `fig, ax = plt.subplots()` 开场）——再做一张 `2×2` 子图（四种图各一格 + 共享 x/y 轴）——最后封装一个 `plot_series(ax, x, y, title)` 函数并调用两次——**"OO 三图 + 子图 + 函数封装 = 对象模型通过"**。
 
-> 🎯 **核心要点**：对象模型 = 显式管理（Figure 纸/Axes 格子/Axis 边/Artist 画——95% 操作在 ax）；万能对照表（plt.xxx → ax.xxx/ax.set_xxx——迁移钥匙）；生产姿势（`fig, ax = plt.subplots()` + ax 方法 + 画图函数化）；布局（subplots 多子图 = 对比——共享轴防误导——constrained_layout）；尺寸账本（像素 = figsize × dpi——显示 100/交付 300）——**"pyplot 是草图、OO API 是工程图——生产标准从此篇开始"**。
+> **核心要点**：对象模型 = 显式管理（Figure 纸/Axes 格子/Axis 边/Artist 画——95% 操作在 ax）；万能对照表（plt.xxx → ax.xxx/ax.set_xxx——迁移钥匙）；生产姿势（`fig, ax = plt.subplots()` + ax 方法 + 画图函数化）；布局（subplots 多子图 = 对比——共享轴防误导——constrained_layout）；尺寸账本（像素 = figsize × dpi——显示 100/交付 300）——**"pyplot 是草图、OO API 是工程图——生产标准从此篇开始"**。
 
 ---
 

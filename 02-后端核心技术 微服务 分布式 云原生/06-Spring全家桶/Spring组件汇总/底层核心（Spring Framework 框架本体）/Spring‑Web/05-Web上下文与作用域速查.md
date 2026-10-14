@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [WebApplicationContext：三层上下文](#1-webapplicationcontext三层上下文)
 2. [Web 作用域：request/session/application](#2-web-作用域requestsessionapplication)
@@ -37,7 +37,7 @@ Web 应用的容器层次：
 | `AnnotationConfigServletWebServerApplicationContext` | Boot 内嵌服务器容器 |
 | `ReactiveWebApplicationContext` | 响应式栈（WebFlux） |
 
-> 🎯 **核心要点**：**Service 层放根上下文、控制器放子上下文**——父子分离让"业务核心不依赖 Web"；子上下文覆盖同名 Bean 时子优先；面试答"SpringMVC 容器结构"先画这棵父子树。
+> **核心要点**：**Service 层放根上下文、控制器放子上下文**——父子分离让"业务核心不依赖 Web"；子上下文覆盖同名 Bean 时子优先；面试答"SpringMVC 容器结构"先画这棵父子树。
 
 ### 1.1 上下文初始化细节与 Bean 查找顺序
 
@@ -58,7 +58,7 @@ Bean 查找顺序（父子容器）：
 | `AnnotationConfigWebApplicationContext` | 编程式创建 | 嵌入式/测试 |
 | Boot `SpringApplication` | 单上下文直接启动 | Boot 内嵌（99% 场景） |
 
-> ⚠️ **Boot 与 WAR 的上下文模型差异**：Boot 是**单上下文**——SpringApplication 建一个上下文，内嵌 Tomcat 的 DispatcherServlet 直接复用；传统 WAR 才是"根 + 子"双上下文（web.xml 配 ContextLoaderListener + DispatcherServlet）。面试别把两者混为一谈。
+> **Boot 与 WAR 的上下文模型差异**：Boot 是**单上下文**——SpringApplication 建一个上下文，内嵌 Tomcat 的 DispatcherServlet 直接复用；传统 WAR 才是"根 + 子"双上下文（web.xml 配 ContextLoaderListener + DispatcherServlet）。面试别把两者混为一谈。
 
 ### 1.2 上下文相关的关键接口与 Bean
 
@@ -82,7 +82,7 @@ public String msg(String code) {
 }
 ```
 
-> 💡 面试考"怎么在任意地方拿容器"——答**注入优先**（ObjectProvider/ObjectFactory），`WebApplicationContextUtils` 是给非 Spring 管理的遗留代码用的；静态持有容器 = 内存泄漏 + 测试困难。
+> 面试考"怎么在任意地方拿容器"——答**注入优先**（ObjectProvider/ObjectFactory），`WebApplicationContextUtils` 是给非 Spring 管理的遗留代码用的；静态持有容器 = 内存泄漏 + 测试困难。
 
 ## 2. Web 作用域：request/session/application
 
@@ -102,7 +102,7 @@ public class RequestContext {
 }
 ```
 
-> ⚠️ **与单例的区别**：request/session Bean 每次请求/会话**新建实例**——单例 Bean 里注入它们必须用代理（见下节）；application 作用域与 singleton 生命周期几乎一致，但语义属于 Servlet 容器。
+> **与单例的区别**：request/session Bean 每次请求/会话**新建实例**——单例 Bean 里注入它们必须用代理（见下节）；application 作用域与 singleton 生命周期几乎一致，但语义属于 Servlet 容器。
 
 ### 2.1 作用域实现类与生命周期细节
 
@@ -132,7 +132,7 @@ public void handle() {
 | 非 Web 环境 | 无 RequestAttributes 时获取报 IllegalStateException |
 | 用途定位 | 请求级临时状态（traceId/当前用户）放 request；登录态/购物车放 session |
 
-> 💡 面试加分：`ObjectProvider` 是"作用域感知获取"的推荐姿势——比 `@Autowired` 直注更能表达"可能不存在/延迟获取"语义；getIfAvailable 判空避免作用域未激活时报错。
+> 面试加分：`ObjectProvider` 是"作用域感知获取"的推荐姿势——比 `@Autowired` 直注更能表达"可能不存在/延迟获取"语义；getIfAvailable 判空避免作用域未激活时报错。
 
 ### 2.2 request 作用域经典场景与陷阱
 
@@ -165,7 +165,7 @@ public class OrderService {
 | 请求级数据塞太多 | 每请求全量构建 | 只放真正请求级的；静态配置走单例 |
 | 与 ThreadLocal 混用 | 两套上下文不一致 | 选一套（作用域 Bean 或显式传递） |
 
-> ⚠️ **同类对比**：request 作用域 Bean 与 ThreadLocal 都能存"请求级数据"——差别在**生命周期管理**：作用域 Bean 由容器创建/销毁（无泄漏），ThreadLocal 需手工清理（线程池复用场景易脏数据）——7.x 推荐作用域 Bean。
+> **同类对比**：request 作用域 Bean 与 ThreadLocal 都能存"请求级数据"——差别在**生命周期管理**：作用域 Bean 由容器创建/销毁（无泄漏），ThreadLocal 需手工清理（线程池复用场景易脏数据）——7.x 推荐作用域 Bean。
 
 ## 3. 作用域代理：ScopedProxyMode
 
@@ -195,7 +195,7 @@ public class OrderService {
   → 请求结束/会话过期 → 实例销毁（可配 destroyMethod）
 ```
 
-> 🎯 **核心要点**：**跨作用域注入 = 必配代理**——否则单例 Bean 持有的是"第一个请求的实例"（经典 bug：所有用户共享第一个用户的数据）；代理在每次方法调用时实时解析。
+> **核心要点**：**跨作用域注入 = 必配代理**——否则单例 Bean 持有的是"第一个请求的实例"（经典 bug：所有用户共享第一个用户的数据）；代理在每次方法调用时实时解析。
 
 ### 3.1 代理的限制与注意
 
@@ -211,10 +211,10 @@ public class OrderService {
 // 反例：final 类 + 类代理 —— 运行期 CGLIB 失败
 @Scope(value = WebApplicationContext.SCOPE_SESSION,
        proxyMode = ScopedProxyMode.TARGET_CLASS)
-public final class UserContext { ... }   // ❌ CGLIB 无法代理 final 类
+public final class UserContext { ... }   // ✗ CGLIB 无法代理 final 类
 ```
 
-> ⚠️ **与 AOP 代理叠加**：作用域代理可以和事务代理共存（外层作用域代理 → 内层事务代理）；自调用（类内 `this.方法()`）两层代理都绕不过——需要代理语义就注入自引用或拆 Bean。
+> **与 AOP 代理叠加**：作用域代理可以和事务代理共存（外层作用域代理 → 内层事务代理）；自调用（类内 `this.方法()`）两层代理都绕不过——需要代理语义就注入自引用或拆 Bean。
 
 ## 4. RequestContextHolder：请求线程绑定
 
@@ -236,7 +236,7 @@ HttpServletRequest request =
 | `WebRequest` / `NativeWebRequest` | 请求的 Web 抽象（不依赖 Servlet API 的轻接口） |
 | `WebRequestInterceptor` | 拦截请求生命周期的轻量拦截器 |
 
-> ⚠️ **异步大坑**：RequestContextHolder 是线程绑定的——**@Async 新线程/线程池里拿不到请求**（NPE）；解法：`TaskDecorator` 传递上下文、或显式传参（别依赖隐式请求状态）；虚拟线程下每请求一线程，同源成立。
+> **异步大坑**：RequestContextHolder 是线程绑定的——**@Async 新线程/线程池里拿不到请求**（NPE）；解法：`TaskDecorator` 传递上下文、或显式传参（别依赖隐式请求状态）；虚拟线程下每请求一线程，同源成立。
 
 ### 4.1 跨线程传递与虚拟线程
 
@@ -268,7 +268,7 @@ ThreadPoolTaskExecutor asyncExecutor() {
 | 虚拟线程 | Boot 4 默认请求处理 | 每请求一虚拟线程，同线程内可用 |
 | TransmittableThreadLocal | 复杂上下文（traceId 等） | 阿里 TTL 库，传递后可回写 |
 
-> 💡 **虚拟线程下的边界**：Boot 4 请求处理用虚拟线程，RequestContextHolder 正常可用；但 @Async（默认线程池）仍是平台线程池——**跨线程的传递需求不会因虚拟线程消失**，该用 TaskDecorator 还用。
+> **虚拟线程下的边界**：Boot 4 请求处理用虚拟线程，RequestContextHolder 正常可用；但 @Async（默认线程池）仍是平台线程池——**跨线程的传递需求不会因虚拟线程消失**，该用 TaskDecorator 还用。
 
 ### 4.2 RequestContextHolder 相关 API 速查
 
@@ -291,7 +291,7 @@ if (attrs != null) {
 }
 ```
 
-> 💡 7.x 加分点：`WebRequest` 抽象让"请求信息访问"不依赖 Servlet API——**Service 层可用 WebRequest 做参数传递**，WebFlux/MVC 双栈代码都能跑（可测性提升）。
+> 7.x 加分点：`WebRequest` 抽象让"请求信息访问"不依赖 Servlet API——**Service 层可用 WebRequest 做参数传递**，WebFlux/MVC 双栈代码都能跑（可测性提升）。
 
 ## 5. Servlet 集成与上下文初始化
 
@@ -311,7 +311,7 @@ Boot 内嵌服务器：
 | `WebApplicationInitializer` | 传统 Servlet 3+ 无 web.xml 初始化 |
 | 多部分解析 | `MultipartConfigElement` / Boot `spring.servlet.multipart.*` |
 
-> 💡 Boot 4 下 99% 场景无需手工 Servlet 集成——`ServletContextInitializer` 是唯一常写的（注册自定义 Filter/Listener 时）；父子上下文模型由 Boot 自动搭好。
+> Boot 4 下 99% 场景无需手工 Servlet 集成——`ServletContextInitializer` 是唯一常写的（注册自定义 Filter/Listener 时）；父子上下文模型由 Boot 自动搭好。
 
 ### 5.1 面试追问与生产实践
 
@@ -351,7 +351,7 @@ Boot 内嵌服务器：
 | 会话失效后 session Bean 仍被引用 | 单例持有代理的缓存 | 代理实时解析——会话过期后访问抛异常，按需降级处理 |
 | request Bean 与虚拟线程 | 虚拟线程每请求一个——作用域正常 | 无特殊处理；但异步分支（同请求内换线程）需传递 |
 
-> 🎯 **本模块一句话**：Web 上下文 = "容器层次 + 作用域 + 线程绑定"三件事——父子容器管 Bean 归属，作用域管生命周期，RequestContextHolder 管线程可见性；三者的边界就是面试的边界。
+> **本模块一句话**：Web 上下文 = "容器层次 + 作用域 + 线程绑定"三件事——父子容器管 Bean 归属，作用域管生命周期，RequestContextHolder 管线程可见性；三者的边界就是面试的边界。
 
 ### 5.3 常见错误速查与记忆卡
 

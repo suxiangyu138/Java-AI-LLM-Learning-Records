@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [一句话定位](#1-一句话定位)
 2. [Workflows：事件驱动编排](#2-workflows事件驱动编排)
@@ -189,7 +189,7 @@ class WorkflowWithGate(Workflow):
 
 **验收动作**：① 手写一个"检索 → 合成"双步骤 Workflow 并流式输出；② 两个 Agent 跑通 handoff（调研 → 写报告）；③ 给高危工具加人工确认点——**"事件驱动 + 多 Agent + 人机协同 = 生产级编排"**。
 
-> 🎯 **核心要点**：**Workflows 事件驱动（QueryPipeline 弃用）**；**AgentWorkflow = root_agent + handoff + ctx.store + 统一记忆**；**人机协同是生产分水岭**；**生产三件套（持久化/观测/护栏）**。
+> **核心要点**：**Workflows 事件驱动（QueryPipeline 弃用）**；**AgentWorkflow = root_agent + handoff + ctx.store + 统一记忆**；**人机协同是生产分水岭**；**生产三件套（持久化/观测/护栏）**。
 
 ---
 

@@ -2,7 +2,7 @@
 
 > 定位：「LLM AI Agent 相关理论」之「Function-call」**完整理论流程背熟层**——从工具声明到循环终止的七步全流程、每个协议细节的背诵版（tool_calls/tool_call_id/tool_choice/流式 index）、常见坑与面试冲刺。与 [Function Calling 函数调用【Agent 基石】](..%2F..%2F..%2F02-大模型基础与Prompt工程%2FFunction%20Calling%20函数调用%E3%80%90Agent%20基石%E3%80%91%2F00-FunctionCalling知识体系总览.md)（协议深潜 11 篇）和 [区分概念 02-函数调用-vs-工具-vs-MCP-vs-Skills](..%2F区分概念（面试容易混淆）%2F02-函数调用-vs-工具-vs-MCP-vs-Skills.md)（概念辨析）分工：本体系讲**流程怎么走、细节怎么背**。2026 一句话：**"模型只出意图（tool_calls），执行与回传是 Harness 的活——流程的每一环都有协议铁律"**。
 
-## 📚 目录
+## 目录
 
 1. [知识体系导图](#1-知识体系导图)
 2. [模块导航](#2-模块导航)
@@ -68,7 +68,7 @@ Function-call 完整理论流程（背熟）
 
 ## 5. 2026 生态基准
 
-> 📅 基准窗口：2026-08。版本与事实以各模块【参考来源】为准。
+> 基准窗口：2026-08。版本与事实以各模块【参考来源】为准。
 
 - **协议两代并存**：Chat Completions（嵌套 `{"type":"function","function":{...}}`，输出 `message.tool_calls[]`，回传 `role:"tool"` + `tool_call_id`）与 Responses API（扁平结构，输出顶层 `{"type":"function_call","call_id"...}`，回传 `function_call_output`）——**两种格式不可混用**（混用是"invalid parameter"报错最常见原因）。
 - **流程本质不变**：2026 年仍是两轮模式——声明→模型提议（`tool_calls`）→Harness 执行→`role:"tool"` 回传→模型定稿；模型**从不执行函数**，只输出意图；每次工具调用迭代 = 一次独立 API 请求（5 步循环 ≈ 10 次调用）。

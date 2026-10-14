@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [知识体系导图](#1-知识体系导图)
 2. [模块导航](#2-模块导航)
@@ -199,7 +199,7 @@ AOP（重点切点表达式与代理选择）→ 事务（重点传播行为与�
 **路线三：面试冲刺（对应模块 10 + 深度剖析系统）**
 背考点 → 自测陷阱题 → 手写简化 IoC 容器；然后进入 `Spring生态深度剖析/` 啃源码级细节（三级缓存、PostProcessor）。
 
-> 🎯 **核心要点**：Spring 核心的学习终点是"**能解释容器每一步在做什么**"——从 `new AnnotationConfigApplicationContext()` 到 `getBean`，每一环的职责、扩展点、失效场景都了然于心。
+> **核心要点**：Spring 核心的学习终点是"**能解释容器每一步在做什么**"——从 `new AnnotationConfigApplicationContext()` 到 `getBean`，每一环的职责、扩展点、失效场景都了然于心。
 
 ---
 
@@ -216,7 +216,7 @@ AOP（重点切点表达式与代理选择）→ 事务（重点传播行为与�
 9. `@ConfigurationProperties` 和 `@Value` 的区别？
 10. `@TransactionalEventListener` 和 `@EventListener` 的区别？
 
-> 💡 答不出的题目对应上方模块导航中的文件，按图索骥复习即可。
+> 答不出的题目对应上方模块导航中的文件，按图索骥复习即可。
 
 ---
 

@@ -1,10 +1,10 @@
 # Android 四大组件详解
 
-> 🧩 Activity、Service、BroadcastReceiver、ContentProvider —— Android 应用的四大核心组件，是骨架，是灵魂，是一切 Android 应用的基础
+> Activity、Service、BroadcastReceiver、ContentProvider —— Android 应用的四大核心组件，是骨架，是灵魂，是一切 Android 应用的基础
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [四大组件全景](#1-四大组件全景)
 2. [Activity：用户界面的载体](#2-activity用户界面的载体)
@@ -39,10 +39,10 @@ Java 后端类比：
 
 | 组件 | 有无 UI | 生命周期方式 | 启动方式 | 跨应用 |
 |------|:---:|------|------|:---:|
-| **Activity** | ✅ | 用户操作驱动（入栈/出栈） | `startActivity()` | ✅ |
-| **Service** | ❌ | 长期运行 | `startService()` / `bindService()` | ✅ |
-| **BroadcastReceiver** | ❌ | 瞬态（收到广播即死） | 系统广播 / `sendBroadcast()` | ✅ |
-| **ContentProvider** | ❌ | 与应用同生命周期 | `ContentResolver` CRUD | ✅ |
+| **Activity** | ✓ | 用户操作驱动（入栈/出栈） | `startActivity()` | ✓ |
+| **Service** | ✗ | 长期运行 | `startService()` / `bindService()` | ✓ |
+| **BroadcastReceiver** | ✗ | 瞬态（收到广播即死） | 系统广播 / `sendBroadcast()` | ✓ |
+| **ContentProvider** | ✗ | 与应用同生命周期 | `ContentResolver` CRUD | ✓ |
 
 ---
 
@@ -91,41 +91,41 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // ✅ 做：初始化 View、绑定数据、恢复 savedInstanceState
-        // ❌ 勿：耗时操作（网络请求、数据库大量读写）
+        // ✓ 做：初始化 View、绑定数据、恢复 savedInstanceState
+        // ✗ 勿：耗时操作（网络请求、数据库大量读写）
         setContentView(R.layout.activity_main);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        // ✅ 做：注册 BroadcastReceiver、绑定 Service
+        // ✓ 做：注册 BroadcastReceiver、绑定 Service
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        // ✅ 做：开始动画、启动相机预览、恢复游戏
-        // ❌ 勿：加载大量资源（已在 onCreate 做过）
+        // ✓ 做：开始动画、启动相机预览、恢复游戏
+        // ✗ 勿：加载大量资源（已在 onCreate 做过）
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        // ✅ 做：保存草稿、停止动画、释放相机
-        // ❌ 勿：耗时的数据库写入（用 onStop）
+        // ✓ 做：保存草稿、停止动画、释放相机
+        // ✗ 勿：耗时的数据库写入（用 onStop）
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        // ✅ 做：释放大量资源、取消广播注册
+        // ✓ 做：释放大量资源、取消广播注册
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        // ✅ 做：最后的清理（ViewModel 被清除、杀掉异步任务）
+        // ✓ 做：最后的清理（ViewModel 被清除、杀掉异步任务）
     }
 }
 ```
@@ -166,11 +166,11 @@ protected void onCreate(Bundle savedInstanceState) {
     }
 }
 
-// ⚠️ Bundle 只能存 1MB 以下的轻量数据！
+// Bundle 只能存 1MB 以下的轻量数据！
 // 大量数据用 ViewModel + SavedStateHandle 或持久化到 DB
 ```
 
-> 🎯 **核心要点**：`onSaveInstanceState` 和 `onRestoreInstanceState` **只在系统杀死进程后重建时**才会被调用（如旋转屏幕）。用户主动 `finish()` 或按返回键不会触发。
+> **核心要点**：`onSaveInstanceState` 和 `onRestoreInstanceState` **只在系统杀死进程后重建时**才会被调用（如旋转屏幕）。用户主动 `finish()` 或按返回键不会触发。
 
 ---
 
@@ -268,7 +268,7 @@ PeriodicWorkRequest periodicWork = new PeriodicWorkRequest.Builder(
     .build();
 ```
 
-> 💡 **Java 后端类比**：WorkManager ≈ Spring 的 `@Scheduled` + 分布式任务调度（但单机）。
+> **Java 后端类比**：WorkManager ≈ Spring 的 `@Scheduled` + 分布式任务调度（但单机）。
 
 ---
 
@@ -295,7 +295,7 @@ PeriodicWorkRequest periodicWork = new PeriodicWorkRequest.Builder(
 | 方式 | 注册 | 生命周期 | Android 8+ 限制 |
 |------|------|------|:---:|
 | **静态注册** (Manifest) | `<receiver>` in XML | 应用未启动也能收 | 大部分隐式广播被禁止 |
-| **动态注册** (代码) | `registerReceiver()` | 组件存活时有效 | ✅ 推荐 |
+| **动态注册** (代码) | `registerReceiver()` | 组件存活时有效 | ✓ 推荐 |
 
 ```java
 // 动态注册（代码中注册/注销）
@@ -343,7 +343,7 @@ MyEventBus.events.collect { event ->
 }
 ```
 
-> 🎯 **Java 后端类比**：LocalBroadcast ≈ Spring Event / Guava EventBus，系统广播 ≈ 接收 MQ 消息。
+> **Java 后端类比**：LocalBroadcast ≈ Spring Event / Guava EventBus，系统广播 ≈ 接收 MQ 消息。
 
 ---
 
@@ -385,7 +385,7 @@ while (cursor.moveToNext()) {
         cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
     Log.d("Contacts", name);
 }
-cursor.close();  // ⚠️ 必须关闭 Cursor！
+cursor.close();  // 必须关闭 Cursor！
 ```
 
 ### 5.3 创建自定义 ContentProvider
@@ -440,7 +440,7 @@ public class MyContentProvider extends ContentProvider {
 }
 ```
 
-> 🎯 **核心要点**：ContentProvider 本质上是对 SQLite/文件的 URI 封装层，为 Android 提供 **REST-like** 的跨进程数据访问。
+> **核心要点**：ContentProvider 本质上是对 SQLite/文件的 URI 封装层，为 Android 提供 **REST-like** 的跨进程数据访问。
 
 ---
 

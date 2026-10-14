@@ -37,7 +37,7 @@ Master 进程（root 权限）
 | Cache Manager | 缓存过期清理 | 定期检查缓存 |
 | Cache Loader | 缓存预热加载 | 启动时加载已有缓存 |
 
-> 💡 Nginx 的惊群问题：多个 worker 同时 accept 同一个 socket 时，只有一个成功，其余空转。通过 `accept_mutex on;` 解决，让 worker 排队 accept。
+> Nginx 的惊群问题：多个 worker 同时 accept 同一个 socket 时，只有一个成功，其余空转。通过 `accept_mutex on;` 解决，让 worker 排队 accept。
 
 ### 1.2 What is the keepalive mechanism? Keepalive 的客户端和上游配置？
 Nginx 需要区分配置两个方向的 keepalive：
@@ -135,7 +135,7 @@ if [ "$(ps -C nginx --no-header | wc -l)" -eq 0 ]; then
 fi
 ```
 
-> 💡 VRRP 原理：MASTER 定期组播发送 VRRP 通告（advert_int 1s），BACKUP 收到则重置计时器，若 3 个通告间隔内未收到，BACKUP 升为 MASTER 接管 VIP。
+> VRRP 原理：MASTER 定期组播发送 VRRP 通告（advert_int 1s），BACKUP 收到则重置计时器，若 3 个通告间隔内未收到，BACKUP 升为 MASTER 接管 VIP。
 
 ### 1.4 What Linux kernel parameters need tuning for Nginx? Nginx 需要调整哪些 Linux 内核参数？
 | 参数 | 说明 | 推荐值 |
@@ -165,7 +165,7 @@ net.ipv4.tcp_fastopen = 3
 vm.swappiness = 10
 ```
 
-> ⚠️ `tcp_tw_recycle` 在 NAT 环境下会导致连接问题，Linux 4.12+ 已删除该参数。使用 `tcp_tw_reuse` + 调整 `tcp_fin_timeout` 替代。
+> `tcp_tw_recycle` 在 NAT 环境下会导致连接问题，Linux 4.12+ 已删除该参数。使用 `tcp_tw_reuse` + 调整 `tcp_fin_timeout` 替代。
 
 ### 1.5 How does the GEOIP module work? GEOIP 模块的工作原理？
 GEOIP 模块根据客户端 IP 查询地理位置数据库，实现地域分发：
@@ -257,7 +257,7 @@ ssi_min_file_chunk 1k;           # 最小文件块
 </html>
 ```
 
-> 💡 SSI 适用于 CMS 网站将页头/页脚/导航栏等公共部分合并，但高并发场景下推荐使用 CDN 或前端组件化替代。
+> SSI 适用于 CMS 网站将页头/页脚/导航栏等公共部分合并，但高并发场景下推荐使用 CDN 或前端组件化替代。
 
 ### 1.8 How does Rsync + inotify achieve static resource synchronization? Rsync + inotify 如何实现静态资源同步？
 多台 Nginx 节点之间的静态文件同步方案：
@@ -440,7 +440,7 @@ cache:set("key", "value", 60)
 local val = cache:get("key")
 ```
 
-> 💡 **性能对比**：lrucache 在单 worker 内访问时延约 0.1μs，shared_dict 约 0.5μs（需跨进程同步）。
+> **性能对比**：lrucache 在单 worker 内访问时延约 0.1μs，shared_dict 约 0.5μs（需跨进程同步）。
 
 ### 1.13 How does OpenResty connect to Redis? OpenResty 如何连接 Redis？
 ```lua
@@ -646,7 +646,7 @@ epoll 实例
   └── 待关闭连接（time_wait 等）
 ```
 
-> 💡 每个连接占用约 2.5KB 内存（包括连接结构体和读/写缓冲区）。`worker_connections 10240` 约占用 25MB。
+> 每个连接占用约 2.5KB 内存（包括连接结构体和读/写缓冲区）。`worker_connections 10240` 约占用 25MB。
 
 ### 1.20 What is the epoll model in Nginx? Nginx 的 epoll 模型？
 Epoll 是 Linux 上最高效的 I/O 多路复用机制，Nginx 利用 epoll 实现高并发：
@@ -687,7 +687,7 @@ server {
 }
 ```
 
-> 🎯 **面试亮点**：Nginx 1.9.1+ 支持 reuseport 特性，通过 `SO_REUSEPORT` 让内核将连接均匀分配给 worker，既解决惊群又提高 CPU cache 亲和性。
+> **面试亮点**：Nginx 1.9.1+ 支持 reuseport 特性，通过 `SO_REUSEPORT` 让内核将连接均匀分配给 worker，既解决惊群又提高 CPU cache 亲和性。
 
 ### 2.2 Nginx 的请求处理阶段（Phases）
 Nginx 的 HTTP 请求处理分为 11 个阶段：
@@ -706,7 +706,7 @@ NGX_HTTP_CONTENT           → 内容产生（proxy_pass/fastcgi_pass）
 NGX_HTTP_LOG               → 日志记录
 ```
 
-> 💡 理解请求处理阶段对排查问题至关重要。例如 `limit_req` 在第 6 阶段执行，`proxy_pass` 在第 10 阶段执行，`access_log` 在最后阶段。
+> 理解请求处理阶段对排查问题至关重要。例如 `limit_req` 在第 6 阶段执行，`proxy_pass` 在第 10 阶段执行，`access_log` 在最后阶段。
 
 ### 2.3 VRRP 协议工作原理
 VRRP（Virtual Router Redundancy Protocol）是 Keepalived 的核心协议：
@@ -766,7 +766,7 @@ Client                Nginx
    │←─ accept() ────── │  (5) worker 调用 accept 取出连接
 ```
 
-> ⚠️ 如果 `somaxconn` 太小，高并发下客户端在握手第三步时收到 RST 包，表现为连接被拒绝（connection reset）。
+> 如果 `somaxconn` 太小，高并发下客户端在握手第三步时收到 RST 包，表现为连接被拒绝（connection reset）。
 
 ### 2.5 TCP Fast Open (TFO) 原理
 TFO 允许在 TCP 握手的 SYN 包中就携带应用数据：
@@ -796,7 +796,7 @@ server {
 }
 ```
 
-> 💡 TFO 在重复连接场景下能减少约 1 RTT 的延迟，对移动端/长轮询场景特别有效。
+> TFO 在重复连接场景下能减少约 1 RTT 的延迟，对移动端/长轮询场景特别有效。
 
 ### 2.6 Nginx 惊群与 reuseport 深入对比
 | 机制 | 原理 | 性能 | 要求 |
@@ -973,7 +973,7 @@ sendfile + DMA Scatter/Gather（2 次拷贝，2 次上下文切换）：
            └── 仅传输描述信息（文件位置、长度）
 ```
 
-> 💡 Nginx 的 `sendfile` 通过 `splice()` 系统调用在内核空间完成数据搬运，完全不经过用户空间，是静态文件服务的核心性能保障。
+> Nginx 的 `sendfile` 通过 `splice()` 系统调用在内核空间完成数据搬运，完全不经过用户空间，是静态文件服务的核心性能保障。
 
 ---
 
@@ -1727,7 +1727,7 @@ vrrp_instance VI_2 {
 }
 ```
 
-> 💡 双主模式资源利用率从 50% 提升到 100%，每个节点处理部分流量，故障时全部流量转移到健康节点。
+> 双主模式资源利用率从 50% 提升到 100%，每个节点处理部分流量，故障时全部流量转移到健康节点。
 
 ### 4.3 手写 Nginx 全局安全加固配置
 ```nginx
@@ -2291,7 +2291,7 @@ fi
 ### 6.2 open_file_cache 缓存溢出
 ```nginx
 # 错误配置：缓存条目过多导致内存耗尽
-open_file_cache max=9999999;   # ❌ 太大
+open_file_cache max=9999999;   # ✗ 太大
 
 # 正确配置：根据实际文件量设置
 open_file_cache max=10000 inactive=60s;
@@ -2393,4 +2393,4 @@ proxy_cache_background_update on;
 
 ---
 
-> 🎯 **总结**：高级篇覆盖了亿级流量场景下的 Nginx 核心技能。**高可用设计**、**内核参数调优**、**多级缓存架构**、**OpenResty/Lua 开发**是架构师级别的面试必考点。关键是在理解原理的基础上，具备从单机优化到分布式扩容的完整架构视野。
+> **总结**：高级篇覆盖了亿级流量场景下的 Nginx 核心技能。**高可用设计**、**内核参数调优**、**多级缓存架构**、**OpenResty/Lua 开发**是架构师级别的面试必考点。关键是在理解原理的基础上，具备从单机优化到分布式扩容的完整架构视野。

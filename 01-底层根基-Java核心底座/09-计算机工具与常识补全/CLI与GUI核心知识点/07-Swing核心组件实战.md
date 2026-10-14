@@ -1,6 +1,6 @@
 # 07 - Swing 核心组件实战
 
-> 🎯 Swing 是 Java 桌面应用的历史基石 — JFrame/布局管理/事件处理/表格/对话框，后端偶尔写内部工具时用得上
+> Swing 是 Java 桌面应用的历史基石 — JFrame/布局管理/事件处理/表格/对话框，后端偶尔写内部工具时用得上
 
 ---
 
@@ -57,7 +57,7 @@ Object[][] data = {
     {2, "李四", "lisi@example.com"}
 };
 JTable table = new JTable(data, columns);
-JScrollPane scrollPane = new JScrollPane(table);   // ⚠️ 必须包在 JScrollPane 中
+JScrollPane scrollPane = new JScrollPane(table);   // 必须包在 JScrollPane 中
 frame.add(scrollPane);
 
 // TableModel — 更灵活
@@ -152,4 +152,4 @@ public class UserManager extends JFrame {
 }
 ```
 
-> 🎯 **Swing 三板斧**：`JFrame` 窗口 + `JPanel` 布局 + `addActionListener` 事件。内部工具 CRUD 用 `JTable` + `DefaultTableModel` 最简组合。
+> **Swing 三板斧**：`JFrame` 窗口 + `JPanel` 布局 + `addActionListener` 事件。内部工具 CRUD 用 `JTable` + `DefaultTableModel` 最简组合。

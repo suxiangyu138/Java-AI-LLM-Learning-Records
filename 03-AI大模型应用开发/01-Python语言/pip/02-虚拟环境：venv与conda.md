@@ -1,6 +1,6 @@
 # 02 - 虚拟环境：venv 与 conda
 
-> 🎯 "在我电脑上能跑"的罪魁祸首就是环境问题。虚拟环境让你每个项目拥有独立的 Python 和依赖，彻底告别版本冲突
+> "在我电脑上能跑"的罪魁祸首就是环境问题。虚拟环境让你每个项目拥有独立的 Python 和依赖，彻底告别版本冲突
 
 ---
 
@@ -18,12 +18,12 @@
 ```text
 没有虚拟环境：
   项目A 需要 numpy==1.24  ──┐
-  项目B 需要 numpy==2.0   ──┤ → 💥 冲突！
+  项目B 需要 numpy==2.0   ──┤ → 冲突！
   全局 Python 只能装一个版本  ──┘
 
 有了虚拟环境：
-  项目A → venv_A → numpy==1.24 ✅
-  项目B → venv_B → numpy==2.0  ✅
+  项目A → venv_A → numpy==1.24 ✓
+  项目B → venv_B → numpy==2.0  ✓
   互不干扰
 ```
 
@@ -78,9 +78,9 @@ echo ".venv/" >> .gitignore
 
 | 维度 | venv | conda |
 |------|:---:|:---:|
-| Python 版本管理 | ❌ | ✅ 一键切换 |
-| C/C++ 库（CUDA/MKL） | ❌ 需手动 | ✅ 内置 |
-| 非 Python 依赖 | ❌ | ✅ (ffmpeg/gcc) |
+| Python 版本管理 | ✗ | ✓ 一键切换 |
+| C/C++ 库（CUDA/MKL） | ✗ 需手动 | ✓ 内置 |
+| 非 Python 依赖 | ✗ | ✓ (ffmpeg/gcc) |
 | 下载速度 | 从 PyPI | 从 conda-forge（更快） |
 | 磁盘占用 | 小 (~20MB) | 大 (~500MB+) |
 | 推荐场景 | 纯 Python 项目 | **AI / 科学计算** |
@@ -140,23 +140,23 @@ dependencies:
 
 ```text
 你的场景？
-├── 🐍 纯 Python 后端（FastAPI/Django）
-│   └── venv 或 Poetry ✅
+├── 纯 Python 后端（FastAPI/Django）
+│   └── venv 或 Poetry ✓
 │
-├── 🤖 AI/ML 项目（PyTorch/CUDA）
-│   └── conda ✅（CUDA 管理是刚需）
+├── AI/ML 项目（PyTorch/CUDA）
+│   └── conda ✓（CUDA 管理是刚需）
 │
-├── 📦 需要发布到 PyPI 的库
-│   └── Poetry ✅（一键构建+发布）
+├── 需要发布到 PyPI 的库
+│   └── Poetry ✓（一键构建+发布）
 │
-├── 🐳 Docker 部署
-│   └── venv ✅（轻量，Docker 内不需要 conda）
+├── Docker 部署
+│   └── venv ✓（轻量，Docker 内不需要 conda）
 │
-└── 👥 团队协作（跨平台）
-    └── conda ✅（environment.yml 锁定完整环境）
+└── 团队协作（跨平台）
+    └── conda ✓（environment.yml 锁定完整环境）
 ```
 
-> 🎯 **我的建议**：AI 项目用 conda 做环境管理 + pip 安装部分包（切到 conda-forge 和 PyTorch 官方 channel），纯 Python 项目用 Poetry。
+> **我的建议**：AI 项目用 conda 做环境管理 + pip 安装部分包（切到 conda-forge 和 PyTorch 官方 channel），纯 Python 项目用 Poetry。
 
 ## 核心要点回顾
 

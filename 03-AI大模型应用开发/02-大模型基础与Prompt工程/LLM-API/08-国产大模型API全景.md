@@ -1,6 +1,6 @@
 # 08 - 国产大模型 API 全景
 
-> 🎯 国产大模型已形成完整梯队——通义千问 (Qwen)、智谱 GLM、Kimi (Moonshot)、豆包 (字节)、文心一言 (百度) 等。它们共同的特点：全部兼容 OpenAI API 格式、中文能力突出、价格极具竞争力
+> 国产大模型已形成完整梯队——通义千问 (Qwen)、智谱 GLM、Kimi (Moonshot)、豆包 (字节)、文心一言 (百度) 等。它们共同的特点：全部兼容 OpenAI API 格式、中文能力突出、价格极具竞争力
 
 > **前置阅读**：[[02-大模型API调用实践]]、[[10-主流大模型API速查与选型指南]]
 
@@ -29,7 +29,7 @@
 | **DeepSeek** | DeepSeek | V3/R1 | 64K | 极致性价比 | ¥0.42-1.1 |
 | **百川** | 百川智能 | Baichuan4 | 128K | 中文+联网搜索 | ¥3-30 |
 
-> 💡 所有国产大模型**全部兼容 OpenAI SDK**，切换到国产模型只需改 `base_url` + `api_key` + `model`
+> 所有国产大模型**全部兼容 OpenAI SDK**，切换到国产模型只需改 `base_url` + `api_key` + `model`
 
 ## 2. 通义千问 Qwen API
 
@@ -74,7 +74,7 @@ curl http://localhost:11434/v1/chat/completions \
   -d '{"model":"qwen2.5:7b","messages":[{"role":"user","content":"你好"}]}'
 ```
 
-> 🎯 Qwen 系列是 Apache 2.0 许可证最宽松的国产模型，可商用可修改
+> Qwen 系列是 Apache 2.0 许可证最宽松的国产模型，可商用可修改
 
 ## 3. 智谱 GLM API
 
@@ -106,7 +106,7 @@ response = client.chat.completions.create(
 | `glm-4-long` | 128K 超长上下文 |
 | `glm-4v-plus` | 多模态视觉 |
 
-> 💡 GLM-4-Flash **完全免费**，适合学习和原型的零成本方案
+> GLM-4-Flash **完全免费**，适合学习和原型的零成本方案
 
 ## 4. Moonshot Kimi API
 
@@ -234,28 +234,28 @@ class LLMUnifiedClient:
 ```text
 选择国产大模型 → 你的首要需求是什么？
 │
-├── 💰 成本最低
+├── 成本最低
 │   ├── 开发/学习 → GLM-4-Flash（免费）
 │   ├── 生产/大量调用 → DeepSeek V3（极致便宜）
 │   └── 本地部署 → Qwen 2.5 GGUF（零 API 费用）
 │
-├── 🇨🇳 中文最好
+├── 中文最好
 │   ├── 日常对话 → Qwen-Max 或 Kimi
 │   ├── 企业合规 → GLM-4（国产审核合规）
 │   └── 创意写作 → Kimi（中文写作口碑最佳）
 │
-├── 📄 超长文档
+├── 超长文档
 │   └── Kimi (128K + 文件上传原生支持)
 │
-├── 🔓 需要开源
+├── 需要开源
 │   └── Qwen 2.5（Apache 2.0，全尺寸开源）
 │
-├── 🔧 需要 Function Calling
+├── 需要 Function Calling
 │   ├── Qwen-Plus/Max
 │   ├── GLM-4-Plus
 │   └── 豆包 Pro
 │
-└── 🏢 百度生态
+└── 百度生态
     └── 文心一言（深度绑定百度云/搜索）
 ```
 

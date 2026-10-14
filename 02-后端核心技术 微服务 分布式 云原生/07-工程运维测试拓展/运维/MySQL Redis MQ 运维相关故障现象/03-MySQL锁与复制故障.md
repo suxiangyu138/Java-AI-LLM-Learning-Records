@@ -1,7 +1,7 @@
 # 03-MySQL 锁与复制故障
 > 锁等待、死锁、主从延迟——"数据库阻塞与一致性的三大故障"的现象、取证与解决
 
-## 📚 目录
+## 目录
 1. [故障一：锁等待（Lock wait timeout）](#1-故障一锁等待lock-wait-timeout)
 2. [故障二：死锁（Deadlock）](#2-故障二死锁deadlock)
 3. [故障三：主从延迟](#3-故障三主从延迟)
@@ -39,7 +39,7 @@ FROM sys.innodb_lock_waits;
 | 热点行竞争 | 同一行高并发更新 | 排队/异步化 |
 | 间隙锁 | RR 隔离级别下范围查询锁间隙 | 索引优化/隔离级别评估 |
 
-> 🎯 **锁等待的本质**：**事务持锁时间过长**——排查主线是"谁持锁、持了多久、为什么没提交"（innodb_trx 看 trx_started/trx_state）。
+> **锁等待的本质**：**事务持锁时间过长**——排查主线是"谁持锁、持了多久、为什么没提交"（innodb_trx 看 trx_started/trx_state）。
 
 ## 2. 故障二：死锁（Deadlock）
 
@@ -75,7 +75,7 @@ SHOW ENGINE INNODB STATUS\G
 | 索引 | 行锁靠索引定位（无索引 = 表锁） |
 | 重试 | 死锁回滚后业务重试（幂等） |
 
-> ⚠️ **死锁与锁等待的区别**：死锁 = 互相等待（MySQL 立即检测并回滚一个）；锁等待 = 单向等待（超时 50s 才报）——**死锁靠预防（顺序/短事务），锁等待靠排查（谁持锁）**。
+> **死锁与锁等待的区别**：死锁 = 互相等待（MySQL 立即检测并回滚一个）；锁等待 = 单向等待（超时 50s 才报）——**死锁靠预防（顺序/短事务），锁等待靠排查（谁持锁）**。
 
 ## 3. 故障三：主从延迟
 
@@ -114,7 +114,7 @@ SHOW REPLICA STATUS\G
   （SQL 线程卡住 = 延迟只增不减）
 ```
 
-> 🎯 **主从延迟排查顺序**：`Seconds_Behind_Master`（延迟多少）→ `Last_SQL_Error`（有没有错）→ `Slave_IO/SQL_Running`（线程状态）→ 主库 binlog 大小（大事务？）。
+> **主从延迟排查顺序**：`Seconds_Behind_Master`（延迟多少）→ `Last_SQL_Error`（有没有错）→ `Slave_IO/SQL_Running`（线程状态）→ 主库 binlog 大小（大事务？）。
 
 ## 4. 锁与事务的取证命令
 
@@ -155,7 +155,7 @@ grep -B2 -A2 "lock wait" /var/log/mysql/error.log
 
 ## 5. 核心要点
 
-> 🎯 **核心要点**：
+> **核心要点**：
 > - 锁等待：单向等待超时——查 innodb_trx/innodb_lock_waits 找"谁持锁没提交"；
 > - 死锁：互相等待——SHOW ENGINE INNODB STATUS 取现场，预防靠锁顺序一致 + 短事务 + 重试；
 > - 死锁 vs 锁等待：立即检测回滚 vs 50s 超时；

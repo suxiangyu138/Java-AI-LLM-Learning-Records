@@ -1,10 +1,10 @@
 # DevOps 与 CI/CD 名词剖析
 
-> 🚀 Docker 容器化、Kubernetes 编排、Jenkins/GitLab CI 流水线、监控告警 Prometheus+Grafana —— 现代运维的 35+ 核心概念
+> Docker 容器化、Kubernetes 编排、Jenkins/GitLab CI 流水线、监控告警 Prometheus+Grafana —— 现代运维的 35+ 核心概念
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [Docker 容器化](#1-docker-容器化)
 2. [Kubernetes 编排](#2-kubernetes-编排)
@@ -78,10 +78,10 @@ EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "app.jar"]
 
 # 最佳实践：
-# ✅ 多阶段构建 → 最终镜像只有 JRE，没有 Maven 和源码
-# ✅ .dockerignore → 排除不必要文件
-# ✅ 分层利用缓存 → 先 COPY pom.xml 下载依赖，再 COPY src
-# ✅ 用非 root 用户运行
+# ✓ 多阶段构建 → 最终镜像只有 JRE，没有 Maven 和源码
+# ✓ .dockerignore → 排除不必要文件
+# ✓ 分层利用缓存 → 先 COPY pom.xml 下载依赖，再 COPY src
+# ✓ 用非 root 用户运行
 ```
 
 ---
@@ -352,7 +352,7 @@ ELK 日志收集架构：
 
 ---
 
-> 🎯 **一句话总结**：DevOps 的本质是 **用自动化的方式打通开发到运维的壁垒** —— Docker 统一环境、K8s 编排调度、CI/CD 自动化交付、Prometheus+Grafana 持续监控。
+> **一句话总结**：DevOps 的本质是 **用自动化的方式打通开发到运维的壁垒** —— Docker 统一环境、K8s 编排调度、CI/CD 自动化交付、Prometheus+Grafana 持续监控。
 
 ---
 

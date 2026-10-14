@@ -1,7 +1,7 @@
 # 图DFS与判环
 > 邻接表遍历、克隆、染色判环——DFS 在图上的四种经典应用
 
-## 📚 目录
+## 目录
 1. [图的存储与 DFS 遍历](#1-图的存储与-dfs-遍历)
 2. [133. 克隆图](#2-133-克隆图)
 3. [785. 判断二分图：染色法](#3-785-判断二分图染色法)
@@ -32,7 +32,7 @@ matrix[u][v] = 1;             // 边 u → v
 ```java
 /**
  * 图 DFS 模板（visited 数组防重复）
- * ⚠️ 图与树不同：树天然无环，图必须 visited！
+ * 图与树不同：树天然无环，图必须 visited！
  */
 public void graphDFS(List<List<Integer>> graph, int node,
                      boolean[] visited) {
@@ -65,7 +65,7 @@ for (int i = 0; i < n; i++) {
  *   ① 已创建 → 直接返回（防无限递归！）
  *   ② 未创建 → 新建 + 递归克隆邻居
  *
- * ⚠️ 必须有 visited 映射：图可能有环，
+ * 必须有 visited 映射：图可能有环，
  *    不记录已克隆节点会无限递归
  */
 public Node cloneGraph(Node node) {
@@ -80,7 +80,7 @@ private Node dfs(Node node, Map<Node, Node> map) {
     }
 
     Node clone = new Node(node.val);          // 新建节点
-    map.put(node, clone);                     // ⚠️ 先放入 map 再递归！
+    map.put(node, clone);                     // 先放入 map 再递归！
 
     for (Node neighbor : node.neighbors) {
         clone.neighbors.add(dfs(neighbor, map));   // 递归克隆邻居
@@ -92,13 +92,13 @@ private Node dfs(Node node, Map<Node, Node> map) {
 ### 2.2 为什么"先放入 map 再递归"？
 
 ```
-⚠️ 顺序关键：
+顺序关键：
   先 put 再递归 → 环中的节点能命中缓存
   先递归再 put → 环中节点无限递归（A→B→A）
 
 例：A ↔ B（环）
   正确：克隆 A 并放入 map → 克隆 B 放入 map → 回到 A 命中缓存 ✓
-  错误：克隆 A → 递归 B → 递归 A → 又克隆 A... 无限循环 ❌
+  错误：克隆 A → 递归 B → 递归 A → 又克隆 A... 无限循环 ✗
 ```
 
 ---
@@ -139,7 +139,7 @@ private boolean dfs(int[][] graph, int node, int c, int[] color) {
             // 邻居染相反色，失败则返回 false
             if (!dfs(graph, next, -c, color)) return false;
         } else if (color[next] == c) {
-            return false;                  // ⚠️ 邻居同色 → 冲突！
+            return false;                  // 邻居同色 → 冲突！
         }
     }
     return true;
@@ -220,7 +220,7 @@ private void dfs(List<List<Integer>> rooms, int room,
  * 判环：DFS 过程中遇到"访问中"的节点 → 有环！
  *   （访问中 = 当前递归栈中 → 说明能回到自己）
  *
- * ⚠️ 撤销标记 vs 颜色法的区别：
+ * 撤销标记 vs 颜色法的区别：
  *   回溯的撤销会丢信息；颜色法区分
  *   "访问中"（本路径上）和"已完成"（其他路径）
  */
@@ -247,7 +247,7 @@ private boolean hasCycle(List<List<Integer>> graph, int node,
     color[node] = 1;                       // 访问中
 
     for (int next : graph.get(node)) {
-        if (color[next] == 1) return true;     // ⚠️ 遇到访问中 → 环！
+        if (color[next] == 1) return true;     // 遇到访问中 → 环！
         if (color[next] == 0 && hasCycle(graph, next, color)) {
             return true;
         }
@@ -289,7 +289,7 @@ private boolean hasCycle(List<List<Integer>> graph, int node,
  遇到访问中的节点说明有环。我写 Kahn 版（更易手写）。"
 ```
 
-> 🎯 **核心要点**：图 DFS 四大应用——**克隆**（哈希映射 + 先 put 防环）、**染色**（两色互斥判二分）、**可达性**（visited 计数）、**判环**（三色法：遇到访问中即环）。图题共同点：**必须 visited/color**（图有环、有共享节点）、**遍历所有连通分量**（图可能不连通）。207 的两种解法（Kahn + 颜色法）都要能讲。
+> **核心要点**：图 DFS 四大应用——**克隆**（哈希映射 + 先 put 防环）、**染色**（两色互斥判二分）、**可达性**（visited 计数）、**判环**（三色法：遇到访问中即环）。图题共同点：**必须 visited/color**（图有环、有共享节点）、**遍历所有连通分量**（图可能不连通）。207 的两种解法（Kahn + 颜色法）都要能讲。
 
 ---
 

@@ -1,6 +1,6 @@
 # 03 - 并发编程与 JUC 高频题
 
-> 🎯 并发是面试"重灾区"也是"分水岭" — 最容易拉开差距。核心链路：synchronized 锁升级 → volatile/JMM → CAS → AQS → 线程池 → ThreadLocal → 虚拟线程
+> 并发是面试"重灾区"也是"分水岭" — 最容易拉开差距。核心链路：synchronized 锁升级 → volatile/JMM → CAS → AQS → 线程池 → ThreadLocal → 虚拟线程
 
 ---
 
@@ -42,10 +42,10 @@ Integer result = f.get();      // 阻塞等待结果
 
 | 方法 | 释放锁 | 作用 | 调用位置 |
 |------|:---:|------|----------|
-| Thread.sleep | ❌ 不释放 | 让出 CPU 指定毫秒 | 任意 |
-| Object.wait | ✅ 释放 | 等待通知，需在同步块内 | synchronized 内 |
-| Thread.join | ❌（等待线程） | 主线程等待子线程结束 | 任意 |
-| Thread.yield | ❌ | 谦让，提示调度器 | 任意 |
+| Thread.sleep | ✗ 不释放 | 让出 CPU 指定毫秒 | 任意 |
+| Object.wait | ✓ 释放 | 等待通知，需在同步块内 | synchronized 内 |
+| Thread.join | ✗（等待线程） | 主线程等待子线程结束 | 任意 |
+| Thread.yield | ✗ | 谦让，提示调度器 | 任意 |
 
 ```java
 // 经典等待-通知模式
@@ -94,7 +94,7 @@ synchronized (lock) {
 - 自旋锁？→ 重量级锁竞争时先自旋（CPU 空转）避免立即阻塞，自适应自旋会动态调整次数
 
 **记忆点：**
-> 🎯 synchronized 面试讲"三个为什么"：为什么分级（竞争成本不同）、为什么不可逆（设计简单，避免反复竞争开销）、为什么非公平（OS 调度决定）。
+> synchronized 面试讲"三个为什么"：为什么分级（竞争成本不同）、为什么不可逆（设计简单，避免反复竞争开销）、为什么非公平（OS 调度决定）。
 
 ### 2.2 synchronized vs ReentrantLock？
 
@@ -119,15 +119,15 @@ synchronized (lock) {
 
 | 保证 | 机制 | 说明 |
 |------|------|------|
-| ✅ 可见性 | 写操作立即刷主存 + 读操作失效本地缓存（volatile 写会插入内存屏障） | 其他线程立即可见 |
-| ✅ 有序性 | 禁止指令重排（内存屏障：LoadLoad/StoreStore 等） | 防止重排序破坏语义 |
-| ❌ 原子性 | **不保证** | 自增 i++ 仍是"读-改-写"三步，可能丢更新 |
+| ✓ 可见性 | 写操作立即刷主存 + 读操作失效本地缓存（volatile 写会插入内存屏障） | 其他线程立即可见 |
+| ✓ 有序性 | 禁止指令重排（内存屏障：LoadLoad/StoreStore 等） | 防止重排序破坏语义 |
+| ✗ 原子性 | **不保证** | 自增 i++ 仍是"读-改-写"三步，可能丢更新 |
 
 ```java
 // 正确用法：状态标志（一写多读）
 volatile boolean stop = false;
 // 错误用法：计数
-volatile int count = 0; count++;   // ❌ 并发下丢更新
+volatile int count = 0; count++;   // ✗ 并发下丢更新
 ```
 
 **追问：** 什么场景必须 volatile？→ ① 状态标志 ② DCL 单例的 instance（防止指令重排导致半初始化对象被引用）。volatile 和 synchronized 的关系？→ volatile 是轻量级同步，只解决可见性/有序性；synchronized 通过锁的 happens-before 规则同时保证原子性。
@@ -255,7 +255,7 @@ try {
 | newSingleThreadExecutor | 无界队列 |
 
 ```java
-// ✅ 生产用法：手动创建 + 有界队列 + 自定义命名 + 拒绝策略
+// ✓ 生产用法：手动创建 + 有界队列 + 自定义命名 + 拒绝策略
 ThreadPoolExecutor pool = new ThreadPoolExecutor(
     4, 8, 60, TimeUnit.SECONDS,
     new ArrayBlockingQueue<>(1000),
@@ -266,7 +266,7 @@ ThreadPoolExecutor pool = new ThreadPoolExecutor(
 **追问：** 核心线程数怎么定？→ CPU 密集：`CPU核数 + 1`；IO 密集：`CPU核数 × (1 + 等待时间/计算时间)`（或经验值 2 倍）。线程池状态？→ RUNNING/SHUTDOWN/STOP/TIDYING/TERMINATED；shutdown() 与 shutdownNow()：前者等任务完成，后者 interrupt 中断。
 
 **记忆点：**
-> 🎯 线程池背"3+1"：3 个数（core/max/队列）、1 个策略（拒绝策略）；永远手动 new，永远有界队列，线程工厂命名（排查问题时一眼定位）。
+> 线程池背"3+1"：3 个数（core/max/队列）、1 个策略（拒绝策略）；永远手动 new，永远有界队列，线程工厂命名（排查问题时一眼定位）。
 
 ### 6.3 线程池异常处理？
 
@@ -275,9 +275,9 @@ ThreadPoolExecutor pool = new ThreadPoolExecutor(
 - **submit() 返回的 Future.get() 会抛异常**（包装 ExecutionException）
 
 ```java
-pool.execute(() -> { throw new RuntimeException(); });  // ❌ 异常丢失（只有后台日志）
+pool.execute(() -> { throw new RuntimeException(); });  // ✗ 异常丢失（只有后台日志）
 Future<?> f = pool.submit(() -> { throw new RuntimeException(); });
-f.get();   // ✅ 抛 ExecutionException，可捕获
+f.get();   // ✓ 抛 ExecutionException，可捕获
 // 或在任务内 try-catch 兜底
 ```
 
@@ -298,7 +298,7 @@ try {
     tl.set(conn);
     // 业务逻辑
 } finally {
-    tl.remove();    // ⚠️ 必须 remove，尤其线程池场景
+    tl.remove();    // 必须 remove，尤其线程池场景
 }
 ```
 
@@ -312,9 +312,9 @@ try {
 
 | 工具 | 机制 | 典型场景 | 能否复用 |
 |------|------|----------|:---:|
-| CountDownLatch | 倒计时门闩，countDown 归零放行 | 主线程等 N 个任务完成 | ❌ 一次性 |
-| CyclicBarrier | 栅栏，N 个线程到齐才一起走 | 分批并发汇总（如多阶段计算） | ✅ 循环 |
-| Semaphore | 信号量，控制同时访问数 | 限流（如连接池、令牌） | ✅ |
+| CountDownLatch | 倒计时门闩，countDown 归零放行 | 主线程等 N 个任务完成 | ✗ 一次性 |
+| CyclicBarrier | 栅栏，N 个线程到齐才一起走 | 分批并发汇总（如多阶段计算） | ✓ 循环 |
+| Semaphore | 信号量，控制同时访问数 | 限流（如连接池、令牌） | ✓ |
 
 ```java
 CountDownLatch latch = new CountDownLatch(3);
@@ -367,6 +367,6 @@ pool.submit(() -> doIo());                               // 每任务一虚拟�
 
 ---
 
-> 🎯 **核心要点**：并发模块的面试主线 = **一条锁的演进史**：无锁（CAS/volatile）→ 轻量同步（synchronized 升级）→ 框架锁（AQS/ReentrantLock）→ 池化（线程池）→ 新型并发（CompletableFuture/虚拟线程）。能沿着这条线讲，再补 ThreadLocal 泄漏和线程池拒绝策略两个"生产事故点"，并发就稳了。
+> **核心要点**：并发模块的面试主线 = **一条锁的演进史**：无锁（CAS/volatile）→ 轻量同步（synchronized 升级）→ 框架锁（AQS/ReentrantLock）→ 池化（线程池）→ 新型并发（CompletableFuture/虚拟线程）。能沿着这条线讲，再补 ThreadLocal 泄漏和线程池拒绝策略两个"生产事故点"，并发就稳了。
 
 **下一模块**：[04-JVM内存与垃圾回收高频题](04-JVM内存与垃圾回收高频题.md) / **返回总览**：[00-Java核心面试大全总览](00-Java核心面试大全总览.md)

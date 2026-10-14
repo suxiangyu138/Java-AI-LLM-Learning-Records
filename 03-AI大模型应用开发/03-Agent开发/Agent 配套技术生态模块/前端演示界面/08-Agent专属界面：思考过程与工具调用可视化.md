@@ -11,7 +11,7 @@
 | 不可干预 | 发现方向错了 | 只能等完再重来 |
 | 无法审计 | 出事故追责 | 没有过程记录 |
 
-> 🎯 核心要点：**Agent 界面必须同时是"进度条 + 审计日志 + 遥控器"**——让用户看到工作、验证工作、打断工作。
+> 核心要点：**Agent 界面必须同时是"进度条 + 审计日志 + 遥控器"**——让用户看到工作、验证工作、打断工作。
 
 ## 2. 核心设计原则：渐进式披露
 
@@ -57,14 +57,14 @@ AG-UI 把 Agent 过程事件标准化，走 SSE：
 
 | 组件 | 形态 | 展示内容 |
 |---|---|---|
-| 工具调用卡片（Tool Call Card） | 状态图标（⏳/✅/❌）+ 名称 + 耗时 ms，展开见参数与结果 | 替代原始 JSON 的必备形态 |
+| 工具调用卡片（Tool Call Card） | 状态图标（/✓/✗）+ 名称 + 耗时 ms，展开见参数与结果 | 替代原始 JSON 的必备形态 |
 | 思考块（Thinking Block） | 斜体/图标标记、可折叠，与答案区分渲染 | 推理过程（CoT） |
 | 思考链（Thought Chain） | 完整"思考-行动-观察"时间线（Ant Design ThoughtChainList） | ReAct 循环全貌 |
 | 任务列表（Task List） | 计划步骤逐项 running/done/waiting | Agent 规划执行进度 |
 | 子 Agent 树（Subagent Tree） | 嵌套节点保留层级，选中才展开详情流 | 多 Agent 结构 |
 | 引用（Citation） | 答案锚点 + 可点击来源列表 | RAG 溯源 |
 
-> 💡 实现捷径：别自研，用 `@ant-design/agentic-ui`（ToolUseBar/ThoughtChainList）、`agentkit-ui`（工具徽章）或 AG-UI 系组件——它们即本节组件表的现成实现。
+> 实现捷径：别自研，用 `@ant-design/agentic-ui`（ToolUseBar/ThoughtChainList）、`agentkit-ui`（工具徽章）或 AG-UI 系组件——它们即本节组件表的现成实现。
 
 ## 5. 渲染实现要点
 
@@ -107,7 +107,7 @@ AG-UI 把 Agent 过程事件标准化，走 SSE：
 | LangChain JS | channels/namespaces 类型化订阅 | checkpoints 通道 |
 | 手写（06 模块） | 自己按事件画卡片 | 自己实现 POST 控制 |
 
-> 🎯 核心要点：过程可视化的胜负手不在"画得多花哨"，而在**协议类型化（AG-UI/Channels）+ 披露分层（渐进式）+ 控制闭环（中断/审批/回放）**——三者齐备，Agent 界面才从"聊天记录"升级为"工作台"。
+> 核心要点：过程可视化的胜负手不在"画得多花哨"，而在**协议类型化（AG-UI/Channels）+ 披露分层（渐进式）+ 控制闭环（中断/审批/回放）**——三者齐备，Agent 界面才从"聊天记录"升级为"工作台"。
 
 ---
 

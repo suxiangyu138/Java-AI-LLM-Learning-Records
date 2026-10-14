@@ -1,6 +1,6 @@
 # 01 - RESTful 设计原则与 URL 规范
 
-> 🎯 URL 是 API 的"门面" — 好的 URL 一眼能看懂做什么，坏的 URL 需要文档才能猜
+> URL 是 API 的"门面" — 好的 URL 一眼能看懂做什么，坏的 URL 需要文档才能猜
 
 ---
 
@@ -28,31 +28,31 @@
 
 ## 2. URL 命名规范
 
-### ✅ 推荐 vs ❌ 避免
+### ✓ 推荐 vs ✗ 避免
 
 ```text
-✅ 资源用名词复数：
+✓ 资源用名词复数：
   GET    /api/users           ← 用户列表
   GET    /api/users/1         ← 单个用户
   POST   /api/users           ← 创建用户
 
-❌ URL 中不要出现动词：
+✗ URL 中不要出现动词：
   GET    /api/getUsers
   POST   /api/createUser
   GET    /api/queryUser?id=1
 
-✅ 用小写 + 连字符：
-  /api/user-orders            ← ✅
-  /api/userOrders             ← ❌ 驼峰
-  /api/user_orders            ← ❌ 下划线
+✓ 用小写 + 连字符：
+  /api/user-orders            ← ✓
+  /api/userOrders             ← ✗ 驼峰
+  /api/user_orders            ← ✗ 下划线
 
-✅ 不要暴露技术细节：
-  /api/users                  ← ✅
-  /api/userServlet/query      ← ❌ 暴露 Servlet
-  /api/users.php?id=1         ← ❌ 暴露扩展名
+✓ 不要暴露技术细节：
+  /api/users                  ← ✓
+  /api/userServlet/query      ← ✗ 暴露 Servlet
+  /api/users.php?id=1         ← ✗ 暴露扩展名
 ```
 
-| 规则 | ✅ | ❌ |
+| 规则 | ✓ | ✗ |
 |------|----|----|
 | 名词复数 | `/users` | `/user`, `/getUser` |
 | 小写连字符 | `/order-items` | `/OrderItems` |
@@ -84,7 +84,7 @@
   POST   /accounts/1/activate      # 激活账户
 ```
 
-> ⚠️ **嵌套不超过 2 层**：`/a/1/b/2/c/3` 太难维护。超过 2 层独立请求：`/c?bId=2`。
+> **嵌套不超过 2 层**：`/a/1/b/2/c/3` 太难维护。超过 2 层独立请求：`/c?bId=2`。
 
 ---
 
@@ -129,4 +129,4 @@ public Page<User> list(
 }
 ```
 
-> 🎯 **URL 设计口诀**：名词复数、小写连字符、嵌套最多两层、非 CRUD 操作加动词后缀、分页用 page/size、排序用 sort=-field。遵守这些规范的 API 不看文档也能猜出怎么用。
+> **URL 设计口诀**：名词复数、小写连字符、嵌套最多两层、非 CRUD 操作加动词后缀、分页用 page/size、排序用 sort=-field。遵守这些规范的 API 不看文档也能猜出怎么用。

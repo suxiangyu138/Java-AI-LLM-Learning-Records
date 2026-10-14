@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [LangGraph 三要素](#1-langgraph-三要素)
 2. [State 深度解析](#2-state-深度解析)
@@ -163,7 +163,7 @@ class State:
     next_step: str = "init"
 ```
 
-> 💡 **推荐**：首选 TypedDict（LangGraph 官方文档风格）。需要强类型校验时用 Pydantic。
+> **推荐**：首选 TypedDict（LangGraph 官方文档风格）。需要强类型校验时用 Pydantic。
 
 ---
 
@@ -238,23 +238,23 @@ main_graph.add_node("sub_agent", subgraph)
 ### 3.3 Node 的返回值规则
 
 ```python
-# ✅ 正确：返回 dict，只包含要更新的字段
+# ✓ 正确：返回 dict，只包含要更新的字段
 def good_node(state):
     return {"messages": [new_msg]}  # 只返回变了的部分
 
-# ✅ 正确：可以返回多个 field
+# ✓ 正确：可以返回多个 field
 def good_node2(state):
     return {
         "messages": [new_msg],
         "current_step": "next"
     }
 
-# ✅ 正确：不修改任何 State（旁路节点）
+# ✓ 正确：不修改任何 State（旁路节点）
 def side_effect_node(state):
     log_to_mlflow(state)  # 副作用
     return {}  # 或 return None
 
-# ❌ 错误：不要返回完整 State
+# ✗ 错误：不要返回完整 State
 def bad_node(state):
     state["messages"].append(new_msg)
     return state  # 这会引起非预期行为！
@@ -370,7 +370,7 @@ builder.add_node("hello", hello)
 builder.add_edge(START, "hello")
 builder.add_edge("hello", END)
 
-# ④ 编译（⚠️ 必须 compile 后才能使用）
+# ④ 编译（必须 compile 后才能使用）
 graph = builder.compile()
 
 # ⑤ 调用
@@ -453,12 +453,12 @@ StateGraph vs MessageGraph：
 │ State 灵活性      │ 任意自定义 Schema     │ 固定 messages list  │
 │ 适用场景          │ 复杂 Agent 工作流     │ 简单对话 Agent      │
 │ 学习曲线          │ 稍陡（需设计 State）  │ 极低（开箱即用）     │
-│ 可扩展性          │ ⭐⭐⭐⭐⭐              │ ⭐⭐⭐               │
+│ 可扩展性          │ ★★★★★              │ ★★★               │
 │ 推荐              │ 生产/复杂项目         │ 原型/教学            │
 └──────────────────┴─────────────────────┴─────────────────────┘
 ```
 
-> 💡 **建议**：学习时从 MessageGraph 入门，理解概念后立即切换到 StateGraph（它是 LangGraph 的真正形态）。
+> **建议**：学习时从 MessageGraph 入门，理解概念后立即切换到 StateGraph（它是 LangGraph 的真正形态）。
 
 ---
 
@@ -500,24 +500,24 @@ class ApprovalState(TypedDict):
 ### 7.2 State 设计原则
 
 ```text
-✅ 原则 1：消息列表用 operator.add
+✓ 原则 1：消息列表用 operator.add
    messages: Annotated[list, operator.add]
    → 永远不会丢消息，这是 LangGraph 的默认选择
 
-✅ 原则 2：单值字段不加 Annotated
+✓ 原则 2：单值字段不加 Annotated
    current_step: str
    → 自然覆盖，最新值即当前步骤
 
-✅ 原则 3：复杂聚合用自定义 Reducer
+✓ 原则 3：复杂聚合用自定义 Reducer
    tool_results: Annotated[dict, custom_merge]
    → 明确合并逻辑
 
-✅ 原则 4：保持 State 扁平
-   ❌ state["agent_a"]["output"]["text"]
-   ✅ state["agent_a_text"]
+✓ 原则 4：保持 State 扁平
+   ✗ state["agent_a"]["output"]["text"]
+   ✓ state["agent_a_text"]
    → 扁平 State 更容易理解和调试
 
-✅ 原则 5：用 bool 字段做循环终止条件
+✓ 原则 5：用 bool 字段做循环终止条件
    is_complete: bool
    → 在条件边中检查，决定是否结束循环
 ```
@@ -525,35 +525,35 @@ class ApprovalState(TypedDict):
 ### 7.3 常见错误
 
 ```python
-# ❌ 错误 1：在 Node 中修改 State 的 list
+# ✗ 错误 1：在 Node 中修改 State 的 list
 def bad_node(state: AgentState) -> dict:
     state["messages"].append(new_msg)  # 不要直接修改！
     return {"messages": state["messages"]}  # 整个替换
 
-# ✅ 正确：返回增量
+# ✓ 正确：返回增量
 def good_node(state: AgentState) -> dict:
     return {"messages": [new_msg]}  # operator.add 负责追加
 
-# ❌ 错误 2：Redundant return None
+# ✗ 错误 2：Redundant return None
 def bad_node(state):
     return None  # 会被当作 {}, OK 但不必要
 
-# ✅ 正确：返回空字典
+# ✓ 正确：返回空字典
 def good_node(state):
     return {}
 
-# ❌ 错误 3：忘记 Reducer 导致消息丢失
+# ✗ 错误 3：忘记 Reducer 导致消息丢失
 class BadState(TypedDict):
     messages: list  # 没有 Annotated！覆盖模式！
 
-# ✅ 正确
+# ✓ 正确
 class GoodState(TypedDict):
     messages: Annotated[list, operator.add]
 ```
 
 ---
 
-> 🎯 **核心要点**：State 是 LangGraph 的基石，70% 的设计时间花在 State Schema 上。关键决策只有两个——这个字段是 `operator.add`（追加）还是覆盖？我的图什么条件下算"完成"？
+> **核心要点**：State 是 LangGraph 的基石，70% 的设计时间花在 State Schema 上。关键决策只有两个——这个字段是 `operator.add`（追加）还是覆盖？我的图什么条件下算"完成"？
 
 ---
 

@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [组件一句话定位](#1-组件一句话定位)
 2. [版本现状（2026-08）](#2-版本现状2026-08)
@@ -51,7 +51,7 @@
 | 事务（@Transactional） | spring-tx | 事务是 AOP + 资源管理的产物 |
 | 组件扫描器 | spring-context（indexer 生成索引） | 扫描需要类路径遍历能力 |
 
-> 🎯 **记忆锚点**："core 里只有两类东西——**注解与接口**（数据）和**工具与引擎**（能力），没有运行时状态"；凡是需要"启动、管理、织入"的东西都在上层模块。
+> **记忆锚点**："core 里只有两类东西——**注解与接口**（数据）和**工具与引擎**（能力），没有运行时状态"；凡是需要"启动、管理、织入"的东西都在上层模块。
 
 **七大能力域的一句话速记**（面试开头 30 秒必答结构）：
 
@@ -65,7 +65,7 @@
 | SpEL | 寄生在 Spring 语义上的受限表达式 | [06](06-SpEL表达式速查.md) |
 | 重试（7.0） | 瞬时故障的轻量重试引擎 | [07](07-重试与弹性速查.md) |
 
-> 💡 这七个域也正好对应"Spring 为什么能零依赖起步"的答案：把通用能力全部下沉到最底层模块，上层各司其职——面试讲模块化设计时直接引用这张表。
+> 这七个域也正好对应"Spring 为什么能零依赖起步"的答案：把通用能力全部下沉到最底层模块，上层各司其职——面试讲模块化设计时直接引用这张表。
 
 ## 2. 版本现状（2026-08）
 
@@ -87,7 +87,7 @@
 - **AOT 元数据统一格式**：资源提示由正则改 glob（`"/files/*.ext"` 不再匹配嵌套路径，用 `"/files/**/*.ext"`）；注册类型反射提示自动覆盖方法/构造器/字段；
 - **类文件读取**：Java 24+ 使用 JEP 484 Class-File API（`ClassFileMetadataReader`）替代精简 ASM 实现扫描组件。
 
-> ⚠️ **要点**：core 的 7.0 变化几乎不破坏业务代码——唯一注意项是显式依赖 spring-jcl 的项目（移除）与 AOT 提示写法（glob）；迁移到 JDK 25 LTS 可获得 ClassFileMetadataReader 带来的扫描加速。
+> **要点**：core 的 7.0 变化几乎不破坏业务代码——唯一注意项是显式依赖 spring-jcl 的项目（移除）与 AOT 提示写法（glob）；迁移到 JDK 25 LTS 可获得 ClassFileMetadataReader 带来的扫描加速。
 
 **6.2 → 7.0 迁移核对清单**（按影响面从高到低）：
 
@@ -100,7 +100,7 @@
 | AOT 资源提示 | 正则改 glob（`"/files/*.ext"` → `"/files/**/*.ext"`） | 仅原生镜像场景 |
 | SpEL 超长表达式 | 确认单次求值 < 10,000 操作，否则配置 `spring.expression.maxOperations` | 运行时异常 |
 
-> 💡 **迁移顺序建议**：先编译（暴露移除项）→ 再跑测试（暴露运行时行为差异）→ 最后做 AOT 构建验证（仅原生镜像项目）；core 层的迁移工作量通常只占整体升级的 10% 以内。
+> **迁移顺序建议**：先编译（暴露移除项）→ 再跑测试（暴露运行时行为差异）→ 最后做 AOT 构建验证（仅原生镜像项目）；core 层的迁移工作量通常只占整体升级的 10% 以内。
 
 ## 3. 能力地图
 
@@ -129,7 +129,7 @@
 | @ConfigurationProperties 绑定 | TypeDescriptor + 转换器 | Boot 绑定器 |
 | 静态/模板资源 | Resource 抽象 | ResourceHttpRequestHandler |
 
-> 💡 观察规律：**core 的能力几乎都是"被回调"而非"主动运行"**——容器在特定阶段调用它们；这也解释了为什么单独用 core 什么都不会发生，必须配合 beans/context。
+> 观察规律：**core 的能力几乎都是"被回调"而非"主动运行"**——容器在特定阶段调用它们；这也解释了为什么单独用 core 什么都不会发生，必须配合 beans/context。
 
 ## 4. 与深度体系的映射
 
@@ -141,7 +141,7 @@
 | 06-SpEL 表达式速查 | [Spring框架核心-03（@Value 与 SpEL）](../../../Spring框架核心/03-依赖注入详解与自动装配.md) |
 | 08-集成地图与常见问题 | [Spring Core-00-源码专题总览](../../../Spring Core/00-SpringCore专题总览.md) |
 
-> 💡 本系列定位"查得快"，源码专题定位"读得深"——容器源码、BeanDefinition 解析机制见 [Spring Core-01~05](../../../Spring Core/00-SpringCore专题总览.md)；core 的能力大多"藏在背后"被 beans/context 消费，深挖入口在 Spring-Beans/Context 两系列。
+> 本系列定位"查得快"，源码专题定位"读得深"——容器源码、BeanDefinition 解析机制见 [Spring Core-01~05](../../../Spring Core/00-SpringCore专题总览.md)；core 的能力大多"藏在背后"被 beans/context 消费，深挖入口在 Spring-Beans/Context 两系列。
 
 **两条衔接路径的配合方式**：
 
@@ -152,7 +152,7 @@
 | 排查线上问题 | 先速查定位能力归属 → 再进源码专题看实现 | 避免在错误模块浪费时间 |
 | 系统学习容器 | Spring-Beans/Context 系列 | core 能力是它们的零件 |
 
-> 💡 **典型阅读路径**：遇到 `@Autowired` 泛型匹配问题 → 04 篇确认 ResolvableType 用法 → Beans-06 看注入裁决链 → 源码专题看 DefaultListableBeanFactory 实现——四层由浅入深。
+> **典型阅读路径**：遇到 `@Autowired` 泛型匹配问题 → 04 篇确认 ResolvableType 用法 → Beans-06 看注入裁决链 → 源码专题看 DefaultListableBeanFactory 实现——四层由浅入深。
 
 ## 5. 快速上手 3 步
 
@@ -166,7 +166,7 @@
 </dependency>
 ```
 
-> 💡 **版本管理**：生产项目不要手写版本号——通过 `spring-framework-bom`（或 Boot 4 的 `spring-boot-dependencies`）统一管理，避免"core 7.0、beans 6.2"混用；单测或工具类项目只需引入 core 时，BOM 同样适用。
+> **版本管理**：生产项目不要手写版本号——通过 `spring-framework-bom`（或 Boot 4 的 `spring-boot-dependencies`）统一管理，避免"core 7.0、beans 6.2"混用；单测或工具类项目只需引入 core 时，BOM 同样适用。
 
 **② 直接使用核心能力**：
 
@@ -210,7 +210,7 @@ String result = template.execute(ctx -> remoteCall(), ctx -> fallback(ctx));
 | Assert 抛异常但业务需求是"用户友好报错" | 用错了断言场景 | 对外接口用 Jakarta Validation；Assert 只做内部契约 |
 | 重试一直失败打爆下游 | 未配 BackOff 或未排除确定错误 | 配置退避 + 异常分类（见 [07-重试与弹性速查](07-重试与弹性速查.md)） |
 
-> ⚠️ **版本一致性是 core 的第一坑**：spring-core 被所有模块传递依赖，一处显式声明旧版本即可引发全链路 NoSuchMethodError——生产排查此类问题先 `mvn dependency:tree` 看 core 版本。
+> **版本一致性是 core 的第一坑**：spring-core 被所有模块传递依赖，一处显式声明旧版本即可引发全链路 NoSuchMethodError——生产排查此类问题先 `mvn dependency:tree` 看 core 版本。
 
 ### 5.2 面试追问点
 
@@ -231,7 +231,7 @@ String result = template.execute(ctx -> remoteCall(), ctx -> fallback(ctx));
 | 重试带退避 | 只重试瞬时异常 + 指数退避 + 总超时 | 防打爆下游 |
 | 升级顺序 | 编译 → 测试 → AOT 验证 三步走 | 每步失败面可控 |
 
-> 🎯 **收尾要点**：core 的学习目标不是"记住 API"，而是建立"能力归属感"——遇到问题先问"这是 core 的能力吗、它在上层被谁消费、什么条件下不生效"，这套思维正是排查框架问题的通用方法。
+> **收尾要点**：core 的学习目标不是"记住 API"，而是建立"能力归属感"——遇到问题先问"这是 core 的能力吗、它在上层被谁消费、什么条件下不生效"，这套思维正是排查框架问题的通用方法。
 
 ## 6. 速查导航
 
@@ -246,7 +246,7 @@ String result = template.execute(ctx -> remoteCall(), ctx -> fallback(ctx));
 | [07-重试与弹性速查](07-重试与弹性速查.md) | core.retry + @Retryable/@ConcurrencyLimit（7.0） |
 | [08-集成地图与常见问题](08-集成地图与常见问题.md) | 被谁消费 + 高频坑 |
 
-**每篇的使用姿势**：02-07 篇都是"表格 + 示例 + 边界"三段式——第一遍只扫表格建立地图，第二遍带着问题精读示例代码，第三遍把"⚠️ 边界"小节抄进团队 wiki；08 篇的坑表建议贴在项目 README 的疑难杂症区。若时间只够读两篇，优先 04（类型系统，面试最常考）与 08（常见问题，最能救急）。
+**每篇的使用姿势**：02-07 篇都是"表格 + 示例 + 边界"三段式——第一遍只扫表格建立地图，第二遍带着问题精读示例代码，第三遍把"边界"小节抄进团队 wiki；08 篇的坑表建议贴在项目 README 的疑难杂症区。若时间只够读两篇，优先 04（类型系统，面试最常考）与 08（常见问题，最能救急）。
 
 ## 7. 学习路线推荐
 

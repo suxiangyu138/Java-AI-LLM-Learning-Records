@@ -1,7 +1,7 @@
 # MySQL 写入与去重
 > 增删改查、批量写入、三种去重策略（UNIQUE/INSERT IGNORE/ON DUPLICATE）——"数据进库"的完整姿势
 
-## 📚 目录
+## 目录
 1. [增删改查四件套](#1-增删改查四件套)
 2. [批量写入：executemany](#2-批量写入executemany)
 3. [去重策略一：UNIQUE + 先查后插](#3-去重策略一unique--先查后插)
@@ -45,7 +45,7 @@ conn.commit()
 | UPDATE | 看 `rowcount` 确认真的更新了 |
 | DELETE | 加 WHERE（**忘 WHERE = 全表清空**——先 SELECT 数一遍） |
 
-> ⚠️ **DELETE 安全三连**：① 先 SELECT 确认范围；② 用事务（`BEGIN`→`DELETE`→验证→`COMMIT`）；③ 重要表禁用裸 DELETE（用 status 标记替代，见 [04-去重与增量策略](04-去重与增量策略.md)）。
+> **DELETE 安全三连**：① 先 SELECT 确认范围；② 用事务（`BEGIN`→`DELETE`→验证→`COMMIT`）；③ 重要表禁用裸 DELETE（用 status 标记替代，见 [04-去重与增量策略](04-去重与增量策略.md)）。
 
 ## 2. 批量写入：executemany
 
@@ -79,7 +79,7 @@ for i in range(0, len(items), BATCH):
 | 事务边界 | 每批 commit（失败只回滚该批） |
 | 与去重配合 | 见 §3-5（批量也能去重） |
 
-> 🎯 性能认知：**"循环单条插入是爬虫写库的头号性能浪费"**——`executemany` 一条 SQL 写 1000 条；配合去重策略（§5 的 upsert 批量版），爬取+入库全程无重复无浪费。
+> 性能认知：**"循环单条插入是爬虫写库的头号性能浪费"**——`executemany` 一条 SQL 写 1000 条；配合去重策略（§5 的 upsert 批量版），爬取+入库全程无重复无浪费。
 
 ## 3. 去重策略一：UNIQUE + 先查后插
 
@@ -109,7 +109,7 @@ def insert_if_new(cur, title, url):
 | **INSERT IGNORE** | 撞唯一键静默跳过 | 1 次 SQL；天然防并发 | 无反馈（跳过不报错） |
 | **ON DUPLICATE KEY** | 撞唯一键则更新 | 幂等 upsert | 需处理"更新了什么" |
 
-> 🎯 结论：**生产优先 INSERT IGNORE / ON DUPLICATE KEY**（一次 SQL + 并发安全）；"先查后插"留给低频/逻辑简单场景。
+> 结论：**生产优先 INSERT IGNORE / ON DUPLICATE KEY**（一次 SQL + 并发安全）；"先查后插"留给低频/逻辑简单场景。
 
 ## 4. 去重策略二：INSERT IGNORE
 
@@ -140,7 +140,7 @@ print(f"共 {len(items)} 条，新插入 {inserted} 条，跳过 {len(items)-ins
 | 批量 | executemany + IGNORE 完美配合 |
 | 统计 | `len - rowcount` = 重复数（采集报告用） |
 
-> 🎯 面试点：**"INSERT IGNORE 是爬虫入库去重的标准姿势"**——一条 SQL 完成"去重 + 插入 + 计数"，批量场景快且天然防并发重复。
+> 面试点：**"INSERT IGNORE 是爬虫入库去重的标准姿势"**——一条 SQL 完成"去重 + 插入 + 计数"，批量场景快且天然防并发重复。
 
 ## 5. 去重策略三：ON DUPLICATE KEY（upsert）
 
@@ -174,7 +174,7 @@ conn.commit()
 | INSERT IGNORE | 跳过 | 只增不改（新闻列表） |
 | **ON DUPLICATE KEY** | 更新 | **增量更新（价格/浏览量/状态）** |
 
-> 🎯 选型：**"列表数据（只进不出）→ INSERT IGNORE；更新型数据（价格/状态会变）→ ON DUPLICATE KEY"**——与 [04-去重与增量策略](04-去重与增量策略.md) 的增量设计直接配合。
+> 选型：**"列表数据（只进不出）→ INSERT IGNORE；更新型数据（价格/状态会变）→ ON DUPLICATE KEY"**——与 [04-去重与增量策略](04-去重与增量策略.md) 的增量设计直接配合。
 
 ## 6. 写入规范与性能
 
@@ -194,7 +194,7 @@ conn.commit()
   瓶颈通常在网络/解析，不在写库
 ```
 
-> 🎯 本阶段入库目标：**"爬多快，存多快，不重复"**——批量 + 去重 + 参数化三件套齐了，数据库层就不再是爬虫瓶颈。下一步把"去重 + 增量"工程化（[04-去重与增量策略](04-去重与增量策略.md)）。
+> 本阶段入库目标：**"爬多快，存多快，不重复"**——批量 + 去重 + 参数化三件套齐了，数据库层就不再是爬虫瓶颈。下一步把"去重 + 增量"工程化（[04-去重与增量策略](04-去重与增量策略.md)）。
 
 ---
 

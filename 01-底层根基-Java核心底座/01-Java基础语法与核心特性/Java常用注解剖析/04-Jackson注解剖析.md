@@ -2,7 +2,7 @@
 
 > Jackson 是 Java 世界 JSON 序列化的事实标准，它的注解体系回答了三个问题：字段与 JSON 键怎么对应（@JsonProperty/@JsonAlias）、哪些不参与序列化（@JsonIgnore 家族）、值怎么变形（@JsonFormat/@JsonInclude/@JsonView）。2026 年的主线是 Jackson 3 迁移——注解包不动、核心 API 全换、默认行为三处反转
 
-## 📚 目录
+## 目录
 
 1. [Jackson 3 迁移全景：什么变了什么没变](#1-jackson-3-迁移全景什么变了什么没变)
 2. [映射与忽略：@JsonProperty / @JsonAlias / @JsonIgnore](#2-映射与忽略jsonproperty--jsonalias--jsonignore)
@@ -46,7 +46,7 @@ Jackson 3（2025 年 GA，Spring Boot 4 起为默认版本）的迁移设计很�
 - `@JsonIgnoreProperties` 的 `allowGetters/allowSetters` 实现"序列化要、反序列化不要"的细粒度方向控制；
 - `@JsonIgnoreType` 类级，把某个类型整体排除（如工具类混入 DTO 的场景）。
 
-> ⚠️ **Lombok 交互坑**：`@Jacksonized` 与显式 `@JsonIgnore` 共存时，Lombok 1.18.46 之前会停止生成 @JsonProperty——升级到 1.18.46+ 修复（#4022）。
+> **Lombok 交互坑**：`@Jacksonized` 与显式 `@JsonIgnore` 共存时，Lombok 1.18.46 之前会停止生成 @JsonProperty——升级到 1.18.46+ 修复（#4022）。
 
 ### 2.4 其余映射注解速览
 

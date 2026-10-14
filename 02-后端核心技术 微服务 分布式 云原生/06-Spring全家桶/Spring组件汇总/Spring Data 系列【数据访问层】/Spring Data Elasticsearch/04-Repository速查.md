@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [Repository 接口定义](#1-repository-接口定义)
 2. [派生查询关键词全表（24 个）](#2-派生查询关键词全表24-个)
@@ -39,7 +39,7 @@ public interface ProductRepository extends ElasticsearchRepository<Product, Stri
 | 自定义片段 | 见第 7 节（老接口 + 片段拼接） |
 | 方法命名冲突 | 两个方法解析出同一查询会启动报错（命名不唯一） |
 
-> 🎯 **心智模型**：Repository 方法名 → 解析器按"主题词 + 谓词关键词"翻译成 ES 查询——`findByCategoryAndPriceBetween` 拆成 `bool.must[term(category), range(price, from, to)]`。**查不到结果先看方法名**，拼写错误（如 `Contain` 非 `Containing`）直接解析失败。
+> **心智模型**：Repository 方法名 → 解析器按"主题词 + 谓词关键词"翻译成 ES 查询——`findByCategoryAndPriceBetween` 拆成 `bool.must[term(category), range(price, from, to)]`。**查不到结果先看方法名**，拼写错误（如 `Contain` 非 `Containing`）直接解析失败。
 
 ### 1.1 内置 CRUD 方法速查
 
@@ -53,7 +53,7 @@ public interface ProductRepository extends ElasticsearchRepository<Product, Stri
 | `count()` | 文档数 | — |
 | `deleteById(id)` / `delete(entity)` / `deleteAll()` | 删除 | 不可恢复 |
 
-> ⚠️ **save 的"更新"语义**：ES 无真正更新——save 同 ID 文档 = 整体覆盖。**部分字段更新必须用** `ElasticsearchOperations.update()`（见 [05 篇](05-查询构造与Operations速查.md)），Repository 的 save 会把缺省字段清空。
+> **save 的"更新"语义**：ES 无真正更新——save 同 ID 文档 = 整体覆盖。**部分字段更新必须用** `ElasticsearchOperations.update()`（见 [05 篇](05-查询构造与Operations速查.md)），Repository 的 save 会把缺省字段清空。
 
 ## 2. 派生查询关键词全表（24 个）
 
@@ -85,19 +85,19 @@ public interface ProductRepository extends ElasticsearchRepository<Product, Stri
 | `IsEmpty` | `findByNameIsEmpty` | exists + must_not 通配 `*` |
 | `IsNotEmpty` | `findByNameIsNotEmpty` | `wildcard` |
 
-> ⚠️ **派生查询的两个限制**：① **`query_string` 语义**——`Containing` 等生成的查询走 query_string 解析，特殊字符（`+ - && || ! ( )` 等）会被当语法处理，搜索框输入必须转义；② **GeoJson 等复杂参数无法派生**——地理查询必须用 `ElasticsearchOperations` + CriteriaQuery 或 NativeQuery（见 05 篇）。
+> **派生查询的两个限制**：① **`query_string` 语义**——`Containing` 等生成的查询走 query_string 解析，特殊字符（`+ - && || ! ( )` 等）会被当语法处理，搜索框输入必须转义；② **GeoJson 等复杂参数无法派生**——地理查询必须用 `ElasticsearchOperations` + CriteriaQuery 或 NativeQuery（见 05 篇）。
 
 ### 2.1 派生查询的选择要点
 
 | 场景 | 用派生方法？ | 建议 |
 |------|:---:|------|
-| 固定条件组合（and/or/range） | ✅ | 首选，声明式最清晰 |
-| 全文搜索框（用户自由输入） | ⚠️ | 用户输入建议 match 而非 query_string 派生 |
-| 高亮/聚合/向量 | ❌ | 必须 @Query 或 Operations |
-| 动态组合条件 | ❌ | CriteriaQuery 拼接（05 篇） |
-| 分页深度 > 10000 | ❌ | search_after（06 篇） |
+| 固定条件组合（and/or/range） | ✓ | 首选，声明式最清晰 |
+| 全文搜索框（用户自由输入） | | 用户输入建议 match 而非 query_string 派生 |
+| 高亮/聚合/向量 | ✗ | 必须 @Query 或 Operations |
+| 动态组合条件 | ✗ | CriteriaQuery 拼接（05 篇） |
+| 分页深度 > 10000 | ✗ | search_after（06 篇） |
 
-> 💡 经验法则：**静态查询用派生方法，动态/复杂查询走 Operations**——两者共存互补，不是替代关系；大项目通常"Repository 放派生方法，Service 里用 Operations 做复杂场景"。
+> 经验法则：**静态查询用派生方法，动态/复杂查询走 Operations**——两者共存互补，不是替代关系；大项目通常"Repository 放派生方法，Service 里用 Operations 做复杂场景"。
 
 ## 3. @Query 自定义查询
 
@@ -154,7 +154,7 @@ public interface BookRepository extends ElasticsearchRepository<Book, String> {
 }
 ```
 
-> 💡 **SpEL 优势**：命名参数 + 文本块让 JSON 可读性大幅提升，集合参数不用手写引号拼接——新代码优先 SpEL 写法；`?0` 风格适合简单单参数。
+> **SpEL 优势**：命名参数 + 文本块让 JSON 可读性大幅提升，集合参数不用手写引号拼接——新代码优先 SpEL 写法；`?0` 风格适合简单单参数。
 
 ### 3.3 @Query 的属性速查
 
@@ -163,7 +163,7 @@ public interface BookRepository extends ElasticsearchRepository<Book, String> {
 | `value` / `query` | 空 | 查询 JSON（query 元素） |
 | `count` | false | true 时按 count 投影执行（返回 long） |
 
-> ⚠️ **@Query 的 JSON 边界**：值是请求体的 **query 元素**（不含 `{ "query": ... }` 外层包装，`count` 为 true 时除外）；写错结构（把整个 body 贴进来）会报 `parsing_exception`。
+> **@Query 的 JSON 边界**：值是请求体的 **query 元素**（不含 `{ "query": ... }` 外层包装，`count` 为 true 时除外）；写错结构（把整个 body 贴进来）会报 `parsing_exception`。
 
 ## 4. @SearchTemplateQuery 搜索模板
 
@@ -182,7 +182,7 @@ public interface BookRepository extends ElasticsearchRepository<Book, String> {
 | 优势 | 查询改动不重新发版（改模板即可） |
 | 代价 | 模板调试链路长，版本管理复杂 |
 
-> 💡 什么时候用搜索模板？**查询由非开发人员（运营/分析师）频繁调整**时——把查询下沉到 ES 侧模板，应用只传参数；常规 CRUD 项目不值得引入这层复杂度。
+> 什么时候用搜索模板？**查询由非开发人员（运营/分析师）频繁调整**时——把查询下沉到 ES 侧模板，应用只传参数；常规 CRUD 项目不值得引入这层复杂度。
 
 ## 5. 分页与排序
 
@@ -206,7 +206,7 @@ page.getContent();         // 本页数据
 | 纯排序 | `Sort` 参数 | 注意 Text 字段不可排序 |
 | 索引级排序 | `@Setting(sortFields=...)` | 与 search_after 配套 |
 
-> ⚠️ **深分页禁令**：from 超过 `index.max_result_window`（默认 10000）直接报错——不是分页 bug，是设计如此（from+size 深分页代价指数级）。翻页超过 10000 的业务（管理后台导出、搜索流）必须换 search_after。
+> **深分页禁令**：from 超过 `index.max_result_window`（默认 10000）直接报错——不是分页 bug，是设计如此（from+size 深分页代价指数级）。翻页超过 10000 的业务（管理后台导出、搜索流）必须换 search_after。
 
 ## 6. 返回类型速查
 
@@ -227,7 +227,7 @@ long count;                             // count 投影（@Query count=true）
 | `List<SearchHit<T>>` | 每个命中的元信息 | 需要逐条 score/highlight |
 | `Stream<T>` | 惰性流 | 大数据量只读遍历（注意资源释放） |
 
-> ⚠️ **高亮头号坑**：高亮查询返回类型必须是 `SearchHits`/`SearchPage` 系列——返回 `List<T>` 时高亮字段**静默丢失**（框架不会报错，只是不注入）。
+> **高亮头号坑**：高亮查询返回类型必须是 `SearchHits`/`SearchPage` 系列——返回 `List<T>` 时高亮字段**静默丢失**（框架不会报错，只是不注入）。
 
 ## 7. 自定义实现与多 Repository 组装
 
@@ -268,7 +268,7 @@ public class ProductRepositoryImpl implements ProductSearchCustom {
 | 组合 | 标准方法 + 自定义片段共存于同一代理 |
 | 适用 | 派生方法表达不了的复杂查询/聚合/向量检索 |
 
-> 🎯 **大项目分工范式**：Repository 接口 = "静态查询声明区"（派生 + @Query），Impl 片段 = "复杂查询收容区"（NativeQuery 聚合/kNN）——一个 Bean 两个面，Service 只面对单一接口。
+> **大项目分工范式**：Repository 接口 = "静态查询声明区"（派生 + @Query），Impl 片段 = "复杂查询收容区"（NativeQuery 聚合/kNN）——一个 Bean 两个面，Service 只面对单一接口。
 
 ## 8. 响应式 Repository
 
@@ -292,7 +292,7 @@ reactiveProductRepository.findByNameContaining("手机")
 | 线程 | 阻塞调用线程 | 事件循环（不阻塞） |
 | 适用 | 常规 Web 服务 | 网关、高并发聚合服务 |
 
-> ⚠️ **响应式全链路**：响应式 Repository 的收益只有在**整条链路（Controller→Service→Repo）全响应式**时才兑现——混用阻塞中间层等于白上反应式，还多背复杂度。WebFlux 项目才考虑。
+> **响应式全链路**：响应式 Repository 的收益只有在**整条链路（Controller→Service→Repo）全响应式**时才兑现——混用阻塞中间层等于白上反应式，还多背复杂度。WebFlux 项目才考虑。
 
 ---
 

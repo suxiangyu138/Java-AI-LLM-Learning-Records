@@ -1,6 +1,6 @@
 # 13 - LangChain4j 项目实战：Agent 系统
 
-> 🎯 从零搭建一个 LangChain4j Agent 系统 — 接口定义 → 工具注册 → RAG 检索 → 记忆管理 → 流式 SSE。完整代码可直接运行，关键是理解 AiServices 动态代理的编排逻辑
+> 从零搭建一个 LangChain4j Agent 系统 — 接口定义 → 工具注册 → RAG 检索 → 记忆管理 → 流式 SSE。完整代码可直接运行，关键是理解 AiServices 动态代理的编排逻辑
 
 ---
 
@@ -21,11 +21,11 @@
 项目名：smart-agent — 具备"手"和"脑"的智能 Agent 系统
 
 Agent 四大能力：
-├── 🗣️ 对话理解    → ChatLanguageModel + @SystemMessage 角色定义
-├── 🧠 推理规划    → 自动判断是否需要调工具、检索知识库
-├── 🔧 工具调用    → @Tool 注解 → 查天气/查订单/计算/发邮件
-├── 📚 知识检索    → ContentRetriever → 自动 RAG（无需手动调）
-└── 💾 对话记忆    → ChatMemoryProvider → Redis 持久化（按用户隔离）
+├── 对话理解    → ChatLanguageModel + @SystemMessage 角色定义
+├── 推理规划    → 自动判断是否需要调工具、检索知识库
+├── 工具调用    → @Tool 注解 → 查天气/查订单/计算/发邮件
+├── 知识检索    → ContentRetriever → 自动 RAG（无需手动调）
+└── 对话记忆    → ChatMemoryProvider → Redis 持久化（按用户隔离）
 
 技术栈：
 ├── Spring Boot 4.1 + Java 21 + LangChain4j 1.15+
@@ -352,6 +352,6 @@ public interface AssistantAgent {
 
 ---
 
-> 🎯 **核心要点**：LangChain4j Agent 的标准装配 = **五层注入** — ① `ChatLanguageModel`（大脑）② `tools(...)`（手脚）③ `contentRetriever(...)`（参考书）④ `chatMemoryProvider(...)`（记忆）⑤ `streamingChatLanguageModel(...)`（流式嘴）。Agent 只是一个 `Interface`，AiServices 动态代理自动编排"思考→检索→调工具→再思考→回答"循环。生产三件套：**Redis 记忆持久化 + Function Calling 模型（如 DeepSeek-V3）+ @AiService 自动装配**。
+> **核心要点**：LangChain4j Agent 的标准装配 = **五层注入** — ① `ChatLanguageModel`（大脑）② `tools(...)`（手脚）③ `contentRetriever(...)`（参考书）④ `chatMemoryProvider(...)`（记忆）⑤ `streamingChatLanguageModel(...)`（流式嘴）。Agent 只是一个 `Interface`，AiServices 动态代理自动编排"思考→检索→调工具→再思考→回答"循环。生产三件套：**Redis 记忆持久化 + Function Calling 模型（如 DeepSeek-V3）+ @AiService 自动装配**。
 
 **下一模块**：[14-生产级AI架构设计与运维](14-生产级AI架构设计与运维.md) / **返回总览**：[00-总览](00-Java-AI开发框架体系总览.md)

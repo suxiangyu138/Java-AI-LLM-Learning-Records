@@ -1,6 +1,6 @@
 # 05 - npm 私服与安全审计
 
-> 🎯 企业内部需要私有 npm 仓库（如同 Nexus），安全审计防止依赖投毒 — 这部分和 Maven 私服 + OWASP 依赖检查的思路一脉相承
+> 企业内部需要私有 npm 仓库（如同 Nexus），安全审计防止依赖投毒 — 这部分和 Maven 私服 + OWASP 依赖检查的思路一脉相承
 
 ---
 
@@ -147,7 +147,7 @@ npm audit --json
 
 ## 4. 依赖管理最佳实践
 
-| ✅ DO | ❌ DON'T |
+| ✓ DO | ✗ DON'T |
 |-------|----------|
 | 提交 `package-lock.json` 到 Git | `.gitignore` 中排除 lock 文件 |
 | CI 环境用 `npm ci` | CI 环境用 `npm install` |
@@ -157,7 +157,7 @@ npm audit --json
 | 搭建私有 npm 仓库管理内部包 | 把 node_modules 提交到 Git |
 
 ```dockerfile
-# ⭐ Dockerfile 最佳实践 — 利用缓存层
+# ★ Dockerfile 最佳实践 — 利用缓存层
 FROM node:20-alpine AS build
 WORKDIR /app
 
@@ -170,4 +170,4 @@ COPY . .
 RUN npm run build
 ```
 
-> 🎯 **后端必记**：npm 安全 = `npm audit`（扫描） + `package-lock.json`（版本锁定） + Verdaccio 私服（内部包管理）。和 Maven 的 OWASP + Nexus + settings.xml 镜像配置是同一套思路。
+> **后端必记**：npm 安全 = `npm audit`（扫描） + `package-lock.json`（版本锁定） + Verdaccio 私服（内部包管理）。和 Maven 的 OWASP + Nexus + settings.xml 镜像配置是同一套思路。

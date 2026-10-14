@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [集合框架全景](#1-集合框架全景)
 2. [ArrayList vs LinkedList 原理与选型](#2-arraylist-vs-linkedlist-原理与选型)
@@ -97,7 +97,7 @@ Map 是一个独立体系，不继承 Collection，但与集合框架深度融�
 | `remove()` | 删除当前元素 | 必须在 `next()` 之后调用 |
 | `forEachRemaining(Consumer)` | 对剩余元素批量消费 | JDK 8 默认方法 |
 
-> 💡 **设计启示**：Iterable + Iterator 分离是策略模式的经典应用——Iterable 定义"有迭代能力"，Iterator 定义"如何迭代"，两者解耦使得同一个集合可以返回不同的迭代策略。
+> **设计启示**：Iterable + Iterator 分离是策略模式的经典应用——Iterable 定义"有迭代能力"，Iterator 定义"如何迭代"，两者解耦使得同一个集合可以返回不同的迭代策略。
 
 ```java
 // 经典迭代写法
@@ -179,7 +179,7 @@ list.add(1, "X");
 // 两者在中间插入的场景复杂度上界相同，但 ArrayList 的 cache locality 更好
 ```
 
-> 🎯 **核心结论**：
+> **核心结论**：
 > - **频繁随机访问 + 尾部追加** → 选 ArrayList（90% 的场景）
 > - **频繁头尾增删**（队列/栈）→ 选 LinkedList 或 ArrayDeque
 > - **频繁中间插入** → 两者都不理想，考虑其他数据结构
@@ -231,7 +231,7 @@ private Object[] grow(int minCapacity) {
 }
 ```
 
-> 💡 **为什么是 1.5 倍而不是 2 倍或固定增量？**
+> **为什么是 1.5 倍而不是 2 倍或固定增量？**
 >
 > - 1.5 倍是**时间与空间的平衡**：如果翻倍，扩容次数更少但平均浪费更多内存（最坏浪费 50%）；1.5 倍则扩容更频繁一些但内存更紧凑
 > - 如果翻倍，扩容后最坏情况浪费近 100% 的空间；1.5 倍最坏浪费约 33%（新容量一半未使用，新容量是旧容量的 1.5 倍，0.5/1.5 ≈ 33%）
@@ -267,7 +267,7 @@ System.out.println(list);  // [A, X, C, D, E] — 原 list 被改了！
 
 // 陷阱 2：修改原 list 的结构（add/remove）后再操作 sub → ConcurrentModificationException
 list.add("F");             // 修改原 list 结构
-System.out.println(sub);   // ❌ ConcurrentModificationException
+System.out.println(sub);   // ✗ ConcurrentModificationException
 // subList 内部维护了 parent 的 modCount，结构修改使校验失败
 ```
 
@@ -359,7 +359,7 @@ n - 1 = 15 = 0000 0000 0000 0000 0000 0000 0000 1111
   (n - 1) & 0x1234444C = 0x000C  ← 高位特征参与到低位了
 ```
 
-> 🎯 **扰动函数 = 将高位 16 位的特征"揉"进低位 16 位**，使得即使 `hashCode()` 区分度集中在高位，也能在 HashMap 的低位掩码运算中体现出来，**减少哈希碰撞**。
+> **扰动函数 = 将高位 16 位的特征"揉"进低位 16 位**，使得即使 `hashCode()` 区分度集中在高位，也能在 HashMap 的低位掩码运算中体现出来，**减少哈希碰撞**。
 
 **JDK 7 的扰动更复杂（4 次位运算）：**
 
@@ -556,7 +556,7 @@ JDK 7 需要重新计算每个元素在新数组中的位置（rehash 操作成�
   hash2 = 0x0011  → hash2 & 16 = 1 → 位置 + 16（index=1+16=17）
 ```
 
-> 🎯 **JDK 8 rehash 优化**：不再逐个重新计算 hash，而是用 `(e.hash & oldCap) == 0` 一分为二——原位置链和原位置 + oldCap 链。位置判断从 O(n) 降为 O(1)，且节点间的相对顺序不变（尾插法保证）。
+> **JDK 8 rehash 优化**：不再逐个重新计算 hash，而是用 `(e.hash & oldCap) == 0` 一分为二——原位置链和原位置 + oldCap 链。位置判断从 O(n) 降为 O(1)，且节点间的相对顺序不变（尾插法保证）。
 
 ### 3.5 树化与退化阈值
 
@@ -590,7 +590,7 @@ JDK 7 需要重新计算每个元素在新数组中的位置（rehash 操作成�
   k=8: 0.00000006   ← 六亿分之一
 ```
 
-> 🎯 **树化的真正原因不是"提升链表性能"，而是防御性设计**——防止大量哈希冲突导致链表退化到 O(n)。8 是泊松分布下的极小概率事件，由于红黑树节点的内存开销是普通节点的 2 倍（TreeNode 有 parent、left、right、prev、red 五个额外字段），因此只在极端情况下启用树化。
+> **树化的真正原因不是"提升链表性能"，而是防御性设计**——防止大量哈希冲突导致链表退化到 O(n)。8 是泊松分布下的极小概率事件，由于红黑树节点的内存开销是普通节点的 2 倍（TreeNode 有 parent、left、right、prev、red 五个额外字段），因此只在极端情况下启用树化。
 
 **为什么退化是 6 而不是 7？**
 
@@ -616,7 +616,7 @@ threshold = (int)(capacity * loadFactor);
 | 1.0 | 空间利用率高（满才扩容） | 哈希碰撞剧增，查询/插入性能下降 |
 | 0.5 | 哈希碰撞极少，性能好 | 空间浪费严重（一半空位） |
 
-> 🎯 **为什么是 0.75 不是 0.7 或 0.8？** 源码注释说明这是在空间利用率和查询效率之间寻找的一个"经验平衡点"。统计学上，在随机 hashCode 下，负载因子为 0.75 时，桶中节点数量的期望约为 0.5，冲突概率较低。且 0.75 = 3/4，容量乘以 0.75 是整数（容量是 16 的倍数，16 * 0.75 = 12），避免浮点运算的精度损失。
+> **为什么是 0.75 不是 0.7 或 0.8？** 源码注释说明这是在空间利用率和查询效率之间寻找的一个"经验平衡点"。统计学上，在随机 hashCode 下，负载因子为 0.75 时，桶中节点数量的期望约为 0.5，冲突概率较低。且 0.75 = 3/4，容量乘以 0.75 是整数（容量是 16 的倍数，16 * 0.75 = 12），避免浮点运算的精度损失。
 
 **自定义初始容量和负载因子的最佳实践：**
 
@@ -684,7 +684,7 @@ Map<String, String> good = new HashMap<>(capacity);
 1. **尾插法**：新节点追加到链表尾部，而非头部。即使在扩容时，也是拆分成两条链（loTail → null, hiTail → null），节点顺序不变，不会形成环
 2. **高低位链拆分**：扩容时不重新计算每个 hash，而是用 `(e.hash & oldCap)` 分成"低位链"和"高位链"，链内顺序与旧链表一致
 
-> ⚠️ **注意**：JDK 8 的 HashMap 仍然**不是线程安全**的，尾插法修复的是"死循环"这一特定 bug，但多线程下仍然存在数据丢失（put 覆盖）、size 计数不准确等问题。需要用 `ConcurrentHashMap`。
+> **注意**：JDK 8 的 HashMap 仍然**不是线程安全**的，尾插法修复的是"死循环"这一特定 bug，但多线程下仍然存在数据丢失（put 覆盖）、size 计数不准确等问题。需要用 `ConcurrentHashMap`。
 
 ### 3.8 HashMap 变体：LinkedHashMap 与 TreeMap
 
@@ -846,7 +846,7 @@ class BadUser {
 Set<BadUser> set = new HashSet<>();
 set.add(new BadUser("Alice", 20));
 set.add(new BadUser("Alice", 20));
-System.out.println(set.size());  // 2 ❌ 因为两个对象 hashCode 不同（默认 Object.hashCode）
+System.out.println(set.size());  // 2 ✗ 因为两个对象 hashCode 不同（默认 Object.hashCode）
 
 // 正确示例
 class GoodUser {
@@ -864,10 +864,10 @@ class GoodUser {
 Set<GoodUser> set2 = new HashSet<>();
 set2.add(new GoodUser("Alice", 20));
 set2.add(new GoodUser("Alice", 20));
-System.out.println(set2.size());  // 1 ✅
+System.out.println(set2.size());  // 1 ✓
 ```
 
-> 💡 **Set 查找唯一性的底层流程（HashMap 视角）：**
+> **Set 查找唯一性的底层流程（HashMap 视角）：**
 > 1. `put(key, PRESENT)` → 先调 `hash(key.hashCode())` 找到桶位置
 > 2. 桶内遍历时先比较 `hash` 值（快速过滤）
 > 3. 再比较 `equals`（精确判断）
@@ -948,7 +948,7 @@ private class Itr implements Iterator<E> {
 List<String> list = new ArrayList<>(Arrays.asList("A", "B", "C", "D"));
 for (String s : list) {
     if ("B".equals(s)) {
-        list.remove(s);  // ❌ ConcurrentModificationException！
+        list.remove(s);  // ✗ ConcurrentModificationException！
         // 底层：list.remove() → modCount++
         // 下一次 foreach.next() → checkForComodification → modCount != expectedModCount
     }
@@ -959,12 +959,12 @@ Iterator<String> it = list.iterator();
 while (it.hasNext()) {
     String s = it.next();
     if ("B".equals(s)) {
-        it.remove();  // ✅ 内部会同步 expectedModCount
+        it.remove();  // ✓ 内部会同步 expectedModCount
     }
 }
 
 // 正确方式 2：JDK 8 removeIf（内部用了 iterator）
-list.removeIf(s -> "B".equals(s));  // ✅ 推荐
+list.removeIf(s -> "B".equals(s));  // ✓ 推荐
 
 // 正确方式 3：收集到新集合，统一删除
 List<String> toRemove = new ArrayList<>();
@@ -974,7 +974,7 @@ for (String s : list) {
 list.removeAll(toRemove);
 ```
 
-> 🎯 **fail-fast 的设计哲学**：与其在并发修改时产生不可预知的结果（数据损坏、死循环），不如**快速失败**，将问题暴露给开发者。ConcurrentModificationException 是一个**编程错误的信号**，不应用 try-catch 处理。
+> **fail-fast 的设计哲学**：与其在并发修改时产生不可预知的结果（数据损坏、死循环），不如**快速失败**，将问题暴露给开发者。ConcurrentModificationException 是一个**编程错误的信号**，不应用 try-catch 处理。
 
 ### 5.2 fail-safe（安全失败）机制
 
@@ -1016,7 +1016,7 @@ while (it.hasNext()) {
 list.forEach(s -> {
     if ("B".equals(s)) {
         // 注意：内部实现本质还是用 iterator，所以这里修改集合仍然会抛 CME
-        // list.remove(s);  ❌ 也是不行的
+        // list.remove(s);  ✗ 也是不行的
     }
 });
 
@@ -1225,7 +1225,7 @@ list.sort(complex);
 | 链式组合 | 不支持 | 支持 thenComparing |
 | 常用方法 | `Collections.sort(list)` | `Collections.sort(list, comparator)` |
 
-> 🎯 **选择原则**：如果"这类天生就有一种自然的排序方式"（如日期、数字），实现 Comparable；如果是"临时根据业务需要排序"或不能修改源码，用 Comparator。
+> **选择原则**：如果"这类天生就有一种自然的排序方式"（如日期、数字），实现 Comparable；如果是"临时根据业务需要排序"或不能修改源码，用 Comparator。
 
 ---
 
@@ -1264,7 +1264,7 @@ synchronized (syncList) {
 
 // 不可变集合
 List<String> unmod = Collections.unmodifiableList(Arrays.asList("A", "B", "C"));
-// unmod.add("D");  // ❌ UnsupportedOperationException
+// unmod.add("D");  // ✗ UnsupportedOperationException
 
 // 不可变集合陷阱：原引用仍然可改
 List<String> mutable = new ArrayList<>(Arrays.asList("A", "B"));
@@ -1299,16 +1299,16 @@ mutable.add("C");  // 原引用修改了 → readOnly 也会变（视图效果�
 // Arrays.asList() 返回的是 Arrays 的内部类 ArrayList（不是 java.util.ArrayList）
 List<String> list = Arrays.asList("A", "B", "C");
 
-list.set(0, "X");             // ✅ 修改元素 OK
-// list.add("D");             // ❌ UnsupportedOperationException：固定长度
-// list.remove("A");          // ❌ UnsupportedOperationException
+list.set(0, "X");             // ✓ 修改元素 OK
+// list.add("D");             // ✗ UnsupportedOperationException：固定长度
+// list.remove("A");          // ✗ UnsupportedOperationException
 
 // 内部类 Arrays.ArrayList 没有实现 add/remove
 // 它的 size 是数组长度，无法改变
 
 // 如果需要可变列表：
 List<String> mutableList = new ArrayList<>(Arrays.asList("A", "B", "C"));
-mutableList.add("D");  // ✅
+mutableList.add("D");  // ✓
 
 // 同时注意：asList 返回的列表与原数组共享底层数据
 String[] arr = {"A", "B", "C"};

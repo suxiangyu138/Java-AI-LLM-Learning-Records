@@ -2,7 +2,7 @@
 
 > @FunctionalInterface 是接口最优雅的应用——一个方法就是一个行为，一个 Lambda 就是一个实现，让代码从"怎么做"变成"做什么"
 
-## 📚 目录
+## 目录
 
 1. [@FunctionalInterface 核心解析](#1)
 2. [java.util.function 四大核心接口](#2)
@@ -34,7 +34,7 @@
 public interface Calculator {
     int compute(int a, int b);  // ← 唯一的抽象方法
 
-    // ✅ 可以有这些：
+    // ✓ 可以有这些：
     default int add(int a, int b) { return a + b; }
     static Calculator of(String type) { return ...; }
     private void helper() { }
@@ -42,7 +42,7 @@ public interface Calculator {
     boolean equals(Object obj);  // Object 方法，不计入
 }
 
-// ❌ 编译错误：多个抽象方法
+// ✗ 编译错误：多个抽象方法
 @FunctionalInterface
 public interface Invalid {
     void doA();
@@ -193,10 +193,10 @@ public User getUser(Long id, Supplier<User> fallbackLoader) {
 }
 
 // ── 日志延迟求值 ──
-// ❌ 总是执行 expensiveFormat()
+// ✗ 总是执行 expensiveFormat()
 log.debug("User: {}", expensiveFormat(user));
 
-// ✅ 仅当 DEBUG 级别开启时才执行
+// ✓ 仅当 DEBUG 级别开启时才执行
 log.atDebug().log("User: {}", () -> expensiveFormat(user));
 
 // ── Optional.orElseGet ──
@@ -214,25 +214,25 @@ User user = optionalUser.orElseGet(() -> createDefaultUser());
 // Function<Integer, Integer> f = x -> x * 2;
 // 每次调用都要装箱/拆箱 → 性能损失！
 
-// ✅ IntFunction / LongFunction / DoubleFunction
+// ✓ IntFunction / LongFunction / DoubleFunction
 IntFunction<String> intToString = i -> "Value: " + i;
 
-// ✅ ToIntFunction / ToLongFunction / ToDoubleFunction
+// ✓ ToIntFunction / ToLongFunction / ToDoubleFunction
 ToIntFunction<String> strLength = String::length;  // 返回 int（不装箱）
 
-// ✅ IntUnaryOperator / LongUnaryOperator / DoubleUnaryOperator
+// ✓ IntUnaryOperator / LongUnaryOperator / DoubleUnaryOperator
 IntUnaryOperator doubler = x -> x * 2;    // int → int，零装箱
 
-// ✅ IntPredicate / LongPredicate / DoublePredicate
+// ✓ IntPredicate / LongPredicate / DoublePredicate
 IntPredicate isPositive = x -> x > 0;
 
-// ✅ IntSupplier / LongSupplier / DoubleSupplier
+// ✓ IntSupplier / LongSupplier / DoubleSupplier
 IntSupplier threadId = () -> Thread.currentThread().hashCode();
 
-// ✅ IntConsumer / LongConsumer / DoubleConsumer
+// ✓ IntConsumer / LongConsumer / DoubleConsumer
 IntConsumer printInt = System.out::println;
 
-// ✅ IntBinaryOperator / LongBinaryOperator / DoubleBinaryOperator
+// ✓ IntBinaryOperator / LongBinaryOperator / DoubleBinaryOperator
 IntBinaryOperator max = Math::max;
 ```
 
@@ -421,11 +421,11 @@ String[] arr = arrayFactory.apply(10);  // new String[10]
 
 ```java
 // ── 什么时候用方法引用？（更简洁、更可读）──
-// ✅ 方法引用：直接引用已有方法
+// ✓ 方法引用：直接引用已有方法
 users.stream().map(User::getName)           // 方法引用
 users.stream().forEach(System.out::println) // 方法引用
 
-// ✅ Lambda：需要额外逻辑
+// ✓ Lambda：需要额外逻辑
 users.stream().map(u -> u.getName().trim())              // Lambda
 users.stream().filter(u -> u.getAge() > 18)              // Lambda
 users.stream().map(u -> "User: " + u.getName())          // Lambda
@@ -439,11 +439,11 @@ users.stream().map(u -> "User: " + u.getName())          // Lambda
 
 ```java
 // ── 策略模式 → Lambda ──
-// ❌ 传统：每种策略一个类
+// ✗ 传统：每种策略一个类
 class VipDiscount implements DiscountStrategy {
     public double apply(double price) { return price * 0.8; }
 }
-// ✅ Lambda：策略就是函数
+// ✓ Lambda：策略就是函数
 Map<String, Function<Double, Double>> discounts = Map.of(
     "vip",     price -> price * 0.8,
     "normal",  price -> price * 0.95,
@@ -452,8 +452,8 @@ Map<String, Function<Double, Double>> discounts = Map.of(
 double finalPrice = discounts.get(userType).apply(100.0);
 
 // ── 命令模式 → Lambda ──
-// ❌ 传统：每个命令一个类
-// ✅ Lambda：命令就是 Runnable
+// ✗ 传统：每个命令一个类
+// ✓ Lambda：命令就是 Runnable
 Map<String, Runnable> commands = Map.of(
     "start",  () -> server.start(),
     "stop",   () -> server.stop(),
@@ -476,7 +476,7 @@ Map<String, Supplier<Payment>> paymentFactories = Map.of(
 Payment p = paymentFactories.get(type).get();
 ```
 
-> 🎯 **核心要点**：函数式接口 + Lambda 不是要替代所有设计模式，而是让**简单的事情回归简单**——当一个模式退化到"只定义一个方法"时，用 Lambda 是实现它的最简方式。
+> **核心要点**：函数式接口 + Lambda 不是要替代所有设计模式，而是让**简单的事情回归简单**——当一个模式退化到"只定义一个方法"时，用 Lambda 是实现它的最简方式。
 
 ---
 

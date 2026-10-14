@@ -2,7 +2,7 @@
 
 > 定位：运行时篇——"Agent 操作系统"叙事的代表项目与 2026 关键趋势"策略内建"：Sulala Agent OS、Nexus 三协议面、IBM CUGA（2026-08 基准）
 
-## 📚 目录
+## 目录
 
 1. [Agent OS 叙事：从口号到项目](#1-agent-os-叙事从口号到项目)
 2. [Sulala Agent OS：极致轻量运行时](#2-sulala-agent-os极致轻量运行时)
@@ -25,7 +25,7 @@
    Sulala（轻量运行时）、Nexus（协议面）、CUGA（策略内建）是代表
 ```
 
-> 🎯 **判断**：Agent OS 是 2026 年最热的**叙事**之一——但"操作系统"隐喻的承诺（资源管理/调度/生态）远未兑现；评估看具体能力（运行时空不空、策略有没有、互操作通不通），不看名字。
+> **判断**：Agent OS 是 2026 年最热的**叙事**之一——但"操作系统"隐喻的承诺（资源管理/调度/生态）远未兑现；评估看具体能力（运行时空不空、策略有没有、互操作通不通），不看名字。
 
 ## 2. Sulala Agent OS：极致轻量运行时
 
@@ -39,7 +39,7 @@
 | CLI | `sulala start`、`onboard` 等；仪表盘含 agents/graphs/skills/schedules/memory/settings |
 | 定位 | "更接近 MicroGPT/SmolAgents，而非 LangChain"——无重型 Python 栈 |
 
-> 💡 **体量对比的意义**：100KB vs 100MB 是"Agent OS 轻量派"的宣言——但轻量的代价是生态与生产配套需要自建。
+> **体量对比的意义**：100KB vs 100MB 是"Agent OS 轻量派"的宣言——但轻量的代价是生态与生产配套需要自建。
 
 ## 3. Nexus：三协议面的 Agent 基础设施
 
@@ -76,7 +76,7 @@ policy = PolicyChain(
 agent = Harness(model=..., policy=policy)
 ```
 
-> 🎯 **CUGA 的意义**：治理从"外层包装"变为"运行时内建"——2026 年治理趋势的代表（多 Agent 模块的护栏、低代码平台的内置沙箱同向）。
+> **CUGA 的意义**：治理从"外层包装"变为"运行时内建"——2026 年治理趋势的代表（多 Agent 模块的护栏、低代码平台的内置沙箱同向）。
 
 ## 5. 策略内建：2026 关键趋势
 
@@ -88,7 +88,7 @@ agent = Harness(model=..., policy=policy)
 | 协议内建 | MCP/A2A 原生支持 | MAF/ADK/CrewAI |
 | 技能内建 | SKILL.md 成为标准单元 | Flue、CUGA、Claude Code 生态 |
 
-> 💡 **趋势内核**：2026 年"安全/持久化/互操作"从**开发者自建**变成**运行时默认**——新兴框架竞争点正是这些默认值。
+> **趋势内核**：2026 年"安全/持久化/互操作"从**开发者自建**变成**运行时默认**——新兴框架竞争点正是这些默认值。
 
 ## 6. Agent OS 评估视角
 
@@ -106,7 +106,7 @@ agent = Harness(model=..., policy=policy)
 
 ## 7. 核心要点
 
-> 🎯 **核心要点**：
+> **核心要点**：
 > 1. "Agent OS" 双含义：产品叙事（Coze/AG2）vs 技术架构（Sulala/Nexus/CUGA）——评估看能力不看名字
 > 2. Sulala：图式微 Agent 协作 + 极致轻量（核心 ~100-150KB）——轻量派宣言
 > 3. Nexus：VFS + MCP + A2A 三协议面——"跨框架互操作缺失拼图"样例

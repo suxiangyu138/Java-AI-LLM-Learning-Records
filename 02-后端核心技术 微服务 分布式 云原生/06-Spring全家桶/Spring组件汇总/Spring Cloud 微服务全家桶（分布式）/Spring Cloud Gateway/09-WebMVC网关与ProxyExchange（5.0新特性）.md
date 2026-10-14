@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [背景：虚拟线程时代为什么拆双栈](#1-背景虚拟线程时代为什么拆双栈)
 2. [WebMVC 网关快速上手](#2-webmvc-网关快速上手)
@@ -33,7 +33,7 @@ Spring Cloud Gateway 5.0（2025.11 Oakwood）：
       WebFlux（原有用户） / WebMVC + 虚拟线程（新选择）
 ```
 
-> 🎯 一句话：**5.0 双栈 = "非阻塞派"与"阻塞派"各得其所**——虚拟线程让阻塞式编程重新有了高性能资格，官方不再强制 WebFlux。
+> 一句话：**5.0 双栈 = "非阻塞派"与"阻塞派"各得其所**——虚拟线程让阻塞式编程重新有了高性能资格，官方不再强制 WebFlux。
 
 ### 1.2 官方拆分方式（issue #3858）
 
@@ -78,7 +78,7 @@ spring:
                 - StripPrefix=1
 ```
 
-> 💡 **路由模型完全一致**（yaml 结构、谓词、过滤器概念相同）——WebMVC 用户几乎零学习成本迁移。
+> **路由模型完全一致**（yaml 结构、谓词、过滤器概念相同）——WebMVC 用户几乎零学习成本迁移。
 
 ### 2.3 虚拟线程启用
 
@@ -102,25 +102,25 @@ spring:
 
 | 过滤器 | WebFlux | WebMVC | 说明 |
 |--------|:---:|:---:|------|
-| Add/Set/Remove 头与参数 | ✅ | ✅ | 通用 |
-| StripPrefix / RewritePath / SetPath / PrefixPath | ✅ | ✅ | 通用 |
-| ModifyRequestBody / ModifyResponseBody | ✅ | ✅ | 通用 |
-| CircuitBreaker | ✅ | ✅ | 通用（底层不同实现） |
-| Retry | ✅ | ✅ | 通用 |
-| **RequestRateLimiter** | ✅ | ✅ | 通用（Redis） |
-| **LoadBalancer** | ❌（由 GlobalFilter 处理） | ✅ 过滤器 | WebMVC 独有过滤器形态 |
-| **StripContextPath** | ❌ | ✅ | WebMVC 独有 |
-| SaveSession | ✅ | ✅ | 通用 |
-| TokenRelay | ✅ | ✅ | 通用 |
-| SecureHeaders | ✅ | ✅ | 通用 |
-| **JsonToGrpc** | ✅ | ❌ | WebFlux 独有 |
-| **LocalResponseCache** | ✅ | ❌ | WebFlux 独有 |
-| **RequestHeaderToRequestUri** | ✅ | ❌ | WebFlux 独有 |
-| **RemoveJsonAttributesResponseBody** | ✅ | ❌ | WebFlux 独有 |
-| **RewriteRequestParameter** | ✅ | ❌ | WebFlux 独有 |
-| **SaveSession 前的 HttpHeadersFilters** | ✅ | ✅ | 均有但实现不同 |
+| Add/Set/Remove 头与参数 | ✓ | ✓ | 通用 |
+| StripPrefix / RewritePath / SetPath / PrefixPath | ✓ | ✓ | 通用 |
+| ModifyRequestBody / ModifyResponseBody | ✓ | ✓ | 通用 |
+| CircuitBreaker | ✓ | ✓ | 通用（底层不同实现） |
+| Retry | ✓ | ✓ | 通用 |
+| **RequestRateLimiter** | ✓ | ✓ | 通用（Redis） |
+| **LoadBalancer** | ✗（由 GlobalFilter 处理） | ✓ 过滤器 | WebMVC 独有过滤器形态 |
+| **StripContextPath** | ✗ | ✓ | WebMVC 独有 |
+| SaveSession | ✓ | ✓ | 通用 |
+| TokenRelay | ✓ | ✓ | 通用 |
+| SecureHeaders | ✓ | ✓ | 通用 |
+| **JsonToGrpc** | ✓ | ✗ | WebFlux 独有 |
+| **LocalResponseCache** | ✓ | ✗ | WebFlux 独有 |
+| **RequestHeaderToRequestUri** | ✓ | ✗ | WebFlux 独有 |
+| **RemoveJsonAttributesResponseBody** | ✓ | ✗ | WebFlux 独有 |
+| **RewriteRequestParameter** | ✓ | ✗ | WebFlux 独有 |
+| **SaveSession 前的 HttpHeadersFilters** | ✓ | ✓ | 均有但实现不同 |
 
-> ⚠️ **迁移注意**：WebFlux 独有过滤器（JsonToGrpc/LocalResponseCache 等）在 WebMVC 栈不可用——**迁移前对照本表检查在用过滤器**。
+> **迁移注意**：WebFlux 独有过滤器（JsonToGrpc/LocalResponseCache 等）在 WebMVC 栈不可用——**迁移前对照本表检查在用过滤器**。
 
 ### 3.2 架构差异
 
@@ -129,7 +129,7 @@ spring:
 | 运行时 | Reactor Netty | Servlet（Tomcat/Jetty）+ 虚拟线程 |
 | 编程模型 | 响应式（Mono/Flux） | 阻塞式（同步） |
 | 高并发 | 事件循环 | 虚拟线程（需 Boot 4 + JDK 21） |
-| 与 Servlet 生态 | 隔离 | ✅ 原生兼容（Servlet Filter/旧库） |
+| 与 Servlet 生态 | 隔离 | ✓ 原生兼容（Servlet Filter/旧库） |
 | 学习成本 | 高 | 低（传统 MVC 开发经验直接复用） |
 | 定制谓词/过滤器 | WebFlux API | MVC API（写法不同） |
 
@@ -158,7 +158,7 @@ public class CustomFilter implements GatewayHandlerFilterFunction {
 }
 ```
 
-> 💡 WebMVC 开发体验：**过滤器是同步方法签名**（返回 ServerWebExchange），不需要 Mono 包装——对 MVC 团队非常友好。
+> WebMVC 开发体验：**过滤器是同步方法签名**（返回 ServerWebExchange），不需要 Mono 包装——对 MVC 团队非常友好。
 
 ### 4.2 与 Servlet 生态协同
 
@@ -182,7 +182,7 @@ public class ServletConfig {
 | 阻塞代码随便写？ | 虚拟线程扛得住，但**平台线程池里的阻塞仍要避免**（如 @Bean 初始化线程） |
 | 兼容性 | 阻塞式第三方库（同步 JDBC 等）反而比 WebFlux 好接 |
 
-> 🎯 面试必答：**"5.0 的 WebMVC 网关和 WebFlux 网关怎么选？"**——**团队是 MVC 派且不熟响应式 → WebMVC + 虚拟线程**（同步代码 + JDK 21 高并发，兼容 Servlet 生态）；**已有 WebFlux 基建/追求极致性能/需要响应式独有过滤器（JsonToGrpc 等）→ WebFlux**；两者路由模型一致，迁移成本主要在过滤器差异。
+> 面试必答：**"5.0 的 WebMVC 网关和 WebFlux 网关怎么选？"**——**团队是 MVC 派且不熟响应式 → WebMVC + 虚拟线程**（同步代码 + JDK 21 高并发，兼容 Servlet 生态）；**已有 WebFlux 基建/追求极致性能/需要响应式独有过滤器（JsonToGrpc 等）→ WebFlux**；两者路由模型一致，迁移成本主要在过滤器差异。
 
 ## 5. Proxy Exchange：嵌入式代理
 
@@ -224,7 +224,7 @@ public class ProxyController {
 | 安全 | 代理方法可加 Spring Security 注解 |
 | 对比独立网关 | 轻量（无路由表管理）、灵活（方法级控制） |
 
-> 🎯 选型：**"有独立网关需求的 → server starter；只要个别接口转发 → Proxy Exchange"**——Proxy Exchange 是"应用内轻代理"，不是独立网关的替代品。
+> 选型：**"有独立网关需求的 → server starter；只要个别接口转发 → Proxy Exchange"**——Proxy Exchange 是"应用内轻代理"，不是独立网关的替代品。
 
 ## 6. 双栈选型决策树
 
@@ -247,14 +247,14 @@ public class ProxyController {
 
 | 决策维度 | WebFlux 胜 | WebMVC 胜 |
 |---------|-----------|----------|
-| 极致性能 | ✅（压测 P99 略优） | — |
+| 极致性能 | ✓（压测 P99 略优） | — |
 | 团队技术栈 | 响应式团队 | MVC 团队 |
-| Servlet 生态兼容 | ❌ | ✅（旧 Filter/中间件） |
-| 响应式独有过滤器 | ✅ | ❌ |
+| Servlet 生态兼容 | ✗ | ✓（旧 Filter/中间件） |
+| 响应式独有过滤器 | ✓ | ✗ |
 | 开发效率 | 响应式曲线 | 同步直觉 |
 | JDK 要求 | 17+ | 21+（虚拟线程） |
 
-> 🎯 最终建议：**2026 年新网关项目：MVC 团队选 WebMVC + 虚拟线程（开发效率优先），性能敏感/已有响应式基建选 WebFlux**——两者都是官方主流，不存在"必须 WebFlux"了。
+> 最终建议：**2026 年新网关项目：MVC 团队选 WebMVC + 虚拟线程（开发效率优先），性能敏感/已有响应式基建选 WebFlux**——两者都是官方主流，不存在"必须 WebFlux"了。
 
 ---
 

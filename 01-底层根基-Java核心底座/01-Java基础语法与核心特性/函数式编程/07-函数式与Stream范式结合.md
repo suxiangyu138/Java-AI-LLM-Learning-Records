@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [map-filter-reduce 心智](#1-map-filter-reduce-心智)
 2. [管线 = 声明式查询](#2-管线--声明式查询)
@@ -96,7 +96,7 @@ List<String> deduped = list.stream().gather(dedupAdjacent()).toList();
 
 **可复用管线**的范式配套：把"中间操作集合"提取为函数值，管线成为可命名资产——`Function<Stream<Order>, Stream<Order>> paidOnly = s -> s.filter(o -> o.status() == PAID);` 即可在多个查询中复用同一段筛选语义，配合静态导入形成团队共享的"管线方言"。
 
-> ⚠️ **兼容性**：Gatherers 要求 JDK 24+，生产环境仍跑 JDK 17/21 的团队不能直接使用；2026 年随着 JDK 25 LTS 普及，它已进入 LTS 基线（JDK 25 正式收录），可以放心规划迁移。
+> **兼容性**：Gatherers 要求 JDK 24+，生产环境仍跑 JDK 17/21 的团队不能直接使用；2026 年随着 JDK 25 LTS 普及，它已进入 LTS 基线（JDK 25 正式收录），可以放心规划迁移。
 
 ## 4. collect vs reduce：两种收束
 
@@ -114,7 +114,7 @@ Map<Status, List<Order>> byStatus = orders.stream()
         .collect(Collectors.groupingBy(Order::status));
 ```
 
-> ⚠️ **经典陷阱**：`reduce(0, Integer::sum)` 在并行流里要求加法结合律成立（成立），但 `reduce(new StringBuilder(), (a,b)->a.append(b))` 这类"可变累积"不成立——并行分片后拼接顺序无定义。可变容器归约一律走 `collect`。
+> **经典陷阱**：`reduce(0, Integer::sum)` 在并行流里要求加法结合律成立（成立），但 `reduce(new StringBuilder(), (a,b)->a.append(b))` 这类"可变累积"不成立——并行分片后拼接顺序无定义。可变容器归约一律走 `collect`。
 
 ## 5. 副作用混入流的三大陷阱
 
@@ -125,11 +125,11 @@ Map<Status, List<Order>> byStatus = orders.stream()
 3. **有状态 lambda**：lambda 里用可变外部变量（计数器、`SimpleDateFormat`）——并行分片共享状态直接产生错误结果，且只在压力下浮现
 
 ```java
-// ❌ 并行下竞态：共享 result 集合
+// ✗ 并行下竞态：共享 result 集合
 List<Integer> result = new ArrayList<>();
 list.parallelStream().forEach(x -> result.add(x * 2));
 
-// ✅ 纯函数管线：map 变换 + collect 收束
+// ✓ 纯函数管线：map 变换 + collect 收束
 List<Integer> result = list.parallelStream().map(x -> x * 2).toList();
 ```
 
@@ -152,11 +152,11 @@ Stream.iterate(2, n -> n + 1)
 
 要同时记住惰性的**物化例外**：`distinct()` 与 `sorted()` 是全量物化操作（内部建 Set/List 缓存整条流），放在无限流上直接 OOM；`flatMap` 对无限流的短路也不友好（内部拉取策略可能拉爆），无限流的拍平应确保输入有限。判断口诀：**凡是要"看到全部才能做"的操作（排序、去重、统计），都要求输入有限**——无限流只配逐元素操作（map/filter/limit/takeWhile）。这类"惰性内部有例外"的知识，正是把 Stream 从"会写"推进到"会用"的分水岭。
 
-> 🎯 **核心要点**：Stream 让函数式范式落地的完整形态 = 纯函数三件套（map/filter/reduce）+ 声明式管线 + Gatherers 扩展中间操作 + 惰性短路。副作用与有状态 lambda 是唯一禁区；JDK 24 后范式拼图完整，学习重心应从"会用 API"转向"设计纯管线"。
+> **核心要点**：Stream 让函数式范式落地的完整形态 = 纯函数三件套（map/filter/reduce）+ 声明式管线 + Gatherers 扩展中间操作 + 惰性短路。副作用与有状态 lambda 是唯一禁区；JDK 24 后范式拼图完整，学习重心应从"会用 API"转向"设计纯管线"。
 
 ## 7. 核心要点与思考题
 
-> 🎯 **本章三句话总结**：
+> **本章三句话总结**：
 > 1. map-filter-reduce 是函数式数据处理的心智模型，管线即声明式查询，惰性 + 短路是免费性能；
 > 2. Gatherers（JEP 485，JDK 24 定稿、25 LTS 收录）补上自定义中间操作，windowSliding/mapConcurrent 等五个内置最常用；
 > 3. 三陷阱（peek 日志、forEach 外部写、有状态 lambda）只在并行时爆雷，管线内禁碰外部状态。

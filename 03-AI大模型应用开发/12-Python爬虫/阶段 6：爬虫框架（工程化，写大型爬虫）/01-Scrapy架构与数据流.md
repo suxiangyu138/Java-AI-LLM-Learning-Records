@@ -1,7 +1,7 @@
 # 01 Scrapy 架构与数据流
 > 本阶段认知地基：五组件如何协作 + 一条请求的完整旅程 + 2026 异步现代化
 
-## 📚 目录
+## 目录
 1. [Scrapy 是什么：与 requests 脚本的本质差异](#1-scrapy-是什么与-requests-脚本的本质差异)
 2. [五大组件与职责](#2-五大组件与职责)
 3. [八步数据流：一个请求的完整旅程](#3-八步数据流一个请求的完整旅程)
@@ -27,7 +27,7 @@ Scrapy 是 Python 最主流的爬虫框架，**2.16.0**（2026-05-19 发布，�
 | 扩展 | 推倒重写 | 加一个 Pipeline / 中间件即可 |
 | 部署运维 | 无 | Scrapyd / Docker / Stats 统计 |
 
-> 🎯 **核心要点**：手写脚本解决"**爬一次**"，Scrapy 解决"**十万次、天天爬、坏了能续、能上生产**"。判断要不要上框架：页面 > 3 个、需要并发 > 10、需要定时增量——三个条件任一命中就用框架。
+> **核心要点**：手写脚本解决"**爬一次**"，Scrapy 解决"**十万次、天天爬、坏了能续、能上生产**"。判断要不要上框架：页面 > 3 个、需要并发 > 10、需要定时增量——三个条件任一命中就用框架。
 
 ## 2. 五大组件与职责
 
@@ -49,11 +49,11 @@ Scrapy 是 Python 最主流的爬虫框架，**2.16.0**（2026-05-19 发布，�
 | **Engine** | 总指挥，控制数据流在组件间流转 | 主板/总线 | 不碰 |
 | **Scheduler** | 接收请求、去重、按优先级排队、出队 | 任务调度中心 | 配置去重器/优先级 |
 | **Downloader** | 异步发 HTTP 请求，拿回 Response | 网络层 | 中间件里管代理/UA |
-| **Spiders** | 定义起始 URL、解析响应、产出 **Request** 或 **Item** | 你写的核心业务 | ⭐ 主要工作 |
-| **Item Pipeline** | 按序处理 Item：校验/清洗/入库 | 流水线工人 | ⭐ 主要工作 |
+| **Spiders** | 定义起始 URL、解析响应、产出 **Request** 或 **Item** | 你写的核心业务 | ★ 主要工作 |
+| **Item Pipeline** | 按序处理 Item：校验/清洗/入库 | 流水线工人 | ★ 主要工作 |
 | **Middlewares** | 请求下载前/后、Spider 输入/输出拦截 | 安检/过滤器 | 反爬治理主战场 |
 
-> 💡 理解框架的最高效姿势：**只记住一句数据流**——"Engine 从 Scheduler 拿一个 Request → 交 Downloader 下载 → 响应进 Spider 解析 → 解析出的新 Request 进 Scheduler、解析出的 Item 进 Pipeline"。整章下面都是这句话的展开。
+> 理解框架的最高效姿势：**只记住一句数据流**——"Engine 从 Scheduler 拿一个 Request → 交 Downloader 下载 → 响应进 Spider 解析 → 解析出的新 Request 进 Scheduler、解析出的 Item 进 Pipeline"。整章下面都是这句话的展开。
 
 ## 3. 八步数据流：一个请求的完整旅程
 
@@ -79,7 +79,7 @@ Scrapy 是 Python 最主流的爬虫框架，**2.16.0**（2026-05-19 发布，�
 - **yield 是框架的核心契约**：`parse()` 里 `yield Request` / `yield Item`，函数变成**生成器**，Engine 边消费边推进，你不需要手动管理循环。
 - **两个队列决定终止条件**：Scheduler 请求队列空 + Downloader 无在途请求 → 爬取结束。死循环（A 页面不断产出生成 B 的请求）会让队列永不枯竭，所以要靠去重器（§4）+ `depth`/`allow` 约束兜底。
 
-> 🎯 **核心要点**：把"一个请求的旅程"按八步讲清楚，等于讲清楚了 Scrapy 的全部——面试 80% 的 Scrapy 题（数据流、组件职责、中间件执行顺序）都从这张图派生。
+> **核心要点**：把"一个请求的旅程"按八步讲清楚，等于讲清楚了 Scrapy 的全部——面试 80% 的 Scrapy 题（数据流、组件职责、中间件执行顺序）都从这张图派生。
 
 ## 4. 调度器与去重：并发的心脏
 
@@ -106,7 +106,7 @@ Spider yield Request → Spider 中间件 → Engine → Scheduler
               (重复→直接丢弃)           (按优先级出队)
 ```
 
-> ⚠️ 去重基于 **Request 指纹**而非 URL 字符串：`?page=1` 与 `?page=1#a`（fragment 不参与指纹）不会误判重复；但**带时间戳/随机参数的 URL 每次指纹都不同**，会绕过去重造成重复下载——这类 URL 应自己清洗后再 yield。
+> 去重基于 **Request 指纹**而非 URL 字符串：`?page=1` 与 `?page=1#a`（fragment 不参与指纹）不会误判重复；但**带时间戳/随机参数的 URL 每次指纹都不同**，会绕过去重造成重复下载——这类 URL 应自己清洗后再 yield。
 
 ### 4.3 优先级（`Request.priority`）
 
@@ -116,7 +116,7 @@ Spider yield Request → Spider 中间件 → Engine → Scheduler
 | 正数（如 10） | 详情页优先于列表页（先抓热门内容） |
 | 负数（如 -10） | 低优先级批量页，避免挤占队列 |
 
-> 💡 优先级只在 DownloaderAwarePriorityQueue 下真正生效（2.14+ 默认即此）；旧 PriorityQueue 无此能力。列表页持续 yield 详情页请求时，给详情页更高优先级可显著改善"先出列表、详情在后面慢慢补"的延迟。
+> 优先级只在 DownloaderAwarePriorityQueue 下真正生效（2.14+ 默认即此）；旧 PriorityQueue 无此能力。列表页持续 yield 详情页请求时，给详情页更高优先级可显著改善"先出列表、详情在后面慢慢补"的延迟。
 
 ## 5. 异步引擎：Twisted 与 2.14+ 异步现代化
 
@@ -146,7 +146,7 @@ Deferred 回调链                + download_request_async() / download_async()
 | 集成 asyncio 库（aiohttp 测速等） | `from twisted.internet import asyncioreactor; asyncioreactor.install()`（2.14+ 可经 `AsyncCrawlerProcess` 更优雅地混用） |
 | 在自己的程序里运行爬虫 | `AsyncCrawlerProcess` / `AsyncCrawlerRunner`（协程版，避免 Deferred 回调地狱） |
 
-> 🎯 **核心要点**：2026 年的 Scrapy 已经是"**Twisted 底座 + asyncio 接口**"的双轨框架——你日常写 Spider 完全无感，但做**动态页集成（06 章）**和**代码内嵌运行爬虫**时必须用到 async API。面试记住时间线：2.14 异步现代化（Async* 系列 API）、2.15 httpx 实验下载器、2.16 Python 3.14 支持。
+> **核心要点**：2026 年的 Scrapy 已经是"**Twisted 底座 + asyncio 接口**"的双轨框架——你日常写 Spider 完全无感，但做**动态页集成（06 章）**和**代码内嵌运行爬虫**时必须用到 async API。面试记住时间线：2.14 异步现代化（Async* 系列 API）、2.15 httpx 实验下载器、2.16 Python 3.14 支持。
 
 ## 6. settings.py 架构级配置
 
@@ -184,7 +184,7 @@ LOG_FILE = "crawl.log"
 STATS_DUMP = True                        # 结束时打印统计
 ```
 
-> ⚠️ 2.14 起官方将**逐步弃用 Spider 类属性配置**（`name = "x"`、`allowed_domains`、`custom_settings` 之外的下载类属性），统一迁移到 **`custom_settings`** 或 settings.py——旧代码里 `handle_httpstatus_list = [...]` 这类类属性写法，新项目一律放进 `custom_settings`。
+> 2.14 起官方将**逐步弃用 Spider 类属性配置**（`name = "x"`、`allowed_domains`、`custom_settings` 之外的下载类属性），统一迁移到 **`custom_settings`** 或 settings.py——旧代码里 `handle_httpstatus_list = [...]` 这类类属性写法，新项目一律放进 `custom_settings`。
 
 ## 7. 核心要点
 

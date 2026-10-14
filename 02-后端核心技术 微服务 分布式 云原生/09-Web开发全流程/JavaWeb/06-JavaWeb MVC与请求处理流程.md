@@ -44,9 +44,9 @@
 
 | 角色 | 职责 | JavaWeb 对应 | 禁止事项 |
 |------|------|-------------|---------|
-| **Model** | 封装数据 + 业务逻辑 | Service / DAO / POJO | ❌ 不能操作 Request/Response |
-| **View** | 展示数据、接收输入 | JSP / HTML / Thymeleaf | ❌ 不包含业务逻辑 |
-| **Controller** | 协调 M 和 V、控制流程 | Servlet / Filter | ❌ 不直接操作数据库 |
+| **Model** | 封装数据 + 业务逻辑 | Service / DAO / POJO | ✗ 不能操作 Request/Response |
+| **View** | 展示数据、接收输入 | JSP / HTML / Thymeleaf | ✗ 不包含业务逻辑 |
+| **Controller** | 协调 M 和 V、控制流程 | Servlet / Filter | ✗ 不直接操作数据库 |
 
 ### 1.2 MVC 的核心价值
 
@@ -132,7 +132,7 @@ public class BaseServlet extends HttpServlet {
 }
 ```
 
-> 💡 BaseServlet 模式是**手写"山寨 Spring MVC"的雏形**——方法名映射到 Controller 方法，Spring MVC 的 `@RequestMapping` 正是这个思路的标准化实现。
+> BaseServlet 模式是**手写"山寨 Spring MVC"的雏形**——方法名映射到 Controller 方法，Spring MVC 的 `@RequestMapping` 正是这个思路的标准化实现。
 
 ### 2.3 Spring MVC 对比
 
@@ -278,7 +278,7 @@ resp.getWriter().write("这段代码不会执行吗？");
 // 坑2：Redirect 之前已提交响应
 resp.getWriter().write("some content");
 resp.getWriter().flush();  // 已提交！
-resp.sendRedirect("/other");  // ❌ IllegalStateException: 响应已提交
+resp.sendRedirect("/other");  // ✗ IllegalStateException: 响应已提交
 
 // 坑3：Redirect 路径丢失 Context Path
 resp.sendRedirect("/list");      // → http://host/list（可能不对）
@@ -383,7 +383,7 @@ public class UserController extends BaseServlet {
         req.setAttribute("users", users);
         req.getRequestDispatcher("/WEB-INF/userList.jsp").forward(req, resp);
     }
-    // ❌ Controller 中不应该出现 JDBC 代码、SQL 语句
+    // ✗ Controller 中不应该出现 JDBC 代码、SQL 语句
 }
 
 // ═══ 业务层 (service) — 调用 DAO，编排业务 ═══
@@ -406,7 +406,7 @@ public class UserServiceImpl implements UserService {
         userDao.insert(user);
         EmailUtil.sendWelcome(user.getEmail());
     }
-    // ✅ Service 可以调用多个 DAO；❌ Service 不应直接操作用户输入/响应
+    // ✓ Service 可以调用多个 DAO；✗ Service 不应直接操作用户输入/响应
 }
 
 // ═══ 持久层 (dao) — 只做数据存取 ═══
@@ -418,7 +418,7 @@ public class UserDaoImpl implements UserDao {
         // JDBC 执行 → ResultSet → List<User>
         return jdbcTemplate.query(sql, new UserRowMapper());
     }
-    // ✅ DAO 只做 CRUD；❌ DAO 不应包含业务逻辑
+    // ✓ DAO 只做 CRUD；✗ DAO 不应包含业务逻辑
 }
 ```
 
@@ -426,13 +426,13 @@ public class UserDaoImpl implements UserDao {
 
 | 调用方向 | 允许？ | 说明 |
 |---------|--------|------|
-| Controller → Service | ✅ | 跨层调用，依赖接口 |
-| Service → DAO | ✅ | 跨层调用，依赖接口 |
-| Controller → DAO | ❌ | 跨两层，违反分层 |
-| Service → Controller | ❌ | 上层不应被下层依赖 |
-| DAO → Service | ❌ | 同上 |
-| Service → Service | ✅ | 同层调用（组合复用） |
-| DAO → DAO | ✅ | 同层调用 |
+| Controller → Service | ✓ | 跨层调用，依赖接口 |
+| Service → DAO | ✓ | 跨层调用，依赖接口 |
+| Controller → DAO | ✗ | 跨两层，违反分层 |
+| Service → Controller | ✗ | 上层不应被下层依赖 |
+| DAO → Service | ✗ | 同上 |
+| Service → Service | ✓ | 同层调用（组合复用） |
+| DAO → DAO | ✓ | 同层调用 |
 
 ---
 
@@ -520,7 +520,7 @@ webapp/
 └── index.jsp                # 欢迎页面
 ```
 
-> 💡 `WEB-INF` 下的资源浏览器无法直接访问（Tomcat 限制），只能通过 `forward` 访问——这是保护 JSP 不被直接请求的安全机制。
+> `WEB-INF` 下的资源浏览器无法直接访问（Tomcat 限制），只能通过 `forward` 访问——这是保护 JSP 不被直接请求的安全机制。
 
 ---
 
@@ -704,7 +704,7 @@ public abstract class BaseController extends HttpServlet {
 
 ## 9. 手写一个 Mini MVC 框架
 
-> 🎯 这个迷你框架浓缩了 Spring MVC 的核心思想：IoC 容器 + 依赖注入 + 请求映射 + 参数绑定。
+> 这个迷你框架浓缩了 Spring MVC 的核心思想：IoC 容器 + 依赖注入 + 请求映射 + 参数绑定。
 
 ```java
 // 步骤1：定义注解
@@ -793,7 +793,7 @@ public class DispatcherServlet extends HttpServlet {
 }
 ```
 
-> 💡 这个 Mini MVC 示范了 Spring MVC 的三大核心：**IoC 容器**（Bean 管理）、**DispatcherServlet**（Front Controller 统一入口）、**注解映射**（`@Controller` + `@RequestMapping`）。理解了这个就知道 Spring MVC "做了什么"。
+> 这个 Mini MVC 示范了 Spring MVC 的三大核心：**IoC 容器**（Bean 管理）、**DispatcherServlet**（Front Controller 统一入口）、**注解映射**（`@Controller` + `@RequestMapping`）。理解了这个就知道 Spring MVC "做了什么"。
 
 ---
 

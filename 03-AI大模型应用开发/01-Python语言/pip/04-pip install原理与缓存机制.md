@@ -1,6 +1,6 @@
 # 04 - pip install 原理与缓存机制
 
-> 🎯 理解 pip install 的内部流程——解析依赖图、下载 wheel、构建 sdist、安装到 site-packages，能帮你快速诊断安装问题
+> 理解 pip install 的内部流程——解析依赖图、下载 wheel、构建 sdist、安装到 site-packages，能帮你快速诊断安装问题
 
 ---
 
@@ -41,7 +41,7 @@ pip install transformers
 
 | 维度 | wheel (.whl) | sdist (.tar.gz) |
 |------|:---:|:---:|
-| 编译 | ❌ 预编译 | ✅ 需要本地编译 |
+| 编译 | ✗ 预编译 | ✓ 需要本地编译 |
 | 安装速度 | 秒级 | 分钟级 |
 | 依赖 | 无 | gcc/cmake/pip-build |
 | 平台 | 特定平台 | 跨平台 |
@@ -55,7 +55,7 @@ pip install --only-binary :all: <pkg>
 pip install --dry-run <pkg> | grep "wheel"
 ```
 
-> ⚠️ AI 开发中，尽量用官方 wheel（如 PyTorch 官网的 CUDA 版本），**不要自己编译 PyTorch**
+> AI 开发中，尽量用官方 wheel（如 PyTorch 官网的 CUDA 版本），**不要自己编译 PyTorch**
 
 ## 3. 缓存机制
 

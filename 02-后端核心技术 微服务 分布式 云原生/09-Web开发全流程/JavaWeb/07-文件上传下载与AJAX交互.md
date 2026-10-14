@@ -47,7 +47,7 @@
   ------WebKitFormBoundary7MA4YWxk--
 ```
 
-> 💡 `boundary` 是随机分隔符，用于分隔多个表单字段和文件。每个 `part` 都有自己的 Content-Disposition 描述。
+> `boundary` 是随机分隔符，用于分隔多个表单字段和文件。每个 `part` 都有自己的 Content-Disposition 描述。
 
 ### 1.2 前端表单
 
@@ -55,7 +55,7 @@
 <!-- 文件上传表单三要素 -->
 <form action="/app/upload"
       method="post"
-      enctype="multipart/form-data">  <!-- ⭐ 必须设置 -->
+      enctype="multipart/form-data">  <!-- ★ 必须设置 -->
 
     <!-- 普通表单字段 -->
     <input type="text" name="description" placeholder="文件描述"/>
@@ -92,7 +92,7 @@ public class FileUploadServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
 
-        // ⚠️ POST + multipart 下 getParameter() 可用（Servlet 3.0+ 自动处理）
+        // POST + multipart 下 getParameter() 可用（Servlet 3.0+ 自动处理）
         String description = req.getParameter("description");
 
         // ═══ 方式一：获取单个文件 ═══
@@ -157,7 +157,7 @@ public class FileUploadServlet extends HttpServlet {
 ```java
 public class FileUploadSecurity {
 
-    // ⚠️ 安全校验清单
+    // 安全校验清单
     public void validate(Part filePart, String fileName) {
 
         // 1. 文件名非空
@@ -165,7 +165,7 @@ public class FileUploadSecurity {
             throw new BusinessException("文件名为空");
         }
 
-        // 2. 后缀名白名单（⭐ 关键防御）
+        // 2. 后缀名白名单（★ 关键防御）
         String ext = fileName.substring(fileName.lastIndexOf(".")).toLowerCase();
         Set<String> ALLOWED_EXT = Set.of(".jpg", ".jpeg", ".png", ".gif",
                                           ".pdf", ".doc", ".docx", ".xlsx");
@@ -182,7 +182,7 @@ public class FileUploadSecurity {
             throw new BusinessException("MIME 类型非法: " + contentType);
         }
 
-        // 4. 魔数校验（⭐ 最可靠——读取文件头几个字节判断真实类型）
+        // 4. 魔数校验（★ 最可靠——读取文件头几个字节判断真实类型）
         // 防 .exe 改名为 .jpg 上传
         // JPEG: FF D8 FF E0  PNG: 89 50 4E 47  GIF: 47 49 46 38
         InputStream is = filePart.getInputStream();
@@ -650,7 +650,7 @@ formData.append('description', '测试文件');
 const uploadResult = await fetch('/upload', {
     method: 'POST',
     body: formData
-    // ⚠️ 不要设置 Content-Type！浏览器会自动设 multipart/form-data + boundary
+    // 不要设置 Content-Type！浏览器会自动设 multipart/form-data + boundary
 }).then(r => r.json());
 
 // ═══ 下载文件（Blob） ═══
@@ -691,7 +691,7 @@ try {
 | **语法** | 回调（onreadystatechange） | Promise（支持 async/await） |
 | **请求/响应** | 混在一起 | 分离的 Request / Response 对象 |
 | **JSON 解析** | 手动 `JSON.parse()` | `response.json()` |
-| **进度事件** | ✅ 支持上传/下载进度 | ❌ 不直接支持（需 ReadableStream） |
+| **进度事件** | ✓ 支持上传/下载进度 | ✗ 不直接支持（需 ReadableStream） |
 | **超时** | `xhr.timeout` | 需手动用 AbortController |
 | **取消请求** | `xhr.abort()` | AbortController |
 | **Cookie** | 默认携带 | 默认不携带（`credentials: 'include'`） |
@@ -800,10 +800,10 @@ public class User {
 协议 + 域名 + 端口 → 三者完全一致才算同源
 
 http://example.com:8080/app/index.html
-  ├── http://example.com:8080/api/users     ✅ 同源
-  ├── http://example.com:8081/api/users     ❌ 端口不同
-  ├── https://example.com:8080/api/users    ❌ 协议不同
-  └── http://api.example.com:8080/users     ❌ 域名不同
+  ├── http://example.com:8080/api/users     ✓ 同源
+  ├── http://example.com:8081/api/users     ✗ 端口不同
+  ├── https://example.com:8080/api/users    ✗ 协议不同
+  └── http://api.example.com:8080/users     ✗ 域名不同
 ```
 
 ### 8.2 CORS 响应头
@@ -871,7 +871,7 @@ public class CorsFilter implements Filter {
 
 ```javascript
 // JSONP 利用 <script> 标签不受同源策略限制
-// ❌ 只支持 GET 请求，有 XSS 风险，已基本淘汰
+// ✗ 只支持 GET 请求，有 XSS 风险，已基本淘汰
 
 // 前端：
 function handleResponse(data) {

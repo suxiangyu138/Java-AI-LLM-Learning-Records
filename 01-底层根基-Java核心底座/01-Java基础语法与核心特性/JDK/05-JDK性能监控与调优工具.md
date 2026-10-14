@@ -2,7 +2,7 @@
 
 > JFR零开销记录、JMC可视化分析、Arthas在线诊断——这些现代工具让Java性能调优从"玄学"变成"科学"
 
-## 📚 目录
+## 目录
 
 1. [JFR — 零开销性能记录](#1-jfr--零开销性能记录)
 2. [JMC — 可视化分析](#2-jmc--可视化分析)
@@ -21,7 +21,7 @@
 
 **JFR**（JDK Flight Recorder，JDK飞行记录器）是Oracle JDK（以及OpenJDK 11+）内置的**低开销事件采集框架**。它通过JVM内置的探针持续采集运行时数据，对应用性能的影响通常低于 **1%**。
 
-> 💡 **核心概念**：JFR的独到之处在于"飞行记录"——像黑匣子一样始终在记录，发生问题时只需"提取"最近的数据即可回溯，无需提前启动。
+> **核心概念**：JFR的独到之处在于"飞行记录"——像黑匣子一样始终在记录，发生问题时只需"提取"最近的数据即可回溯，无需提前启动。
 
 ### 1.2 JFR原理
 
@@ -156,7 +156,7 @@ jcmd <PID> JFR.dump name=prod_profile \
 | 启动时机 | 可随时动态启停 | 需随进程启动或attach |
 | 分析能力 | 需配合JMC | 自带UI |
 
-> 🎯 **核心要点**：
+> **核心要点**：
 > - JFR最大的价值是**可以安全地在生产环境长期开启**，开销极小
 > - 用 `jcmd` 动态启停，无需重启应用——这是线上利器
 > - "飞行记录"的特性意味着**问题发生后再回溯也能看到原因**
@@ -198,8 +198,8 @@ JMC内置数十条分析规则，自动扫描JFR文件并标记问题：
 
 ```text
 Rules Check Results:
-✅ No problems found (20/29 rules checked)
-❌ Problems found (9/29 rules checked)
+✓ No problems found (20/29 rules checked)
+✗ Problems found (9/29 rules checked)
 
 Critical:
   - GC Pause Time: 15% of total runtime (阈值: <5%)
@@ -234,7 +234,7 @@ JMC 8+ 内置火焰图支持：
 │   │  query │              │          │               │
 │   └────────┴──────────────┴──────────┘               │
 │                                                      │
-│   🔥 最宽的函数 = 最热的CPU消耗点                      │
+│   最宽的函数 = 最热的CPU消耗点                      │
 │   → 这里dao.query占CPU时间最长                        │
 └─────────────────────────────────────────────────────┘
 ```
@@ -259,7 +259,7 @@ JMC 8+ 内置火焰图支持：
 2. 看分配速率最高的类
 3. 定位到代码中创建对象最密集的位置
 
-> 🎯 **核心要点**：
+> **核心要点**：
 > - JMC是**JFR的分析工具**，一定要配合JFR使用才有意义
 > - **Automated Analysis** 是最省力的功能——双击即可知道应用健康度
 > - 火焰图找热点：**最宽的函数** = 最消耗资源的方法
@@ -308,7 +308,7 @@ java \
   -jar app.jar
 ```
 
-> ⚠️ **安全警告**：生产环境务必开启 `ssl=true` 和 `authenticate=true`！
+> **安全警告**：生产环境务必开启 `ssl=true` 和 `authenticate=true`！
 
 **连接方式**：
 
@@ -340,7 +340,7 @@ java.lang:type=ClassLoading      → 类加载统计
 java.nio:type=BufferPool,name=direct → 直接内存使用
 ```
 
-> 🎯 **核心要点**：JConsole适合**开发环境快速查看**和**远程监督**。其最大优势是JDK内置、零配置、即开即用。但功能有限，不适合深度性能分析，线上环境建议优先使用JFR+JMC。
+> **核心要点**：JConsole适合**开发环境快速查看**和**远程监督**。其最大优势是JDK内置、零配置、即开即用。但功能有限，不适合深度性能分析，线上环境建议优先使用JFR+JMC。
 
 ---
 
@@ -410,7 +410,7 @@ VisualGC - 实时GC面板
 
 VisualVM可以通过插件集成BTrace（动态字节码追踪）：
 
-> 💡 **BTrace原理**：在不重启应用的情况下，动态注入追踪代码到运行中的Java类中，实时输出方法调用参数、返回值和耗时。
+> **BTrace原理**：在不重启应用的情况下，动态注入追踪代码到运行中的Java类中，实时输出方法调用参数、返回值和耗时。
 
 ```java
 // BTrace脚本示例：监控指定方法的调用耗时
@@ -430,7 +430,7 @@ public class MethodTimer {
 }
 ```
 
-> 🎯 **核心要点**：
+> **核心要点**：
 > - VisualVM是"功能最全"的开源监控工具，**VisualGC插件**看GC变化最直观
 > - 插件体系是VisualVM的差异化优势，**BTrace** 和 **VisualGC** 是必装插件
 > - 适合**开发和测试环境**的深度分析，线上环境推荐JFR（更低开销）
@@ -506,7 +506,7 @@ Runtime Info:
   uptime: 2 days 3 hours
 ```
 
-> 💡 **dashboard解读**：
+> **dashboard解读**：
 > - 左上角：所有线程列表及CPU使用时间（%CPU列）
 > - 右侧上方：堆各代内存使用情况
 > - 右侧下方：GC统计、运行时信息
@@ -640,7 +640,7 @@ stack com.example.service.OrderService createOrder \
 
 ### 5.8 `redefine` — 热替换Class（紧急修复）
 
-> ⚠️ **红牌警告**：redefine是"核武器"，只有紧急情况才使用！它只能替换方法体，不能增减字段或方法。
+> **红牌警告**：redefine是"核武器"，只有紧急情况才使用！它只能替换方法体，不能增减字段或方法。
 
 ```bash
 # 场景：线上发现某个方法有bug，紧急修改后编译替换
@@ -669,7 +669,7 @@ redefine /tmp/OrderService.class
 | 添加/删除注解 | - | no |
 | 修改方法签名 | - | no |
 
-> 💡 **redefine应用场景**：
+> **redefine应用场景**：
 > - 紧急修复空指针异常（增加null判断）
 > - 临时增加日志输出（debug用）
 > - 紧急修改配置值（硬编码修改）
@@ -677,7 +677,7 @@ redefine /tmp/OrderService.class
 
 ### 5.9 实战案例：接口突然变慢
 
-> 💡 **场景**：线上接到告警，下单接口响应时间P99从50ms飙升到5s。
+> **场景**：线上接到告警，下单接口响应时间P99从50ms飙升到5s。
 
 **Arthas排查全流程**：
 
@@ -735,7 +735,7 @@ logger --name com.example.service --level debug
 logger --name com.example.service
 ```
 
-> 🎯 **核心要点**：
+> **核心要点**：
 > - Arthas最核心的思想是"**在线**"——不重启、不部署、不配置，Attach进程即可
 > - 掌握这三板斧："**trace** 看慢在哪，**watch** 看入参返回值，**stack** 看谁调的"
 > - `thread -b` 一键检测死锁，比jstack更直观
@@ -807,7 +807,7 @@ CPU火焰图（从上往下看）：
 | Alloc | 对象分配热点 | OOM/GC频繁 |
 | Lock | 锁竞争热点 | 线程阻塞 |
 
-> 🎯 **核心要点**：async-profiler基于Linux perf_events，对应用几乎零侵入，是目前Linux上最好的采样分析工具之一。生成的交互式HTML火焰图可以在浏览器中放大、缩小、搜索，是性能调优的"地图"。
+> **核心要点**：async-profiler基于Linux perf_events，对应用几乎零侵入，是目前Linux上最好的采样分析工具之一。生成的交互式HTML火焰图可以在浏览器中放大、缩小、搜索，是性能调优的"地图"。
 
 ---
 
@@ -886,7 +886,7 @@ CPU火焰图（从上往下看）：
 
 ### 7.3 GCViewer / GCEasy 可视化分析
 
-> 💡 **推荐**：GC日志太长时，使用可视化工具一键分析
+> **推荐**：GC日志太长时，使用可视化工具一键分析
 
 | 工具 | 地址 | 特点 |
 |------|------|------|
@@ -897,13 +897,13 @@ CPU火焰图（从上往下看）：
 **GCEasy自动诊断输出**：
 
 ```text
-📊 Heap Analysis Report
+Heap Analysis Report
 ───────────────────────────────
 Key Performance Indicators:
-  Throughput: 98.5% (阈值: >99%, ⚠️ 略低于标准)
-  Avg Pause Time: 85ms (阈值: <200ms, ✅ 正常)
-  Max Pause Time: 1.2s (阈值: <1s, ❌ 超标!)
-  GC Frequency: 12次/分钟 (阈值: <10次/分钟, ⚠️ 偏高)
+  Throughput: 98.5% (阈值: >99%, 略低于标准)
+  Avg Pause Time: 85ms (阈值: <200ms, ✓ 正常)
+  Max Pause Time: 1.2s (阈值: <1s, ✗ 超标!)
+  GC Frequency: 12次/分钟 (阈值: <10次/分钟, 偏高)
 
 Diagnosis:
   1. Full GC: 发现3次Full GC，平均耗时850ms
@@ -924,7 +924,7 @@ Diagnosis:
 | GC暂停总时间 | <1%运行时间 | 1-5% | >5% |
 | YGC频率 | <1次/分钟 | 1-10次/分钟 | >10次/分钟 |
 
-> 🎯 **核心要点**：
+> **核心要点**：
 > - GC日志是判断GC健康度的第一手资料，**生产环境必须开启**GC日志
 > - GC日志分析三连问：**FGC次数（有或没有？）、单次暂停时间（是否超过1s？）、GC吞吐量（是否>99%？）**
 > - 重点关注 `real=` 值（实际暂停时间），`user+sys` 是多核并行总耗时
@@ -972,10 +972,10 @@ Diagnosis:
 **生产环境**：
 ```
 推荐优先级：
-  1️⃣ JFR（default级别）—— 长期开启，出事回溯
-  2️⃣ Arthas（按需attach）—— 即时诊断，用完即走
-  3️⃣ GC日志 —— 必须开启，事后分析
-  4️⃣ async-profiler（按需）—— 深度性能采样
+  1 JFR（default级别）—— 长期开启，出事回溯
+  2 Arthas（按需attach）—— 即时诊断，用完即走
+  3 GC日志 —— 必须开启，事后分析
+  4 async-profiler（按需）—— 深度性能采样
 ```
 
 ### 8.3 一句话总结
@@ -994,7 +994,7 @@ VisualVM → 本地开发神器
 
 ### 8.4 面试高频问题
 
-> 💡 **面试官常问**：
+> **面试官常问**：
 > 1. "生产环境如何零开销采集性能数据？" → JFR default模式 + jcmd动态启停
 > 2. "Arthas相比传统JDK工具有什么优势？" → 在线attach、trace/watch/stack三连、redefine热替换
 > 3. "接口突然变慢，只给你一台机器的权限怎么排查？" → Arthas trace定位慢方法
@@ -1006,7 +1006,7 @@ VisualVM → 本地开发神器
 
 ---
 
-> 🎯 **总结**：JDK性能监控与调优工具经历了"命令行→可视化→在线诊断→零开销采样"的进化。建议分层掌握：**基础层**（jstat/jstack/jmap），**现代层**（JFR/JMC），**在线诊断层**（Arthas），**深度分析层**（async-profiler/MAT）。面试和工作中，Arthas和JFR是最高频提到的两个武器。
+> **总结**：JDK性能监控与调优工具经历了"命令行→可视化→在线诊断→零开销采样"的进化。建议分层掌握：**基础层**（jstat/jstack/jmap），**现代层**（JFR/JMC），**在线诊断层**（Arthas），**深度分析层**（async-profiler/MAT）。面试和工作中，Arthas和JFR是最高频提到的两个武器。
 
 ---
 

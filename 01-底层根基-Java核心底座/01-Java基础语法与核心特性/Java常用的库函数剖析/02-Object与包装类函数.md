@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [Object 三大方法契约](#1-object-三大方法契约)
 2. [equals 重写的黄金模板](#2-equals-重写的黄金模板)
@@ -38,7 +38,7 @@ public class User {
 // 与 Java集合框架/03 的"去重正确性"联动
 ```
 
-> 🎯 **核心要点**：三大契约 = "**equals 值相等 + hashCode 同步 + toString 可读**"——**"equals 相等必须 hashCode 相等"是 HashMap/HashSet 正确性的前提**；record（JDK 16+）自动实现三件套。
+> **核心要点**：三大契约 = "**equals 值相等 + hashCode 同步 + toString 可读**"——**"equals 相等必须 hashCode 相等"是 HashMap/HashSet 正确性的前提**；record（JDK 16+）自动实现三件套。
 
 ---
 
@@ -73,7 +73,7 @@ public int hashCode() {
 现代替代：record 自动实现（组件全参与 + 值语义）
 ```
 
-> 🎯 **核心要点**：equals 模板 = "**五步（自身/类型/null/强转/逐字段）+ 同步 hashCode**"——**"Objects.equals 处理引用字段（防 NPE）"**是模板的关键细节；能手写模板 + 说清 getClass vs instanceof = 面试满分。
+> **核心要点**：equals 模板 = "**五步（自身/类型/null/强转/逐字段）+ 同步 hashCode**"——**"Objects.equals 处理引用字段（防 NPE）"**是模板的关键细节；能手写模板 + 说清 getClass vs instanceof = 面试满分。
 
 ---
 
@@ -105,7 +105,7 @@ int z = x;                // 拆箱：intValue()
   高频小整数复用（省对象）→ 但带来 == 陷阱（见第 4 节）
 ```
 
-> 🎯 **核心要点**：Integer 缓存池 = "**-128~127 共享对象（valueOf/装箱走池）**"——**"127 == 128 的差别"是 Java 最著名的面试题**；`new Integer()` 已废弃（JDK 9+），统一用 valueOf/装箱。
+> **核心要点**：Integer 缓存池 = "**-128~127 共享对象（valueOf/装箱走池）**"——**"127 == 128 的差别"是 Java 最著名的面试题**；`new Integer()` 已废弃（JDK 9+），统一用 valueOf/装箱。
 
 ---
 
@@ -114,19 +114,19 @@ int z = x;                // 拆箱：intValue()
 **装箱/拆箱与 == 的完整规则**（面试必背）：
 
 ```java
-Integer a = 127, b = 127;     // 装箱 → 缓存池 → a == b ✅ true
-Integer c = 128, d = 128;     // 装箱 → 超缓存 → c == d ❌ false
+Integer a = 127, b = 127;     // 装箱 → 缓存池 → a == b ✓ true
+Integer c = 128, d = 128;     // 装箱 → 超缓存 → c == d ✗ false
 Integer e = new Integer(128); // 显式 new → 永不相等
 
 // 包装类 vs 基本类型比较：自动拆箱
 Integer x = 100;
 int y = 100;
-x == y;                       // ✅ true（x 拆箱后比）
-// ⚠️ 但：包装类 == 包装类 是引用比较（拆箱只在基本类型参与时）
+x == y;                       // ✓ true（x 拆箱后比）
+// 但：包装类 == 包装类 是引用比较（拆箱只在基本类型参与时）
 
 // NPE 陷阱：自动拆箱 null
 Integer n = null;
-int m = n;                    // ❌ NullPointerException（拆箱 null）
+int m = n;                    // ✗ NullPointerException（拆箱 null）
 ```
 
 **== 的完整决策树**：
@@ -138,7 +138,7 @@ int m = n;                    // ❌ NullPointerException（拆箱 null）
 → 结论：包装类比较一律用 equals（或 intValue）
 ```
 
-> 🎯 **核心要点**：装箱陷阱 = "**包装类 == 是引用比较（缓存池例外）+ 拆箱 null 抛 NPE**"——**"包装类比较用 equals"是铁律**；`Integer == int` 自动拆箱的 NPE 是生产常见事故。
+> **核心要点**：装箱陷阱 = "**包装类 == 是引用比较（缓存池例外）+ 拆箱 null 抛 NPE**"——**"包装类比较用 equals"是铁律**；`Integer == int` 自动拆箱的 NPE 是生产常见事故。
 
 ---
 
@@ -174,7 +174,7 @@ String.format("%05d", 123);             // "00123"（补零）
 | String.valueOf | String | **"null"**（不抛） | 任意对象转字符串 |
 | toString | String | NPE（null 调用） | 已知非 null |
 
-> 🎯 **核心要点**：parse 家族 = "**parseInt（基本类型）+ valueOf（包装类）+ String.valueOf（null 安全）**"——**"String.valueOf(null) 返回 'null' 而非 NPE"是细节考点**；进制与 format 是扩展能力。
+> **核心要点**：parse 家族 = "**parseInt（基本类型）+ valueOf（包装类）+ String.valueOf（null 安全）**"——**"String.valueOf(null) 返回 'null' 而非 NPE"是细节考点**；进制与 format 是扩展能力。
 
 ---
 
@@ -198,7 +198,7 @@ Boolean.valueOf("yes");        // false（只认 "true"）
 Double.isNaN(0.0 / 0.0);       // true（NaN 判断必须用 isNaN！）
 Double.isInfinite(1.0 / 0.0);  // true
 Double.parseDouble("1.5");     // 1.5
-// ⚠️ 坑：Double.NaN == Double.NaN 为 false（NaN 不等于自身）
+// 坑：Double.NaN == Double.NaN 为 false（NaN 不等于自身）
 //    → 比较必须 isNaN()
 
 // Long
@@ -215,7 +215,7 @@ Long.toBinaryString(10);       // "1010"
 字符：Character（isDigit/isLetter 判断）
 ```
 
-> 🎯 **核心要点**：包装类特色 = "**Character 判断、Boolean 两实例、Double 的 NaN 陷阱**"——**"NaN != NaN，必须 isNaN()"是最隐蔽的坑**；金额场景直接跳到 BigDecimal（05 模块）。
+> **核心要点**：包装类特色 = "**Character 判断、Boolean 两实例、Double 的 NaN 陷阱**"——**"NaN != NaN，必须 isNaN()"是最隐蔽的坑**；金额场景直接跳到 BigDecimal（05 模块）。
 
 ---
 
@@ -245,7 +245,7 @@ Object 与包装类的核心认知：
   parse 家族三选（parseInt/valueOf/String.valueOf）
 ```
 
-> 🎯 **核心要点**：速查九项 = "**Object 与包装类的完整考点清单**"——**缓存池、==、拆箱 NPE、NaN 四大陷阱**是细节题富矿；黄金模板 + 同步 hashCode 是手写题标准答案。
+> **核心要点**：速查九项 = "**Object 与包装类的完整考点清单**"——**缓存池、==、拆箱 NPE、NaN 四大陷阱**是细节题富矿；黄金模板 + 同步 hashCode 是手写题标准答案。
 
 ---
 

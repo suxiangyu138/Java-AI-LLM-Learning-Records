@@ -2,7 +2,7 @@
 
 > 定位：2026 年 LangChain 构建 Agent 的唯一官方入口——全参数解析、弃用史、与 AgentExecutor 的迁移对照（2026-08 基准）
 
-## 📚 目录
+## 目录
 
 1. [为什么是 create_agent](#1-为什么是-create_agent)
 2. [最小示例：三行起一个 Agent](#2-最小示例三行起一个-agent)
@@ -30,7 +30,7 @@ StateGraph（langgraph）              = 底层引擎，需要节点级控制时
 | 底层 | 自动构建 LangGraph 状态机（04 篇解剖） |
 | 状态 | 标准 ReAct 循环（agent 节点 + tools 节点 + 条件路由） |
 
-> 🎯 **核心要点**：create_agent = "你要的循环能力，我打包成参数给你"——你阶段 1 手写的 60 行循环、阶段 2 手写的流式/记忆，在这里都是参数。
+> **核心要点**：create_agent = "你要的循环能力，我打包成参数给你"——你阶段 1 手写的 60 行循环、阶段 2 手写的流式/记忆，在这里都是参数。
 
 ## 2. 最小示例：三行起一个 Agent
 
@@ -68,7 +68,7 @@ print(result["messages"][-1].content)
 输出：{"messages": [ ...完整消息历史... ]}（最后一条 = 最终回答）
 ```
 
-> 💡 **与手写对照**：输入/输出都是 `messages` 数组——协议没变，只是框架替你维护了追加铁律。
+> **与手写对照**：输入/输出都是 `messages` 数组——协议没变，只是框架替你维护了追加铁律。
 
 ## 3. 全参数解析
 
@@ -97,7 +97,7 @@ agent = create_agent(
 )
 ```
 
-> ⚠️ **recursion_limit 别省**：默认值可能偏大——生产环境显式设置（10-25），否则工具反复失败时循环烧钱（阶段 1 教训的框架版）。
+> **recursion_limit 别省**：默认值可能偏大——生产环境显式设置（10-25），否则工具反复失败时循环烧钱（阶段 1 教训的框架版）。
 
 ## 4. 弃用史：AgentExecutor → create_react_agent → create_agent
 
@@ -105,16 +105,16 @@ agent = create_agent(
 |------|-----|----------|-----------|
 | 2023-2024 | AgentExecutor + tools | **维护期至 2026-12** | 循环逻辑硬编码、难扩展 |
 | 2024-2025 | create_react_agent（LangGraph） | **已弃用** | 被 langchain.create_agent 统一 |
-| 2025.10+ | **create_agent** | ✅ 官方入口 | 内置状态机 + 中间件 + 全参数 |
+| 2025.10+ | **create_agent** | ✓ 官方入口 | 内置状态机 + 中间件 + 全参数 |
 
 **AgentExecutor → create_agent 迁移对照**：
 
 ```text
-❌ 老代码（维护期）：
+✗ 老代码（维护期）：
 from langchain.agents import AgentExecutor, create_react_agent
 executor = AgentExecutor(agent=create_react_agent(llm, tools, prompt), tools=tools)
 
-✅ 新代码（2026）：
+✓ 新代码（2026）：
 from langchain.agents import create_agent
 agent = create_agent(model=llm, tools=tools, system_prompt=prompt_text)
 ```
@@ -126,7 +126,7 @@ agent = create_agent(model=llm, tools=tools, system_prompt=prompt_text)
 | 中间步骤 | → stream(stream_mode="values") 或钩子 |
 | 兼容提示 | 老教程代码直接改 import 大多可跑，但行为检查一遍 |
 
-> ⚠️ **2026 判断框架资历的试金石**：面试/文档看到 `AgentExecutor` 或 `create_react_agent` 作为推荐 API → 该资料已过时。
+> **2026 判断框架资历的试金石**：面试/文档看到 `AgentExecutor` 或 `create_react_agent` 作为推荐 API → 该资料已过时。
 
 ## 5. 中间件系统
 
@@ -151,7 +151,7 @@ agent = create_agent(model, tools, middleware=[LogMiddleware()])
 | 拦截 | 请求级过滤/改写 |
 | 限流 | 速率控制 |
 
-> 💡 中间件 = 你手写时"包一层装饰器"的框架化——横切关注点不再散落各处。
+> 中间件 = 你手写时"包一层装饰器"的框架化——横切关注点不再散落各处。
 
 ## 6. 何时下沉 StateGraph
 
@@ -165,10 +165,10 @@ create_agent 够用吗？（默认答案：够）
 
 | 场景 | create_agent | StateGraph |
 |------|:---:|:---:|
-| 标准工具循环 | ✅ | 杀鸡用牛刀 |
-| 人类审批节点 | ❌ | ✅ |
-| 多 Agent Supervisor | ❌ | ✅ |
-| 状态中途检查 | ❌ | ✅ |
+| 标准工具循环 | ✓ | 杀鸡用牛刀 |
+| 人类审批节点 | ✗ | ✓ |
+| 多 Agent Supervisor | ✗ | ✓ |
+| 状态中途检查 | ✗ | ✓ |
 
 ## 7. 常见坑速查
 
@@ -181,7 +181,7 @@ create_agent 够用吗？（默认答案：够）
 | 输入格式错 | invoke 报错 | `{"messages": [("user", ...)]}` |
 | 忘装 langgraph | create_agent 底层缺依赖 | `pip install langgraph` |
 
-> 🎯 **核心要点**：create_agent 的正确心智 = **"参数化的生产级循环"**。用熟它之后，阶段 1 手写的循环代码就变成了你的"内部解剖图"——你知道每个参数背后在跑什么。
+> **核心要点**：create_agent 的正确心智 = **"参数化的生产级循环"**。用熟它之后，阶段 1 手写的循环代码就变成了你的"内部解剖图"——你知道每个参数背后在跑什么。
 
 ---
 

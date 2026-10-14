@@ -1,6 +1,6 @@
 # 10 - PyTorch 部署：量化与 ONNX 导出
 
-> 🎯 模型训好了不代表能上线 — 量化压缩、ONNX 导出、Java 端加载，这是模型从 Python 走向生产的关键三步
+> 模型训好了不代表能上线 — 量化压缩、ONNX 导出、Java 端加载，这是模型从 Python 走向生产的关键三步
 
 ---
 
@@ -262,12 +262,12 @@ try (ZooModel<Image, Classifications> model = criteria.loadModel();
 
 | 方案 | 接口语言 | 性能 | LLM 适用 | 复杂度 |
 |------|:---:|:---:|:---:|:---:|
-| **ONNX Runtime Java** | Java | ⭐⭐⭐⭐ | ✅ 传统模型 | ⭐⭐ |
-| **DJL** | Java | ⭐⭐⭐⭐ | ✅ 多引擎 | ⭐ |
-| **TorchScript + LibTorch** | C++ | ⭐⭐⭐⭐⭐ | ✅ | ⭐⭐⭐⭐ |
-| **TensorRT** | C++/Python | ⭐⭐⭐⭐⭐ | ✅ GPU极致 | ⭐⭐⭐⭐ |
-| **llama.cpp / GGUF** | C++ | ⭐⭐⭐ | ✅ LLM专属 | ⭐⭐ |
-| **Ollama API** | HTTP | ⭐⭐⭐ | ✅ 最简单 | ⭐ |
+| **ONNX Runtime Java** | Java | ★★★★ | ✓ 传统模型 | ★★ |
+| **DJL** | Java | ★★★★ | ✓ 多引擎 | ★ |
+| **TorchScript + LibTorch** | C++ | ★★★★★ | ✓ | ★★★★ |
+| **TensorRT** | C++/Python | ★★★★★ | ✓ GPU极致 | ★★★★ |
+| **llama.cpp / GGUF** | C++ | ★★★ | ✓ LLM专属 | ★★ |
+| **Ollama API** | HTTP | ★★★ | ✓ 最简单 | ★ |
 
 ```text
 对 Java 后端开发者的推荐：

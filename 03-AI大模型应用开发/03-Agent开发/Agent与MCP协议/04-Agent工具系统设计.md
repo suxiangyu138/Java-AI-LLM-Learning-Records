@@ -1,6 +1,6 @@
 # 04 - Agent 工具系统设计
 
-> 🎯 工具是 Agent 的"手脚" — 设计好工具系统，Agent 才能可靠地操作外部世界。工具注册、Schema 设计、沙箱执行、错误处理是四大基石
+> 工具是 Agent 的"手脚" — 设计好工具系统，Agent 才能可靠地操作外部世界。工具注册、Schema 设计、沙箱执行、错误处理是四大基石
 
 ---
 
@@ -74,12 +74,12 @@ class ToolRegistry:
 工具 Schema 设计黄金法则：
 
 ① description 是 LLM 选择工具的唯一依据 → 写清楚"何时用、做什么"
-   ❌ "查询数据"
-   ✅ "查询MySQL数据库中的销售数据。当用户询问销售、订单、营收相关问题时使用。"
+   ✗ "查询数据"
+   ✓ "查询MySQL数据库中的销售数据。当用户询问销售、订单、营收相关问题时使用。"
 
 ② 参数 description 同样重要
-   ❌ "query": {"type": "string"}
-   ✅ "query": {"type": "string", "description": "SQL查询语句，仅支持SELECT"}
+   ✗ "query": {"type": "string"}
+   ✓ "query": {"type": "string", "description": "SQL查询语句，仅支持SELECT"}
 
 ③ 使用枚举约束取值空间
    "time_range": {"type": "string", "enum": ["1d", "7d", "30d", "90d"]}
@@ -91,11 +91,11 @@ class ToolRegistry:
 ### Schema 设计对比
 
 ```text
-❌ 差 Schema：
+✗ 差 Schema：
   {"name": "search", "description": "搜索",
    "parameters": {"query": {"type": "string"}}}
 
-✅ 好 Schema：
+✓ 好 Schema：
   {"name": "search_knowledge_base",
    "description": "搜索企业内部知识库。当用户询问公司政策、技术文档、产品说明时使用此工具。不要用于查询实时数据。",
    "parameters": {

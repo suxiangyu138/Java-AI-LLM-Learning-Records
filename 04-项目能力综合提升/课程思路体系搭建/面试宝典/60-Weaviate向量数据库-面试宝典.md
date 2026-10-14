@@ -26,7 +26,7 @@
 | 核心场景 | 语义搜索、RAG、推荐系统 | 事务处理、报表 |
 | 检索结果 | 按相似度排序的 Top-K | 精确匹配集合 |
 
-> 💡 向量数据库是 RAG（Retrieval-Augmented Generation）架构的核心组件，负责从海量文档中找出与用户 query 语义最相似的片段。
+> 向量数据库是 RAG（Retrieval-Augmented Generation）架构的核心组件，负责从海量文档中找出与用户 query 语义最相似的片段。
 
 ### Q2 什么是向量嵌入（Vector Embedding）？
 > Embedding 是将文本、图片、音视频等非结构化数据通过深度学习模型映射为固定维度的浮点数向量。
@@ -66,7 +66,7 @@
 | **Schema** | DDL（表结构定义） | 管理 Class 和 Property 的元信息 |
 | **Tenant** | Schema/Database | 多租户隔离单位 |
 
-> 💡 Weaviate 中的 Class 类似于 RDBMS 的表，但多了 `vectorizer`、`vectorIndexType` 等 AI 相关配置。
+> Weaviate 中的 Class 类似于 RDBMS 的表，但多了 `vectorizer`、`vectorIndexType` 等 AI 相关配置。
 
 ### Q5 什么是 HNSW（Hierarchical Navigable Small World）索引？
 > HNSW 是目前最主流的 ANN（Approximate Nearest Neighbor）算法，基于**分层可导航小世界图**构建。
@@ -79,7 +79,7 @@
 | **时间复杂度** | O(log n) 级别 |
 | **优缺点** | 查询极快但内存占用较高 |
 
-> 🎯 HNSW 是 Weaviate 默认的向量索引类型，适合**高精度、低延迟**的场景。
+> HNSW 是 Weaviate 默认的向量索引类型，适合**高精度、低延迟**的场景。
 
 ### Q6 什么是 Flat（Brute Force）索引？
 > Flat 索引是**暴力穷举**方式，计算查询向量与所有向量的距离，不建树/图结构。
@@ -100,7 +100,7 @@
 | **内积距离** | `dot` | 1 - dot(x, y) | 归一化后等同余弦，推荐场景 |
 | **曼哈顿距离** | `manhattan` | Σ\|xi - yi\| | 特定特征空间 |
 
-> ⚠️ Weaviate 中**距离越小表示越相似**。余弦距离 = 1 - 余弦相似度，范围 [0, 2]。
+> Weaviate 中**距离越小表示越相似**。余弦距离 = 1 - 余弦相似度，范围 [0, 2]。
 
 ### Q8 Weaviate 中的向量化方式有哪些？
 > Weaviate 支持多种向量化策略，无需外部模型调用。
@@ -168,7 +168,7 @@ Hybrid(query) = α × BM25(query) + (1-α) × VectorSimilarity(query)
 | **向量搜索** | 语义相似度高 | 关键词精确匹配弱 |
 | **混合搜索** | 两者兼顾 | 权重 α 需调优 |
 
-> 💡 Weaviate 的混合搜索通过 `hybrid` 查询操作符实现，自动融合 BM25 分数和向量距离分数。
+> Weaviate 的混合搜索通过 `hybrid` 查询操作符实现，自动融合 BM25 分数和向量距离分数。
 
 ### Q14 什么是生成式搜索（Generative Search）？
 > 生成式搜索 = **检索（Retrieval）** + **生成（Generation）**，即 RAG 的数据库原生实现。
@@ -220,7 +220,7 @@ Hybrid(query) = α × BM25(query) + (1-α) × VectorSimilarity(query)
 }
 ```
 
-> 💡 交叉引用支持**反向查询（Beacon/HasNext）**，适合知识图谱类应用。
+> 交叉引用支持**反向查询（Beacon/HasNext）**，适合知识图谱类应用。
 
 ### Q18 Weaviate 的 Backup/Restore 机制是怎样的？
 > Weaviate 支持**创建备份（Create Backup）**和**恢复（Restore）**，可以导出到 S3、GCS 或本地文件系统。
@@ -239,13 +239,13 @@ POST /v1/backups/{backend}
 
 | 算法 | 原理 | 查询速度 | 内存占用 | 建索引时间 | Weaviate 支持 |
 |------|------|---------|---------|-----------|:---:|
-| **HNSW** | 分层可导航小世界图 | ⭐⭐⭐⭐⭐ | ⭐⭐（高） | ⭐⭐（慢） | ✅ 默认 |
-| **Flat** | 暴力全量计算 | ⭐（极慢） | ⭐⭐⭐⭐⭐（无额外） | ⭐⭐⭐⭐⭐（无） | ✅ |
-| **IVF** | 倒排文件 + 聚类 | ⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ❌（不在核心引擎中） |
-| **IVF_PQ** | IVF + 乘积量化压缩 | ⭐⭐⭐ | ⭐⭐⭐⭐⭐（省内存） | ⭐⭐⭐ | ❌ |
-| **DiskANN** | 基于 SSD 的图索引 | ⭐⭐⭐ | ⭐⭐⭐⭐⭐（SSD） | ⭐⭐⭐ | ❌ |
+| **HNSW** | 分层可导航小世界图 | ★★★★★ | ★★（高） | ★★（慢） | ✓ 默认 |
+| **Flat** | 暴力全量计算 | ★（极慢） | ★★★★★（无额外） | ★★★★★（无） | ✓ |
+| **IVF** | 倒排文件 + 聚类 | ★★★★ | ★★★★ | ★★★★ | ✗（不在核心引擎中） |
+| **IVF_PQ** | IVF + 乘积量化压缩 | ★★★ | ★★★★★（省内存） | ★★★ | ✗ |
+| **DiskANN** | 基于 SSD 的图索引 | ★★★ | ★★★★★（SSD） | ★★★ | ✗ |
 
-> 🎯 HNSW 是当前**召回率和延迟的最佳平衡点**，也是 Weaviate 的默认和首选索引类型。
+> HNSW 是当前**召回率和延迟的最佳平衡点**，也是 Weaviate 的默认和首选索引类型。
 
 ### Q2 HNSW 的关键参数如何调优？
 
@@ -316,7 +316,7 @@ vectorIndexConfig:
   → (4) 返回确认
 ```
 
-> ⚠️ 如果使用外部向量（自行调用 Embedding API），Weaviate 会跳过步骤 (1)，直接存储传入的 vector。
+> 如果使用外部向量（自行调用 Embedding API），Weaviate 会跳过步骤 (1)，直接存储传入的 vector。
 
 ### Q5 Weaviate 的搜索流程如何工作？
 
@@ -344,7 +344,7 @@ BM25(d, q) = Σ IDF(t) × TF(t, d) × (k1 + 1) / (TF(t, d) + k1 × (1 - b + b ×
 | b | 文档长度归一化 | 0.75 |
 | IDF(t) | 逆文档频率 | 自动计算 |
 
-> 💡 Weaviate 的 BM25 通过 `bm25` 查询操作符使用，是对 `text` 类型属性最有效的全文搜索方式。
+> Weaviate 的 BM25 通过 `bm25` 查询操作符使用，是对 `text` 类型属性最有效的全文搜索方式。
 
 ### Q7 Weaviate 的混合搜索分数融合机制是怎样的？
 > Weaviate 使用倒数排名融合（Reciprocal Rank Fusion, RRF）来合并 BM25 和向量的排名。
@@ -1518,14 +1518,14 @@ public class MigrationService {
 
 | 对比维度 | **Weaviate** | **Milvus** | **Pinecone** | **Qdrant** |
 |----------|:-----------:|:---------:|:-----------:|:---------:|
-| **开源** | ✅ Apache 2.0 | ✅ Apache 2.0 | ❌ 闭源 | ✅ Apache 2.0 |
+| **开源** | ✓ Apache 2.0 | ✓ Apache 2.0 | ✗ 闭源 | ✓ Apache 2.0 |
 | **开发语言** | Go | Go + C++ | 闭源 | Rust |
 | **API** | GraphQL+REST | gRPC+REST | REST | gRPC+REST |
-| **混合搜索** | ✅ 原生 | ❌ 需手动 | ❌ 需手动 | ✅ 原生 |
-| **生成式搜索** | ✅ 内置模块 | ❌ | ❌ | ❌ |
-| **多租户** | ✅ Schema 级 | ❌ Collection 级 | ❌ Index 级 | ✅ Collection 级 |
-| **分布式** | ✅ K8s 原生 | ✅ K8s | ✅ SaaS | ✅ K8s |
-| **RAG 友好度** | ⭐⭐⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐⭐ |
+| **混合搜索** | ✓ 原生 | ✗ 需手动 | ✗ 需手动 | ✓ 原生 |
+| **生成式搜索** | ✓ 内置模块 | ✗ | ✗ | ✗ |
+| **多租户** | ✓ Schema 级 | ✗ Collection 级 | ✗ Index 级 | ✓ Collection 级 |
+| **分布式** | ✓ K8s 原生 | ✓ K8s | ✓ SaaS | ✓ K8s |
+| **RAG 友好度** | ★★★★★ | ★★★ | ★★★★ | ★★★★ |
 | **社区生态** | 快速增长 | 成熟 | 成熟 | 快速增长 |
 
 ---
@@ -1622,4 +1622,4 @@ public class MigrationService {
 
 ---
 
-> 🎯 **复习建议**：先通读基础概念部分建立整体认知，再重点掌握 Spring AI 的代码实践（面试手写高频），最后理解原理部分用于深度面试问答。系统设计题建议结合实际项目经验进行准备，写出你参与过的 RAG/知识库项目中 Weaviate 的具体使用场景。
+> **复习建议**：先通读基础概念部分建立整体认知，再重点掌握 Spring AI 的代码实践（面试手写高频），最后理解原理部分用于深度面试问答。系统设计题建议结合实际项目经验进行准备，写出你参与过的 RAG/知识库项目中 Weaviate 的具体使用场景。

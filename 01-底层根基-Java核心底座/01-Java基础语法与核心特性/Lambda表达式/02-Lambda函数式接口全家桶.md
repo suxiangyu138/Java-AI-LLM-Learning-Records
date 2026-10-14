@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [函数式接口与 SAM 判定](#1-函数式接口与-sam-判定)
 2. [@FunctionalInterface 注解](#2-functionalinterface-注解)
@@ -64,10 +64,10 @@ NamedTask task = () -> System.out.println("run");
 
 这里 `run()` 仍然是唯一需要 Lambda 提供实现的抽象方法。接口声明 `equals` 等方法只是对 `Object` 方法的重新声明，不改变函数式接口资格。
 
-> ⚠️ **豁免只覆盖 `Object` 的 `public` 方法**。`clone()` 与 `finalize()` 在 `Object` 里是 **protected**，接口重声明它们等于把 protected 提升为 public，构成了**新契约**，因此计入抽象方法数：
+> **豁免只覆盖 `Object` 的 `public` 方法**。`clone()` 与 `finalize()` 在 `Object` 里是 **protected**，接口重声明它们等于把 protected 提升为 public，构成了**新契约**，因此计入抽象方法数：
 >
 > ```java
-> // ❌ 实测报错：WithClone 不是函数接口
+> // ✗ 实测报错：WithClone 不是函数接口
 > //              在 接口 WithClone 中找到多个非覆盖抽象方法
 > @FunctionalInterface
 > interface WithClone {
@@ -81,7 +81,7 @@ NamedTask task = () -> System.out.println("run");
 另一个反直觉的推论：**只声明 `Object` 方法的接口不是函数式接口**，因为豁免之后抽象方法数是 **0**，而要求是恰好 1 个。
 
 ```java
-// ❌ 抽象方法数 = 0，不满足"恰好一个"
+// ✗ 抽象方法数 = 0，不满足"恰好一个"
 // @FunctionalInterface
 interface OnlyObjectMethods {
     boolean equals(Object o);
@@ -128,11 +128,11 @@ interface Both extends Left, Right {
 interface A { void a(); }
 interface B { void b(); }
 
-// ❌ 有两个不同的抽象方法
+// ✗ 有两个不同的抽象方法
 // interface NotFunctional extends A, B {}
 ```
 
-> 🎯 **判定口诀**：先剔除 `default/static/private`，再剔除 `Object` 公共方法，最后对继承来的同签名方法做合并；剩下一个抽象契约才是 SAM。
+> **判定口诀**：先剔除 `default/static/private`，再剔除 `Object` 公共方法，最后对继承来的同签名方法做合并；剩下一个抽象契约才是 SAM。
 
 ---
 
@@ -156,7 +156,7 @@ interface Validator<T> {
 以下写法会被拒绝：
 
 ```java
-// ❌ @FunctionalInterface
+// ✗ @FunctionalInterface
 // interface Broken {
 //     void first();
 //     void second();
@@ -221,7 +221,7 @@ System.out.println(trimThenParse.apply(" 42 "));  // 42（int）
 System.out.println(parseThenFormat.apply("42"));  // "42"（String）
 ```
 
-> ⚠️ 注意 `parseThenFormat` 的声明类型必须是 `Function<String, String>` 而不是 `Function<String, Integer>`。`andThen` 会把返回类型换成后一个函数的返回类型（这里 `String::valueOf` 返回 `String`），写错会得到一条很难读的报错：`推论变量 V 具有不兼容的上限：等式约束条件 Integer，下限 String`。
+> 注意 `parseThenFormat` 的声明类型必须是 `Function<String, String>` 而不是 `Function<String, Integer>`。`andThen` 会把返回类型换成后一个函数的返回类型（这里 `String::valueOf` 返回 `String`），写错会得到一条很难读的报错：`推论变量 V 具有不兼容的上限：等式约束条件 Integer，下限 String`。
 
 | 写法 | 执行顺序 | 组合结果 | 结果类型 |
 |---|---|---|---|
@@ -330,7 +330,7 @@ pipeline.accept("  hello  ");
 // save: [  hello  ]
 ```
 
-> ⚠️ **`andThen` 串起来的是"两个都收到同一个入参"，不是"前一个的输出喂给后一个"**。`Consumer` 返回 `void`，根本没有输出可传递。所以下面这种写法是个静默失效的陷阱：
+> **`andThen` 串起来的是"两个都收到同一个入参"，不是"前一个的输出喂给后一个"**。`Consumer` 返回 `void`，根本没有输出可传递。所以下面这种写法是个静默失效的陷阱：
 >
 > ```java
 > Consumer<String> trimPrint = String::trim;      // 合法但毫无作用：trim 结果被丢弃
@@ -667,7 +667,7 @@ Rule<String> accepted = nonBlank.and(shortText);
 4. 定义带受检异常的 `CheckedFunction<T,R>`，实现转换为标准 `Function` 的适配器。
 5. 设计一个订单折扣 `Rule` 接口，提供 `and`、`or`、`negate` 组合，并说明副作用约束。
 
-> 🎯 **模块结论**：先根据函数描述符选接口，再根据语义选择组合方式；标准接口解决通用性，自定义接口解决业务可读性、异常和契约边界。
+> **模块结论**：先根据函数描述符选接口，再根据语义选择组合方式；标准接口解决通用性，自定义接口解决业务可读性、异常和契约边界。
 
 ---
 

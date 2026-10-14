@@ -1,7 +1,7 @@
 # 05-SonarScanner与CI集成
 > 定位：Scanner 是分析入口、CI 是门禁执行者——CLI/Maven/Gradle 三种形态、分析异步模型、流水线门禁三件套；Community Build 没有 PR 装饰，CI 脚本补偿是标配动作。
 
-## 📚 目录
+## 目录
 1. [Scanner 家族](#1-scanner-家族)
 2. [sonar-project.properties](#2-sonar-projectproperties)
 3. [分析的异步模型](#3-分析的异步模型)
@@ -139,7 +139,7 @@ gh pr comment $PR_NUMBER --body "SonarQube 门禁：$STATUS（$SONAR_HOST_URL/da
 4. Jenkins 的「分析 + 等待门禁」两 stage 怎么写？
 5. Community Build 的 PR 补偿两种姿势？
 
-> 🎯 **核心要点**：Maven 项目 `mvn sonar:sonar`、CLI 通用、Gradle 插件；`sonar.java.binaries` 与排除生成代码必配；分析异步——轮询门禁 API 再判定；Jenkins `waitForQualityGate`、GitHub 官方 action；Community 无 PR 装饰用 CI 注释补偿。
+> **核心要点**：Maven 项目 `mvn sonar:sonar`、CLI 通用、Gradle 插件；`sonar.java.binaries` 与排除生成代码必配；分析异步——轮询门禁 API 再判定；Jenkins `waitForQualityGate`、GitHub 官方 action；Community 无 PR 装饰用 CI 注释补偿。
 
 ---
 

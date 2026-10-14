@@ -1,8 +1,8 @@
 # 07 - Spring 与 SpringBoot
 
-> 🎯 Spring 题从"会不会用"到"懂不懂原理"层层递进——Bean 生命周期、循环依赖三级缓存、AOP 动态代理、事务失效场景、自动装配是五大必考主线。本模块对标 Spring Framework 7 / Boot 4（2026 生产基线）
+> Spring 题从"会不会用"到"懂不懂原理"层层递进——Bean 生命周期、循环依赖三级缓存、AOP 动态代理、事务失效场景、自动装配是五大必考主线。本模块对标 Spring Framework 7 / Boot 4（2026 生产基线）
 
-## 📚 目录
+## 目录
 
 1. [IOC 容器与 DI 思想](#1-ioc-容器与-di-思想)
 2. [Bean 生命周期十二步](#2-bean-生命周期十二步)
@@ -98,7 +98,7 @@ AOP（面向切面编程）：把日志、事务、鉴权、性能监控等**横
 
 @Autowired 注入原理（BeanPostProcessor 的 AutowiredAnnotationBeanPostProcessor）；prototype Bean 的 AOP 代理是每次新代理吗（是）；@Transactional 和 AOP 什么关系（事务就是 AOP 的一个切面实现）；Spring 容器是单例吗（默认单例池）；Boot 4 后 @Transactional 的默认回滚行为有变化吗（没有，依旧默认运行时异常回滚、受检异常需 rollbackFor 显式声明）。
 
-> 🎯 **核心要点**：Spring 题的通吃公式 = **思想（IOC/AOP）→ 机制（生命周期/三级缓存/动态代理）→ 场景（事务/失效/自调用）→ 版本（Boot 4/Framework 7）**。Spring 题最能区分"背答案"和"真懂"——追问一次机制原理就现形，所以每道题都要准备"为什么"的下一层。
+> **核心要点**：Spring 题的通吃公式 = **思想（IOC/AOP）→ 机制（生命周期/三级缓存/动态代理）→ 场景（事务/失效/自调用）→ 版本（Boot 4/Framework 7）**。Spring 题最能区分"背答案"和"真懂"——追问一次机制原理就现形，所以每道题都要准备"为什么"的下一层。
 
 ---
 

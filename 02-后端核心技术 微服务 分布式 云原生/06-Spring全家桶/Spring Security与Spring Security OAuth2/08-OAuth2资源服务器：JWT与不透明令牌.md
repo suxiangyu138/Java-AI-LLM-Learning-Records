@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [资源服务器的职责与两种令牌形态](#1-资源服务器的职责与两种令牌形态)
 2. [JWT 资源服务器：最小配置](#2-jwt-资源服务器最小配置)
@@ -32,7 +32,7 @@
 | 信息携带 | 自含 claims | 需 introspection 响应 |
 | 适用 | 高频 API、微服务内部 | 强撤销要求、第三方令牌 |
 
-> 🎯 **要点**：JWT 是 2026 年绝对主流（自建授权服务器默认发 JWT）；不透明令牌用于"必须能即时踢人"的场景。两者在 Spring Security 里都是 `oauth2ResourceServer` 的一个开关。
+> **要点**：JWT 是 2026 年绝对主流（自建授权服务器默认发 JWT）；不透明令牌用于"必须能即时踢人"的场景。两者在 Spring Security 里都是 `oauth2ResourceServer` 的一个开关。
 
 ## 2. JWT 资源服务器：最小配置
 
@@ -129,7 +129,7 @@ JwtDecoder jwtDecoder(JwtDecoder jwtDecoder) {
 }
 ```
 
-> ⚠️ **6.x 迁移注意**：6.x 里很多项目为了兼容手动关掉了 typ 校验（`setJwtValidator` 覆盖）——7.0 默认开启后，**工作区配置会被默认校验覆盖**，先测再升级。
+> **6.x 迁移注意**：6.x 里很多项目为了兼容手动关掉了 typ 校验（`setJwtValidator` 覆盖）——7.0 默认开启后，**工作区配置会被默认校验覆盖**，先测再升级。
 
 ### 3.3 手动构建 JwtDecoder（多场景）
 
@@ -177,7 +177,7 @@ Converter<Jwt, AbstractAuthenticationToken> jwtAuthenticationConverter() {
 | 角色映射（realm_access 等） | 对接 Keycloak/自建授权服务器的角色模型 |
 | 自定义 claim | 业务自定义权限载体 |
 
-> 💡 **设计建议**：API 授权一律走 scope（与 OAuth2 语义对齐）；角色映射仅在与既有系统对接时使用。
+> **设计建议**：API 授权一律走 scope（与 OAuth2 语义对齐）；角色映射仅在与既有系统对接时使用。
 
 ## 5. 多签发方与多租户
 
@@ -210,7 +210,7 @@ Converter<HttpServletRequest, JwtDecoder> tenantAwareDecoder() {
 }
 ```
 
-> ⚠️ **多租户注意**：按请求头路由**必须配合路径/域名隔离校验**（防止租户 A 的请求头冒充租户 B）；iss 校验始终开启——解码器路由只是第一步，签名与 issuer 校验仍按各租户独立执行。
+> **多租户注意**：按请求头路由**必须配合路径/域名隔离校验**（防止租户 A 的请求头冒充租户 B）；iss 校验始终开启——解码器路由只是第一步，签名与 issuer 校验仍按各租户独立执行。
 
 ## 6. 不透明令牌：Token Introspection
 
@@ -257,7 +257,7 @@ public Map<String, Object> me(@AuthenticationPrincipal OAuth2AuthenticatedPrinci
 | 多签发方漏配 | 某租户登录全挂 | 逐签发方测试解码链 |
 | scope 映射不生效 | hasAuthority("SCOPE_...") 恒失败 | 检查 JWT 里 claim 名（scope vs scp） |
 
-> 🎯 **核心要点**：资源服务器 = 令牌校验 + 权限映射 + 授权规则。JWT 走"本地校验链"（签名/过期/iss/typ/aud——7.0 默认收紧 typ），不透明令牌走"远程 introspection"。权限模型首选 scope（SCOPE_xxx）；多租户按请求路由解码器但必须保 iss 校验。**401 是"你是谁"的问题，403 是"你能干什么"的问题**——排障先分清。
+> **核心要点**：资源服务器 = 令牌校验 + 权限映射 + 授权规则。JWT 走"本地校验链"（签名/过期/iss/typ/aud——7.0 默认收紧 typ），不透明令牌走"远程 introspection"。权限模型首选 scope（SCOPE_xxx）；多租户按请求路由解码器但必须保 iss 校验。**401 是"你是谁"的问题，403 是"你能干什么"的问题**——排障先分清。
 
 ---
 

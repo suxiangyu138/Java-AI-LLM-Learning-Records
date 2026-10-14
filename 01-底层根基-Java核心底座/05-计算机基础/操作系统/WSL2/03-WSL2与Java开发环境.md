@@ -1,10 +1,10 @@
 # WSL2 与 Java 开发环境
 
-> ☕ 在 WSL2 的 Linux 中安装 JDK、Maven、Gradle、Docker —— 利用 SDKMAN 管理多 JDK、IDEA/VS Code 深度集成、Docker Desktop WSL2 Backend 原生容器，构建终极 Java 开发环境
+> 在 WSL2 的 Linux 中安装 JDK、Maven、Gradle、Docker —— 利用 SDKMAN 管理多 JDK、IDEA/VS Code 深度集成、Docker Desktop WSL2 Backend 原生容器，构建终极 Java 开发环境
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [Java 开发选型：Windows 原生 vs WSL2](#1-java-开发选型windows-原生-vs-wsl2)
 2. [SDKMAN：JDK 版本管理神器](#2-sdkmanjdk-版本管理神器)
@@ -24,12 +24,12 @@
 | **Maven/Gradle** | 手动配置 | apt/sdkman 安装 + 镜像 |
 | **Docker** | Docker Desktop (Windows) | Docker Engine 原生 Linux |
 | **编译速度** | 中等（NTFS） | **快**（ext4，SSD 直接读写） |
-| **Shell 脚本** | CMD/PowerShell 兼容差 | ✅ 原生 bash/zsh |
-| **CI/CD 一致性** | ❌ 与 Linux 服务器不同 | ✅ 与服务器环境一致 |
-| **IDE 体验** | ✅ 原生 GUI | ⚠️ 通过 WSLg 或 Windows IDE Remote |
+| **Shell 脚本** | CMD/PowerShell 兼容差 | ✓ 原生 bash/zsh |
+| **CI/CD 一致性** | ✗ 与 Linux 服务器不同 | ✓ 与服务器环境一致 |
+| **IDE 体验** | ✓ 原生 GUI | 通过 WSLg 或 Windows IDE Remote |
 | **推荐方案** | **IDE 在 Windows，代码 + 工具链在 WSL2** | |
 
-> 🎯 **最佳实践**：IDEA/VS Code 用 Windows 原生（GUI 流畅），项目代码放在 WSL2 的 ext4 上（构建快），通过 IDE 的 WSL2 Remote/Integration 打通。
+> **最佳实践**：IDEA/VS Code 用 Windows 原生（GUI 流畅），项目代码放在 WSL2 的 ext4 上（构建快），通过 IDE 的 WSL2 Remote/Integration 打通。
 
 ---
 
@@ -212,11 +212,11 @@ code .
 VS Code WSL2 Remote 的优势：
 
 ```text
-✅ 代码在 WSL2 的 ext4 上（编译极快）
-✅ 终端就是 WSL2 bash/zsh（原生 Linux CLI）
-✅ 扩展运行在 WSL2 中（Java 语言服务也是 Linux 版）
-✅ Git 操作完全在 Linux 环境
-✅ 前端界面的丝滑 Windows 渲染
+✓ 代码在 WSL2 的 ext4 上（编译极快）
+✓ 终端就是 WSL2 bash/zsh（原生 Linux CLI）
+✓ 扩展运行在 WSL2 中（Java 语言服务也是 Linux 版）
+✓ Git 操作完全在 Linux 环境
+✓ 前端界面的丝滑 Windows 渲染
 → 最好的 Windows + Linux 混合开发体验
 ```
 
@@ -227,26 +227,26 @@ IDEA 对 WSL2 的支持有三种方式：
 
 方式一：IDEA 直接打开 \\wsl$\ 路径（不推荐）
   File → Open → \\wsl$\Ubuntu-24.04\home\user\projects
-  ❌ 文件 I/O 走 9P 协议，极慢
-  ❌ IDE 索引巨慢
-  ❌ Maven/Gradle 调用路径混乱
+  ✗ 文件 I/O 走 9P 协议，极慢
+  ✗ IDE 索引巨慢
+  ✗ Maven/Gradle 调用路径混乱
 
 方式二：Gateway Remote Development（推荐）
   IDEA → Remote Development → New Connection → WSL
   → 选择发行版 → 选择项目目录
-  ✅ IDEA Backend 运行在 WSL2 中
-  ✅ 前端 Thin Client 在 Windows 渲染
-  ⚠️ 需要 IDEA Ultimate
+  ✓ IDEA Backend 运行在 WSL2 中
+  ✓ 前端 Thin Client 在 Windows 渲染
+  需要 IDEA Ultimate
 
 方式三：IDEA Windows 版 + Terminal 用 WSL2（折中）
   Settings → Tools → Terminal → Shell path:
   wsl.exe -d Ubuntu-24.04
   → 代码放 Windows 目录，Terminal 用 WSL2
-  ⚠️ 编译速度慢（NTFS）
-  ✅ 索引用 Windows 路径
+  编译速度慢（NTFS）
+  ✓ 索引用 Windows 路径
 ```
 
-> 💡 **VS Code + WSL2 Remote** 是目前最丝滑的免费方案。IDEA Ultimate 用户建议 Gateway Remote。
+> **VS Code + WSL2 Remote** 是目前最丝滑的免费方案。IDEA Ultimate 用户建议 Gateway Remote。
 
 ### 4.3 Git 配置
 
@@ -289,10 +289,10 @@ Docker Desktop with WSL2 Backend：
 └───────────────────────────────────────────┘
 
 优势：
-✅ 原生 Linux 容器（无需 Windows 容器）
-✅ 容器文件系统在 ext4 上（高性能）
-✅ 支持 docker compose、docker buildx
-✅ 从 WSL2 和 Windows 都能使用 docker 命令
+✓ 原生 Linux 容器（无需 Windows 容器）
+✓ 容器文件系统在 ext4 上（高性能）
+✓ 支持 docker compose、docker buildx
+✓ 从 WSL2 和 Windows 都能使用 docker 命令
 ```
 
 ### 5.2 配置 WSL2 Backend
@@ -300,10 +300,10 @@ Docker Desktop with WSL2 Backend：
 ```bash
 # 1. Windows 安装 Docker Desktop
 # 2. Docker Desktop → Settings → General
-#    ✅ Use WSL 2 based engine
+#    ✓ Use WSL 2 based engine
 # 3. Settings → Resources → WSL Integration
-#    ✅ Enable integration with my default WSL distro
-#    ✅ 勾选要集成的发行版（Ubuntu-24.04）
+#    ✓ Enable integration with my default WSL distro
+#    ✓ 勾选要集成的发行版（Ubuntu-24.04）
 # 4. Apply & Restart
 
 # 在 WSL2 中验证
@@ -349,32 +349,32 @@ del D:\docker-data.tar
 
 set -e
 
-echo "🔄 Step 1: 更新系统..."
+echo "Step 1: 更新系统..."
 sudo apt update && sudo apt upgrade -y
 
-echo "📦 Step 2: 安装基础工具..."
+echo "Step 2: 安装基础工具..."
 sudo apt install -y build-essential curl wget git vim zsh \
     software-properties-common apt-transport-https \
     ca-certificates gnupg lsb-release unzip
 
-echo "🐚 Step 3: 配置 zsh + oh-my-zsh..."
+echo "Step 3: 配置 zsh + oh-my-zsh..."
 sudo chsh -s $(which zsh) $USER
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
 
-echo "☕ Step 4: 安装 SDKMAN..."
+echo "Step 4: 安装 SDKMAN..."
 curl -s "https://get.sdkman.io" | bash
 source "$HOME/.sdkman/bin/sdkman-init.sh"
 
-echo "☕ Step 5: 安装 JDK..."
+echo "Step 5: 安装 JDK..."
 sdk install java 21.0.5-tem
 sdk install java 17.0.12-tem
 sdk default java 21.0.5-tem
 
-echo "🔨 Step 6: 安装 Maven + Gradle..."
+echo "Step 6: 安装 Maven + Gradle..."
 sdk install maven 3.9.9
 sdk install gradle 8.11
 
-echo "📁 Step 7: 配置 Maven 国内镜像..."
+echo "Step 7: 配置 Maven 国内镜像..."
 mkdir -p ~/.m2
 cat > ~/.m2/settings.xml << 'XMLEOF'
 <?xml version="1.0" encoding="UTF-8"?>
@@ -390,12 +390,12 @@ cat > ~/.m2/settings.xml << 'XMLEOF'
 </settings>
 XMLEOF
 
-echo "✅ Step 8: 生成 SSH Key..."
+echo "✓ Step 8: 生成 SSH Key..."
 if [ ! -f ~/.ssh/id_rsa ]; then
     ssh-keygen -t rsa -b 4096 -C "$USER@wsl2" -f ~/.ssh/id_rsa -N ""
 fi
 
-echo "📝 Step 9: 配置环境变量..."
+echo "Step 9: 配置环境变量..."
 cat >> ~/.zshrc << 'EOF'
 
 # === Java 开发环境 ===
@@ -417,7 +417,7 @@ alias mcp="mvn clean package -DskipTests"
 EOF
 
 echo ""
-echo "✅ WSL2 Java 开发环境初始化完成！"
+echo "✓ WSL2 Java 开发环境初始化完成！"
 echo ""
 echo "   JDK:    $(java --version 2>&1 | head -1)"
 echo "   Maven:  $(mvn --version 2>&1 | head -1)"

@@ -36,7 +36,7 @@
 | 一致性 | ACID强一致 | 最终一致性优先 |
 | 扩展方式 | 分库分表（水平扩展复杂） | 分布式分片（Sharding原生） |
 
-> 💡 企业常用方案：PgSQL + pgvector插件同时支持结构化查询和向量检索，避免引入过多中间件。
+> 企业常用方案：PgSQL + pgvector插件同时支持结构化查询和向量检索，避免引入过多中间件。
 
 ### 3. PgVector是什么？如何实现向量检索？
 
@@ -98,7 +98,7 @@ result = chain.invoke({"text": "你好世界"})  # "Hello World"
 | 适用场景 | 简单文本生成、分类 | 对话、Agent、工具调用 |
 | 底层调用 | `/completions` 端点 | `/chat/completions` 端点 |
 
-> ⚠️ 在新版LangChain中，建议始终使用ChatModel，LLM类已标记为legacy。
+> 在新版LangChain中，建议始终使用ChatModel，LLM类已标记为legacy。
 
 ### 6. 什么是Function Calling（工具调用）？
 
@@ -191,11 +191,11 @@ result: Person = structured_llm.invoke("张三28岁，精通Python、Java、AI")
 
 | 方案 | 适用模型 | 推理速度 | 显存需求 | 部署难度 | 典型场景 |
 |------|---------|---------|---------|---------|---------|
-| Ollama | 7B-72B | 中等 | 8-64GB | ⭐（最简单） | 本地开发测试 |
-| vLLM | 全量开源模型 | ⭐最快 | 16-128GB | ⭐⭐⭐ | 生产高并发 |
-| TGI (HuggingFace) | 主流开源模型 | 快 | 16-128GB | ⭐⭐⭐ | HF生态、企业级 |
-| Triton + TensorRT-LLM | NVIDIA优化 | ⭐极快 | 32-256GB | ⭐⭐⭐⭐ | 高吞吐、NV卡优化 |
-| llama.cpp | CPU/边缘设备 | 慢 | 4-16GB | ⭐⭐ | 边缘部署、Apple M系列 |
+| Ollama | 7B-72B | 中等 | 8-64GB | ★（最简单） | 本地开发测试 |
+| vLLM | 全量开源模型 | ★最快 | 16-128GB | ★★★ | 生产高并发 |
+| TGI (HuggingFace) | 主流开源模型 | 快 | 16-128GB | ★★★ | HF生态、企业级 |
+| Triton + TensorRT-LLM | NVIDIA优化 | ★极快 | 32-256GB | ★★★★ | 高吞吐、NV卡优化 |
+| llama.cpp | CPU/边缘设备 | 慢 | 4-16GB | ★★ | 边缘部署、Apple M系列 |
 
 ### 11. AI Agent在企业中的落地场景？
 
@@ -245,7 +245,7 @@ scores = reranker.predict(pairs)
 sorted_results = [doc for _, doc in sorted(zip(scores, documents), reverse=True)]
 ```
 
-> 💡 推荐方案：Embedding模型（bge-m3）粗召回Top-50 → ReRanker精排Top-5，准确率提升15-30%。
+> 推荐方案：Embedding模型（bge-m3）粗召回Top-50 → ReRanker精排Top-5，准确率提升15-30%。
 
 ### 15. 什么是Query Rewriting（查询改写）？
 
@@ -409,7 +409,7 @@ LIMIT 10;
 | **中文生态** | 无特殊 | 无特殊 | 好（中文社区） | 好 | 一般 |
 | **推荐场景** | **Java+Spring生态** | 算法研究 | 大规模生产 | 快速起步 | 学习原型 |
 
-> 🎯 **选型建议**：Java技术栈 + 已有PgSQL → pgvector；海量数据 + 分布式 → Milvus；快速验证 → Chroma/Pinecone。
+> **选型建议**：Java技术栈 + 已有PgSQL → pgvector；海量数据 + 分布式 → Milvus；快速验证 → Chroma/Pinecone。
 
 ### 3. PgVector原理：IVFFlat与HNSW索引算法
 
@@ -459,10 +459,10 @@ LIMIT 10;
 
 | 维度 | IVFFlat | HNSW |
 |------|---------|------|
-| 构建速度 | ⭐⭐⭐ 快 | ⭐⭐ 中 |
-| 查询速度 | ⭐⭐⭐ 中 | ⭐⭐⭐⭐ 快 |
-| 召回率 | ⭐⭐⭐ 中 | ⭐⭐⭐⭐⭐ 高 |
-| 内存占用 | ⭐⭐⭐⭐⭐ 低 | ⭐⭐ 高 |
+| 构建速度 | ★★★ 快 | ★★ 中 |
+| 查询速度 | ★★★ 中 | ★★★★ 快 |
+| 召回率 | ★★★ 中 | ★★★★★ 高 |
+| 内存占用 | ★★★★★ 低 | ★★ 高 |
 | 动态插入 | 需重建索引 | 支持动态 |
 | 适用范围 | 百万级 | 百万-千万级 |
 
@@ -577,11 +577,11 @@ agent_executor.invoke({"input": "北京今天天气怎么样？"})
 
 | 方案 | 原理 | 训练参数量 | 显存需求（7B） | 效果 | 适用场景 |
 |------|------|-----------|-------------|------|---------|
-| **全量微调** | 更新全部参数 | 7B | 4×A100 80GB | ⭐⭐⭐⭐⭐ | 大规模算力充足 |
-| **LoRA** | 低秩适配器，冻结原参数 | <1% | 1×A100 80GB | ⭐⭐⭐⭐ | 多数业务场景 |
-| **QLoRA** | LoRA + 4bit量化 | <0.1% | 1×RTX 4090 24GB | ⭐⭐⭐ | 消费级显卡 |
-| **P-Tuning** | 连续Prompt前缀 | <0.01% | 1×A100 80GB | ⭐⭐⭐ | 参数高效调优 |
-| **Adapter** | Transformer层插入小网络 | <5% | 1×A100 80GB | ⭐⭐⭐ | 多任务适配 |
+| **全量微调** | 更新全部参数 | 7B | 4×A100 80GB | ★★★★★ | 大规模算力充足 |
+| **LoRA** | 低秩适配器，冻结原参数 | <1% | 1×A100 80GB | ★★★★ | 多数业务场景 |
+| **QLoRA** | LoRA + 4bit量化 | <0.1% | 1×RTX 4090 24GB | ★★★ | 消费级显卡 |
+| **P-Tuning** | 连续Prompt前缀 | <0.01% | 1×A100 80GB | ★★★ | 参数高效调优 |
+| **Adapter** | Transformer层插入小网络 | <5% | 1×A100 80GB | ★★★ | 多任务适配 |
 
 **LoRA微调代码示例：**
 
@@ -613,12 +613,12 @@ peft_model.save_pretrained("./qwen-lora-adapter")
 
 | 方案 | 并发能力 | 延迟 | 特性 | 推荐模型 | 部署复杂度 |
 |------|---------|------|------|---------|---------|
-| **vLLM** | ⭐⭐⭐⭐⭐ 高 | ⭐⭐⭐ 低 | PagedAttention、连续批处理、KV缓存 | 所有主流LLM | 中 |
-| **TGI** | ⭐⭐⭐⭐ | ⭐⭐⭐⭐ | HuggingFace生态、安全防护 | HF模型 | 中 |
-| **Ollama** | ⭐⭐ | ⭐⭐ | 一键部署、模型管理便捷 | 7B-72B | 低 |
-| **Triton + TRT-LLM** | ⭐⭐⭐⭐⭐ 极高 | ⭐⭐⭐⭐⭐ 极低 | 多框架支持、动态批处理 | NVIDIA优化模型 | 高 |
-| **llama.cpp** | ⭐ | ⭐⭐ | CPU运行、ARM优化 | GGUF格式 | 低 |
-| **SGLang** | ⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | RadixAttention、结构化生成 | 主流模型 | 中 |
+| **vLLM** | ★★★★★ 高 | ★★★ 低 | PagedAttention、连续批处理、KV缓存 | 所有主流LLM | 中 |
+| **TGI** | ★★★★ | ★★★★ | HuggingFace生态、安全防护 | HF模型 | 中 |
+| **Ollama** | ★★ | ★★ | 一键部署、模型管理便捷 | 7B-72B | 低 |
+| **Triton + TRT-LLM** | ★★★★★ 极高 | ★★★★★ 极低 | 多框架支持、动态批处理 | NVIDIA优化模型 | 高 |
+| **llama.cpp** | ★ | ★★ | CPU运行、ARM优化 | GGUF格式 | 低 |
+| **SGLang** | ★★★★ | ★★★★★ | RadixAttention、结构化生成 | 主流模型 | 中 |
 
 **vLLM部署命令：**
 
@@ -653,7 +653,7 @@ curl http://localhost:8000/v1/chat/completions \
 | "苹果"向量 | 始终相同 | "苹果手机" vs "苹果水果" 不同 |
 | 训练数据 | 少量（几亿词） | 大量（TB级语料） |
 | 参数量 | ~10M | 100M-1B |
-| 语义效果 | 一般 | ⭐⭐⭐⭐ |
+| 语义效果 | 一般 | ★★★★ |
 
 ### 10. 对比学习在Embedding中的应用
 
@@ -678,12 +678,12 @@ L = -log( exp(sim(h_i, h_i+)/τ) / Σ exp(sim(h_i, h_j-)/τ) )
 
 | 模型 | 参数量 | 向量维度 | 最大长度 | 中文效果 | 推荐场景 |
 |------|-------|---------|---------|---------|---------|
-| bge-small-zh-v1.5 | 24M | 512 | 512 | ⭐⭐⭐ | 轻量场景 |
-| bge-base-zh-v1.5 | 102M | 768 | 512 | ⭐⭐⭐⭐ | 通用RAG |
-| bge-large-zh-v1.5 | 326M | 1024 | 512 | ⭐⭐⭐⭐⭐ | 高质量检索 |
-| bge-m3 | 567M | 1024 | 8192 | ⭐⭐⭐⭐⭐ | 多语/长文档 |
-| text-embedding-3-small | - | 1536 | 8191 | ⭐⭐⭐⭐ | OpenAI生态 |
-| text-embedding-3-large | - | 3072 | 8191 | ⭐⭐⭐⭐⭐ | 精度要求高 |
+| bge-small-zh-v1.5 | 24M | 512 | 512 | ★★★ | 轻量场景 |
+| bge-base-zh-v1.5 | 102M | 768 | 512 | ★★★★ | 通用RAG |
+| bge-large-zh-v1.5 | 326M | 1024 | 512 | ★★★★★ | 高质量检索 |
+| bge-m3 | 567M | 1024 | 8192 | ★★★★★ | 多语/长文档 |
+| text-embedding-3-small | - | 1536 | 8191 | ★★★★ | OpenAI生态 |
+| text-embedding-3-large | - | 3072 | 8191 | ★★★★★ | 精度要求高 |
 
 ### 11. 大模型的注意力机制与Transformer
 
@@ -3018,7 +3018,7 @@ for doc_id, score in fused:
 
 ---
 
-> 🎯 **最后建议：**
+> **最后建议：**
 > 1. **动手 > 背书**：面试官更看重你实际搭过RAG项目，而不是背概念。建议用本宝典中的示例代码动手跑一遍
 > 2. **Java+AI是差异化优势**：纯Python背景的候选人非常多，同时熟练掌握Java+Python的RAG工程师是稀缺人才
 > 3. **关注Agent落地**：2025-2026年Agent将从Demo走向生产级，这是面试中的核心加分项

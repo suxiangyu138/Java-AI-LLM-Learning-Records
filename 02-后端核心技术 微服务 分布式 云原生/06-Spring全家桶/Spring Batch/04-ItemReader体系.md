@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [ItemReader 契约与设计约束](#1-itemreader-契约与设计约束)
 2. [文件类 Reader](#2-文件类-reader)
@@ -76,7 +76,7 @@ public class OrderFieldSetMapper implements FieldSetMapper<Order> {
 }
 ```
 
-内置映射器：`BeanWrapperFieldSetMapper`（按 names 反射注入）、`RecordFieldSetMapper`（记录类型）。⚠️ 6.0.4 修复：`RecordFieldSetMapper` 对可空类型曾拒绝 null 值（JSpecify 空安全细化后的问题）。
+内置映射器：`BeanWrapperFieldSetMapper`（按 names 反射注入）、`RecordFieldSetMapper`（记录类型）。6.0.4 修复：`RecordFieldSetMapper` 对可空类型曾拒绝 null 值（JSpecify 空安全细化后的问题）。
 
 ### 2.2 多文件与 JSON/XML
 
@@ -104,7 +104,7 @@ StaxEventItemReader<Order> xmlReader = new StaxEventItemReaderBuilder<Order>()
         .build();
 ```
 
-> ⚠️ 6.0 注意：`JsonItemWriter`/`JsonItemReader` 走 **Jackson 3.x**；5.x 的 `Jackson2*` 系列在 6.0 未保留双版本 API，迁移需直接替换（Jackson 2 支持整体废弃，6.0 还修复了 `appendAllowed` 时 JsonFileItemWriter 破坏 JSON 数组结构的问题）。
+> 6.0 注意：`JsonItemWriter`/`JsonItemReader` 走 **Jackson 3.x**；5.x 的 `Jackson2*` 系列在 6.0 未保留双版本 API，迁移需直接替换（Jackson 2 支持整体废弃，6.0 还修复了 `appendAllowed` 时 JsonFileItemWriter 破坏 JSON 数组结构的问题）。
 
 ## 3. 数据库类 Reader
 
@@ -176,7 +176,7 @@ RepositoryItemReader<Order> repoReader = new RepositoryItemReaderBuilder<Order>(
 
 ### 3.3 已移除的数据库 Reader
 
-> ⚠️ 6.0 移除了已废弃的 **MongoItemReader / Neo4jItemReader**（及其 Writer）——MongoDB 作为批处理数据源时，推荐自定义 reader（基于 Spring Data Mongo 流式查询）或第三方实现。
+> 6.0 移除了已废弃的 **MongoItemReader / Neo4jItemReader**（及其 Writer）——MongoDB 作为批处理数据源时，推荐自定义 reader（基于 Spring Data Mongo 流式查询）或第三方实现。
 
 ## 4. 消息与特殊数据源 Reader
 
@@ -245,7 +245,7 @@ ItemReaderAdapter<Order> adapter = new ItemReaderAdapterBuilder<Order>()
 | 适用数据库 | 全部 | 大表 + 分页优化良好的库（MySQL OFFSET 大偏移有坑） |
 | 典型选择 | Oracle/PostgreSQL 大表游标 | MySQL 中等表、多线程 Step |
 
-> 💡 大表分页注意：`OFFSET` 深翻页性能差，可改用"游标分页"（`WHERE id > ? ORDER BY id LIMIT n`），用 ExecutionContext 记录 last id。
+> 大表分页注意：`OFFSET` 深翻页性能差，可改用"游标分页"（`WHERE id > ? ORDER BY id LIMIT n`），用 ExecutionContext 记录 last id。
 
 ## 7. Reader 选型决策表
 
@@ -264,6 +264,6 @@ ItemReaderAdapter<Order> adapter = new ItemReaderAdapterBuilder<Order>()
 
 ---
 
-> 🎯 **核心要点**：ItemReader 家族按"文件/DB/消息/函数"四类记忆；数据库读的核心决策是**游标（省内存、长连接）vs 分页（可续读、可并发）**；5.2 起的函数适配器与 dataRowMapper 大幅减少样板代码；6.0 移除 Mongo/Neo4j reader 并全面转向 Jackson 3，是版本迁移的雷区。
+> **核心要点**：ItemReader 家族按"文件/DB/消息/函数"四类记忆；数据库读的核心决策是**游标（省内存、长连接）vs 分页（可续读、可并发）**；5.2 起的函数适配器与 dataRowMapper 大幅减少样板代码；6.0 移除 Mongo/Neo4j reader 并全面转向 Jackson 3，是版本迁移的雷区。
 
 **下一模块**：[05-ItemProcessor与ItemWriter体系](05-ItemProcessor与ItemWriter体系.md)　|　**返回总览**：[00-Spring Batch知识体系总览](00-Spring Batch知识体系总览.md)

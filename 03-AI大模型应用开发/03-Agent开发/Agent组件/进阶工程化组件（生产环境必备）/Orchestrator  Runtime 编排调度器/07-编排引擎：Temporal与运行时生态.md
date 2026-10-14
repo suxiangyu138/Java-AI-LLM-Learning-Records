@@ -12,7 +12,7 @@
 | 案例 | Uber/Netflix/Snap 久经考验；支撑 OpenAI/Cursor/Lovable/Block 的 Agent 体验 |
 | 限制 | ~2MB gRPC 负载（大上下文需外部存储）；非 AI 专用（无 token 成本追踪） |
 
-> 🎯 核心要点：**Temporal 的确定性重放 = "工作流代码本身活着"**——不是 checkpoint 状态活着，是执行历史活着；LLM 调用必须包在 Activities 里（副作用与确定性分离）。
+> 核心要点：**Temporal 的确定性重放 = "工作流代码本身活着"**——不是 checkpoint 状态活着，是执行历史活着；LLM 调用必须包在 Activities 里（副作用与确定性分离）。
 
 ## 2. Google Agent Executor：Agent 专用开源运行时（2026-05）
 
@@ -25,7 +25,7 @@
 | 轨迹分支 | checkpoint 处实验备选路径（03 篇） |
 | 配套 | Agent Substrate——K8s agent-first 计算层（毫秒级工具调用规模） |
 
-> 💡 Agent Executor 的意义：**"运行时标准化"的开源信号**——harness 无关（LangGraph/ADK/Gemini Managed Agents/A2A 协议 Agent 都可跑）；"上面的工具必须开源，否则没人信任"（行业逻辑）。
+> Agent Executor 的意义：**"运行时标准化"的开源信号**——harness 无关（LangGraph/ADK/Gemini Managed Agents/A2A 协议 Agent 都可跑）；"上面的工具必须开源，否则没人信任"（行业逻辑）。
 
 ## 3. Diagrid Catalyst 2.0：可验证执行（2026-07）
 
@@ -36,7 +36,7 @@
 | 覆盖 | LangGraph/MAF/ADK/Strands/OpenAI Agents/CrewAI/Pydantic AI |
 | 部署 | 多云/主权/气隙；10x 开源 Dapr 性能；百万级并发工作流 |
 
-> 🎯 核心要点：**Catalyst 把"执行"变成"可验证的链"**——每个步骤加密签名可追溯（审计/合规的新基准）；"持久 + 可验证"是 2026 运行时能力的最高形态（02 篇恰好一次 + 加密）。
+> 核心要点：**Catalyst 把"执行"变成"可验证的链"**——每个步骤加密签名可追溯（审计/合规的新基准）；"持久 + 可验证"是 2026 运行时能力的最高形态（02 篇恰好一次 + 加密）。
 
 ## 4. 轻量派与控制平面
 
@@ -47,7 +47,7 @@
 | Kheish | 控制平面：调用者/执行分离 + 日志中断生存 + 追加式审计——"Agent 界的 K8s" |
 | Continuum | 基础设施档案：Temporal（持久工作流）+ Redis（会话状态）+ 向量库 |
 
-> 💡 定位分层：**引擎管"执行生存"，控制平面管"治理身份"**——Kheish 的不变量"Agent 的执行持久、有界、可问责，独立于任何调用者"是控制平面的宣言（Multi-Agent 08 篇问责联动）。
+> 定位分层：**引擎管"执行生存"，控制平面管"治理身份"**——Kheish 的不变量"Agent 的执行持久、有界、可问责，独立于任何调用者"是控制平面的宣言（Multi-Agent 08 篇问责联动）。
 
 ## 5. 运行时选型决策
 
@@ -73,7 +73,7 @@
 | 轻量 | Kitaru/contd.ai |
 | 治理 | Kheish 叠加 |
 
-> 🎯 核心要点：**运行时不是单选**——"引擎 + 控制平面 + 计算层"可组合（Agent Executor + Substrate、Temporal + Kheish）；2026 生产栈 = 一个引擎 + 一个治理层 + 可观测。
+> 核心要点：**运行时不是单选**——"引擎 + 控制平面 + 计算层"可组合（Agent Executor + Substrate、Temporal + Kheish）；2026 生产栈 = 一个引擎 + 一个治理层 + 可观测。
 
 ## 6. 运行时选型前五测试（08 篇详述）
 
@@ -85,7 +85,7 @@
 | 可观测 | 每步 span（输入/输出/模型/延迟/成本/重试数） |
 | 成本投影 | 重试尾支配 p99——规模成本 |
 
-> ⚠️ 五测试是选型的"体检"——**不跑五测试的选型是猜**；尤其"重试尾支配 p99 支出"决定了规模成本模型（05 篇）。
+> 五测试是选型的"体检"——**不跑五测试的选型是猜**；尤其"重试尾支配 p99 支出"决定了规模成本模型（05 篇）。
 
 ## 7. 常见误区
 

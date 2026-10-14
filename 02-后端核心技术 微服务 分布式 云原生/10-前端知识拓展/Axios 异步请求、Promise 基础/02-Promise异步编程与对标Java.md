@@ -1,6 +1,6 @@
 # 02 - Promise 异步编程与 Java 对标
 
-> 🎯 Promise 之于 JavaScript = CompletableFuture 之于 Java — 都是解决异步编程的方案。理解三者（回调→Promise→async/await）的演进，后端能读懂前端异步代码
+> Promise 之于 JavaScript = CompletableFuture 之于 Java — 都是解决异步编程的方案。理解三者（回调→Promise→async/await）的演进，后端能读懂前端异步代码
 
 ---
 
@@ -16,7 +16,7 @@
 ## 1. 回调地狱 → Promise → async/await
 
 ```javascript
-// ❌ 回调地狱（Callback Hell）
+// ✗ 回调地狱（Callback Hell）
 getUser(1, user => {
   getOrders(user.id, orders => {
     getOrderDetail(orders[0].id, detail => {
@@ -25,14 +25,14 @@ getUser(1, user => {
   });
 });
 
-// ✅ Promise 链式调用
+// ✓ Promise 链式调用
 getUser(1)
   .then(user => getOrders(user.id))
   .then(orders => getOrderDetail(orders[0].id))
   .then(detail => console.log(detail))
   .catch(err => console.error(err));
 
-// ⭐ async/await — 像同步代码一样写异步
+// ★ async/await — 像同步代码一样写异步
 async function getOrderDetail(userId) {
   try {
     const user = await getUser(userId);
@@ -129,7 +129,7 @@ Java 对标：
 ## 4. async/await 语法糖
 
 ```javascript
-// ⭐ async/await — 写起来像同步，实际是异步
+// ★ async/await — 写起来像同步，实际是异步
 async function loadUserPage() {
   try {
     const user = await axios.get('/api/users/1');
@@ -154,15 +154,15 @@ async/await 本质：
   async 函数 → 始终返回 Promise
   await → 等 Promise 完成后再继续（暂停函数执行，不阻塞主线程）
 
-⚠️ await 是顺序执行！如果请求间无依赖，用 Promise.all 并行：
-  ✅ await Promise.all([req1, req2])    ← 并行
-  ❌ await req1; await req2;            ← 串行（除非 req2 依赖 req1）
+await 是顺序执行！如果请求间无依赖，用 Promise.all 并行：
+  ✓ await Promise.all([req1, req2])    ← 并行
+  ✗ await req1; await req2;            ← 串行（除非 req2 依赖 req1）
 ```
 
 ### 前端实际请求模式
 
 ```javascript
-// ⭐ 最常见的页面加载写法
+// ★ 最常见的页面加载写法
 async mounted() {
   try {
     const [user, config] = await Promise.all([
@@ -179,4 +179,4 @@ async mounted() {
 }
 ```
 
-> 🎯 **后端对标理解**：`await` = `future.get()`、`Promise.all` = `CompletableFuture.allOf()`、`try/catch` = `@ExceptionHandler`、`finally` = `try-finally`。前端异步的本质和后端一模一样，只是语法不同。
+> **后端对标理解**：`await` = `future.get()`、`Promise.all` = `CompletableFuture.allOf()`、`try/catch` = `@ExceptionHandler`、`finally` = `try-finally`。前端异步的本质和后端一模一样，只是语法不同。

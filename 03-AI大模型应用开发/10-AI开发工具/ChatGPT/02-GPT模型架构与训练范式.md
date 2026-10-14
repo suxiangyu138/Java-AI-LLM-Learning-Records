@@ -1,6 +1,6 @@
 # 02 - GPT 模型架构与训练范式
 
-> 🎯 GPT = Decoder-Only + Next Token Prediction + RLHF。三阶段训练是 ChatGPT 从"会说话"到"说人话"的核心秘密
+> GPT = Decoder-Only + Next Token Prediction + RLHF。三阶段训练是 ChatGPT 从"会说话"到"说人话"的核心秘密
 
 ---
 
@@ -88,7 +88,7 @@ $$\max_{\pi}\ \mathbb{E}[RM(prompt, response)] - \beta \cdot KL(\pi_{RL} \|\| \p
 |------|:---:|:---:|:---:|
 | 注意力方向 | 单向（因果掩码） | 双向 | 双向+单向 |
 | 预训练任务 | Next Token Prediction | MLM + NSP | Span Corruption |
-| 能否生成文本 | ✅ | ❌ | ✅ |
+| 能否生成文本 | ✓ | ✗ | ✓ |
 | 当前地位 | **绝对主流** | Embedding 专用 | 特定翻译/摘要 |
 | 代表模型 | GPT-4o, LLaMA, Qwen | BERT, RoBERTa | T5, BART |
 
@@ -103,4 +103,4 @@ Decoder-Only 成为主流的原因：① 自回归天然适合对话生成；②
 | GPT-3 175B | 10,000 V100 | 数月 | ~$4.6M |
 | GPT-4 | ~25,000 A100 | 90-100天 | ~$100M+ |
 
-> 🎯 GPT = Decoder-Only + 三阶段训练。预训练学说话 → SFT 学听指令 → RLHF 学说人话。KL 约束是 RLHF 不掉链子的关键。
+> GPT = Decoder-Only + 三阶段训练。预训练学说话 → SFT 学听指令 → RLHF 学说人话。KL 约束是 RLHF 不掉链子的关键。

@@ -1,6 +1,6 @@
 # 01 - Oracle 架构与安装部署
 
-> 🎯 Oracle 的架构和 MySQL 截然不同——实例(Instance) vs 数据库(DB)、SGA 共享内存、PGA 私有内存、表空间管理体系。理解架构是管理 Oracle 的基础
+> Oracle 的架构和 MySQL 截然不同——实例(Instance) vs 数据库(DB)、SGA 共享内存、PGA 私有内存、表空间管理体系。理解架构是管理 Oracle 的基础
 
 ---
 

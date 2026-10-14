@@ -1,6 +1,6 @@
 # 02 - npm 包管理与模块系统
 
-> 🎯 npm 是 Node.js 的 Maven——管理依赖、运行脚本、版本控制。本章从 Java 开发者视角快速掌握 npm + package.json + CommonJS/ESM 模块系统
+> npm 是 Node.js 的 Maven——管理依赖、运行脚本、版本控制。本章从 Java 开发者视角快速掌握 npm + package.json + CommonJS/ESM 模块系统
 
 ---
 

@@ -1,7 +1,7 @@
 # Selenium 基础
 > 安装与 WebDriver、启动浏览器、元素定位、基础操作——"用代码开一个真浏览器"的传统方案
 
-## 📚 目录
+## 目录
 1. [Selenium 定位与版本（2026）](#1-selenium-定位与版本2026)
 2. [安装与 WebDriver](#2-安装与-webdriver)
 3. [启动与关闭浏览器](#3-启动与关闭浏览器)
@@ -18,7 +18,7 @@
 | 本阶段角色 | 渲染方案之一（Playwright 是新项目首选，Selenium 管存量） |
 | 原理 | WebDriver 协议控制真实浏览器 |
 
-> 🎯 2026 现实：**新项目渲染优先 Playwright（[05 章](05-Playwright现代方案.md)），Selenium 用于存量代码与特定场景**——但 Selenium 的知识（定位/等待）与 Playwright 通用（locator 思想一致），先学它有铺垫价值。
+> 2026 现实：**新项目渲染优先 Playwright（[05 章](05-Playwright现代方案.md)），Selenium 用于存量代码与特定场景**——但 Selenium 的知识（定位/等待）与 Playwright 通用（locator 思想一致），先学它有铺垫价值。
 
 ## 2. 安装与 WebDriver
 
@@ -54,7 +54,7 @@ options.add_argument("--disable-blink-features=AutomationControlled")  # 去自�
 driver = webdriver.Chrome(options=options)
 ```
 
-> ⚠️ **驱动版本匹配**是老坑：Chrome 升级 → chromedriver 不匹配 → 启动失败。2026 的 Selenium Manager 自动处理（方式一），**优先用自动管理**。
+> **驱动版本匹配**是老坑：Chrome 升级 → chromedriver 不匹配 → 启动失败。2026 的 Selenium Manager 自动处理（方式一），**优先用自动管理**。
 
 ## 3. 启动与关闭浏览器
 
@@ -73,7 +73,7 @@ html = driver.page_source             # 渲染后的完整 HTML（关键！）
 # → 这就是"渲染后解析"的数据源（07 章）
 
 # ═══ 关闭 ═══
-driver.quit()                         # ⚠️ 必须 quit（释放浏览器进程）
+driver.quit()                         # 必须 quit（释放浏览器进程）
 # driver.close()  # 只关当前标签页（少用）
 ```
 
@@ -85,7 +85,7 @@ driver.quit()                         # ⚠️ 必须 quit（释放浏览器进�
 | `driver.quit()` | 关闭浏览器（**必须**，防进程泄漏） |
 | `driver.implicitly_wait(10)` | 隐式等待（04 章详讲） |
 
-> ⚠️ **quit() 是铁律**：忘记 quit → 浏览器进程泄漏（服务器上 = 内存耗尽）。生产用 `try-finally` 或上下文管理器（04 章给规范写法）。
+> **quit() 是铁律**：忘记 quit → 浏览器进程泄漏（服务器上 = 内存耗尽）。生产用 `try-finally` 或上下文管理器（04 章给规范写法）。
 
 ## 4. 元素定位八法
 
@@ -113,13 +113,13 @@ els = driver.find_elements(By.CSS_SELECTOR, ".title")     # 全部（列表）
 
 | 定位方式 | 推荐度 | 说明 |
 |---------|:---:|------|
-| CSS_SELECTOR | ⭐ | 与 bs4 选择器同语法（阶段 2 复用） |
-| XPATH | ⭐ | 复杂定位（文本/轴） |
-| ID | ⭐ | 唯一元素最快 |
+| CSS_SELECTOR | ★ | 与 bs4 选择器同语法（阶段 2 复用） |
+| XPATH | ★ | 复杂定位（文本/轴） |
+| ID | ★ | 唯一元素最快 |
 | CLASS_NAME | 次 | 多元素场景用 find_elements |
 | LINK_TEXT | 次 | "下一页"按钮场景 |
 
-> 🎯 技能复用：**Selenium 的 CSS/XPath 与阶段 2 完全同语法**——已学的选择器知识直接迁移；区别只是 API（`driver.find_element` vs `soup.select`）。
+> 技能复用：**Selenium 的 CSS/XPath 与阶段 2 完全同语法**——已学的选择器知识直接迁移；区别只是 API（`driver.find_element` vs `soup.select`）。
 
 ## 5. 基础操作：点击/输入/提取
 
@@ -145,7 +145,7 @@ print(title.text)                            # 文本
 print(title.get_attribute("href"))           # 属性
 
 # ═══ 等待加载（简单版：sleep——04 章讲正规等待）═══
-time.sleep(2)                                # ⚠️ 临时方案，勿用于生产
+time.sleep(2)                                # 临时方案，勿用于生产
 items = driver.find_elements(By.CSS_SELECTOR, "ul.news-list li")
 for item in items:
     print(item.find_element(By.CSS_SELECTOR, "a").text)
@@ -159,7 +159,7 @@ for item in items:
 | 提取属性 | `get_attribute("href")` | 属性值 |
 | 等待 | `time.sleep()`（临时） | **04 章换正规等待** |
 
-> ⚠️ **`time.sleep` 是过渡品不是方案**：页面加载快慢不定，固定 sleep 要么等不够（元素还没出现 → 报错）要么白等（浪费秒级）。04 章讲"显式等待"（等元素出现，不等固定时间）。
+> **`time.sleep` 是过渡品不是方案**：页面加载快慢不定，固定 sleep 要么等不够（元素还没出现 → 报错）要么白等（浪费秒级）。04 章讲"显式等待"（等元素出现，不等固定时间）。
 
 ## 6. Selenium 的基本局限
 
@@ -176,7 +176,7 @@ Selenium 的已知短板（2026 对比 Playwright）：
       Selenium 的价值在存量代码与教学（概念通用）
 ```
 
-> 🎯 本阶段学习顺序的意义：**"先学 Selenium 理解'浏览器自动化'概念，再学 Playwright 用现代工具"**——概念（定位/等待/渲染）完全通用，工具选择 2026 偏 Playwright。下一章把 Selenium 的"等待"补全（04），05 章切换到 Playwright 现代路线。
+> 本阶段学习顺序的意义：**"先学 Selenium 理解'浏览器自动化'概念，再学 Playwright 用现代工具"**——概念（定位/等待/渲染）完全通用，工具选择 2026 偏 Playwright。下一章把 Selenium 的"等待"补全（04），05 章切换到 Playwright 现代路线。
 
 ---
 

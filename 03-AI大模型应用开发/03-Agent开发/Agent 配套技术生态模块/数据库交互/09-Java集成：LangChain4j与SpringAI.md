@@ -10,7 +10,7 @@
 | B. 双 Agent 工具链 | Supervisor + SqlAgent 多工具 | 生产级、复杂 schema | 高（工具隔离+校验） |
 | C. SqlDatabaseContentRetriever | RAG 组件生成并执行 SQL | 检索增强问答 | 警告：@Experimental |
 
-> 🎯 核心要点：**模式 A 快但糙（靠提示词），模式 B 稳但重（靠工具链）**——生产系统选 B，Demo 与内部工具选 A。
+> 核心要点：**模式 A 快但糙（靠提示词），模式 B 稳但重（靠工具链）**——生产系统选 B，Demo 与内部工具选 A。
 
 ## 2. 模式 A：@AiService 声明式 Text-to-SQL
 
@@ -143,7 +143,7 @@ List<Content> results = retriever.retrieve(Query.from("显示最近一个月销�
 | 多阶段优化 | SqlOptimizer 12 类规则（索引建议/join 顺序/子查询） |
 | 过滤 | 表/列过滤（排除 password 列） |
 
-> ⚠️ **官方警告**：此类标 @Experimental 且"有危险"——数据库用户必须极受限只读；JSQLParser 只验证了 SELECT 语句，**不能保证查询无害**（如 SELECT 调用副作用函数）。生产用请搭配第 4 节完整校验。
+> **官方警告**：此类标 @Experimental 且"有危险"——数据库用户必须极受限只读；JSQLParser 只验证了 SELECT 语句，**不能保证查询无害**（如 SELECT 调用副作用函数）。生产用请搭配第 4 节完整校验。
 
 ## 6. 企业架构参考（腾讯云 2026 案例）
 
@@ -198,7 +198,7 @@ List<Content> results = retriever.retrieve(Query.from("显示最近一个月销�
    好处：同一套工具服务所有客户端
 ```
 
-> 💡 Google 2026 官方 Codelab（Cymbal Transit）即"LangChain4J + MCP Toolbox Java SDK 多 Agent"模式——Java 侧 MCP 已是一等公民。
+> Google 2026 官方 Codelab（Cymbal Transit）即"LangChain4J + MCP Toolbox Java SDK 多 Agent"模式——Java 侧 MCP 已是一等公民。
 
 ## 8. 面试速记
 
@@ -209,7 +209,7 @@ List<Content> results = retriever.retrieve(Query.from("显示最近一个月销�
 | Schema 上下文怎么给？ | 按域拆分 ≤20 表 + 样例行 + 口径注入；Redis 缓存元数据（120ms→15ms） |
 | Java 侧 MCP 怎么用？ | LangChain4j 原生 MCP 客户端接 DBHub；或把自研工具注册为 MCP Server 供所有客户端复用 |
 
-> 🎯 核心要点：Java 侧的护城河在**工程规范**——数据源隔离（只读）、AST 校验（JSQLParser）、配置化白名单、OTel 审计——语言本身不产生智能，产生的是可控性。
+> 核心要点：Java 侧的护城河在**工程规范**——数据源隔离（只读）、AST 校验（JSQLParser）、配置化白名单、OTel 审计——语言本身不产生智能，产生的是可控性。
 
 ---
 

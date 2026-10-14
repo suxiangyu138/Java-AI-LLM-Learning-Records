@@ -1,10 +1,10 @@
 # 05 - Grok API 与 SpaceXAI 开发实战
 
-> 🎯 Grok 4.5 API 于 2026 年 7 月全面开放——$2/$6 per 1M tokens 的定价、OpenAI SDK 完全兼容、Token 效率 4.2× 优于同级、原生集成 Cursor。Java 开发者可以最低成本接入"效率旗舰"
+> Grok 4.5 API 于 2026 年 7 月全面开放——$2/$6 per 1M tokens 的定价、OpenAI SDK 完全兼容、Token 效率 4.2× 优于同级、原生集成 Cursor。Java 开发者可以最低成本接入"效率旗舰"
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [API 概览与接入](#1-api-概览与接入)
 2. [Grok 4.5 API 核心能力](#2-grok-45-api-核心能力)
@@ -81,13 +81,13 @@ Token 效率是关键优势：
 
 | 能力 | 支持 | 说明 |
 |------|:---:|------|
-| 文本对话 | ✅ | 基础问答与聊天 |
-| 流式输出 (SSE) | ✅ | 实时流式响应 |
-| Function Calling | ✅ | 工具/函数调用 |
-| JSON Mode | ✅ | 强制 JSON 输出 |
-| 多模态 | ✅ | 图片输入（20MB, JPG/PNG） |
-| 推理模式 | ✅ | Thinking tokens |
-| 缓存 | ✅ | 75% 折扣 |
+| 文本对话 | ✓ | 基础问答与聊天 |
+| 流式输出 (SSE) | ✓ | 实时流式响应 |
+| Function Calling | ✓ | 工具/函数调用 |
+| JSON Mode | ✓ | 强制 JSON 输出 |
+| 多模态 | ✓ | 图片输入（20MB, JPG/PNG） |
+| 推理模式 | ✓ | Thinking tokens |
+| 缓存 | ✓ | 75% 折扣 |
 
 ---
 
@@ -265,7 +265,7 @@ public class TokenEfficiencyTracker {
         // Grok 4.5 典型结果：15K tokens，$0.10
         // 对比 Opus 4.8：67K tokens，$1.68
         return new EfficiencyReport(model, tokens, cost,
-            model.equals("grok-4.5") ? "⭐⭐⭐⭐⭐ 极致省 Token" : "标准");
+            model.equals("grok-4.5") ? "★★★★★ 极致省 Token" : "标准");
     }
 }
 ```
@@ -307,7 +307,7 @@ public String chatWithRetry(String message) {
 }
 ```
 
-> 🎯 **核心要点**：Grok 4.5 API 的核心竞争力不是"绝对能力最强"，而是"每美元完成的任务最多"——$0.10 完成 Opus 4.8 要花 $1.68 的任务。对于高频 API 调用场景（Agent 自动化、批量处理、CI/CD 集成），这是结构性的成本优势。
+> **核心要点**：Grok 4.5 API 的核心竞争力不是"绝对能力最强"，而是"每美元完成的任务最多"——$0.10 完成 Opus 4.8 要花 $1.68 的任务。对于高频 API 调用场景（Agent 自动化、批量处理、CI/CD 集成），这是结构性的成本优势。
 
 ---
 

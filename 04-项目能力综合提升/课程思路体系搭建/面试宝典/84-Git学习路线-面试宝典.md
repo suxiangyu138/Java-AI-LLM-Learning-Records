@@ -464,7 +464,7 @@ git push origin main
 # 方案3：reset后force push（仅当团队确认）
 git reset --hard <target-commit>
 git push --force-with-lease origin main
-# ⚠️ 注意：force push会重写远程历史，慎用！
+# 注意：force push会重写远程历史，慎用！
 ```
 
 ### Q5: 开发完成如何创建Pull Request？

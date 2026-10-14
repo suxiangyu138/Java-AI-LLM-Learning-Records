@@ -2,7 +2,7 @@
 
 > 定位：PG 独有的 SQL 能力——CTE 递归与物化、窗口函数全解、LATERAL JOIN、UNION 家族、丰富数据类型、RETURNING 与 UPSERT
 
-## 📚 目录
+## 目录
 
 1. [CTE 与递归查询](#1-cte-与递归查询)
 2. [窗口函数全解](#2-窗口函数全解)
@@ -27,7 +27,7 @@ SELECT d.name, s.cnt
 FROM departments d
 JOIN user_stats s ON d.id = s.dept_id;
 
--- ⚠️ PG 18 增强：EXPLAIN 显示 CTE 物化方式（Memory/Disk）
+-- PG 18 增强：EXPLAIN 显示 CTE 物化方式（Memory/Disk）
 -- 多层 CTE：可嵌套复用（比子查询清晰）
 ```
 
@@ -48,12 +48,12 @@ WITH RECURSIVE org_tree AS (
 SELECT * FROM org_tree ORDER BY level, id;
 ```
 
-> 🎯 **要点**：递归 CTE = 锚点 + 递归成员 UNION ALL——天然适配树形数据。PG 的 CTE 可配 `MATERIALIZED`/`NOT MATERIALIZED` 控制优化。
+> **要点**：递归 CTE = 锚点 + 递归成员 UNION ALL——天然适配树形数据。PG 的 CTE 可配 `MATERIALIZED`/`NOT MATERIALIZED` 控制优化。
 
 ### 1.3 CTE 物化控制（优化器开关）
 
 ```sql
--- ⚠️ PG 独有：CTE 默认物化（把结果落盘/存内存再复用）
+-- PG 独有：CTE 默认物化（把结果落盘/存内存再复用）
 -- 问题：外层过滤无法下推 → 大 CTE 可能性能差
 
 WITH orders_cte AS MATERIALIZED (
@@ -99,7 +99,7 @@ SELECT name, dept_id, salary,
     SUM(salary) OVER (ORDER BY salary ROWS UNBOUNDED PRECEDING) AS cum
 FROM employees
 WINDOW w AS (PARTITION BY dept_id ORDER BY salary DESC);
--- ⚠️ PG 特有：WINDOW 子句命名窗口（复用）
+-- PG 特有：WINDOW 子句命名窗口（复用）
 ```
 
 | 窗口函数 | 用途 |
@@ -113,11 +113,11 @@ WINDOW w AS (PARTITION BY dept_id ORDER BY salary DESC);
 ### 2.1 Frame 子句（窗口范围精确定义）
 
 ```sql
--- ⚠️ 窗口函数的灵魂 = FRAME（计算范围），PG 三种模式
+-- 窗口函数的灵魂 = FRAME（计算范围），PG 三种模式
 SELECT
     -- ① ROWS：按物理行数
     SUM(amount) OVER (ORDER BY day ROWS BETWEEN 6 PRECEDING AND CURRENT ROW) AS week_avg,
-    -- ② RANGE：按逻辑值范围（⚠️ 默认模式，重复值同帧）
+    -- ② RANGE：按逻辑值范围（默认模式，重复值同帧）
     SUM(amount) OVER (ORDER BY day RANGE BETWEEN INTERVAL '7 days' PRECEDING AND CURRENT ROW) AS rolling_7d,
     -- ③ GROUPS：按分组（ORDER BY 相同值的组为单位）
     SUM(amount) OVER (ORDER BY day GROUPS BETWEEN 1 PRECEDING AND CURRENT ROW) AS prev_group
@@ -158,23 +158,23 @@ FROM departments d
 JOIN LATERAL (
     SELECT name, salary
     FROM employees e
-    WHERE e.dept_id = d.id      -- ⚠️ 引用左侧列
+    WHERE e.dept_id = d.id      -- 引用左侧列
     ORDER BY salary DESC
     LIMIT 3
 ) emp ON true;
 
--- ⚠️ LATERAL 与普通 JOIN 的区别：
+-- LATERAL 与普通 JOIN 的区别：
 --   普通 JOIN 子查询先执行（无法引用左表）
 --   LATERAL 子查询可以引用左表当前行
 ```
 
-> 🎯 **要点**：LATERAL = "行级子查询"——能引用左侧列执行动态子查询。TopN per group、复杂计算子查询的标准答案。
+> **要点**：LATERAL = "行级子查询"——能引用左侧列执行动态子查询。TopN per group、复杂计算子查询的标准答案。
 
 ### 3.1 LATERAL vs 相关子查询 vs EXISTS
 
 | 写法 | 原理 | 性能 |
 |------|------|------|
-| LATERAL JOIN | 每行执行子查询，可 LIMIT | ✅ 最快（TopN） |
+| LATERAL JOIN | 每行执行子查询，可 LIMIT | ✓ 最快（TopN） |
 | 相关子查询（EXISTS） | 逐行扫描验证 | 中等 |
 | 窗口函数 | 全表一次排序 | TopN 大 N 时更优 |
 
@@ -197,7 +197,7 @@ WHERE 2 > (SELECT COUNT(*) FROM employees e2
            WHERE e2.dept_id = e.dept_id AND e2.salary > e.salary);
 ```
 
-> 💡 **选型经验**：数据量大、每组只取前 N → LATERAL；N 小且 SQL 简单 → 窗口函数；嵌套条件复杂 → EXISTS。
+> **选型经验**：数据量大、每组只取前 N → LATERAL；N 小且 SQL 简单 → 窗口函数；嵌套条件复杂 → EXISTS。
 
 ---
 
@@ -208,7 +208,7 @@ WHERE 2 > (SELECT COUNT(*) FROM employees e2
 ```sql
 -- RETURNING：增删改操作返回受影响的行的数据（免 SELECT 回查）
 INSERT INTO users(name, email) VALUES ('张三', 'a@b.com')
-RETURNING id, created_at;        -- ⚠️ PG 独有
+RETURNING id, created_at;        -- PG 独有
 
 UPDATE users SET status = 'active' WHERE id = 1
 RETURNING *;
@@ -216,13 +216,13 @@ RETURNING *;
 DELETE FROM logs WHERE created_at < now() - interval '90 days'
 RETURNING id;
 
--- ⚠️ PG 18：RETURNING 支持 OLD/NEW 引用（如 UPDATE 前后对比）
+-- PG 18：RETURNING 支持 OLD/NEW 引用（如 UPDATE 前后对比）
 UPDATE products SET price = price * 0.9
 WHERE id = 5
 RETURNING id, OLD.price AS old_price, NEW.price AS new_price;
 ```
 
-> 💡 **实战价值**：RETURNING 与 DML 原子执行——高并发下免「先查再改」的竞态窗口；配合 `INSERT ... RETURNING id` 是获取自增 ID 的标准姿势（替代 `lastval()` 显式调用）。
+> **实战价值**：RETURNING 与 DML 原子执行——高并发下免「先查再改」的竞态窗口；配合 `INSERT ... RETURNING id` 是获取自增 ID 的标准姿势（替代 `lastval()` 显式调用）。
 
 ### 4.2 UPSERT（ON CONFLICT）
 
@@ -230,7 +230,7 @@ RETURNING id, OLD.price AS old_price, NEW.price AS new_price;
 -- UPSERT = INSERT ... ON CONFLICT（有冲突则更新）
 INSERT INTO users(id, name, score) VALUES (1, '张三', 100)
 ON CONFLICT (id)
-DO UPDATE SET name = EXCLUDED.name,        -- ⚠️ EXCLUDED = 拟插入值
+DO UPDATE SET name = EXCLUDED.name,        -- EXCLUDED = 拟插入值
               score = users.score + EXCLUDED.score;
 
 -- DO NOTHING：冲突忽略
@@ -238,7 +238,7 @@ INSERT INTO user_logins(user_id, login_at) VALUES (1, now())
 ON CONFLICT (user_id, login_at) DO NOTHING;
 ```
 
-> 🎯 **要点**：RETURNING + UPSERT = 增删改操作的"省去回查"。UPSERT 的 `EXCLUDED` 引用拟插入值是关键细节。
+> **要点**：RETURNING + UPSERT = 增删改操作的"省去回查"。UPSERT 的 `EXCLUDED` 引用拟插入值是关键细节。
 
 ### 4.3 UPSERT 批量场景与陷阱
 
@@ -258,7 +258,7 @@ ON CONFLICT (id) DO UPDATE SET
     cnt = counters.cnt + EXCLUDED.cnt        -- 累加器模式
 RETURNING cnt;
 
--- ⚠️ 三大陷阱：
+-- 三大陷阱：
 --   1) 冲突列必须被唯一索引/主键覆盖，否则报错
 --   2) 同一语句多行时：同一行冲突只执行一次 DO UPDATE
 --   3) 高并发下 ON CONFLICT 依赖唯一索引的锁，误用 O_EXCL 会阻塞
@@ -267,7 +267,7 @@ RETURNING cnt;
 | 对比项 | PG `ON CONFLICT` | MySQL `ON DUPLICATE KEY` | SQL Server `MERGE` |
 |--------|:---:|:---:|:---:|
 | 冲突定位 | 指定列/约束 | 任意唯一键 | MATCH 条件 |
-| 语义清晰度 | ✅ 最清晰 | 隐式（易误触发） | 强（但语法繁） |
+| 语义清晰度 | ✓ 最清晰 | 隐式（易误触发） | 强（但语法繁） |
 | 可读性 | 高 | 低 | 中 |
 
 ---
@@ -284,12 +284,12 @@ RETURNING cnt;
 | 操作 | 语义 | 性能 |
 |------|------|:---:|
 | UNION | 去重合并 | 慢（排序去重） |
-| UNION ALL | 全部合并 | ✅ 快 |
+| UNION ALL | 全部合并 | ✓ 快 |
 | INTERSECT | 交集 | 中等 |
 | EXCEPT | 差集 | 中等 |
 
 ```
-⚠️ 面试必答：
+面试必答：
 "PG UNIQUE 特性——RETURNING 免回查、
  UPSERT 冲突更新、LATERAL 行级子查询、
  递归 CTE 树形查询、CTE 物化控制；
@@ -300,12 +300,12 @@ RETURNING cnt;
 
 ## 6. PG 18 SQL 新特性
 
-> 💡 以下为 PG 18（2025-09 发布，2026 生产验证中）新增的 SQL 能力，面试加分项。
+> 以下为 PG 18（2025-09 发布，2026 生产验证中）新增的 SQL 能力，面试加分项。
 
 ### 6.1 JSON_TABLE()（SQL/JSON 标准）
 
 ```sql
--- ⚠️ PG 18 首次原生支持 JSON_TABLE（对标 Oracle/MySQL 8.4）
+-- PG 18 首次原生支持 JSON_TABLE（对标 Oracle/MySQL 8.4）
 -- 把 JSON 数组拆成关系行（免 jsonb_each + LATERAL 手工拆）
 SELECT jt.*
 FROM orders,
@@ -354,7 +354,7 @@ CREATE TABLE bookings (
 
 ---
 
-> 🎯 **核心要点**：PG SQL 独有 = **CTE 递归**（树形数据）+ **LATERAL JOIN**（行级子查询）+ **RETURNING**（免回查）+ **UPSERT**（ON CONFLICT）+ **WINDOW 命名窗口** + **PG 18 JSON_TABLE/OLD-NEW/虚拟生成列**。这些是 PG 相对 MySQL 的查询能力优势——分析/复杂查询场景的利器。
+> **核心要点**：PG SQL 独有 = **CTE 递归**（树形数据）+ **LATERAL JOIN**（行级子查询）+ **RETURNING**（免回查）+ **UPSERT**（ON CONFLICT）+ **WINDOW 命名窗口** + **PG 18 JSON_TABLE/OLD-NEW/虚拟生成列**。这些是 PG 相对 MySQL 的查询能力优势——分析/复杂查询场景的利器。
 
 ---
 

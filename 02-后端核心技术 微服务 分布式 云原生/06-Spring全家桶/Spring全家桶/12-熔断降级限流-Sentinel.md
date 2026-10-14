@@ -43,7 +43,7 @@
 | 规则持久化 | 多数据源（Nacos/APOLLO/ZK） | 不支持 | 需自行实现 |
 | 动态规则推送 | push/pull 模式 | 不支持 | 需集成 |
 
-> 💡 Sentinel 在限流维度的能力远超 Hystrix 和 Resilience4j，是 Spring Cloud Alibaba 生态的首选稳定性组件。
+> Sentinel 在限流维度的能力远超 Hystrix 和 Resilience4j，是 Spring Cloud Alibaba 生态的首选稳定性组件。
 
 ### 1.3 本章学习路线
 
@@ -143,7 +143,7 @@ ProcessorSlotChain (责任链)
     └── DegradeSlot            — 熔断降级
 ```
 
-> 💡 每个 Slot 都可以独立扩展，通过 SPI 机制注册，Sentinel 的扩展性极强。
+> 每个 Slot 都可以独立扩展，通过 SPI 机制注册，Sentinel 的扩展性极强。
 
 ### 2.2 滑动窗口统计原理
 
@@ -200,7 +200,7 @@ Sentinel 使用 **滑动窗口（Sliding Window）** 进行实时统计，而非
 | QPS 限流 | `FLOW_GRADE_QPS` | 每秒请求数限流，最常用 |
 | 线程数限流 | `FLOW_GRADE_THREAD` | 并发线程数限流，防止资源过度占用 |
 
-> 💡 QPS 模式适用于接口级别的流量整形，线程数模式适用于防止慢调用耗尽线程池。
+> QPS 模式适用于接口级别的流量整形，线程数模式适用于防止慢调用耗尽线程池。
 
 #### 2.3.3 流控效果（Control Behavior）
 
@@ -247,7 +247,7 @@ Sentinel 使用 **滑动窗口（Sliding Window）** 进行实时统计，而非
 | `STRATEGY_RELATE` | 关联流控：当关联资源达到阈值时限流当前资源 |
 | `STRATEGY_CHAIN` | 链路流控：根据调用链路入口限流 |
 
-> 💡 **关联流控** 常用于读写分离场景：写入达到阈值时限制读取流量，保证写入优先。
+> **关联流控** 常用于读写分离场景：写入达到阈值时限制读取流量，保证写入优先。
 
 #### 2.3.5 基于来源的流控
 
@@ -310,7 +310,7 @@ limitApp: "default"      → 其他来源限流 50 QPS
   - 成功 → 恢复 CLOSED
   - 失败 → 再次进入 OPEN
 
-> 💡 半开探活机制防止熔断恢复后流量瞬间涌入导致二次雪崩。
+> 半开探活机制防止熔断恢复后流量瞬间涌入导致二次雪崩。
 
 ### 2.5 热点参数限流（Param Flow Rule）
 
@@ -378,7 +378,7 @@ item.setClassType(String.class.getName());
 | 线程数 | 并发线程数 > `maxThread` | Tomcat 线程池大小 |
 | QPS | 入口 QPS > `qps` | 根据压测确定 |
 
-> ⚠️ `highestSystemLoad` 在 Windows 下无效，因 Windows 没有 loadAverage 系统调用。
+> `highestSystemLoad` 在 Windows 下无效，因 Windows 没有 loadAverage 系统调用。
 
 ### 2.7 @SentinelResource 注解
 
@@ -403,7 +403,7 @@ item.setClassType(String.class.getName());
 | 是否必填 | 可选 | 可选 |
 | 方法签名 | 参数 + `Throwable` | 参数 + `BlockException` |
 
-> 💡 两者可以共存，当 Sentinel 触发限流时走 `blockHandler`，当业务抛出异常时走 `fallback`。
+> 两者可以共存，当 Sentinel 触发限流时走 `blockHandler`，当业务抛出异常时走 `fallback`。
 
 #### 2.7.3 方法签名要求
 
@@ -425,7 +425,7 @@ public User getUserBlockHandler(Long id, BlockException e) {
 }
 ```
 
-> ⚠️ fallback/blockHandler 方法必须定义在同一个类中（若使用 `fallbackClass` 则可以是静态方法）。
+> fallback/blockHandler 方法必须定义在同一个类中（若使用 `fallbackClass` 则可以是静态方法）。
 
 ### 2.8 自定义异常处理 — UrlBlockHandler
 
@@ -700,7 +700,7 @@ tail -f logs/csp/sentinel-record.log
 总计 115 个请求 > 阈值 100
 ```
 
-> 💡 如果对精度要求极高，可以缩短窗口时间，或使用精确限流（单机限流 + 本地计数器）。
+> 如果对精度要求极高，可以缩短窗口时间，或使用精确限流（单机限流 + 本地计数器）。
 
 ### 3.6 热点限流参数索引错误
 
@@ -1953,7 +1953,7 @@ Thread Group (100 线程, Loop 100 次)
 └── Listener: Backend Listener (可选，对接 Dashboard)
 ```
 
-> 💡 建议使用 JMeter 或 AB（Apache Bench）进行压测验证限流效果。
+> 建议使用 JMeter 或 AB（Apache Bench）进行压测验证限流效果。
 
 ---
 
@@ -2252,9 +2252,9 @@ public class DynamicFlowRuleManager {
 ### 7.5 规则持久化速记
 
 ```text
-原始模式  → 内存，重启丢失 ❌
-Pull 模式 → 定时拉取，有延迟 ⚠️
-Push 模式 → Nacos/ZK/Apollo 推送，实时生效 ✅
+原始模式  → 内存，重启丢失 ✗
+Pull 模式 → 定时拉取，有延迟 
+Push 模式 → Nacos/ZK/Apollo 推送，实时生效 ✓
 ```
 
 ### 7.6 常见问题速查
@@ -2325,7 +2325,7 @@ Push 模式 → Nacos/ZK/Apollo 推送，实时生效 ✅
 | 需要系统自适应保护 | **Sentinel** | 唯一支持 Load/CPU 保护 |
 | 需要 Dashboard 实时监控 | **Sentinel** | 开箱即用控制台 |
 
-> 💡 业界趋势：Hystrix 已进入维护模式，新项目在 Alibaba 生态选 Sentinel，非 Alibaba 生态选 Resilience4j。
+> 业界趋势：Hystrix 已进入维护模式，新项目在 Alibaba 生态选 Sentinel，非 Alibaba 生态选 Resilience4j。
 
 ### 8.2 Sentinel 源码核心类解读
 
@@ -2827,6 +2827,6 @@ public class StressTestOriginAspect {
 
 ---
 
-> 🎯 **本章总结**：Sentinel 是微服务体系中最核心的高可用组件。从基础的流控熔断，到热点限流、系统保护，再到规则持久化和 Nacos 集成，构成了完整的服务保护方案。在生产环境中，建议结合压测数据动态调整规则，并通过监控告警体系确保及时发现异常。
+> **本章总结**：Sentinel 是微服务体系中最核心的高可用组件。从基础的流控熔断，到热点限流、系统保护，再到规则持久化和 Nacos 集成，构成了完整的服务保护方案。在生产环境中，建议结合压测数据动态调整规则，并通过监控告警体系确保及时发现异常。
 
-> 💡 **最佳实践**：先压测摸清系统水位，再配置规则，最后上线观察。规则配置要"宁严勿松"，随着系统稳定逐步放宽阈值。
+> **最佳实践**：先压测摸清系统水位，再配置规则，最后上线观察。规则配置要"宁严勿松"，随着系统稳定逐步放宽阈值。

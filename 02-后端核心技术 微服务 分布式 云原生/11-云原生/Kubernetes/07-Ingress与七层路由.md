@@ -1,5 +1,5 @@
 # 07-Ingress与七层路由
-> 🎯 Service负责K8s集群内部的L4层负载均衡 — Pod IP变化时自动更新DNS。但在生产环境中，我们需要**从外部访问集群内服务**，并且在域名+路径级别做路由分发，这就是Ingress的使命
+> Service负责K8s集群内部的L4层负载均衡 — Pod IP变化时自动更新DNS。但在生产环境中，我们需要**从外部访问集群内服务**，并且在域名+路径级别做路由分发，这就是Ingress的使命
 
 ---
 
@@ -53,7 +53,7 @@
 | 流量分发 | 简单轮询 | 灰度、重定向、Header改写 |
 | 成本 | 多个LB → 多个云资源 | 单个LB + Ingress Controller Pod |
 
-> 💡 一句话总结：**Ingress是集群的"API网关"，统一管理所有外部流量的七层路由**。没有Ingress，每个对外暴露的Service都需要独立的LoadBalancer（每个LB几十刀/月，多Service时成本爆炸）。
+> 一句话总结：**Ingress是集群的"API网关"，统一管理所有外部流量的七层路由**。没有Ingress，每个对外暴露的Service都需要独立的LoadBalancer（每个LB几十刀/月，多Service时成本爆炸）。
 
 ---
 
@@ -68,7 +68,7 @@
 | **Ingress资源** | 一个K8s API对象（YAML配置），定义了路由规则 | Nginx的`server.conf`配置 |
 | **Ingress Controller** | 运行在集群中的实际网关程序，**读取Ingress资源并实现路由** | Nginx进程本身 |
 
-> ⚠️ **Ingress只是声明，Ingress Controller才是执行者！** 只创建Ingress YAML但不安装Ingress Controller，路由不会生效。
+> **Ingress只是声明，Ingress Controller才是执行者！** 只创建Ingress YAML但不安装Ingress Controller，路由不会生效。
 
 ### 2.2 安装Ingress Controller（最流行的方式）
 
@@ -86,14 +86,14 @@ kubectl get pods -n ingress-nginx
 
 | Controller | 语言 | 性能 | 特点 | 适用场景 |
 |------------|------|------|------|----------|
-| **Nginx Ingress** | Go + Lua | ⭐⭐⭐⭐ | 生态最成熟、社区最大、文档最全 | **生产首选** |
-| **Traefik** | Go | ⭐⭐⭐⭐ | 自动发现、自动HTTPS、Dashboard可视化 | 微服务、中小规模 |
-| **HAProxy Ingress** | Go | ⭐⭐⭐⭐⭐ | 性能极高、配置灵活 | 高并发场景（电商、实时） |
-| **Istio Gateway** | Go/Envoy | ⭐⭐⭐ | 服务网格原生、流量管理能力极强 | 需要完整服务网格时 |
-| **Kong Ingress** | Lua/Go | ⭐⭐⭐⭐ | 插件生态丰富（限流/认证/日志） | API管理+网关一体化 |
-| **Apache APISIX** | Lua/Go | ⭐⭐⭐⭐⭐ | 超高性能、动态路由、丰富插件 | 云原生API网关 |
+| **Nginx Ingress** | Go + Lua | ★★★★ | 生态最成熟、社区最大、文档最全 | **生产首选** |
+| **Traefik** | Go | ★★★★ | 自动发现、自动HTTPS、Dashboard可视化 | 微服务、中小规模 |
+| **HAProxy Ingress** | Go | ★★★★★ | 性能极高、配置灵活 | 高并发场景（电商、实时） |
+| **Istio Gateway** | Go/Envoy | ★★★ | 服务网格原生、流量管理能力极强 | 需要完整服务网格时 |
+| **Kong Ingress** | Lua/Go | ★★★★ | 插件生态丰富（限流/认证/日志） | API管理+网关一体化 |
+| **Apache APISIX** | Lua/Go | ★★★★★ | 超高性能、动态路由、丰富插件 | 云原生API网关 |
 
-> 💡 **选型建议**：如果没有特殊需求，直接选**Nginx Ingress Controller**（社区最活跃、厂商支持最多）。需要服务网格时考虑Istio Gateway，需要API管理功能考虑Kong或APISIX。
+> **选型建议**：如果没有特殊需求，直接选**Nginx Ingress Controller**（社区最活跃、厂商支持最多）。需要服务网格时考虑Istio Gateway，需要API管理功能考虑Kong或APISIX。
 
 ---
 
@@ -102,14 +102,14 @@ kubectl get pods -n ingress-nginx
 ### 3.1 基础语法结构
 
 ```yaml
-apiVersion: networking.k8s.io/v1    # ⭐ v1为稳定版（以前为extensions/v1beta1）
+apiVersion: networking.k8s.io/v1    # ★ v1为稳定版（以前为extensions/v1beta1）
 kind: Ingress
 metadata:
   name: example-ingress
   annotations:                       # 行为控制配置
     nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
-  ingressClassName: nginx            # ⭐ K8s 1.18+ 替代 annotation
+  ingressClassName: nginx            # ★ K8s 1.18+ 替代 annotation
   rules:                             # 路由规则
   - host: api.example.com            # 域名匹配
     http:
@@ -197,14 +197,14 @@ Ingress可以配置一个**默认后端**，当所有规则都不匹配时（如
 
 ```yaml
 spec:
-  defaultBackend:                # ⭐ 兜底：404页面或统一入口
+  defaultBackend:                # ★ 兜底：404页面或统一入口
     service:
       name: default-backend
       port:
         number: 80
 ```
 
-> 💡 默认后端通常部署一个返回404或友好提示页面的Service，避免访问到不存在的路由时直接连接拒绝。
+> 默认后端通常部署一个返回404或友好提示页面的Service，避免访问到不存在的路由时直接连接拒绝。
 
 ---
 
@@ -219,7 +219,7 @@ metadata:
   name: tls-ingress
 spec:
   ingressClassName: nginx
-  tls:                              # ⭐ TLS配置
+  tls:                              # ★ TLS配置
   - hosts:
     - api.example.com
     secretName: api-tls-secret      # 证书Secret
@@ -246,7 +246,7 @@ apiVersion: v1
 kind: Secret
 metadata:
   name: api-tls-secret
-type: kubernetes.io/tls             # ⭐ 固定类型
+type: kubernetes.io/tls             # ★ 固定类型
 data:
   tls.crt: LS0tLS1CRUdJTi...        # Base64编码的证书
   tls.key: LS0tLS1CRUdJTi...        # Base64编码的私钥
@@ -291,13 +291,13 @@ kind: Ingress
 metadata:
   name: auto-tls-ingress
   annotations:
-    cert-manager.io/cluster-issuer: "letsencrypt-prod"  # ⭐ 自动签发
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"  # ★ 自动签发
 spec:
   ingressClassName: nginx
   tls:
   - hosts:
     - api.example.com
-    secretName: api-tls-cert          # ⭐ cert-manager自动创建此Secret
+    secretName: api-tls-cert          # ★ cert-manager自动创建此Secret
   rules:
   - host: api.example.com
     http:
@@ -311,7 +311,7 @@ spec:
               number: 8080
 ```
 
-> 🎯 **最佳实践**：永远不要手工管理证书！cert-manager + Let's Encrypt实现全自动证书申请、续期、注入，证书过期前自动重新签发，零人工介入。
+> **最佳实践**：永远不要手工管理证书！cert-manager + Let's Encrypt实现全自动证书申请、续期、注入，证书过期前自动重新签发，零人工介入。
 
 ---
 
@@ -344,7 +344,7 @@ kind: Ingress
 metadata:
   name: rewrite-ingress
   annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /$2   # ⭐ 捕获组重写
+    nginx.ingress.kubernetes.io/rewrite-target: /$2   # ★ 捕获组重写
 spec:
   ingressClassName: nginx
   rules:
@@ -353,7 +353,7 @@ spec:
       paths:
       # 请求 /api/users → 转发到user-service:8080/users（去掉/api前缀）
       - path: /api(/|$)(.*)
-        pathType: ImplementationSpecific  # ⭐ 正则需用此类型
+        pathType: ImplementationSpecific  # ★ 正则需用此类型
         backend:
           service:
             name: user-service
@@ -363,9 +363,9 @@ spec:
 
 | 请求路径 | 没有rewrite-target | 有rewrite-target: /$2 |
 |----------|-------------------|----------------------|
-| `/api/users` | `/api/users`（404！后端无此路径） | `/users`（✅ 正常） |
-| `/api/v1/orders` | `/api/v1/orders`（404！） | `/v1/orders`（✅ 正常） |
-| `/api/payment/callback` | `/api/payment/callback`（404！） | `/payment/callback`（✅ 正常） |
+| `/api/users` | `/api/users`（404！后端无此路径） | `/users`（✓ 正常） |
+| `/api/v1/orders` | `/api/v1/orders`（404！） | `/v1/orders`（✓ 正常） |
+| `/api/payment/callback` | `/api/payment/callback`（404！） | `/payment/callback`（✓ 正常） |
 
 ### 5.2 CORS配置示例
 
@@ -425,8 +425,8 @@ kind: Ingress
 metadata:
   name: app-canary
   annotations:
-    nginx.ingress.kubernetes.io/canary: "true"                # ⭐ 标记为金丝雀
-    nginx.ingress.kubernetes.io/canary-weight: "10"           # ⭐ 10%流量到v2
+    nginx.ingress.kubernetes.io/canary: "true"                # ★ 标记为金丝雀
+    nginx.ingress.kubernetes.io/canary-weight: "10"           # ★ 10%流量到v2
     # 或者按Header/Header + Cookie分发
     # nginx.ingress.kubernetes.io/canary-by-header: "X-Canary"
     # nginx.ingress.kubernetes.io/canary-by-cookie: "canary_user"
@@ -453,7 +453,7 @@ spec:
 | `canary-by-header` | 按自定义Header分发 | 内部测试：指定Header才走新版本 | `X-Canary: always` |
 | `canary-by-cookie` | 按Cookie分发 | 会话级别灰度 | `canary_user: true` |
 
-> 💡 金丝雀发布流程：`weight=5`（5%流量验证）→ `weight=20`（扩大验证）→ `weight=100`（全量）→ 切换主Ingress指向v2 → 下线canary。
+> 金丝雀发布流程：`weight=5`（5%流量验证）→ `weight=20`（扩大验证）→ `weight=100`（全量）→ 切换主Ingress指向v2 → 下线canary。
 
 ---
 
@@ -518,14 +518,14 @@ spec:
     backendRefs:
     - name: user-service-v1
       port: 8080
-      weight: 90                          # ⭐ 权重路由（90%流量）
+      weight: 90                          # ★ 权重路由（90%流量）
     - name: user-service-v2
       port: 8080
-      weight: 10                          # ⭐ 10%流量金丝雀
+      weight: 10                          # ★ 10%流量金丝雀
   - matches:
     - headers:
       - name: X-Env
-        value: canary                     # ⭐ Header条件路由
+        value: canary                     # ★ Header条件路由
     backendRefs:
     - name: user-service-v2
       port: 8080
@@ -533,7 +533,7 @@ spec:
 
 ### 7.3 迁移建议
 
-> 💡 **何时从Ingress迁移到Gateway API？** 当前Ingress对大多数场景已经够用。Gateway API适合以下场景：需要gRPC路由、精细化流量管理、多租户、或需要跨Namespace路由。建议持续关注Gateway API的发展，在K8s版本支持成熟后逐步采用。
+> **何时从Ingress迁移到Gateway API？** 当前Ingress对大多数场景已经够用。Gateway API适合以下场景：需要gRPC路由、精细化流量管理、多租户、或需要跨Namespace路由。建议持续关注Gateway API的发展，在K8s版本支持成熟后逐步采用。
 
 ---
 
@@ -717,4 +717,4 @@ echo | openssl s_client -connect api.example.com:443 -servername api.example.com
 
 ---
 
-> 🎯 **Ingress核心要点总结**：Ingress是K8s七层入口网关，解决外部访问和路由分发问题。Nginx Ingress Controller是生产首选。用Annotations控制流量行为（路径重写、CORS、速率限制），用cert-manager实现证书自动管理。金丝雀发布通过canary-weight实现平滑升级。Gateway API是下一代标准，提供更强大的路由能力。**没有Ingress Controller的Ingress只是一个空配置**——必须先安装Ingress Controller！
+> **Ingress核心要点总结**：Ingress是K8s七层入口网关，解决外部访问和路由分发问题。Nginx Ingress Controller是生产首选。用Annotations控制流量行为（路径重写、CORS、速率限制），用cert-manager实现证书自动管理。金丝雀发布通过canary-weight实现平滑升级。Gateway API是下一代标准，提供更强大的路由能力。**没有Ingress Controller的Ingress只是一个空配置**——必须先安装Ingress Controller！

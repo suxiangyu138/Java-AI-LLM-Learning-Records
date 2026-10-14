@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [组件一句话定位](#1-组件一句话定位)
 2. [版本现状（2026-08）](#2-版本现状2026-08)
@@ -54,33 +54,33 @@
 | 聚合 | 手写管道 Document 数组 | @Aggregation 注解 / TypedAggregation |
 | 与 Spring 生态 | 无集成 | Repository、审计、事件、Boot 自动配置 |
 
-> 🎯 判断标准一句话：**"业务代码里有没有 POJO ↔ BSON 的转换和重复查询逻辑？"**——有，用 Spring Data MongoDB；没有（纯运维脚本/数据管道），直接用原生驱动更轻。
+> 判断标准一句话：**"业务代码里有没有 POJO ↔ BSON 的转换和重复查询逻辑？"**——有，用 Spring Data MongoDB；没有（纯运维脚本/数据管道），直接用原生驱动更轻。
 
 ### 1.2 适用与不适用场景
 
 | 场景 | 适合？ | 说明 |
 |------|:---:|------|
-| 文档型业务数据（用户画像、订单、日志、内容） | ✅ | Repository + 聚合管道是主战场 |
-| 模式灵活/快速迭代的业务 | ✅ | 无固定表结构，加字段不加列 |
-| 高写入吞吐（日志、埋点、IOT） | ✅ | WiredTiger + 分片集群 |
-| 向量检索 / AI 语义搜索（2026 主流） | ✅ | 4.x 起 $vectorSearch 全链路支持（[08 篇](08-向量检索与AI集成速查.md)） |
-| 强事务、强一致、复杂关联 | ⚠️ 部分 | 事务仅副本集多文档；**关联用内嵌/引用，不支持 join**（$lookup 有限） |
-| 复杂 SQL 报表、多表 join 查询 | ❌ | 关系型语义请用 [Spring Data JPA](../../Spring%20Data%20系列【数据访问层】/Spring%20Data%20JPA/00-Spring%20Data%20JPA组件总览.md) |
-| 精确金额结算（DECIMAL 语义） | ⚠️ 部分 | 用 Decimal128 支持但不如关系库审计完备 |
+| 文档型业务数据（用户画像、订单、日志、内容） | ✓ | Repository + 聚合管道是主战场 |
+| 模式灵活/快速迭代的业务 | ✓ | 无固定表结构，加字段不加列 |
+| 高写入吞吐（日志、埋点、IOT） | ✓ | WiredTiger + 分片集群 |
+| 向量检索 / AI 语义搜索（2026 主流） | ✓ | 4.x 起 $vectorSearch 全链路支持（[08 篇](08-向量检索与AI集成速查.md)） |
+| 强事务、强一致、复杂关联 | 部分 | 事务仅副本集多文档；**关联用内嵌/引用，不支持 join**（$lookup 有限） |
+| 复杂 SQL 报表、多表 join 查询 | ✗ | 关系型语义请用 [Spring Data JPA](../../Spring%20Data%20系列【数据访问层】/Spring%20Data%20JPA/00-Spring%20Data%20JPA组件总览.md) |
+| 精确金额结算（DECIMAL 语义） | 部分 | 用 Decimal128 支持但不如关系库审计完备 |
 
-> ⚠️ **最大认知误区**：把 MongoDB 当"关系型数据库"用——没有外键/join/强 schema，事务范围受限（副本集内多文档）。**数据模型要按"文档思维"设计**（内嵌优先、按查询建模），照搬 MySQL 表结构设计会在关联与一致性上处处碰壁（[07 篇](07-索引与性能优化速查.md) 设计模式专节）。
+> **最大认知误区**：把 MongoDB 当"关系型数据库"用——没有外键/join/强 schema，事务范围受限（副本集内多文档）。**数据模型要按"文档思维"设计**（内嵌优先、按查询建模），照搬 MySQL 表结构设计会在关联与一致性上处处碰壁（[07 篇](07-索引与性能优化速查.md) 设计模式专节）。
 
 ### 1.3 与其他 Spring Data 组件的定位差异
 
 | 组件 | 存储 | 数据模型 | 事务 | 本系列的差异点 |
 |------|------|---------|:---:|--------------|
-| Spring Data JPA | 关系型数据库 | 表/实体/关联 | ✅ | 有外键、有事务、有强 schema |
-| Spring Data Redis | Redis | K/V、集合 | ⚠️ 有限 | 无索引、无查询 DSL |
-| **Spring Data MongoDB** | **MongoDB 8.3** | **文档 + 内嵌/引用 + 向量** | ✅（副本集多文档） | **文档模型、聚合管道、无 join、动态 schema** |
-| Spring Data Elasticsearch | ES 9 | 文档 + 倒排索引 + 向量 | ❌ | 查询是 JSON DSL，映射动态 |
-| Spring Data R2DBC | 关系型数据库 | 表/实体 | ✅ | 响应式非阻塞，同库可互转 |
+| Spring Data JPA | 关系型数据库 | 表/实体/关联 | ✓ | 有外键、有事务、有强 schema |
+| Spring Data Redis | Redis | K/V、集合 | 有限 | 无索引、无查询 DSL |
+| **Spring Data MongoDB** | **MongoDB 8.3** | **文档 + 内嵌/引用 + 向量** | ✓（副本集多文档） | **文档模型、聚合管道、无 join、动态 schema** |
+| Spring Data Elasticsearch | ES 9 | 文档 + 倒排索引 + 向量 | ✗ | 查询是 JSON DSL，映射动态 |
+| Spring Data R2DBC | 关系型数据库 | 表/实体 | ✓ | 响应式非阻塞，同库可互转 |
 
-> 💡 本系列定位"查得快"——组件速查；Repository 设计哲学（派生方法、Pageable、审计）与 Spring Data JPA 同源（同级目录），会 JPA 的开发者上手本组件几乎零门槛；差异集中在：**映射注解不同、查询是 JSON/Criteria 而非 JPQL、无关联懒加载、有聚合管道**。
+> 本系列定位"查得快"——组件速查；Repository 设计哲学（派生方法、Pageable、审计）与 Spring Data JPA 同源（同级目录），会 JPA 的开发者上手本组件几乎零门槛；差异集中在：**映射注解不同、查询是 JSON/Criteria 而非 JPQL、无关联懒加载、有聚合管道**。
 
 ## 2. 版本现状（2026-08）
 
@@ -93,7 +93,7 @@
 | 2024.0 | 3.3.x | 7.x | 6.1.x | 3.3.x | 停止维护 |
 | 2021.2 | 3.3.x（Raj 起改名） | 5.x/6.x | 5.3.x | 2.7.x | EOL |
 
-> ⚠️ **版本策略（2026 起）**：MongoDB 8.x 是当前主线（8.3 为 AI-native 版本，性能较 8.0 提升 45% 读/35% 写）；**新项目直接 Boot 4.1 + SDM 4.1 + MongoDB 8.x**；存量 Boot 3.5 项目停留在 3.5.x 且已停止维护——升级需 Java 21（同 JPA 4.x 线的迁移约束，见 [09 篇](09-集成地图与常见问题.md)）。
+> **版本策略（2026 起）**：MongoDB 8.x 是当前主线（8.3 为 AI-native 版本，性能较 8.0 提升 45% 读/35% 写）；**新项目直接 Boot 4.1 + SDM 4.1 + MongoDB 8.x**；存量 Boot 3.5 项目停留在 3.5.x 且已停止维护——升级需 Java 21（同 JPA 4.x 线的迁移约束，见 [09 篇](09-集成地图与常见问题.md)）。
 
 ### 2.1 4.x 线关键变化（3.5 → 4.0 迁移要点）
 
@@ -115,7 +115,7 @@
 | 8.1/8.2（2025） | 索引与查询优化、安全增强 |
 | **8.3（2026-05）** | **AI-native**：45% 读/35% 写吞吐提升；`$rankFusion`（RRF 混合检索）正式化；Atlas 自动 Voyage 嵌入（预览）；LangGraph 长期记忆集成 |
 
-> 💡 服务端能力的窗口：**`$vectorSearch` 需要 Search/Vector 索引（Atlas 或 Enterprise 的 mongot）**——社区版自建需评估；`$rankFusion` 同理。开发/测试可用本地 mongot 或降级到普通 kNN 计算（[08 篇](08-向量检索与AI集成速查.md) 有对比）。
+> 服务端能力的窗口：**`$vectorSearch` 需要 Search/Vector 索引（Atlas 或 Enterprise 的 mongot）**——社区版自建需评估；`$rankFusion` 同理。开发/测试可用本地 mongot 或降级到普通 kNN 计算（[08 篇](08-向量检索与AI集成速查.md) 有对比）。
 
 ## 3. 能力地图
 
@@ -144,7 +144,7 @@
 | 嵌入向量生成 | Spring AI / LangChain4j / 自建 | MongoDB 只存向量并检索（Atlas 自动嵌入除外） |
 | 分布式事务（跨库/跨副本集） | Seata / 本地消息表 | MongoDB 事务限于副本集内多文档 |
 
-> ⚠️ **常见归因错误**：查询慢怪"Spring Data MongoDB 不好用"——MongoDB 查询性能由索引设计（$match 前置、索引覆盖）、文档模型（内嵌 vs 引用）决定，组件只负责翻译查询；排查路径应是"explain 走没走索引 → 查询模式对不对 → 数据模型要不要改"。
+> **常见归因错误**：查询慢怪"Spring Data MongoDB 不好用"——MongoDB 查询性能由索引设计（$match 前置、索引覆盖）、文档模型（内嵌 vs 引用）决定，组件只负责翻译查询；排查路径应是"explain 走没走索引 → 查询模式对不对 → 数据模型要不要改"。
 
 ## 4. 与深度体系的映射
 
@@ -157,7 +157,7 @@
 | 07-索引与性能优化速查 | [MongoDB-03 索引与聚合](../../../../02-非关系型数据库/MongoDB/03-MongoDB索引与聚合操作.md)、[MongoDB-04 副本集与分片](../../../../02-非关系型数据库/MongoDB/04-MongoDB副本集与分片集群.md) |
 | 09-集成地图与常见问题 | [MongoDB-06 SpringBoot集成与实战场景](../../../../02-非关系型数据库/MongoDB/06-SpringBoot集成MongoDB与实战场景.md) |
 
-> 💡 分工约定：**速查页回答"API 怎么写"，深度页回答"引擎怎么工作"**——文档模型、副本集/分片原理、备份恢复在 MongoDB 深度体系；本系列聚焦"POJO ↔ 文档 ↔ 查询的映射与编排"。
+> 分工约定：**速查页回答"API 怎么写"，深度页回答"引擎怎么工作"**——文档模型、副本集/分片原理、备份恢复在 MongoDB 深度体系；本系列聚焦"POJO ↔ 文档 ↔ 查询的映射与编排"。
 
 ## 5. 快速上手 3 步
 
@@ -209,7 +209,7 @@ Page<Product> page = productRepository.findByCategoryAndPriceBetween(
 docker run -d --name mongo8 -p 27017:27017 mongo:8.0
 ```
 
-> 💡 事务提示：**多文档事务需要副本集**（单节点需 `--replSet` 初始化）；开发期只想试 CRUD 用单节点即可，测事务再起副本集（[06 篇](06-批量操作与写关注速查.md)）。
+> 事务提示：**多文档事务需要副本集**（单节点需 `--replSet` 初始化）；开发期只想试 CRUD 用单节点即可，测事务再起副本集（[06 篇](06-批量操作与写关注速查.md)）。
 
 ### 5.2 三步验证集成真的通了
 
@@ -219,7 +219,7 @@ docker run -d --name mongo8 -p 27017:27017 mongo:8.0
 | ② 写读验证 | save 一条 → findById | 返回同一实体，id 已回填 |
 | ③ 控制台核对 | `mongosh shop` 查 `db.product.find()` | 文档存在，字段与实体一致 |
 
-> 💡 排障起点：**先确认 MongoDB 通不通（mongosh 或 mongo shell），再查 Java 侧**——`Timed out after 30000 ms` 一般是集群没起或 uri 配错，不是组件问题。
+> 排障起点：**先确认 MongoDB 通不通（mongosh 或 mongo shell），再查 Java 侧**——`Timed out after 30000 ms` 一般是集群没起或 uri 配错，不是组件问题。
 
 ## 6. 速查导航
 

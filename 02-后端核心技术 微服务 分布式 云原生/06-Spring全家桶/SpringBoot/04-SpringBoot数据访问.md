@@ -2,7 +2,7 @@
 
 > 定位：Spring Data JPA 与 MyBatis 双框架、事务管理、连接池（HikariCP）、多数据源、Spring Data Redis——数据访问全解
 
-## 📚 目录
+## 目录
 
 1. [数据访问框架选型](#1-数据访问框架选型)
 2. [Spring Data JPA](#2-spring-data-jpa)
@@ -22,7 +22,7 @@
 | JdbcTemplate | 轻量、手写 SQL | 简单场景 |
 
 ```
-⚠️ 面试必答：
+面试必答：
 "JPA 对象思维（快）、MyBatis SQL 思维（可控）——
  国内互联网 MyBatis 主流、欧洲 JPA 主流；
  两者都基于 Spring 事务抽象。"
@@ -47,7 +47,7 @@ public class User {
     // getter/setter
 }
 
-// ⚠️ 接口继承即自动实现（方法名推导 SQL）
+// 接口继承即自动实现（方法名推导 SQL）
 public interface UserRepository extends JpaRepository<User, Long> {
     List<User> findByName(String name);               // 按名查
     List<User> findByAgeGreaterThan(int age);         // 大于
@@ -63,10 +63,10 @@ public interface UserRepository extends JpaRepository<User, Long> {
 ### 2.2 JPA 核心
 
 ```
-⚠️ 方法名推导规则：
+方法名推导规则：
   findBy + 字段 + 条件（And/Or/GreaterThan/Like/In）
 
-⚠️ 面试必答：
+面试必答：
 "JPA 三能力——方法名推导 SQL、
  @Query 自定义 JPQL/原生 SQL、
  Specification 动态查询；
@@ -120,11 +120,11 @@ public interface UserMapper {
 ### 3.2 MyBatis 核心要点
 
 ```
-⚠️ #{} vs ${}（安全第一考点）：
-  #{}：预编译参数（✅ 防注入）
-  ${}：字符串拼接（❌ 注入风险，仅表名/排序用）
+#{} vs ${}（安全第一考点）：
+  #{}：预编译参数（✓ 防注入）
+  ${}：字符串拼接（✗ 注入风险，仅表名/排序用）
 
-⚠️ 面试必答：
+面试必答：
 "MyBatis 安全铁律——参数一律 #{}（预编译），
  ${} 只允许表名/排序字段（且白名单校验）；
  动态 SQL 用 <where>/<if>/<foreach>。"
@@ -140,7 +140,7 @@ public interface UserMapper {
 @Service
 public class OrderService {
 
-    @Transactional                        // ⚠️ 声明式事务（默认回滚 RuntimeException）
+    @Transactional                        // 声明式事务（默认回滚 RuntimeException）
     public void createOrder(OrderDTO dto) {
         orderRepo.save(order);
         // 异常 → 自动回滚
@@ -168,11 +168,11 @@ public class OrderService {
 | 自注入循环 | 设计问题 |
 
 ```java
-// ⚠️ 经典失效：同类调用（this 调用不走代理）
+// 经典失效：同类调用（this 调用不走代理）
 @Service
 public class OrderService {
     public void create() {
-        this.doCreate();      // ❌ this 调用无事务
+        this.doCreate();      // ✗ this 调用无事务
     }
     @Transactional
     public void doCreate() { }
@@ -180,7 +180,7 @@ public class OrderService {
 // 解决：注入自身代理 / 拆分到其他 Service
 ```
 
-> 🎯 **要点**：事务失效五场景——同类调用、非 public、吞异常、异常类型、自注入。**同类调用不经过代理**是最高频考点。
+> **要点**：事务失效五场景——同类调用、非 public、吞异常、异常类型、自注入。**同类调用不经过代理**是最高频考点。
 
 ---
 
@@ -192,7 +192,7 @@ public class OrderService {
 HikariCP = 默认连接池（性能最快、代码精简）
   对比：Druid（阿里，监控全）/ DBCP（历史）
 
-⚠️ 面试必答：
+面试必答：
 "Boot 默认 HikariCP——性能标杆；
  Druid 的优势是监控（SQL 审计/慢查询统计），
  需要监控可换 Druid。"
@@ -214,7 +214,7 @@ spring:
 ```
 
 ```
-⚠️ 池大小经验：
+池大小经验：
   池大小 = (核数 × 2) + 有效磁盘数
   过度设大反而慢（上下文切换）
   max-lifetime 必须小于数据库 wait_timeout
@@ -227,7 +227,7 @@ spring:
 ### 6.1 多数据源
 
 ```java
-// ⚠️ 多数据源：一个为主、其他为读（读写分离应用层实现）
+// 多数据源：一个为主、其他为读（读写分离应用层实现）
 @Configuration
 public class DataSourceConfig {
 
@@ -244,7 +244,7 @@ public class DataSourceConfig {
         return DataSourceBuilder.create().build();
     }
 }
-// ⚠️ 或使用 @DS("slave") 注解（dynamic-datasource 库）
+// 或使用 @DS("slave") 注解（dynamic-datasource 库）
 // @DS("slave") public User getById() { }   ← 读写分离注解式
 ```
 
@@ -281,16 +281,16 @@ public class CacheService {
     public boolean tryLock(String key, long timeoutSeconds) {
         Boolean ok = redis.opsForValue()
             .setIfAbsent(key, "1", timeoutSeconds, TimeUnit.SECONDS);
-        return Boolean.TRUE.equals(ok);   // ⚠️ 防拆箱 NPE
+        return Boolean.TRUE.equals(ok);   // 防拆箱 NPE
     }
 }
 ```
 
-> 🎯 **要点**：Redis 集成 = Spring Data Redis（StringRedisTemplate）+ 连接池 + 分布式锁（setIfAbsent + 过期）。缓存/锁/会话三大场景是微服务标配。
+> **要点**：Redis 集成 = Spring Data Redis（StringRedisTemplate）+ 连接池 + 分布式锁（setIfAbsent + 过期）。缓存/锁/会话三大场景是微服务标配。
 
 ---
 
-> 🎯 **核心要点**：数据访问体系 = **框架选型**（JPA vs MyBatis）+ **JPA**（方法名推导 + @Query）+ **MyBatis**（#{} 防注入 + 动态 SQL）+ **事务**（声明式 + 失效五场景）+ **HikariCP**（池大小公式 + 泄漏检测）+ **多数据源/Redis**（@DS 读写分离 + 分布式锁）。"#{} vs ${}"与"事务失效"是两大必考。
+> **核心要点**：数据访问体系 = **框架选型**（JPA vs MyBatis）+ **JPA**（方法名推导 + @Query）+ **MyBatis**（#{} 防注入 + 动态 SQL）+ **事务**（声明式 + 失效五场景）+ **HikariCP**（池大小公式 + 泄漏检测）+ **多数据源/Redis**（@DS 读写分离 + 分布式锁）。"#{} vs ${}"与"事务失效"是两大必考。
 
 ---
 

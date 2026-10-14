@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [ItemProcessor 契约与四种处理模式](#1-itemprocessor-契约与四种处理模式)
 2. [校验器体系](#2-校验器体系)
@@ -99,7 +99,7 @@ ValidatingItemProcessor<Order> validator = new ValidatingItemProcessor<>(new Ord
 | BeanValidatingRecordItemProcessor（5.2+） | 同上的 record 版本 |
 | 自定义 | 实现 Validator 接口 |
 
-> 💡 实践顺序：**先校验、后转换、再写**——校验失败的走 skip 计数，避免脏数据入库后再靠数据库约束兜底。
+> 实践顺序：**先校验、后转换、再写**——校验失败的走 skip 计数，避免脏数据入库后再靠数据库约束兜底。
 
 ## 3. ItemWriter 契约与提交边界
 
@@ -137,7 +137,7 @@ JdbcBatchItemWriter<Order> orderWriter(DataSource dataSource) {
 | `itemSqlParameterSourceProvider(...)` | 自定义绑定（Map/record/复杂对象） |
 | `recordMapped()`（5.2+） | record 类型直接映射 |
 
-> 💡 性能要点：JDBC 批量写入 + `rewriteBatchedStatements=true`（MySQL）可显著提升吞吐；`assertUpdates(true)` 校验影响行数，防静默丢失。
+> 性能要点：JDBC 批量写入 + `rewriteBatchedStatements=true`（MySQL）可显著提升吞吐；`assertUpdates(true)` 校验影响行数，防静默丢失。
 
 ### 4.2 JPA / Hibernate / Repository
 
@@ -153,7 +153,7 @@ RepositoryItemWriter<Order> repoWriter = new RepositoryItemWriterBuilder<Order>(
         .build();
 ```
 
-> ⚠️ 陷阱：`usePersist(false)`（merge）会先查询再更新，大表逐条 merge 极慢；纯插入场景务必 `usePersist(true)`。
+> 陷阱：`usePersist(false)`（merge）会先查询再更新，大表逐条 merge 极慢；纯插入场景务必 `usePersist(true)`。
 
 ## 5. 文件与消息写入器
 
@@ -181,7 +181,7 @@ JsonFileItemWriter<Order> jsonWriter = new JsonFileItemWriterBuilder<Order>()
         .build();
 ```
 
-> ⚠️ 6.0.4 修复：`JsonFileItemWriter` + `appendAllowed(true)` 多次 open/write/close 会破坏 JSON 数组结构（多段 `[...]` 拼接），6.0.4/5.2.6 已修复，但追加 JSON 仍建议先写临时文件再合并。
+> 6.0.4 修复：`JsonFileItemWriter` + `appendAllowed(true)` 多次 open/write/close 会破坏 JSON 数组结构（多段 `[...]` 拼接），6.0.4/5.2.6 已修复，但追加 JSON 仍建议先写临时文件再合并。
 
 ### 5.2 消息类（无事务原子性）
 
@@ -222,7 +222,7 @@ JdbcBatchItemWriter<Order> idempotentWriter = new JdbcBatchItemWriterBuilder<Ord
         .build();
 ```
 
-> 🎯 幂等设计三原则：**写前可查重、写时用唯一键、重跑能覆盖**。批处理重启（模块 06）依赖"已处理部分可重放而不产生重复"，不是"恰好一次"而是"至少一次 + 去重"。
+> 幂等设计三原则：**写前可查重、写时用唯一键、重跑能覆盖**。批处理重启（模块 06）依赖"已处理部分可重放而不产生重复"，不是"恰好一次"而是"至少一次 + 去重"。
 
 ## 7. Writer 选型决策表
 
@@ -240,6 +240,6 @@ JdbcBatchItemWriter<Order> idempotentWriter = new JdbcBatchItemWriterBuilder<Ord
 
 ---
 
-> 🎯 **核心要点**：Processor 记住"返回 null 即过滤"；Writer 记住"一个 chunk 一次 write、一次事务"；数据库写入用 JdbcBatchItemWriter 拿批量性能，消息写入要正视"无原子性"并用幂等键兜底；6.0 的 Chunk API（write(Chunk)）与 Jackson 3 迁移是版本关注点。
+> **核心要点**：Processor 记住"返回 null 即过滤"；Writer 记住"一个 chunk 一次 write、一次事务"；数据库写入用 JdbcBatchItemWriter 拿批量性能，消息写入要正视"无原子性"并用幂等键兜底；6.0 的 Chunk API（write(Chunk)）与 Jackson 3 迁移是版本关注点。
 
 **下一模块**：[06-容错机制：Skip、Retry与重启](06-容错机制：Skip、Retry与重启.md)　|　**返回总览**：[00-Spring Batch知识体系总览](00-Spring Batch知识体系总览.md)

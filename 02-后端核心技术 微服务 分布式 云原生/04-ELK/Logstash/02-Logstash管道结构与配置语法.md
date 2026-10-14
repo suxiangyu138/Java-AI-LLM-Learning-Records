@@ -41,7 +41,7 @@ Event（字段集合：message/@timestamp/host）
 写入 ES / 转发 Kafka / 输出文件
 ```
 
-> 🎯 核心认知：**管道里流动的是 Event（事件），不是字符串**——filter 做的是「字段增删改查」，一切操作围绕字段展开。
+> 核心认知：**管道里流动的是 Event（事件），不是字符串**——filter 做的是「字段增删改查」，一切操作围绕字段展开。
 
 ---
 
@@ -167,7 +167,7 @@ output {
 }
 ```
 
-> 🎯 路由是 Logstash 的「多输出」核心能力——**一个管道按条件分发到不同索引/通道**，这是 Ingest Pipeline 做不到的。
+> 路由是 Logstash 的「多输出」核心能力——**一个管道按条件分发到不同索引/通道**，这是 Ingest Pipeline 做不到的。
 
 ---
 
@@ -199,7 +199,7 @@ input {
 }
 ```
 
-> ⚠️ multiline 的性能：逐行正则判断，大日志量时是瓶颈；9.x 也可考虑 Filebeat 侧 multiline（更轻）。
+> multiline 的性能：逐行正则判断，大日志量时是瓶颈；9.x 也可考虑 Filebeat 侧 multiline（更轻）。
 
 ---
 
@@ -297,7 +297,7 @@ grok 失败 → 自动打 tag: _grokparsefailure
   · 设置收敛后告警：解析失败率过高 → 配置问题
 ```
 
-> 🎯 **核心要点**：Logstash 配置 = **三段式（input/filter/output）+ 条件路由 + 编解码器**。写管道的标准流程：stdin/stdout 调试三件套跑通 → 加 filter 逐段验证 → 切真实 input/output → 上线前 `--config.test_and_exit`。记住三个机制：**Event 是字段集合、if/else 是多路分发、multiline 处理堆栈**。
+> **核心要点**：Logstash 配置 = **三段式（input/filter/output）+ 条件路由 + 编解码器**。写管道的标准流程：stdin/stdout 调试三件套跑通 → 加 filter 逐段验证 → 切真实 input/output → 上线前 `--config.test_and_exit`。记住三个机制：**Event 是字段集合、if/else 是多路分发、multiline 处理堆栈**。
 
 ---
 

@@ -30,7 +30,7 @@ RocketMQ is a distributed messaging middleware open-sourced by Alibaba, donated 
 | **Producer** | 消息生产者 | 从 NameServer 获取路由信息，选择队列发送 |
 | **Consumer** | 消息消费者 | 支持 Push/Pull 两种模式，维护消费进度 |
 
-> 💡 NameServer 与 ZooKeeper 的区别：NameServer 设计更轻量，Broker 定期向所有 NameServer 发送心跳；ZooKeeper 需要选举，复杂度高。
+> NameServer 与 ZooKeeper 的区别：NameServer 设计更轻量，Broker 定期向所有 NameServer 发送心跳；ZooKeeper 需要选举，复杂度高。
 
 ### 3. 消息类型有哪几种？/ Message Types
 > RocketMQ 支持同步、异步、单向三种基本发送方式，以及顺序、延迟、批量、事务等高级消息类型。
@@ -53,7 +53,7 @@ RocketMQ is a distributed messaging middleware open-sourced by Alibaba, donated 
 - 每个 Queue 对应一个 ConsumeQueue 文件，消费者按 Queue 进行负载均衡
 - 一条消息只会落在一个 Queue 中，被一个消费者消费（集群模式下）
 
-> 💡 Queue 数量影响并发能力：Producer 端轮询选择 Queue，Consumer 端按 Queue 分配线程消费。
+> Queue 数量影响并发能力：Producer 端轮询选择 Queue，Consumer 端按 Queue 分配线程消费。
 
 ### 5. Tag 的作用是什么？/ What is Tag?
 > Tag 是 Topic 下的二级消息标签，用于在 Topic 内做精细化过滤。
@@ -71,7 +71,7 @@ consumer.subscribe("TopicTest", MessageSelector.bySql(
     "age BETWEEN 0 AND 200 AND tag = 'important'"
 ));
 ```
-> ⚠️ SQL92 过滤需要在 Broker 配置中开启 `enablePropertyFilter=true`。
+> SQL92 过滤需要在 Broker 配置中开启 `enablePropertyFilter=true`。
 
 ### 7. 集群模式有哪些？/ Cluster Modes
 
@@ -126,7 +126,7 @@ consumer.subscribe("TopicTest", MessageSelector.bySql(
 - **Push**：Consumer 持续轮询 Broker 拉取消息，封装了 Pull 的细节，消息到达后自动推送给业务监听器。客户端通过长轮询（Long Polling）实现"准实时"推送。
 - **Pull**：消费者主动调用拉取方法，自行控制拉取频率和时机。
 
-> 💡 RocketMQ 的 Push 模式本质是"伪推送"——底层仍然是客户端循环 Pull 请求，通过长轮询让请求挂起等待消息到达。
+> RocketMQ 的 Push 模式本质是"伪推送"——底层仍然是客户端循环 Pull 请求，通过长轮询让请求挂起等待消息到达。
 
 ### 13. 顺序消息如何实现？/ Ordered Message
 > 将消息路由到同一个 Queue，由该 Queue 的有序存储和单线程消费保证顺序。
@@ -152,7 +152,7 @@ consumer.registerMessageListener(new MessageListenerOrderly() {
 });
 ```
 
-> ⚠️ 顺序消息会牺牲一定的并发性能，且消费失败时不能跳过（会阻塞后续消息）。
+> 顺序消息会牺牲一定的并发性能，且消费失败时不能跳过（会阻塞后续消息）。
 
 ### 14. 延迟消息的 18 个等级？/ Delay Message Levels
 > RocketMQ 预设了 18 个延迟等级，不支持任意时间延迟。
@@ -171,7 +171,7 @@ consumer.registerMessageListener(new MessageListenerOrderly() {
 message.setDelayTimeLevel(3);
 ```
 
-> 💡 如果需要任意时间延迟，可以自定义 TimerMessageStore 或通过时间轮实现。
+> 如果需要任意时间延迟，可以自定义 TimerMessageStore 或通过时间轮实现。
 
 ### 15. 事务消息的实现机制？/ Transaction Message
 > 基于**半消息（Half Message）+ 事务回查**实现最终一致性。
@@ -223,7 +223,7 @@ message.setDelayTimeLevel(3);
 | **Redis 去重** | SETNX 指令 + 过期时间 | 高性能 | 极端情况可能漏判 |
 | **状态机校验** | 根据业务状态判断是否已处理 | 无额外依赖 | 需设计状态流转 |
 
-> 🎯 幂等性是面试高频考点，阿里/美团面试中通常会结合订单场景考察。
+> 幂等性是面试高频考点，阿里/美团面试中通常会结合订单场景考察。
 
 ---
 
@@ -271,7 +271,7 @@ message.setDelayTimeLevel(3);
 4. **路由删除**：NameServer 每 10s 扫描一次，120s 未收到心跳则移除 Broker
 5. **路由发现**：Producer/Consumer 启动时从 NameServer 拉取 Topic 路由
 
-> 💡 NameServer 集群之间不通信，每个 NameServer 保存全量路由信息，Broker 向所有 NameServer 注册。这种设计避免了一致性选举的复杂度。
+> NameServer 集群之间不通信，每个 NameServer 保存全量路由信息，Broker 向所有 NameServer 注册。这种设计避免了一致性选举的复杂度。
 
 ### 3. 消息存储设计：CommitLog + ConsumeQueue + IndexFile
 > RocketMQ 的文件存储采用"顺序写 + 随机读"的架构，最大化利用磁盘性能。
@@ -286,7 +286,7 @@ message.setDelayTimeLevel(3);
 
 **读取流程：** Consumer 拉取 → 读 ConsumeQueue（获取偏移量 & 大小）→ 从 CommitLog 读取消息体
 
-> 🎯 **为什么 RocketMQ 写入极快？** 因为所有消息都顺序写入 CommitLog，避免随机 I/O；而 Kafka 按 Topic/Partition 写（多个文件）。
+> **为什么 RocketMQ 写入极快？** 因为所有消息都顺序写入 CommitLog，避免随机 I/O；而 Kafka 按 Topic/Partition 写（多个文件）。
 
 ### 4. 刷盘机制详解：同步刷盘 vs 异步刷盘
 > 刷盘决定消息在 Broker 宕机时是否丢失，是性能和可靠性的权衡。
@@ -306,7 +306,7 @@ message.setDelayTimeLevel(3);
 flushDiskType=ASYNC_FLUSH   // 或 SYNC_FLUSH
 ```
 
-> 💡 异步刷盘 + 同步复制组合：保证 Slave 有备份 + 高性能写入，是大多数场景的推荐配置。
+> 异步刷盘 + 同步复制组合：保证 Slave 有备份 + 高性能写入，是大多数场景的推荐配置。
 
 ### 5. 消息发送源码全流程分析
 > 从 `DefaultMQProducer.send()` 进入，跟踪完整发送路径。
@@ -342,7 +342,7 @@ flushDiskType=ASYNC_FLUSH   // 或 SYNC_FLUSH
 3. 各实例执行 `AllocateMessageQueueStrategy`，重新分配 Queue
 4. 新 Queue 分配后，释放旧 Queue，拉取新 Queue 的消息
 
-> ⚠️ Rebalance 过程中可能出现"同一条消息被两个消费者同时消费"的情况，因此幂等性很重要。
+> Rebalance 过程中可能出现"同一条消息被两个消费者同时消费"的情况，因此幂等性很重要。
 
 ### 7. 消息重试与死信队列机制
 > RocketMQ 提供 16 级递增重试，重试全部失败后进入 DLQ。
@@ -438,7 +438,7 @@ public class OrderTransactionListener implements TransactionListener {
 - 每个 Queue 有单独的定时线程轮询扫描
 - 使用 `TimerLog` 记录延迟消息的写入时间
 
-> 💡 如果需要更精细的延迟时间，可以修改 `messageDelayLevel` 配置或自行实现时间轮。
+> 如果需要更精细的延迟时间，可以修改 `messageDelayLevel` 配置或自行实现时间轮。
 
 ### 11. 高可用机制：Master-Slave 切换与 Dledger/Raft
 > RocketMQ 提供多层级的高可用保障。
@@ -495,7 +495,7 @@ public void checkHoldRequest() {
 | **管理控制台** | 完善（Console） | 一般 | 完善 |
 | **适用场景** | 金融/订单/交易 | 日志/大数据/流处理 | 中小系统/消息路由 |
 
-> 🎯 面试高频题："为什么选择 RocketMQ？"答案：事务消息、顺序消息、高可用、Java 生态。
+> 面试高频题："为什么选择 RocketMQ？"答案：事务消息、顺序消息、高可用、Java 生态。
 
 ---
 
@@ -525,7 +525,7 @@ public class OrderTransactionListener implements TransactionListener {
 }
 ```
 
-> 💡 限时优惠抢购场景需要额外处理：Redis 预扣库存 → MQ 异步扣减 → 最终一致性。
+> 限时优惠抢购场景需要额外处理：Redis 预扣库存 → MQ 异步扣减 → 最终一致性。
 
 ### 2. 支付回调异步通知如何实现？
 > **场景**：支付成功后需要通知订单服务更新状态、通知物流系统发货、发送短信通知用户。
@@ -537,7 +537,7 @@ public class OrderTransactionListener implements TransactionListener {
 4. 物流服务消费消息，开始发货流程
 5. 短信服务消费消息，发送通知短信
 
-> ⚠️ 回调消息一定要设置唯一键（支付流水号）用于幂等处理，防止重复回调。
+> 回调消息一定要设置唯一键（支付流水号）用于幂等处理，防止重复回调。
 
 ### 3. 库存回滚的幂等性处理？
 > **场景**：下单过程中某个步骤失败，需要回退已扣减的库存。
@@ -597,7 +597,7 @@ public ConsumeConcurrentlyStatus consumeMessage(
 }
 ```
 
-> 💡 注意：延迟消息触发取消订单前，用户可能已经支付，需要先检查订单状态。
+> 注意：延迟消息触发取消订单前，用户可能已经支付，需要先检查订单状态。
 
 ### 6. 线程池优化消息发送性能？
 > **场景**：高并发下单场景，裸用 `producer.send()` 会导致频繁的 IO 阻塞。
@@ -919,7 +919,7 @@ msg.putUserProperty("isVip", "true");
 producer.send(msg);
 ```
 
-> ⚠️ SQL92 过滤需要在 Broker 配置文件开启：`enablePropertyFilter=true`，且会增加 Broker CPU 开销。
+> SQL92 过滤需要在 Broker 配置文件开启：`enablePropertyFilter=true`，且会增加 Broker CPU 开销。
 
 ### 6. 批量消息 + 异步发送
 > 批量发送提高吞吐量，异步发送避免阻塞。
@@ -962,7 +962,7 @@ public class BatchAsyncProducer {
 }
 ```
 
-> 💡 批量消息大小超过 4MB 时会被 Broker 拒绝，需要手动拆分（Split）。可以通过 `ListSplitter` 工具类按大小拆分。
+> 批量消息大小超过 4MB 时会被 Broker 拒绝，需要手动拆分（Split）。可以通过 `ListSplitter` 工具类按大小拆分。
 
 ---
 
@@ -1062,7 +1062,7 @@ public class BatchAsyncProducer {
 - Broker 自动选主，机房故障自动切换
 - 支持设置 `brokerId=-1` 的 Slave 只做备份
 
-> 🎯 面试重点：RocketMQ 5.x 的 Controller 模式是最新推荐的跨机房高可用方案。
+> 面试重点：RocketMQ 5.x 的 Controller 模式是最新推荐的跨机房高可用方案。
 
 ---
 
@@ -1088,7 +1088,7 @@ public class BatchAsyncProducer {
 | 16 | **延迟消息堆积** | `SCHEDULE_TOPIC_XXXX` 队列数不够 | 每个 Broker 的延迟消息队列数可以调整 |
 | 17 | **关闭顺序消息** | 顺序消费慢、吞吐量低 | 只对真正需要顺序的业务使用，非关键链路用并发消费 |
 
-> 💡 面试技巧：回答坑点问题时，先说明问题现象 → 分析根本原因 → 给出解决方案 → 补充预防措施。
+> 面试技巧：回答坑点问题时，先说明问题现象 → 分析根本原因 → 给出解决方案 → 补充预防措施。
 
 ---
 
@@ -1243,7 +1243,7 @@ public class BatchAsyncProducer {
 
 ---
 
-> 🎯 **面试策略建议**：
+> **面试策略建议**：
 > 1. **基础题**（1-15）：掌握关键概念，能用 1-2 句话解释每个概念
 > 2. **原理题**（16-30）：结合源码路径回答，展示深度
 > 3. **实战题**（31-40）：强调场景 + 方案 + 坑点，展示经验

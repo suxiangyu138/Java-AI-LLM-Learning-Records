@@ -1,4 +1,4 @@
-# 🚀 Ollama 本地部署与量化模型实战
+# Ollama 本地部署与量化模型实战
 
 > **核心摘要**：Ollama 让本地部署大模型像 `docker pull` 一样简单。结合 GGUF 量化技术，7B 模型仅需 4GB 显存即可流畅运行。本文从安装部署、量化选型、Modelfile 自定义、Spring Boot 集成到生产化部署（Docker Compose + GPU 加速）提供完整实战指南。
 

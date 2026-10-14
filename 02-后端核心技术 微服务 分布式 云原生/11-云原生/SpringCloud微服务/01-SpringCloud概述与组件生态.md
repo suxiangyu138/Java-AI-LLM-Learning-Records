@@ -1,6 +1,6 @@
 # 01 - Spring Cloud 概述与组件生态
 
-> 🎯 Spring Cloud 不是单个框架，而是一套微服务解决方案的集合 — 理解 Netflix 老一代到 Alibaba 新一代的演进，选对版本和技术栈是项目成功的第一步
+> Spring Cloud 不是单个框架，而是一套微服务解决方案的集合 — 理解 Netflix 老一代到 Alibaba 新一代的演进，选对版本和技术栈是项目成功的第一步
 
 ---
 
@@ -31,14 +31,14 @@
 
 | 分类 | 组件 | Netflix | Alibaba 替代 | 说明 |
 |------|------|:---:|:---:|------|
-| 注册中心 | Nacos | Eureka | ✅ | Nacos 注册+配置一体 |
-| 配置中心 | Nacos Config | Config+Bus | ✅ | 动态刷新，无需 Bus |
+| 注册中心 | Nacos | Eureka | ✓ | Nacos 注册+配置一体 |
+| 配置中心 | Nacos Config | Config+Bus | ✓ | 动态刷新，无需 Bus |
 | 远程调用 | OpenFeign | Feign | — | 声明式 HTTP 客户端 |
 | 负载均衡 | LoadBalancer | Ribbon | — | Spring 官方替代 |
-| 熔断降级 | Sentinel | Hystrix | ✅ | 可视化控制台 |
+| 熔断降级 | Sentinel | Hystrix | ✓ | 可视化控制台 |
 | 网关 | Gateway | Zuul | — | 基于 WebFlux |
 | 链路追踪 | Micrometer Tracing | Sleuth | — | 集成 Zipkin/SkyWalking |
-| 分布式事务 | Seata | — | ✅ | AT/TCC/Saga 模式 |
+| 分布式事务 | Seata | — | ✓ | AT/TCC/Saga 模式 |
 
 ---
 
@@ -62,7 +62,7 @@ Hoxton (H) → 2020.0 (Ilford) → 2021.0 (Jubilee) → 2022.0 (Kilburn)
 | Hoxton.SR12 | 2.3 / 2.4 | Netflix 全系进入维护 |
 | 2020.0.x | 2.4 / 2.5 | 移除 Ribbon/Hystrix，引入 LoadBalancer |
 | 2021.0.x | 2.6 / 2.7 | Spring Cloud Gateway 3.x, Sleuth 3.x |
-| **2022.0.x** | **3.0** | ⭐ 支持 Spring Boot 3 + JDK 17 |
+| **2022.0.x** | **3.0** | ★ 支持 Spring Boot 3 + JDK 17 |
 | 2023.0.x | 3.1 / 3.2 | 支持 GraalVM Native、Virtual Threads |
 
 ---
@@ -80,7 +80,7 @@ Hoxton (H) → 2020.0 (Ilford) → 2021.0 (Jubilee) → 2022.0 (Kilburn)
 | 负载均衡 | LoadBalancer | **Dubbo LB** | 并存 |
 
 ```yaml
-# ⭐ 当前生产推荐
+# ★ 当前生产推荐
 推荐组合：Spring Boot 3.2 + Spring Cloud 2023.0 + Spring Cloud Alibaba 2023.0
 
 核心组件：
@@ -128,4 +128,4 @@ Hoxton (H) → 2020.0 (Ilford) → 2021.0 (Jubilee) → 2022.0 (Kilburn)
 </dependencyManagement>
 ```
 
-> 🎯 **选型结论**：Spring Boot 3.2 + Spring Cloud 2023.0 + Spring Cloud Alibaba 2023.0 + Nacos 2.3。新项目一律选 Alibaba 方案替代已停维的 Netflix 组件。
+> **选型结论**：Spring Boot 3.2 + Spring Cloud 2023.0 + Spring Cloud Alibaba 2023.0 + Nacos 2.3。新项目一律选 Alibaba 方案替代已停维的 Netflix 组件。

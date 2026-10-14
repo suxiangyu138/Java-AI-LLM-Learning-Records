@@ -1,7 +1,7 @@
 # 05-Docker 网络配置与通信
 > Docker 网络对 Java 后端的核心价值是"简化网络配置、实现灵活通信、保障环境隔离"——4 种场景、自定义网络容器名通信、跨主机方案
 
-## 📚 目录
+## 目录
 1. [网络模式与 Java 后端关联逻辑](#1-网络模式与-java-后端关联逻辑)
 2. [场景 1：外部访问容器内应用（端口映射）](#2-场景-1外部访问容器内应用端口映射)
 3. [场景 2：容器内应用访问外部服务](#3-场景-2容器内应用访问外部服务)
@@ -24,7 +24,7 @@
 | host（主机网络） | 容器直接使用宿主机网络栈，无需端口映射 | 网络性能要求高、本地开发调试 |
 | none（无网络） | 容器无网络配置 | 特殊隔离场景（几乎不用于 Java） |
 
-> 💡 除默认网络外，Docker 支持**自定义网络**（桥接模式为主），是 Java 微服务间通信的核心方案：实现"容器名通信""网络隔离"，解决端口冲突、地址依赖问题。
+> 除默认网络外，Docker 支持**自定义网络**（桥接模式为主），是 Java 微服务间通信的核心方案：实现"容器名通信""网络隔离"，解决端口冲突、地址依赖问题。
 
 ## 2. 场景 1：外部访问容器内应用（端口映射）
 
@@ -55,7 +55,7 @@ docker run -d -p 8080:8080 --name java-app java-app:1.0
 | Linux/Mac | `172.17.0.1`（Docker 桥接网络默认网关，`ip addr show docker0` 查看） | `jdbc:mysql://172.17.0.1:3306/db` |
 | Windows（Docker Desktop） | `host.docker.internal`（Docker 提供的特殊地址） | `jdbc:mysql://host.docker.internal:3306/db` |
 
-> ⚠️ 若宿主机服务绑定了 `127.0.0.1`，即使 IP 配置正确容器内也连不上——需修改宿主机服务绑定 `0.0.0.0`（如 MySQL 的 `bind-address = 0.0.0.0`）。
+> 若宿主机服务绑定了 `127.0.0.1`，即使 IP 配置正确容器内也连不上——需修改宿主机服务绑定 `0.0.0.0`（如 MySQL 的 `bind-address = 0.0.0.0`）。
 
 ### 3.2 访问外部服务器服务（阿里云 RDS、第三方接口）
 
@@ -65,7 +65,7 @@ docker run -d -p 8080:8080 --name java-app java-app:1.0
 jdbc:mysql://rm-xxx.mysql.aliyuncs.com:3306/db
 ```
 
-> 💡 容器无法访问外网时：检查宿主机网络 + Docker 的 DNS 配置；DNS 解析失败可在启动时指定：`docker run -d -p 8080:8080 --dns 8.8.8.8 java-app:1.0`。
+> 容器无法访问外网时：检查宿主机网络 + Docker 的 DNS 配置；DNS 解析失败可在启动时指定：`docker run -d -p 8080:8080 --dns 8.8.8.8 java-app:1.0`。
 
 ## 4. 场景 3：容器间通信（自定义桥接网络）
 
@@ -99,7 +99,7 @@ String userUrl = "http://user-service:8081/api/user/getById?id=1";
 String userInfo = restTemplate.getForObject(userUrl, String.class);
 ```
 
-> 🎯 **核心原理**：Docker 自定义网络自动维护"容器名 → IP"映射表，容器间可通过容器名直接解析 IP，且容器重启后映射关系不变。
+> **核心原理**：Docker 自定义网络自动维护"容器名 → IP"映射表，容器间可通过容器名直接解析 IP，且容器重启后映射关系不变。
 
 ### 4.3 微服务与中间件容器通信
 
@@ -174,7 +174,7 @@ docker run -d -p 8082:8082 --name order-service order-service:1.0
 
 ## 8. 核心要点
 
-> 🎯 **核心要点**：
+> **核心要点**：
 > - 三种网络模式：bridge（默认，端口映射）、host（无隔离，性能）、none（无网络）；
 > - 容器访问宿主机：Linux 用 `172.17.0.1`、Windows 用 `host.docker.internal`；
 > - 微服务间通信**必须用自定义网络 + 容器名**（IP 不稳定 + 无隔离是默认 bridge 两大硬伤）；

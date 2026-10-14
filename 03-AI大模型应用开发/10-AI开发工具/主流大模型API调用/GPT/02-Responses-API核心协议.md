@@ -1,6 +1,6 @@
 # 02 - Responses API 核心协议
 
-> 🎯 Responses API（`v1/responses`）是 OpenAI 新一代开发范式 — 内置工具调用循环、多智能体执行、跨轮次推理上下文。本章覆盖端点对比、参数详解、与 Chat Completions 的关系
+> Responses API（`v1/responses`）是 OpenAI 新一代开发范式 — 内置工具调用循环、多智能体执行、跨轮次推理上下文。本章覆盖端点对比、参数详解、与 Chat Completions 的关系
 
 ---
 
@@ -23,7 +23,7 @@
 | 状态 | **新一代范式** | 仍支持（兼容） |
 | 工具循环 | **内置**（自动管理） | 手动管理 |
 | 推理上下文 | `reasoning.context` 跨轮次持久 | 无 |
-| 多智能体 | ✅（Beta） | ❌ |
+| 多智能体 | ✓（Beta） | ✗ |
 | 视觉细节 | original/auto 保留原尺寸 | 有限 |
 | 适用 | **新项目首选** | 存量项目 |
 
@@ -183,6 +183,6 @@ response = client.responses.create(
 
 ---
 
-> 🎯 **核心要点**：Responses API 三个新能力 — **① 内置工具循环（不再手动管理）② 编程式工具调用（模型写 JS 在 V8 沙箱编排）③ 多智能体执行（Ultra 4-16 子 Agent）**。迁移建议：新项目直接用 Responses API；存量 Chat Completions 项目仍可兼容，逐步迁移。
+> **核心要点**：Responses API 三个新能力 — **① 内置工具循环（不再手动管理）② 编程式工具调用（模型写 JS 在 V8 沙箱编排）③ 多智能体执行（Ultra 4-16 子 Agent）**。迁移建议：新项目直接用 Responses API；存量 Chat Completions 项目仍可兼容，逐步迁移。
 
 **下一模块**：[03-Reasoning-推理控制](03-Reasoning-推理控制.md) / **返回总览**：[00-总览](00-GPT-API知识体系总览.md)

@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [API 全景](#1-api-全景)
 2. [双 token 体系](#2-双-token-体系)
@@ -61,7 +61,7 @@ Authorization: Bearer {tenant_access_token}
 
 | 方式 | 原理 | 优点 | 缺点 |
 |------|------|------|------|
-| 长连接（WebSocket） | 飞书连到你的服务（SDK 建连） | ⭐ 无需公网/延迟低/免验签 | 需 SDK 支持 |
+| 长连接（WebSocket） | 飞书连到你的服务（SDK 建连） | ★ 无需公网/延迟低/免验签 | 需 SDK 支持 |
 | HTTP Webhook | 飞书 POST 到你的公网地址 | 无 SDK 也行 | 需公网/验签/防伪造 |
 
 **2026 推荐**：**长连接是默认姿势**（**无需公网 IP/域名**——内网开发友好、延迟更低，官方 SDK 内置支持）；**Webhook 留给"必须 HTTP 回调"的场景**（已有网关/无 SDK 环境）。**订阅流程**：**开发者后台配置事件 → 发布版本 → 收到事件**。**事件的结构**：**event_id**（唯一标识——**去重用**）、**event**（事件类型与数据）、**timestamp**——"**长连接是'飞书主动找你'，Webhook 是'飞书敲门你开门'——2026 年首选长连接**"。**事件类型速查**：`im.message.receive_v1`（收到消息）、`card.action.trigger`（卡片点击）、`approval.instance.*`（审批事件）、`bitable.app.table.record.created`（表格新记录）——"**按需订阅，别全量订阅**"（订阅越少，处理越简单）。
@@ -117,7 +117,7 @@ EventDispatcher dispatcher = EventDispatcher.newBuilder("verificationToken", "en
 4. 长连接 vs Webhook 的对比？为什么 2026 首选长连接？
 5. 回调安全三件套？错误处理三件事？
 
-> 🎯 **核心要点**：API 与鉴权 = **"tenant token 办事（缓存复用）、user token 替人办事、事件订阅长连接首选、回调必验签"**——"**官方 SDK 是 2026 标准姿势（token/长连接/重试内置）**"；"会发消息 = 会调飞书 API"。
+> **核心要点**：API 与鉴权 = **"tenant token 办事（缓存复用）、user token 替人办事、事件订阅长连接首选、回调必验签"**——"**官方 SDK 是 2026 标准姿势（token/长连接/重试内置）**"；"会发消息 = 会调飞书 API"。
 
 ---
 

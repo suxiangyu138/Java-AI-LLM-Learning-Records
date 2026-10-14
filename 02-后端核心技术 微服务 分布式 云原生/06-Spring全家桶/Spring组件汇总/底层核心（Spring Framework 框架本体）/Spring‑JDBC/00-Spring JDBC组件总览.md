@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [组件一句话定位](#1-组件一句话定位)
 2. [版本现状（2026-08）](#2-版本现状2026-08)
@@ -61,7 +61,7 @@
 | 性能调优空间 | 最大 | 大 | 大 | 中（缓存需谨慎） |
 | 适合场景 | 工具类/脚本 | 轻量数据访问、批量 | 复杂查询、报表 | 领域模型驱动 |
 
-> 💡 **定位金句**：spring-jdbc 处在"裸 JDBC"与"全功能 ORM"的中间层——比裸 JDBC 少 80% 样板代码，比 ORM 多 100% 的 SQL 可控性。
+> **定位金句**：spring-jdbc 处在"裸 JDBC"与"全功能 ORM"的中间层——比裸 JDBC 少 80% 样板代码，比 ORM 多 100% 的 SQL 可控性。
 
 ## 2. 版本现状（2026-08）
 
@@ -79,7 +79,7 @@
 - **Kotlin 扩展修正**（#35846）：`queryForObject(sql, Array)` / `queryForList(sql, Array)` 改为 vararg 版本，与 Java API 对齐（Kotlin 代码需调整）；
 - **ORM 侧迁移**：Hibernate 原生支持（`HibernateTransactionManager`）随 JPA 3.2/Hibernate 7 迁移到 `org.springframework.orm.jpa.hibernate`（spring-orm 模块，事务相关内容见 [Spring-TX-01](../Spring‑TX（Spring‑Transaction）/01-模块清单.md)）。
 
-> ⚠️ **要点**：7.0 的 jdbc 变化核心是"**收口到 JdbcClient**"——新代码直接用 JdbcClient，存量 NamedParameterJdbcTemplate 代码可平滑迁移（API 几乎一一对应）；JdbcTemplate 本身稳定不变。
+> **要点**：7.0 的 jdbc 变化核心是"**收口到 JdbcClient**"——新代码直接用 JdbcClient，存量 NamedParameterJdbcTemplate 代码可平滑迁移（API 几乎一一对应）；JdbcTemplate 本身稳定不变。
 
 ### 2.1 从 6.x 迁移到 7.0 的落地清单
 
@@ -93,7 +93,7 @@
 
 迁移优先级建议：**先迁移 NamedParameterJdbcTemplate → JdbcClient**（改动最小、收益最大），`DaoSupport` 存量代码可留到下次重构再动——7.0 只是标记 deprecation，并非立即删除。
 
-> 💡 判断迁移成本：JdbcClient 与 NamedParameterJdbcTemplate 的方法几乎一一对应（对照表见 [03-JdbcClient 速查](03-JdbcClient速查.md) 第 6 节），中等项目的迁移量通常在一个工作日内完成，且属于纯语法级改动——事务与异常行为完全不变。
+> 判断迁移成本：JdbcClient 与 NamedParameterJdbcTemplate 的方法几乎一一对应（对照表见 [03-JdbcClient 速查](03-JdbcClient速查.md) 第 6 节），中等项目的迁移量通常在一个工作日内完成，且属于纯语法级改动——事务与异常行为完全不变。
 
 ### 2.2 版本选型建议
 
@@ -134,7 +134,7 @@
 | 出错怎么办 | 异常体系 | `SQLExceptionTranslator` |
 | 多语句怎么成组 | 事务接轨 | `DataSourceTransactionManager` |
 
-> 💡 面试时把"一次 JdbcTemplate 查询的完整链路"讲下来（SQL 传入 → 参数绑定 → `DataSourceUtils` 取连接（先查事务绑定）→ 执行 → RowMapper 映射 → 异常翻译 → `DataSourceUtils` 释放连接），就等于把整张能力地图串起来了——这是数据访问层面试的"万能主线"。
+> 面试时把"一次 JdbcTemplate 查询的完整链路"讲下来（SQL 传入 → 参数绑定 → `DataSourceUtils` 取连接（先查事务绑定）→ 执行 → RowMapper 映射 → 异常翻译 → `DataSourceUtils` 释放连接），就等于把整张能力地图串起来了——这是数据访问层面试的"万能主线"。
 
 ### 3.2 能力地图之外：容易被忽略的能力点
 
@@ -158,7 +158,7 @@
 | 07-与事务/ORM 集成速查 | [Spring生态深度剖析-04-AOP代理创建与事务管理内核](../../../Spring生态深度剖析/04-AOP代理创建与事务管理内核.md) |
 | 08-集成地图与常见问题 | [Spring全家桶-06-Spring-Data数据访问层](../../../Spring全家桶/06-Spring-Data数据访问层.md) |
 
-> 💡 本系列定位"查得快"——JDBC 的 ORM 生态（JPA/MyBatisPlus）与数据库细节（MySQL）见 Spring Data 系列与关系型数据库系列；事务纵深见 Spring-TX 系列。
+> 本系列定位"查得快"——JDBC 的 ORM 生态（JPA/MyBatisPlus）与数据库细节（MySQL）见 Spring Data 系列与关系型数据库系列；事务纵深见 Spring-TX 系列。
 
 ### 4.1 阅读策略：速查与深度的分工
 
@@ -169,7 +169,7 @@
 | 面试深挖连接池 / 翻译器 | 04 / 06（含源码级小节） | Spring 框架核心系列 |
 | 数据层整体选型 | 08（集成地图） | [Spring全家桶-06-Spring-Data数据访问层](../../../Spring全家桶/06-Spring-Data数据访问层.md) |
 
-> 💡 本系列每篇的"面试官追问"小节就是速查 → 深度体系之间的"桥"——先照着追问自测，答不出的知识点再去深度体系里补，比从头通读效率高得多。
+> 本系列每篇的"面试官追问"小节就是速查 → 深度体系之间的"桥"——先照着追问自测，答不出的知识点再去深度体系里补，比从头通读效率高得多。
 
 ## 5. 快速上手 3 步
 
@@ -273,7 +273,7 @@ public class OrderController {
 }
 ```
 
-> ⚠️ 示例用 H2 内存库保证"零外部依赖可跑"；切到 MySQL 只需改 URL 与驱动依赖——业务代码零改动，这正是 `DataSource` 抽象的价值（[04-DataSource 与连接池速查](04-DataSource与连接池速查.md)）。
+> 示例用 H2 内存库保证"零外部依赖可跑"；切到 MySQL 只需改 URL 与驱动依赖——业务代码零改动，这正是 `DataSource` 抽象的价值（[04-DataSource 与连接池速查](04-DataSource与连接池速查.md)）。
 
 ### 5.2 快速上手阶段的常见报错
 
@@ -285,7 +285,7 @@ public class OrderController {
 | `IncorrectResultSizeDataAccessException` | 期望单行但查到多行 | 检查条件唯一性，或改 list() |
 | `Cannot infer the SQL type` | 参数类型无法推断（如 LocalDateTime + 老驱动） | 显式转 Timestamp 或声明类型 |
 
-> 💡 上手阶段的报错 90% 是"配置问题"和"API 语义问题"两类——先检查数据源配置，再核对查询方法语义（单数形态抛异常、复数形态不抛），基本能覆盖大部分报错；具体的异常类型与翻译机制见 [06-异常体系与错误映射速查](06-异常体系与错误映射速查.md)。
+> 上手阶段的报错 90% 是"配置问题"和"API 语义问题"两类——先检查数据源配置，再核对查询方法语义（单数形态抛异常、复数形态不抛），基本能覆盖大部分报错；具体的异常类型与翻译机制见 [06-异常体系与错误映射速查](06-异常体系与错误映射速查.md)。
 
 ## 6. 速查导航
 

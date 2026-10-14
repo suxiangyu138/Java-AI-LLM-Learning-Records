@@ -6,7 +6,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [put 流程全景](#1-put-流程全景)
 2. [put 源码逐行解析](#2-put-源码逐行解析)
@@ -33,7 +33,7 @@ put(key, value) 流程
 ├─────────────────────────────────────────────┤
 │ ③ 定位下标：(n-1) & hash                    │
 ├─────────────────────────────────────────────┤
-│ ④ 桶为空？→ 直接插入 ✅ 完成                 │
+│ ④ 桶为空？→ 直接插入 ✓ 完成                 │
 │    └── 桶非空 → 下一步                       │
 ├─────────────────────────────────────────────┤
 │ ⑤ 遍历链表/树：                              │
@@ -160,7 +160,7 @@ get 流程要点
 ├── ② 首节点命中：O(1)（最常见）
 ├── ③ 冲突处理：树 O(log n) / 链表 O(n)
 ├── ④ key 判定：hash + (== || equals)
-└── ⑤ ⚠️ 返回 null 的歧义：key 不存在 vs value 为 null
+└── ⑤ 返回 null 的歧义：key 不存在 vs value 为 null
     └── 生产：containsKey 区分（或不用 null value）
 ```
 
@@ -177,7 +177,7 @@ boolean removed = map.remove(key, value);
 
 // containsKey：判断 key 存在（区分 null value）
 boolean exists = map.containsKey(key);
-// ⚠️ get 返回 null ≠ 不存在（value 可能是 null）——用 containsKey 确认
+// get 返回 null ≠ 不存在（value 可能是 null）——用 containsKey 确认
 
 // getOrDefault：不存在给默认值
 V value = map.getOrDefault(key, defaultValue);
@@ -186,7 +186,7 @@ V value = map.getOrDefault(key, defaultValue);
 Order order = map.containsKey("ORD-1") ? map.get("ORD-1") : null;
 // 或 getOrDefault + 业务默认
 
-// ⚠️ remove 的实现细节（树/链表删除 + 树退化判断）
+// remove 的实现细节（树/链表删除 + 树退化判断）
 // 树删除后：节点 ≤ 6 → 退链表（见 05 篇）
 ```
 
@@ -194,7 +194,7 @@ Order order = map.containsKey("ORD-1") ? map.get("ORD-1") : null;
 
 ## 5. 树化触发条件
 
-> ⚠️ **树化双条件（高频面试陷阱）**：链表长度 ≥ 8 **且** 数组容量 ≥ 64——容量 < 64 时**先扩容而非树化**：
+> **树化双条件（高频面试陷阱）**：链表长度 ≥ 8 **且** 数组容量 ≥ 64——容量 < 64 时**先扩容而非树化**：
 
 ```java
 final void treeifyBin(Node<K, V>[] tab, int hash) {
@@ -230,7 +230,7 @@ for (Map.Entry<String, Integer> e : map.entrySet()) {
     e.getKey(); e.getValue();
 }
 
-// ② keySet + get（⚠️ 低效：每次 get 再哈希）
+// ② keySet + get（低效：每次 get 再哈希）
 for (String key : map.keySet()) {
     map.get(key);       // 二次哈希（避免——用 entrySet）
 }
@@ -250,35 +250,35 @@ map.entrySet().stream()
 ### 6.2 遍历删除（fail-fast）
 
 ```java
-// ❌ 错误：遍历中直接 remove → ConcurrentModificationException
+// ✗ 错误：遍历中直接 remove → ConcurrentModificationException
 for (String key : map.keySet()) {
     if (key.startsWith("x"))
-        map.remove(key);    // ❌ fail-fast！
+        map.remove(key);    // ✗ fail-fast！
 }
 
-// ✅ 正确 1：Iterator.remove（安全）
+// ✓ 正确 1：Iterator.remove（安全）
 Iterator<String> it = map.keySet().iterator();
 while (it.hasNext()) {
     if (it.next().startsWith("x"))
-        it.remove();        // ✅ 迭代器删除
+        it.remove();        // ✓ 迭代器删除
 }
 
-// ✅ 正确 2：removeIf（Java 8+ 简洁）
+// ✓ 正确 2：removeIf（Java 8+ 简洁）
 map.keySet().removeIf(k -> k.startsWith("x"));
 
-// ✅ 正确 3：先收集再删（两遍）
+// ✓ 正确 3：先收集再删（两遍）
 List<String> toRemove = map.keySet().stream()
     .filter(k -> k.startsWith("x")).toList();
 toRemove.forEach(map::remove);
 
-// ⚠️ modCount 机制：修改计数不匹配 → 抛异常（fail-fast 设计）
+// modCount 机制：修改计数不匹配 → 抛异常（fail-fast 设计）
 ```
 
 ---
 
 ## 7. 核心要点
 
-> 🎯 **核心要点**：
+> **核心要点**：
 > 1. put 流程：懒初始化 → 定位 → 空桶直插/冲突遍历 → 覆盖/追加 → 树化 → 扩容
 > 2. key 判定：hash 相等 +（引用相等 || equals）——先比 hash 快速排除
 > 3. get 流程：快速路径（空数组/空桶/首节点）→ 冲突链（树/链表）

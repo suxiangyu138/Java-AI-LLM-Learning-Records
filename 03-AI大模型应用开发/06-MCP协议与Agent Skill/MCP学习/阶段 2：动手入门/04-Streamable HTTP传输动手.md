@@ -2,7 +2,7 @@
 
 > 把 Server 从"本地子进程"升级为"远程 HTTP 服务"：fastmcp 一行切换传输、curl 手测无状态接口、HTTP Client 编程调用——体验 2026-07-28 规范的无状态革命。
 
-## 📚 目录
+## 目录
 
 1. [为什么需要 HTTP 传输](#1-为什么需要-http-传输)
 2. [Server 切换为 HTTP 模式](#2-server-切换为-http-模式)
@@ -56,7 +56,7 @@ uv run python server.py
 
 **发生了什么**：fastmcp 内置 uvicorn 起了一个 HTTP 服务，统一端点 `http://127.0.0.1:8080/mcp` 接收所有 MCP 请求。
 
-> 💡 fastmcp 3.x 中 transport 参数名为 `"http"`（兼容旧写法 `"streamable-http"`）；老版本 2.x 写法是 `mcp.run(transport="streamable-http")`——教程混用很正常，认准 3.x 写法。
+> fastmcp 3.x 中 transport 参数名为 `"http"`（兼容旧写法 `"streamable-http"`）；老版本 2.x 写法是 `mcp.run(transport="streamable-http")`——教程混用很正常，认准 3.x 写法。
 
 ## 3. curl 手测：无状态接口
 
@@ -146,7 +146,7 @@ uv run python http_client.py   # 需先启动 HTTP Server
 3. **代理简单**：网关/反代无需维护会话映射。
 4. **运维统一**：标准 REST 语义，监控告警模板直接复用。
 
-> ⚠️ 需要跨调用状态的业务怎么办？规范答案（SEP-2567）：**状态作为普通工具参数显式传递**——Server 签发句柄，客户端在后续调用中传入。会话状态从协议层搬到了业务层。
+> 需要跨调用状态的业务怎么办？规范答案（SEP-2567）：**状态作为普通工具参数显式传递**——Server 签发句柄，客户端在后续调用中传入。会话状态从协议层搬到了业务层。
 
 ## 6. 易错点与规范
 
@@ -165,7 +165,7 @@ uv run python http_client.py   # 需先启动 HTTP Server
 2. curl 是 HTTP Server 的第一测试工具——Client 连不上时先 curl 定位"是 Server 问题还是 Client 问题"。
 3. 改代码后重启 Server 进程，观察 Uvicorn 日志确认新版本已加载。
 
-> 🎯 **核心要点**：Streamable HTTP 动手的核心体验是"**无状态**"——同一份工具代码，传输从 stdio 换到 HTTP 只改一行；curl 两次独立请求验证了无会话；Client 代码同样只换传输层。2026-07-28 规范把 MCP 从"带会话的进程协议"变成"标准 REST 服务"——这是它 2026 年被企业广泛采用的工程基础。
+> **核心要点**：Streamable HTTP 动手的核心体验是"**无状态**"——同一份工具代码，传输从 stdio 换到 HTTP 只改一行；curl 两次独立请求验证了无会话；Client 代码同样只换传输层。2026-07-28 规范把 MCP 从"带会话的进程协议"变成"标准 REST 服务"——这是它 2026 年被企业广泛采用的工程基础。
 
 ---
 

@@ -325,7 +325,7 @@ public class OrderlyConsumer implements RocketMQListener<OrderMessage> {
 }
 ```
 
-> ⚠️ 顺序消费会降低吞吐量，因为同队列消息串行处理。
+> 顺序消费会降低吞吐量，因为同队列消息串行处理。
 
 ---
 
@@ -349,8 +349,8 @@ brokerRole=SYNC_MASTER            # 同步复制
 
 | 刷盘策略 | 可靠性 | 性能 |
 |:--------:|:------:|:----:|
-| 同步刷盘 | ⭐⭐⭐ | ⭐ |
-| 异步刷盘 | ⭐⭐ | ⭐⭐⭐ |
+| 同步刷盘 | ★★★ | ★ |
+| 异步刷盘 | ★★ | ★★★ |
 
 ### 7.3 消费者端
 ```java
@@ -416,4 +416,4 @@ public class DlxConsumer implements RocketMQListener<MessageExt> {
 | 监控告警 | 消息积压/消费延迟 > 阈值告警 |
 | 压测先行 | 上线前进行全链路压测 |
 
-> 💡 相比 RabbitMQ：RocketMQ 在吞吐量和事务消息上有显著优势，适合电商金融等需要高吞吐和高可靠的场景。
+> 相比 RabbitMQ：RocketMQ 在吞吐量和事务消息上有显著优势，适合电商金融等需要高吞吐和高可靠的场景。

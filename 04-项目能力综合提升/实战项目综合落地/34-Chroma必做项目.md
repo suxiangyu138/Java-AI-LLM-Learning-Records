@@ -1,4 +1,4 @@
-# 🧠 Chroma 必做项目全路线（入门 → RAG → 工程化）
+# Chroma 必做项目全路线（入门 → RAG → 工程化）
 
 > 适配技术栈：Python / LangChain / Chroma / Ollama / FastAPI / Streamlit  
 > 目标：吃透向量检索原理，用 Chroma 打通「入门 RAG → 工程化部署」，再平滑升级 Milvus 等企业级向量库 [web:2][web:5][web:8]
@@ -26,7 +26,7 @@ Python + Chroma + Sentence-BERT / BGE [web:2][web:5]
 
 ---
 
-### 2. 持久化向量库项目 ✅（优先）
+### 2. 持久化向量库项目 ✓（优先）
 
 **技术栈**  
 Python + Chroma  
@@ -47,7 +47,7 @@ Python + Chroma
 
 ## 二、RAG 核心必做：企业最常用场景
 
-### 3. 单 PDF 文件 RAG 问答系统 ✅（强烈推荐）
+### 3. 单 PDF 文件 RAG 问答系统 ✓（强烈推荐）
 
 **技术栈**  
 LangChain + Chroma + Ollama + PyPDFLoader [web:6][web:7][web:10]  
@@ -67,7 +67,7 @@ LangChain + Chroma + Ollama + PyPDFLoader [web:6][web:7][web:10]
 
 ---
 
-### 4. 多文档批量 RAG 系统 ✅
+### 4. 多文档批量 RAG 系统 ✓
 
 **技术栈**  
 LangChain + Chroma  
@@ -124,7 +124,7 @@ LangChain + Chroma
 
 ## 三、进阶必做：检索优化 + 业务场景
 
-### 7. 多轮对话 RAG 系统 ✅
+### 7. 多轮对话 RAG 系统 ✓
 
 **技术栈**  
 LangChain + Chroma + Ollama [web:6][web:7][web:10]  
@@ -177,7 +177,7 @@ Python + Chroma
 
 ## 四、工程化必做：接口封装 + 部署
 
-### 10. FastAPI 封装 RAG 接口服务 ✅（强烈推荐）
+### 10. FastAPI 封装 RAG 接口服务 ✓（强烈推荐）
 
 **技术栈**  
 FastAPI + LangChain + Chroma [web:6][web:9]  

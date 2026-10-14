@@ -40,7 +40,7 @@ public class WeatherTools {
 // 注册：ToolCallbacks.from(new WeatherTools())
 ```
 
-> 🎯 核心要点：两框架注解语义一致（方法 = 工具、注解值 = 描述、参数注解 = 参数描述）——**契约生成自动完成**：注解即 schema。手写 JSON Schema 的时代只存在于无框架场景。
+> 核心要点：两框架注解语义一致（方法 = 工具、注解值 = 描述、参数注解 = 参数描述）——**契约生成自动完成**：注解即 schema。手写 JSON Schema 的时代只存在于无框架场景。
 
 ## 2. 注册机制：从静态到动态
 
@@ -52,7 +52,7 @@ public class WeatherTools {
 | 批量注册 | LangGraph4j | `tool(ToolCallback)` / `tools(List)` / `tools(ToolCallbackProvider)` / `toolsFromObject(Object)` |
 | 执行控制 | LangGraph4j | `internalToolExecutionEnabled(false)`——关掉框架自动执行，由图路由控制（Spring AI ToolCallingChatOptions） |
 
-> 💡 2026 Java 生产模式：**注解注册 + 动态 Provider + 外部工具执行**三件套——注解负责契约生成，Provider 负责按需注入，执行控制交给编排层（如 LangGraph4j 的图流程）。
+> 2026 Java 生产模式：**注解注册 + 动态 Provider + 外部工具执行**三件套——注解负责契约生成，Provider 负责按需注入，执行控制交给编排层（如 LangGraph4j 的图流程）。
 
 ## 3. 执行与容错能力
 
@@ -64,7 +64,7 @@ public class WeatherTools {
 | 返回类型 | 基本类型（Gemini 需字符串——`Objects.toString()` 兜底） | 可序列化类型（字符串/List 最佳） |
 | 方法约束 | public 方法 | public、可序列化返回 |
 
-> ⚠️ 注意差异：Gemini 要求字符串返回（Spring AI 官方提示 `Objects.toString()` 兜底）；LangChain4j 强调"返回字符串/List 最好"——**结果字符串化原则（06 篇）在框架层同样成立**。
+> 注意差异：Gemini 要求字符串返回（Spring AI 官方提示 `Objects.toString()` 兜底）；LangChain4j 强调"返回字符串/List 最好"——**结果字符串化原则（06 篇）在框架层同样成立**。
 
 ## 4. MCP：工具的分发生态
 
@@ -77,7 +77,7 @@ public class WeatherTools {
 | 注册中心 | 官方注册中心 + 动态服务器发现（演进中） |
 | 生态工具 | API→MCP 生成器（Postman/Stainless/Zuplo）、mcpadapt（解锁 650+ MCP 工具跨框架） |
 
-> 🎯 核心要点：MCP 与框架 `@Tool` 互补——**注解封装"自己进程里的方法"；MCP 封装"别的进程/服务的工具"**。同一 Agent 里两者可共存：本地工具走注解、外部能力走 MCP。
+> 核心要点：MCP 与框架 `@Tool` 互补——**注解封装"自己进程里的方法"；MCP 封装"别的进程/服务的工具"**。同一 Agent 里两者可共存：本地工具走注解、外部能力走 MCP。
 
 ## 5. MCP 服务器架构五模式（2026 研究）
 
@@ -89,7 +89,7 @@ public class WeatherTools {
 | Proxy Aggregator | 聚合多个上游服务 | API 网关化工具 |
 | Domain-Specific Adapter | 领域专用适配 | 单一业务域 |
 
-> ⚠️ 关键数据：**10-15 个工具/上下文是 Haiku 级模型的准确率边界**——服务器设计要少而精，别堆工具（05 篇数量治理在 MCP 侧同样成立）。
+> 关键数据：**10-15 个工具/上下文是 Haiku 级模型的准确率边界**——服务器设计要少而精，别堆工具（05 篇数量治理在 MCP 侧同样成立）。
 
 ## 6. MCP 服务器构建规范
 
@@ -110,7 +110,7 @@ public class WeatherTools {
 | 安全 | 凭据环境变量（启动校验）、Zod 输入校验、限流、RBAC、审计 |
 | 服务器指令 | 说明服务器用途、工具与工作流映射、环境配置要求 |
 
-> 💡 MCP vs 脚本的选型：**MCP 用于探索性/一次性/跨工具工作流**（自然语言、自适应）；**传统脚本用于可重复/确定性/性能敏感/离线操作**。混合模式常见：MCP 原型 → 验证后固化为脚本。
+> MCP vs 脚本的选型：**MCP 用于探索性/一次性/跨工具工作流**（自然语言、自适应）；**传统脚本用于可重复/确定性/性能敏感/离线操作**。混合模式常见：MCP 原型 → 验证后固化为脚本。
 
 ## 7. 框架选择建议
 
@@ -122,7 +122,7 @@ public class WeatherTools {
 | 跨语言共享工具 | MCP（一次定义多宿主） |
 | 多模型切换 | 框架抽象层（避免手写协议，04 篇） |
 
-> 🎯 核心要点：选框架 = 选**注册与执行的生命周期管理方式**——注解省了 schema 手写，Provider 补了动态发现，MCP 补了跨应用分发。三层可以组合，不必二选一。
+> 核心要点：选框架 = 选**注册与执行的生命周期管理方式**——注解省了 schema 手写，Provider 补了动态发现，MCP 补了跨应用分发。三层可以组合，不必二选一。
 
 ## 8. 常见误区
 

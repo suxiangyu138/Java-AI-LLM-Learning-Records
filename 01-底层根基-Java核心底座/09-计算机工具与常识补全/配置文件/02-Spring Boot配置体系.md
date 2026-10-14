@@ -6,7 +6,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [Spring Boot 配置体系全景](#1-spring-boot-配置体系全景)
 2. [application.yml 规范](#2-applicationyml-规范)
@@ -80,7 +80,7 @@ myapp:
 ├── META-INF/spring/xxx.imports  # Spring Boot 3.x 自动配置
 └── 位置优先级：外部 config/ > 外部根 > classpath:/config/ > classpath:/
 
-⚠️ 命名陷阱：
+命名陷阱：
 ├── application-dev.yml 与 spring.profiles.active=dev 必须完全对应
 ├── 文件后缀混乱（.yaml 与 .yml 混用）→ 可能加载不到
 └── bootstrap.yml 在纯 Spring Boot 3.x 不生效（需 Spring Cloud 依赖）
@@ -107,7 +107,7 @@ logging:                   # 日志层
     com.example: debug
 ```
 
-> 🎯 **规范**：自定义配置统一前缀（`myapp.*`/`app.*`）——避免与框架配置混在一起，也避免与第三方库配置 key 冲突。
+> **规范**：自定义配置统一前缀（`myapp.*`/`app.*`）——避免与框架配置混在一起，也避免与第三方库配置 key 冲突。
 
 ---
 
@@ -252,14 +252,14 @@ public AppProperties appProperties() { return new AppProperties(); }
 |------|:---:|:---:|
 | 绑定方式 | 逐字段 | 整对象 |
 | 类型安全 | 运行时转换 | **编译期对象 + 强类型** |
-| 校验支持 | ❌ | ✅ @Validated + 校验注解 |
+| 校验支持 | ✗ | ✓ @Validated + 校验注解 |
 | 嵌套结构 | 手写前缀拼 | **自动嵌套绑定** |
 | 列表/Map | 手动解析 | **原生支持** |
-| 动态刷新 | 需 @RefreshScope | ✅ 配合刷新 |
+| 动态刷新 | 需 @RefreshScope | ✓ 配合刷新 |
 | 可测试性 | 差 | **好（直接 new + setter）** |
 | 2026 推荐 | 少量零散值 | **生产项目首选** |
 
-> 🎯 **企业规范结论**：**业务配置一律 @ConfigurationProperties + @Validated**；@Value 只用于零散单值（端口/超时）；代码中禁止到处 @Value 散落。
+> **企业规范结论**：**业务配置一律 @ConfigurationProperties + @Validated**；@Value 只用于零散单值（端口/超时）；代码中禁止到处 @Value 散落。
 
 ---
 
@@ -307,7 +307,7 @@ myapp:
 
 ### 6.1 松散绑定规则（宽松绑定）
 
-> 🎯 **松散绑定**：配置文件中的 key 与 Java 字段名之间的宽松匹配规则——环境变量、命令行、配置文件写法不同但能绑定到同一字段：
+> **松散绑定**：配置文件中的 key 与 Java 字段名之间的宽松匹配规则——环境变量、命令行、配置文件写法不同但能绑定到同一字段：
 
 ```text
 字段 timeoutMs 可被以下写法绑定：
@@ -317,7 +317,7 @@ myapp:
 ├── MYAPP_TIMEOUTMS        ← 环境变量（全大写）
 └── myapp.TIMEOUTMS        ← 命令行
 
-⚠️ 注意：@Value 不适用松散绑定！@Value 的 ${key} 必须精确匹配。
+注意：@Value 不适用松散绑定！@Value 的 ${key} 必须精确匹配。
 ```
 
 ### 6.2 类型转换支持
@@ -377,7 +377,7 @@ public class AppProperties {
 
 ```text
 校验失败时的行为（3.x 默认）
-├── 启动失败：BindValidationException（fail-fast，防止带病上线）✅
+├── 启动失败：BindValidationException（fail-fast，防止带病上线）✓
 ├── 定位信息：属性路径（myapp.timeoutMs）+ 违规原因
 ├── 可选：宽松模式（spring.bind.handler.ignore-invalid-fields=true）
 │   └── 不推荐——错误配置应尽早暴露
@@ -426,7 +426,7 @@ public class AppProperties {
 
 ## 9. 核心要点
 
-> 🎯 **核心要点**：
+> **核心要点**：
 > 1. 三件套：配置文件（application.yml）+ 注入（@Value/@ConfigurationProperties）+ 绑定（占位符/松散/转换/校验）
 > 2. 企业规范：**业务配置一律 @ConfigurationProperties + @Validated**；@Value 只用于零散单值
 > 3. @Value 五大陷阱：无默认值启动失败、static/final 失效、无松散绑定、无校验、刷新不生效

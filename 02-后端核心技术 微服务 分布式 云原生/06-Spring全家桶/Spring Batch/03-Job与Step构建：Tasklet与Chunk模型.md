@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [构建器 API 演进与 6.0 新写法](#1-构建器-api-演进与-60-新写法)
 2. [Step 的三种类型](#2-step-的三种类型)
@@ -42,7 +42,7 @@ Job job1(JobRepository jobRepository, Step step1) {
 }
 ```
 
-> ⚠️ 迁移注意：5.x 中"先 new Builder 再 `.repository(jobRepository)`"的写法在 6.0 中已不再支持——JobBuilder/StepBuilder 的**单参构造器与所有已废弃 API 均被移除**，必须走双参构造器。
+> 迁移注意：5.x 中"先 new Builder 再 `.repository(jobRepository)`"的写法在 6.0 中已不再支持——JobBuilder/StepBuilder 的**单参构造器与所有已废弃 API 均被移除**，必须走双参构造器。
 
 ## 2. Step 的三种类型
 
@@ -83,7 +83,7 @@ Step cleanupStep(JobRepository jobRepository) {
 }
 ```
 
-> 💡 分界经验：**有"数据流 + 逐条处理"结构的用 Chunk，一次性动作用 Tasklet**。把整个业务写进一个 Tasklet 是新手最常见的错误——既失去事务边界，也失去重启粒度。
+> 分界经验：**有"数据流 + 逐条处理"结构的用 Chunk，一次性动作用 Tasklet**。把整个业务写进一个 Tasklet 是新手最常见的错误——既失去事务边界，也失去重启粒度。
 
 ## 4. Chunk 模型与执行细节
 
@@ -149,7 +149,7 @@ FlatFileItemReader<Order> orderReader(
 }
 ```
 
-> ⚠️ 6.0.4 修复：`@StepScope` + 本地 chunking（模块 07）组合下曾触发 `ScopeNotActiveException`，升级到 6.0.4 及以上即可规避。
+> 6.0.4 修复：`@StepScope` + 本地 chunking（模块 07）组合下曾触发 `ScopeNotActiveException`，升级到 6.0.4 及以上即可规避。
 
 ## 5. Flow、Decision 与条件分支
 
@@ -212,7 +212,7 @@ stepExecution.setExitStatus(new ExitStatus("HAS_ERROR_ROW")); // 6.0 中 ExitSta
 | `.fail()` / `.stop()` | 标记失败 / 停止 |
 | `.next(flow)` | 嵌入子 Flow |
 
-> 🎯 核心辨析：`.on()` 匹配的是 **ExitStatus 的 code**；同一 Step 的 BatchStatus 是 COMPLETED 时也可能因为自定义 ExitCode 走到"失败"分支——**别用 BatchStatus 猜分支走向**。
+> 核心辨析：`.on()` 匹配的是 **ExitStatus 的 code**；同一 Step 的 BatchStatus 是 COMPLETED 时也可能因为自定义 ExitCode 走到"失败"分支——**别用 BatchStatus 猜分支走向**。
 
 ## 6. 监听器体系
 
@@ -238,7 +238,7 @@ new StepBuilder("step", jobRepository)
         .build();
 ```
 
-> ⚠️ 注意：Job 级别的 `JobExecutionListener` 直接注册在 Job 上（`new JobBuilder(...).listener(...)`）；Step 级别的注册在 StepBuilder 上。6.0 中旧的 listener 支持类（如 `ItemListenerSupport` 系列）已被移除，统一用接口 + default 方法或 lambda。
+> 注意：Job 级别的 `JobExecutionListener` 直接注册在 Job 上（`new JobBuilder(...).listener(...)`）；Step 级别的注册在 StepBuilder 上。6.0 中旧的 listener 支持类（如 `ItemListenerSupport` 系列）已被移除，统一用接口 + default 方法或 lambda。
 
 ## 7. JobParametersIncrementer
 
@@ -257,7 +257,7 @@ new JobBuilder("dailyReport", jobRepository)
 | SimpleJobParametersIncrementer | 维护 `timestamp` 参数（当前时间） |
 | 自定义 | 实现 `increment(JobParameters) → JobParameters` |
 
-> ⚠️ **6.0 行为变更**：Job 配置了 Incrementer 后，**启动时用户显式传入的参数会被忽略并打印 warning**——框架完全以 incrementer 计算出的参数为准（避免与实例身份判定冲突）。5.x 中"传入参数覆盖 incrementer"的行为不再成立。
+> **6.0 行为变更**：Job 配置了 Incrementer 后，**启动时用户显式传入的参数会被忽略并打印 warning**——框架完全以 incrementer 计算出的参数为准（避免与实例身份判定冲突）。5.x 中"传入参数覆盖 incrementer"的行为不再成立。
 
 ## 8. 完整示例：CSV 导入 Job
 
@@ -332,10 +332,10 @@ class OrderImportJobConfig {
 }
 ```
 
-> 💡 注释中的执行语义：`processor` 返回 null 的条目被过滤（FILTER_COUNT）；chunk(500) 每 500 条一个事务；`@StepScope` 让 reader 在步骤执行时才绑定 `jobParameters['input.file']`。
+> 注释中的执行语义：`processor` 返回 null 的条目被过滤（FILTER_COUNT）；chunk(500) 每 500 条一个事务；`@StepScope` 让 reader 在步骤执行时才绑定 `jobParameters['input.file']`。
 
 ---
 
-> 🎯 **核心要点**：6.0 构建 API 是"构造器注入 JobRepository"——JobBuilder/StepBuilder 双参构造，工厂类已成历史；Chunk 步以新 ChunkOrientedStep 实现，`chunk(N)` 与 `transactionManager()` 分离写法；条件分支用 ExitStatus 驱动 `.on("...")`；监听器四层粒度 + Skip/Retry 监听器构成完整横切能力。
+> **核心要点**：6.0 构建 API 是"构造器注入 JobRepository"——JobBuilder/StepBuilder 双参构造，工厂类已成历史；Chunk 步以新 ChunkOrientedStep 实现，`chunk(N)` 与 `transactionManager()` 分离写法；条件分支用 ExitStatus 驱动 `.on("...")`；监听器四层粒度 + Skip/Retry 监听器构成完整横切能力。
 
 **下一模块**：[04-ItemReader体系](04-ItemReader体系.md)　|　**返回总览**：[00-Spring Batch知识体系总览](00-Spring Batch知识体系总览.md)

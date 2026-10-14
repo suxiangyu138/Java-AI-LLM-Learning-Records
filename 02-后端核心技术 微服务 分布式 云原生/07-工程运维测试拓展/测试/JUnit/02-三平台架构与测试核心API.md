@@ -2,7 +2,7 @@
 
 > JUnit Platform 是引擎中立的总线，Jupiter 是默认引擎与 API 模型，Vintage 是旧测试迁移桥。掌握架构分层与注解/断言/假设三大核心 API，是写出正确测试的前提。
 
-## 📚 目录
+## 目录
 
 1. [三平台架构分层](#1)
 2. [Jupiter 注解族](#2)
@@ -43,7 +43,7 @@
 | `junit-jupiter-params` | 参数化测试支持 |
 | `junit-jupiter`（聚合器） | 同时引入 api + engine + params |
 
-> 💡 依赖选择：Maven 用户引入 `junit-jupiter`（或直接 `junit-bom` 管理版本）；只用 ConsoleLauncher 的 CI 场景引入 `junit-platform-console-standalone` 单包。
+> 依赖选择：Maven 用户引入 `junit-jupiter`（或直接 `junit-bom` 管理版本）；只用 ConsoleLauncher 的 CI 场景引入 `junit-platform-console-standalone` 单包。
 
 ### 1.3 Platform 层的三类职责
 
@@ -137,7 +137,7 @@ assertEquals("用户名不能为空", ex.getMessage());
 assertDoesNotThrow(() -> cache.evict("key"));
 ```
 
-> ⚠️ **陷阱**：`assertThrows` 只校验「方法抛出了指定类型异常」，不校验「之后的状态」——需要接着断言异常后的系统状态（如回滚、资源释放）。
+> **陷阱**：`assertThrows` 只校验「方法抛出了指定类型异常」，不校验「之后的状态」——需要接着断言异常后的系统状态（如回滚、资源释放）。
 
 ### 3.3 超时断言
 
@@ -222,9 +222,9 @@ tasks.test {
 }
 ```
 
-> 💡 标签命名规范：用**分类维度**（`api`/`db`/`slow`/`flaky`）而非环境维度；组名保持小写、单一词，避免空格导致 CLI 转义问题。
+> 标签命名规范：用**分类维度**（`api`/`db`/`slow`/`flaky`）而非环境维度；组名保持小写、单一词，避免空格导致 CLI 转义问题。
 
-> 🎯 **核心要点**：三平台架构是理解一切后续概念（扩展、并行、动态测试、引擎共存）的地基；日常写测试记住三件事——断言带业务消息、`assertAll` 聚合多个断言、`assertTimeout` 优先于 `assertTimeoutPreemptively`；假设与条件注解是「跳过」语义的两套表达，按运行期/启动期选择。
+> **核心要点**：三平台架构是理解一切后续概念（扩展、并行、动态测试、引擎共存）的地基；日常写测试记住三件事——断言带业务消息、`assertAll` 聚合多个断言、`assertTimeout` 优先于 `assertTimeoutPreemptively`；假设与条件注解是「跳过」语义的两套表达，按运行期/启动期选择。
 
 ---
 

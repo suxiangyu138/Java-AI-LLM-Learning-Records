@@ -1,6 +1,6 @@
 # 03 - ReAct 模式与 Function Calling
 
-> 🎯 ReAct = Reasoning + Acting，是 Agent 的核心推理范式。Function Calling 是 ReAct 的工业化实现，让 LLM 能可靠地调用外部工具
+> ReAct = Reasoning + Acting，是 Agent 的核心推理范式。Function Calling 是 ReAct 的工业化实现，让 LLM 能可靠地调用外部工具
 
 ---
 
@@ -164,10 +164,10 @@ executor.register(get_weather, {
 | 维度 | OpenAI | Anthropic (Claude) |
 |------|--------|---------------------|
 | **定义方式** | `tools` 参数 + JSON Schema | `tools` 参数 + JSON Schema |
-| **调用能力** | 并行调用 ✅ | 并行调用 ✅ |
+| **调用能力** | 并行调用 ✓ | 并行调用 ✓ |
 | **强制调用** | `tool_choice="required"` | `tool_choice={"type": "any"}` |
 | **返回格式** | `response.tool_calls` | `response.content[].input` |
-| **流式工具调用** | ✅ | ✅ |
+| **流式工具调用** | ✓ | ✓ |
 
 ```python
 # Anthropic 工具调用
@@ -213,7 +213,7 @@ response = client.messages.create(
 | 幻觉参数 | 编造不存在的 ID | 工具先查存在性再操作 |
 | 描述注入 | 工具描述被恶意改写 | **固定（pin）工具描述**（2026 安全要点） |
 
-> 🎯 **核心要点**：Function Calling 的质量 = "**选得对（描述）+ 调得稳（超时/重试）+ 败得明（降级）**"三件事——2026 年评估指标 `FunctionCallAccuracy` 与 `ToolSelectionAccuracy` 就是这三件事的度量（优化器可自动改进工具描述，提升 10-25 个百分点）。
+> **核心要点**：Function Calling 的质量 = "**选得对（描述）+ 调得稳（超时/重试）+ 败得明（降级）**"三件事——2026 年评估指标 `FunctionCallAccuracy` 与 `ToolSelectionAccuracy` 就是这三件事的度量（优化器可自动改进工具描述，提升 10-25 个百分点）。
 
 ---
 

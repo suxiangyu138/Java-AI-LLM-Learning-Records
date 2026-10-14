@@ -2,7 +2,7 @@
 
 > OpenAI 官方 Agent 框架（Swarm 的生产级继任者，Python v0.19.3）——托管式流程：Runner 驱动 Agent 循环、Handoffs 移交控制权、Guardrails 输入输出护栏、Sessions 跨运行持久化，与 Responses API 深度集成。
 
-## 📚 目录
+## 目录
 
 1. [知识体系导图](#1-知识体系导图)
 2. [模块导航](#2-模块导航)

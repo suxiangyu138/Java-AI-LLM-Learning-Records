@@ -65,14 +65,14 @@ HTTP 响应格式：
 
 | 方法 | 语义 | 幂等 | 安全 | 请求体 | 缓存 | 典型场景 |
 |------|------|------|------|--------|------|---------|
-| **GET** | 获取资源 | ✅ | ✅ | ❌ | ✅ | 查询 |
-| **POST** | 创建资源 | ❌ | ❌ | ✅ | ❌ | 新增、登录 |
-| **PUT** | 全量替换 | ✅ | ❌ | ✅ | ❌ | 覆盖更新 |
-| **PATCH** | 部分更新 | ❌ | ❌ | ✅ | ❌ | 只改部分字段 |
-| **DELETE** | 删除资源 | ✅ | ❌ | ❌ | ❌ | 删除 |
-| **HEAD** | 获取响应头 | ✅ | ✅ | ❌ | ✅ | 检查资源是否存在 |
-| **OPTIONS** | 查询支持的方法 | ✅ | ✅ | ❌ | ❌ | CORS 预检请求 |
-| **TRACE** | 追踪请求路径 | ✅ | ✅ | ❌ | ❌ | 调试（通常禁用） |
+| **GET** | 获取资源 | ✓ | ✓ | ✗ | ✓ | 查询 |
+| **POST** | 创建资源 | ✗ | ✗ | ✓ | ✗ | 新增、登录 |
+| **PUT** | 全量替换 | ✓ | ✗ | ✓ | ✗ | 覆盖更新 |
+| **PATCH** | 部分更新 | ✗ | ✗ | ✓ | ✗ | 只改部分字段 |
+| **DELETE** | 删除资源 | ✓ | ✗ | ✗ | ✗ | 删除 |
+| **HEAD** | 获取响应头 | ✓ | ✓ | ✗ | ✓ | 检查资源是否存在 |
+| **OPTIONS** | 查询支持的方法 | ✓ | ✓ | ✗ | ✗ | CORS 预检请求 |
+| **TRACE** | 追踪请求路径 | ✓ | ✓ | ✗ | ✗ | 调试（通常禁用） |
 
 ```
 幂等性：同样请求执行多次，结果相同
@@ -201,8 +201,8 @@ X-Real-IP: 10.0.0.1
 ```
 核心原则：
 1. 以资源为中心（URL 用名词，不用动词）
-   ✅ GET /api/users
-   ❌ GET /api/getUsers
+   ✓ GET /api/users
+   ✗ GET /api/getUsers
 
 2. HTTP 方法表达操作意图
    GET → 查，POST → 增，PUT/PATCH → 改，DELETE → 删
@@ -300,22 +300,22 @@ X-Real-IP: 10.0.0.1
 ### 2.5 常见设计误区
 
 ```
-❌ 把所有返回都设为 200（包括错误场景）
+✗ 把所有返回都设为 200（包括错误场景）
    GET /api/users/999 → 200 { "code": 404, "message": "用户不存在" }
    问题：CDN/代理 无法根据 HTTP 状态码做处理
-✅ GET /api/users/999 → 404 { "code": 40401, "message": "用户不存在" }
+✓ GET /api/users/999 → 404 { "code": 40401, "message": "用户不存在" }
 
-❌ URL 中暴露数据库结构
+✗ URL 中暴露数据库结构
    GET /api/table/sys_user?column=user_name&value=张三
-✅ GET /api/users?name=张三
+✓ GET /api/users?name=张三
 
-❌ 用动词命名
+✗ 用动词命名
    POST /api/createUser
-✅ POST /api/users
+✓ POST /api/users
 
-❌ 嵌套过深
+✗ 嵌套过深
    GET /api/users/1/orders/2/items/3/attachments/4
-✅ GET /api/attachments/4?userId=1&orderId=2&itemId=3
+✓ GET /api/attachments/4?userId=1&orderId=2&itemId=3
 ```
 
 ---
@@ -435,8 +435,8 @@ OAuth 2.1（简化 + 安全加强）：
   https://api.example.com:443  → 不同源（子域名不同）
 
 限制内容：
-  ✅ 可以跨域引用的：Script、CSS、IMG、Video、iframe 引入
-  ❌ 限制的：AJAX/Fetch 请求、Cookie/LocalStorage 访问
+  ✓ 可以跨域引用的：Script、CSS、IMG、Video、iframe 引入
+  ✗ 限制的：AJAX/Fetch 请求、Cookie/LocalStorage 访问
 
 CORS（Cross-Origin Resource Sharing）：
   一套机制让服务器告诉浏览器"我允许哪些源跨域访问我"
@@ -493,7 +493,7 @@ public CorsFilter corsFilter() {
     return new CorsFilter(source);
 }
 
-// ⚠️ 生产环境不要 allowedOrigins("*") + allowCredentials(true)
+// 生产环境不要 allowedOrigins("*") + allowCredentials(true)
 //    这两个是互斥的！带凭证时必须指定具体域名
 ```
 

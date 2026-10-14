@@ -28,7 +28,7 @@ RPC（Remote Procedure Call，远程过程调用）是一种允许程序调用�
 | 适用场景 | 内部微服务调用 | 开放API、异构系统集成 |
 | 治理能力 | 内置服务注册发现、负载均衡、熔断降级 | 需借助网关/注册中心 |
 
-> 💡 在实际项目中，Dubbo用于内部服务间高性能调用，REST用于对外暴露API。两者可以共存。
+> 在实际项目中，Dubbo用于内部服务间高性能调用，REST用于对外暴露API。两者可以共存。
 
 ### 1.3 Dubbo架构中有哪些核心角色？
 Dubbo架构包含5个核心角色：**Provider（服务提供者）** 启动时向Registry注册服务，**Consumer（服务消费者）** 启动时从Registry订阅服务列表，**Registry（注册中心）** 负责服务的注册与发现（常用ZooKeeper/Nacos），**Monitor（监控中心）** 负责统计调用次数和耗时，**Container（容器）** 负责管理服务生命周期。调用流程：Consumer从Registry获取Provider列表后，根据负载均衡策略直连Provider调用，同时将调用数据上报Monitor。
@@ -47,7 +47,7 @@ Dubbo架构包含5个核心角色：**Provider（服务提供者）** 启动时�
 ### 1.5 SPI机制是什么？Dubbo的SPI和JDK SPI有什么区别？
 SPI（Service Provider Interface）是一种服务发现机制，允许在运行时动态替换或扩展实现。JDK SPI通过`META-INF/services/`目录下的配置文件加载实现类，但会一次性实例化所有实现，无法按需加载。Dubbo对SPI进行了增强：支持**按需加载**（使用时才创建实例），支持**IoC和AOP**（自动注入依赖、包装类形成调用链），支持**自适应扩展（@Adaptive）** 根据URL参数动态选择实现类。配置路径为`META-INF/dubbo/internal/`。
 
-> ⚠️ Dubbo SPI是Dubbo整个扩展体系的基础，Protocol、Filter、LoadBalance等所有扩展点都通过SPI加载。
+> Dubbo SPI是Dubbo整个扩展体系的基础，Protocol、Filter、LoadBalance等所有扩展点都通过SPI加载。
 
 ### 1.6 Dubbo的负载均衡策略有哪些？
 Dubbo内置5种负载均衡策略：
@@ -57,7 +57,7 @@ Dubbo内置5种负载均衡策略：
 - **ConsistentHashLoadBalance（一致性哈希）**：相同参数始终转发到同一节点，适合缓存场景
 - **ShortestResponseLoadBalance（最短响应时间）**：选最近响应时间最短的节点，Dubbo 2.7+新增
 
-> 💡 可通过 `@Reference(loadbalance = "leastactive")` 或在配置中心动态调整策略。
+> 可通过 `@Reference(loadbalance = "leastactive")` 或在配置中心动态调整策略。
 
 ### 1.7 Dubbo的集群容错策略有哪些？
 | 策略 | 原理 | 适用场景 |
@@ -91,7 +91,7 @@ Dubbo通过`mock`配置实现服务降级。降级分为两种模式：
 | Protobuf | 结构化数据，跨语言 | 快 |
 | FST | 类似Kryo，兼容JDK | 快 |
 
-> 💡 性能对比（基于相同数据量）：Kryo ≈ FST > Protobuf > Hessian2 > JSON > Java。生产环境推荐Hessian2（默认最稳定）或Kryo（追求极致性能）。
+> 性能对比（基于相同数据量）：Kryo ≈ FST > Protobuf > Hessian2 > JSON > Java。生产环境推荐Hessian2（默认最稳定）或Kryo（追求极致性能）。
 
 ### 1.10 Dubbo vs SpringCloud 如何选择？
 | 对比维度 | Dubbo | SpringCloud |
@@ -104,7 +104,7 @@ Dubbo通过`mock`配置实现服务降级。降级分为两种模式：
 | 学习曲线 | 中，概念较多 | 中低，基于Spring生态 |
 | 社区活跃度 | Apache顶级项目，国内使用广泛 | Spring官方，全球生态 |
 
-> 🎯 选择建议：纯Java技术栈、对性能敏感、需要强服务治理能力 → Dubbo；异构系统多、强调云原生、团队Spring能力强 → SpringCloud。
+> 选择建议：纯Java技术栈、对性能敏感、需要强服务治理能力 → Dubbo；异构系统多、强调云原生、团队Spring能力强 → SpringCloud。
 
 ### 1.11 Dubbo 3.0 有哪些新特性？
 Dubbo 3.0是重大版本升级，核心特性包括：
@@ -117,7 +117,7 @@ Dubbo 3.0是重大版本升级，核心特性包括：
 ### 1.12 Dubbo的Filter链是什么？
 Dubbo的Filter链是**责任链模式**的典型实现，Provider和Consumer端各有一条Filter链。所有Filter都实现了`Filter`接口，通过`@Activate`注解或SPI配置自动激活。常见Filter包括：`ExceptionFilter`（异常处理）、`TimeoutFilter`（超时监控）、`MonitorFilter`（监控统计）、`ContextFilter`（上下文传递）、`CacheFilter`（结果缓存）、`ValidationFilter`（参数校验）。用户可以通过`@Activate`自定义Filter，实现日志记录、鉴权、限流等功能。
 
-> 💡 Filter链的执行顺序由`@Activate`注解的`order`属性控制，值越小越先执行。Consumer端的Filter链在发起远程调用前执行，Provider端的Filter链在收到请求后执行。
+> Filter链的执行顺序由`@Activate`注解的`order`属性控制，值越小越先执行。Consumer端的Filter链在发起远程调用前执行，Provider端的Filter链在收到请求后执行。
 
 ### 1.13 互联网项目的架构演进经历了哪些阶段？
 典型演进路径：**单体架构** → **垂直拆分**（按业务拆分成独立应用） → **分布式服务**（引入RPC框架和注册中心） → **SOA/微服务**（加上ESB或API Gateway） → **云原生**（容器化+K8s+Service Mesh）。单体架构期所有模块耦合在一个JAR包中，部署困难、扩展性差；引入Dubbo后，服务被拆分为独立进程，通过接口契约通信，各团队独立开发部署，通过注册中心实现动态发现。
@@ -144,7 +144,7 @@ Dubbo在分层架构上划分为10层，从上到下为：
 
 各层之间通过SPI机制连接，每一层都可以通过SPI扩展。
 
-> 🎯 面试高频题：Dubbo的分层设计使得每一层可独立替换，通过SPI机制实现高度可扩展性，体现了"依赖倒置"和"开闭原则"。
+> 面试高频题：Dubbo的分层设计使得每一层可独立替换，通过SPI机制实现高度可扩展性，体现了"依赖倒置"和"开闭原则"。
 
 ### 2.2 Dubbo SPI 深度解析（JDK SPI vs Dubbo SPI vs @Adaptive）
 
@@ -167,7 +167,7 @@ public interface Protocol {
 }
 ```
 
-> 💡 Dubbo SPI是Dubbo的"灵魂"，正是基于SPI，所有扩展点（协议、注册中心、序列化、负载均衡、过滤器和集群容错）都可以被无缝替换和扩展。
+> Dubbo SPI是Dubbo的"灵魂"，正是基于SPI，所有扩展点（协议、注册中心、序列化、负载均衡、过滤器和集群容错）都可以被无缝替换和扩展。
 
 ### 2.3 服务导出流程（Service Export）
 服务导出的入口是`ServiceBean.export()`（Spring容器初始化时触发），核心流程如下：
@@ -182,7 +182,7 @@ public interface Protocol {
 
 每个Provider启动时还会将自身的元数据信息（接口、版本、group、权重、序列化方式等）写入到URL（统一配置模型）。
 
-> ⚠️ 导出过程中，`ProtocolFilterWrapper`和`ProtocolListenerWrapper`会通过SPI自动包装原始Protocol，插入Filter链和监听器。
+> 导出过程中，`ProtocolFilterWrapper`和`ProtocolListenerWrapper`会通过SPI自动包装原始Protocol，插入Filter链和监听器。
 
 ### 2.4 服务引用流程（Service Reference / Import）
 服务引用的入口是`ReferenceBean.getObject()`（Spring注入时触发）：
@@ -196,7 +196,7 @@ public interface Protocol {
 
 Consumer启动后，订阅机制确保Provider变更时实时感知。当Provider列表变化时，`RegistryDirectory.notify()`更新本地路由表。
 
-> 💡 引用的核心产物是**代理对象**，调用时经过：代理 → Filter链 → 负载均衡 → 容错 → 网络传输 → Provider接收。
+> 引用的核心产物是**代理对象**，调用时经过：代理 → Filter链 → 负载均衡 → 容错 → 网络传输 → Provider接收。
 
 ### 2.5 负载均衡实现原理
 
@@ -255,7 +255,7 @@ public class FailoverClusterInvoker<T> extends AbstractClusterInvoker<T> {
 }
 ```
 
-> ⚠️ 注意：`ForkingClusterInvoker`会同时向多个节点发起调用（`forks`参数控制并行数），通过`ExecutorService`提交多个Callable，任一成功就取消其他任务。
+> 注意：`ForkingClusterInvoker`会同时向多个节点发起调用（`forks`参数控制并行数），通过`ExecutorService`提交多个Callable，任一成功就取消其他任务。
 
 ### 2.7 Dubbo协议数据包结构
 Dubbo协议体使用16字节的Header + Body结构：
@@ -275,7 +275,7 @@ Dubbo的线程模型涉及三类线程：
 - **业务线程池**：Provider端接收请求后，由IO线程将任务提交给业务线程池执行。默认`fixed`线程池（200线程），可通过`threads`和`queues`配置。
 - **Consumer端调用线程**：Consumer发起调用时，调用线程发送请求后阻塞等待（通过`DefaultFuture` + `CountDownLatch`实现），IO线程收到响应后唤醒等待线程。
 
-> 💡 配置建议：`<dubbo:provider threadpool="cached" threads="300" queues="500" />` 适用于高并发场景，但需注意线程数不要超过服务器CPU核数的5倍。
+> 配置建议：`<dubbo:provider threadpool="cached" threads="300" queues="500" />` 适用于高并发场景，但需注意线程数不要超过服务器CPU核数的5倍。
 
 ### 2.9 服务目录（RegistryDirectory）和路由规则
 `RegistryDirectory`是Dubbo的**动态服务目录**，它：
@@ -298,7 +298,7 @@ Dubbo的优雅停机通过**Spring的`DisposableBean` + JVM的`ShutdownHook`**�
 4. **关闭线程池**：优雅关闭Netty线程池和业务线程池
 5. **释放其他资源**：关闭ZK连接、清理缓存
 
-> ⚠️ 必须配置`<dubbo:parameter key="shutdown.wait" value="15000" />`确保足够的时间窗口处理正在执行的请求，避免强制关闭导致数据不一致。
+> 必须配置`<dubbo:parameter key="shutdown.wait" value="15000" />`确保足够的时间窗口处理正在执行的请求，避免强制关闭导致数据不一致。
 
 ---
 
@@ -394,7 +394,7 @@ private UserService userService;
 private UserService userService;
 ```
 
-> 💡 灰度发布实战：新版本`2.0.0`先部署到少量机器，通过路由规则将内部测试人员流量引入，验证稳定后再逐步扩大灰度比例。
+> 灰度发布实战：新版本`2.0.0`先部署到少量机器，通过路由规则将内部测试人员流量引入，验证稳定后再逐步扩大灰度比例。
 
 ### 3.5 配置服务降级
 ```java
@@ -436,7 +436,7 @@ dubbo:
 private UserService userService;
 ```
 
-> ⚠️ 重试必须保证幂等！写操作（创建订单、扣减库存）**retries设为0**，读操作（查询用户）**retries可设为1-2**。
+> 重试必须保证幂等！写操作（创建订单、扣减库存）**retries设为0**，读操作（查询用户）**retries可设为1-2**。
 
 ### 3.7 dubbo-admin 监控配置
 dubbo-admin是Dubbo的可视化运维控制台，支持服务查询、路由规则管理、动态配置等功能。
@@ -634,7 +634,7 @@ API Gateway (Spring Cloud Gateway / Kong)
    MySQL / Redis / MQ
 ```
 
-> 🎯 关键设计要点：
+> 关键设计要点：
 > 1. **API契约管理**：将所有接口定义和DTO放在独立的`api-common` Jar包中，统一版本管理
 > 2. **注册中心高可用**：ZK集群3节点或Nacos集群（CP模式保证一致性）
 > 3. **熔断降级**：配合Sentinel实现Dubbo Adapter，自动熔断异常服务
@@ -726,7 +726,7 @@ Object result = genericService.$invoke("sayHello", new String[]{"java.lang.Strin
 | 泛化调用类型丢失 | JSON参数类型推断错误 | `$invoke`传入的泛型参数类型与实际不一致 | 明确指定参数类型数组，使用`Map`包装复杂对象 |
 | 参数校验失效 | 非法参数穿透到业务层 | 未启用ValidationFilter | 配置`validation="true"`启用JSR303校验 |
 
-> ⚠️ **最经典的生产事故**：超时+重试导致数据库压力暴增。场景：某写入接口响应慢（>5s），Consumer设置3次重试，高峰时每个请求生成4次写入，数据库被打垮。解决方案：写操作retries=0，同时优化接口性能。
+> **最经典的生产事故**：超时+重试导致数据库压力暴增。场景：某写入接口响应慢（>5s），Consumer设置3次重试，高峰时每个请求生成4次写入，数据库被打垮。解决方案：写操作retries=0，同时优化接口性能。
 
 ---
 
@@ -787,4 +787,4 @@ Dubbo 3.0是一次重大架构升级。最大变化是**Triple协议**，基于H
 - [ ] 能配置Sentinel + Dubbo的限流降级方案
 - [ ] 能说明注册中心宕机时的`dubbo.resilience`容错机制
 
-> 🎯 **面试秘籍**：Dubbo面试的高频核心是**SPI机制**和**调用链路**。如果能从SPI角度解释Dubbo的可扩展架构，从调用链路角度画出完整的请求处理流程，就已经超越了80%的面试者。配合具体的生产实践（如重试导致的雪崩、序列化版本兼容问题），能给面试官留下深刻印象。
+> **面试秘籍**：Dubbo面试的高频核心是**SPI机制**和**调用链路**。如果能从SPI角度解释Dubbo的可扩展架构，从调用链路角度画出完整的请求处理流程，就已经超越了80%的面试者。配合具体的生产实践（如重试导致的雪崩、序列化版本兼容问题），能给面试官留下深刻印象。

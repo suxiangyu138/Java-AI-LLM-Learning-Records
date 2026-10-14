@@ -13,7 +13,7 @@
 | 云集成 | Azure AI Foundry/Copilot Studio、AWS Bedrock AgentCore、Google Cloud |
 | 标准推进 | IETF 筹备 AIPROTO WG（以 A2A 为基线）；NIST AI Agent Standards Initiative（2026-02-17） |
 
-> 🎯 核心要点：**A2A 是"水平"标准**——解决"我的 Agent 和你的 Agent 怎么对话"；与 MCP（垂直：Agent→工具）分层互补（§7）。2026 已从提案变生产事实。
+> 核心要点：**A2A 是"水平"标准**——解决"我的 Agent 和你的 Agent 怎么对话"；与 MCP（垂直：Agent→工具）分层互补（§7）。2026 已从提案变生产事实。
 
 ## 2. Agent Card：发现机制
 
@@ -36,7 +36,7 @@
 | 签名 | 生产可加密签名——接收方验证真实性 |
 | 类比 | **版本化的公共 API 契约**——锁版本 + 严格 IO 校验 |
 
-> 🎯 核心要点：Agent Card 是"能力发现"的契约——**先取卡再调用**；生产把卡当版本化 API 管理（pinned 版本、Pydantic 类严格校验、显式安全方案）。
+> 核心要点：Agent Card 是"能力发现"的契约——**先取卡再调用**；生产把卡当版本化 API 管理（pinned 版本、Pydantic 类严格校验、显式安全方案）。
 
 ## 3. 通信机制：JSON-RPC 2.0
 
@@ -51,7 +51,7 @@
 | TextPart | 文本 | 自然语言内容 |
 | DataPart | 结构化 JSON | 类型化数据 |
 
-> 💡 消息 vs 任务：**message/send 适合多轮对话（贵）；tasks/send 适合一次性委托（省）**——05 篇 token 乘数效应的协议级对应。
+> 消息 vs 任务：**message/send 适合多轮对话（贵）；tasks/send 适合一次性委托（省）**——05 篇 token 乘数效应的协议级对应。
 
 ## 4. Task 生命周期
 
@@ -69,7 +69,7 @@ Task 状态机：
 | completed | 完成（带结果） | 消费结果 |
 | failed | 失败（带错误） | 重试/降级/人工 |
 
-> 🎯 核心要点：**Task 是 A2A 的最小执行单元**——状态机让编排层可监控/可重试/可审计；"任务有明确定义的完成状态"是防级联（08 篇）的基础结构。
+> 核心要点：**Task 是 A2A 的最小执行单元**——状态机让编排层可监控/可重试/可审计；"任务有明确定义的完成状态"是防级联（08 篇）的基础结构。
 
 ## 5. A2A 安全：零信任落地
 
@@ -80,7 +80,7 @@ Task 状态机：
 | 零信任原则 | 每次 A2A 调用单独认证授权——内部流量当外部流量 |
 | 可观测 | W3C Trace Context（traceparent）跨 Agent 传播（09 篇） |
 
-> ⚠️ 2026 铁律：**内部 Agent 流量 = 外部流量**——每个 A2A 调用单独认证；信任"内部"是多 Agent 系统最大的安全幻觉（08 篇信任边界）。
+> 2026 铁律：**内部 Agent 流量 = 外部流量**——每个 A2A 调用单独认证；信任"内部"是多 Agent 系统最大的安全幻觉（08 篇信任边界）。
 
 ## 6. SDK 与生态（2026）
 
@@ -93,7 +93,7 @@ Task 状态机：
 | MuleSoft Anypoint A2A Connector | 企业集成 |
 | Microsoft Teams | bot-to-bot 交接走 A2A |
 
-> 💡 跨语言实证：**Python ADK Agent 协调 Go 合规 Agent 纯 A2A**（Google 官方 demo）——语言无关是 A2A 的核心卖点；Java 侧 Quarkus SDK 是 JVM 生态入口。
+> 跨语言实证：**Python ADK Agent 协调 Go 合规 Agent 纯 A2A**（Google 官方 demo）——语言无关是 A2A 的核心卖点；Java 侧 Quarkus SDK 是 JVM 生态入口。
 
 ## 7. A2A vs MCP：分层互补
 
@@ -105,7 +105,7 @@ Task 状态机：
 | 典型组合 | 编排 Agent 内部用 MCP 调后端 | 编排 Agent 用 A2A 委派专家 |
 | 类比 | USB-C（接设备） | HTTP（上网） |
 
-> 🎯 核心要点：**分层架构 = A2A 高层编排/委派 + MCP 低层工具执行**——常见模式：编排 Agent 说 A2A 委派专家，专家内部用 MCP 调后端（信用检查/身份验证/库存系统）。
+> 核心要点：**分层架构 = A2A 高层编排/委派 + MCP 低层工具执行**——常见模式：编排 Agent 说 A2A 委派专家，专家内部用 MCP 调后端（信用检查/身份验证/库存系统）。
 
 ## 8. 常见误区
 

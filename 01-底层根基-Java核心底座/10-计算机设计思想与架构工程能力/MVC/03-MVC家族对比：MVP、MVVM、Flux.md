@@ -47,7 +47,7 @@ Flux（2014，Facebook）不再争论第三角色叫什么，而是**重新定�
 
 两个新兴平台的实践验证了家族模式的映射规律：**React Native 中 Controller 没有位置**——hooks"吃掉"了它（useState 管状态、useEffect 管副作用，组件化后 600 行的 Controller 被拆散）；MVP 映射为"presenter hooks + 被动视图"；MVVM 映射出人意料地好——自定义 hooks 拥有状态、暴露命令，就是 ViewModel；Zustand/Jotai 的 store 暴露状态与命令且不关心谁在监听，也是 ViewModel——React 的渲染循环替代了 WPF 的双向绑定（单向替代双向）。**SwiftUI** 中 @ObservableObject + @StateObject 让 MVVM 天然契合，而 MVC 没有一等公民形态——把逻辑写进 View body 只是"以值类型外衣重新造上帝控制器"。结论：**MVVM 的"状态与视图解耦"思想在 2026 年的新平台全面获胜，但实现机制从双向绑定演化为单向渲染循环**。
 
-> 🎯 **核心要点**：家族对比的最终结论是"模式不是选择，是分配"——Model 与 View 恒定，真正要设计的是"输入路由（Controller）、视图驱动（Presenter）、状态转换（ViewModel）"三段职责的归属。2026 年实践答案：后端 MVC 管请求路由，前端 MVVM 管状态同步，复杂状态用 Flux 单向流兜底，三者共存而非互斥。评审时把"贴模式标签"换成"问职责归属三问"（输入路由/状态转换/视图驱动各归谁），再对照三反模式（隐形 Controller/贫血模型/同步地狱）检查——这是等价性悖论带来的最实用转变。
+> **核心要点**：家族对比的最终结论是"模式不是选择，是分配"——Model 与 View 恒定，真正要设计的是"输入路由（Controller）、视图驱动（Presenter）、状态转换（ViewModel）"三段职责的归属。2026 年实践答案：后端 MVC 管请求路由，前端 MVVM 管状态同步，复杂状态用 Flux 单向流兜底，三者共存而非互斥。评审时把"贴模式标签"换成"问职责归属三问"（输入路由/状态转换/视图驱动各归谁），再对照三反模式（隐形 Controller/贫血模型/同步地狱）检查——这是等价性悖论带来的最实用转变。
 
 ---
 

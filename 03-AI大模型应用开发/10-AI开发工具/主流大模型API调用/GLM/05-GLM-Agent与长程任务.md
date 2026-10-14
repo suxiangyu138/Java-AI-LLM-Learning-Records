@@ -1,6 +1,6 @@
 # 05 - GLM Agent 与长程任务
 
-> 🎯 GLM 的核心差异化 = Agent 长程任务开源 SOTA — 8 小时自主工作、OpenClaw 龙虾套餐深度绑定、MCP-Atlas 开源第一。本章拆解长程 Agent 的能力与落地
+> GLM 的核心差异化 = Agent 长程任务开源 SOTA — 8 小时自主工作、OpenClaw 龙虾套餐深度绑定、MCP-Atlas 开源第一。本章拆解长程 Agent 的能力与落地
 
 ---
 
@@ -139,6 +139,6 @@ tools = [{
 
 ---
 
-> 🎯 **核心要点**：GLM 的 Agent 三张牌 — **① 8 小时自主（GLM-5.1 长程）② 龙虾套餐（GLM-5-Turbo + OpenClaw，39 元/月）③ MCP-Atlas 开源第一（工具调用最稳）**。定位总结：它是"Agent 长程任务"的开源最优解，配合 OpenClaw 生态能实现极低成本的 AI 员工。
+> **核心要点**：GLM 的 Agent 三张牌 — **① 8 小时自主（GLM-5.1 长程）② 龙虾套餐（GLM-5-Turbo + OpenClaw，39 元/月）③ MCP-Atlas 开源第一（工具调用最稳）**。定位总结：它是"Agent 长程任务"的开源最优解，配合 OpenClaw 生态能实现极低成本的 AI 员工。
 
 **下一模块**：[06-GLM在开发框架中的集成](06-GLM在开发框架中的集成.md) / **返回总览**：[00-总览](00-GLM-API知识体系总览.md)

@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [为什么需要 URL 编码](#1-为什么需要-url-编码)
 2. [字符分类保留与非保留](#2-字符分类保留与非保留)
@@ -32,16 +32,16 @@ URL 只允许 **ASCII 可打印子集**中的一部分字符。三类字符必�
 **破坏结构的直观例子**：
 
 ```text
-❌ 期望搜索 "A&B=C" 这个关键词，直接拼接：
+✗ 期望搜索 "A&B=C" 这个关键词，直接拼接：
    /search?kw=A&B=C&page=1
    服务端解析成 3 个参数：kw=A、B=C、page=1   ← kw 只剩 "A"
 
-✅ 对参数值单独编码：
+✓ 对参数值单独编码：
    /search?kw=A%26B%3DC&page=1
    服务端解析成 2 个参数：kw="A&B=C"、page=1   ← 正确
 ```
 
-> 🎯 **核心要点**：编码的对象永远是"**单个参数值 / 单个路径段**"，绝不是整条 URL。这是 90% 编码 Bug 的根源。
+> **核心要点**：编码的对象永远是"**单个参数值 / 单个路径段**"，绝不是整条 URL。这是 90% 编码 Bug 的根源。
 
 ---
 
@@ -55,7 +55,7 @@ RFC 3986 把字符分为三大类：
 A-Z  a-z  0-9  -  .  _  ~
 ```
 
-> ⚠️ 注意 `~` 是**非保留**字符（RFC 3986 才加入的）。但 Java `URLEncoder` 会把它编成 `%7E`，导致签名不一致——见第 6 节。
+> 注意 `~` 是**非保留**字符（RFC 3986 才加入的）。但 Java `URLEncoder` 会把它编成 `%7E`，导致签名不一致——见第 6 节。
 
 ### 2.2 保留字符 Reserved（共 18 个，作分隔符时不编码，作数据时必须编码）
 
@@ -70,24 +70,24 @@ A-Z  a-z  0-9  -  .  _  ~
 空格  "  <  >  %  {  }  |  \  ^  `      以及所有非 ASCII 字符
 ```
 
-> 💡 `%` 本身必须编码为 `%25`，否则解码器会把后面两位当成十六进制。
+> `%` 本身必须编码为 `%25`，否则解码器会把后面两位当成十六进制。
 
 ### 2.4 按位置的编码需求矩阵
 
 | 字符 | Path 段 | Query 名/值 | Fragment | 说明 |
 |:---:|:---:|:---:|:---:|------|
-| `/` | ✅ 必编码 `%2F` | ⭕ 可不编码 | ⭕ | Path 里是层级分隔符 |
-| `?` | ✅ `%3F` | ⭕ 可不编码 | ⭕ | 首个 `?` 开始 query |
-| `#` | ✅ `%23` | ✅ `%23` | ✅ | 首个 `#` 开始 fragment |
-| `&` | ⭕ | ✅ `%26` | ⭕ | query 参数分隔符 |
-| `=` | ⭕ | ✅ `%3D` | ⭕ | query 键值分隔符 |
-| `+` | ⭕ | ✅ `%2B` | ⭕ | **表单编码下代表空格** |
-| 空格 | ✅ `%20` | ✅ `%20` 或 `+` | ✅ `%20` | 见第 4 节 |
-| `;` | ⚠️ `%3B` | ⭕ | ⭕ | Spring 矩阵参数分隔符 |
-| `:` | ⭕（首段除外） | ⭕ | ⭕ | 相对 URL 首段含 `:` 会被误判成 scheme |
-| `%` | ✅ `%25` | ✅ `%25` | ✅ | 永远要编码 |
+| `/` | ✓ 必编码 `%2F` | ○ 可不编码 | ○ | Path 里是层级分隔符 |
+| `?` | ✓ `%3F` | ○ 可不编码 | ○ | 首个 `?` 开始 query |
+| `#` | ✓ `%23` | ✓ `%23` | ✓ | 首个 `#` 开始 fragment |
+| `&` | ○ | ✓ `%26` | ○ | query 参数分隔符 |
+| `=` | ○ | ✓ `%3D` | ○ | query 键值分隔符 |
+| `+` | ○ | ✓ `%2B` | ○ | **表单编码下代表空格** |
+| 空格 | ✓ `%20` | ✓ `%20` 或 `+` | ✓ `%20` | 见第 4 节 |
+| `;` | `%3B` | ○ | ○ | Spring 矩阵参数分隔符 |
+| `:` | ○（首段除外） | ○ | ○ | 相对 URL 首段含 `:` 会被误判成 scheme |
+| `%` | ✓ `%25` | ✓ `%25` | ✓ | 永远要编码 |
 
-> ⭕ = 语法上允许原样出现，但编码后也合法且更安全。**保守做法：除非明确是分隔符，全部编码。**
+> ○ = 语法上允许原样出现，但编码后也合法且更安全。**保守做法：除非明确是分隔符，全部编码。**
 
 ---
 
@@ -107,7 +107,7 @@ A-Z  a-z  0-9  -  .  _  ~
 | `&` | `26` | `%26` |
 | `中` | `E4 B8 AD` | `%E4%B8%AD` |
 | `文` | `E6 96 87` | `%E6%96%87` |
-| `😀` | `F0 9F 98 80` | `%F0%9F%98%80` |
+| `` | `F0 9F 98 80` | `%F0%9F%98%80` |
 | `é` | `C3 A9` | `%C3%A9` |
 
 ```text
@@ -115,7 +115,7 @@ A-Z  a-z  0-9  -  .  _  ~
 "中文" → %D6%D0%CE%C4              （GBK，老系统遗留）
 ```
 
-> 🎯 **一个汉字 UTF-8 占 3 字节 = 9 个 URL 字符**。中文 URL 极易超长，Nginx 请求行 8 KB 约等于 900 个汉字。
+> **一个汉字 UTF-8 占 3 字节 = 9 个 URL 字符**。中文 URL 极易超长，Nginx 请求行 8 KB 约等于 900 个汉字。
 
 ### 3.2 常用字符编码速查表
 
@@ -153,7 +153,7 @@ A-Z  a-z  0-9  -  .  _  ~
   • 若服务端按 RFC 3986 解析 → kw = "a+b"  （+ 是字面量）
 
 请求：GET /search?kw=a%2Bb
-  • 两种解析下都是 kw = "a+b"              ✅ 唯一安全写法
+  • 两种解析下都是 kw = "a+b"              ✓ 唯一安全写法
 ```
 
 ### 4.2 各框架的实际行为
@@ -168,11 +168,11 @@ A-Z  a-z  0-9  -  .  _  ~
 | Nginx `$arg_x` | 保持 `+` | 保持 `+` |
 | Python `urllib.parse.parse_qs` | 解成**空格** | — |
 
-> ⚠️ **实战踩坑**：Base64 字符串含 `+`，直接放 Query 会被解成空格 → 解码失败。解决：改用 **Base64URL**（第 9 节）或对值做 `encodeURIComponent`。
+> **实战踩坑**：Base64 字符串含 `+`，直接放 Query 会被解成空格 → 解码失败。解决：改用 **Base64URL**（第 9 节）或对值做 `encodeURIComponent`。
 
 ### 4.3 铁律
 
-> 🎯 **凡是要放进 URL 的数据，一律用"编码 API"处理，把空格编成 `%20`、`+` 编成 `%2B`**。永远不要手写 `+` 表示空格。
+> **凡是要放进 URL 的数据，一律用"编码 API"处理，把空格编成 `%20`、`+` 编成 `%2B`**。永远不要手写 `+` 表示空格。
 
 ---
 
@@ -181,8 +181,8 @@ A-Z  a-z  0-9  -  .  _  ~
 | API | 不编码的字符 | 用途 |
 |-----|-------------|------|
 | `encodeURI()` | 非保留 + **保留字符全部** + `#` | 编码**整条 URL**（保留结构） |
-| `encodeURIComponent()` | `A-Za-z0-9 - _ . ! ~ * ' ( )` | 编码**单个参数值/路径段** ✅ 常用 |
-| `escape()` | — | ❌ **已废弃**，非 UTF-8，不要用 |
+| `encodeURIComponent()` | `A-Za-z0-9 - _ . ! ~ * ' ( )` | 编码**单个参数值/路径段** ✓ 常用 |
+| `escape()` | — | ✗ **已废弃**，非 UTF-8，不要用 |
 | `new URLSearchParams()` | 表单编码规则 | 拼装 Query（空格→`+`） |
 | `new URL()` | 自动做最小必要编码 | 解析 + 拼装完整 URL |
 
@@ -192,10 +192,10 @@ A-Z  a-z  0-9  -  .  _  ~
 const raw = "a b&c=d/e?f#g中文+x";
 
 encodeURI(raw);
-// "a%20b&c=d/e?f#g%E4%B8%AD%E6%96%87+x"   ← & = / ? # + 都没编码 ❌ 参数会被截断
+// "a%20b&c=d/e?f#g%E4%B8%AD%E6%96%87+x"   ← & = / ? # + 都没编码 ✗ 参数会被截断
 
 encodeURIComponent(raw);
-// "a%20b%26c%3Dd%2Fe%3Ff%23g%E4%B8%AD%E6%96%87%2Bx"   ✅ 全部安全
+// "a%20b%26c%3Dd%2Fe%3Ff%23g%E4%B8%AD%E6%96%87%2Bx"   ✓ 全部安全
 
 // 正确姿势：结构自己写，值用 encodeURIComponent
 const url = `/search?kw=${encodeURIComponent(raw)}&page=1`;
@@ -231,7 +231,7 @@ u.searchParams.get("kw");       // "a b&c=d"
 u.searchParams.getAll("tag");   // ["AI", "URL"]
 ```
 
-> 💡 `URLSearchParams` 用 `+` 表示空格。若后端严格按 RFC 3986 解析（把 `+` 当字面量），需手动 `.toString().replace(/\+/g, "%20")`。
+> `URLSearchParams` 用 `+` 表示空格。若后端严格按 RFC 3986 解析（把 `+` 当字面量），需手动 `.toString().replace(/\+/g, "%20")`。
 
 ---
 
@@ -243,11 +243,11 @@ u.searchParams.getAll("tag");   // ["AI", "URL"]
 | `URLDecoder.decode()` | 表单解码 | `+`→空格 | — | 只适合 Query 值 |
 | `URI` 多参构造器 | RFC 3986 自动编码 | `%20` | 保留 | 拼装 URI |
 | `URI.create()` 单参 | **不编码**，非法字符抛异常 | — | — | 解析已编码 URI |
-| `UriUtils.encodePath()`（Spring） | RFC 3986 Path 规则 | `%20` | 保留 | ✅ 推荐 |
-| `UriUtils.encodeQueryParam()`（Spring） | RFC 3986 Query 规则 | `%20` | 保留 | ✅ 推荐 |
-| `UriComponentsBuilder` | 按组件分别编码 | `%20` | 保留 | ✅ 最推荐 |
-| Guava `UrlEscapers` | 按位置分 3 种 escaper | 见下 | 保留 | ✅ 推荐 |
-| OkHttp `HttpUrl.Builder` | 自动按位置编码 | `%20` | 保留 | ✅ 推荐 |
+| `UriUtils.encodePath()`（Spring） | RFC 3986 Path 规则 | `%20` | 保留 | ✓ 推荐 |
+| `UriUtils.encodeQueryParam()`（Spring） | RFC 3986 Query 规则 | `%20` | 保留 | ✓ 推荐 |
+| `UriComponentsBuilder` | 按组件分别编码 | `%20` | 保留 | ✓ 最推荐 |
+| Guava `UrlEscapers` | 按位置分 3 种 escaper | 见下 | 保留 | ✓ 推荐 |
+| OkHttp `HttpUrl.Builder` | 自动按位置编码 | `%20` | 保留 | ✓ 推荐 |
 
 ### 6.1 `URLEncoder` 的历史包袱
 
@@ -261,40 +261,40 @@ URLEncoder.encode(s, StandardCharsets.UTF_8);
 // "a+b%2Bc%7Ed%2Fe"
 //   ↑空格变+   ↑ ~ 被多余编码
 
-// ❌ 错误用法：拿它编码路径
+// ✗ 错误用法：拿它编码路径
 String path = "/files/" + URLEncoder.encode("my file.txt", StandardCharsets.UTF_8);
 // "/files/my+file.txt"  ← 服务端拿到的文件名是 "my+file.txt"，找不到文件
 
-// ✅ 修法一：替换 + 为 %20
+// ✓ 修法一：替换 + 为 %20
 String fixed = URLEncoder.encode("my file.txt", StandardCharsets.UTF_8)
                          .replace("+", "%20");
-// ✅ 修法二（推荐）：用专门的 Path 编码器
+// ✓ 修法二（推荐）：用专门的 Path 编码器
 String better = org.springframework.web.util.UriUtils
                    .encodePathSegment("my file.txt", StandardCharsets.UTF_8);
 // "my%20file.txt"
 ```
 
-> ⚠️ `URLEncoder` 的类名极具误导性——它实现的是 **HTML 表单编码**（`application/x-www-form-urlencoded`），不是 RFC 3986 URI 编码。**只在编码 Query 参数值时可用**。
+> `URLEncoder` 的类名极具误导性——它实现的是 **HTML 表单编码**（`application/x-www-form-urlencoded`），不是 RFC 3986 URI 编码。**只在编码 Query 参数值时可用**。
 >
-> 💡 Java 10+ 支持 `URLEncoder.encode(s, StandardCharsets.UTF_8)` 重载，无需再 catch `UnsupportedEncodingException`。
+> Java 10+ 支持 `URLEncoder.encode(s, StandardCharsets.UTF_8)` 重载，无需再 catch `UnsupportedEncodingException`。
 
 ### 6.2 `URI` 双构造器行为差异
 
 ```java
 // 单参构造：假设输入已编码，遇到非法字符直接抛异常
 new URI("https://a.com/my file.txt");
-// ❌ URISyntaxException: Illegal character in path at index 20
+// ✗ URISyntaxException: Illegal character in path at index 20
 
-URI.create("https://a.com/my%20file.txt");   // ✅ OK
+URI.create("https://a.com/my%20file.txt");   // ✓ OK
 
 // 多参构造：自动帮你编码
 URI u = new URI("https", "a.com", "/my file.txt", "kw=a b", "frag ment");
 System.out.println(u.toASCIIString());
-// https://a.com/my%20file.txt?kw=a%20b#frag%20ment   ✅ 自动编码
+// https://a.com/my%20file.txt?kw=a%20b#frag%20ment   ✓ 自动编码
 
 // 但多参构造不会编码保留字符 —— 值里的 & 依然会破坏结构
 URI bad = new URI("https", "a.com", "/p", "kw=A&B=C", null);
-// https://a.com/p?kw=A&B=C   ← 仍然被拆成 2 个参数 ⚠️
+// https://a.com/p?kw=A&B=C   ← 仍然被拆成 2 个参数 
 ```
 
 ### 6.3 raw vs decoded 取值
@@ -310,7 +310,7 @@ u.getFragment();  // f g
 u.getRawFragment; // f%20g
 ```
 
-> ⚠️ **安全要点**：做路径校验（防穿越）必须用 `getRawPath()` 并自行解码判断。用 `getPath()` 会让 `%2F`、`%2e%2e` 提前解码，绕过你的检查。
+> **安全要点**：做路径校验（防穿越）必须用 `getRawPath()` 并自行解码判断。用 `getPath()` 会让 `%2F`、`%2e%2e` 提前解码，绕过你的检查。
 
 ### 6.4 Guava 三种 Escaper
 
@@ -342,7 +342,7 @@ System.out.println(uri);
 //   ?kw=A%26B%3DC&tag=AI&tag=URL#top
 ```
 
-> 🎯 **核心要点**：Java 侧编码，**结论就一句——用 `UriComponentsBuilder`（有 Spring）或 OkHttp `HttpUrl.Builder`（无 Spring），永远别手动 `URLEncoder` + 字符串拼接**。
+> **核心要点**：Java 侧编码，**结论就一句——用 `UriComponentsBuilder`（有 Spring）或 OkHttp `HttpUrl.Builder`（无 Spring），永远别手动 `URLEncoder` + 字符串拼接**。
 
 ---
 
@@ -405,12 +405,12 @@ String garbled = new String(raw.getBytes(StandardCharsets.ISO_8859_1),
 
 | 位置 | 中文支持 | 说明 |
 |------|:---:|------|
-| Host（中文域名） | ⚠️ 需 Punycode | 见第 8 节 |
-| Path | ✅ 需百分号编码 | `/文档/入门` → `/%E6%96%87%E6%A1%A3/%E5%85%A5%E9%97%A8` |
-| Query 值 | ✅ 需百分号编码 | 最常见场景 |
-| Fragment | ✅ | 浏览器自动处理 |
+| Host（中文域名） | 需 Punycode | 见第 8 节 |
+| Path | ✓ 需百分号编码 | `/文档/入门` → `/%E6%96%87%E6%A1%A3/%E5%85%A5%E9%97%A8` |
+| Query 值 | ✓ 需百分号编码 | 最常见场景 |
+| Fragment | ✓ | 浏览器自动处理 |
 
-> 💡 中文 URL 在浏览器地址栏**显示为中文**（美化），复制出来是编码形态。SEO 上中文 URL 对中文搜索引擎有正向作用，但会显著增加 URL 长度、易在第三方系统被截断。**技术型站点建议用英文 slug 或拼音。**
+> 中文 URL 在浏览器地址栏**显示为中文**（美化），复制出来是编码形态。SEO 上中文 URL 对中文搜索引擎有正向作用，但会显著增加 URL 长度、易在第三方系统被截断。**技术型站点建议用英文 slug 或拼音。**
 
 ---
 
@@ -463,7 +463,7 @@ new URL("https://münchen.de/p").href;       // "https://xn--mnchen-3ya.de/p"
 | 服务端校验 | 输入域名先 `IDN.toASCII`，再与白名单比对**编码后**的值 |
 | 混合脚本检测 | 同一标签内出现多个 Unicode Script 时告警 |
 
-> ⚠️ 做 SSRF / 重定向白名单时，**必须比对 Punycode 形态**。若直接比对 Unicode 字符串，`аpple.com`（西里尔）会被误判为不在白名单从而放过，或反之绕过检查。
+> 做 SSRF / 重定向白名单时，**必须比对 Punycode 形态**。若直接比对 Unicode 字符串，`аpple.com`（西里尔）会被误判为不在白名单从而放过，或反之绕过检查。
 
 ---
 
@@ -473,8 +473,8 @@ new URL("https://münchen.de/p").href;       // "https://xn--mnchen-3ya.de/p"
 
 | 编码 | 62/63 号字符 | 填充 | URL 安全 |
 |------|-------------|:---:|:---:|
-| **Base64**（RFC 4648 §4） | `+` `/` | `=` | ❌ |
-| **Base64URL**（RFC 4648 §5） | `-` `_` | 可省略 | ✅ |
+| **Base64**（RFC 4648 §4） | `+` `/` | `=` | ✗ |
+| **Base64URL**（RFC 4648 §5） | `-` `_` | 可省略 | ✓ |
 
 ```text
 标准 Base64：  aGVsbG8+d29ybGQ/PT0=
@@ -489,11 +489,11 @@ import java.util.Base64;
 
 byte[] data = "hello>world?".getBytes(StandardCharsets.UTF_8);
 
-// ❌ 标准 Base64 —— 含 + / = 放到 URL 会出问题
+// ✗ 标准 Base64 —— 含 + / = 放到 URL 会出问题
 String std = Base64.getEncoder().encodeToString(data);
 // "aGVsbG8+d29ybGQ/"
 
-// ✅ Base64URL —— 直接可放 URL
+// ✓ Base64URL —— 直接可放 URL
 String url = Base64.getUrlEncoder().withoutPadding().encodeToString(data);
 // "aGVsbG8-d29ybGQ_"
 
@@ -516,7 +516,7 @@ String jwt = base64Url(headerJson) + "." + base64Url(payloadJson) + "." + base64
 // eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMjMifQ.dBjftJeZ4CVP-mB92K27uhbUJU1p1r_wW1gFWFOEjXk
 ```
 
-> 💡 **速判**：见到含 `-`/`_` 且**无** `+`/`/`/`=` 的 Base64 串，基本就是 Base64URL（JWT、OAuth state、签名）。
+> **速判**：见到含 `-`/`_` 且**无** `+`/`/`/`=` 的 Base64 串，基本就是 Base64URL（JWT、OAuth state、签名）。
 
 ---
 
@@ -539,14 +539,14 @@ String jwt = base64Url(headerJson) + "." + base64Url(payloadJson) + "." + base64
 | `UriComponentsBuilder` 上重复调 `.encode()` | Spring 常见坑 |
 
 ```java
-// ⚠️ Spring 常见双重编码坑
+// Spring 常见双重编码坑
 UriComponentsBuilder.fromUriString("https://a.com")
         .queryParam("kw", URLEncoder.encode("中文", UTF_8))  // 已编码一次
-        .encode()                                            // ❌ 又编一次
+        .encode()                                            // ✗ 又编一次
         .toUriString();
 // https://a.com?kw=%25E4%25B8%25AD%25E6%2596%2587
 
-// ✅ 正确：交给 builder 统一编码，自己不要提前编
+// ✓ 正确：交给 builder 统一编码，自己不要提前编
 UriComponentsBuilder.fromUriString("https://a.com")
         .queryParam("kw", "中文")
         .encode()
@@ -561,11 +561,11 @@ UriComponentsBuilder.fromUriString("https://a.com")
 ```text
 callback = https://app.com/cb?token=abc&from=wx
 
-❌ 直接拼：
+✗ 直接拼：
 /oauth?redirect_uri=https://app.com/cb?token=abc&from=wx
    → from=wx 变成了外层 oauth 的参数，回调地址被截断
 
-✅ 编码后拼：
+✓ 编码后拼：
 /oauth?redirect_uri=https%3A%2F%2Fapp.com%2Fcb%3Ftoken%3Dabc%26from%3Dwx
    → 服务端 getParameter("redirect_uri") 得到完整回调地址
 ```
@@ -593,7 +593,7 @@ String oauthUrl = "https://auth.com/oauth?client_id=X&redirect_uri="
 
 ---
 
-> 🎯 **本篇核心要点**
+> **本篇核心要点**
 > 1. **编码的对象是"值"，不是整条 URL**
 > 2. 空格有两套标准：URI 用 `%20`，表单用 `+`；**统一编成 `%20` 最安全**
 > 3. JS 用 `encodeURIComponent` / `URLSearchParams`；Java 用 `UriComponentsBuilder`，**别用 `URLEncoder` 编路径**

@@ -1,6 +1,6 @@
 # 09 - Spring 生态集成与最佳实践
 
-> 🎯 Spring Cloud Stream + RocketMQ  = 声明式消息驱动，配合生产避坑指南和面试题，从能用到精通
+> Spring Cloud Stream + RocketMQ  = 声明式消息驱动，配合生产避坑指南和面试题，从能用到精通
 
 ---
 
@@ -281,7 +281,7 @@ public class OrderStreamConfig {
 | 维度 | spring-boot-starter | Spring Cloud Stream |
 |------|---------------------|---------------------|
 | **抽象层级** | 低（RocketMQ 原生 API） | 高（绑定器抽象） |
-| **多 MQ 切换** | ❌ 需改代码 | ✅ 改配置即可 |
+| **多 MQ 切换** | ✗ 需改代码 | ✓ 改配置即可 |
 | **复杂度** | 简单直接 | 需要学习抽象概念 |
 | **功能覆盖** | 完整 | 部分（如事务消息支持有限） |
 | **推荐度** | 专注 RocketMQ | 多 MQ 可能切换 |
@@ -294,24 +294,24 @@ public class OrderStreamConfig {
 
 ```text
 生产者端：
-  ✅ 同步发送 + 重试 3 次
-  ✅ 异常时写入本地消息表（定时补偿）
-  ✅ 发送前记录 send_log(status=PENDING)
+  ✓ 同步发送 + 重试 3 次
+  ✓ 异常时写入本地消息表（定时补偿）
+  ✓ 发送前记录 send_log(status=PENDING)
 
 Broker 端：
-  ✅ 多 Master 多 Slave（异步复制）
-  ✅ 或 SYNC_FLUSH + SYNC_MASTER（金融级）
-  ✅ 或 DLedger / Controller 模式
+  ✓ 多 Master 多 Slave（异步复制）
+  ✓ 或 SYNC_FLUSH + SYNC_MASTER（金融级）
+  ✓ 或 DLedger / Controller 模式
 
 消费者端：
-  ✅ 手动确认后才提交
-  ✅ 消费前：幂等检查
-  ✅ 消费后：标记已消费
-  ✅ 异常：触发重试，不要吞异常
+  ✓ 手动确认后才提交
+  ✓ 消费前：幂等检查
+  ✓ 消费后：标记已消费
+  ✓ 异常：触发重试，不要吞异常
 
 补偿：
-  ✅ 定时扫描 send_log(status=PENDING) → 重新发送
-  ✅ 定时对比 DB 和消费状态 → 补发
+  ✓ 定时扫描 send_log(status=PENDING) → 重新发送
+  ✓ 定时对比 DB 和消费状态 → 补发
 ```
 
 ### 3.2 消费幂等方案
@@ -370,9 +370,9 @@ RocketMQ 事务消息 + 本地消息表：
        │                    │                    │ ⑥ 返回结果
 
 异常恢复：
-  ✅ 本地事务回滚 + 半消息回滚
-  ✅ 库存扣减失败 → 重试/补偿
-  ✅ Broker 回查 checkLocalTransaction
+  ✓ 本地事务回滚 + 半消息回滚
+  ✓ 库存扣减失败 → 重试/补偿
+  ✓ Broker 回查 checkLocalTransaction
 ```
 
 ---
@@ -493,9 +493,9 @@ CommitLog: 所有 Topic 消息混合顺序写入 → 100% 顺序写
 ConsumeQueue: 按 Topic/Queue 索引 CommitLog 位置 → 快速定位
 
 优势：
-  ✅ 写：只需要 1 个顺序写的文件（CommitLog）
-  ✅ 读：通过轻量索引（20B/条）定位 → 虽然读是随机的但靠页缓存
-  ✅ 清理：只需清理 CommitLog（不含消费索引信息）
+  ✓ 写：只需要 1 个顺序写的文件（CommitLog）
+  ✓ 读：通过轻量索引（20B/条）定位 → 虽然读是随机的但靠页缓存
+  ✓ 清理：只需清理 CommitLog（不含消费索引信息）
 
 Kafka 是 Partition 独立存储（N 个顺序写），各有优劣
 ```
@@ -515,16 +515,16 @@ Kafka 是 Partition 独立存储（N 个顺序写），各有优劣
 
 ```text
 选 RocketMQ：
-  ✅ 业务解耦（订单/支付/通知）
-  ✅ 需要事务消息、延迟消息
-  ✅ 需要 Tag/SQL92 Broker 端过滤
-  ✅ 国内团队、阿里技术栈
+  ✓ 业务解耦（订单/支付/通知）
+  ✓ 需要事务消息、延迟消息
+  ✓ 需要 Tag/SQL92 Broker 端过滤
+  ✓ 国内团队、阿里技术栈
 
 选 Kafka：
-  ✅ 大数据管道（日志/埋点/CDC）
-  ✅ 流处理生态（Flink/Kafka Streams/kSQL）
-  ✅ 需要 Connect 插件生态
-  ✅ 国际化团队
+  ✓ 大数据管道（日志/埋点/CDC）
+  ✓ 流处理生态（Flink/Kafka Streams/kSQL）
+  ✓ 需要 Connect 插件生态
+  ✓ 国际化团队
 ```
 
 ### 更多面试题速览

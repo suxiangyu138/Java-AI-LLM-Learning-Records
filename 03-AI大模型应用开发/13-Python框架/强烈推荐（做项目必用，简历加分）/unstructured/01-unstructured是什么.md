@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [文档解析 ETL：RAG 的第一公里](#1-文档解析-etlrag-的第一公里)
 2. [解决什么问题](#2-解决什么问题)
@@ -69,7 +69,7 @@ unstructured 的定位一句话：**"ETL 库——把任意格式的文档变成
 4. 与 pypdf/pdfplumber/docling/LlamaParse 的选型判断？
 5. 四个边界分别是什么？"解析质量有上限"怎么理解？
 
-> 🎯 **核心要点**：unstructured = **文档解析 ETL（25+ 格式 → 20+ 类型 Elements）+ 策略体系（fast/hi_res/OCR）+ 清洗分块一站式 + 框架集成（LangChain/LlamaIndex）**；2026 年 0.24.1 活跃迭代、93M+ 下载——**"RAG 第一公里的事实标准：加载与解析由它承包"**。
+> **核心要点**：unstructured = **文档解析 ETL（25+ 格式 → 20+ 类型 Elements）+ 策略体系（fast/hi_res/OCR）+ 清洗分块一站式 + 框架集成（LangChain/LlamaIndex）**；2026 年 0.24.1 活跃迭代、93M+ 下载——**"RAG 第一公里的事实标准：加载与解析由它承包"**。
 
 ---
 

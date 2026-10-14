@@ -2,7 +2,7 @@
 
 > Tier 1 之外的版图：Rust 双选项（官方 rmcp 与社区）、Swift/Ruby/PHP 的 Tier 3 现状、多语言 starters 生态——以及"什么时候才需要考虑它们"。
 
-## 📚 目录
+## 目录
 
 1. [Rust 生态：两个 beta](#1-rust-生态两个-beta)
 2. [官方 rmcp 与社区 rust-mcp-sdk](#2-官方-rmcp-与社区-rust-mcp-sdk)
@@ -106,10 +106,10 @@ async fn main() -> anyhow::Result<()> {
 
 | 场景 | 可行性 | 说明 |
 |---|---|---|
-| Python Server ↔ TS Client | ✅ | 协议中立，传输一致即可 |
-| Java Server ↔ 任何 Client | ✅ | Spring AI 或 Java SDK 均可 |
-| Go Server ↔ C# Client | ✅ | stdio/HTTP 传输无关语言 |
-| Rust Server ↔ 任意 | ✅（beta 影响） | 规范支持度是唯一变量 |
+| Python Server ↔ TS Client | ✓ | 协议中立，传输一致即可 |
+| Java Server ↔ 任何 Client | ✓ | Spring AI 或 Java SDK 均可 |
+| Go Server ↔ C# Client | ✓ | stdio/HTTP 传输无关语言 |
+| Rust Server ↔ 任意 | ✓（beta 影响） | 规范支持度是唯一变量 |
 
 **互操作的前提**：**协议版本一致**（2026-07-28 vs legacy 走双代兼容）与**传输一致**（stdio 本地 / Streamable HTTP 远程）——语言不同不是障碍，协议与传输才是。**工程含义**：团队可以按"每语言做自己最擅长的 Server"分工（Python 做数据处理工具、Java 做企业系统工具、Go 做基础设施工具），客户端统一调度。
 
@@ -182,7 +182,7 @@ async fn main() -> anyhow::Result<()> {
 4. 跨语言互操作：协议版本 × 传输一致，语言无关——MCP 的核心价值。
 5. 性能选型：数据面（网关/代理）才谈 Rust/Go，业务 Server 不构成理由。
 
-> 🎯 **核心要点**：非主流生态 = Rust 双 beta（官方 rmcp 保生态、社区版保体验，都别上核心生产）+ Tier 3（Swift/Ruby/PHP 靠技术栈锁定驱动，规范跟进不可预期）+ Kotlin 无需等（Java SDK 全 JVM 通用）+ 多语言 starters（起步脚手架，生产仍按通用清单）+ 跨语言互操作（协议版本×传输一致即通）+ 垂直场景错位竞争（Apple 应用内/数据面）。**选语言的第一原则：Tier 1 是默认答案，非主流语言必须有"技术栈锁定"的理由**——框架选型的纪律与语言选型一体。
+> **核心要点**：非主流生态 = Rust 双 beta（官方 rmcp 保生态、社区版保体验，都别上核心生产）+ Tier 3（Swift/Ruby/PHP 靠技术栈锁定驱动，规范跟进不可预期）+ Kotlin 无需等（Java SDK 全 JVM 通用）+ 多语言 starters（起步脚手架，生产仍按通用清单）+ 跨语言互操作（协议版本×传输一致即通）+ 垂直场景错位竞争（Apple 应用内/数据面）。**选语言的第一原则：Tier 1 是默认答案，非主流语言必须有"技术栈锁定"的理由**——框架选型的纪律与语言选型一体。
 
 ---
 

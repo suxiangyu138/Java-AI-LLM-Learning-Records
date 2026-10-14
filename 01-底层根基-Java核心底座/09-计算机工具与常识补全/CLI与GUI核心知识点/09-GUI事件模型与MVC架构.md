@@ -1,30 +1,30 @@
 # 09 - GUI 事件模型与 MVC 架构
 
-> 🎯 GUI 编程的核心是事件驱动 — 理解 EDT 线程模型、事件分发机制和 MVC 模式，是写好桌面应用的基础
+> GUI 编程的核心是事件驱动 — 理解 EDT 线程模型、事件分发机制和 MVC 模式，是写好桌面应用的基础
 
 ---
 
 ## 1. EDT（Event Dispatch Thread）
 
-> ⚠️ Swing 所有 UI 操作必须在 EDT 线程执行！
+> Swing 所有 UI 操作必须在 EDT 线程执行！
 
 ```java
-// ✅ 正确的启动方式
+// ✓ 正确的启动方式
 public static void main(String[] args) {
-    SwingUtilities.invokeLater(() -> {    // ⭐ 在 EDT 中创建 UI
+    SwingUtilities.invokeLater(() -> {    // ★ 在 EDT 中创建 UI
         new MyFrame().setVisible(true);
     });
 }
 
-// ❌ 错误 — 在主线程直接操作 UI
+// ✗ 错误 — 在主线程直接操作 UI
 new MyFrame().setVisible(true);   // 可能导致 UI 冻结
 
-// ✅ 从其他线程更新 UI
+// ✓ 从其他线程更新 UI
 SwingUtilities.invokeLater(() -> {
     label.setText("更新了");       // 切回 EDT
 });
 
-// ✅ 耗时操作 — 用 SwingWorker 避免阻塞 EDT
+// ✓ 耗时操作 — 用 SwingWorker 避免阻塞 EDT
 new SwingWorker<Void, Integer>() {
     @Override
     protected Void doInBackground() {
@@ -44,9 +44,9 @@ new SwingWorker<Void, Integer>() {
 
 | 线程 | 职责 | 不允许 |
 |------|------|--------|
-| **Main** | 程序入口 | ❌ 操作 UI 组件 |
-| **EDT** | UI 事件处理 | ❌ 耗时操作（>100ms） |
-| **Worker** | 后台任务 | ❌ 直接更新 UI（用 SwingWorker） |
+| **Main** | 程序入口 | ✗ 操作 UI 组件 |
+| **EDT** | UI 事件处理 | ✗ 耗时操作（>100ms） |
+| **Worker** | 后台任务 | ✗ 直接更新 UI（用 SwingWorker） |
 
 ---
 
@@ -156,8 +156,8 @@ MVC 数据流：
 
 | 模式 | View 知道 Model | 核心 | 框架 |
 |------|:---:|------|------|
-| **MVC** | ✅（观察者） | Controller 协调 | Swing |
-| **MVP** | ❌ | Presenter 中介 | — |
-| **MVVM** | ❌ | 数据绑定 | JavaFX Property + FXML |
+| **MVC** | ✓（观察者） | Controller 协调 | Swing |
+| **MVP** | ✗ | Presenter 中介 | — |
+| **MVVM** | ✗ | 数据绑定 | JavaFX Property + FXML |
 
-> 🎯 **GUI 编程铁律**：UI 操作走 EDT、耗时操作走 Worker、更新 UI 用 invokeLater、业务逻辑和 UI 分离走 MVC。这三条做到，桌面应用也有好架构。
+> **GUI 编程铁律**：UI 操作走 EDT、耗时操作走 Worker、更新 UI 用 invokeLater、业务逻辑和 UI 分离走 MVC。这三条做到，桌面应用也有好架构。

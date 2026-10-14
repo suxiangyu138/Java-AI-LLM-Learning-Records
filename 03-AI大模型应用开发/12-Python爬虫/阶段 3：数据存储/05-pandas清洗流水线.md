@@ -1,7 +1,7 @@
 # pandas 清洗流水线
 > DataFrame 读取、清洗、去重、类型转换、导出——"爬到的原始数据 → 可分析的数据集"
 
-## 📚 目录
+## 目录
 1. [pandas 定位与版本](#1-pandas-定位与版本)
 2. [读取：CSV/JSON/数据库进 DataFrame](#2-读取csvjson数据库进-dataframe)
 3. [清洗：缺失值/空白/去重](#3-清洗缺失值空白去重)
@@ -18,7 +18,7 @@
 | 本阶段用途 | **爬虫数据的清洗流水线**（批量/向量化/导出） |
 | 核心对象 | DataFrame（表格）/ Series（列） |
 
-> 🎯 与阶段 2 §5 的关系：**阶段 2 的清洗是"逐条函数"，pandas 是"整表向量化"**——100 万行数据，逐条清洗 vs pandas 批量，速度差 100 倍。数据量大了必须换 pandas。
+> 与阶段 2 §5 的关系：**阶段 2 的清洗是"逐条函数"，pandas 是"整表向量化"**——100 万行数据，逐条清洗 vs pandas 批量，速度差 100 倍。数据量大了必须换 pandas。
 
 ## 2. 读取：CSV/JSON/数据库进 DataFrame
 
@@ -27,7 +27,7 @@ import pandas as pd
 
 # ═══ 从 CSV 读取 ═══
 df = pd.read_csv("news.csv")                       # 自动识别表头
-df = pd.read_csv("news.csv", encoding="utf-8-sig") # ⚠️ 阶段 2 写入的 BOM 编码
+df = pd.read_csv("news.csv", encoding="utf-8-sig") # 阶段 2 写入的 BOM 编码
 
 # ═══ 从 JSON 读取 ═══
 df = pd.read_json("news.json")
@@ -51,7 +51,7 @@ df = pd.DataFrame(items)
 | `read_sql` | **数据库直读（清洗回写闭环）** |
 | `DataFrame(list)` | 内存数据 |
 
-> 🎯 核心价值：**`read_sql` 让"数据库 ↔ pandas ↔ 数据库"闭环**——爬虫入库 → pandas 清洗 → 回写/导出，全程不用中间文件。
+> 核心价值：**`read_sql` 让"数据库 ↔ pandas ↔ 数据库"闭环**——爬虫入库 → pandas 清洗 → 回写/导出，全程不用中间文件。
 
 ## 3. 清洗：缺失值/空白/去重
 
@@ -90,7 +90,7 @@ df = df[df["views"] > 0]                             # 条件过滤
 | 去重 | `drop_duplicates(subset=[列])` |
 | 条件过滤 | `df[df[列] 条件]` |
 
-> 🎯 pandas 清洗哲学：**"向量化 = 一行命令处理整列"**——`df["title"].str.strip()` 一次处理 100 万行；手写 for 循环是阶段 2 的思维，pandas 时代要换成"列操作"思维。
+> pandas 清洗哲学：**"向量化 = 一行命令处理整列"**——`df["title"].str.strip()` 一次处理 100 万行；手写 for 循环是阶段 2 的思维，pandas 时代要换成"列操作"思维。
 
 ## 4. 转换：类型/字段/派生列
 
@@ -125,7 +125,7 @@ by_date = df.groupby(df["date"].dt.date).size()     # 每天抓取量
 | 派生列 | `df["新列"] = 表达式` |
 | 分组统计 | `groupby(列)[值列].sum()/count()/mean()` |
 
-> 💡 `errors="coerce"` 是转换的"容错开关"：非法值变 NaN（不报错中断）——与阶段 2 的 `to_int` 默认值思想一致，pandas 版是 NaN + `fillna`。
+> `errors="coerce"` 是转换的"容错开关"：非法值变 NaN（不报错中断）——与阶段 2 的 `to_int` 默认值思想一致，pandas 版是 NaN + `fillna`。
 
 ## 5. 导出：CSV/Excel/数据库
 
@@ -142,7 +142,7 @@ from sqlalchemy import create_engine        # pandas 官方推荐方式
 # pip install sqlalchemy pymysql
 engine = create_engine("mysql+pymysql://root:xxx@localhost/crawler_db?charset=utf8mb4")
 df.to_sql("news_clean", engine, if_exists="append", index=False)
-# ⚠️ 中文列名/特殊字符注意；大表用 chunksize
+# 中文列名/特殊字符注意；大表用 chunksize
 ```
 
 | 导出方式 | 场景 |
@@ -151,7 +151,7 @@ df.to_sql("news_clean", engine, if_exists="append", index=False)
 | `to_excel` | 交付业务（非技术同事） |
 | `to_sql` | **清洗结果回写数据库**（闭环） |
 
-> 🎯 闭环思维：**"爬虫入库 → pandas 清洗 → 回写/导出"**——`to_sql` 让清洗结果直接回库（`if_exists="append"` 增量追加），数据分析师直接用干净数据。
+> 闭环思维：**"爬虫入库 → pandas 清洗 → 回写/导出"**——`to_sql` 让清洗结果直接回库（`if_exists="append"` 增量追加），数据分析师直接用干净数据。
 
 ## 6. 清洗流水线模板
 
@@ -191,7 +191,7 @@ if __name__ == "__main__":
     clean_pipeline()
 ```
 
-> 🎯 流水线设计原则：**"一步一验证"**——每步后 `print(len(df))` 观察数据量变化（清洗掉的量 = 数据质量报告）；流水线写成函数（输入输出明确），配定时任务就是自动化数据管道（阶段 6 工程化）。
+> 流水线设计原则：**"一步一验证"**——每步后 `print(len(df))` 观察数据量变化（清洗掉的量 = 数据质量报告）；流水线写成函数（输入输出明确），配定时任务就是自动化数据管道（阶段 6 工程化）。
 
 ---
 

@@ -100,19 +100,19 @@ Server 的 Compute Engine 处理报告
 | **价格** | 免费 | 收费 | 收费 | 收费（最高） |
 | **许可证** | LGPL-3.0 | 商业许可 | 商业许可 | 商业许可 |
 | **语言分析** | 27 种 | 29+ 种 | 29+ 种 | 29+ 种 |
-| **质量门禁** | ✅ | ✅ | ✅ | ✅ |
-| **技术债务** | ✅ | ✅ | ✅ | ✅ |
-| **Security Hotspots** | ✅ | ✅ | ✅ | ✅ |
-| **Branch Analysis** | ❌ | ✅ | ✅ | ✅ |
-| **PR/MR Decoration** | ❌ | ✅ | ✅ | ✅ |
-| **AI Code Assurance** | ❌ | ✅ | ✅ | ✅ |
-| **Portfolio Management** | ❌ | ❌ | ✅ | ✅ |
-| **PDF Report** | ❌ | ❌ | ✅ | ✅ |
-| **High Availability** | ❌ | ❌ | ❌ | ✅ |
+| **质量门禁** | ✓ | ✓ | ✓ | ✓ |
+| **技术债务** | ✓ | ✓ | ✓ | ✓ |
+| **Security Hotspots** | ✓ | ✓ | ✓ | ✓ |
+| **Branch Analysis** | ✗ | ✓ | ✓ | ✓ |
+| **PR/MR Decoration** | ✗ | ✓ | ✓ | ✓ |
+| **AI Code Assurance** | ✗ | ✓ | ✓ | ✓ |
+| **Portfolio Management** | ✗ | ✗ | ✓ | ✓ |
+| **PDF Report** | ✗ | ✗ | ✓ | ✓ |
+| **High Availability** | ✗ | ✗ | ✗ | ✓ |
 | **最大代码行数** | 无限 | 无限 | 无限 | 无限 |
 | **最大用户数** | 无限 | 无限 | 无限 | 无限，支持集群 |
 
-> 💡 **选型建议**：
+> **选型建议**：
 > - 个人/小型团队：Community 版完全够用，核心质量门禁和技术债务功能齐全
 > - 中型团队（需要分支分析）：Developer 版是性价比之选
 > - 大型企业（多项目组合管理）：Enterprise 版
@@ -142,7 +142,7 @@ Community 版                       Developer+ 版
 
 ### 3.1 Docker Compose 部署（推荐）
 
-> 💡 Docker Compose 是最快捷的 SonarQube 部署方式，适用于开发环境和小型团队。
+> Docker Compose 是最快捷的 SonarQube 部署方式，适用于开发环境和小型团队。
 
 ```yaml
 # docker-compose.yml
@@ -268,7 +268,7 @@ bin/windows-x86-64/StartSonar.bat
    └── 记录此 Token，后续 Scanner 配置需要使用
 ```
 
-> ⚠️ **生产环境安全配置**：
+> **生产环境安全配置**：
 > - 必须修改默认密码
 > - 使用 HTTPS（反向代理 Nginx 或直接配置）
 > - 配置防火墙限制 9000 端口访问范围
@@ -349,7 +349,7 @@ Quality Profile
 | **Sonar way (Recommended)** | Java | Java 语言推荐配置，包含所有必须规则 |
 | **Sonar way + Security** | Java | 在 Sonar way 基础上增加安全相关规则 |
 
-> 💡 **"Sonar way"是默认 Profile**，新项目创建时自动关联。对大多数团队，直接使用"Sonar way"已经足够。
+> **"Sonar way"是默认 Profile**，新项目创建时自动关联。对大多数团队，直接使用"Sonar way"已经足够。
 
 ### 5.3 自定义 Profile
 
@@ -461,16 +461,16 @@ Administration → Quality Gates → Create
 | **Duplications** | `duplicated_lines_density` | 重复行密度百分比 | GT |
 | | `new_duplicated_lines_density` | 新代码重复行密度百分比 | GT |
 
-> 🎯 **推荐策略**：仅对 New Code 设置严格门禁，对 Overall Code 设置宽松门禁。这符合 "Clean as You Code" 方法论，循序渐进地提升总体质量。
+> **推荐策略**：仅对 New Code 设置严格门禁，对 Overall Code 设置宽松门禁。这符合 "Clean as You Code" 方法论，循序渐进地提升总体质量。
 
 ### 6.4 质量门禁的 CI 反馈
 
 ```yaml
 # 质量门禁通过/失败时 CI 的表现
-PASS: ✅ Quality Gate passed
+PASS: ✓ Quality Gate passed
       → CI Pipeline 继续，可合并 PR
 
-FAIL: ❌ Quality Gate failed
+FAIL: ✗ Quality Gate failed
       → CI Pipeline 失败（失败 stage）
       → PR 显示 Check 未通过
       → 阻止合并（需配置分支保护规则）
@@ -633,7 +633,7 @@ mvn sonar:sonar \
   -Dsonar.qualitygate.timeout=300
 ```
 
-> 💡 **执行顺序很重要**：`mvn clean verify sonar:sonar` 确保先编译、测试、生成覆盖率报告，再执行 SonarQube 分析。
+> **执行顺序很重要**：`mvn clean verify sonar:sonar` 确保先编译、测试、生成覆盖率报告，再执行 SonarQube 分析。
 
 ### 8.3 在 settings.xml 中配置 Server
 
@@ -819,7 +819,7 @@ jobs:
           echo "SonarQube analysis completed. Check the dashboard for details."
 ```
 
-> ⚠️ **关键点**：`fetch-depth: 0` 必不可少——SonarQube 需要完整的 Git 历史来计算 New Code 周期。
+> **关键点**：`fetch-depth: 0` 必不可少——SonarQube 需要完整的 Git 历史来计算 New Code 周期。
 
 ### 10.2 Jenkins Pipeline 集成
 
@@ -874,16 +874,16 @@ pipeline {
 
     post {
         success {
-            echo '✅ Quality Gate passed!'
+            echo '✓ Quality Gate passed!'
         }
         failure {
-            echo '❌ Quality Gate failed. Check SonarQube dashboard.'
+            echo '✗ Quality Gate failed. Check SonarQube dashboard.'
         }
     }
 }
 ```
 
-> 💡 **Jenkins 集成提示**：安装 `SonarQube Scanner for Jenkins` 插件，在 Jenkins 系统配置中配置 SonarQube Server，然后在 Pipeline 中使用 `withSonarQubeEnv` 和 `waitForQualityGate`。
+> **Jenkins 集成提示**：安装 `SonarQube Scanner for Jenkins` 插件，在 Jenkins 系统配置中配置 SonarQube Server，然后在 Pipeline 中使用 `withSonarQubeEnv` 和 `waitForQualityGate`。
 
 ### 10.3 GitLab CI 集成
 
@@ -935,25 +935,25 @@ sonarqube-analysis:
 
 | 参数 | 必填 | 说明 | 示例值 |
 |------|:----:|------|--------|
-| `sonar.host.url` | ✅ | SonarQube 服务器 URL | `http://localhost:9000` |
-| `sonar.login` | ✅ | 认证 Token 或用户名 | `sqp_xxxxxxxx` 或 `admin` |
+| `sonar.host.url` | ✓ | SonarQube 服务器 URL | `http://localhost:9000` |
+| `sonar.login` | ✓ | 认证 Token 或用户名 | `sqp_xxxxxxxx` 或 `admin` |
 | `sonar.password` | 条件必填 | 当 login 是用户名时的密码 | `my_password` |
-| `sonar.projectKey` | ✅ | 项目唯一标识 | `com.example:my-service` |
-| `sonar.projectName` | ❌ | 项目显示名 | `My Service` |
-| `sonar.projectVersion` | ❌ | 项目版本号 | `1.0.0` |
+| `sonar.projectKey` | ✓ | 项目唯一标识 | `com.example:my-service` |
+| `sonar.projectName` | ✗ | 项目显示名 | `My Service` |
+| `sonar.projectVersion` | ✗ | 项目版本号 | `1.0.0` |
 
 ### 11.2 源码与编译参数
 
 | 参数 | 必填 | 说明 | 示例值 |
 |------|:----:|------|--------|
-| `sonar.sources` | ✅ | 源码目录（逗号分隔） | `src/main/java` |
-| `sonar.tests` | ❌ | 测试代码目录 | `src/test/java` |
-| `sonar.java.binaries` | ✅ | 编译后的 class 文件目录 | `target/classes` |
-| `sonar.java.test.binaries` | ❌ | 测试 class 文件目录 | `target/test-classes` |
-| `sonar.java.libraries` | ❌ | 依赖 jar 包路径 | `target/dependency/*.jar` |
-| `sonar.java.source` | ❌ | Java 版本 | `17` |
-| `sonar.java.target` | ❌ | 编译目标版本 | `17` |
-| `sonar.sourceEncoding` | ❌ | 源码编码 | `UTF-8` |
+| `sonar.sources` | ✓ | 源码目录（逗号分隔） | `src/main/java` |
+| `sonar.tests` | ✗ | 测试代码目录 | `src/test/java` |
+| `sonar.java.binaries` | ✓ | 编译后的 class 文件目录 | `target/classes` |
+| `sonar.java.test.binaries` | ✗ | 测试 class 文件目录 | `target/test-classes` |
+| `sonar.java.libraries` | ✗ | 依赖 jar 包路径 | `target/dependency/*.jar` |
+| `sonar.java.source` | ✗ | Java 版本 | `17` |
+| `sonar.java.target` | ✗ | 编译目标版本 | `17` |
+| `sonar.sourceEncoding` | ✗ | 源码编码 | `UTF-8` |
 
 ### 11.3 排除与过滤参数
 
@@ -1022,7 +1022,7 @@ New Code Period（新代码周期）是 SonarQube 区分"新代码"和"旧代码
 
 ### 12.2 Clean as You Code 方法论
 
-> 🎯 **Clean as You Code（边编码边清理）** 是 SonarQube 倡导的核心方法论——**不要试图一次性解决所有遗留质量问题，而是确保新编写的代码是干净的。**
+> **Clean as You Code（边编码边清理）** 是 SonarQube 倡导的核心方法论——**不要试图一次性解决所有遗留质量问题，而是确保新编写的代码是干净的。**
 
 **核心理念：**
 
@@ -1075,7 +1075,7 @@ Dashboard 面板:
 ├──────────────────────────────────────────────────────────────┤
 │                                                              │
 │  ┌─────────────────────────────────────────────────────┐    │
-│  │  质量门禁: ✅ Pass (New Code)                        │    │
+│  │  质量门禁: ✓ Pass (New Code)                        │    │
 │  └─────────────────────────────────────────────────────┘    │
 │                                                              │
 │  ┌────────┐ ┌────────┐ ┌────────┐ ┌────────┐ ┌────────┐   │
@@ -1086,7 +1086,7 @@ Dashboard 面板:
 │  └────────┘ └────────┘ └────────┘ └────────┘ └────────┘   │
 │                                                              │
 │  ┌─────────────────────────────────────────────────────┐    │
-│  │  ⚡ 技术债务: 2d 15h  |  比率: 3.2%  |  评级: A    │    │
+│  │  技术债务: 2d 15h  |  比率: 3.2%  |  评级: A    │    │
 │  └─────────────────────────────────────────────────────┘    │
 │                                                              │
 │  ┌──────────────┐   ┌──────────────┐                        │
@@ -1112,21 +1112,21 @@ Dashboard 面板:
 
 | 指标 | 图标 | 含义 | 评级颜色 | 对应安全等级 |
 |------|------|------|---------|------------|
-| **Bugs** | 🐛 | 代码中明确的不正确行为，运行时极可能出问题 | A(绿)/B(黄)/C(橙)/D(红)/E(深红) | Reliability |
-| **Vulnerabilities** | 🔒 | 安全漏洞，可能被外部攻击利用 | A(绿)/B(黄)/C(橙)/D(红)/E(深红) | Security |
-| **Code Smells** | 👃 | 代码异味，不影响运行但降低可维护性 | A(绿)/B(黄)/C(橙)/D(红)/E(深红) | Maintainability |
-| **Coverage** | 🎯 | 测试覆盖率，测试覆盖的代码行百分比 | 百分比值（>=80% 为绿色） | - |
-| **Duplications** | 📋 | 重复代码密度，重复行占总代码行百分比 | 百分比值（<3% 为绿色） | - |
+| **Bugs** | | 代码中明确的不正确行为，运行时极可能出问题 | A(绿)/B(黄)/C(橙)/D(红)/E(深红) | Reliability |
+| **Vulnerabilities** | | 安全漏洞，可能被外部攻击利用 | A(绿)/B(黄)/C(橙)/D(红)/E(深红) | Security |
+| **Code Smells** | | 代码异味，不影响运行但降低可维护性 | A(绿)/B(黄)/C(橙)/D(红)/E(深红) | Maintainability |
+| **Coverage** | | 测试覆盖率，测试覆盖的代码行百分比 | 百分比值（>=80% 为绿色） | - |
+| **Duplications** | | 重复代码密度，重复行占总代码行百分比 | 百分比值（<3% 为绿色） | - |
 
 ### 13.3 评级系统
 
 ```text
 评级        颜色        说明                    阈值
-A (1.0)     🟢 绿色     良好                    0 Bug / 0 Vulnerability
-B (2.0)     🟡 黄色     轻微风险                至少 1 个 Minor Issue
-C (3.0)     🟠 橙色     中等风险                至少 1 个 Major Issue
-D (4.0)     🔴 红色     显著风险                至少 1 个 Critical Issue
-E (5.0)     🔴 深红     高风险                  至少 1 个 Blocker Issue
+A (1.0)     绿色     良好                    0 Bug / 0 Vulnerability
+B (2.0)     黄色     轻微风险                至少 1 个 Minor Issue
+C (3.0)     橙色     中等风险                至少 1 个 Major Issue
+D (4.0)     红色     显著风险                至少 1 个 Critical Issue
+E (5.0)     深红     高风险                  至少 1 个 Blocker Issue
 ```
 
 ### 13.4 Issues 趋势图解读
@@ -1147,7 +1147,7 @@ Issues 数量
         初始阶段    治理期    稳定期
 ```
 
-> 💡 **趋势比绝对值更重要**：即使当前有较多的 Issues，只要趋势是下降的，说明团队在持续改善。
+> **趋势比绝对值更重要**：即使当前有较多的 Issues，只要趋势是下降的，说明团队在持续改善。
 
 ---
 
@@ -1203,9 +1203,9 @@ Security Hotspot（安全热点）是 SonarQube 中的一种特殊 Issue 类型�
             ▼
 标记结果：
 ┌──────────────────────────────────────────────────────┐
-│  ✅ Reviewed and Fixed   — 已修复的问题              │
-│  ✅ Reviewed and Safe    — 审查确认安全，无需修改    │
-│  🕐 Reviewed and Accepted Risk — 已评估风险，接受   │
+│  ✓ Reviewed and Fixed   — 已修复的问题              │
+│  ✓ Reviewed and Safe    — 审查确认安全，无需修改    │
+│  Reviewed and Accepted Risk — 已评估风险，接受   │
 └──────────────────────────────────────────────────────┘
             │
             ▼
@@ -1213,7 +1213,7 @@ Security Hotspot（安全热点）是 SonarQube 中的一种特殊 Issue 类型�
 Quality Gate 要求：Security Hotspots Reviewed = 0（全部审查完毕）
 ```
 
-> 🎯 **安全审查是团队责任**：不一定要安全团队来做——Feature Team 的开发者最了解业务上下文，通常他们是审查 Hotspot 的最佳人选。
+> **安全审查是团队责任**：不一定要安全团队来做——Feature Team 的开发者最了解业务上下文，通常他们是审查 Hotspot 的最佳人选。
 
 ---
 
@@ -1425,10 +1425,10 @@ while [ $elapsed -lt $TIMEOUT ]; do
     status=$(echo "$response" | jq -r '.projectStatus.status')
 
     if [ "$status" = "OK" ]; then
-        echo "✅ Quality Gate PASSED"
+        echo "✓ Quality Gate PASSED"
         exit 0
     elif [ "$status" = "ERROR" ]; then
-        echo "❌ Quality Gate FAILED"
+        echo "✗ Quality Gate FAILED"
         echo "$response" | jq '.projectStatus.conditions'
         exit 1
     fi
@@ -1437,7 +1437,7 @@ while [ $elapsed -lt $TIMEOUT ]; do
     elapsed=$((elapsed + INTERVAL))
 done
 
-echo "⏰ Timeout: Quality Gate did not complete within ${TIMEOUT}s"
+echo "Timeout: Quality Gate did not complete within ${TIMEOUT}s"
 exit 1
 ```
 
@@ -1473,7 +1473,7 @@ mvn clean verify sonar:sonar ...
 
 ### 17.3 误报管理（False Positives）
 
-> ⚠️ **误报是静态分析工具的固有特性**。管理好误报可以提高团队对工具的信任度。
+> **误报是静态分析工具的固有特性**。管理好误报可以提高团队对工具的信任度。
 
 ```text
 发现一个"误报"（False Positive）
@@ -1604,9 +1604,9 @@ IDE 实时检查           │                   Build 时全量分析
 
 ---
 
-> 🎯 **总结：SonarQube 是企业级代码质量管理的核心枢纽。** 从架构理解到部署安装，从质量门禁到 CI/CD 集成，从 Dashboard 解读到 API 自动化——掌握 SonarQube 是高级工程师的必备技能。配合 SonarLint 的 IDE 实时检查和正确的 Clean as You Code 方法论，可以构建一个可持续演进的质量保障体系。
+> **总结：SonarQube 是企业级代码质量管理的核心枢纽。** 从架构理解到部署安装，从质量门禁到 CI/CD 集成，从 Dashboard 解读到 API 自动化——掌握 SonarQube 是高级工程师的必备技能。配合 SonarLint 的 IDE 实时检查和正确的 Clean as You Code 方法论，可以构建一个可持续演进的质量保障体系。
 
-> 💡 **推荐实践路径**：
+> **推荐实践路径**：
 > 1. 先用 Docker 搭建 SonarQube 体验环境
 > 2. 在自己的项目中运行一次 `mvn sonar:sonar`
 > 3. 理解 Dashboard 上的各项指标

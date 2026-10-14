@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [背景：为什么需要 API 版本负载均衡](#1-背景为什么需要-api-版本负载均衡)
 2. [API Versioning 配置](#2-api-versioning-配置)
@@ -32,7 +32,7 @@ API Versioning LB（issue #1582）：
   └── 老请求打老实例、新请求打新实例——版本隔离
 ```
 
-> 🎯 一句话：**API Versioning = "请求的 API 版本"与"实例的 API 版本"配对**——多版本并存时保证流量不乱窜。
+> 一句话：**API Versioning = "请求的 API 版本"与"实例的 API 版本"配对**——多版本并存时保证流量不乱窜。
 
 ### 1.2 与 Path 版本（/v1/）的区别
 
@@ -41,7 +41,7 @@ API Versioning LB（issue #1582）：
 | Path 版本（/v1/api） | URL 路径 | 接口级 | 服务内多版本共存（同一服务新旧实例）无法区分 |
 | **API Versioning LB（5.0）** | 请求特征（头等） | **实例级** | 解决"新旧实例并存"的选路问题 |
 
-> 💡 定位差异：**/v1 是"接口契约"版本（对外），API Versioning LB 是"实例路由"版本（对内）**——两者可组合使用。
+> 定位差异：**/v1 是"接口契约"版本（对外），API Versioning LB 是"实例路由"版本（对内）**——两者可组合使用。
 
 ## 2. API Versioning 配置
 
@@ -121,7 +121,7 @@ ApiVersionServiceInstanceListSupplier：
 | fallback-to-available-instances | true | 无匹配回退全部 | 回退 = 版本隔离失效（老请求可能打新实例） |
 | 载体 | 头/参数/路径/媒体类型 | 请求版本从哪读 | 载体不一致（客户端头 vs 服务端参数）永远匹配不上 |
 
-> ⚠️ **版本隔离 vs 可用性的权衡**：`required=true` 严格隔离（无匹配就拒绝）但风险是"版本没对上传 → 全部拒绝"；`fallback` 保可用性但破坏隔离——**上线期用 fallback（先保流量），稳定后用 required（强隔离）**。
+> **版本隔离 vs 可用性的权衡**：`required=true` 严格隔离（无匹配就拒绝）但风险是"版本没对上传 → 全部拒绝"；`fallback` 保可用性但破坏隔离——**上线期用 fallback（先保流量），稳定后用 required（强隔离）**。
 
 ## 4. 与 Gateway API Versioning 的配合
 
@@ -138,7 +138,7 @@ ApiVersionServiceInstanceListSupplier：
     → LB：选 metadata.api-version=1.1 的实例（API Versioning supplier）
 ```
 
-> 🎯 面试加分：**"5.0 的版本路由怎么落地？"**——**两级配合**：Gateway 的版本谓词决定"进哪个服务/路由"，LoadBalancer 的版本 supplier 决定"选哪个版本实例"——网关管服务级，LB 管实例级，缺一层都不完整（对照 [Gateway 03 篇](../Spring Cloud Gateway/03-路由谓词工厂速查.md)）。
+> 面试加分：**"5.0 的版本路由怎么落地？"**——**两级配合**：Gateway 的版本谓词决定"进哪个服务/路由"，LoadBalancer 的版本 supplier 决定"选哪个版本实例"——网关管服务级，LB 管实例级，缺一层都不完整（对照 [Gateway 03 篇](../Spring Cloud Gateway/03-路由谓词工厂速查.md)）。
 
 ## 5. HTTP Service Clients 集成
 
@@ -189,7 +189,7 @@ class ClientConfig {
 | 非 lb URL | 显式 http(s):// 地址不参与 LB（原样直连） |
 | 对比 Feign | @HttpExchange 是 Framework 7 原生；Feign 降级为"兼容适配器"（官方 2025.1 表态） |
 
-> 🎯 面试必答：**"Feign 和 @HttpExchange 什么关系？"**——**官方 2025.1（Oakwood）明确：新项目导向 Framework 7 的 @HttpExchange 声明式客户端，OpenFeign 降级为"兼容适配器"（维护但不再是新方向）**——LoadBalancer 对两者都自动集成：Feign 通过 FeignBlockingLoadBalancerClient，@HttpExchange 通过 HTTP Service Clients 自动配置。
+> 面试必答：**"Feign 和 @HttpExchange 什么关系？"**——**官方 2025.1（Oakwood）明确：新项目导向 Framework 7 的 @HttpExchange 声明式客户端，OpenFeign 降级为"兼容适配器"（维护但不再是新方向）**——LoadBalancer 对两者都自动集成：Feign 通过 FeignBlockingLoadBalancerClient，@HttpExchange 通过 HTTP Service Clients 自动配置。
 
 ## 6. 选型与实践建议
 
@@ -214,7 +214,7 @@ class ClientConfig {
 □ 6. 灰度：与 Hint 灰度组合（版本 + 灰度双维度）
 ```
 
-> 💡 最佳实践：**API Versioning 与 Hint 灰度组合**——版本决定"打新还是打旧实例"，Hint 决定"新实例里打灰度还是全量"——多维流量治理的完整矩阵（[03 篇](03-负载均衡策略全解.md) 组合语义）。
+> 最佳实践：**API Versioning 与 Hint 灰度组合**——版本决定"打新还是打旧实例"，Hint 决定"新实例里打灰度还是全量"——多维流量治理的完整矩阵（[03 篇](03-负载均衡策略全解.md) 组合语义）。
 
 ---
 

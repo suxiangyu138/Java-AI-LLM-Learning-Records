@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [OAuth2 全景：角色、令牌与授权模式](#1-oauth2-全景角色令牌与授权模式)
 2. [oauth2Login：第三方登录接入](#2-oauth2login第三方登录接入)
@@ -30,14 +30,14 @@
 
 | 授权模式 | 语义 | 状态 |
 |---------|------|:---:|
-| 授权码（authorization_code） | 用户授权 → 换授权码 → 换令牌 | ✅ 主推 |
-| PKCE（授权码 + 挑战值） | 防授权码劫持 | ✅ **7.0 默认** |
-| client_credentials | 客户端自己的身份（无用户） | ✅ 机器间 |
-| refresh_token | 刷新令牌换新令牌 | ✅ |
-| password | 直接交密码（客户端代持） | ❌ **7.0 已移除** |
-| implicit | 隐式流程（URL 直发令牌） | ❌ OAuth 2.1 废弃 |
+| 授权码（authorization_code） | 用户授权 → 换授权码 → 换令牌 | ✓ 主推 |
+| PKCE（授权码 + 挑战值） | 防授权码劫持 | ✓ **7.0 默认** |
+| client_credentials | 客户端自己的身份（无用户） | ✓ 机器间 |
+| refresh_token | 刷新令牌换新令牌 | ✓ |
+| password | 直接交密码（客户端代持） | ✗ **7.0 已移除** |
+| implicit | 隐式流程（URL 直发令牌） | ✗ OAuth 2.1 废弃 |
 
-> 🎯 **要点**：OAuth 2.1 的精神是"收紧"——密码模式被移除（客户端不该碰用户密码），隐式流程被废弃（不安全），PKCE 成为默认。7.0 完全跟随：**授权码 + PKCE 是唯一面向用户的流程**。
+> **要点**：OAuth 2.1 的精神是"收紧"——密码模式被移除（客户端不该碰用户密码），隐式流程被废弃（不安全），PKCE 成为默认。7.0 完全跟随：**授权码 + PKCE 是唯一面向用户的流程**。
 
 ## 2. oauth2Login：第三方登录接入
 
@@ -130,7 +130,7 @@ spring:
             # 无需配 PKCE —— 7.0 自动启用（授权服务器端也默认开启）
 ```
 
-> ⚠️ **兼容注意**：若对接的**第三方授权服务器**不支持 PKCE（老实现），7.0 默认强制会导致握手失败——需显式 `client-authentication-method` 或评估升级对方。自建授权服务器（09 篇）默认支持。
+> **兼容注意**：若对接的**第三方授权服务器**不支持 PKCE（老实现），7.0 默认强制会导致握手失败——需显式 `client-authentication-method` 或评估升级对方。自建授权服务器（09 篇）默认支持。
 
 ## 4. OAuth2AuthorizedClient：代表用户调用 API
 
@@ -185,7 +185,7 @@ OAuth2AuthorizedClient client = manager.authorize(
         new OAuth2AuthorizeRequest(clientRegistrationId, principal));
 ```
 
-> 💡 登录会话与授权客户端的生命周期绑定：用户登出时授权客户端也随之清空（`OAuth2AuthorizedClientService` 管理）。
+> 登录会话与授权客户端的生命周期绑定：用户登出时授权客户端也随之清空（`OAuth2AuthorizedClientService` 管理）。
 
 ## 5. client-credentials：机器间认证
 
@@ -247,7 +247,7 @@ if (client.getAccessToken().isExpired()) {
 }
 ```
 
-> ⚠️ **刷新令牌安全**：refresh_token 相当于长期免密凭证——**必须服务端存储、加密、不可出服务端**。WebClient 自动刷新方便但要注意存储实现选型（多实例用 JDBC/Redis 而非内存）。
+> **刷新令牌安全**：refresh_token 相当于长期免密凭证——**必须服务端存储、加密、不可出服务端**。WebClient 自动刷新方便但要注意存储实现选型（多实例用 JDBC/Redis 而非内存）。
 
 ## 7. 安全边界与常见坑
 
@@ -261,7 +261,7 @@ if (client.getAccessToken().isExpired()) {
 | 三方用户与本地用户未绑定 | 同一人多个账号 | 邮箱/唯一标识匹配并合并 |
 | 对接老授权服务器失败 | 握手失败 | 检查 PKCE 支持与 `client-authentication-method` |
 
-> 🎯 **核心要点**：OAuth2 客户端 = 登录（oauth2Login）+ 代表调用（OAuth2AuthorizedClient）两层能力。7.0 的三个关键词：**PKCE 默认强制**（防授权码劫持）、**密码模式移除**（OAuth 2.1 精神）、**WebClient/RestTemplate 一等支持**（服务间调用开箱即用）。安全红线：secret 只进服务端、redirect-uri 精确注册、scope 最小化、refresh_token 严加保管。
+> **核心要点**：OAuth2 客户端 = 登录（oauth2Login）+ 代表调用（OAuth2AuthorizedClient）两层能力。7.0 的三个关键词：**PKCE 默认强制**（防授权码劫持）、**密码模式移除**（OAuth 2.1 精神）、**WebClient/RestTemplate 一等支持**（服务间调用开箱即用）。安全红线：secret 只进服务端、redirect-uri 精确注册、scope 最小化、refresh_token 严加保管。
 
 ---
 

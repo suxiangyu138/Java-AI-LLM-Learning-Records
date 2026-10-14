@@ -1,10 +1,10 @@
 # 07 - IDE 集成与开发工作流对比
 
-> 🎯 代码模型再强，最终要通过 IDE 和开发工具落地。2026 年 7 月的主流 AI 编程工具已形成"六足鼎立"格局——Copilot、Cursor、Claude Code、Codex CLI、Gemini CLI、Antigravity，各自背后是不同的底层模型和产品哲学
+> 代码模型再强，最终要通过 IDE 和开发工具落地。2026 年 7 月的主流 AI 编程工具已形成"六足鼎立"格局——Copilot、Cursor、Claude Code、Codex CLI、Gemini CLI、Antigravity，各自背后是不同的底层模型和产品哲学
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [2026 AI 编程工具全景](#1-2026-ai-编程工具全景)
 2. [IDE 内补全方案对比](#2-ide-内补全方案对比)
@@ -19,20 +19,20 @@
 ```text
 2026.07 AI 编程工具格局
 │
-├── 🖱️ IDE 嵌入式（补全 + Chat）
+├── IDE 嵌入式（补全 + Chat）
 │   ├── GitHub Copilot — GPT-5.2 驱动，生态最大
 │   ├── Cursor — 多模型切换，Agent 模式领先
 │   ├── 通义灵码 — Qwen3.7 驱动，阿里生态 + 免费
 │   ├── CodeGeeX — GLM-5.2 可选，开源免费
 │   └── Amazon Q Developer — 企业级，AWS 生态
 │
-├── 💻 CLI Agent（终端自主编程）
+├── CLI Agent（终端自主编程）
 │   ├── Claude Code — Claude Opus 5/Sonnet 5 驱动，Agent 最强
 │   ├── Codex CLI — GPT-5.6 Sol 驱动，开源可自部署
 │   ├── Gemini CLI — Gemini 3 Pro 驱动，Google 生态
 │   └── Antigravity — 独立 Agent，多模型可切换
 │
-└── 🌐 云端 Agent（Web 端自主开发）
+└── 云端 Agent（Web 端自主开发）
     ├── ChatGPT Canvas — GPT-5.6 Sol 驱动
     ├── Grok App — Grok 4.5 驱动，X 生态
     └── Google AI Studio — Gemini 3 Pro 驱动
@@ -47,29 +47,29 @@
 | 维度 | Copilot | Cursor | 通义灵码 | CodeGeeX | Amazon Q |
 |------|:---:|:---:|:---:|:---:|:---:|
 | **底层模型** | GPT-5.2 | 多模型 | Qwen3.7 | GLM-5.2 | 自研 |
-| **代码补全** | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐ |
-| **Chat 对话** | ⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐ |
-| **Agent 模式** | ⚠️ 有限 | ✅ 最强 | ❌ | ❌ | ⚠️ 有限 |
-| **Java 支持** | ⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐ |
-| **中文支持** | ⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐ |
+| **代码补全** | ★★★★★ | ★★★★★ | ★★★★ | ★★★★ | ★★★ |
+| **Chat 对话** | ★★★★ | ★★★★★ | ★★★★★ | ★★★★ | ★★★ |
+| **Agent 模式** | 有限 | ✓ 最强 | ✗ | ✗ | 有限 |
+| **Java 支持** | ★★★★ | ★★★★★ | ★★★★★ | ★★★★ | ★★★ |
+| **中文支持** | ★★★ | ★★★ | ★★★★★ | ★★★★★ | ★★ |
 | **价格 (月)** | $10 (个人) | $20 Pro | **免费** | **免费** | 免费(有限) |
 | **企业版** | $39/人 | $40/人 | 免费(基础) | — | $20/人 |
-| **隐私/本地** | ⚠️ 云端 | ⚠️ 云端 | ⚠️ 云端 | ✅ 可本地 | ⚠️ 云端 |
+| **隐私/本地** | 云端 | 云端 | 云端 | ✓ 可本地 | 云端 |
 
 ### 2.2 Java 开发者 IDE 推荐
 
 ```text
-🥇 Cursor + Claude Opus 5
+Cursor + Claude Opus 5
    最佳 AI 编程体验：Agent 模式可以理解整个 Spring Boot 项目
    价格：$20/月 Pro（含 500 次 Opus 5 调用）
    适合：追求极致 AI 体验的开发者
 
-🥈 IntelliJ IDEA + GitHub Copilot
+IntelliJ IDEA + GitHub Copilot
    最成熟的 Java 生态：对 Spring/MyBatis 的补全最稳定
    价格：$10/月 Copilot 个人版
    适合：Java 企业开发，稳定优先
 
-🥉 VS Code + 通义灵码
+VS Code + 通义灵码
    最佳国产方案：免费 + 中文友好 + 阿里 Java 规范
    价格：完全免费
    适合：国内 Java 开发者，中文场景优先
@@ -102,7 +102,7 @@ public class UserService {
         );
         return page;
     }
-    // 评分：⭐⭐⭐⭐⭐ — 正确使用 MyBatis-Plus + 空值判断
+    // 评分：★★★★★ — 正确使用 MyBatis-Plus + 空值判断
 
 // 通义灵码 补全：
     public IPage<User> findByUsernameAndStatus(
@@ -118,7 +118,7 @@ public class UserService {
         wrapper.orderByDesc(User::getCreateTime);
         return userMapper.selectPage(p, wrapper);
     }
-    // 评分：⭐⭐⭐⭐⭐ — 加了排序 + 中文注释 + 类型更兼容
+    // 评分：★★★★★ — 加了排序 + 中文注释 + 类型更兼容
 ```
 
 ---
@@ -130,14 +130,14 @@ public class UserService {
 | 维度 | Claude Code | Codex CLI | Gemini CLI | Antigravity |
 |------|:---:|:---:|:---:|:---:|
 | **底层模型** | Opus 5/Sonnet 5 | GPT-5.6 Sol | Gemini 3 Pro | 多模型 |
-| **Agent 能力** | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐⭐ |
-| **多文件编辑** | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐⭐ |
-| **Git 操作** | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐ |
-| **终端命令** | ✅ 全功能 | ✅ 沙箱 | ✅ 有限 | ⚠️ 需确认 |
+| **Agent 能力** | ★★★★★ | ★★★★ | ★★★ | ★★★★ |
+| **多文件编辑** | ★★★★★ | ★★★★★ | ★★★★ | ★★★★ |
+| **Git 操作** | ★★★★★ | ★★★★★ | ★★★★ | ★★★ |
+| **终端命令** | ✓ 全功能 | ✓ 沙箱 | ✓ 有限 | 需确认 |
 | **上下文窗口** | 200K | 128K | **1M** | 可变 |
 | **价格(任务)** | $0.75-3.00 | ~$0.50 | ~$0.36 | 按模型 |
-| **开源** | ❌ | ✅ CLI 开源 | ❌ | ❌ |
-| **Java 项目** | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐⭐ |
+| **开源** | ✗ | ✓ CLI 开源 | ✗ | ✗ |
+| **Java 项目** | ★★★★★ | ★★★★ | ★★★ | ★★★★ |
 
 ### 3.2 实测：Agent 修复一个 Spring Boot Bug
 
@@ -151,7 +151,7 @@ Claude Code (Opus 5)：
     2. 分析 @MockBean vs @Mock 的区别
     3. 识别到需要 @SpringBootTest 而非 @WebMvcTest
     4. 修改注解并运行测试验证通过
-  评价：⭐⭐⭐⭐⭐ 一步到位
+  评价：★★★★★ 一步到位
 
 Codex CLI (GPT-5.6 Sol)：
   用时：52 秒
@@ -159,18 +159,18 @@ Codex CLI (GPT-5.6 Sol)：
     1. 运行了测试查看错误
     2. 尝试了 2 种修复方案（第一次改错了）
     3. 最终正确修复
-  评价：⭐⭐⭐⭐ 多了一步试错
+  评价：★★★★ 多了一步试错
 
 Gemini CLI (Gemini 3 Pro)：
   用时：1 分 25 秒
   操作：
     1. 一次性读取了整个测试类 + 被测试的 Service
     2. 正确识别问题并修复
-  评价：⭐⭐⭐⭐ 靠 1M 上下文一步到位，但慢一些
+  评价：★★★★ 靠 1M 上下文一步到位，但慢一些
 
 通义灵码 Agent（Qwen3.7）：
   用时：失败 — 当前版本 Agent 模式对 Mock 机制理解不足
-  评价：⭐⭐⭐ 对话模式手动操作可以，Agent 自动模式待改进
+  评价：★★★ 对话模式手动操作可以，Agent 自动模式待改进
 ```
 
 ---
@@ -183,27 +183,27 @@ Gemini CLI (Gemini 3 Pro)：
 ┌─────────────────────────────────────────────────┐
 │            2026 Java 开发者 AI 工具链             │
 │                                                  │
-│  📝 日常编码                                     │
+│  日常编码                                     │
 │  ├── IDE: IntelliJ IDEA 2026.2                  │
 │  ├── 补全: GitHub Copilot ($10/月)               │
 │  └── Chat: Cursor 侧边栏 (Claude Opus 5)         │
 │                                                  │
-│  🔍 代码审查                                     │
+│  代码审查                                     │
 │  ├── 日常 CR: Cursor Agent 模式                  │
 │  ├── 深度审查: Claude Code (Opus 5)              │
 │  └── Bug 排查: MiniMax M3 (通过 API)             │
 │                                                  │
-│  🏗️ 架构/重构                                    │
+│  架构/重构                                    │
 │  ├── 方案设计: Claude Opus 5 (Web/API)           │
 │  ├── DeepSearch: Grok (调研新技术)               │
 │  └── 文档生成: Qwen3.7-Max (中文文档)            │
 │                                                  │
-│  🤖 自动化任务                                   │
+│  自动化任务                                   │
 │  ├── 批量重构: Claude Code (Sonnet 5)            │
 │  ├── 测试生成: Codex CLI                        │
 │  └── CI/CD 集成: 自建 + Grok/Gemini API          │
 │                                                  │
-│  💰 成本优化                                     │
+│  成本优化                                     │
 │  └── 简单任务降级: DeepSeek V4 Pro (API)         │
 │      将 Copilot Chat 切换到 DeepSeek 省 90%+     │
 └─────────────────────────────────────────────────┘
@@ -245,7 +245,7 @@ Gemini CLI (Gemini 3 Pro)：
 ### 5.1 三个预算级别的组合
 
 ```text
-💰 预算充足（$60-100/月）— 专业开发者
+预算充足（$60-100/月）— 专业开发者
 ├── GitHub Copilot ($10)          — IDE 补全
 ├── Cursor Pro ($20)              — Agent IDE
 ├── Claude Code API (~$20)        — 深度任务
@@ -253,13 +253,13 @@ Gemini CLI (Gemini 3 Pro)：
 └── Grok Premium+ ($16)           — DeepSearch 调研
 合计：~$71/月
 
-💵 性价比（$20-40/月）— 高效开发者
+性价比（$20-40/月）— 高效开发者
 ├── Cursor Pro ($20)              — 补全 + Agent（含 Opus 5）
 ├── DeepSeek V4 Pro API (~$3)     — 批量省钱
 └── Grok Premium+ ($16)           — 深度搜索
 合计：~$39/月
 
-🆓 低成本（$0-10/月）— 个人学习者
+低成本（$0-10/月）— 个人学习者
 ├── 通义灵码 (免费)               — IDE 补全 + Chat
 ├── CodeGeeX (免费)               — 备选/本地部署
 ├── Kimi K3 API (~$2)             — 按量高端任务
@@ -288,7 +288,7 @@ Gemini CLI (Gemini 3 Pro)：
    关注 SWE-bench + Code Arena + 真实任务体验
 ```
 
-> 🎯 **核心要点**：2026 年 7 月最佳 Java 开发工具链 = **Cursor Pro (Claude Opus 5) + 通义灵码 (Qwen3.7) + DeepSeek V4 Pro API**。补全用 Copilot/通义，深度任务用 Cursor Agent，省钱批量用 DeepSeek，代码审查用 MiniMax M3。$40/月就能覆盖 95% 的 AI 编程需求。
+> **核心要点**：2026 年 7 月最佳 Java 开发工具链 = **Cursor Pro (Claude Opus 5) + 通义灵码 (Qwen3.7) + DeepSeek V4 Pro API**。补全用 Copilot/通义，深度任务用 Cursor Agent，省钱批量用 DeepSeek，代码审查用 MiniMax M3。$40/月就能覆盖 95% 的 AI 编程需求。
 
 ---
 

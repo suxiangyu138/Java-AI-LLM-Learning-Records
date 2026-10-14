@@ -1,6 +1,6 @@
 # 04 - MyBatis 缓存机制
 
-> 🎯 MyBatis 的两级缓存是面试高频考点——一级缓存（SqlSession 级别，默认开启）和二级缓存（Mapper 级别，需手动开启）。理解缓存的生效条件和失效场景，是解决"数据不一致"Bug 的关键
+> MyBatis 的两级缓存是面试高频考点——一级缓存（SqlSession 级别，默认开启）和二级缓存（Mapper 级别，需手动开启）。理解缓存的生效条件和失效场景，是解决"数据不一致"Bug 的关键
 
 ---
 
@@ -80,7 +80,7 @@ try (SqlSession session = sqlSessionFactory.openSession()) {
 ### 二级缓存注意事项
 
 ```text
-⚠️ 二级缓存的坑：
+二级缓存的坑：
 
 1. 多表关联时缓存不一致
    UserMapper 有二级缓存，OrderMapper 没有

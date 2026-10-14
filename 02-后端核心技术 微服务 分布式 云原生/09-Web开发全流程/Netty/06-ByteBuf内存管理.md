@@ -1,6 +1,6 @@
 # 06 - ByteBuf 内存管理
 
-> 🎯 ByteBuf 是 Netty 高性能的基石 — 池化内存避免 GC 压力、直接内存避免拷贝、引用计数精准释放、零拷贝减少数据搬运。理解 ByteBuf 才能写出高性能 Netty 代码
+> ByteBuf 是 Netty 高性能的基石 — 池化内存避免 GC 压力、直接内存避免拷贝、引用计数精准释放、零拷贝减少数据搬运。理解 ByteBuf 才能写出高性能 Netty 代码
 
 ---
 
@@ -23,9 +23,9 @@
 |------|---------|---------------|
 | 读写指针 | 双指针（readerIndex / writerIndex） | 单指针（position），需 flip() |
 | 容量 | 自动扩容 | 固定，需手动 |
-| 池化 | ✅ PooledByteBufAllocator | ❌ |
-| 引用计数 | ✅ 自动/手动释放 | ❌ 依赖 GC |
-| 零拷贝 | ✅ slice / duplicate / composite | ❌ |
+| 池化 | ✓ PooledByteBufAllocator | ✗ |
+| 引用计数 | ✓ 自动/手动释放 | ✗ 依赖 GC |
+| 零拷贝 | ✓ slice / duplicate / composite | ✗ |
 
 ### 1.2 双指针模型
 
@@ -64,7 +64,7 @@ buf.clear();                        // readerIndex = writerIndex = 0
 | IO 操作 | 需拷贝到 Direct Buffer | 零拷贝（直接 IO） |
 | GC 影响 | 受 GC 管理，可能 STW | 不受 GC（但引用对象在堆） |
 | 分配速度 | 快 | 较慢 |
-| 适用场景 | 业务逻辑（堆内编解码） | ⭐ 网络 IO（读写 Socket） |
+| 适用场景 | 业务逻辑（堆内编解码） | ★ 网络 IO（读写 Socket） |
 
 ```java
 // 创建方式
@@ -73,7 +73,7 @@ ByteBuf directBuf = Unpooled.directBuffer();          // 直接内存
 ByteBuf pooledBuf = PooledByteBufAllocator.DEFAULT.buffer();  // 池化（默认 Direct）
 ```
 
-> 💡 **Netty 默认策略**：IO 读写用 Direct 内存（走 PooledByteBufAllocator），业务 Handler 内编解码可用 Heap 内存。
+> **Netty 默认策略**：IO 读写用 Direct 内存（走 PooledByteBufAllocator），业务 Handler 内编解码可用 Heap 内存。
 
 ---
 
@@ -106,10 +106,10 @@ buf.release();
 
 | 对比 | 非池化 | 池化 |
 |------|:---:|:---:|
-| 分配速度 | ⭐⭐ 每次 malloc | ⭐⭐⭐ 从池中取 |
+| 分配速度 | ★★ 每次 malloc | ★★★ 从池中取 |
 | 内存碎片 | 高 | 低 |
 | GC 压力 | 高（频繁回收） | 低（复用） |
-| **推荐** | 开发测试 | ⭐ 生产环境 |
+| **推荐** | 开发测试 | ★ 生产环境 |
 
 ```java
 // Server 端开启池化
@@ -122,7 +122,7 @@ bootstrap.option(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT)
 
 ## 4. 引用计数与内存泄漏
 
-> ⚠️ Direct ByteBuf 不受 GC 管理，必须手动 release()。Netty 使用引用计数（ReferenceCounted）管理。
+> Direct ByteBuf 不受 GC 管理，必须手动 release()。Netty 使用引用计数（ReferenceCounted）管理。
 
 ```java
 ByteBuf buf = Unpooled.directBuffer();
@@ -149,7 +149,7 @@ ResourceLeakDetector.setLevel(ResourceLeakDetector.Level.PARANOID);
 ### 4.2 谁创建谁释放
 
 ```java
-// ✅ 正确：在创建该 ByteBuf 的 Handler 中释放
+// ✓ 正确：在创建该 ByteBuf 的 Handler 中释放
 public class BizHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
@@ -157,12 +157,12 @@ public class BizHandler extends ChannelInboundHandlerAdapter {
         try {
             // 处理...
         } finally {
-            ReferenceCountUtil.release(msg);  // ⚠️ 必须释放！
+            ReferenceCountUtil.release(msg);  // 必须释放！
         }
     }
 }
 
-// ✅ 或使用 SimpleChannelInboundHandler（自动释放）
+// ✓ 或使用 SimpleChannelInboundHandler（自动释放）
 public class BizHandler2 extends SimpleChannelInboundHandler<ByteBuf> {
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, ByteBuf msg) {
@@ -187,8 +187,8 @@ public class BizHandler2 extends SimpleChannelInboundHandler<ByteBuf> {
 // ═══ slice — 零拷贝切分 ═══
 ByteBuf original = Unpooled.buffer(100);
 ByteBuf slice = original.slice(0, 50);   // 共享 original 的前 50 字节
-// ⚠️ slice 和 original 共享内存，修改互相影响
-// ⚠️ release original → slice 也失效
+// slice 和 original 共享内存，修改互相影响
+// release original → slice 也失效
 
 // ═══ CompositeByteBuf — 零拷贝聚合 ═══
 CompositeByteBuf composite = Unpooled.compositeBuffer();
@@ -213,7 +213,7 @@ ctx.writeAndFlush(region);     // 零拷贝（sendfile）
 
 ## 6. ByteBuf 使用规范
 
-| ✅ DO | ❌ DON'T |
+| ✓ DO | ✗ DON'T |
 |-------|----------|
 | 用 `SimpleChannelInboundHandler` 自动释放 | 忘记 release Direct ByteBuf |
 | 生产环境用 PooledByteBufAllocator | 生产环境用 Unpooled |
@@ -222,10 +222,10 @@ ctx.writeAndFlush(region);     // 零拷贝（sendfile）
 | IO 读写用 Direct，业务编解码用 Heap | 混用导致多次拷贝 |
 
 ```java
-// ⭐ 内存管理黄金法则
+// ★ 内存管理黄金法则
 // 生产环境强制开启
 System.setProperty("io.netty.leakDetection.level", "PARANOID");
 System.setProperty("io.netty.allocator.type", "pooled");
 ```
 
-> 🎯 **内存三板斧**：池化（避免频繁 malloc）、Direct 零拷贝（避免堆→堆外拷贝）、引用计数（避免泄漏）。三者叠加 = Netty 极致性能。
+> **内存三板斧**：池化（避免频繁 malloc）、Direct 零拷贝（避免堆→堆外拷贝）、引用计数（避免泄漏）。三者叠加 = Netty 极致性能。

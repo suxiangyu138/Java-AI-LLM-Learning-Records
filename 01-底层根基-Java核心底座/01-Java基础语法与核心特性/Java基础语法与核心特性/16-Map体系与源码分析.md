@@ -41,7 +41,7 @@
 | Hashtable | 数组+链表 | 无序 | 是（全表锁） | 不允许 | O(n) |
 | ConcurrentHashMap | 数组+链表+红黑树 | 无序 | 是（CAS+synchronized） | 不允许 | O(1)/O(log n) |
 
-> 💡 **HashMap 是最核心的 Map 实现**，面试出现频率最高。理解 HashMap 就等于理解了 Map 体系的 80%。
+> **HashMap 是最核心的 Map 实现**，面试出现频率最高。理解 HashMap 就等于理解了 Map 体系的 80%。
 
 ---
 
@@ -95,7 +95,7 @@ public class HashMap<K,V> extends AbstractMap<K,V> {
 // TreeNode（红黑树节点）：继承 Node，多 parent/left/right/prev/red
 ```
 
-> 💡 **为什么容量必须是 2 的幂？** `(n-1)&hash` 等价于 `hash%n` 但更快。且 2^n-1 全为 1 能充分利用 hash 所有位，扩容时元素不用重算 hash。
+> **为什么容量必须是 2 的幂？** `(n-1)&hash` 等价于 `hash%n` 但更快。且 2^n-1 全为 1 能充分利用 hash 所有位，扩容时元素不用重算 hash。
 
 ---
 
@@ -106,10 +106,10 @@ public class HashMap<K,V> extends AbstractMap<K,V> {
 ```java
 final V putVal(int hash, K key, V value, boolean onlyIfAbsent, boolean evict) {
     Node<K,V>[] tab; Node<K,V> p; int n, i;
-    // ⭐ 步骤1：首次 put 时延迟初始化
+    // ★ 步骤1：首次 put 时延迟初始化
     if ((tab = table) == null || (n = tab.length) == 0)
         n = (tab = resize()).length;
-    // ⭐ 步骤2：计算下标 (n-1)&hash，空桶直接放入
+    // ★ 步骤2：计算下标 (n-1)&hash，空桶直接放入
     if ((p = tab[i = (n - 1) & hash]) == null)
         tab[i] = newNode(hash, key, value, null);
     else {
@@ -139,7 +139,7 @@ final V putVal(int hash, K key, V value, boolean onlyIfAbsent, boolean evict) {
         }
     }
     ++modCount;
-    if (++size > threshold) resize();                      // ⭐ 步骤5：扩容检查
+    if (++size > threshold) resize();                      // ★ 步骤5：扩容检查
     afterNodeInsertion(evict);
     return null;
 }
@@ -171,7 +171,7 @@ final Node<K,V> getNode(int hash, Object key) {
 }
 ```
 
-> 🎯 **get 只需要看两个条件**：hash 相等 + key 相等（== 或 equals）。先比 hash 快速过滤，再比 key 精确匹配。
+> **get 只需要看两个条件**：hash 相等 + key 相等（== 或 equals）。先比 hash 快速过滤，再比 key 精确匹配。
 
 ---
 
@@ -184,7 +184,7 @@ final Node<K,V> getNode(int hash, Object key) {
 ### 4.2 resize() 源码
 
 ```java
-/** ⭐ 扩容机制 (JDK 8) — 约 1/3 的面试题围绕此方法 */
+/** ★ 扩容机制 (JDK 8) — 约 1/3 的面试题围绕此方法 */
 final Node<K,V>[] resize() {
     Node<K,V>[] oldTab = table;
     int oldCap = (oldTab == null) ? 0 : oldTab.length;
@@ -202,7 +202,7 @@ final Node<K,V>[] resize() {
     Node<K,V>[] newTab = (Node<K,V>[])new Node[newCap];
     table = newTab;
 
-    if (oldTab != null) {                  // ⭐ 数据迁移（无需重算 hash）
+    if (oldTab != null) {                  // ★ 数据迁移（无需重算 hash）
         for (int j = 0; j < oldCap; ++j) {
             Node<K,V> e;
             if ((e = oldTab[j]) != null) {
@@ -213,7 +213,7 @@ final Node<K,V>[] resize() {
                 else {
                     Node<K,V> loHead = null, loTail = null, hiHead = null, hiTail = null;
                     do {
-                        if ((e.hash & oldCap) == 0) {    // ⭐ 关键：原位
+                        if ((e.hash & oldCap) == 0) {    // ★ 关键：原位
                             if (loTail == null) loHead = e; else loTail.next = e;
                             loTail = e;
                         } else {                          // 原位+oldCap
@@ -241,7 +241,7 @@ final Node<K,V>[] resize() {
 ### 5.1 扰动函数
 
 ```java
-/** ⭐ 扰动函数：让高位也参与低位的下标计算 */
+/** ★ 扰动函数：让高位也参与低位的下标计算 */
 static final int hash(Object key) {
     int h;
     return (key == null) ? 0 : (h = key.hashCode()) ^ (h >>> 16);
@@ -270,7 +270,7 @@ index = (n - 1) & hash   // 等价于 hash % n，但快得多
 2. **均匀散列**：2^n-1 二进制全为 1，充分利用 hash 所有位
 3. **扩容高效**：元素新索引=原索引或原索引+oldCap，无需重算
 
-> ⚠️ **传入非 2 的幂？** `tableSizeFor()` 找到大于指定容量的最小 2 的幂。传入 19 → 实际 32。
+> **传入非 2 的幂？** `tableSizeFor()` 找到大于指定容量的最小 2 的幂。传入 19 → 实际 32。
 
 ---
 
@@ -282,8 +282,8 @@ index = (n - 1) & hash   // 等价于 hash % n，但快得多
 |------|-------|-------|
 | 数据结构 | 数组+链表 | 数组+链表+红黑树 |
 | hash 扰动 | 9次 | 2次 |
-| 插入方式 | ⚠️ 头插法 | ✅ 尾插法 |
-| 扩容死锁 | ⚠️ 有 | ✅ 无 |
+| 插入方式 | 头插法 | ✓ 尾插法 |
+| 扩容死锁 | 有 | ✓ 无 |
 | 扩容重hash | 需重新计算 | hash & oldCap 判断 |
 | 树化 | 无 | 链表>=8且容量>=64 |
 | 初始化 | 构造时创建 | 第一次 put 时延迟 |
@@ -300,7 +300,7 @@ JDK 7 多线程并发扩容形成环形链表：
 
 JDK 8 **尾插法**修复：扩容时按原有顺序迁移，用 lo/hi 两条链表分别存储原位和高位元素，不反转链表顺序。
 
-> ⚠️ **但 JDK 8 HashMap 并发下仍有数据丢失！** 多线程必须使用 ConcurrentHashMap。
+> **但 JDK 8 HashMap 并发下仍有数据丢失！** 多线程必须使用 ConcurrentHashMap。
 
 ---
 
@@ -338,7 +338,7 @@ cache.put("d", 4);                  // 触发淘汰 b
 System.out.println(cache.keySet()); // [c, a, d]
 ```
 
-> 🎯 **LinkedHashMap LRU 要点**：accessOrder=true + 重写 removeEldestEntry。这是 Java 中最优雅的 LRU 实现方式。
+> **LinkedHashMap LRU 要点**：accessOrder=true + 重写 removeEldestEntry。这是 Java 中最优雅的 LRU 实现方式。
 
 ---
 
@@ -435,13 +435,13 @@ final V putVal(K key, V value, boolean onlyIfAbsent) {
             tab = initTable();                              // 1. 延迟初始化
         else if ((f = tabAt(tab, i = (n - 1) & hash)) == null) {
             if (casTabAt(tab, i, null, new Node<>(hash, key, value)))
-                break;                                      // ⭐ 2. 空桶→CAS无锁
+                break;                                      // ★ 2. 空桶→CAS无锁
         }
         else if ((fh = f.hash) == MOVED)
             tab = helpTransfer(tab, f);                     // 3. 扩容中→帮忙迁移
         else {
             V oldVal = null;
-            synchronized (f) {                              // ⭐ 4. 桶非空→锁头节点
+            synchronized (f) {                              // ★ 4. 桶非空→锁头节点
                 if (tabAt(tab, i) == f) {
                     if (fh >= 0) { /* 链表操作 */ }
                     else if (f instanceof TreeBin) { /* 红黑树操作 */ }
@@ -483,7 +483,7 @@ private final Node<K,V>[] initTable() {
 // 多线程扩容：其他线程 put 发现 ForwardingNode(MOVED) → helpTransfer()
 ```
 
-> 🎯 **CHM JDK 8 精髓**：空桶 CAS 无锁（最频繁路径），非空桶 synchronized 锁头节点（细粒度），扩容多线程协作。并发度从固定 16 提升到数组长度级别。
+> **CHM JDK 8 精髓**：空桶 CAS 无锁（最频繁路径），非空桶 synchronized 锁头节点（细粒度），扩容多线程协作。并发度从固定 16 提升到数组长度级别。
 
 ---
 
@@ -514,20 +514,20 @@ private final Node<K,V>[] initTable() {
 ### 11.2 最佳实践
 
 ```java
-// ✅ 指定初始容量：expectedSize/0.75+1 避免频繁扩容
+// ✓ 指定初始容量：expectedSize/0.75+1 避免频繁扩容
 Map<String, Object> map = new HashMap<>(expectedSize / 3 * 4 + 1);
-// ✅ 用接口声明（面向抽象编程）
+// ✓ 用接口声明（面向抽象编程）
 Map<String, Integer> map = new HashMap<>();
-// ✅ 遍历用 entrySet（避免 keySet+get 的二次 hash）
+// ✓ 遍历用 entrySet（避免 keySet+get 的二次 hash）
 for (Map.Entry<String, Integer> e : map.entrySet())
     System.out.println(e.getKey() + "=" + e.getValue());
-// ✅ JDK 8 遍历方式
+// ✓ JDK 8 遍历方式
 map.forEach((k, v) -> System.out.println(k + "=" + v));
-// ✅ computeIfAbsent（原子操作，替代"先检查再put"的竞态模式）
+// ✓ computeIfAbsent（原子操作，替代"先检查再put"的竞态模式）
 map.computeIfAbsent("key", k -> expensiveCompute(k));
-// ✅ merge（存在则合并，不存在则插入）
+// ✓ merge（存在则合并，不存在则插入）
 map.merge("score", 1, Integer::sum);
-// ❌ 多线程不要用 HashMap → 用 ConcurrentHashMap
+// ✗ 多线程不要用 HashMap → 用 ConcurrentHashMap
 ```
 
 ---
@@ -560,7 +560,7 @@ map.merge("score", 1, Integer::sum);
 
 ---
 
-> 🎯 **Map 体系总结**：HashMap 是核心（掌握 put/resize/hash 三大流程），ConcurrentHashMap 是关键难点（理解 CAS+synchronized 锁演进），LinkedHashMap 和 TreeMap 是重要扩展（有序性的两种实现方式）。理解这些 Map 的底层原理和演进思路，是 Java 面试和实战的必经之路。
+> **Map 体系总结**：HashMap 是核心（掌握 put/resize/hash 三大流程），ConcurrentHashMap 是关键难点（理解 CAS+synchronized 锁演进），LinkedHashMap 和 TreeMap 是重要扩展（有序性的两种实现方式）。理解这些 Map 的底层原理和演进思路，是 Java 面试和实战的必经之路。
 
 ---
 

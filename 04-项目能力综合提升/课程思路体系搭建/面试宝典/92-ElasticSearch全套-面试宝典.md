@@ -43,8 +43,8 @@
 | **prefix** | 扫描 Term Dictionary 中指定前缀的词项 | 前缀越长越快 |
 | **wildcard** | 全量扫描 Term Dictionary，逐项匹配通配符 | **非常慢**，不推荐用于高频搜索 |
 
-> ⚠️ **wildcard 以 `*`开头会导致全量扫描 Term Dictionary**，生产环境务必避免。
-> ✅ 替代方案：使用 **ngram 分词器** 实现高效通配符效果。
+> **wildcard 以 `*`开头会导致全量扫描 Term Dictionary**，生产环境务必避免。
+> ✓ 替代方案：使用 **ngram 分词器** 实现高效通配符效果。
 
 ### Q4 query_string 和 simple_query_string 的区别？
 | 特性 | query_string | simple_query_string |
@@ -54,7 +54,7 @@
 | 字段指定 | title:java `+` 必须 `-` 排除 | 不支持复杂语法 |
 | 异常处理 | 语法错误抛出异常 | 忽略错误，容错处理 |
 
-> 💡 面向用户的搜索框推荐使用 `simple_query_string`，更加健壮。
+> 面向用户的搜索框推荐使用 `simple_query_string`，更加健壮。
 
 ### Q5 什么是 Dynamic Template？请举例说明。
 > Dynamic Template 允许根据字段名或类型匹配，自动应用预设的映射规则。
@@ -132,10 +132,10 @@ POST /_reindex
 ### Q8 deep pagination（深度分页）三种方案的详细对比？
 | 方案 | 支持随机跳页 | 内存消耗 | 实时性 | 适用场景 |
 |------|------------|----------|--------|----------|
-| **from+size** | ✅ | O(from+size) 累加，深分页极差 | ✅ 实时 | 浅分页（<10000条） |
-| **scroll** | ❌ 只能向前 | 高（维护快照上下文） | ❌ 快照 | 全量导出、reindex |
-| **search_after** | ❌ 只能向前 | 低（仅存储游标值） | ✅ 实时 | 深分页滚动 |
-| **PIT + search_after** | ❌ 只能向前 | 中 | ✅ 实时 | ES 7.x+ 推荐方案 |
+| **from+size** | ✓ | O(from+size) 累加，深分页极差 | ✓ 实时 | 浅分页（<10000条） |
+| **scroll** | ✗ 只能向前 | 高（维护快照上下文） | ✗ 快照 | 全量导出、reindex |
+| **search_after** | ✗ 只能向前 | 低（仅存储游标值） | ✓ 实时 | 深分页滚动 |
+| **PIT + search_after** | ✗ 只能向前 | 中 | ✓ 实时 | ES 7.x+ 推荐方案 |
 
 ### Q9 BM25 相比 TF-IDF 做了哪些改进？
 | 方面 | TF-IDF | BM25 |
@@ -149,7 +149,7 @@ POST /_reindex
 TF-IDF: score = tf * idf
 BM25:   score = IDF * (tf * (k1+1)) / (tf + k1*(1-b+b*dl/avgdl))
 ```
-> 💡 ES 5.0 之后默认从 TF-IDF 切换到 BM25。
+> ES 5.0 之后默认从 TF-IDF 切换到 BM25。
 
 ### Q10 什么是 Explain API？如何调试搜索得分？
 ```json
@@ -179,7 +179,7 @@ GET /products/_search
 | ES 6.x 及之前 | Zen Discovery（基于单播 + 广播） | 配置 `discovery.zen.ping.unicast.hosts` |
 | ES 7.x+ | Seeded Gossip（基于种子节点） | 配置 `discovery.seed_hosts`，更简单 |
 
-> 💡 **Gossip 协议**：每个节点定期与其他节点交换元数据信息，实现集群拓扑收敛。不像 ZooKeeper 那样强一致，但更适合 ES 的最终一致性模型。
+> **Gossip 协议**：每个节点定期与其他节点交换元数据信息，实现集群拓扑收敛。不像 ZooKeeper 那样强一致，但更适合 ES 的最终一致性模型。
 
 ### Q12 什么是"脑裂"（Split Brain）问题？如何解决？
 > 脑裂是指集群中同时出现两个 Master 节点，导致数据不一致的问题。
@@ -233,7 +233,7 @@ POST /_cluster/reroute
 | `cluster.routing.allocation.disk.watermark.high` | 90% | 超过此水位会将分片迁移到其他节点 |
 | `cluster.routing.allocation.disk.watermark.flood_stage` | 95% | 所有索引强制设为只读 |
 
-> ⚠️ 生产环境中需要根据磁盘容量合理设置水位线，避免集群进入只读状态。
+> 生产环境中需要根据磁盘容量合理设置水位线，避免集群进入只读状态。
 
 ### Q16 ES 的快照（Snapshot）和恢复（Restore）机制？
 ```json
@@ -271,7 +271,7 @@ POST /_snapshot/my_backup/snapshot_20260722/_restore
 | **Follower** | 目标集群中复制出来的只读索引 |
 | **基于** | 底层使用 Lucene 的 segment 复制 + translog 实时同步 |
 
-> 💡 适用场景：**异地多活**、**灾备**、**跨机房数据同步**。
+> 适用场景：**异地多活**、**灾备**、**跨机房数据同步**。
 
 ### Q18 如何为 ES 配置安全认证（Basic Auth + TLS）？
 > ES 提供免费的基础安全功能，推荐开启。
@@ -339,7 +339,7 @@ PUT /users/_doc/1
 | 存储方式 | 扁平化到父文档 | 独立 Lucene 块 |
 | 查询方式 | 普通 query | `nested` query |
 | 查询性能 | 快 | 较慢（需跨块查询） |
-| 关联正确性 | ❌ 数组关联错乱 | ✅ 正确 |
+| 关联正确性 | ✗ 数组关联错乱 | ✓ 正确 |
 
 ---
 
@@ -349,7 +349,7 @@ PUT /users/_doc/1
 - ES 使用 **fixed thread pool** 处理写入请求。
 - 默认 `thread_pool.write.size` = CPU 核心数，`queue_size` = 10000。
 - 当队列满时，返回 `429 Too Many Requests`（RemoteTransportException）。
-> 💡 **优化**：如果频繁 429，说明写入压力过大，应降低 Bulk 并发或增大 `queue_size`。
+> **优化**：如果频繁 429，说明写入压力过大，应降低 Bulk 并发或增大 `queue_size`。
 
 ### Q22 Translog 的持久化策略如何影响性能和数据安全？
 | 参数 | 默认值 | 说明 |
@@ -358,8 +358,8 @@ PUT /users/_doc/1
 | `index.translog.sync_interval` | `5s` | async 模式下 fsync 间隔 |
 | `index.translog.flush_threshold_size` | `512mb` | translog 大小触发 flush |
 
-> ⚠️ 如果对数据安全性要求极高（如金融场景），保持 `request` 模式，但写入吞吐会下降。
-> ✅ 批量写入场景，可切换到 `async`，写入性能提升 3-5 倍。
+> 如果对数据安全性要求极高（如金融场景），保持 `request` 模式，但写入吞吐会下降。
+> ✓ 批量写入场景，可切换到 `async`，写入性能提升 3-5 倍。
 
 ### Q23 什么是 Doc Values？列式存储的优势在哪里？
 > Doc Values 是 ES 在索引时构建的**列式存储**结构，用于排序、聚合和脚本操作。
@@ -383,7 +383,7 @@ PUT /users/_doc/1
 | `index.merge.scheduler.max_merge_count` | 6 | 并发 merge 线程数 |
 | `index.merge.policy.max_merged_doc` | 极大 | 参与 merge 的最大文档数 |
 
-> 💡 `forcemerge` 触发全量合并到 `max_num_segments` 个 segment，适用于只读索引。
+> `forcemerge` 触发全量合并到 `max_num_segments` 个 segment，适用于只读索引。
 
 ### Q25 ES 的协调节点（Coordinating Node）做了什么？
 ```
@@ -394,7 +394,7 @@ Client Request → Coordinating Node
                  4. 归并结果：排序、聚合、裁剪
                  5. 返回最终结果给客户端
 ```
-> 💡 大查询场景（如全表扫描聚合），协调节点会成为**内存瓶颈**。建议将协调节点与数据节点分离部署。
+> 大查询场景（如全表扫描聚合），协调节点会成为**内存瓶颈**。建议将协调节点与数据节点分离部署。
 
 ### Q26 ES 如何实现"最终一致性"？
 1. **主分片写入 → 同步副本**：写入主分片后同步到副本，可设 `wait_for_active_shards`。
@@ -414,7 +414,7 @@ Client Request → Coordinating Node
 | `script.max_compilations_rate` | 75/5m | 脚本编译速率 |
 | `search.max_buckets` | 65536 | 聚合桶数量 |
 
-> ⚠️ 业务中若频繁触发断路器，应优化查询或增大堆内存。
+> 业务中若频繁触发断路器，应优化查询或增大堆内存。
 
 ### Q28 什么是 Global Ordinals？对聚合性能有什么影响？
 > Global Ordinals 是一种对 keyword 字段的**全局编号系统**，用于加速聚合和排序。
@@ -422,7 +422,7 @@ Client Request → Coordinating Node
 - 每个 segment 有自己的本地 ordinal（Term 到 int 的映射）。
 - **Global Ordinals** 将整个索引的 ordinal 统一，使得跨 segment 聚合不需要合并字符串。
 - 构建 Global Ordinals 需要扫描所有 segment，是一个**耗时操作**（默认延迟加载）。
-> 💡 **优化**：对频繁聚合的字段，可在 Mapping 中设置 `eager_global_ordinals: true`，在 refresh 时提前构建。
+> **优化**：对频繁聚合的字段，可在 Mapping 中设置 `eager_global_ordinals: true`，在 refresh 时提前构建。
 
 ### Q29 ES 如何管理 JVM 堆内存？
 | 配置 | 建议值 | 说明 |
@@ -432,7 +432,7 @@ Client Request → Coordinating Node
 | `indices.fielddata.cache.size` | 20% JVM（最多） | FieldData 缓存 |
 | `indices.breaker.fielddata.limit` | 40% JVM | FieldData 断路器 |
 
-> ⚠️ **JVM 堆大小不建议超过 32GB**，因为 JDK 的普通对象指针压缩技术在超过 32GB 时失效，导致内存浪费。
+> **JVM 堆大小不建议超过 32GB**，因为 JDK 的普通对象指针压缩技术在超过 32GB 时失效，导致内存浪费。
 
 ### Q30 ES 7.x 的 PIT（Point In Time）机制是什么？
 > PIT 是 ES 7.x 引入的替代 scroll 的机制，结合 search_after 实现实时深分页。
@@ -1060,11 +1060,11 @@ PUT /_analyze
 **设计对比**：
 | 方案 | 资源隔离 | 管理复杂度 | 查询性能 | 适用租户数 |
 |------|----------|------------|----------|-----------|
-| **索引隔离** | ✅ 完全隔离 | 低（ILM 自动管理） | 高 | <1000 |
-| **别名+路由** | ⚠️ 部分隔离 | 中（需管理 routing） | 中 | 1000-10000 |
-| **字段隔离** | ❌ 共享索引 | 高（查询始终过滤 tenant_id） | 低 | >10000 |
+| **索引隔离** | ✓ 完全隔离 | 低（ILM 自动管理） | 高 | <1000 |
+| **别名+路由** | 部分隔离 | 中（需管理 routing） | 中 | 1000-10000 |
+| **字段隔离** | ✗ 共享索引 | 高（查询始终过滤 tenant_id） | 低 | >10000 |
 
-> 💡 推荐方案：**中型 SaaS（<1000 租户）使用索引隔离**，每个租户日志一个索引前缀，通过 ILM 自动管理。
+> 推荐方案：**中型 SaaS（<1000 租户）使用索引隔离**，每个租户日志一个索引前缀，通过 ILM 自动管理。
 
 ### Q52 设计一个"ES 集群容灾方案"
 > **需求**：RPO < 5 分钟，RTO < 30 分钟，跨机房/跨地域。
@@ -1107,13 +1107,13 @@ PUT /_analyze
 | **频繁 force merge** | IO 毛刺、节点失联 | merge 占用 IO 带宽 | `indices.store.throttle.max_bytes_per_sec` |
 
 ### 生产优化清单
-> ✅ **节点角色分离**：Master（3 台）/ Data（多台）/ Coordinating（2 台）
-> ✅ **JVM 配置**：`-Xms` = `-Xmx` ≤ 32GB，使用 G1GC 或 ZGC
-> ✅ **操作系统**：`vm.max_map_count=262144`，禁用 swap
-> ✅ **索引设计**：显式 mapping + dynamic template + 按时间滚动
-> ✅ **写入策略**：Bulk API + 关闭 `refresh` 和副本 + async translog
-> ✅ **查询优化**：filter 前置 + 限制 `size` + 避免 `*` wildcard
-> ✅ **监控告警**：集群健康、节点 CPU/内存、查询/写入延迟、慢日志
+> ✓ **节点角色分离**：Master（3 台）/ Data（多台）/ Coordinating（2 台）
+> ✓ **JVM 配置**：`-Xms` = `-Xmx` ≤ 32GB，使用 G1GC 或 ZGC
+> ✓ **操作系统**：`vm.max_map_count=262144`，禁用 swap
+> ✓ **索引设计**：显式 mapping + dynamic template + 按时间滚动
+> ✓ **写入策略**：Bulk API + 关闭 `refresh` 和副本 + async translog
+> ✓ **查询优化**：filter 前置 + 限制 `size` + 避免 `*` wildcard
+> ✓ **监控告警**：集群健康、节点 CPU/内存、查询/写入延迟、慢日志
 
 ---
 

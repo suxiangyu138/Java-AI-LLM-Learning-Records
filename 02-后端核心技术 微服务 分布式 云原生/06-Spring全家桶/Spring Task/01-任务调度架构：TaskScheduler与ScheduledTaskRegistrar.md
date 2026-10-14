@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [整体架构：任务从注解到执行的两条路径](#1-整体架构任务从注解到执行的两条路径)
 2. [TaskScheduler：调度的核心抽象](#2-taskscheduler调度的核心抽象)
@@ -42,7 +42,7 @@
 | 调度层 | `TaskScheduler` | 管理线程、安排触发时间 |
 | 执行层 | 调度线程池 | 实际执行任务 |
 
-> 🎯 **核心要点**：@Scheduled 只是"注册声明"，真正的执行靠 TaskScheduler。理解"注解 → 注册器 → 调度器"三层，就理解了为什么换 Trigger 能动态化、为什么换 TaskScheduler 能改线程模型。
+> **核心要点**：@Scheduled 只是"注册声明"，真正的执行靠 TaskScheduler。理解"注解 → 注册器 → 调度器"三层，就理解了为什么换 Trigger 能动态化、为什么换 TaskScheduler 能改线程模型。
 
 ## 2. TaskScheduler：调度的核心抽象
 
@@ -61,7 +61,7 @@ public interface TaskScheduler {
 | `scheduleAtFixedRate` | 固定频率：按**起点**间隔 | `@Scheduled(fixedRate=)` |
 | `scheduleWithFixedDelay` | 固定延迟：**上次结束后**再等 delay | `@Scheduled(fixedDelay=)` |
 
-> ⚠️ **fixedRate 与 fixedDelay 的本质区别**：fixedRate 按"开始时刻"排队（任务执行超长会叠加/错过）；fixedDelay 按"结束时刻"排队（永不叠加）。面试必考，02 篇展开。
+> **fixedRate 与 fixedDelay 的本质区别**：fixedRate 按"开始时刻"排队（任务执行超长会叠加/错过）；fixedDelay 按"结束时刻"排队（永不叠加）。面试必考，02 篇展开。
 
 ## 3. ThreadPoolTaskScheduler：生产默认实现
 
@@ -87,7 +87,7 @@ scheduler.initialize();
 | errorHandler | 无 | 任务异常处理器（默认只是日志） |
 | rejectedExecutionHandler | AbortPolicy | 拒绝策略 |
 
-> 🎯 **默认单线程**是 Spring Task 第一坑：两个 @Scheduled 任务，一个执行 10 秒，另一个只能等它结束——**凡是"定时任务互相拖累"的生产现象，根因多半是这里**。
+> **默认单线程**是 Spring Task 第一坑：两个 @Scheduled 任务，一个执行 10 秒，另一个只能等它结束——**凡是"定时任务互相拖累"的生产现象，根因多半是这里**。
 
 ## 4. ScheduledTaskRegistrar：任务注册中枢
 
@@ -142,7 +142,7 @@ public class Application { }
 | 有 SchedulingConfigurer | 动态任务并入同一注册器 |
 | 关闭顺序 | SmartLifecycle 优先级：任务停止先于容器销毁 |
 
-> ⚠️ **注意**：`@EnableScheduling` 与 `@EnableAsync` 是**两个独立开关**——定时任务默认在调度线程同步执行；要让定时任务与异步配合，需自行组合（04 篇）。
+> **注意**：`@EnableScheduling` 与 `@EnableAsync` 是**两个独立开关**——定时任务默认在调度线程同步执行；要让定时任务与异步配合，需自行组合（04 篇）。
 
 ## 6. 单线程调度器的坑与多线程改造
 
@@ -189,7 +189,7 @@ public TaskScheduler taskScheduler() {
 // 每个任务独立虚拟线程，天然互不阻塞
 ```
 
-> 💡 **经验值**：调度线程数 = 预期并发执行的任务数上限 + 余量（一般 5-10 足够；调度线程≠业务线程，任务内部的耗时操作应交给 @Async 线程池）。**多线程调度器只解决"互相阻塞"，不解决"任务自身耗时"**——耗时的业务逻辑要异步化。
+> **经验值**：调度线程数 = 预期并发执行的任务数上限 + 余量（一般 5-10 足够；调度线程≠业务线程，任务内部的耗时操作应交给 @Async 线程池）。**多线程调度器只解决"互相阻塞"，不解决"任务自身耗时"**——耗时的业务逻辑要异步化。
 
 ## 7. 与 TaskExecutor 的分工
 
@@ -209,7 +209,7 @@ public TaskScheduler taskScheduler() {
   → 调度线程立即空闲，不阻塞其它定时任务
 ```
 
-> 🎯 **核心要点**：Spring Task 的架构就是"调度器 + 执行器"双引擎——调度器管时间（何时）、执行器管线程（哪里）。默认单线程调度器是头号坑；多线程 + @Async 卸载耗时逻辑是生产标准解；Boot 4 的虚拟线程直接消灭了"调度线程被阻塞"这一类问题（06 篇）。
+> **核心要点**：Spring Task 的架构就是"调度器 + 执行器"双引擎——调度器管时间（何时）、执行器管线程（哪里）。默认单线程调度器是头号坑；多线程 + @Async 卸载耗时逻辑是生产标准解；Boot 4 的虚拟线程直接消灭了"调度线程被阻塞"这一类问题（06 篇）。
 
 ---
 

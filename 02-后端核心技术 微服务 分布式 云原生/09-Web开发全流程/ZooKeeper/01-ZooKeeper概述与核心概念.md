@@ -1,6 +1,6 @@
 # 01 - ZooKeeper 概述与核心概念
 
-> 🎯 ZooKeeper 是 Apache 的分布式协调服务 — CP 系统代表、ZAB 原子广播、顺序一致性。理解它的设计哲学才能理解 Dubbo/Kafka/Hadoop 的协调层
+> ZooKeeper 是 Apache 的分布式协调服务 — CP 系统代表、ZAB 原子广播、顺序一致性。理解它的设计哲学才能理解 Dubbo/Kafka/Hadoop 的协调层
 
 ---
 
@@ -71,7 +71,7 @@ ZAB 两种模式：
 |------|-----|------|
 | 心跳方向 | Leader → Follower | Leader → Follower |
 | 日志提交 | **所有** Follower ACK | **多数派** ACK |
-| 乱序提交 | ✅ 允许 | ❌ 严格顺序 |
+| 乱序提交 | ✓ 允许 | ✗ 严格顺序 |
 | 代表实现 | ZooKeeper | etcd / Consul |
 
 ---
@@ -86,7 +86,7 @@ ZAB 两种模式：
 | Watch | 一次性 | 流式（持续） | 长轮询 |
 | 语言 | Java | Go | Go |
 | 生态 | Hadoop/Kafka/Dubbo | K8s | HashiCorp 生态 |
-| 趋势 | 被 Nacos/etcd 替代 | ⭐ K8s 原生 | ⭐ HashiCorp |
+| 趋势 | 被 Nacos/etcd 替代 | ★ K8s 原生 | ★ HashiCorp |
 
 ---
 
@@ -100,4 +100,4 @@ ZAB 两种模式：
 | **Dubbo 2.x** | 注册中心（3.x 已迁移到应用级+Nacos） |
 | **Canal** | 集群选主 |
 
-> 🎯 **现状**：ZK 在存量大厂系统中仍然广泛使用，但新项目微服务协调推荐 Nacos/etcd。学习 ZK 的核心价值是理解分布式协调的思想，而非工具本身。
+> **现状**：ZK 在存量大厂系统中仍然广泛使用，但新项目微服务协调推荐 Nacos/etcd。学习 ZK 的核心价值是理解分布式协调的思想，而非工具本身。

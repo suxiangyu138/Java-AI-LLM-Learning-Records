@@ -115,7 +115,7 @@ jobs:
 
 **语法学习的边界**：本文覆盖的字段覆盖了 95% 生产场景，其余字段（`secrets` 在 job 级的继承、`permissions` 的细粒度 scope、`strategy` 的失败策略变体）用到时查官方文档即可——语法是"查得到的东西"，不必背全；真正需要内化的只有三条：**顶层四键（on/jobs/permissions/concurrency）是每个工作流的骨架，job 三要素（runs-on/needs/timeout）是每个 job 的底线，step 两件事（uses 还是 run、id 要不要）是每步的决策**——把这三条写进自己的模板，语法细节随用随查、自然沉淀。
 
-> 🎯 核心要点：语法层的价值在于"少踩坑"——concurrency 防重复、timeout 防烧钱、`${{ }}` vs `$VAR` 防混淆、GITHUB_OUTPUT 传值。2026 新语法里并行步骤与 `$/` 自引用是生产力提升最明显的两个，优先用起来。
+> 核心要点：语法层的价值在于"少踩坑"——concurrency 防重复、timeout 防烧钱、`${{ }}` vs `$VAR` 防混淆、GITHUB_OUTPUT 传值。2026 新语法里并行步骤与 `$/` 自引用是生产力提升最明显的两个，优先用起来。
 
 ---
 

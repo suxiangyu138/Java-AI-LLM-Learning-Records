@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [组件一句话定位](#1-组件一句话定位)
 2. [版本现状（2026-08）](#2-版本现状2026-08)
@@ -34,7 +34,7 @@
   JLine：补全 / 历史 / 终端控制（3.30.x）
 ```
 
-> 🎯 **一句话**：Spring Shell = "把 Spring 容器能力暴露给终端"——命令方法里能用一切 Bean（服务/仓库/AI 组件），是运维工具、开发脚手架、AI CLI 的标准姿势。
+> **一句话**：Spring Shell = "把 Spring 容器能力暴露给终端"——命令方法里能用一切 Bean（服务/仓库/AI 组件），是运维工具、开发脚手架、AI CLI 的标准姿势。
 
 ## 2. 版本现状（2026-08）
 
@@ -53,7 +53,7 @@
 
 4.0.2（2026-04）新增：类级命令分组、测试"需要输入的命令"、多值参数 arity、help 命令排序、非交互模式退出码修复（不再恒为 0）、子命令布尔标志、Spring profile 生效、GraalVM 原生命令注册。4.0.3（2026-06）修复：JDK 25 下 tab 补全（JLine 3.30.9+）、自定义 Converter 配 @Command、原生编译 stg 资源 runtime hints 等。
 
-> 💡 面试/写代码要点：**4.0 语法 = @Command + @Option + CommandRegistration DSL**；看到 `@ShellComponent`/`@ShellMethod` 的博客都是 3.x 旧文。
+> 面试/写代码要点：**4.0 语法 = @Command + @Option + CommandRegistration DSL**；看到 `@ShellComponent`/`@ShellMethod` 的博客都是 3.x 旧文。
 
 ## 3. 能力地图
 
@@ -77,7 +77,7 @@
 | 04 集成地图 | [Spring Batch 深度体系-08 调度、运维与可观测性](../../../Spring Batch/08-调度、运维与可观测性.md) | Shell 是触发批处理（JobOperator）的轻量运维终端 |
 | 04 集成地图 | [DeepSeek 知识体系](../../../../../03-AI大模型应用开发/10-AI开发工具/主流大模型API调用/DeepSeek/00-DeepSeek知识体系总览.md) | AI CLI 工具：Shell 命令方法内调 LLM/Agent |
 
-> 💡 Spring Shell 生态位：**它是"操作层"组件**——把后端能力暴露为终端命令，常与 Batch（运维触发）、Spring AI（智能助手 CLI）、Spring Security（命令鉴权）组合；本仓库暂无独立深度体系，深入以 [官方参考文档](https://docs.spring.io/spring-shell/reference/) 为准。
+> Spring Shell 生态位：**它是"操作层"组件**——把后端能力暴露为终端命令，常与 Batch（运维触发）、Spring AI（智能助手 CLI）、Spring Security（命令鉴权）组合；本仓库暂无独立深度体系，深入以 [官方参考文档](https://docs.spring.io/spring-shell/reference/) 为准。
 
 ## 5. 快速上手 3 步
 
@@ -99,7 +99,7 @@ class HelloCommand {
 // 运行：java -jar app.jar → hello → hello world（可 tab 补全参数）
 ```
 
-> 💡 三种模式即得：交互（默认）、`-c "hello"` 单命令（返回退出码，CI 友好）、`--script file.shell` 脚本批量。
+> 三种模式即得：交互（默认）、`-c "hello"` 单命令（返回退出码，CI 友好）、`--script file.shell` 脚本批量。
 
 ## 6. 速查导航
 
@@ -133,6 +133,6 @@ AI CLI / 运维工具：00 → 04 集成地图 → 结合 Spring AI 与 Batch �
 
 ---
 
-> 🎯 **核心要点**：Spring Shell 4.0 = "零注解开关 + DSL 重建 + 模块合并 + JSpecify"的现代化重写；三件事记住——**语法看 4.0（@Command/@Option）、CI 看退出码、交互体验靠 JLine**；AI CLI 工具是 2026 年最热的使用场景。
+> **核心要点**：Spring Shell 4.0 = "零注解开关 + DSL 重建 + 模块合并 + JSpecify"的现代化重写；三件事记住——**语法看 4.0（@Command/@Option）、CI 看退出码、交互体验靠 JLine**；AI CLI 工具是 2026 年最热的使用场景。
 
 **下一模块**：[01-模块清单](01-模块清单.md)

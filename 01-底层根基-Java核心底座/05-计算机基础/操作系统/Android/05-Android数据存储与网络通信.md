@@ -1,10 +1,10 @@
 # Android 数据存储与网络通信
 
-> 💾 SharedPreferences → DataStore → SQLite → Room (ORM)，Retrofit + OkHttp 双雄组合 —— Android 的数据持久化与网络通信全栈指南，每个方案都有 Java 后端对比
+> SharedPreferences → DataStore → SQLite → Room (ORM)，Retrofit + OkHttp 双雄组合 —— Android 的数据持久化与网络通信全栈指南，每个方案都有 Java 后端对比
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [数据存储方案全景对比](#1-数据存储方案全景对比)
 2. [轻量存储：DataStore](#2-轻量存储datastore)
@@ -19,11 +19,11 @@
 
 | 方案 | 数据类型 | 容量 | 跨进程 | 后端类比 | 推荐场景 |
 |------|---------|:---:|:---:|------|------|
-| **DataStore** | KV 键值对 | 小 | ❌ | Redis / application.properties | 用户偏好、设置 |
-| **Room** | 结构化数据 | 不限 | ✅ (ContentProvider) | JPA/Hibernate + H2 | 本地数据库 |
-| **内部存储** | 文件 | 不限 | ❌ | 文件系统 | 私有文件、缓存 |
-| **外部存储** | 文件 | 不限 | ✅ | 共享目录 | 下载、图片、大文件 |
-| **SharedPreferences** | KV 键值对（旧） | 小 | ❌ | — (已废弃) | ⚠️ 不推荐（迁移到 DataStore） |
+| **DataStore** | KV 键值对 | 小 | ✗ | Redis / application.properties | 用户偏好、设置 |
+| **Room** | 结构化数据 | 不限 | ✓ (ContentProvider) | JPA/Hibernate + H2 | 本地数据库 |
+| **内部存储** | 文件 | 不限 | ✗ | 文件系统 | 私有文件、缓存 |
+| **外部存储** | 文件 | 不限 | ✓ | 共享目录 | 下载、图片、大文件 |
+| **SharedPreferences** | KV 键值对（旧） | 小 | ✗ | — (已废弃) | 不推荐（迁移到 DataStore） |
 
 ---
 
@@ -268,7 +268,7 @@ Room.databaseBuilder(context, AppDatabase.class, "app_database.db")
     .build();
 ```
 
-> 🎯 **JPA 开发者注意**：Room 没有 `@OneToMany` / `@ManyToOne` 自动关联。多表关联必须手动定义关系类 + 联合查询。
+> **JPA 开发者注意**：Room 没有 `@OneToMany` / `@ManyToOne` 自动关联。多表关联必须手动定义关系类 + 联合查询。
 
 ---
 
@@ -532,7 +532,7 @@ OkHttpClient client = new OkHttpClient.Builder()
     .build();
 ```
 
-> 💡 **Retrofit 使用注意**：Android 默认不允许 HTTP 明文请求（Android 9+）。开发环境用 `android:usesCleartextTraffic="true"`，生产环境必须 HTTPS。
+> **Retrofit 使用注意**：Android 默认不允许 HTTP 明文请求（Android 9+）。开发环境用 `android:usesCleartextTraffic="true"`，生产环境必须 HTTPS。
 
 ---
 
@@ -542,12 +542,12 @@ OkHttpClient client = new OkHttpClient.Builder()
 
 | 方案 | 速度 | APK 体积 | Kotlin 支持 | Java 支持 | 推荐度 |
 |------|:---:|:---:|:---:|:---:|:---:|
-| **Gson** | 中等 | 中等 | ✅ | ✅ | ⭐⭐⭐ (经典) |
-| **Moshi** | 快 | 小 | ✅ | ✅ | ⭐⭐⭐⭐ (Kotlin 友好) |
-| **Kotlinx Serialization** | 最快 | 最小 | ✅ | ❌ | ⭐⭐⭐⭐⭐ (Kotlin 首选) |
-| **Jackson** | 慢 | 大 | ⚠️ | ✅ | ⭐⭐ (太重) |
-| **Serializable** (Java) | 慢 | — | ⚠️ | ✅ | ❌ (Android 别用) |
-| **Parcelable** (Android) | 最快 | — | ✅ (Parcelize) | ⚠️ (手写繁琐) | ⭐⭐⭐⭐ (进程间) |
+| **Gson** | 中等 | 中等 | ✓ | ✓ | ★★★ (经典) |
+| **Moshi** | 快 | 小 | ✓ | ✓ | ★★★★ (Kotlin 友好) |
+| **Kotlinx Serialization** | 最快 | 最小 | ✓ | ✗ | ★★★★★ (Kotlin 首选) |
+| **Jackson** | 慢 | 大 | | ✓ | ★★ (太重) |
+| **Serializable** (Java) | 慢 | — | | ✓ | ✗ (Android 别用) |
+| **Parcelable** (Android) | 最快 | — | ✓ (Parcelize) | (手写繁琐) | ★★★★ (进程间) |
 
 ### 6.2 Gson vs Moshi 对比
 

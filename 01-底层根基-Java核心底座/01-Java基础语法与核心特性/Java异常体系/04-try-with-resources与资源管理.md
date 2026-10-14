@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [资源管理的演进：从手动 finally 到 TWR](#1-资源管理的演进从手动-finally-到-twr)
 2. [TWR 语法与编译器展开原理](#2-twr-语法与编译器展开原理)
@@ -20,7 +20,7 @@
 **Java 7 之前**：关闭资源靠手动 finally——漏写、异常路径不关闭、关闭顺序错误，是三大泄漏源头：
 
 ```java
-// ❌ Java 7 前的经典写法（问题重重）
+// ✗ Java 7 前的经典写法（问题重重）
 BufferedReader reader = null;
 try {
     reader = Files.newBufferedReader(Path.of("a.txt"));
@@ -39,7 +39,7 @@ try {
 **TWR 之后**（JDK 7，JEP 183）：
 
 ```java
-// ✅ 一行声明，关闭由语言保证
+// ✓ 一行声明，关闭由语言保证
 try (BufferedReader reader = Files.newBufferedReader(Path.of("a.txt"))) {
     String line = reader.readLine();
     // 无论这里发生什么，reader 必然被关闭
@@ -48,7 +48,7 @@ try (BufferedReader reader = Files.newBufferedReader(Path.of("a.txt"))) {
 }
 ```
 
-> 🎯 **核心要点**：TWR 把"关闭资源"从"程序员纪律"变成"编译器保证"——任何实现 `AutoCloseable` 的资源（流、连接、锁、线程池、HTTP 客户端），只要出现在 try 头，就**必然关闭**，无论正常、异常还是 return。
+> **核心要点**：TWR 把"关闭资源"从"程序员纪律"变成"编译器保证"——任何实现 `AutoCloseable` 的资源（流、连接、锁、线程池、HTTP 客户端），只要出现在 try 头，就**必然关闭**，无论正常、异常还是 return。
 
 ---
 
@@ -95,7 +95,7 @@ try {
 2. **无主异常时**：close 异常正常抛出（比手动 finally 更符合直觉）；
 3. **null 资源**：`try (X x = null)` 不抛 NPE——展开里有判空（虽然正常代码不应写 null 资源）。
 
-> 💡 验证方式：`javac` 后 `javap -c` 反编译，能看到编译器生成的 `Throwable` 局部变量与 `addSuppressed` 调用——面试答"TWR 底层是编译期展开"时可现场演示这一过程。
+> 验证方式：`javac` 后 `javap -c` 反编译，能看到编译器生成的 `Throwable` 局部变量与 `addSuppressed` 调用——面试答"TWR 底层是编译期展开"时可现场演示这一过程。
 
 ---
 
@@ -114,7 +114,7 @@ AutoCloseable (JDK 7, java.lang)         close() throws Exception      —— �
 | close 声明 | `throws Exception`（宽） | `throws IOException`（窄） |
 | 幂等性 | 未约定（**实现可能不幂等**） | 约定幂等（多次 close 无害） |
 | 范围 | 通用：流、连接、锁、ExecutorService | IO 专用 |
-| TWR 支持 | ✅ 都支持 | ✅ |
+| TWR 支持 | ✓ 都支持 | ✓ |
 
 **设计要点**：
 
@@ -144,7 +144,7 @@ try (DbSession session = new DbSession()) {
 }
 ```
 
-> 🎯 **核心要点**：JDK 21 的虚拟线程、JDK 的 `ExecutorService`、`Lock`、`HttpClient` 等大量新 API 都实现了 `AutoCloseable`——"万物皆可 TWR"是现代 Java 的资源管理趋势。
+> **核心要点**：JDK 21 的虚拟线程、JDK 的 `ExecutorService`、`Lock`、`HttpClient` 等大量新 API 都实现了 `AutoCloseable`——"万物皆可 TWR"是现代 Java 的资源管理趋势。
 
 ---
 
@@ -181,7 +181,7 @@ catch (IllegalStateException e) {
 
 **suppressed 的价值**：TWR 之前，close 异常会**覆盖**业务异常（调试时看到错误的方向完全跑偏）；TWR 让两个异常**都保留**——主异常在前，关闭异常挂在 `getSuppressed()`。
 
-> ⚠️ **排查纪律**：线上日志看到主异常后，务必检查 `getSuppressed()`——资源关闭失败的线索常常藏在这里（连接没释放、文件句柄泄漏的根因往往是 suppressed 异常）。
+> **排查纪律**：线上日志看到主异常后，务必检查 `getSuppressed()`——资源关闭失败的线索常常藏在这里（连接没释放、文件句柄泄漏的根因往往是 suppressed 异常）。
 
 ---
 
@@ -197,7 +197,7 @@ try (Resource r2 = r) { ... }          // 被迫再声明一个变量
 
 // JDK 9+：直接引用
 Resource r = new Resource();
-try (r) {                              // ✅ 引用外部变量（must be effectively final）
+try (r) {                              // ✓ 引用外部变量（must be effectively final）
     // ...
 }
 // 注意：r 必须 effectively final（声明后不再重新赋值）
@@ -214,7 +214,7 @@ public void process(AutoCloseableFactory factory) throws Exception {
 }
 ```
 
-> 💡 多资源混合也支持：`try (r; r2)`——只要每个引用都是 effectively final。
+> 多资源混合也支持：`try (r; r2)`——只要每个引用都是 effectively final。
 
 ---
 
@@ -232,7 +232,7 @@ public void process(AutoCloseableFactory factory) throws Exception {
 
 **2025 年在途动态**（时效性要点）：OpenJDK 正在评估让 `java.lang.Process` 实现 `AutoCloseable`（JDK-8364361，2025-08 core-libs-dev 讨论中）——届时 `Process` 可参与 TWR，自动等待/清理子进程资源。评审中关于 close() 是否处理 `InterruptedException` 的讨论，再次印证"TWR 的异常处理与重抛足够复杂"这一设计难点。
 
-> 🎯 **核心要点**：TWR 是资源管理的**默认写法**——所有 `AutoCloseable` 资源一律 TWR，没有任何理由回到手动 finally。JDK 自身也在不断扩大 AutoCloseable 家族（Process 拟加入），说明这是语言演进的方向。
+> **核心要点**：TWR 是资源管理的**默认写法**——所有 `AutoCloseable` 资源一律 TWR，没有任何理由回到手动 finally。JDK 自身也在不断扩大 AutoCloseable 家族（Process 拟加入），说明这是语言演进的方向。
 
 ---
 

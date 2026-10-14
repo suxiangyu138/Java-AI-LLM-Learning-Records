@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [JSON 是 YAML 的子集](#1-json-是-yaml-的子集)
 2. [用 PyYAML 读 JSON](#2-用-pyyaml-读-json)
@@ -164,7 +164,7 @@ convert("config.yaml", "config.json")   # YAML → JSON（程序用）
 4. 性能对比表说明了什么？"别用性能当借口，也别用可读性当借口"？
 5. 格式选型表的主线是什么？双向转换的标准流程？
 
-> 🎯 **核心要点**：JSON 互操作 = **子集关系（YAML 吃 JSON，反向不行）+ 分工主线（人写配置 YAML、机器数据 JSON）+ 转换走"load→dump"摊平锚点**——"格式选型一句话：人读的 YAML，机器读的 JSON"。
+> **核心要点**：JSON 互操作 = **子集关系（YAML 吃 JSON，反向不行）+ 分工主线（人写配置 YAML、机器数据 JSON）+ 转换走"load→dump"摊平锚点**——"格式选型一句话：人读的 YAML，机器读的 JSON"。
 
 ---
 

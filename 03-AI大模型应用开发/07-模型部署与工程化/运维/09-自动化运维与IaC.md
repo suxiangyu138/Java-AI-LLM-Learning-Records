@@ -1,6 +1,6 @@
 # 09 - 自动化运维与 IaC
 
-> 🎯 手动运维 = 人肉背锅。Terraform 管基础设施、Ansible 管配置、GitOps 管部署 — 一切皆代码，一切皆自动化
+> 手动运维 = 人肉背锅。Terraform 管基础设施、Ansible 管配置、GitOps 管部署 — 一切皆代码，一切皆自动化
 
 ## 1. Terraform 基础设施即代码
 

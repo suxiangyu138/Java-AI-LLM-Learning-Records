@@ -6,7 +6,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [Agent 的本质：ReAct 循环](#1-agent-的本质react-循环)
 2. [create_agent 统一 API](#2-create_agent-统一-api)
@@ -55,7 +55,7 @@ create_agent 内部自动实现这个循环（LangGraph 状态机）
 
 ## 2. create_agent 统一 API
 
-> 🎯 **1.x 唯一 Agent 入口**——AgentExecutor / create_react_agent 已弃用（维护至 2026.12），新代码一律 create_agent。
+> **1.x 唯一 Agent 入口**——AgentExecutor / create_react_agent 已弃用（维护至 2026.12），新代码一律 create_agent。
 
 ```python
 from langchain.agents import create_agent
@@ -94,13 +94,13 @@ print(result["messages"][-1].content)      # 最终回答
 | `middleware` | 横切能力注入 | 无 |
 | `state_schema` | 自定义状态字段（TypedDict/Pydantic） | 默认消息流 |
 
-> 💡 **系统提示里的工具说明**：1.x 自动注入工具 schema；`prompt` 里只需写「角色 + 行为规则 + 边界」，不要手动罗列工具参数。
+> **系统提示里的工具说明**：1.x 自动注入工具 schema；`prompt` 里只需写「角色 + 行为规则 + 边界」，不要手动罗列工具参数。
 
 ---
 
 ## 3. 工具定义最佳实践
 
-> 🎯 **工具质量 = Agent 上限**——docstring 是模型唯一的「说明书」，写不好工具等于模型瞎猜。
+> **工具质量 = Agent 上限**——docstring 是模型唯一的「说明书」，写不好工具等于模型瞎猜。
 
 ```python
 from langchain_core.tools import tool
@@ -144,13 +144,13 @@ def check_flight(flight_no: str, date: str) -> str:
     ...
 ```
 
-> ⚠️ **工具失败的三种处理**：① 返回错误说明字符串（模型可读，可自我修正重试）；② 抛异常（v1.3 ToolErrorMiddleware 拦截转换）；③ 返回 None 占位。生产推荐 ①+② 组合——异常交给 ToolRetryMiddleware 重试，仍失败则回退。
+> **工具失败的三种处理**：① 返回错误说明字符串（模型可读，可自我修正重试）；② 抛异常（v1.3 ToolErrorMiddleware 拦截转换）；③ 返回 None 占位。生产推荐 ①+② 组合——异常交给 ToolRetryMiddleware 重试，仍失败则回退。
 
 ---
 
 ## 4. 记忆与持久化
 
-> 🎯 **checkpointer = Agent 的记忆**——传入后同 `thread_id` 的对话自动恢复，崩溃/重启不丢状态（这是 create_agent 底层 LangGraph 的能力）。
+> **checkpointer = Agent 的记忆**——传入后同 `thread_id` 的对话自动恢复，崩溃/重启不丢状态（这是 create_agent 底层 LangGraph 的能力）。
 
 ```python
 from langgraph.checkpoint.memory import InMemorySaver
@@ -192,7 +192,7 @@ agent.invoke({"messages": [{"role": "user", "content": "我住哪个城市？"}]
 
 ## 5. Middleware 中间件
 
-> 🎯 **中间件 = 横切能力的插拔式注入**——模型调用前/后、工具调用前/后、Agent 生命周期钩子，不侵入核心代码。
+> **中间件 = 横切能力的插拔式注入**——模型调用前/后、工具调用前/后、Agent 生命周期钩子，不侵入核心代码。
 
 ```python
 # ① 内置中间件（开箱即用）
@@ -237,13 +237,13 @@ async def log_model(request, handler):
     return result
 ```
 
-> ⚠️ **中间件顺序敏感**：列表顺序即执行顺序（先注册先包裹）；HITL 中间件建议放在**外层**（最优先拦截）。
+> **中间件顺序敏感**：列表顺序即执行顺序（先注册先包裹）；HITL 中间件建议放在**外层**（最优先拦截）。
 
 ---
 
 ## 6. 结构化输出
 
-> 🎯 **create_agent 的 response_format 在主循环内直接产出结构体**——相比「先聊天再解析」省一次 LLM 调用，且模型可自主选择「调工具」或「原生结构化」策略。
+> **create_agent 的 response_format 在主循环内直接产出结构体**——相比「先聊天再解析」省一次 LLM 调用，且模型可自主选择「调工具」或「原生结构化」策略。
 
 ```python
 from pydantic import BaseModel
@@ -276,7 +276,7 @@ out = result["structured_response"]
 
 ## 7. 事件流式 stream_events（v1.3）
 
-> 🎯 **v1.3 新增 typed-projection 事件流**——按通道（messages/tool_calls/values）分别消费，不再靠 `stream_mode` 分支判断，前端打字机 + 工具状态展示的最佳姿势。
+> **v1.3 新增 typed-projection 事件流**——按通道（messages/tool_calls/values）分别消费，不再靠 `stream_mode` 分支判断，前端打字机 + 工具状态展示的最佳姿势。
 
 ```python
 from langchain.agents import create_agent
@@ -301,7 +301,7 @@ for kind, item in stream.interleave("messages", "tool_calls"):
         for token in item.text:
             print(token, end="", flush=True)
     elif kind == "tool_calls":
-        print(f"\n🔧 {item.tool_name}({item.input})")
+        print(f"\n{item.tool_name}({item.input})")
         for delta in item.output_deltas:
             print(delta, end="", flush=True)
         print(f"\n→ {item.output}")
@@ -321,7 +321,7 @@ final_state = stream.output   # 结束后的完整状态
 
 ## 8. 多 Agent 协作
 
-> 🎯 **单 Agent 解决 80% 场景；多 Agent 在「职责分明 + 需要交接」时才值得**——每个 Agent 配独立工具集，用 handoffs 交接。
+> **单 Agent 解决 80% 场景；多 Agent 在「职责分明 + 需要交接」时才值得**——每个 Agent 配独立工具集，用 handoffs 交接。
 
 ```python
 from langchain.agents import create_agent
@@ -350,12 +350,12 @@ def transfer_to_billing():
 
 | 模式 | 结构 | 适用 | 复杂度 |
 |------|------|------|:---:|
-| 单 Agent | 一个大脑 + N 工具 | 大多数场景 | ⭐ |
-| 多 Agent 分工 | 各配工具集 + 交接 | 职责清晰的大型客服/运营 | ⭐⭐⭐ |
-| Supervisor | 主管 Agent 调度下属 | 任务可拆分、需要编排 | ⭐⭐⭐⭐ |
-| 层级协作 | 主管 → 组长 → 执行 | 复杂流水线 | ⭐⭐⭐⭐⭐ |
+| 单 Agent | 一个大脑 + N 工具 | 大多数场景 | ★ |
+| 多 Agent 分工 | 各配工具集 + 交接 | 职责清晰的大型客服/运营 | ★★★ |
+| Supervisor | 主管 Agent 调度下属 | 任务可拆分、需要编排 | ★★★★ |
+| 层级协作 | 主管 → 组长 → 执行 | 复杂流水线 | ★★★★★ |
 
-> ⚠️ **多 Agent 的代价**：token 消耗翻倍、错误传递放大、调试困难（每个 Agent 都要 trace）。**能用单 Agent 解决就不要拆**——先单后多，是官方反复强调的原则。
+> **多 Agent 的代价**：token 消耗翻倍、错误传递放大、调试困难（每个 Agent 都要 trace）。**能用单 Agent 解决就不要拆**——先单后多，是官方反复强调的原则。
 
 ---
 
@@ -388,7 +388,7 @@ Agent 上线前 checklist（2026 生产标准）
 
 ## 10. 核心要点
 
-> 🎯 **核心要点**：
+> **核心要点**：
 > 1. **create_agent 是 1.x 唯一 Agent 入口**——ReAct 循环自动实现，AgentExecutor 别再用
 > 2. **工具 docstring = 模型说明书**——写好「何时调/参数格式/返回结构/边界」
 > 3. **checkpointer 即记忆**：Sqlite/Postgres Saver + thread_id 多轮会话

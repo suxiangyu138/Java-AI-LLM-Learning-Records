@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [Objects：判空与比较的现代工具](#1-objects判空与比较的现代工具)
 2. [Arrays：数组操作总管](#2-arrays数组操作总管)
@@ -51,7 +51,7 @@ Objects.compare(a, b, comparator);   // null 安全比较（null 排前）
 ④ 日志/调试 → Objects.toString（null 安全）
 ```
 
-> 🎯 **核心要点**：Objects = "**null 安全的四个工具（requireNonNull/equals/hash/toString）**"——**"用 Objects.equals 替代 a.equals(b)"消灭 NPE 是 2026 代码规范共识**；requireNonNull 是方法入参校验的标准姿势。
+> **核心要点**：Objects = "**null 安全的四个工具（requireNonNull/equals/hash/toString）**"——**"用 Objects.equals 替代 a.equals(b)"消灭 NPE 是 2026 代码规范共识**；requireNonNull 是方法入参校验的标准姿势。
 
 ---
 
@@ -89,11 +89,11 @@ Arrays.deepToString(arr2d);             // 多维字符串
 
 ```java
 System.out.println(arr);        // [I@1b6d3586（类型+地址！）
-System.out.println(Arrays.toString(arr));   // [1, 2, 3] ✅
+System.out.println(Arrays.toString(arr));   // [1, 2, 3] ✓
 // 二维数组：Arrays.deepToString（toString 只打印引用）
 ```
 
-> 🎯 **核心要点**：Arrays = "**sort/binarySearch（先排序）/copyOf/toString**"四核心——**"数组直接打印是地址，必须 Arrays.toString"是最常见的坑**；binarySearch 未命中的负返回值（-(插入点)-1）是细节考点。
+> **核心要点**：Arrays = "**sort/binarySearch（先排序）/copyOf/toString**"四核心——**"数组直接打印是地址，必须 Arrays.toString"是最常见的坑**；binarySearch 未命中的负返回值（-(插入点)-1）是细节考点。
 
 ---
 
@@ -104,8 +104,8 @@ System.out.println(Arrays.toString(arr));   // [1, 2, 3] ✅
 ```java
 // 坑 1：返回"固定大小"的视图（不是 ArrayList！）
 List<String> list = Arrays.asList("a", "b");
-list.add("c");       // ❌ UnsupportedOperationException（固定大小）
-list.set(0, "x");    // ✅ 可以修改元素
+list.add("c");       // ✗ UnsupportedOperationException（固定大小）
+list.set(0, "x");    // ✓ 可以修改元素
 
 // 坑 2：修改写穿原数组（是视图不是副本）
 String[] arr = {"a", "b"};
@@ -116,11 +116,11 @@ arr[0];              // "z"（写穿！）
 // 坑 3：基本类型数组是"单元素"列表！
 int[] nums = {1, 2, 3};
 List<int[]> list = Arrays.asList(nums);   // 1 个元素（int[] 本身）！
-// ✅ 正确：Integer[] 或用 Stream：
+// ✓ 正确：Integer[] 或用 Stream：
 List<Integer> ok = Arrays.stream(nums).boxed().toList();
 
 // 想要真正的可变列表：
-List<String> mutable = new ArrayList<>(Arrays.asList("a", "b"));   // ✅ 包装一层
+List<String> mutable = new ArrayList<>(Arrays.asList("a", "b"));   // ✓ 包装一层
 ```
 
 **数组 → 集合的现代选择**：
@@ -132,7 +132,7 @@ List<String> mutable = new ArrayList<>(Arrays.asList("a", "b"));   // ✅ 包装
 // 基本类型：Arrays.stream(ints).boxed().toList()
 ```
 
-> 🎯 **核心要点**：asList 三坑 = "**固定大小（不可增删）+ 写穿数组 + 基本类型单元素**"——**"要可变就包 ArrayList、要不可变用 List.of"**是标准解法；基本类型数组必须 boxed。
+> **核心要点**：asList 三坑 = "**固定大小（不可增删）+ 写穿数组 + 基本类型单元素**"——**"要可变就包 ArrayList、要不可变用 List.of"**是标准解法；基本类型数组必须 boxed。
 
 ---
 
@@ -164,7 +164,7 @@ Arrays.parallelSort(bigArr);    // JDK 8+，分段排序后合并
 应用：插入点 = -ret - 1 → insert(插入点, 元素) 保持有序
 ```
 
-> 🎯 **核心要点**：排序 = "**基本类型双轴快排（不稳定）+ 对象 TimSort（稳定）+ parallelSort（大数据）**"——**"二分必须先排序 + 负返回值转插入点"**是细节考点（与集合排序的 TimSort 一致）。
+> **核心要点**：排序 = "**基本类型双轴快排（不稳定）+ 对象 TimSort（稳定）+ parallelSort（大数据）**"——**"二分必须先排序 + 负返回值转插入点"**是细节考点（与集合排序的 TimSort 一致）。
 
 ---
 
@@ -198,7 +198,7 @@ int[][] copy = matrix.clone();      // 浅拷贝（只复制外层引用！）
 → 二维/对象数组的"拷贝"要确认深度
 ```
 
-> 🎯 **核心要点**：拷贝 = "**copyOf（扩容/截断，ArrayList 底层）+ 浅拷贝陷阱（clone/fill 引用）**"——**"二维数组 clone 是浅拷贝"是隐蔽坑**；copyOf 是 ArrayList 扩容的实现细节（`Java集合框架/02` 联动）。
+> **核心要点**：拷贝 = "**copyOf（扩容/截断，ArrayList 底层）+ 浅拷贝陷阱（clone/fill 引用）**"——**"二维数组 clone 是浅拷贝"是隐蔽坑**；copyOf 是 ArrayList 扩容的实现细节（`Java集合框架/02` 联动）。
 
 ---
 
@@ -229,7 +229,7 @@ asList 三坑（固定大小/写穿/基本类型）
 拷贝记住浅拷贝陷阱（clone/fill）
 ```
 
-> 🎯 **核心要点**：速查 11 项 = "**Objects 四工具 + Arrays 七操作 + 三坑**"——**"数组用 Arrays.*、对象用 Objects.*"是记忆主线**；asList 三坑与 toString 是面试细节题富矿。
+> **核心要点**：速查 11 项 = "**Objects 四工具 + Arrays 七操作 + 三坑**"——**"数组用 Arrays.*、对象用 Objects.*"是记忆主线**；asList 三坑与 toString 是面试细节题富矿。
 
 ---
 

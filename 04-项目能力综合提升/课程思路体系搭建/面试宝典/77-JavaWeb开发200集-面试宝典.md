@@ -27,7 +27,7 @@
 | 类/属性/伪类选择器 | 10 | `.container`、`[type]`、`:hover` |
 | 元素/伪元素选择器 | 1 | `div`、`::before` |
 
-> 💡 **面试常考**：`div.container#main` 的权重 = 1 + 10 + 100 = 111。`!important` 优先于一切，应谨慎使用。
+> **面试常考**：`div.container#main` 的权重 = 1 + 10 + 100 = 111。`!important` 优先于一切，应谨慎使用。
 
 ### 1.3 JavaScript 中 `==` 与 `===` 的区别？
 - `==`：先做类型转换再比较值（如 `"5" == 5` 返回 `true`）。
@@ -44,7 +44,7 @@
 | `v-model` | 双向数据绑定 | `v-model="username"` |
 | `v-on` | 事件绑定 | `v-on:click="handle"` 简写 `@click="handle"` |
 
-> 💡 **高频追问**：`v-if` vs `v-show` 区别？`v-if` 是惰性的（条件为假时 DOM 不存在），适用于切换频率低的场景；`v-show` 仅切换 CSS 的 `display`，适用于高频切换。
+> **高频追问**：`v-if` vs `v-show` 区别？`v-if` 是惰性的（条件为假时 DOM 不存在），适用于切换频率低的场景；`v-show` 仅切换 CSS 的 `display`，适用于高频切换。
 
 ### 1.5 Maven 的三大生命周期是什么？
 | 生命周期 | 包含阶段 | 说明 |
@@ -53,7 +53,7 @@
 | **default** | compile → test → package → install → deploy | 核心构建流程 |
 | **site** | pre-site → site → post-site → site-deploy | 生成项目站点文档 |
 
-> 💡 **面试常问**：`mvn clean install` 执行了 clean 生命周期的 `clean` 阶段，然后执行 default 生命周期直到 `install`。
+> **面试常问**：`mvn clean install` 执行了 clean 生命周期的 `clean` 阶段，然后执行 default 生命周期直到 `install`。
 
 ### 1.6 Maven 依赖 scope 有哪些？
 | scope | 编译期 | 运行期 | 示例 |
@@ -126,7 +126,7 @@
 ### 1.14 Logback 日志级别及优先级？
 `TRACE` < `DEBUG` < `INFO` < `WARN` < `ERROR`
 
-> 💡 **常见配置**：开发环境用 DEBUG 级别，生产环境用 INFO 级别。`<root level="INFO">` 设置全局级别。
+> **常见配置**：开发环境用 DEBUG 级别，生产环境用 INFO 级别。`<root level="INFO">` 设置全局级别。
 
 ### 1.15 JWT 的组成部分及过期处理？
 - **Header**：`{"alg": "HS256", "typ": "JWT"}`，声明算法和类型
@@ -202,7 +202,7 @@ public class Application {
 4. 每个自动配置类上使用 `@ConditionalOnClass`、`@ConditionalOnMissingBean` 等条件注解，判断是否生效
 5. 生效后，自动配置类会创建对应的 Bean 到 Spring 容器中
 
-> 💡 **常见面试题**：如何排除某个自动配置？使用 `@SpringBootApplication(exclude = DataSourceAutoConfiguration.class)` 或者在配置文件中设置 `spring.autoconfigure.exclude`。
+> **常见面试题**：如何排除某个自动配置？使用 `@SpringBootApplication(exclude = DataSourceAutoConfiguration.class)` 或者在配置文件中设置 `spring.autoconfigure.exclude`。
 
 ### 2.2 IOC（控制反转）与 DI（依赖注入）原理
 - **IOC 思想**：对象的创建权从程序本身反转给 Spring 容器管理
@@ -231,7 +231,7 @@ public class UserServiceImpl implements UserService {
 }
 ```
 
-> 💡 **Spring 官方推荐构造器注入**：依赖不可变（`final`）、不为 null、便于单元测试。
+> **Spring 官方推荐构造器注入**：依赖不可变（`final`）、不为 null、便于单元测试。
 
 ### 2.3 AOP 底层代理机制（JDK Proxy vs CGLIB）
 | 对比维度 | JDK 动态代理 | CGLIB 代理 |
@@ -242,7 +242,7 @@ public class UserServiceImpl implements UserService {
 | 性能（调用阶段） | 略慢 | 略快 |
 | Spring Boot 默认 | 有接口时用 JDK | 无接口或用 CGLIB |
 
-> 💡 **Spring Boot 2.x+ 默认使用 CGLIB**，即使目标类有接口：`spring.aop.proxy-target-class=true`（默认值）。
+> **Spring Boot 2.x+ 默认使用 CGLIB**，即使目标类有接口：`spring.aop.proxy-target-class=true`（默认值）。
 
 ```java
 // JDK 动态代理核心代码
@@ -326,7 +326,7 @@ public class JdkProxyFactory implements InvocationHandler {
 | 适用场景 | 列名与属性名一致 | 列名不一致、多表关联、复杂映射 |
 | 示例 | `resultType="com.User"` | `<resultMap id="userMap" type="com.User">` |
 
-> 💡 **建议**：企业项目中统一使用 `resultMap`，便于维护和扩展。
+> **建议**：企业项目中统一使用 `resultMap`，便于维护和扩展。
 
 ### 2.7 Spring Boot 配置优先级
 从高到低：
@@ -339,7 +339,7 @@ public class JdkProxyFactory implements InvocationHandler {
 7. `@PropertySource` 指定的配置文件
 8. Spring Boot 默认配置
 
-> 🎯 **总结**：命令行参数 > 环境变量 > profile 配置 > 默认配置。后加载的覆盖先加载的。
+> **总结**：命令行参数 > 环境变量 > profile 配置 > 默认配置。后加载的覆盖先加载的。
 
 ### 2.8 HTTP 请求/响应协议结构
 **请求协议**：
@@ -435,7 +435,7 @@ public class EmpServiceImpl implements EmpService {
 }
 ```
 
-> ⚠️ **PageHelper 注意事项**：一个线程中只能有一个 `PageHelper.startPage` 生效，必须在 MyBatis 查询方法之前调用，且不能被跳过。
+> **PageHelper 注意事项**：一个线程中只能有一个 `PageHelper.startPage` 生效，必须在 MyBatis 查询方法之前调用，且不能被跳过。
 
 ### 2.12 spring.factories 自动配置加载机制
 Spring Boot 的 `AutoConfiguration.imports` 文件（Spring Boot 2.7+）或 `spring.factories`（旧版本）中注册了所有自动配置类，Spring 通过 `SpringFactoriesLoader.loadFactoryNames()` 读取这些类名，然后按 `@AutoConfigureOrder` 和 `@AutoConfigureAfter` / `@AutoConfigureBefore` 确定顺序，逐个按条件配置。
@@ -1311,4 +1311,4 @@ public class UserServiceImpl implements UserService {
 
 ---
 
-> 🎯 **面试建议**：JavaWeb 面试考察的是从页面到底层的全链路理解。前端重点在 Vue 指令和 Ajax 交互，后端核心在 Spring Boot 自动配置原理 + AOP + JWT 认证，数据库在于 MyBatis 动态 SQL 和事务管理，部署在于 Docker 容器化。建议对照 Checklist 逐项排查，弱势项目按"是什么 → 怎么用 → 为什么"的三段式准备。
+> **面试建议**：JavaWeb 面试考察的是从页面到底层的全链路理解。前端重点在 Vue 指令和 Ajax 交互，后端核心在 Spring Boot 自动配置原理 + AOP + JWT 认证，数据库在于 MyBatis 动态 SQL 和事务管理，部署在于 Docker 容器化。建议对照 Checklist 逐项排查，弱势项目按"是什么 → 怎么用 → 为什么"的三段式准备。

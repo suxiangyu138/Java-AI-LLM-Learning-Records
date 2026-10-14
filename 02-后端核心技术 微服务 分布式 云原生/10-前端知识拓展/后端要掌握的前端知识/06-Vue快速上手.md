@@ -1,5 +1,5 @@
 # 06-Vue快速上手
-> 🎯 后端为什么学Vue？因为国内90%的前端项目用Vue — 能看懂前端代码、能写简单页面验证自己的API，是后端协作能力的质变
+> 后端为什么学Vue？因为国内90%的前端项目用Vue — 能看懂前端代码、能写简单页面验证自己的API，是后端协作能力的质变
 
 ---
 
@@ -310,4 +310,4 @@ const remove = async (id) => {
 
 ---
 
-> 🎯 **后端学Vue的最小集合**：能看懂`.vue`文件的`<template>`+`<script setup>`结构 → 理解`v-for`/`v-if`/`v-model`/`@click` → 能自己写一个简单页面测试API。
+> **后端学Vue的最小集合**：能看懂`.vue`文件的`<template>`+`<script setup>`结构 → 理解`v-for`/`v-if`/`v-model`/`@click` → 能自己写一个简单页面测试API。

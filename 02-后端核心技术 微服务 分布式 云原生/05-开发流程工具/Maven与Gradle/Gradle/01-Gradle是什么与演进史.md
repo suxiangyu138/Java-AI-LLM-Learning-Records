@@ -1,6 +1,6 @@
 # 01 - Gradle 是什么与演进史
 
-> 🎯 Gradle 是 JVM 生态的两大构建工具之一，核心差异在构建模型：Maven 是固定生命周期阶段，Gradle 是自由编排的任务 DAG。DSL 从 Groovy 演进到 Kotlin DSL（2026 默认）再到 Declarative Gradle（下一代），理解这条线就理解了 Gradle 的设计哲学
+> Gradle 是 JVM 生态的两大构建工具之一，核心差异在构建模型：Maven 是固定生命周期阶段，Gradle 是自由编排的任务 DAG。DSL 从 Groovy 演进到 Kotlin DSL（2026 默认）再到 Declarative Gradle（下一代），理解这条线就理解了 Gradle 的设计哲学
 
 ---
 
@@ -100,6 +100,6 @@ Gradle： 任务图（compileJava → processResources → classes → test → 
 
 ---
 
-> 🎯 **核心要点**：Gradle = 任务 DAG 模型（自由编排 + 增量友好）+ 语言演进（Groovy 维护 → Kotlin DSL 默认 → Declarative 下一代）+ 性能三层加速。与 Maven 的本质差异是构建模型而非快慢。2026 姿势：新项目 Kotlin DSL、Wrapper 固定版本、配置缓存开启、约定插件复用——Maven 迁移不是搬家而是换构建哲学。
+> **核心要点**：Gradle = 任务 DAG 模型（自由编排 + 增量友好）+ 语言演进（Groovy 维护 → Kotlin DSL 默认 → Declarative 下一代）+ 性能三层加速。与 Maven 的本质差异是构建模型而非快慢。2026 姿势：新项目 Kotlin DSL、Wrapper 固定版本、配置缓存开启、约定插件复用——Maven 迁移不是搬家而是换构建哲学。
 
 **下一模块**：[02-安装与快速开始](02-安装与快速开始.md) / **返回总览**：[00-总览](00-Gradle知识体系总览.md)

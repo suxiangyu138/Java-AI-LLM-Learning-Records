@@ -2,7 +2,7 @@
 
 > 定位：PG 最大的差异化优势——pgvector 向量检索、PostGIS 地理空间、PL 语言扩展、FDW 外部数据源、时序与全文——PG 不止是关系库
 
-## 📚 目录
+## 目录
 
 1. [pgvector 向量检索](#1-pgvector-向量检索)
 2. [PostGIS 地理空间](#2-postgis-地理空间)
@@ -46,7 +46,7 @@ ORDER BY embedding <=> query_vector -- 向量排序
 LIMIT 10;
 ```
 
-> 🎯 **要点**：pgvector = **数据库内混合查询**（结构化过滤 + 向量排序一条 SQL）——对比独立向量库（Milvus）需要两步查询。是 Spring AI RAG 场景的默认向量库选择之一。
+> **要点**：pgvector = **数据库内混合查询**（结构化过滤 + 向量排序一条 SQL）——对比独立向量库（Milvus）需要两步查询。是 Spring AI RAG 场景的默认向量库选择之一。
 
 ### 1.2 pgvector 0.8 实战（HNSW 参数 + 迭代扫描）
 
@@ -73,26 +73,26 @@ CREATE TABLE docs (id int, embedding halfvec(1536));
 
 | 能力 | pgvector 0.7 | pgvector 0.8（2026 验证） |
 |------|:---:|:---:|
-| 过滤后重扫 | ❌ 结果可能不足 | ✅ iterative scan |
-| 二进制量化 | 手动 | ✅ 内置 binary_quantize |
-| halfvec | ✅ | ✅（0.7 引入，0.8 优化） |
-| PG 18 支持 | ❌ | ✅ 0.8.1+ |
-| 并行建索引 | — | ✅ 0.8 快 40%（需 REINDEX 生效） |
+| 过滤后重扫 | ✗ 结果可能不足 | ✓ iterative scan |
+| 二进制量化 | 手动 | ✓ 内置 binary_quantize |
+| halfvec | ✓ | ✓（0.7 引入，0.8 优化） |
+| PG 18 支持 | ✗ | ✓ 0.8.1+ |
+| 并行建索引 | — | ✓ 0.8 快 40%（需 REINDEX 生效） |
 
-> 💡 **选型经验**：生产常用组合 = `halfvec` 存储 + HNSW 索引 + `ef_search` 动态调参；百万级向量 + 90%+ 召回诉求再考虑量化两阶段（bit 粗排 + 原精度精排）。
+> **选型经验**：生产常用组合 = `halfvec` 存储 + HNSW 索引 + `ef_search` 动态调参；百万级向量 + 90%+ 召回诉求再考虑量化两阶段（bit 粗排 + 原精度精排）。
 
 ### 1.3 pgvector vs 独立向量库
 
 | 维度 | pgvector | Milvus |
 |------|:---:|:---:|
-| 部署 | ✅ 已有 PG 零额外 | 独立服务 |
-| 混合查询 | ✅ SQL 一体化 | 两步 |
+| 部署 | ✓ 已有 PG 零额外 | 独立服务 |
+| 混合查询 | ✓ SQL 一体化 | 两步 |
 | 规模 | 百万级 | 十亿级 |
 | 索引 | IVFFlat/HNSW | 多种 ANN |
 | 一致性 | ACID | 最终 |
 
 ```
-⚠️ 面试必答：
+面试必答：
 "pgvector = 关系库原生向量检索——
  中小规模（百万）零额外部署、
  结构化+向量一条 SQL；
@@ -121,7 +121,7 @@ WHERE ST_DWithin(
     5000                               -- 5km 内
 );
 
--- ⚠️ PostGIS 让 PG 成为地理信息系统的事实标准
+-- PostGIS 让 PG 成为地理信息系统的事实标准
 --   (MongoDB/MySQL 均无法匹敌)
 ```
 
@@ -175,10 +175,10 @@ SELECT u.name, o.total
 FROM remote_users u
 JOIN local_orders o ON u.id = o.user_id;
 
--- ⚠️ FDW = 统一查询层（多数据源联邦查询）
+-- FDW = 统一查询层（多数据源联邦查询）
 ```
 
-> 🎯 **要点**：FDW = "PG 作为数据中间层"——统一查询 MySQL/Mongo/文件/API，免应用层聚合。PG 就是数据联邦引擎。
+> **要点**：FDW = "PG 作为数据中间层"——统一查询 MySQL/Mongo/文件/API，免应用层聚合。PG 就是数据联邦引擎。
 
 ---
 
@@ -226,7 +226,7 @@ SELECT cron.schedule('daily-vacuum', '0 2 * * *',
     'VACUUM (ANALYZE) public.orders');
 SELECT cron.schedule('hourly-snapshot', '0 * * * *',
     'CALL public.snapshot_metrics()');
--- ⚠️ pg_cron 适合库内维护任务；应用级调度仍推荐 XXL-Job
+-- pg_cron 适合库内维护任务；应用级调度仍推荐 XXL-Job
 
 -- ③ pg_stat_statements：SQL 性能统计（调优第一扩展）
 CREATE EXTENSION pg_stat_statements;
@@ -242,14 +242,14 @@ ORDER BY mean_exec_time DESC LIMIT 10;      -- 慢 SQL Top10
 | 业务需求 | 专用方案 | PG 方案 | 选型建议 |
 |---------|---------|---------|---------|
 | 向量检索 | Milvus/Weaviate | pgvector | ≤ 千万级用 PG，更大上专用 |
-| 地理空间 | MongoDB 2dsphere | PostGIS | ✅ PG 完胜（精度/函数全） |
+| 地理空间 | MongoDB 2dsphere | PostGIS | ✓ PG 完胜（精度/函数全） |
 | 全文搜索 | Elasticsearch | tsvector + GIN | 小场景（<10GB 文本）PG 够用 |
 | 时序数据 | InfluxDB | TimescaleDB | 百万级指标用 PG |
 | 分布式 | Citus 集群 | — | 10 亿+ 行再考虑 |
-| 多库联邦 | 应用层聚合 | FDW | ✅ 免中间件 |
+| 多库联邦 | 应用层聚合 | FDW | ✓ 免中间件 |
 
 ```
-⚠️ 面试必答：
+面试必答：
 "PG 扩展生态是最大护城河——
  pgvector（AI）、PostGIS（地理）、
  TimescaleDB（时序）、Citus（分布式）、
@@ -260,7 +260,7 @@ ORDER BY mean_exec_time DESC LIMIT 10;      -- 慢 SQL Top10
 
 ---
 
-> 🎯 **核心要点**：PG 扩展 = **pgvector 0.8**（HNSW + 量化 + 迭代扫描）+ **PostGIS**（地理）+ **PL 多语言** + **FDW**（联邦查询）+ **pg_partman/pg_cron**（自动化）+ **pg_stat_statements**（性能）。PG 的定位早已超出"关系数据库"——是数据平台（关系/向量/地理/时序/全文一体化），但有规模边界。
+> **核心要点**：PG 扩展 = **pgvector 0.8**（HNSW + 量化 + 迭代扫描）+ **PostGIS**（地理）+ **PL 多语言** + **FDW**（联邦查询）+ **pg_partman/pg_cron**（自动化）+ **pg_stat_statements**（性能）。PG 的定位早已超出"关系数据库"——是数据平台（关系/向量/地理/时序/全文一体化），但有规模边界。
 
 ---
 

@@ -2,7 +2,7 @@
 
 > 定位：CLI 生态篇——终端 Agent 的 2026 格局：阿里云百炼 CLI（平台能力 CLI 化）、Qoder、OpenClaw、Hermes Agent，以及"平台 ↔ 本地 Agent"双向打通趋势（2026-08 基准）
 
-## 📚 目录
+## 目录
 
 1. [CLI Agent 生态格局](#1-cli-agent-生态格局)
 2. [阿里云百炼 CLI：平台能力 CLI 化](#2-阿里云百炼-cli平台能力-cli-化)
@@ -26,7 +26,7 @@
          → 平台把"模型/知识库/记忆/搜索"开放为 CLI 工具，任何 Agent 可调
 ```
 
-> 🎯 **一句话**：2026 年 CLI Agent 生态的核心叙事 = **"平台能力工具化"**——云平台把全套能力变成 Agent 可调用的 CLI/工具，本地 Agent 生态（Claude Code 系）作为消费方。
+> **一句话**：2026 年 CLI Agent 生态的核心叙事 = **"平台能力工具化"**——云平台把全套能力变成 Agent 可调用的 CLI/工具，本地 Agent 生态（Claude Code 系）作为消费方。
 
 ## 2. 阿里云百炼 CLI：平台能力 CLI 化
 
@@ -40,7 +40,7 @@
 | 设计 | 把面向人的平台交互（鉴权/参数/协议差异）封装为统一轻量命令行入口 |
 | 配套 | 吞吐弹性调度（并发波峰波谷）、Agentic RL（基于执行反馈迭代） |
 
-> 🎯 **设计洞察**：百炼 CLI = "**把平台做成 Agent 的工具**"——过去是人调用平台 API，现在是 Agent 一行命令调用平台能力；鉴权/参数/协议差异全部封装。
+> **设计洞察**：百炼 CLI = "**把平台做成 Agent 的工具**"——过去是人调用平台 API，现在是 Agent 一行命令调用平台能力；鉴权/参数/协议差异全部封装。
 
 ## 3. 百炼 CLI 核心能力
 
@@ -61,7 +61,7 @@
 全流程一行提示词驱动，无需拼接多个 API
 ```
 
-> 💡 **与 Claude Code 的关系**：百炼 CLI 不替代 Claude Code——它把自己变成 Claude Code 可调用的"平台工具"；Claude Code 管编排，百炼 CLI 供能力（模型/知识库/记忆/搜索）。
+> **与 Claude Code 的关系**：百炼 CLI 不替代 Claude Code——它把自己变成 Claude Code 可调用的"平台工具"；Claude Code 管编排，百炼 CLI 供能力（模型/知识库/记忆/搜索）。
 
 ## 4. Qoder / OpenClaw / Hermes Agent
 
@@ -73,7 +73,7 @@
 | Claude Code | Anthropic | 编码 Agent | 生态事实标准；多平台接入（百炼/Coze） |
 | Codex CLI | OpenAI | 编码 Agent | Coze 3.0 可接入 |
 
-> 💡 **Hermes 的 A2A 意义**：CLI Agent 从"单机工具"走向"协议化 Agent"——A2A 端点让 Hermes 可被其他 Agent 发现与委派（07 篇协议详述）。
+> **Hermes 的 A2A 意义**：CLI Agent 从"单机工具"走向"协议化 Agent"——A2A 端点让 Hermes 可被其他 Agent 发现与委派（07 篇协议详述）。
 
 ## 5. 双向打通趋势：平台 ↔ 本地 Agent
 
@@ -92,7 +92,7 @@
       MCP/A2A = 连接协议
 ```
 
-> 🎯 **生态判断**：本地 CLI Agent（Claude Code 系）成为 2026 年 Agent 生态的"客户端"，云平台成为"能力服务器"——**学会用 CLI Agent + 平台能力组合，比纠结单框架更有生产力**。
+> **生态判断**：本地 CLI Agent（Claude Code 系）成为 2026 年 Agent 生态的"客户端"，云平台成为"能力服务器"——**学会用 CLI Agent + 平台能力组合，比纠结单框架更有生产力**。
 
 ## 6. CLI Agent 选型
 
@@ -106,7 +106,7 @@
 
 ## 7. 核心要点
 
-> 🎯 **核心要点**：
+> **核心要点**：
 > 1. 2026 CLI 生态核心叙事：**平台能力工具化**——百炼 CLI（2026-05-29 开源）让 150+ 模型/知识库/记忆/搜索成为 Agent 一行命令可调的工具
 > 2. 百炼 CLI 原生兼容 Claude Code/Qoder/OpenClaw/Hermes——不替代 CLI Agent，而是做"能力供给方"
 > 3. 双向打通：本地 Agent 接平台（Coze 3.0）↔ 平台能力开放（百炼 CLI）——MCP/A2A 为连接协议

@@ -1,10 +1,10 @@
 # Spring 生态名词剖析
 
-> 🌿 Spring 全家桶核心概念 50+ —— IoC/DI、AOP、Spring Boot 自动配置、Spring Cloud 微服务、Security 安全、事务管理
+> Spring 全家桶核心概念 50+ —— IoC/DI、AOP、Spring Boot 自动配置、Spring Cloud 微服务、Security 安全、事务管理
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [Spring Framework 核心](#1-spring-framework-核心)
 2. [Spring Boot](#2-spring-boot)
@@ -28,7 +28,7 @@ IoC = Inversion of Control（控制反转）
 DI = Dependency Injection（依赖注入）
   → IoC 的具体实现方式
   → 三种方式：
-    1. 构造器注入（推荐 ✅）
+    1. 构造器注入（推荐 ✓）
     2. Setter 注入
     3. 字段注入 @Autowired（不推荐，测试困难）
 ```
@@ -48,10 +48,10 @@ public class UserService {
 }
 
 // 为什么推荐构造器注入？
-// ✅ 依赖不可变（final）
-// ✅ 保证依赖不为 null
-// ✅ 单元测试方便（直接 new 即可）
-// ✅ 避免循环依赖的问题
+// ✓ 依赖不可变（final）
+// ✓ 保证依赖不为 null
+// ✓ 单元测试方便（直接 new 即可）
+// ✓ 避免循环依赖的问题
 ```
 
 ### 1.2 Bean 的作用域
@@ -98,8 +98,8 @@ Bean 生命周期（简化版）：
 // 5. B 初始化完成 → 放入一级缓存
 // 6. A 继续填充 → A 初始化完成 → 放入一级缓存
 
-// ⚠️ 构造器注入无法解决循环依赖（因为无法提前暴露引用）
-// ⚠️ prototype 作用域无法解决循环依赖
+// 构造器注入无法解决循环依赖（因为无法提前暴露引用）
+// prototype 作用域无法解决循环依赖
 ```
 
 ---
@@ -370,7 +370,7 @@ public class SecurityConfig {
 
 ---
 
-> 🎯 **一句话总结**：Spring 生态的核心逻辑是 **IoC 容器管理 Bean → AOP 横切增强 → 自动配置简化开发 → 微服务组件化治理**。面试重点：循环依赖、事务失效、自动配置原理、Bean 生命周期。
+> **一句话总结**：Spring 生态的核心逻辑是 **IoC 容器管理 Bean → AOP 横切增强 → 自动配置简化开发 → 微服务组件化治理**。面试重点：循环依赖、事务失效、自动配置原理、Bean 生命周期。
 
 ---
 

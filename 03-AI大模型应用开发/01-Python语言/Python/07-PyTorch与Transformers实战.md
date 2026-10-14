@@ -1,6 +1,6 @@
 # 07 - PyTorch 与 Transformers 实战
 
-> 🎯 Java 后端不需要成为 PyTorch 专家，但必须会：加载模型、跑推理、微调 LoRA。这三件事就够了
+> Java 后端不需要成为 PyTorch 专家，但必须会：加载模型、跑推理、微调 LoRA。这三件事就够了
 
 ## 1. HuggingFace Pipeline（零代码）
 

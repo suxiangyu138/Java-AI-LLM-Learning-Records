@@ -3,7 +3,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [内核 IO 路径全景](#1-内核-io-路径全景)
 2. [缓冲 IO vs 直接 IO vs mmap](#2-缓冲-io-vs-直接-io-vs-mmap)
@@ -43,7 +43,7 @@ NVMe/SATA 驱动 → 控制器 → NAND
 
 **为什么数据库用 O_DIRECT**：数据库自己有 Buffer Pool 管理缓存，再走页缓存等于双缓存（浪费内存 + 双份脏页 + fsync 语义复杂）。MySQL 的 `innodb_flush_method=O_DIRECT`、PostgreSQL 的 direct IO 选项（2024+ 支持）都是此逻辑。
 
-> ⚠️ mmap 陷阱：文件截断/并发写时 SIGBUS；`MappedByteBuffer.force()` 才落盘；虚拟内存占用大。Java 中 mmap 适合读多写少的索引类文件，不适合高频追加写。
+> mmap 陷阱：文件截断/并发写时 SIGBUS；`MappedByteBuffer.force()` 才落盘；虚拟内存占用大。Java 中 mmap 适合读多写少的索引类文件，不适合高频追加写。
 
 ---
 
@@ -180,7 +180,7 @@ mbb.force();  // 落盘（代价高，低频调用）
 
 **三板斧顺序**：`iostat -x 1`（先看设备）→ `fio` 复现（排除负载噪音）→ `smartctl`/dmesg（看设备健康）。**先定位是"负载问题"还是"设备问题"，再动手。**
 
-> 🎯 **核心要点**：后端工程师的磁盘知识浓缩为一句话——**write() 是幻觉，fsync() 才是承诺**。数据可靠性 = 正确的 fsync 时机（数据库的 WAL/双一、Redis 的 AOF）+ 正确的设备（企业级 PLP）+ 正确的文件系统配置（discard=async、XFS/ZFS 按需）。在此基础上，io_uring 与虚拟线程让"异步落盘"成为 2026 年高性能后端的标准姿势。
+> **核心要点**：后端工程师的磁盘知识浓缩为一句话——**write() 是幻觉，fsync() 才是承诺**。数据可靠性 = 正确的 fsync 时机（数据库的 WAL/双一、Redis 的 AOF）+ 正确的设备（企业级 PLP）+ 正确的文件系统配置（discard=async、XFS/ZFS 按需）。在此基础上，io_uring 与虚拟线程让"异步落盘"成为 2026 年高性能后端的标准姿势。
 
 ---
 

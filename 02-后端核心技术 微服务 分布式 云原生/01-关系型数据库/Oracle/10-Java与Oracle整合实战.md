@@ -1,6 +1,6 @@
 # 10 - Java 与 Oracle 整合实战
 
-> 🎯 Java 后端连接 Oracle 的核心要点：JDBC 驱动、连接池配置、PL/SQL 调用、BLOB/CLOB 处理、分页最佳实践
+> Java 后端连接 Oracle 的核心要点：JDBC 驱动、连接池配置、PL/SQL 调用、BLOB/CLOB 处理、分页最佳实践
 
 ---
 

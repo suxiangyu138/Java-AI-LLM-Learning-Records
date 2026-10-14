@@ -2,7 +2,7 @@
 
 > `jdk.internal.vm.annotation` 包里的注解是 JDK 自留的"JVM 调教开关"：@Stable 骗过 JIT 做常量折叠、@IntrinsicCandidate 请求 HotSpot 用汇编替换方法体、@Contended 隔离缓存行消除伪共享。普通开发者一辈子不会直接使用它们，但读懂它们 = 读懂 JIT 优化与内存布局的底层机制
 
-## 📚 目录
+## 目录
 
 1. [包的来历：JDK 9 的内部化迁移](#1-包的来历jdk-9-的内部化迁移)
 2. [JIT 行为三注解：@Stable / @ForceInline / @IntrinsicCandidate](#2-jit-行为三注解stable--forceinline--intrinsiccandidate)
@@ -21,7 +21,7 @@
 2. **语义由 VM 解释**：注解本身无处理器类，真正的"消费者"是 C++ 写成的 HotSpot 编译器（C2 JIT）；
 3. **可绕过**：@IntrinsicCandidate 在解释执行/低编译层级下就是普通 Java 方法，注解只在特定编译层级生效——所以 JDK 要求被注解方法"字节码实现与 intrinsic 实现语义等价"。
 
-> 🎯 **核心要点**：这组注解揭示了注解的终极形态——消费者不是反射、不是 APT，而是 C++ 虚拟机本体。注解只是"向另一层软件传递意图的声明式协议"。
+> **核心要点**：这组注解揭示了注解的终极形态——消费者不是反射、不是 APT，而是 C++ 虚拟机本体。注解只是"向另一层软件传递意图的声明式协议"。
 
 ---
 
@@ -89,7 +89,7 @@ CPU 缓存一致性以**缓存行**（通常 64 字节）为最小单位。两�
 
 三道速答题：「LongAdder 为什么比 AtomicLong 快？」——Cell 数组用 @Contended 隔离各线程的计数器字段，消除伪共享互踩（结合无锁 CAS 分段）；「String.hashCode 为什么只算一次？」——hash 字段"至多写一次"符合 @Stable 语义，JIT 可常量折叠后续读取；「System.arraycopy 为什么比循环快？」——@IntrinsicCandidate 让 HotSpot 用平台优化的内存拷贝指令整体替换方法体。答这三题时把注解与机制对上号，就是与背概念候选人的分界线。
 
-> ⚠️ **边界提醒**：本模块内容属 HotSpot 内部实现协议，注解语义随 JDK 版本可能调整（如 @IntrinsicCandidate 的校验行为、@Contended 的填充策略）。生产代码**禁止**通过 `--add-exports` 使用它们，学习目的只需理解机制。
+> **边界提醒**：本模块内容属 HotSpot 内部实现协议，注解语义随 JDK 版本可能调整（如 @IntrinsicCandidate 的校验行为、@Contended 的填充策略）。生产代码**禁止**通过 `--add-exports` 使用它们，学习目的只需理解机制。
 
 ---
 

@@ -1,6 +1,6 @@
 # 15 - Gradle 构建 Task 与依赖管理
 
-> 🎯 Task 是 Gradle 构建的基本工作单元，依赖管理是日常开发的核心操作 — 掌握 Task 定义与增量构建、依赖解析与冲突处理，才能真正驾驭 Gradle
+> Task 是 Gradle 构建的基本工作单元，依赖管理是日常开发的核心操作 — 掌握 Task 定义与增量构建、依赖解析与冲突处理，才能真正驾驭 Gradle
 
 ---
 
@@ -21,7 +21,7 @@
 ### 1.1 Task 的两种定义方式
 
 ```kotlin
-// ⭐ 方式1：register（推荐，懒加载 — 仅在需要时配置）
+// ★ 方式1：register（推荐，懒加载 — 仅在需要时配置）
 tasks.register("hello") {
     doLast { println("Hello, Gradle!") }
 }
@@ -138,7 +138,7 @@ tasks.register("build") {
 
 ## 3. 增量构建与输入输出
 
-> 💡 Gradle 增量构建的核心：Task 声明 `@Input` 和 `@Output`，Gradle 自动比较输入是否变化，跳过无变化 Task。
+> Gradle 增量构建的核心：Task 声明 `@Input` 和 `@Output`，Gradle 自动比较输入是否变化，跳过无变化 Task。
 
 ### 3.1 输入输出注解
 
@@ -306,7 +306,7 @@ dependencies {
 
 ## 6. Version Catalog（统一版本管理）
 
-> 💡 Gradle 7.4+ 推荐使用 Version Catalog（`libs.versions.toml`）替代 `dependencyManagement`，提供类型安全的依赖声明。
+> Gradle 7.4+ 推荐使用 Version Catalog（`libs.versions.toml`）替代 `dependencyManagement`，提供类型安全的依赖声明。
 
 ### 6.1 配置文件
 
@@ -409,4 +409,4 @@ org.gradle.jvmargs=-Xmx2g -XX:MaxMetaspaceSize=512m  # Daemon JVM 参数
 # org.gradle.unsafe.build-scan=true
 ```
 
-> 🎯 **总结**：掌握 Task 的输入输出声明是实现增量构建的关键；Version Catalog 是统一依赖版本的现代方案；合理配置 Daemon + 并行 + 缓存可显著提升大型项目的构建速度。
+> **总结**：掌握 Task 的输入输出声明是实现增量构建的关键；Version Catalog 是统一依赖版本的现代方案；合理配置 Daemon + 并行 + 缓存可显著提升大型项目的构建速度。

@@ -18,25 +18,25 @@
 
 | 攻击类型 | 目标 | 危害等级 | 防御核心 |
 |---------|------|:---:|---------|
-| **SQL 注入** | 数据库 | 🔴 极高 | 预编译 + 参数化查询 |
-| **XSS** | 用户浏览器 | 🟠 高 | 输出编码 + CSP |
-| **CSRF** | 用户操作 | 🟠 高 | Token + SameSite Cookie |
-| **会话劫持** | 用户身份 | 🟠 高 | HTTPS + HttpOnly + Secure |
-| **文件上传漏洞** | 服务器 | 🔴 极高 | 类型校验 + 重命名 + 隔离 |
-| **路径遍历** | 文件系统 | 🔴 极高 | 路径规范化 + 白名单 |
+| **SQL 注入** | 数据库 | 极高 | 预编译 + 参数化查询 |
+| **XSS** | 用户浏览器 | 高 | 输出编码 + CSP |
+| **CSRF** | 用户操作 | 高 | Token + SameSite Cookie |
+| **会话劫持** | 用户身份 | 高 | HTTPS + HttpOnly + Secure |
+| **文件上传漏洞** | 服务器 | 极高 | 类型校验 + 重命名 + 隔离 |
+| **路径遍历** | 文件系统 | 极高 | 路径规范化 + 白名单 |
 
 ## 2. SQL 注入防御
 
 ### 攻击原理
 
 ```java
-// ❌ 危险：字符串拼接
+// ✗ 危险：字符串拼接
 String username = request.getParameter("username");
 String sql = "SELECT * FROM users WHERE username = '" + username + "'";
 // 输入: ' OR '1'='1' -- 
 // → SELECT * FROM users WHERE username = '' OR '1'='1' --'（返回全部用户）
 
-// ✅ 安全：PreparedStatement
+// ✓ 安全：PreparedStatement
 String sql = "SELECT * FROM users WHERE username = ?";
 PreparedStatement ps = conn.prepareStatement(sql);
 ps.setString(1, username);  // 自动转义
@@ -45,13 +45,13 @@ ps.setString(1, username);  // 自动转义
 ### MyBatis 中的 SQL 注入
 
 ```java
-// ❌ ${} 直接拼接 → SQL 注入风险
+// ✗ ${} 直接拼接 → SQL 注入风险
 @Select("SELECT * FROM users WHERE name = '${name}'")
 
-// ✅ #{} 预编译 → 安全
+// ✓ #{} 预编译 → 安全
 @Select("SELECT * FROM users WHERE name = #{name}")
 
-// 🟡 ${} 的合法用法（ORDER BY / 动态表名 → 必须白名单校验）
+// ${} 的合法用法（ORDER BY / 动态表名 → 必须白名单校验）
 private static final Set<String> ALLOWED_COLUMNS = Set.of("id", "name", "create_time");
 public List<User> getUsersByOrder(String orderBy) {
     if (!ALLOWED_COLUMNS.contains(orderBy)) {
@@ -96,7 +96,7 @@ cookie.setAttribute("SameSite", "Strict");
   用户登录银行网站 → 浏览器保存 Cookie
   → 用户访问恶意网站（未登出银行）
   → 恶意网站发起 POST 请求到银行（浏览器自动携带 Cookie）
-  → 银行认为这是用户的操作 → 转账成功 💸
+  → 银行认为这是用户的操作 → 转账成功 
 ```
 
 ```java

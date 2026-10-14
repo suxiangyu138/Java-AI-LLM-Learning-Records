@@ -1,6 +1,6 @@
 # 05 - 数据库与ORM集成
 
-> 🎯 AI 应用离不开数据持久化 — SQLAlchemy 2.0 async、连接池、Alembic 迁移。重点在异步模式下的数据库使用
+> AI 应用离不开数据持久化 — SQLAlchemy 2.0 async、连接池、Alembic 迁移。重点在异步模式下的数据库使用
 
 ---
 
@@ -500,7 +500,7 @@ class VectorStoreService:
         ]
 ```
 
-> 🎯 **核心要点**：SQLAlchemy 2.0 async + DeclarativeBase 是标准范式。Session 通过 DI 注入，事务用 try/commit/rollback。AI 应用特有：对话/消息表设计、向量数据库与关系数据库配合、Token 计数追踪
+> **核心要点**：SQLAlchemy 2.0 async + DeclarativeBase 是标准范式。Session 通过 DI 注入，事务用 try/commit/rollback。AI 应用特有：对话/消息表设计、向量数据库与关系数据库配合、Token 计数追踪
 
 ---
 

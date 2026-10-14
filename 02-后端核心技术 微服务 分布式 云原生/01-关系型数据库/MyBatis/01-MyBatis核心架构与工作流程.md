@@ -1,6 +1,6 @@
 # 01 - MyBatis 核心架构与工作流程
 
-> 🎯 MyBatis 的工作流程 = 加载配置 → 创建 SqlSessionFactory → 获取 SqlSession → 执行 SQL → 映射结果。理解这条链路上的每个组件，是阅读源码和排查问题的基础
+> MyBatis 的工作流程 = 加载配置 → 创建 SqlSessionFactory → 获取 SqlSession → 执行 SQL → 映射结果。理解这条链路上的每个组件，是阅读源码和排查问题的基础
 
 ---
 

@@ -1,6 +1,6 @@
 # 10 - Spring Cloud Alibaba 全栈实战
 
-> 🎯 以电商微服务为例，从零搭建完整的 Spring Cloud Alibaba 全栈项目 — Docker Compose 一键启动基础设施 + 多个微服务模块完整代码
+> 以电商微服务为例，从零搭建完整的 Spring Cloud Alibaba 全栈项目 — Docker Compose 一键启动基础设施 + 多个微服务模块完整代码
 
 ---
 
@@ -277,4 +277,4 @@ open http://localhost:8090 → 实时监控 / 流控规则
 ab -n 1000 -c 50 http://localhost:8080/api/orders/1
 ```
 
-> 🎯 **从零到全栈**：Docker Compose 启动基础设施 → 4 个微服务模块 → Feign 调用 → Sentinel 保护 → Gateway 路由 → Zipkin 追踪。这个 DEMO 覆盖了 Spring Cloud Alibaba 最核心的每日使用场景。
+> **从零到全栈**：Docker Compose 启动基础设施 → 4 个微服务模块 → Feign 调用 → Sentinel 保护 → Gateway 路由 → Zipkin 追踪。这个 DEMO 覆盖了 Spring Cloud Alibaba 最核心的每日使用场景。

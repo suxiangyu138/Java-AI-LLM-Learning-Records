@@ -2,7 +2,7 @@
 
 > 语法糖不是花招——它背后是编译器黑魔法、字节码转换、JVM优化。面试官问"语法糖"其实在考你对Java编译原理的理解深度
 
-## 📚 目录
+## 目录
 
 1. [知识体系导图](#1-知识体系导图)
 2. [模块导航](#2-模块导航)
@@ -118,7 +118,7 @@ Java 语法糖的核心机制：**编译期解糖（Desugaring）**
 | 运行时特性 | 注解、动态代理 | 运行期保留 | 是 |
 | 混合型 | Lambda（部分解糖+部分 invokedynamic） | 编译+运行 | 部分 |
 
-> ⚠️ **核心要点**：泛型是纯编译期语法糖，运行时会被类型擦除（Type Erasure）；而注解可通过 `RetentionPolicy.RUNTIME` 在运行期保留，这已经不是纯粹的"语法糖"了。面试中值得区分。
+> **核心要点**：泛型是纯编译期语法糖，运行时会被类型擦除（Type Erasure）；而注解可通过 `RetentionPolicy.RUNTIME` 在运行期保留，这已经不是纯粹的"语法糖"了。面试中值得区分。
 
 ---
 
@@ -157,47 +157,47 @@ Java 21 (LTS)  ─── 模式匹配switch正式、record模式、虚拟线程�
 
 | 语法糖 | 本质 | 解糖方式 | 面试热度 |
 |-------|------|---------|:-------:|
-| 泛型（Generic） | 编译期类型检查 + 类型擦除 | 擦除为 Object/上界 + 强制转型 | ⭐⭐⭐⭐⭐ |
-| 自动装箱拆箱 | 编译器插入 `valueOf()` / `xxxValue()` | `Integer.valueOf(200)` / `i.intValue()` | ⭐⭐⭐⭐⭐ |
-| 增强 for 循环 | 数组→普通for；Iterable→Iterator | 编译器转换 + 迭代器生成 | ⭐⭐⭐⭐ |
-| 枚举 enum | final class extends Enum | 编译为 final class 继承 java.lang.Enum | ⭐⭐⭐⭐⭐ |
-| 可变参数 varargs | 数组包裹 | 编译为数组参数 + 堆污染警告 | ⭐⭐⭐ |
-| 注解（Annotation） | 标记接口 + RetentionPolicy | 编译期处理、运行期反射读取 | ⭐⭐⭐⭐ |
-| 静态导入 | 编译期名称解析 | 直接引入静态成员 | ⭐⭐ |
+| 泛型（Generic） | 编译期类型检查 + 类型擦除 | 擦除为 Object/上界 + 强制转型 | ★★★★★ |
+| 自动装箱拆箱 | 编译器插入 `valueOf()` / `xxxValue()` | `Integer.valueOf(200)` / `i.intValue()` | ★★★★★ |
+| 增强 for 循环 | 数组→普通for；Iterable→Iterator | 编译器转换 + 迭代器生成 | ★★★★ |
+| 枚举 enum | final class extends Enum | 编译为 final class 继承 java.lang.Enum | ★★★★★ |
+| 可变参数 varargs | 数组包裹 | 编译为数组参数 + 堆污染警告 | ★★★ |
+| 注解（Annotation） | 标记接口 + RetentionPolicy | 编译期处理、运行期反射读取 | ★★★★ |
+| 静态导入 | 编译期名称解析 | 直接引入静态成员 | ★★ |
 
 #### Java 7 — 实用主义
 
 | 语法糖 | 本质 | 解糖方式 | 面试热度 |
 |-------|------|---------|:-------:|
-| switch String | hashCode() + equals() | 生成 switch(Int) + if-else 对比 equals | ⭐⭐⭐⭐ |
-| try-with-resources | try-finally + AutoCloseable | 编译器生成 close() 调用 + addSuppressed | ⭐⭐⭐⭐ |
-| 钻石操作符 <> | 类型推断 | 编译器推断泛型参数 | ⭐⭐⭐ |
-| 二进制字面量 | 编译期常量折叠 | 编译时直接计算 | ⭐ |
-| 数字下划线 | 编译期去下划线 | 编译时去除 | ⭐ |
+| switch String | hashCode() + equals() | 生成 switch(Int) + if-else 对比 equals | ★★★★ |
+| try-with-resources | try-finally + AutoCloseable | 编译器生成 close() 调用 + addSuppressed | ★★★★ |
+| 钻石操作符 <> | 类型推断 | 编译器推断泛型参数 | ★★★ |
+| 二进制字面量 | 编译期常量折叠 | 编译时直接计算 | ★ |
+| 数字下划线 | 编译期去下划线 | 编译时去除 | ★ |
 
 #### Java 8 — 函数式革命
 
 | 语法糖 | 本质 | 解糖方式 | 面试热度 |
 |-------|------|---------|:-------:|
-| Lambda 表达式 | 函数式接口 + invokedynamic | `invokedynamic` + `LambdaMetafactory` | ⭐⭐⭐⭐⭐ |
-| 方法引用 :: | Lambda 快捷语法 | 同理转换为 Lambda | ⭐⭐⭐⭐ |
-| Stream API | 流水线 + 惰性求值 | 方法调用链，内部迭代 | ⭐⭐⭐⭐⭐ |
-| Optional | 值容器 | 普通类方法调用 | ⭐⭐⭐⭐ |
-| 接口默认/静态方法 | 接口中的方法体 | 编译为特殊方法，运行期 JVM 支持 | ⭐⭐⭐⭐ |
+| Lambda 表达式 | 函数式接口 + invokedynamic | `invokedynamic` + `LambdaMetafactory` | ★★★★★ |
+| 方法引用 :: | Lambda 快捷语法 | 同理转换为 Lambda | ★★★★ |
+| Stream API | 流水线 + 惰性求值 | 方法调用链，内部迭代 | ★★★★★ |
+| Optional | 值容器 | 普通类方法调用 | ★★★★ |
+| 接口默认/静态方法 | 接口中的方法体 | 编译为特殊方法，运行期 JVM 支持 | ★★★★ |
 
 #### Java 9–21 — 持续进化
 
 | 语法糖 | 版本 | 本质 | 解糖方式 | 面试热度 |
 |-------|:---:|------|---------|:-------:|
-| var | 10 | 局部变量类型推断 | 编译期推断 + 替换为实际类型 | ⭐⭐⭐⭐ |
-| record | 14→16 | 数据载体紧凑语法 | 编译为 final class + 自动生成方法 | ⭐⭐⭐⭐⭐ |
-| 文本块 | 13→15 | 多行字符串 | 编译期去前导缩进 + 换行处理 | ⭐⭐⭐ |
-| sealed class | 17 | 限制继承 | 编译期 permits 检查 | ⭐⭐⭐⭐ |
-| switch 表达式 | 14→17 | 返回值 + 箭头语法 | 编译为 tableswitch/lookupswitch | ⭐⭐⭐⭐ |
-| 模式匹配 | 16→21 | instanceof + 变量绑定 | 编译为普通 instanceof + 赋值 | ⭐⭐⭐⭐ |
-| 记录模式 | 21 | 解构 record | 编译为 deconstruct 调用 | ⭐⭐⭐ |
+| var | 10 | 局部变量类型推断 | 编译期推断 + 替换为实际类型 | ★★★★ |
+| record | 14→16 | 数据载体紧凑语法 | 编译为 final class + 自动生成方法 | ★★★★★ |
+| 文本块 | 13→15 | 多行字符串 | 编译期去前导缩进 + 换行处理 | ★★★ |
+| sealed class | 17 | 限制继承 | 编译期 permits 检查 | ★★★★ |
+| switch 表达式 | 14→17 | 返回值 + 箭头语法 | 编译为 tableswitch/lookupswitch | ★★★★ |
+| 模式匹配 | 16→21 | instanceof + 变量绑定 | 编译为普通 instanceof + 赋值 | ★★★★ |
+| 记录模式 | 21 | 解构 record | 编译为 deconstruct 调用 | ★★★ |
 
-> 💡 **趋势观察**：Java 每次 LTS 版本都在"去样板代码"，语法糖的本质是让**意图**胜于**形式**。Java 5 是语法糖爆发点，Java 8 是函数式转折点，Java 17+ 进入模式匹配时代。
+> **趋势观察**：Java 每次 LTS 版本都在"去样板代码"，语法糖的本质是让**意图**胜于**形式**。Java 5 是语法糖爆发点，Java 8 是函数式转折点，Java 17+ 进入模式匹配时代。
 
 ---
 
@@ -284,7 +284,7 @@ Java 21 (LTS)  ─── 模式匹配switch正式、record模式、虚拟线程�
 
 高级面试中，面试官会要求你**反编译看字节码**来验证你对语法糖的理解。如果只能口述原理，却不能落地到字节码层面的指令分析（如 `invokedynamic`、`tableswitch`、`checkcast`），说明理解浮于表面。这是区分"会用"和"真懂"的关键分水岭。
 
-> 🎯 **核心要点**：当面试官问"语法糖"相关问题时，不要停留在"我知道这个写法"，要深入讲解**编译器如何转换、字节码长什么样、有什么陷阱、性能如何**。这五层逐步展现深度。
+> **核心要点**：当面试官问"语法糖"相关问题时，不要停留在"我知道这个写法"，要深入讲解**编译器如何转换、字节码长什么样、有什么陷阱、性能如何**。这五层逐步展现深度。
 
 ---
 
@@ -423,7 +423,7 @@ String s = identity("hello");
 | Q9 | `constructor` `toString` `equals` `hashCode` `accessor` | record 自动生成 |
 | Q10 | `String`（编译期确定实际类型） | 泛型类型推断 |
 
-> 💡 **自评**：
+> **自评**：
 > - 答对 0-3 题：建议系统学习语法糖原理，从 [01-经典语法糖篇](./01-经典语法糖篇-编译器的魔法.md) 开始
 > - 答对 4-6 题：有基础但理解不够深，重点关注陷阱题和字节码层面
 > - 答对 7-9 题：掌握扎实，可以进阶到现代语法糖和字节码揭秘

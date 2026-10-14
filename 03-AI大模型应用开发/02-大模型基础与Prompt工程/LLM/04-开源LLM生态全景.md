@@ -1,6 +1,6 @@
 # 04 - 开源 LLM 生态全景
 
-> 🎯 开源 LLM 在 2024-2025 年迎来爆发——Llama 3.1 405B 对标 GPT-4、Qwen 2.5 中文称王、DeepSeek V3 极致性价比。了解开源生态，才能在成本、性能、合规之间做对选择
+> 开源 LLM 在 2024-2025 年迎来爆发——Llama 3.1 405B 对标 GPT-4、Qwen 2.5 中文称王、DeepSeek V3 极致性价比。了解开源生态，才能在成本、性能、合规之间做对选择
 
 ---
 
@@ -18,14 +18,14 @@
 
 | 模型 | 开发方 | 最大参数 | 上下文 | 许可证 | 中文 | 定位 |
 |------|------|:---:|:---:|------|:---:|------|
-| **Llama 3.1** | Meta | 405B | 128K | Llama3 Community | ⭐⭐⭐ | 开源标杆 |
-| **Qwen 2.5** | 阿里 | 72B | 128K | **Apache 2.0** | ⭐⭐⭐⭐⭐ | 中文最强 |
-| **DeepSeek V3** | DeepSeek | 671B(MoE) | 64K | MIT | ⭐⭐⭐⭐⭐ | 极致性价比 |
-| **Mistral** | Mistral AI | 123B | 128K | Apache 2.0 | ⭐⭐ | 欧洲标杆 |
-| **Gemma 2** | Google | 27B | 8K | Gemma | ⭐⭐ | 轻量级 |
-| **Hermes 3** | Nous Research | 405B | 32K | Llama3 | ⭐⭐ | 无审查FC |
-| **Yi** | 零一万物 | 34B | 200K | Apache 2.0 | ⭐⭐⭐⭐ | 长上下文 |
-| **Phi-4** | Microsoft | 14B | 16K | MIT | ⭐⭐ | 小而精 |
+| **Llama 3.1** | Meta | 405B | 128K | Llama3 Community | ★★★ | 开源标杆 |
+| **Qwen 2.5** | 阿里 | 72B | 128K | **Apache 2.0** | ★★★★★ | 中文最强 |
+| **DeepSeek V3** | DeepSeek | 671B(MoE) | 64K | MIT | ★★★★★ | 极致性价比 |
+| **Mistral** | Mistral AI | 123B | 128K | Apache 2.0 | ★★ | 欧洲标杆 |
+| **Gemma 2** | Google | 27B | 8K | Gemma | ★★ | 轻量级 |
+| **Hermes 3** | Nous Research | 405B | 32K | Llama3 | ★★ | 无审查FC |
+| **Yi** | 零一万物 | 34B | 200K | Apache 2.0 | ★★★★ | 长上下文 |
+| **Phi-4** | Microsoft | 14B | 16K | MIT | ★★ | 小而精 |
 
 ## 2. Llama 系列
 
@@ -65,12 +65,12 @@ Llama 3.1 (2024.07): 8B/70B/405B
 Qwen 2.5 — 阿里开源旗舰
 
 核心优势：
-├── 🇨🇳 中文最强：中文理解/生成/翻译远超 Llama
-├── 📜 Apache 2.0：最宽松的商用许可证
-├── 📏 全尺寸：0.5B → 1.5B → 3B → 7B → 14B → 32B → 72B
-├── 📖 128K 上下文
-├── 🔧 Function Calling 原生支持
-└── 🎯 多语言：支持 29 种语言
+├── 中文最强：中文理解/生成/翻译远超 Llama
+├── Apache 2.0：最宽松的商用许可证
+├── 全尺寸：0.5B → 1.5B → 3B → 7B → 14B → 32B → 72B
+├── 128K 上下文
+├── Function Calling 原生支持
+└── 多语言：支持 29 种语言
 
 选型建议：
   中文场景 → Qwen 2.5（不二之选）

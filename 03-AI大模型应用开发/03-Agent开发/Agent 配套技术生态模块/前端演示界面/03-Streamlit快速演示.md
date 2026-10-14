@@ -7,13 +7,13 @@
 | 维度 | Streamlit 表现 | 说明 |
 |---|---|---|
 | 上手速度 | 极快（几十分钟出 Demo） | 纯 Python，脚本即 UI |
-| 聊天能力 | ✅ 够用 | chat_input/chat_message/write_stream |
+| 聊天能力 | ✓ 够用 | chat_input/chat_message/write_stream |
 | 数据可视化 | 最强 | Pandas/Plotly/组件生态数万 |
-| 生产级聊天 | ⚠️ 勉强 | rerun 模型 + session_state 需谨慎管理 |
+| 生产级聊天 | 勉强 | rerun 模型 + session_state 需谨慎管理 |
 | 前端定制 | 受限 | 布局模板化，深度定制靠 CSS 硬改 |
-| 多用户隔离 | ⚠️ 需自行设计 | session_state 按会话隔离，跨会话存储要数据库 |
+| 多用户隔离 | 需自行设计 | session_state 按会话隔离，跨会话存储要数据库 |
 
-> 🎯 核心要点：**Streamlit 是"以数据应用为主、聊天为辅"的演示方案**。Agent 输出图表/报表为主 → 选它；Agent 以对话为主 → [05 Chainlit](05-Chainlit对话界面.md) 更对口。
+> 核心要点：**Streamlit 是"以数据应用为主、聊天为辅"的演示方案**。Agent 输出图表/报表为主 → 选它；Agent 以对话为主 → [05 Chainlit](05-Chainlit对话界面.md) 更对口。
 
 ## 2. 聊天 API 全家桶（v1.59 基准）
 
@@ -70,7 +70,7 @@ Streamlit 把脚本当"函数"，任何交互都触发**全脚本重跑**：
 | 组件即函数返回值 | 把返回值立刻存进 state | 组件 id 变化导致状态丢失 |
 | 多用户=多 session | 每用户一份 session_state | 跨用户共享数据要落库（SQLite/Redis） |
 
-> ⚠️ 多用户并发演示：Streamlit 单进程多 session，**内存型缓存（st.cache_data）跨用户共享**——不要把用户私有数据放 cache；要落库用 SQLite 或外部数据库（配合本体系[数据库交互]模块）。
+> 多用户并发演示：Streamlit 单进程多 session，**内存型缓存（st.cache_data）跨用户共享**——不要把用户私有数据放 cache；要落库用 SQLite 或外部数据库（配合本体系[数据库交互]模块）。
 
 ## 4. Agent 演示的进阶姿势
 
@@ -136,7 +136,7 @@ def save(sid: str, messages: list):
 # 使用：sid 放 session_state，每条消息后 save(sid, messages)
 ```
 
-> 💡 多用户场景直接用 PostgreSQL + 连接池（本仓库[数据库交互]模块有完整方案）；SQLite 适合单机演示。
+> 多用户场景直接用 PostgreSQL + 连接池（本仓库[数据库交互]模块有完整方案）；SQLite 适合单机演示。
 
 ## 6. 部署与生产注意
 
@@ -177,12 +177,12 @@ def save(sid: str, messages: list):
 
 | 你的场景 | 结论 |
 |---|---|
-| 验证 Agent 逻辑、给导师/同事演示 | ✅ Streamlit，30 分钟出活 |
-| 大量图表报表 + 聊天 | ✅ Streamlit 主场 |
-| 纯对话产品、要过程可视化与鉴权 | ❌ 换 Chainlit |
-| 要品牌化对外上线 | ❌ 换 AI SDK/前端团队 |
+| 验证 Agent 逻辑、给导师/同事演示 | ✓ Streamlit，30 分钟出活 |
+| 大量图表报表 + 聊天 | ✓ Streamlit 主场 |
+| 纯对话产品、要过程可视化与鉴权 | ✗ 换 Chainlit |
+| 要品牌化对外上线 | ✗ 换 AI SDK/前端团队 |
 
-> 🎯 核心要点：Streamlit 的价值在于**把演示期成本压到小时级**——用它验证逻辑，用结论决定是否投入前端重写。
+> 核心要点：Streamlit 的价值在于**把演示期成本压到小时级**——用它验证逻辑，用结论决定是否投入前端重写。
 
 ---
 

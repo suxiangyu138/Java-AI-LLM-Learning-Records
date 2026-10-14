@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [Set 接口语义与数学集合](#1-set-接口语义与数学集合)
 2. [HashSet：HashMap 的马甲](#2-hashsethashmap-的马甲)
@@ -47,7 +47,7 @@ Set<Integer> inter = new HashSet<>(a); inter.retainAll(b);    // {3}
 Set<Integer> diff = new HashSet<>(a);  diff.removeAll(b);     // {1,2}
 ```
 
-> 🎯 **核心要点**：Set 的三个实现（Hash/LinkedHash/Tree）数据结构与 Map 三兄弟一一对应，区别只在"顺序语义"——选 Set 先问自己：需要什么顺序？
+> **核心要点**：Set 的三个实现（Hash/LinkedHash/Tree）数据结构与 Map 三兄弟一一对应，区别只在"顺序语义"——选 Set 先问自己：需要什么顺序？
 
 ---
 
@@ -77,7 +77,7 @@ add(e) → hash(e.hashCode()) → 定位桶 → 桶内找 equals 相等的键
 
 **特性总结**：无序（迭代顺序由 hash 分布决定，**同一 JVM 内稳定但不可依赖**）、O(1) 增删查、允许一个 null 元素（HashMap 允许一个 null 键）、fail-fast 迭代器、线程不安全。
 
-> ⚠️ **易错点**：HashSet 的"无序"不是说"随机"，而是"**不保证顺序**"——依赖迭代顺序做业务（如取第一个元素当默认值）是不可靠的；需要确定性顺序就换 LinkedHashSet/TreeSet。
+> **易错点**：HashSet 的"无序"不是说"随机"，而是"**不保证顺序**"——依赖迭代顺序做业务（如取第一个元素当默认值）是不可靠的；需要确定性顺序就换 LinkedHashSet/TreeSet。
 
 ---
 
@@ -107,7 +107,7 @@ orderIds.add("A3"); orderIds.add("A1"); orderIds.add("A2"); orderIds.add("A1");
 System.out.println(orderIds);   // [A3, A1, A2] —— 去重且保持首次出现顺序
 ```
 
-> 💡 JDK 21 起 LinkedHashSet 是 `SequencedSet`——`getFirst()/getLast()/reversed()` 直接可用（见 01 模块第 5 节），"取最近加入的去重列表"变得一行搞定。
+> JDK 21 起 LinkedHashSet 是 `SequencedSet`——`getFirst()/getLast()/reversed()` 直接可用（见 01 模块第 5 节），"取最近加入的去重列表"变得一行搞定。
 
 ---
 
@@ -138,7 +138,7 @@ Score s = ranks.floor(new Score("?", 90));   // 李四(92) ≤ 90 的最近？�
 // 注意 floor/ceiling 语义：floor(x) = 最大的 ≤x，ceiling(x) = 最小的 ≥x
 ```
 
-> ⚠️ **TreeSet 的"相等"由比较器决定**：两个 `equals` 不同但 `compareTo` 为 0 的元素会被视为重复——这既是去重语义（推荐与 equals 保持一致），也是坑：比较器写错（如只比较部分字段）会导致元素被"意外吞掉"。同时 **Set 契约要求 compareTo 与 equals 一致**，否则行为违反 Set 语义。
+> **TreeSet 的"相等"由比较器决定**：两个 `equals` 不同但 `compareTo` 为 0 的元素会被视为重复——这既是去重语义（推荐与 equals 保持一致），也是坑：比较器写错（如只比较部分字段）会导致元素被"意外吞掉"。同时 **Set 契约要求 compareTo 与 equals 一致**，否则行为违反 Set 语义。
 
 ---
 
@@ -167,7 +167,7 @@ workdays.retainAll(weekend);   // 位运算 | & ^ —— 集合运算全是位�
 | 约束 | **只接受枚举元素**；元素必须非 null |
 | 构造 | 不能 new，必须静态工厂 `of/range/allOf/noneOf/complementOf` |
 
-> 🎯 **核心要点**：枚举集合无脑用 EnumSet——它把"集合运算"降维成"位运算"，是 JDK 性能优化的典范。`EnumMap` 同理（见 05 模块）。
+> **核心要点**：枚举集合无脑用 EnumSet——它把"集合运算"降维成"位运算"，是 JDK 性能优化的典范。`EnumMap` 同理（见 05 模块）。
 
 ---
 
@@ -192,7 +192,7 @@ public class User {
     private String name;
     private int age;
 
-    // ❌ 只重写 equals 不重写 hashCode
+    // ✗ 只重写 equals 不重写 hashCode
     @Override public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof User u)) return false;
@@ -216,7 +216,7 @@ System.out.println(users.contains(u));   // false —— u 的桶号变了，Has
 // 且 users 里仍"有"它但永远查不到 —— 泄漏
 ```
 
-> 🎯 **核心要点**：放入 HashSet/HashMap 的元素要么不可变，要么**绝不修改参与 equals/hashCode 的字段**；`record`（JDK 16+）自动实现基于全部组件的值相等与哈希，天然规避这个坑。
+> **核心要点**：放入 HashSet/HashMap 的元素要么不可变，要么**绝不修改参与 equals/hashCode 的字段**；`record`（JDK 16+）自动实现基于全部组件的值相等与哈希，天然规避这个坑。
 
 ---
 
@@ -224,10 +224,10 @@ System.out.println(users.contains(u));   // false —— u 的桶号变了，Has
 
 ```text
 需要什么顺序？
-├── 无顺序要求，只要去重/成员判断 → HashSet ✅（O(1) 最快）
+├── 无顺序要求，只要去重/成员判断 → HashSet ✓（O(1) 最快）
 ├── 去重 + 保持插入顺序（保序展示、去重队列） → LinkedHashSet
 ├── 去重 + 自然序/自定义序（排行榜、字典序） → TreeSet
-└── 元素是枚举 → EnumSet ✅（位运算，性能碾压）
+└── 元素是枚举 → EnumSet ✓（位运算，性能碾压）
 ```
 
 | 维度 | HashSet | LinkedHashSet | TreeSet | EnumSet |

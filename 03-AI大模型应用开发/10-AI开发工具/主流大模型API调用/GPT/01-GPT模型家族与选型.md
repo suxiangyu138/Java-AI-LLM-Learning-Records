@@ -1,6 +1,6 @@
 # 01 - GPT 模型家族与选型
 
-> 🎯 GPT-5.6 三档模型（Sol/Terra/Luna）彻底重构了 OpenAI 的定价体系 — Terra 恰为 GPT-5.5 半价、Luna 为 1/5、Sol 同价更强。选型一句话：默认 Terra、省钱 Luna、难题 Sol
+> GPT-5.6 三档模型（Sol/Terra/Luna）彻底重构了 OpenAI 的定价体系 — Terra 恰为 GPT-5.5 半价、Luna 为 1/5、Sol 同价更强。选型一句话：默认 Terra、省钱 Luna、难题 Sol
 
 ---
 
@@ -50,7 +50,7 @@
 | 短板 | SWE-Bench Pro 64.6%（落后 Claude Fable 5 的 80%） |
 | 价格 | $5/$30（与 GPT-5.5 同价但更强） |
 
-> ⚠️ **gpt-5.6 裸别名路由到 Sol**（而非 Terra）— 用别名做低成本任务会账单翻倍。
+> **gpt-5.6 裸别名路由到 Sol**（而非 Terra）— 用别名做低成本任务会账单翻倍。
 
 ---
 
@@ -121,6 +121,6 @@
 
 ---
 
-> 🎯 **核心要点**：GPT-5.6 选型三句话 — **① 默认 Terra（$2.50/$15，GPT-5.5 半价且性能更强）② 高并发降级 Luna（$1/$6）③ 难题升 Sol（$5/$30 + Ultra 16 子 Agent）**。⚠️ 两个坑：`gpt-5.6` 裸别名路由到 Sol（账单翻倍）、Sol 的 SWE-Bench Pro 落后 Claude Fable 5（编程场景注意）。
+> **核心要点**：GPT-5.6 选型三句话 — **① 默认 Terra（$2.50/$15，GPT-5.5 半价且性能更强）② 高并发降级 Luna（$1/$6）③ 难题升 Sol（$5/$30 + Ultra 16 子 Agent）**。两个坑：`gpt-5.6` 裸别名路由到 Sol（账单翻倍）、Sol 的 SWE-Bench Pro 落后 Claude Fable 5（编程场景注意）。
 
 **下一模块**：[02-Responses-API核心协议](02-Responses-API核心协议.md) / **返回总览**：[00-总览](00-GPT-API知识体系总览.md)

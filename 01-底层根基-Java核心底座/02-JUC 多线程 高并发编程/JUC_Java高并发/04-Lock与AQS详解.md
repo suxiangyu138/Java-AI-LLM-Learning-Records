@@ -47,7 +47,7 @@
 - **复杂场景**：需要公平锁、可中断、超时、多条件通信等高级特性时，使用Lock
 - **虚拟线程（JDK 21+）**：`synchronized`会pin虚拟线程到平台线程，推荐使用ReentrantLock
 
-> 💡 JDK 6之后synchronized经过锁升级优化（偏向锁→轻量级锁→重量级锁），性能已大幅提升，不再是"重量级锁"代名词。选择依据应该是功能需求而非性能。
+> JDK 6之后synchronized经过锁升级优化（偏向锁→轻量级锁→重量级锁），性能已大幅提升，不再是"重量级锁"代名词。选择依据应该是功能需求而非性能。
 
 ---
 
@@ -84,7 +84,7 @@ public void syncMethod() {
 }
 ```
 
-> ⚠️ **严禁写法**：不要把`lock()`放在`try`代码块内！若try内代码在加锁前抛出异常，会直接执行finally的`unlock()`，此时线程未持有锁，会抛出`IllegalMonitorStateException`。
+> **严禁写法**：不要把`lock()`放在`try`代码块内！若try内代码在加锁前抛出异常，会直接执行finally的`unlock()`，此时线程未持有锁，会抛出`IllegalMonitorStateException`。
 
 ### 2.3 基础实战示例
 
@@ -237,7 +237,7 @@ protected final boolean tryAcquire(int acquires) {
 
 非公平锁在`tryAcquire`时直接尝试CAS抢锁，如果抢锁成功则避免了一次线程挂起和唤醒操作（一次park/unpark约需5-10微秒）。这种"插队"行为减少了上下文切换，提升了整体吞吐量。
 
-> 💡 默认场景使用非公平锁追求性能；当业务要求线程按照请求顺序获取锁，或需要避免线程饥饿时，使用公平锁。
+> 默认场景使用非公平锁追求性能；当业务要求线程按照请求顺序获取锁，或需要避免线程饥饿时，使用公平锁。
 
 ---
 
@@ -309,7 +309,7 @@ class BoundedBuffer<T> {
 }
 ```
 
-> 🎯 Condition的核心价值在于：一个Lock可以管理多个条件队列，生产者等待"不满"，消费者等待"不空"，`signal()`只唤醒对应条件上等待的线程，避免传统`notifyAll()`无效唤醒带来的性能损耗。
+> Condition的核心价值在于：一个Lock可以管理多个条件队列，生产者等待"不满"，消费者等待"不空"，`signal()`只唤醒对应条件上等待的线程，避免传统`notifyAll()`无效唤醒带来的性能损耗。
 
 ### 4.3 虚假唤醒防护
 
@@ -321,7 +321,7 @@ while (!conditionMet) {
 // 条件满足后继续执行
 ```
 
-> ⚠️ Object.wait()和Condition.await()都可能发生**虚假唤醒**（spurious wakeup），即线程在未被notify/signal且未被中断的情况下被唤醒。必须用while循环检查等待条件，不能使用if。
+> Object.wait()和Condition.await()都可能发生**虚假唤醒**（spurious wakeup），即线程在未被notify/signal且未被中断的情况下被唤醒。必须用while循环检查等待条件，不能使用if。
 
 ---
 
@@ -392,7 +392,7 @@ public void processWithLockDowngrade() {
 }
 ```
 
-> 💡 锁降级是一种保护机制：确保写操作完成后，当前线程在释放写锁后仍持有读锁，防止其他写线程在中间状态修改数据。锁升级（读锁→写锁）不被支持，直接获取写锁会死锁。
+> 锁降级是一种保护机制：确保写操作完成后，当前线程在释放写锁后仍持有读锁，防止其他写线程在中间状态修改数据。锁升级（读锁→写锁）不被支持，直接获取写锁会死锁。
 
 ---
 
@@ -458,7 +458,7 @@ class Point {
 | 性能（读多写少） | 更高 | 良好 |
 | 使用复杂度 | 较高（需管理stamp） | 较低 |
 
-> ⚠️ StampedLock不是可重入锁，同一个线程不能重复获取锁；不支持Condition；且不能从写锁直接升级，需要使用`tryConvertToReadLock()`等转换方法。
+> StampedLock不是可重入锁，同一个线程不能重复获取锁；不支持Condition；且不能从写锁直接升级，需要使用`tryConvertToReadLock()`等转换方法。
 
 ---
 
@@ -521,7 +521,7 @@ protected boolean isHeldExclusively()     // 当前线程是否独占
 | ReentrantReadWriteLock | 独占+共享 | 高16位=读锁数, 低16位=写锁重入数 |
 | ThreadPoolExecutor | 独占+共享 | 高3位=线程池状态, 低29位=线程数 |
 
-> 🎯 AQS的核心设计思路：将同步器拆分为"状态管理"（state）+ "等待队列"（CLH）+ "阻塞/唤醒"（LockSupport），子类只需关注如何获取和释放state，排队和线程调度由AQS统一处理。
+> AQS的核心设计思路：将同步器拆分为"状态管理"（state）+ "等待队列"（CLH）+ "阻塞/唤醒"（LockSupport），子类只需关注如何获取和释放state，排队和线程调度由AQS统一处理。
 
 ---
 
@@ -613,7 +613,7 @@ release(1)
 线程B获取锁：      state: 0 → 1  (exclusiveOwnerThread = ThreadB)
 ```
 
-> 💡 state的CAS操作通过`unsafe.compareAndSwapInt()`实现，保证原子性。重入计数器与owner线程双重判断，确保只有持有锁的线程才能修改state。
+> state的CAS操作通过`unsafe.compareAndSwapInt()`实现，保证原子性。重入计数器与owner线程双重判断，确保只有持有锁的线程才能修改state。
 
 ---
 
@@ -886,7 +886,7 @@ class SharedLock {
 
 ---
 
-> 🎯 Lock与AQS是JUC包的基石，理解它们能从原理层面掌握ReentrantLock、Semaphore、CountDownLatch、ReentrantReadWriteLock等所有同步工具。核心记住：state控制同步状态，CLH队列管理等待线程，Condition提供多路等待/通知——三者结合构成了Java并发同步的完整体系。
+> Lock与AQS是JUC包的基石，理解它们能从原理层面掌握ReentrantLock、Semaphore、CountDownLatch、ReentrantReadWriteLock等所有同步工具。核心记住：state控制同步状态，CLH队列管理等待线程，Condition提供多路等待/通知——三者结合构成了Java并发同步的完整体系。
 
 ---
 

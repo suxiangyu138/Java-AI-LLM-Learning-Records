@@ -2,7 +2,7 @@
 
 > Haystack 的"生产就绪"落地：管道 YAML 序列化进 CI/CD、Hayhooks 一键部署 K8s、OpenTelemetry 原生追踪、内置评估框架——从"代码能跑"到"系统可运维"。
 
-## 📚 目录
+## 目录
 
 1. [生产化全景](#1-生产化全景)
 2. [YAML 序列化](#2-yaml-序列化)
@@ -181,7 +181,7 @@ Ragas = 更全面的评估框架（可独立使用）
 
 ### 上线检查清单
 
-| 类别 | 检查项 | ✅ |
+| 类别 | 检查项 | ✓ |
 |---|---|---|
 | 序列化 | 管道 YAML 入库（版本化） | ☐ |
 | 部署 | Hayhooks 端点可调用 | ☐ |
@@ -260,7 +260,7 @@ jobs:
 | "Hayhooks 必须 K8s" | 单 Docker 也可（小规模） |
 | "生产四件套可选" | 缺一件 = 运维黑洞（部署/观测/评估） |
 
-> 🎯 核心要点：生产四件套（YAML 序列化/Hayhooks 部署/OTel 观测/内置评估）；YAML 让管道可版本化可回滚（CI 可加载测试）；Hayhooks = 管道服务化（K8s 一键）；OTel 原生"追踪即图"；内置评估（检索 MRR/NDCG + 生成 faithfulness）进 CI 门禁（YAML 变更即质量回归测试）；与 RAG 阶段 5 的思想完全打通，Haystack 只是框架内建。
+> 核心要点：生产四件套（YAML 序列化/Hayhooks 部署/OTel 观测/内置评估）；YAML 让管道可版本化可回滚（CI 可加载测试）；Hayhooks = 管道服务化（K8s 一键）；OTel 原生"追踪即图"；内置评估（检索 MRR/NDCG + 生成 faithfulness）进 CI 门禁（YAML 变更即质量回归测试）；与 RAG 阶段 5 的思想完全打通，Haystack 只是框架内建。
 
 ---
 

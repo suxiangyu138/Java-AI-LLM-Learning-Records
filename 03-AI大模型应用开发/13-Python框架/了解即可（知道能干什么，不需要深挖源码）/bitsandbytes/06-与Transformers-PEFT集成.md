@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [集成的定位](#1-集成的定位)
 2. [推理集成：加载即量化](#2-推理集成加载即量化)
@@ -124,7 +124,7 @@ config = BitsAndBytesConfig(
 
 **验收动作**：① 用统一 Config 分别 8bit/4bit 加载同一模型（对比显存）；② PEFT 三件套包装模型并打印可训练参数占比；③ 写"老教程代码适配"笔记（load_in_4bit=True → Config）——**"两个入口 + Config 统一 = 集成能力"**——**练习纪律**：配置一律用 BitsAndBytesConfig——"2026 年唯一入口——版本纪律不商量"。
 
-> 🎯 **核心要点**：集成的哲学（**发动机 bitsandbytes + 方向盘 Transformers——你开的是车不是发动机**）；**推理入口（from_pretrained + quantization_config + device_map——API 无感——换档 = 改一行配置）**；**训练入口（PEFT 三件套：LoraConfig + get_peft_model + Trainer——可训练参数占比是第一体检项）**；**统一入口 BitsAndBytesConfig（六参数：开关 + nf4/bf16/double_quant/storage——四件套标准 + 多卡加 storage——老代码报错先适配它）**——"一套配置，推理/微调两用——配置写对就赢"。
+> **核心要点**：集成的哲学（**发动机 bitsandbytes + 方向盘 Transformers——你开的是车不是发动机**）；**推理入口（from_pretrained + quantization_config + device_map——API 无感——换档 = 改一行配置）**；**训练入口（PEFT 三件套：LoraConfig + get_peft_model + Trainer——可训练参数占比是第一体检项）**；**统一入口 BitsAndBytesConfig（六参数：开关 + nf4/bf16/double_quant/storage——四件套标准 + 多卡加 storage——老代码报错先适配它）**——"一套配置，推理/微调两用——配置写对就赢"。
 
 ---
 

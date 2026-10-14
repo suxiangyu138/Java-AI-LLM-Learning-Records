@@ -1,6 +1,6 @@
 # 06 - Nginx 缓存与优化
 
-> 🎯 缓存是性能优化的银弹 — proxy_cache 减少后端 90% 请求、gzip 压缩传输体积 70%、sendfile 零拷贝加速静态文件
+> 缓存是性能优化的银弹 — proxy_cache 减少后端 90% 请求、gzip 压缩传输体积 70%、sendfile 零拷贝加速静态文件
 
 ---
 

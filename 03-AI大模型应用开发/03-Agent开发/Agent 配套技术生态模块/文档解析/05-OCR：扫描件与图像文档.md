@@ -16,7 +16,7 @@ V1 传统 OCR（Tesseract 等）：只认字，输出坐标+文本
 | V2 | PP-StructureV3 | 结构化元素 | 需多模型串联 |
 | V3 | PaddleOCR-VL-1.6 | Markdown/JSON 全结构化 | 需 GPU（0.9B 模型） |
 
-> 🎯 核心要点：**2026 年别再用"纯 OCR"做文档**——V3 模型把版面分析+文字+表格+公式一体输出，质量与成本都优于"传统 OCR + 自己拼版面"。
+> 核心要点：**2026 年别再用"纯 OCR"做文档**——V3 模型把版面分析+文字+表格+公式一体输出，质量与成本都优于"传统 OCR + 自己拼版面"。
 
 ## 2. PaddleOCR-VL-1.6（2026 SOTA，开源）
 
@@ -59,7 +59,7 @@ text = pytesseract.image_to_string(Image.open("scan.png"), lang="chi_sim+eng")
 # 注意：输出纯文本流，无版面无表格结构——仅适合"只要可搜索文本"的场景
 ```
 
-> ⚠️ Tesseract 是版面盲的（layout-blind）：它不知道标题和正文的区别、会把表格摊成乱字。凡是下游要"结构"的场景，传统 OCR 都不合格。
+> Tesseract 是版面盲的（layout-blind）：它不知道标题和正文的区别、会把表格摊成乱字。凡是下游要"结构"的场景，传统 OCR 都不合格。
 
 ## 4. 版面分析：结构化输出的地基
 
@@ -73,7 +73,7 @@ text = pytesseract.image_to_string(Image.open("scan.png"), lang="chi_sim+eng")
 | 页眉页脚/印章 | 识别并剔除 | 去噪音 |
 | 竖排文本/多边形框 | 倾斜/扭曲文档 | 拍照文档兜底 |
 
-> 💡 版面分析的准确率直接决定分块质量——**"标题认错了"比"字认错了"更伤 RAG**（分块边界全错），这就是为什么 2026 年选型要版面分析一体化模型，而不是传统 OCR。
+> 版面分析的准确率直接决定分块质量——**"标题认错了"比"字认错了"更伤 RAG**（分块边界全错），这就是为什么 2026 年选型要版面分析一体化模型，而不是传统 OCR。
 
 ## 5. 公式识别
 
@@ -111,7 +111,7 @@ text = pytesseract.image_to_string(Image.open("scan.png"), lang="chi_sim+eng")
   超大批量同模板 → 传统 OCR + 模板
 ```
 
-> 🎯 核心要点：扫描件解析在 2026 年只有两条路——**PaddleOCR-VL（准、贵、要 GPU）或传统 OCR（便宜、版面盲）**；选择依据是"下游要不要结构"：要结构走前者，只求可搜索走后者的模板化玩法。
+> 核心要点：扫描件解析在 2026 年只有两条路——**PaddleOCR-VL（准、贵、要 GPU）或传统 OCR（便宜、版面盲）**；选择依据是"下游要不要结构"：要结构走前者，只求可搜索走后者的模板化玩法。
 
 ## 8. 中文 vs 英文：OCR 差异与对策
 
@@ -123,7 +123,7 @@ text = pytesseract.image_to_string(Image.open("scan.png"), lang="chi_sim+eng")
 | 公式 | 常见于论文/教材 | 同左 |
 | 推荐 | PaddleOCR-VL（中文 SOTA） | PaddleOCR-VL 或 Tesseract（低成本） |
 
-> 💡 中文文档的 OCR 结论很明确：**别折腾 Tesseract 中文模型**（需 chi_sim 包、长文本效果一般），PaddleOCR-VL 在中文+表格+公式上都是压倒性优势，且开源免费。
+> 中文文档的 OCR 结论很明确：**别折腾 Tesseract 中文模型**（需 chi_sim 包、长文本效果一般），PaddleOCR-VL 在中文+表格+公式上都是压倒性优势，且开源免费。
 
 ## 9. 自建 OCR 质量测试集
 

@@ -69,7 +69,7 @@ min-replicas-to-write 1        # 最少从节点数才可写
 min-replicas-max-lag 10        # 从节点最大延迟
 ```
 
-> 💡 `repl-backlog-size` 根据写入量调整：`backlog_size = 主库断线时间(秒) × 每秒写入量 × 2`。公式：若主库断线 60 秒内每秒写入 1MB，则设为 120MB。
+> `repl-backlog-size` 根据写入量调整：`backlog_size = 主库断线时间(秒) × 每秒写入量 × 2`。公式：若主库断线 60 秒内每秒写入 1MB，则设为 120MB。
 
 ### 1.4 复制风暴与解决方案
 
@@ -94,7 +94,7 @@ min-replicas-max-lag 10        # 从节点最大延迟
    └────────┘
 ```
 
-> ⚠️ 树形复制延迟会逐级增加，不适合对实时性要求高的场景。Slave 的 Slave 复制偏移量落后更多，故障转移时数据丢失风险也更大。
+> 树形复制延迟会逐级增加，不适合对实时性要求高的场景。Slave 的 Slave 复制偏移量落后更多，故障转移时数据丢失风险也更大。
 
 ### 1.5 优缺点
 
@@ -156,7 +156,7 @@ min-replicas-max-lag 10        # 从节点最大延迟
    所有 Sentinel 更新配置，客户端感知新 Master
 ```
 
-> 💡 **SDOWN vs ODOWN**：SDOWN 是单一 Sentinel 的主观判断，ODOWN 是 quorum 个 Sentinel 达成共识后的客观下线。从节点只会有 SDOWN，不会产生 ODOWN。
+> **SDOWN vs ODOWN**：SDOWN 是单一 Sentinel 的主观判断，ODOWN 是 quorum 个 Sentinel 达成共识后的客观下线。从节点只会有 SDOWN，不会产生 ODOWN。
 
 ### 2.4 Raft 算法在 Sentinel 中的应用
 
@@ -432,7 +432,7 @@ NodeD 加入 NodeA 和 NodeB 之间：
 其他 key：不受影响
 ```
 
-> 💡 一致性哈希主要用在 Memcached 和 Codis 等 Proxy 型缓存方案中，Redis Cluster 使用固定的 16384 槽映射方案，不采用一致性哈希。
+> 一致性哈希主要用在 Memcached 和 Codis 等 Proxy 型缓存方案中，Redis Cluster 使用固定的 16384 槽映射方案，不采用一致性哈希。
 
 ### 4.2 虚拟节点解决数据倾斜
 
@@ -505,7 +505,7 @@ Proxy 模式对客户端透明，但增加了一跳延迟。
 - **中型项目（1k-10k QPS）**：主从 + Sentinel
 - **大型项目（10k+ QPS / 海量数据）**：Redis Cluster
 
-> 🎯 **选型总结：** 单机能扛就用单机，扛不住上主从+哨兵，再扛不住上 Cluster。不要为了高可用而高可用，每一层复杂度都有代价。
+> **选型总结：** 单机能扛就用单机，扛不住上主从+哨兵，再扛不住上 Cluster。不要为了高可用而高可用，每一层复杂度都有代价。
 
 ---
 

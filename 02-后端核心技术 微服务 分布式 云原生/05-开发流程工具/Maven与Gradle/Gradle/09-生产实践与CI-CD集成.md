@@ -1,6 +1,6 @@
 # 09 - 生产实践与 CI/CD 集成
 
-> 🎯 生产级 Gradle 工程 = Wrapper 版本纪律 + Java 工具链 + 制品发布 + CI 缓存持久化 + 构建可观测。本章覆盖 CI/CD 全链路集成（GitHub Actions/Gitee Go/Jenkins）、制品发布到私有仓库、多版本 JDK 与常见生产坑
+> 生产级 Gradle 工程 = Wrapper 版本纪律 + Java 工具链 + 制品发布 + CI 缓存持久化 + 构建可观测。本章覆盖 CI/CD 全链路集成（GitHub Actions/Gitee Go/Jenkins）、制品发布到私有仓库、多版本 JDK 与常见生产坑
 
 ---
 
@@ -188,6 +188,6 @@ steps:
 
 ---
 
-> 🎯 **核心要点**：生产 Gradle = 七条纪律（Wrapper 固定/版本目录/配置缓存/依赖锁定/可复现）+ CI 接入（--no-daemon、持久化 GRADLE_USER_HOME、--stacktrace）+ 制品发布（pom 元数据、凭据环境变量、GPG 签名）+ 可观测（Build Scan 三指标）。排错顺序：先 Build Scan 数据，再针对性修——不猜。
+> **核心要点**：生产 Gradle = 七条纪律（Wrapper 固定/版本目录/配置缓存/依赖锁定/可复现）+ CI 接入（--no-daemon、持久化 GRADLE_USER_HOME、--stacktrace）+ 制品发布（pom 元数据、凭据环境变量、GPG 签名）+ 可观测（Build Scan 三指标）。排错顺序：先 Build Scan 数据，再针对性修——不猜。
 
 **下一模块**：[10-与Maven对比与面试自测](10-与Maven对比与面试自测.md) / **返回总览**：[00-总览](00-Gradle知识体系总览.md)

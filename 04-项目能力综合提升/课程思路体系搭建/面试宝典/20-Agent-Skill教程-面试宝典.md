@@ -18,12 +18,12 @@
 ### 1.1 什么是 AI Agent？
 AI Agent（智能体）是一个能够**感知环境、自主规划、调用工具、执行动作并记忆历史**的大模型应用系统。它不同于单纯的 LLM 聊天——Agent 能够主动制定计划、使用工具、从错误中恢复。
 
-> 🎯 Agent = LLM（推理核心）+ Planning（规划能力）+ Tools（工具调用）+ Memory（记忆系统）
+> Agent = LLM（推理核心）+ Planning（规划能力）+ Tools（工具调用）+ Memory（记忆系统）
 
 ### 1.2 Agent 的 Skill 机制是什么？
 Skill（技能）机制是 Agent 的**能力模块化封装**方式。每个 Skill 包含一组相关的 Tool、Prompt 模板和状态处理逻辑。其核心价值在于 **Progressive Disclosure（渐进式暴露）**——Agent 根据当前任务动态加载和激活所需 Skill，而非一次性加载所有能力。
 
-> 💡 类比：Skill 就像人的"专业技能"，Agent 是"项目经理"。项目经理不需要同时精通所有领域，而是在需要时调用对应专家（Skill）。
+> 类比：Skill 就像人的"专业技能"，Agent 是"项目经理"。项目经理不需要同时精通所有领域，而是在需要时调用对应专家（Skill）。
 
 ### 1.3 什么是 Progressive Disclosure（渐进式暴露）？
 Progressive Disclosure 是一种**按需加载**设计原则。在 Agent 系统中，这意味着：
@@ -34,7 +34,7 @@ Progressive Disclosure 是一种**按需加载**设计原则。在 Agent 系统�
 | 第 3 层 | Skill 内的具体 Tool 集合 | 选定 Skill 后 |
 | 第 4 层 | Tool 的参数和文档 | 决定调用 Tool 时 |
 
-> ⚠️ 不遵循 Progressive Disclosure 的 Agent 会在 Prompt 中塞入所有工具描述，导致 Token 浪费和推理质量下降。
+> 不遵循 Progressive Disclosure 的 Agent 会在 Prompt 中塞入所有工具描述，导致 Token 浪费和推理质量下降。
 
 ### 1.4 Multi-Agent 和 Skills-Agent 的区别是什么？
 | 对比维度 | Multi-Agent（多智能体） | Skills-Agent（单智能体+技能） |
@@ -60,7 +60,7 @@ Progressive Disclosure 是一种**按需加载**设计原则。在 Agent 系统�
 - 追求**低延迟**（避免 Agent 间通信开销）
 - 需要**简单的状态管理和调试**
 
-> 💡 一个常见的错误是"什么场景都用 Multi-Agent"。实际上 80% 的场景用 Skills-Agent 更合适，只有真正需要跨域隔离时才上 Multi-Agent。
+> 一个常见的错误是"什么场景都用 Multi-Agent"。实际上 80% 的场景用 Skills-Agent 更合适，只有真正需要跨域隔离时才上 Multi-Agent。
 
 ### 1.6 WorkFlow 和 Agent 的区别？
 | 对比维度 | WorkFlow（工作流） | Agent（智能体） |
@@ -72,7 +72,7 @@ Progressive Disclosure 是一种**按需加载**设计原则。在 Agent 系统�
 | 适用场景 | 确定性的业务流水线 | 复杂的开放式任务 |
 | 典型实现 | LangGraph 条件边、State Machine | ReAct Loop、Plan-Execute |
 
-> 🎯 WorkFlow 适合"已知怎么做"的任务，Agent 适合"需要探索怎么做"的任务。
+> WorkFlow 适合"已知怎么做"的任务，Agent 适合"需要探索怎么做"的任务。
 
 ### 1.7 什么是 ReAct 模式？
 ReAct = **Re**asoning + **Act**ion（推理 + 行动）。Agent 交替进行"思考（Thought）→ 行动（Action）→ 观察（Observation）"，形成循环：
@@ -85,7 +85,7 @@ Thought: 天气是 28 度晴天，组织回复
 Final Answer: 北京今天 28°C，天气晴朗！
 ```
 
-> 💡 ReAct 是最主流的 Agent 设计模式，OpenAI Function Calling、LangChain Agent 均基于此。
+> ReAct 是最主流的 Agent 设计模式，OpenAI Function Calling、LangChain Agent 均基于此。
 
 ### 1.8 什么是 REWOO 模式？
 REWOO = **Re**asoning **W**ith**o**ut **O**bservation。与 ReAct 的区别在于：**将推理和行动分离为两个独立阶段**。
@@ -103,7 +103,7 @@ LLMComp 将 Agent 的控制流程视为**编译器优化**问题。核心思想�
 - LLM 生成一个多分支的**DAG（有向无环图）**，标识哪些步骤可并行
 - 执行器并行执行可并行的工具调用，大幅降低延迟
 
-> 🎯 LLMComp 适合工具调用密集的场景，如同时查询多个 API 获取信息。
+> LLMComp 适合工具调用密集的场景，如同时查询多个 API 获取信息。
 
 ### 1.10 什么是 Reflexion 模式？
 Reflexion 是一种**自我反思 + 反馈迭代**的 Agent 模式：
@@ -123,7 +123,7 @@ LAT = **Language Agent Tree**。将 Agent 的决策过程建模为**树形搜索
 - 使用 BFS/DFS 在树中搜索最优路径
 - 叶子节点是最终答案
 
-> ⚠️ LAT 计算成本高，适合需要深度探索的复杂推理任务。
+> LAT 计算成本高，适合需要深度探索的复杂推理任务。
 
 ### 1.12 LCEL（LangChain Expression Language）是什么？
 LCEL 是 LangChain 的**声明式链式语法**，用 `|` 管道符连接组件：
@@ -167,7 +167,7 @@ Function Calling 是 LLM 的一种**结构化输出能力**。模型在生成回
 | 幻觉调用 | 模型编造不存在的函数名或参数 |
 | 推理退化 | 长篇工具描述干扰核心推理能力 |
 
-> 💡 解决 Tool Overload 的核心方法就是 **Skill 机制** — 将工具分组分层、渐进式暴露。
+> 解决 Tool Overload 的核心方法就是 **Skill 机制** — 将工具分组分层、渐进式暴露。
 
 ### 1.15 什么是 Coze（扣子）？
 Coze 是字节跳动推出的 **AI Agent 开发平台**，提供可视化 Agent 搭建能力：
@@ -232,7 +232,7 @@ while not state.get("finished"):
         state["answer"] = thought_action.answer
 ```
 
-> 🎯 ReAct 的核心优势在于"边做边想"，每一步都能基于上一步的观察调整推理。
+> ReAct 的核心优势在于"边做边想"，每一步都能基于上一步的观察调整推理。
 
 ### 2.2 Skill 机制如何解决 Tool Overload 问题？
 **Key Insight：** 将 30+ 工具按领域分组为 Skill，Agent 先选 Skill 再选 Tool。
@@ -318,7 +318,7 @@ class MessageBus:
 | 调试友好度 | 黑盒 | 每步可追溯、可视 |
 | 适用版本 | LangChain < 0.3 | LangChain >= 0.3 推荐 |
 
-> 💡 LangGraph 可以看作是 LangChain Agent 的"替代升级方案"。
+> LangGraph 可以看作是 LangChain Agent 的"替代升级方案"。
 
 ### 2.5 AutoGen 和 CrewAI 的架构差异？
 | 对比维度 | AutoGen（微软） | CrewAI |
@@ -439,7 +439,7 @@ def execute_plan(plan_dag):
 | CoT | 数学、逻辑、推理 | 简单问答、事实查询 | 中 |
 | ToT | 复杂规划、博弈、搜索 | 实时交互、简单任务 | 高 |
 
-> 💡 经验法则：简单任务用 Few-shot，复杂推理用 CoT，超复杂探索用 ToT。
+> 经验法则：简单任务用 Few-shot，复杂推理用 CoT，超复杂探索用 ToT。
 
 ### 2.10 Soft Prompt（软提示）与 Hard Prompt（硬提示）的区别？
 | 对比维度 | Hard Prompt | Soft Prompt |
@@ -1090,7 +1090,7 @@ class FunctionCallingWithFallback:
 | 9 | 忽略 Progressive Disclosure | Prompt 中无差别暴露所有能力 | 按层级暴露：Skill 名 → Tool 列表 → Tool 参数 |
 | 10 | CoT 与 Tool Call 混用 | 推理步骤和工具调用互相干扰 | 明确区分推理阶段和工具调用阶段（参考 REWOO）|
 
-> ⚠️ **最常犯的错误：** 一上来就上 Multi-Agent。99% 的初版 Agent 用 Skills-Agent + ReAct 就能解决问题，后续根据实际瓶颈逐步升级。
+> **最常犯的错误：** 一上来就上 Multi-Agent。99% 的初版 Agent 用 Skills-Agent + ReAct 就能解决问题，后续根据实际瓶颈逐步升级。
 
 ---
 
@@ -1205,4 +1205,4 @@ class FunctionCallingWithFallback:
 
 ---
 
-> 🎯 **面试冲刺提示：** Agent 相关面试的重点已经不是"知不知道概念"，而是"有没有在实际项目中踩过坑、如何解决"。建议结合自己的项目经验，准备 1-2 个具体的 Case Study。Skill 机制和 Multi-Agent 选型是最高频考点。
+> **面试冲刺提示：** Agent 相关面试的重点已经不是"知不知道概念"，而是"有没有在实际项目中踩过坑、如何解决"。建议结合自己的项目经验，准备 1-2 个具体的 Case Study。Skill 机制和 Multi-Agent 选型是最高频考点。

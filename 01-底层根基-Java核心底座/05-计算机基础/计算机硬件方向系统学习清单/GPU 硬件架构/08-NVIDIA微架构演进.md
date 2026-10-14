@@ -53,7 +53,7 @@ Rubin 于 CES 2026 发布、GTC 2026 详述，Q1 2026 进入量产：**TSMC N3P�
 
 一个值得注意的稳定性：从 2006 年的 G80 到 2026 年的 Rubin，SIMT + 调度器 + 分层存储的基本盘二十年未变——因为"并发换延迟"在物理上依然是最优解。变化只发生在边缘：指令集（mma→tcgen05）、数据通路（TMA/TMEM）、精度（FP8/FP4）。理解"底盘不变、引擎升级"的结构，比追逐每一代规格更能预测未来：**下一个十年 SIMT 依然会是主架构，变的还是引擎**。
 
-> 🎯 **核心要点**：七年七代的主线始终是"矩阵引擎扩张 × 数据通路拓宽"——Volta 发明 Tensor Core，Turing 补 INT8，Ampere 定型双派发与稀疏，Hopper 引入 TMA 与 wgmma，Blackwell 用 TMEM 与 NVFP4 解放矩阵流水，Rubin 用 HBM4 与 MoE 专项把机柜推到 260TB/s；看懂每代的 SM 结构与指令族变化，比背规格更能预测下一代架构的方向；而护城河在软硬协同的节奏，风险在功耗、HBM 供应与竞争三方。
+> **核心要点**：七年七代的主线始终是"矩阵引擎扩张 × 数据通路拓宽"——Volta 发明 Tensor Core，Turing 补 INT8，Ampere 定型双派发与稀疏，Hopper 引入 TMA 与 wgmma，Blackwell 用 TMEM 与 NVFP4 解放矩阵流水，Rubin 用 HBM4 与 MoE 专项把机柜推到 260TB/s；看懂每代的 SM 结构与指令族变化，比背规格更能预测下一代架构的方向；而护城河在软硬协同的节奏，风险在功耗、HBM 供应与竞争三方。
 
 ---
 

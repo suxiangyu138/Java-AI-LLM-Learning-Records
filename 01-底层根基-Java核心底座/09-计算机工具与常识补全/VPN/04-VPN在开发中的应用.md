@@ -1,10 +1,10 @@
 # VPN 在开发中的应用
 
-> 💻 远程数据库安全访问、跨区域 API 测试、微服务内网穿透、CI/CD 安全通道 —— VPN 是后端工程师的隐形工具链
+> 远程数据库安全访问、跨区域 API 测试、微服务内网穿透、CI/CD 安全通道 —— VPN 是后端工程师的隐形工具链
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [为什么开发者需要 VPN](#1-为什么开发者需要-vpn)
 2. [远程服务器与数据库安全访问](#2-远程服务器与数据库安全访问)
@@ -23,20 +23,20 @@
 
 ```text
 痛点 1: 远程数据库暴露在公网
-  ❌ MySQL 3306 端口直接开放 = 随时被扫描爆破
-  ✅ VPN 接入内网 → 数据库只监听内网 → 零暴露
+  ✗ MySQL 3306 端口直接开放 = 随时被扫描爆破
+  ✓ VPN 接入内网 → 数据库只监听内网 → 零暴露
 
 痛点 2: 微服务只在公司内网
-  ❌ 在家无法调试依赖的内部服务
-  ✅ VPN 拨入 → 像在公司一样开发
+  ✗ 在家无法调试依赖的内部服务
+  ✓ VPN 拨入 → 像在公司一样开发
 
 痛点 3: 跨区域 API 行为不一致
-  ❌ 无法复现海外用户的 bug
-  ✅ 通过 VPN 切换到目标区域 → 精准复现
+  ✗ 无法复现海外用户的 bug
+  ✓ 通过 VPN 切换到目标区域 → 精准复现
 
 痛点 4: CI/CD 需要访问内部仓库
-  ❌ GitHub Actions Runner 无法访问公司 GitLab
-  ✅ CI Runner 通过 VPN 接入 → 零信任访问
+  ✗ GitHub Actions Runner 无法访问公司 GitLab
+  ✓ CI Runner 通过 VPN 接入 → 零信任访问
 ```
 
 ### 1.2 开发者 VPN 需求矩阵
@@ -44,11 +44,11 @@
 ```
               │ 安全访问DB │ 访问内网服务 │ 区域切换 │ CI/CD  │
 ──────────────┼───────────┼─────────────┼─────────┼───────┤
-WireGuard     │    ✅     │     ✅      │   ✅    │  ✅   │
-OpenVPN       │    ✅     │     ✅      │   ✅    │  ✅   │
-SSH 隧道      │    ✅     │     ❌      │   ❌    │  ⚠️   │
-Tailscale     │    ✅     │     ✅      │   ⚠️    │  ✅   │
-CloudFlare    │    ✅     │     ✅      │   ❌    │  ✅   │
+WireGuard     │    ✓     │     ✓      │   ✓    │  ✓   │
+OpenVPN       │    ✓     │     ✓      │   ✓    │  ✓   │
+SSH 隧道      │    ✓     │     ✗      │   ✗    │    │
+Tailscale     │    ✓     │     ✓      │      │  ✓   │
+CloudFlare    │    ✓     │     ✓      │   ✗    │  ✓   │
 ZTNA          │          │             │         │       │
 ```
 
@@ -59,7 +59,7 @@ ZTNA          │          │             │         │       │
 ### 2.1 场景：在家访问生产数据库
 
 ```text
-❌ 错误做法：
+✗ 错误做法：
   数据库开放 3306 端口到公网
   使用 root 密码登录
   
@@ -67,7 +67,7 @@ ZTNA          │          │             │         │       │
   # 密码在网络中明文传输（除非启用 TLS）
   # 端口暴露在公网，时刻被扫描
 
-✅ 正确做法：
+✓ 正确做法：
   ┌──────────┐     WireGuard      ┌──────────┐    内网     ┌──────────┐
   │  家用电脑  │ ←─── 加密隧道 ───→ │ VPN Server│ ─────────→ │ MySQL    │
   │  10.0.0.2 │                   │ 10.0.0.1 │            │ 10.1.0.10│
@@ -286,11 +286,11 @@ spring:
 ```text
 Tailscale 基于 WireGuard 的零配置 Mesh VPN，特别适合开发者：
 
-✅ 自动 NAT 穿透（不需要公网 IP）
-✅ 自动密钥管理（基于 SSO 登录）
-✅ MagicDNS（peer 自动获得 hostname.ts.net 域名）
-✅ ACL 精细化控制
-✅ 支持子网路由（Subnet Router 模式）
+✓ 自动 NAT 穿透（不需要公网 IP）
+✓ 自动密钥管理（基于 SSO 登录）
+✓ MagicDNS（peer 自动获得 hostname.ts.net 域名）
+✓ ACL 精细化控制
+✓ 支持子网路由（Subnet Router 模式）
 
 免费版：最多 100 台设备，支持 3 个用户
 ```
@@ -462,10 +462,10 @@ Host prod-*
 #!/bin/bash
 vpn-status() {
     if sudo wg show wg0 2>/dev/null | grep -q 'latest handshake'; then
-        echo "✅ VPN 已连接"
+        echo "✓ VPN 已连接"
         echo "   SSH 可用: ssh prod-app-01"
     else
-        echo "❌ VPN 未连接"
+        echo "✗ VPN 未连接"
         echo "   运行: sudo wg-quick up office"
     fi
 }
@@ -498,13 +498,13 @@ git config --global core.compression 0          # Git 协议下关闭压缩
 
 | 场景 | VPN | SSH 隧道 | 推荐 |
 |------|:---:|:------:|:---:|
-| 访问单个数据库端口 | ⚠️ 过度 | ✅ 刚好 | SSH 隧道 |
-| 访问多个内网服务 | ✅ | ❌ 需多个隧道 | VPN |
-| 需要访问 Web 页面 | ✅ | ❌ 需 SOCKS 代理 | VPN |
-| 所有流量走远程出口 | ✅ | ⚠️ SOCKS 代理可做 | VPN |
-| 临时一次性连接 | ❌ 配置多 | ✅ | SSH 隧道 |
-| CI/CD 自动化 | ✅ | ⚠️ 可以但不优雅 | VPN |
-| 移动端使用 | ✅ | ❌ | VPN |
+| 访问单个数据库端口 | 过度 | ✓ 刚好 | SSH 隧道 |
+| 访问多个内网服务 | ✓ | ✗ 需多个隧道 | VPN |
+| 需要访问 Web 页面 | ✓ | ✗ 需 SOCKS 代理 | VPN |
+| 所有流量走远程出口 | ✓ | SOCKS 代理可做 | VPN |
+| 临时一次性连接 | ✗ 配置多 | ✓ | SSH 隧道 |
+| CI/CD 自动化 | ✓ | 可以但不优雅 | VPN |
+| 移动端使用 | ✓ | ✗ | VPN |
 
 ### 7.2 SSH 隧道快速使用
 
@@ -573,10 +573,10 @@ echo ""
 
 # 1. VPN 连接状态
 if sudo wg show wg0 2>/dev/null | grep -q 'latest handshake'; then
-    echo "✅ WireGuard: 已连接"
+    echo "✓ WireGuard: 已连接"
     sudo wg show wg0 | grep -E 'transfer|handshake'
 else
-    echo "❌ WireGuard: 未连接"
+    echo "✗ WireGuard: 未连接"
 fi
 
 # 2. 关键服务可达性
@@ -592,9 +592,9 @@ SERVICES=(
 for svc in "${SERVICES[@]}"; do
     IFS=':' read -r host port name <<< "$svc"
     if timeout 2 bash -c "echo >/dev/tcp/$host/$port" 2>/dev/null; then
-        echo "✅ $name ($host:$port)"
+        echo "✓ $name ($host:$port)"
     else
-        echo "❌ $name ($host:$port) - 不可达"
+        echo "✗ $name ($host:$port) - 不可达"
     fi
 done
 
@@ -620,11 +620,11 @@ alias vpn-status='sudo wg show'
 alias vpn-check='bash ~/scripts/dev-vpn-check.sh'
 
 # 启动开发环境（VPN + Docker + IDE）
-alias dev-up='vpn-up && docker compose -f ~/dev-env/docker-compose.yml up -d && echo "🚀 开发环境就绪"'
-alias dev-down='docker compose -f ~/dev-env/docker-compose.yml down && vpn-down && echo "👋 开发环境已关闭"'
+alias dev-up='vpn-up && docker compose -f ~/dev-env/docker-compose.yml up -d && echo "开发环境就绪"'
+alias dev-down='docker compose -f ~/dev-env/docker-compose.yml down && vpn-down && echo "开发环境已关闭"'
 ```
 
-> 🎯 **核心要点**：VPN 对开发者的最大价值不是"翻墙"，而是**让远程资源像本地一样可用**。配置好 Split Tunneling，让内网流量走 VPN、公网流量走本地，日常开发体验丝滑。
+> **核心要点**：VPN 对开发者的最大价值不是"翻墙"，而是**让远程资源像本地一样可用**。配置好 Split Tunneling，让内网流量走 VPN、公网流量走本地，日常开发体验丝滑。
 
 ---
 

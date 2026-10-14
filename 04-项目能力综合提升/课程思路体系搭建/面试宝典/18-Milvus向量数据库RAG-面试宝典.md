@@ -61,7 +61,7 @@
 | **Euclidean (L2)** | `sqrt(Σ(aᵢ - bᵢ)²)` | 图像特征匹配 |
 | **Dot Product (IP)** | `Σ aᵢ · bᵢ` | 推荐系统、归一化向量场景 |
 
-> 💡 选型建议：文本检索首选 Cosine，图像/音频推荐 L2，评分推荐用 IP。
+> 选型建议：文本检索首选 Cosine，图像/音频推荐 L2，评分推荐用 IP。
 
 ### 1.6 什么是 Collection、Partition、Segment？
 
@@ -177,7 +177,7 @@ search_params = {"time_travel": timestamp}  # 查询指定时间点的数据
 | **DiskANN** | 基于磁盘的图索引 | 超大规模（内存不足） | 支持内存放不下的数据 | 延迟比 HNSW 高 |
 | **BIN_FLAT/BIN_IVF** | 二值化向量索引 | 二值向量（图像哈希） | 内存极省 | 仅支持二值向量 |
 
-> 🎯 面试高频回答：`数据量 < 1万用 Flat`，`1万-100万用 IVF_FLAT`，`> 100万且需要高 QPS 用 HNSW`，`内存不足用 DiskANN`。
+> 面试高频回答：`数据量 < 1万用 Flat`，`1万-100万用 IVF_FLAT`，`> 100万且需要高 QPS 用 HNSW`，`内存不足用 DiskANN`。
 
 ### 2.2 IVF_FLAT 原理
 
@@ -993,4 +993,4 @@ schema = CollectionSchema(fields, description="多租户向量库")
 
 ---
 
-> 🎯 **面试要点总结**：Milvus 面试核心围绕 **架构原理（35%）**+ **索引与搜索（30%）**+ **RAG 系统设计（25%）**+ **LLM 推理优化（10%）**。准备时先确保能徒手画出架构图，能写出完整的 RAG Pipeline 代码，然后深入理解索引原理和优化参数。对于高级岗位，LLM 推理优化的 Prefill/Decode、Page Attention 是区分度考点。
+> **面试要点总结**：Milvus 面试核心围绕 **架构原理（35%）**+ **索引与搜索（30%）**+ **RAG 系统设计（25%）**+ **LLM 推理优化（10%）**。准备时先确保能徒手画出架构图，能写出完整的 RAG Pipeline 代码，然后深入理解索引原理和优化参数。对于高级岗位，LLM 推理优化的 Prefill/Decode、Page Attention 是区分度考点。

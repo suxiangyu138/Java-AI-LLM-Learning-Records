@@ -1,6 +1,6 @@
 # 03 - Function Calling 工具调用机制
 
-> 🎯 Hermes 的 Function Calling 是其最核心的差异化能力——基于 ChatML + XML 标签的轻量工具调用协议，无框架绑定，可在任意推理引擎上实现 Agent 式递归工具调用
+> Hermes 的 Function Calling 是其最核心的差异化能力——基于 ChatML + XML 标签的轻量工具调用协议，无框架绑定，可在任意推理引擎上实现 Agent 式递归工具调用
 
 ---
 
@@ -43,7 +43,7 @@
               └───────────────────────────┘
 ```
 
-> 🎯 Hermes Function Calling 的核心原则：**工具定义是人（system prompt），工具选择是模型，工具执行是代码**
+> Hermes Function Calling 的核心原则：**工具定义是人（system prompt），工具选择是模型，工具执行是代码**
 
 ## 2. 工具定义规范
 
@@ -107,7 +107,7 @@ arguments within <tool_call></tool_call> XML tags as follows:
 </tools>
 ```
 
-> 💡 工具按 JSON 对象一一列出，顺序无影响。Hermes 模型可同时调用多个工具
+> 工具按 JSON 对象一一列出，顺序无影响。Hermes 模型可同时调用多个工具
 
 ## 3. 工具调用与响应格式
 
@@ -139,7 +139,7 @@ arguments within <tool_call></tool_call> XML tags as follows:
 </tool_call>
 ```
 
-> ⚠️ **vLLM 部署关键规则**：单次响应只输出一个 `<tool_call>` 块，多个调用放在同一个 `tool_calls` 数组内。不要在响应前后附加任何其他文本
+> **vLLM 部署关键规则**：单次响应只输出一个 `<tool_call>` 块，多个调用放在同一个 `tool_calls` 数组内。不要在响应前后附加任何其他文本
 
 ### 3.3 完整交互示例
 
@@ -249,7 +249,7 @@ python -m vllm.entrypoints.openai.api_server \
 
 | 参数 | 说明 | 重要性 |
 |------|------|:---:|
-| `--tool-call-parser hermes` | ⭐ 启用 Hermes XML 格式解析 | **必须** |
+| `--tool-call-parser hermes` | ★ 启用 Hermes XML 格式解析 | **必须** |
 | `--enable-auto-tool-choice` | 模型自主决定是否调用工具 | 推荐 |
 | `--max-model-len 32768` | 上下文窗口 | 按需 |
 | `--gpu-memory-utilization` | GPU 显存利用率 | 0.85-0.95 |
@@ -294,7 +294,7 @@ Follow schemas strictly; never invent parameters.
 | 错误处理 | 工具异常返回 `{"error": "message"}` | 模型可根据错误重试 |
 | 工具调用 + 推理 | DeepHermes 3 不支持同时使用 | 两者训练分开，混合结果不一致 |
 
-> ⚠️ **DeepHermes 3 限制**：Function Calling 和推理模式（`<think>`）**不是同时训练的**，同时启用会导致不可预测的行为（虽然偶尔能工作得更准确）
+> **DeepHermes 3 限制**：Function Calling 和推理模式（`<think>`）**不是同时训练的**，同时启用会导致不可预测的行为（虽然偶尔能工作得更准确）
 
 ## 核心要点回顾
 

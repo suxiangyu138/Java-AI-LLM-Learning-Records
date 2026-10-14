@@ -2,7 +2,7 @@
 
 > 定位：OpenAI 的 Agent 原生接口——previous_response_id、内置工具、服务端会话；对比 Chat Completions 并给出迁移与选型（2026-08 基准）
 
-## 📚 目录
+## 目录
 
 1. [Responses API 是什么](#1-responses-api-是什么)
 2. [架构对比：两个接口的哲学差异](#2-架构对比两个接口的哲学差异)
@@ -19,10 +19,10 @@
 
 ```text
 2026 生态事实：
-✅ Responses API  = Agent 默认（Agno、Microsoft Agent Framework 等已切默认）
-✅ Chat Completions = 行业标准，继续支持新模型（GPT-5.x 全支持）
-⚠️ Assistants API = 已弃用，2026 上半年停服（一源：2026-08-26）
-❌ 多供应商兼容（DeepSeek 等） = 只有 Chat Completions 形态
+✓ Responses API  = Agent 默认（Agno、Microsoft Agent Framework 等已切默认）
+✓ Chat Completions = 行业标准，继续支持新模型（GPT-5.x 全支持）
+Assistants API = 已弃用，2026 上半年停服（一源：2026-08-26）
+✗ 多供应商兼容（DeepSeek 等） = 只有 Chat Completions 形态
 ```
 
 | 维度 | Chat Completions | Responses API |
@@ -34,7 +34,7 @@
 | 循环 | 你自己写 | 内置工具由平台自动循环 |
 | 流式 | delta 拼接 | 语义事件 |
 
-> 🎯 **核心要点**：哲学差异一句话——**Chat Completions 是"单次请求→单次响应"的对话模型接口，Responses 是"给个目标、平台托管循环"的 Agent 运行时**。开发者职责从"建循环"变成"定义行为"。
+> **核心要点**：哲学差异一句话——**Chat Completions 是"单次请求→单次响应"的对话模型接口，Responses 是"给个目标、平台托管循环"的 Agent 运行时**。开发者职责从"建循环"变成"定义行为"。
 
 ## 2. 架构对比：两个接口的哲学差异
 
@@ -84,7 +84,7 @@ r2 = client.responses.create(
 | 与手写 messages 对比 | 客户端不再维护/重发消息数组（省带宽与编排代码） |
 | 注意 | 缓存/成本模型不同——按官方计价核对长会话成本 |
 
-> ⚠️ 依赖平台状态 = 绑定 OpenAI 生态；多供应商混合场景仍走 Chat Completions。
+> 依赖平台状态 = 绑定 OpenAI 生态；多供应商混合场景仍走 Chat Completions。
 
 ## 4. 内置工具：平台托管执行
 
@@ -105,7 +105,7 @@ response = client.responses.create(
 print(response.output_text)              # 含引用标注的最终回答
 ```
 
-> 💡 **工程权衡**：内置 `web_search` 简单但**不透明且贵**（1 万次/天 ≈ $250-500）。生产 Agent 常用自定义 function 工具路由到第三方搜索（Tavily/Parallel 等）——索引可控、成本可控、token 密度可控。**内置工具是快速原型，自定义工具是生产选择**。
+> **工程权衡**：内置 `web_search` 简单但**不透明且贵**（1 万次/天 ≈ $250-500）。生产 Agent 常用自定义 function 工具路由到第三方搜索（Tavily/Parallel 等）——索引可控、成本可控、token 密度可控。**内置工具是快速原型，自定义工具是生产选择**。
 
 ## 5. 自定义函数的调用循环
 
@@ -139,7 +139,7 @@ for item in response.output:
         )
 ```
 
-> ⚠️ **迁移铁律**：Responses 续传**不能用**旧式 `{"role": "tool", "tool_call_id": ...}` 消息——必须用 `function_call_output` 项（`call_id` 配对）。混用直接校验失败。
+> **迁移铁律**：Responses 续传**不能用**旧式 `{"role": "tool", "tool_call_id": ...}` 消息——必须用 `function_call_output` 项（`call_id` 配对）。混用直接校验失败。
 
 ## 6. 结构化输出与流式
 
@@ -166,7 +166,7 @@ with client.responses.stream(model="gpt-4o-mini", input="你好") as s:
 | 请求体 | `messages` | `input` |
 | 输出上限 | `max_tokens` / `max_completion_tokens` | `max_output_tokens` |
 | 结构化 | `response_format` | `text.format` |
-| seed | ✅ | ❌（已移除） |
+| seed | ✓ | ✗（已移除） |
 | 多模态文本 | `text` | `input_text` |
 | 图片 | `image_url`（嵌套） | `input_image`（旧嵌套形状会校验失败） |
 | 工具回传 | `{"role": "tool", "tool_call_id": ...}` | `function_call_output` + `call_id` |
@@ -191,7 +191,7 @@ with client.responses.stream(model="gpt-4o-mini", input="你好") as s:
 | 计价模型差异 | 长会话/内置工具成本需实测核算 |
 | Go 等生态滞后 | 部分语言只有 Chat Completions 客户端 |
 
-> 🎯 **核心要点**：Responses API 的正确心态——**它是"Agent 原生接口"的未来方向，但 2026 年多供应商世界仍以 Chat Completions 为事实协议**。会画迁移对照表、会判断何时切，比"无脑迁移"专业得多。
+> **核心要点**：Responses API 的正确心态——**它是"Agent 原生接口"的未来方向，但 2026 年多供应商世界仍以 Chat Completions 为事实协议**。会画迁移对照表、会判断何时切，比"无脑迁移"专业得多。
 
 ---
 

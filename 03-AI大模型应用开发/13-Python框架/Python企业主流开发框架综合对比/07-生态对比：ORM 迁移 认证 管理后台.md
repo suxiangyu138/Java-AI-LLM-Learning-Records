@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [ORM：Django ORM vs SQLAlchemy 2.x](#1-ormdjango-orm-vs-sqlalchemy-2x)
 2. [迁移：Django migrations vs Alembic](#2-迁移django-migrations-vs-alembic)
@@ -96,25 +96,25 @@ Django Admin 是生态对比中**差距最大的一项**：模型注册即后台
 
 | 组件 | Django | FastAPI | Flask |
 |------|:---:|:---:|:---:|
-| ORM | ✅ 内置 | 🧩 SQLAlchemy | 🧩 SQLAlchemy |
-| 迁移 | ✅ 自动 | 🧩 Alembic | 🧩 Flask-Migrate |
-| 认证 | ✅ 内置 | 🧩 自搭 | 🧩 自搭 |
-| 后台 | ✅ 王牌 | ❌ 无 | 🧩 Flask-Admin |
-| 序列化 | 🧩 DRF/Ninja | ✅ Pydantic | 🧩 自由 |
-| 后台任务 | ✅ 内置（6.0） | 🧩 Celery/ARQ | 🧩 Celery |
-| 异步数据 | 🧩 有限 | ✅ 原生 | ❌ 弱 |
+| ORM | ✓ 内置 | SQLAlchemy | SQLAlchemy |
+| 迁移 | ✓ 自动 | Alembic | Flask-Migrate |
+| 认证 | ✓ 内置 | 自搭 | 自搭 |
+| 后台 | ✓ 王牌 | ✗ 无 | Flask-Admin |
+| 序列化 | DRF/Ninja | ✓ Pydantic | 自由 |
+| 后台任务 | ✓ 内置（6.0） | Celery/ARQ | Celery |
+| 异步数据 | 有限 | ✓ 原生 | ✗ 弱 |
 
-（✅ = 内置/原生，🧩 = 事实标准组合，❌ = 明显短板）
+（✓ = 内置/原生，= 事实标准组合，✗ = 明显短板）
 
 **选型信号**：生态对比出现三个"明显短板"以上的场景（如"要后台 + 要认证 + 要后台任务"三项全中），Django 的一体化优势压倒一切；只有"纯 API + 无后台 + 契约自动"（FastAPI 全中项）时，FastAPI 胜出——**生态对比的答案往往不是"谁最好"，而是"谁最不缺你需要的"**。
 
 **面试的高频追问**顺势给答案：被问"你的 FastAPI 项目认证怎么做"——标准答法是 OAuth2 密码流 + JWT（`OAuth2PasswordBearer` + `python-jose`）约 150 行，加上角色装饰器与 Redis 黑名单；被问"为什么不用 django-allauth"——答：项目无 Session 后台需求，JWT 无状态契合微服务；被问"Django 的 Session vs JWT 怎么选"——答：同域后台 Session（服务端可撤销）、跨域/微服务 JWT（无状态扩展），混合方案用双 Token。**"认证是生态对比的试金石"**——能把认证方案讲得头头是道的候选人，生态对比题基本满分。
 
-> 🎯 **核心要点**：六大件对比的结论——Django 生态"自足"（ORM/迁移/认证/后台全内置，Admin 是王牌），FastAPI 生态"事实标准组合"（SQLAlchemy + Alembic + Pydantic 缺一不可），Flask 生态"自由拼装"；"要后台 + 要认证 + 要后台任务"三项全中时，Django 一体化无对手。
+> **核心要点**：六大件对比的结论——Django 生态"自足"（ORM/迁移/认证/后台全内置，Admin 是王牌），FastAPI 生态"事实标准组合"（SQLAlchemy + Alembic + Pydantic 缺一不可），Flask 生态"自由拼装"；"要后台 + 要认证 + 要后台任务"三项全中时，Django 一体化无对手。
 
 ## 7. 核心要点与思考题
 
-> 🎯 **本章三句话总结**：
+> **本章三句话总结**：
 > 1. ORM 平手（Django ORM vs SQLAlchemy 2.x 都成熟），差异在绑定度——Django 锁死、SQLAlchemy 通用；
 > 2. 认证是样板来源：Django 内置，FastAPI/Flask 要自搭 100-200 行；Admin 是 Django 最大差距项；
 > 3. Django Ninja 是"Django 要 FastAPI 体验"的 2026 折中方案；低代码后台是"不选 Django"的出口。

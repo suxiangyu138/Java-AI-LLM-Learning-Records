@@ -2,7 +2,7 @@
 
 > Spring 对注解的处理远超"反射读一下"：MergedAnnotations 递归合并元注解链、@AliasFor 建立属性别名映射、合成注解实例是 JDK 动态代理。理解这套元模型是理解一切 Spring 注解行为的钥匙——@GetMapping 为什么有 path 属性、@Service 为什么就是 @Component、派生注解为什么自动生效，答案全在这里
 
-## 📚 目录
+## 目录
 
 1. [MergedAnnotations：注解的合并视图](#1-mergedannotations注解的合并视图)
 2. [@AliasFor 的三种别名形态](#2-aliasfor-的三种别名形态)
@@ -54,7 +54,7 @@ public @interface GetMapping {
 
 **形态三：隐式别名集**：多个属性（直接或传递地）覆写同一元注解属性时，它们互为隐式别名。SPR-13345 之前合并算法"后者胜"导致隐式别名覆盖异常，4.2.x 修复后成为完整能力。声明纪律三条：别名属性必须**返回类型一致**且**都有默认值**；成对声明推荐双向 @AliasFor（5.2.1+ 允许单向但可读性差）；`value` 与 `attribute` 不能同时指定（冲突报错）。
 
-> 🎯 **核心要点**：@AliasFor 只是**声明**，别名语义的**强制执行**依赖 MergedAnnotations 加载——裸反射读注解时 @AliasFor 不起作用，这是自研注解消费端最容易忽略的契约。
+> **核心要点**：@AliasFor 只是**声明**，别名语义的**强制执行**依赖 MergedAnnotations 加载——裸反射读注解时 @AliasFor 不起作用，这是自研注解消费端最容易忽略的契约。
 
 ---
 

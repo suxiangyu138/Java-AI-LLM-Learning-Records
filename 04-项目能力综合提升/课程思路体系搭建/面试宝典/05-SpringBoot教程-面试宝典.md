@@ -50,7 +50,7 @@ org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration,\
 // ... 上百个自动配置类
 ```
 
-> 🎯 面试亮点：Spring Boot 2.7+ 开始使用 `META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports` 替代 `spring.factories`。
+> 面试亮点：Spring Boot 2.7+ 开始使用 `META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports` 替代 `spring.factories`。
 
 ### 1.5 @Conditional 系列注解有哪些？
 | 注解 | 条件 |
@@ -279,7 +279,7 @@ public boolean matches(ConditionContext context, AnnotatedTypeMetadata metadata)
 }
 ```
 
-> 💡 面试亮点：Spring Boot 通过 `spring-autoconfigure-metadata.properties` 进行条件过滤优化，避免加载大量不需要的类。
+> 面试亮点：Spring Boot 通过 `spring-autoconfigure-metadata.properties` 进行条件过滤优化，避免加载大量不需要的类。
 
 ### 2.3 Spring Boot 的 SpringApplication 构造过程源码分析
 ```java

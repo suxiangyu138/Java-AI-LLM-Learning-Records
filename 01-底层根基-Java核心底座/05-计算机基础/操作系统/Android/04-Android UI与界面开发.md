@@ -1,10 +1,10 @@
 # Android UI 与界面开发
 
-> 🎨 从传统的 View + XML 到现代的 Jetpack Compose 声明式 UI —— Android 界面的两种范式、Material Design 3 设计规范、完整的界面开发指南
+> 从传统的 View + XML 到现代的 Jetpack Compose 声明式 UI —— Android 界面的两种范式、Material Design 3 设计规范、完整的界面开发指南
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [View 体系：传统 XML 方式](#1-view-体系传统-xml-方式)
 2. [五大经典布局](#2-五大经典布局)
@@ -150,11 +150,11 @@ public class MainActivity extends AppCompatActivity {
 
 | 布局 | 排列方式 | 适用场景 | 性能 | 推荐度 |
 |------|---------|------|:---:|:---:|
-| **ConstraintLayout** | 约束关系 | 复杂界面 | ⭐⭐⭐ | ✅ 首选 |
-| **LinearLayout** | 线性（水平/垂直） | 简单排列 | ⭐⭐⭐ | ✅ |
-| **FrameLayout** | 层叠（堆叠） | 占位/覆盖 | ⭐⭐⭐ | ✅ |
-| **RelativeLayout** | 相对位置 | 中等复杂 | ⭐⭐ | ❌ (用 ConstraintLayout) |
-| **TableLayout** | 表格 | 表格式 | ⭐ | ❌ (用 RecyclerView) |
+| **ConstraintLayout** | 约束关系 | 复杂界面 | ★★★ | ✓ 首选 |
+| **LinearLayout** | 线性（水平/垂直） | 简单排列 | ★★★ | ✓ |
+| **FrameLayout** | 层叠（堆叠） | 占位/覆盖 | ★★★ | ✓ |
+| **RelativeLayout** | 相对位置 | 中等复杂 | ★★ | ✗ (用 ConstraintLayout) |
+| **TableLayout** | 表格 | 表格式 | ★ | ✗ (用 RecyclerView) |
 
 ### 2.2 ConstraintLayout：现代布局首选
 
@@ -202,7 +202,7 @@ public class MainActivity extends AppCompatActivity {
 </androidx.constraintlayout.widget.ConstraintLayout>
 ```
 
-> 💡 **为什么 ConstraintLayout 是首选**：扁平化视图树（无嵌套），性能最佳；支持百分比、角度、链、引导线等高级特性。
+> **为什么 ConstraintLayout 是首选**：扁平化视图树（无嵌套），性能最佳；支持百分比、角度、链、引导线等高级特性。
 
 ---
 
@@ -298,10 +298,10 @@ recyclerView.setAdapter(adapter);
 |------|---------|-------------|
 | **ViewHolder 模式** | 手动实现 | **强制内置** |
 | **布局管理** | 仅垂直列表 | 线性/网格/瀑布/自定义 |
-| **动画** | ❌ 需手动 | ✅ ItemAnimator 内置 |
-| **Item 装饰** | ❌ | ✅ ItemDecoration |
+| **动画** | ✗ 需手动 | ✓ ItemAnimator 内置 |
+| **Item 装饰** | ✗ | ✓ ItemDecoration |
 | **性能** | 一般 | **优秀**（缓存池优化） |
-| **状态** | 2026 年已废弃 | ✅ 唯一推荐 |
+| **状态** | 2026 年已废弃 | ✓ 唯一推荐 |
 
 ---
 
@@ -419,9 +419,9 @@ class MainActivity : ComponentActivity() {
 | **预览** | Design 编辑器 | `@Preview` 注解 |
 | **学习曲线** | 较低（直观 XML） | 中等（需函数式思维） |
 | **性能** | 基础好 | `remember` 跳过不必要重组 |
-| **推荐度** | 维护旧项目 | ✅ **新项目首选** |
+| **推荐度** | 维护旧项目 | ✓ **新项目首选** |
 
-> 🎯 **核心建议**：2026 年新项目 **优先选 Jetpack Compose**。如果是维护传统项目（Java + XML），保持 View 体系即可。
+> **核心建议**：2026 年新项目 **优先选 Jetpack Compose**。如果是维护传统项目（Java + XML），保持 View 体系即可。
 
 ---
 

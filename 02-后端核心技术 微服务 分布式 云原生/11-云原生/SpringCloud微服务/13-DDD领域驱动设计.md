@@ -1,6 +1,6 @@
 # 13 - DDD 领域驱动设计
 
-> 🎯 DDD 是微服务拆分的理论武器 — 限界上下文划定服务边界、聚合保证事务一致性、领域事件实现服务解耦。代码和业务语言对齐是核心价值
+> DDD 是微服务拆分的理论武器 — 限界上下文划定服务边界、聚合保证事务一致性、领域事件实现服务解耦。代码和业务语言对齐是核心价值
 
 ---
 
@@ -18,7 +18,7 @@
 
 | 概念 | 说明 | 微服务映射 |
 |------|------|-----------|
-| **限界上下文** | 领域模型的边界 | ⭐ 微服务拆分依据 |
+| **限界上下文** | 领域模型的边界 | ★ 微服务拆分依据 |
 | **实体** | 有唯一标识的对象 | JPA Entity |
 | **值对象** | 无标识，不可变 | `@Embeddable` |
 | **聚合** | 一组强关联的实体和值对象 | 事务一致性边界 |
@@ -31,7 +31,7 @@
 
 ## 2. 战略设计：限界上下文
 
-> ⭐ **限界上下文 = 微服务的天然边界**。
+> ★ **限界上下文 = 微服务的天然边界**。
 
 ```text
 电商 DDD 限界上下文拆分：
@@ -78,16 +78,16 @@
 ```
 
 ```java
-// ⭐ 订单聚合（Order = 聚合根）
+// ★ 订单聚合（Order = 聚合根）
 @AggregateRoot
 public class Order {
     private OrderId id;                    // 值对象 — 订单ID
-    private UserId userId;                 // ⚠️ 引用其他聚合用 ID，不用对象
+    private UserId userId;                 // 引用其他聚合用 ID，不用对象
     private List<OrderItem> items;         // 实体（聚合内部）
     private OrderStatus status;            // 值对象 — 状态
     private Money totalAmount;             // 值对象 — 金额
 
-    // ⭐ 聚合根是唯一入口，保证不变性
+    // ★ 聚合根是唯一入口，保证不变性
     public void addItem(ProductId productId, int quantity, Money price) {
         if (status != OrderStatus.PENDING) {
             throw new OrderException("只有待支付订单才能修改商品");
@@ -111,8 +111,8 @@ public class Order {
 
 | 维度 | 实体 | 值对象 |
 |------|------|--------|
-| 唯一标识 | ✅ 有 ID | ❌ 无 ID |
-| 可变性 | 可变 | ⭐ 不可变（推荐） |
+| 唯一标识 | ✓ 有 ID | ✗ 无 ID |
+| 可变性 | 可变 | ★ 不可变（推荐） |
 | 相等性 | ID 相等 | 属性相等 |
 | 持久化 | 单独表 | 嵌入父表 / JSON 列 |
 | 示例 | User, Order | Money, Address, OrderId |
@@ -186,7 +186,7 @@ public class OrderPaidHandler {
 │   Application Layer（应用层，薄层）            │
 │   编排领域对象，处理事务、权限、发布事件        │
 ├──────────────────────────────────────────────┤
-│   Domain Layer（领域层 ⭐ 核心）              │
+│   Domain Layer（领域层 ★ 核心）              │
 │   Entity / ValueObject / Aggregate / Service  │
 │   ★ 不依赖任何外部框架                        │
 ├──────────────────────────────────────────────┤
@@ -224,4 +224,4 @@ public class OrderPricingService {
 }
 ```
 
-> 🎯 **DDD 微服务铁三角**：限界上下文 = 服务边界、聚合 = 事务边界、领域事件 = 服务解耦。理解这三个映射，DDD 才算学到位。
+> **DDD 微服务铁三角**：限界上下文 = 服务边界、聚合 = 事务边界、领域事件 = 服务解耦。理解这三个映射，DDD 才算学到位。

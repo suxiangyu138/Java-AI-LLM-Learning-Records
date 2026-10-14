@@ -2,7 +2,7 @@
 
 > 定位：Queue vs Topic 全场景选型、消息持久化与内存模式、四种 ACK 确认机制对比与选型、JMS 事务与分布式事务、死信队列与重投策略、可靠性对标 RabbitMQ/Kafka——JMS 消息可靠性的完整体系
 
-## 📚 目录
+## 目录
 
 1. [P2P Queue vs Pub/Sub Topic 全场景](#1-p2p-queue-vs-pubsub-topic-全场景)
 2. [持久化：KahaDB 与 JDBC 存储](#2-持久化kahadb-与-jdbc-存储)
@@ -21,7 +21,7 @@
 | 维度 | Queue（P2P） | Topic（Pub/Sub） |
 |------|:---:|:---:|
 | 消费模式 | 一条消息一个消费者（竞争） | 一条消息多个消费者 |
-| 负载均衡 | ✅ 多个消费者分担 | ❌ 每个都收到全量 |
+| 负载均衡 | ✓ 多个消费者分担 | ✗ 每个都收到全量 |
 | 消息保留 | 消费后删除 | 默认不保留（无订阅） |
 | 持久订阅 | 天然 | 需 `createDurableSubscriber` |
 | 适用 | 任务分发/订单处理 | 事件广播/配置变更通知 |
@@ -35,7 +35,7 @@ Connection conn = factory.createConnection();
 Session session = conn.createSession(false, Session.AUTO_ACKNOWLEDGE);
 Queue queue = session.createQueue("orders.queue");
 MessageProducer producer = session.createProducer(queue);
-// ⚠️ 设置持久化（Broker 重启不丢）
+// 设置持久化（Broker 重启不丢）
 producer.setDeliveryMode(DeliveryMode.PERSISTENT);
 TextMessage msg = session.createTextMessage("{\"orderId\":1001}");
 producer.send(msg);
@@ -61,7 +61,7 @@ TopicSubscriber durableSub = session.createDurableSubscriber(
 ### 1.3 虚拟 Topic（Virtual Topic）
 
 ```java
-// ⚠️ ActiveMQ 独有：虚拟 Topic——Queue 的竞争负载 + Topic 的广播
+// ActiveMQ 独有：虚拟 Topic——Queue 的竞争负载 + Topic 的广播
 // 生产者发到 VirtualTopic.Orders
 Topic virtualTopic = session.createTopic("VirtualTopic.Orders");
 producer.send(virtualTopic, msg);
@@ -92,7 +92,7 @@ KahaDB = ActiveMQ Classic 默认的持久化引擎
   索引存 B-tree（快速定位)
   定期清理已消费日志（checkpoint）
 
-⚠️ 面试必答：
+面试必答：
 "KahaDB = 顺序写日志 + B-tree 索引——
  类似 PG 的 WAL 与 MySQL 的 binlog；
  写入性能高（顺序追加），恢复时重放日志。"
@@ -126,27 +126,27 @@ KahaDB = ActiveMQ Classic 默认的持久化引擎
 
 | 模式 | 行为 | 丢失风险 | 重复风险 | 适用 |
 |------|------|:---:|:---:|------|
-| AUTO_ACKNOWLEDGE | `receive()` 返回即确认 | ⚠️ 高 | 低 | 不推荐生产 |
-| CLIENT_ACKNOWLEDGE | 显式调用 `msg.acknowledge()` | 低 | ⚠️ 中 | ✅ 生产推荐 |
-| DUPS_OK_ACKNOWLEDGE | 批量延迟确认 | 低 | ⚠️ 高 | 可容忍重复 |
-| SESSION_TRANSACTED | 事务提交确认 | 最低 | 低 | ✅ 关键业务 |
+| AUTO_ACKNOWLEDGE | `receive()` 返回即确认 | 高 | 低 | 不推荐生产 |
+| CLIENT_ACKNOWLEDGE | 显式调用 `msg.acknowledge()` | 低 | 中 | ✓ 生产推荐 |
+| DUPS_OK_ACKNOWLEDGE | 批量延迟确认 | 低 | 高 | 可容忍重复 |
+| SESSION_TRANSACTED | 事务提交确认 | 最低 | 低 | ✓ 关键业务 |
 
 ### 3.2 ACK 的坑与实战
 
 ```java
-// ⚠️ 坑1：AUTO_ACK 模式下 receive() 返回即确认
+// 坑1：AUTO_ACK 模式下 receive() 返回即确认
 // 业务尚未处理，进程崩了 → 消息永丢！
 // 解决方案：用 CLIENT_ACK
 Session session = conn.createSession(false, Session.CLIENT_ACKNOWLEDGE);
 TextMessage msg = (TextMessage) consumer.receive(5000);
 try {
     processOrder(msg.getText());      // 业务处理
-    msg.acknowledge();                // ⚠️ 成功才确认
+    msg.acknowledge();                // 成功才确认
 } catch (Exception e) {
     // 未 ack 的消息 → Broker 重投
 }
 
-// ⚠️ 坑2：批量消费时 ack 影响整批
+// 坑2：批量消费时 ack 影响整批
 // CLIENT_ACK 调用 msg.acknowledge() 确认本消息
 // 及之前所有已接收但未 ack 的消息！
 // 解决：单条处理 + 逐条 ack，或用事务模式逐条提交
@@ -154,10 +154,10 @@ Session txSession = conn.createSession(true, Session.SESSION_TRANSACTED);
 for (int i = 0; i < 10; i++) {
     Message m = consumer.receive();
     processSingle(m);                 // 逐条处理
-    txSession.commit();               // ⚠️ 逐条提交
+    txSession.commit();               // 逐条提交
 }
 
-// ⚠️ 坑3：DUPS_OK 异步写磁盘
+// 坑3：DUPS_OK 异步写磁盘
 // 性能高但可能重复 → 消费端必须幂等
 ```
 
@@ -186,7 +186,7 @@ txSession.setTransactionTimeout(30);  // 30 秒
 ### 4.2 分布式事务实战（JTA + Spring）
 
 ```java
-// ⚠️ 最完整的可靠方案：JDBC + JMS 在同一个事务
+// 最完整的可靠方案：JDBC + JMS 在同一个事务
 @Service
 @Transactional(rollbackFor = Exception.class)
 public class OrderService {
@@ -204,7 +204,7 @@ public class OrderService {
         // 若 ③ 之后抛异常 → 数据库回滚 + 消息撤销！
     }
 }
-// ⚠️ 需要 JTA 事务管理器（Atomikos/Bitronix/Narayana）
+// 需要 JTA 事务管理器（Atomikos/Bitronix/Narayana）
 ```
 
 ### 4.3 事务 vs 非事务的性能对比
@@ -212,7 +212,7 @@ public class OrderService {
 | 维度 | 非事务（AUTO_ACK） | 事务（SESSION_TRANSACTED） |
 |------|:---:|:---:|
 | 吞吐 | 最高 | 中（提交开销） |
-| 可靠性 | 低 | ✅ 最高 |
+| 可靠性 | 低 | ✓ 最高 |
 | 适用 | 日志/通知（丢得起） | 订单/支付（丢不起） |
 | 批处理优化 | — | 批量提交（N 条一提交） |
 
@@ -230,7 +230,7 @@ public class OrderService {
   ④ 队列满了（producerFlowControl=true 下）
   ⑤ 消费者显式拒绝（Artemis 支持，Classic 不支持）
 
-⚠️ 面试必答：
+面试必答：
 "DLQ 不是'丢了'——消息还在，只是标识为
  处理失败的'待人工检查'队列；
  监控 DLQ 是运维第一要务。"
@@ -239,7 +239,7 @@ public class OrderService {
 ### 5.2 完整重投策略配置
 
 ```java
-// ⚠️ 生产推荐配置（指数退避 + 最大重投 + DLQ 兜底）
+// 生产推荐配置（指数退避 + 最大重投 + DLQ 兜底）
 @Bean
 public RedeliveryPolicy redeliveryPolicy() {
     RedeliveryPolicy policy = new RedeliveryPolicy();
@@ -290,7 +290,7 @@ producer.send(msg);
 // 消费者：只用选择器接收自己关心的
 String selector = "region = 'east' AND priority >= 5";
 MessageConsumer c = session.createConsumer(queue, selector);
-// ⚠️ 选择器在 Broker 侧过滤 → 网络传输只有匹配的消息
+// 选择器在 Broker 侧过滤 → 网络传输只有匹配的消息
 // 代价：Broker CPU 开销（大量消息时需评估）
 ```
 
@@ -299,7 +299,7 @@ MessageConsumer c = session.createConsumer(queue, selector);
 ```java
 // JMSXGroupID：同一组消息发给同一个消费者（保序）
 TextMessage msg1 = session.createTextMessage(data1);
-msg1.setStringProperty("JMSXGroupID", "order-1001");  // ⚠️ 分组键
+msg1.setStringProperty("JMSXGroupID", "order-1001");  // 分组键
 
 TextMessage msg2 = session.createTextMessage(data2);
 msg2.setStringProperty("JMSXGroupID", "order-1001");
@@ -311,9 +311,9 @@ msg2.setStringProperty("JMSXGroupID", "order-1001");
 ### 6.3 消息属性 vs 消息体
 
 ```
-⚠️ 选择器只能用消息属性过滤（不能匹配消息体）
-  ✅ msg.setStringProperty("type", "order")
-  ❌ 根据消息体 JSON 内容过滤
+选择器只能用消息属性过滤（不能匹配消息体）
+  ✓ msg.setStringProperty("type", "order")
+  ✗ 根据消息体 JSON 内容过滤
 
 属性存储开销：属性存在 Broker 内存索引中
   → 不要每条消息带大量属性（影响性能）
@@ -327,14 +327,14 @@ msg2.setStringProperty("JMSXGroupID", "order-1001");
 |------|:---:|:---:|:---:|
 | ACK | 4 种模式（灵活） | manual auto | 偏移提交 |
 | 持久化 | KahaDB/JDBC | 磁盘 + 镜像队列 | 磁盘 + 副本 |
-| 事务 | ✅ JMS 本地 + JTA | ✅ AMQP TX | ❌ 无事务 |
-| DLQ | ✅ 自动（配置简单） | ✅ 需配置 | ❌ 无内置 |
+| 事务 | ✓ JMS 本地 + JTA | ✓ AMQP TX | ✗ 无事务 |
+| DLQ | ✓ 自动（配置简单） | ✓ 需配置 | ✗ 无内置 |
 | 顺序 | Message Group | 单队列 | 分区内 |
 | 重试 | 指数退避（内置） | 需插件 | 无内置重试 |
-| 流式/日志 | ❌ 不适用 | ❌ 不适用 | ✅ 天然 |
+| 流式/日志 | ✗ 不适用 | ✗ 不适用 | ✓ 天然 |
 
 ```
-⚠️ 面试必答：
+面试必答：
 "可靠性对比——ActiveMQ 强在 JMS 标准实现（ACK/事务/DLQ
  全内置）、RabbitMQ 强在低延迟 + AMQP 生态、
  Kafka 强在高吞吐 + 持久化 + 重放。
@@ -345,7 +345,7 @@ msg2.setStringProperty("JMSXGroupID", "order-1001");
 
 ---
 
-> 🎯 **核心要点**：JMS 可靠性 = **Queue/Topic 全场景**（含 Virtual Topic 广播+负载均衡）+ **三种存储**（KahaDB/JDBC/LevelDB）+ **四种 ACK**（AUTO/CLIENT/DUPS/SESSION，逐条 ack 防批量丢失）+ **JTA 分布式事务**（JDBC+JMS 原子性）+ **DLQ 策略**（指数退避重投 + 不同队列不同死信）。生产顺序 = PERSISTENT → CLIENT_ACK → DLQ → 消费幂等——四道防线完整落地。
+> **核心要点**：JMS 可靠性 = **Queue/Topic 全场景**（含 Virtual Topic 广播+负载均衡）+ **三种存储**（KahaDB/JDBC/LevelDB）+ **四种 ACK**（AUTO/CLIENT/DUPS/SESSION，逐条 ack 防批量丢失）+ **JTA 分布式事务**（JDBC+JMS 原子性）+ **DLQ 策略**（指数退避重投 + 不同队列不同死信）。生产顺序 = PERSISTENT → CLIENT_ACK → DLQ → 消费幂等——四道防线完整落地。
 
 ---
 

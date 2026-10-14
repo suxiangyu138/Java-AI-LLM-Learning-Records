@@ -1,6 +1,6 @@
 # 10 - Nginx SSL 与安全加固
 
-> 🎯 HTTPS 已是生产标配，安全加固是守门人的天职 — 从 SSL 证书配置到 HSTS/CSP 安全头、从限流防刷到 WAF 防护，让 Nginx 真正成为应用的第一道防线
+> HTTPS 已是生产标配，安全加固是守门人的天职 — 从 SSL 证书配置到 HSTS/CSP 安全头、从限流防刷到 WAF 防护，让 Nginx 真正成为应用的第一道防线
 
 ---
 
@@ -102,7 +102,7 @@ resolver 8.8.8.8 8.8.4.4 valid=300s;
 resolver_timeout 5s;
 ```
 
-> 💡 OCSP Stapling 让 Nginx 代替客户端查询证书吊销状态，减少客户端验证延迟。
+> OCSP Stapling 让 Nginx 代替客户端查询证书吊销状态，减少客户端验证延迟。
 
 ---
 
@@ -133,12 +133,12 @@ server {
 
 | 安全头 | 防护类型 | 优先级 |
 |--------|----------|:---:|
-| `Strict-Transport-Security` | SSL 降级攻击 | 🔴 必配 |
-| `X-Content-Type-Options` | MIME 嗅探攻击 | 🔴 必配 |
-| `X-Frame-Options` | 点击劫持 | 🟡 |
-| `X-XSS-Protection` | 反射型 XSS | 🟡 |
-| `Content-Security-Policy` | XSS / 数据注入 | 🟡（复杂） |
-| `Referrer-Policy` | 信息泄漏 | 🟢 |
+| `Strict-Transport-Security` | SSL 降级攻击 | 必配 |
+| `X-Content-Type-Options` | MIME 嗅探攻击 | 必配 |
+| `X-Frame-Options` | 点击劫持 | |
+| `X-XSS-Protection` | 反射型 XSS | |
+| `Content-Security-Policy` | XSS / 数据注入 | （复杂） |
+| `Referrer-Policy` | 信息泄漏 | |
 
 ---
 
@@ -328,4 +328,4 @@ server {
 | **请求限制** | 非法 Method 拦截 | `if ($request_method ...)` |
 | **WAF** | SQL 注入/XSS 基础拦截 | 正则匹配关键字符 |
 
-> 🎯 **安全是 1，其他是 0** — 没有安全的性能优化和架构设计都是空中楼阁。Nginx 作为所有流量的入口，是安全防护的理想位置。
+> **安全是 1，其他是 0** — 没有安全的性能优化和架构设计都是空中楼阁。Nginx 作为所有流量的入口，是安全防护的理想位置。

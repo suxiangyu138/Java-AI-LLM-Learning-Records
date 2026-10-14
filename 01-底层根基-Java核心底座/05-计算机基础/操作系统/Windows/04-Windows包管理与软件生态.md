@@ -1,10 +1,10 @@
 # Windows 包管理与软件生态
 
-> 📦 winget、Chocolatey、Scoop 三足鼎立 —— 从"下载→下一步→下一步→完成"到一行命令装好全套开发环境
+> winget、Chocolatey、Scoop 三足鼎立 —— 从"下载→下一步→下一步→完成"到一行命令装好全套开发环境
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [为什么需要包管理器](#1-为什么需要包管理器)
 2. [winget：微软官方](#2-winget微软官方)
@@ -100,7 +100,7 @@ winget install Microsoft.PowerToys
 winget install Microsoft.WindowsTerminal
 ```
 
-> ⚠️ **winget 局限**：部分包版本滞后（依赖社区维护 manifest），安装路径通常不可自定义，且大多是系统级安装。
+> **winget 局限**：部分包版本滞后（依赖社区维护 manifest），安装路径通常不可自定义，且大多是系统级安装。
 
 ---
 
@@ -186,7 +186,7 @@ choco uninstall jdk8 -y
 choco install packages.config -y
 ```
 
-> ⚠️ **Chocolatey 局限**：部分包需要管理员权限，系统级安装较"脏"，卸载可能有残留。
+> **Chocolatey 局限**：部分包需要管理员权限，系统级安装较"脏"，卸载可能有残留。
 
 ---
 
@@ -196,11 +196,11 @@ choco install packages.config -y
 
 ```text
 Scoop 的核心原则：
-├── 📁 所有软件装在 ~/scoop/ 下（不需要管理员权限）
-├── 🔗 通过 ~/scoop/shims/ 软链接暴露命令
-├── 🎯 用户级安装（不污染系统）
-├── 📦 便携式软件优先（解压即用）
-└── 🪣 bucket 机制组织软件源
+├── 所有软件装在 ~/scoop/ 下（不需要管理员权限）
+├── 通过 ~/scoop/shims/ 软链接暴露命令
+├── 用户级安装（不污染系统）
+├── 便携式软件优先（解压即用）
+└── bucket 机制组织软件源
 ```
 
 ### 4.2 安装与配置
@@ -304,7 +304,7 @@ scoop install curl
 scoop install jq                # JSON 处理
 ```
 
-> 🎯 **Scoop 最大优势**：`scoop reset <jdk>` 一键切换 Java 版本，比改环境变量优雅得多。
+> **Scoop 最大优势**：`scoop reset <jdk>` 一键切换 Java 版本，比改环境变量优雅得多。
 
 ---
 
@@ -320,12 +320,12 @@ scoop install jq                # JSON 处理
 | **包数量** | ~5000+ | ~10000+ | ~2000+ |
 | **管理员权限** | 部分需要 | 大多数需要 | **不需要** |
 | **安装位置** | 系统 `Program Files` | 系统 `Program Files` | **用户目录** `~/scoop` |
-| **版本切换** | ❌ 不支持 | ❌ 不支持 | ✅ `scoop reset` |
-| **多版本共存** | ❌ | ❌ | ✅ `versions` bucket |
-| **便携软件** | ❌ | ❌ | ✅ 核心设计 |
+| **版本切换** | ✗ 不支持 | ✗ 不支持 | ✓ `scoop reset` |
+| **多版本共存** | ✗ | ✗ | ✓ `versions` bucket |
+| **便携软件** | ✗ | ✗ | ✓ 核心设计 |
 | **卸载干净度** | 中等 | 中等 | **极高** |
-| **GUI 客户端** | ❌ | ✅ Chocolatey GUI | ❌ |
-| **JSON 导入导出** | ✅ | ✅ (packages.config) | ✅ `scoop export/import` |
+| **GUI 客户端** | ✗ | ✓ Chocolatey GUI | ✗ |
+| **JSON 导入导出** | ✓ | ✓ (packages.config) | ✓ `scoop export/import` |
 | **社区活跃度** | 高（微软推动） | 高（历史最久） | 中（开发者最爱） |
 
 ### 5.2 选型建议
@@ -389,7 +389,7 @@ scoop install FiraCode-NF
 scoop install CascadiaCode-NF
 
 # 完成
-Write-Host "✅ 开发环境部署完成！" -ForegroundColor Green
+Write-Host "✓ 开发环境部署完成！" -ForegroundColor Green
 java --version
 ```
 

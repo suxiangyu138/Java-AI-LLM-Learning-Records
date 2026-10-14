@@ -1,6 +1,6 @@
 # 06 - 成本管理与 FinOps
 
-> 🎯 LLM 的成本是持续支出 — API 按 Token、GPU 按小时、存储按月。没有 FinOps，月底账单会让你怀疑人生
+> LLM 的成本是持续支出 — API 按 Token、GPU 按小时、存储按月。没有 FinOps，月底账单会让你怀疑人生
 
 ## 1. 成本模型
 

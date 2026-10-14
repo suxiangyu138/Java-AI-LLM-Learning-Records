@@ -1,6 +1,6 @@
 # 08 - Node.js 测试与调试
 
-> 🎯 测试和调试是工程化的基本功。Jest 是 Node.js 的 JUnit，Node.js Inspector 是 JVM 的 debugger。本章覆盖单元测试、HTTP 测试、调试技巧
+> 测试和调试是工程化的基本功。Jest 是 Node.js 的 JUnit，Node.js Inspector 是 JVM 的 debugger。本章覆盖单元测试、HTTP 测试、调试技巧
 
 ---
 

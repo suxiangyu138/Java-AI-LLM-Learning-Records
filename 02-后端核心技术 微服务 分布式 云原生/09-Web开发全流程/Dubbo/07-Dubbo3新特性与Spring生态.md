@@ -1,6 +1,6 @@
 # 07 - Dubbo 3 新特性与 Spring 生态
 
-> 🎯 Dubbo 3.x 是里程碑版本 — Triple 协议、应用级服务发现、云原生支持；同时与 Spring Cloud Alibaba 深度集成，是 Java 微服务的推荐技术栈
+> Dubbo 3.x 是里程碑版本 — Triple 协议、应用级服务发现、云原生支持；同时与 Spring Cloud Alibaba 深度集成，是 Java 微服务的推荐技术栈
 
 ---
 
@@ -181,7 +181,7 @@ dubbo:
   application:
     name: ${spring.application.name}
   registry:
-    address: spring-cloud://localhost   # ⭐ 使用 Spring Cloud 注册中心
+    address: spring-cloud://localhost   # ★ 使用 Spring Cloud 注册中心
   protocol:
     name: dubbo
     port: 20880
@@ -251,4 +251,4 @@ dubbo:
 
 ---
 
-> 🎯 **Dubbo 3.x 是 Java 微服务的推荐版**：Triple 协议解决跨语言、应用级发现降低注册压力、Spring Cloud Alibaba 无缝集成。新项目直接上 Dubbo 3.x + Nacos + Triple 协议。
+> **Dubbo 3.x 是 Java 微服务的推荐版**：Triple 协议解决跨语言、应用级发现降低注册压力、Spring Cloud Alibaba 无缝集成。新项目直接上 Dubbo 3.x + Nacos + Triple 协议。

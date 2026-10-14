@@ -1,7 +1,7 @@
 # 02-核心模型：Binder 抽象与目的地绑定
 > 拆解 Spring Cloud Stream 五大核心概念：Destination、Binding、Group、Partition、Binder SPI，理解"一套代码对接任意消息中间件"的抽象设计
 
-## 📚 目录
+## 目录
 1. [设计哲学：为什么需要 Stream](#1-设计哲学为什么需要-stream)
 2. [Binder 抽象（核心抽象层）](#2-binder-抽象核心抽象层)
 3. [Destination 目的地](#3-destination-目的地)
@@ -26,7 +26,7 @@
 
 Spring Cloud Stream 的解法：**Binder 抽象层**。业务代码只面向 `Destination`（逻辑名）与 `Binding`（连接），Binder 负责把逻辑模型翻译成各中间件的物理资源并处理差异。业务代码因此与中间件解耦，切换中间件只改依赖与配置，不改 Java 代码。
 
-> 🎯 **核心要点**：Stream 的价值不是"又一个消息库"，而是**中间件无关的消息编程模型**——绑定层（Binder）把底层差异全部吸收，业务侧永远只看到逻辑概念。
+> **核心要点**：Stream 的价值不是"又一个消息库"，而是**中间件无关的消息编程模型**——绑定层（Binder）把底层差异全部吸收，业务侧永远只看到逻辑概念。
 
 ## 2. Binder 抽象（核心抽象层）
 
@@ -54,7 +54,7 @@ Binder<T, C extends ConsumerProperties, P extends ProducerProperties>
 - `bindProducer`：把 `MessageChannel`（output）绑定到目标，返回 `Binding`；
 - 每个 Binder 实现对应一个配置类（`KafkaBinderConfigurationProperties`、`RabbitBinderConfigurationProperties`），属性前缀 `spring.cloud.stream.kafka.binder.*` / `spring.cloud.stream.rabbit.binder.*`。
 
-> ⚠️ **已知问题（4.x）**：`KafkaBinderConfigurationProperties` 在发布制品中缺失 `@ConfigurationProperties` 注解（3.2.9 有、4.x 无），从 Boot 2 → Boot 3 / SCS 3 → 4 迁移时可能报 `IllegalStateException: No ConfigurationProperties annotation found`（issue #2801）。规避：显式声明配置属性 Bean 或升级到含修复的版本。
+> **已知问题（4.x）**：`KafkaBinderConfigurationProperties` 在发布制品中缺失 `@ConfigurationProperties` 注解（3.2.9 有、4.x 无），从 Boot 2 → Boot 3 / SCS 3 → 4 迁移时可能报 `IllegalStateException: No ConfigurationProperties annotation found`（issue #2801）。规避：显式声明配置属性 Bean 或升级到含修复的版本。
 
 ### 2.3 Binder 生命周期
 
@@ -78,7 +78,7 @@ Binder<T, C extends ConsumerProperties, P extends ProducerProperties>
 | `bindings.<b>.destination` | `orders` | 逻辑目的地名（必配才能连接物理资源） |
 | `bindings.<b>.group` | `order-service` | 消费组名（Kafka 下参与 offset 语义） |
 
-> 💡 一个 input 绑定没配 `group` 时是"匿名消费者"：Kafka 下每次重启生成新 `group.id`（从上次提交点重新消费，容易重复）；Rabbit 下创建随机自动删除队列。生产环境**务必配置 group**（且匿名组无法启用 Kafka DLQ，见 [08-消息可靠性与重试死信](08-消息可靠性与重试死信.md)）。
+> 一个 input 绑定没配 `group` 时是"匿名消费者"：Kafka 下每次重启生成新 `group.id`（从上次提交点重新消费，容易重复）；Rabbit 下创建随机自动删除队列。生产环境**务必配置 group**（且匿名组无法启用 Kafka DLQ，见 [08-消息可靠性与重试死信](08-消息可靠性与重试死信.md)）。
 
 ## 4. Binding 绑定
 
@@ -114,7 +114,7 @@ Binding 是"应用 ←→ 目的地"的连接，分两种方向：
 | 组内均衡 | 分区分配（RangeAssignor/Sticky） | 队列投递轮询（prefetch 相关） |
 | 组内扩容 | 增加实例 → 重新分配分区 | 增加实例 → 同一队列多消费者 |
 
-> 🎯 **核心要点**：group 是"负载均衡 + 持久化消费位点"的最小单元。Kafka 下 group 决定 offset 归属；Rabbit 下 group 决定队列归属（`<destination>.<group>`）。水平扩展、故障恢复都围绕 group 进行。
+> **核心要点**：group 是"负载均衡 + 持久化消费位点"的最小单元。Kafka 下 group 决定 offset 归属；Rabbit 下 group 决定队列归属（`<destination>.<group>`）。水平扩展、故障恢复都围绕 group 进行。
 
 ## 6. Partition 分区
 
@@ -158,7 +158,7 @@ spring:
 - **Kafka**：分区键 → Kafka 分区号（binder 自动建 topic 时按 `partition-count` 建分区）；消费组内一个实例负责若干分区；
 - **RabbitMQ**：分区生产时以分区号为 routing key 投递；分区消费时每个分区一个队列（`<dest>-<partitionIndex>`），实例间按队列分配，实现与 Kafka 分区等价的效果。
 
-> ⚠️ 分区键值变化会导致消息进不同分区，破坏有序性——业务上应使用稳定字段（订单号、用户 ID），不要用时间戳等易变值。
+> 分区键值变化会导致消息进不同分区，破坏有序性——业务上应使用稳定字段（订单号、用户 ID），不要用时间戳等易变值。
 
 ## 7. 消息通道与消息模型
 
@@ -178,7 +178,7 @@ Stream 全程使用 Spring 的 `Message<T>` 抽象：
 | `SubscribableChannel` | input | 可订阅消费（函数式模型由框架内部订阅） |
 | `MessageChannel` | output | 可发送生产（`StreamBridge` 可编程发送） |
 
-> ⚠️ **兼容警告**：4.0 起注解模型删除，`@Input`/`@Output` 注解、`Processor`/`Source`/`Sink` 接口（`@EnableBinding` 时代的产物）均已不存在；网上大量旧教程（"`@StreamListener` + `@Input` 通道"）在 4.x/5.x 下**直接编译失败**，请认准函数式模型（见 [03-函数式编程模型与绑定生成](03-函数式编程模型与绑定生成.md)）。
+> **兼容警告**：4.0 起注解模型删除，`@Input`/`@Output` 注解、`Processor`/`Source`/`Sink` 接口（`@EnableBinding` 时代的产物）均已不存在；网上大量旧教程（"`@StreamListener` + `@Input` 通道"）在 4.x/5.x 下**直接编译失败**，请认准函数式模型（见 [03-函数式编程模型与绑定生成](03-函数式编程模型与绑定生成.md)）。
 
 ## 8. 多 Binder 配置
 
@@ -214,11 +214,11 @@ spring:
 | `spring.cloud.stream.default-binder` | 未指定 binder 的绑定使用此默认 |
 | `bindings.<b>.binder` | 单绑定指定 Binder |
 
-> ⚠️ **多 Binder 踩坑**：同一应用中存在多个 binder 时，`ListenerContainerWithDlqAndRetryCustomizer` 这类自定义 Bean 会被 `DefaultBinderFactory` 覆盖，需改用 `BinderCustomizer` 在 `KafkaMessageChannelBinder` 上设置容器自定义器（详见 [08-消息可靠性与重试死信](08-消息可靠性与重试死信.md)）。
+> **多 Binder 踩坑**：同一应用中存在多个 binder 时，`ListenerContainerWithDlqAndRetryCustomizer` 这类自定义 Bean 会被 `DefaultBinderFactory` 覆盖，需改用 `BinderCustomizer` 在 `KafkaMessageChannelBinder` 上设置容器自定义器（详见 [08-消息可靠性与重试死信](08-消息可靠性与重试死信.md)）。
 
 ## 9. 核心要点
 
-> 🎯 五概念一句话记忆：
+> 五概念一句话记忆：
 > - **Destination** = 逻辑目的地名（物理资源的抽象入口）；
 > - **Binding** = 应用与目的地之间的连接管道（input/output 双向）；
 > - **Group** = 竞争消费单元（负载均衡 + 位点/队列归属）；

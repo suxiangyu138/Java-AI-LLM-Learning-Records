@@ -1,6 +1,6 @@
 # 11 - 微服务安全：OAuth2 与 JWT 认证
 
-> 🎯 微服务安全的核心是"无状态认证" — JWT 自包含令牌 + OAuth2 授权框架 + Spring Security，构建从网关到服务的全链路认证体系
+> 微服务安全的核心是"无状态认证" — JWT 自包含令牌 + OAuth2 授权框架 + Spring Security，构建从网关到服务的全链路认证体系
 
 ---
 
@@ -18,9 +18,9 @@
 
 | 方案 | 原理 | 优点 | 缺点 | 适用 |
 |------|------|------|------|------|
-| **Session + Cookie** | 服务端存 Session | 简单、安全 | 不适用于分布式 | ❌ 微服务不推荐 |
-| **JWT 无状态** | 客户端持有签名 Token | 无状态、跨服务 | Token 无法主动失效 | ⭐ 内部微服务 |
-| **OAuth2 + JWT** | 授权码 + JWT | 标准、第三方接入 | 配置复杂 | ⭐ 对外开放 API |
+| **Session + Cookie** | 服务端存 Session | 简单、安全 | 不适用于分布式 | ✗ 微服务不推荐 |
+| **JWT 无状态** | 客户端持有签名 Token | 无状态、跨服务 | Token 无法主动失效 | ★ 内部微服务 |
+| **OAuth2 + JWT** | 授权码 + JWT | 标准、第三方接入 | 配置复杂 | ★ 对外开放 API |
 | **API Key** | 固定密钥 | 极简 | 不安全 | 内部工具 |
 
 ---
@@ -36,13 +36,13 @@ Header:   {"alg": "RS256", "typ": "JWT"}
 Payload:  {"sub": "10086", "name": "张三", "roles": ["USER"], "exp": 1705315200}
 Signature: RSASHA256(base64(Header) + "." + base64(Payload), privateKey)
 
-⚠️ Payload 是 Base64 编码，不是加密！不要放敏感信息（如密码）
+Payload 是 Base64 编码，不是加密！不要放敏感信息（如密码）
 ```
 
 ### 2.2 Spring Security + JWT 配置
 
 ```java
-// ⭐ JWT 工具类
+// ★ JWT 工具类
 public class JwtUtil {
     private static final KeyPair keyPair = Keys.keyPairFor(SignatureAlgorithm.RS256);
 
@@ -104,7 +104,7 @@ spring:
 
 ```text
 OAuth2 四种模式：
-├── 授权码模式（Authorization Code）— ⭐ 最安全，Web 前后端分离
+├── 授权码模式（Authorization Code）— ★ 最安全，Web 前后端分离
 ├── 密码模式（Password）— 不推荐，已废弃
 ├── 客户端模式（Client Credentials）— 服务间调用
 └── 简化模式（Implicit）— 不推荐，已废弃
@@ -218,4 +218,4 @@ public class TokenRelayInterceptor implements RequestInterceptor {
   → 刷新失败 → 跳转登录页
 ```
 
-> 🎯 **微服务安全铁律**：JWT 不存密码、access_token 短时效、refresh_token 安全存储、网关统一验签、服务间 Feign 拦截器透传 Token。
+> **微服务安全铁律**：JWT 不存密码、access_token 短时效、refresh_token 安全存储、网关统一验签、服务间 Feign 拦截器透传 Token。

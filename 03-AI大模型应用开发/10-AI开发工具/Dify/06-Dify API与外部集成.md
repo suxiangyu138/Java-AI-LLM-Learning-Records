@@ -1,10 +1,10 @@
 # Dify API 与外部集成
 
-> 🔌 RESTful API、Webhook 触发、前端嵌入（iframe/WebComponent）、Java Spring Boot 集成 —— 把 Dify 的 AI 能力嵌入你的应用生态
+> RESTful API、Webhook 触发、前端嵌入（iframe/WebComponent）、Java Spring Boot 集成 —— 把 Dify 的 AI 能力嵌入你的应用生态
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [Dify API 概述](#1-dify-api-概述)
 2. [聊天 API 完整参考](#2-聊天-api-完整参考)
@@ -90,12 +90,12 @@ Authorization: Bearer app-xxxxxxxxxxxx
 
 | 参数 | 类型 | 必填 | 说明 |
 |------|------|:---:|------|
-| `inputs` | object | ✅ | 传入应用定义的变量 |
-| `query` | string | ✅ | 用户的问题 |
-| `response_mode` | string | ✅ | `streaming` (SSE) 或 `blocking` |
-| `conversation_id` | string | ❌ | 对话 ID（新对话留空） |
-| `user` | string | ✅ | 用户标识（用于区分不同用户） |
-| `files` | array | ❌ | 上传的文件列表 |
+| `inputs` | object | ✓ | 传入应用定义的变量 |
+| `query` | string | ✓ | 用户的问题 |
+| `response_mode` | string | ✓ | `streaming` (SSE) 或 `blocking` |
+| `conversation_id` | string | ✗ | 对话 ID（新对话留空） |
+| `user` | string | ✓ | 用户标识（用于区分不同用户） |
+| `files` | array | ✗ | 上传的文件列表 |
 
 ### 2.2 流式响应 (SSE)
 

@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [并入核心：Spring Authorization Server 的 7.0 迁移](#1-并入核心spring-authorization-server-的-70-迁移)
 2. [架构与配置体系：OAuth2AuthorizationServerConfigurer](#2-架构与配置体系oauth2authorizationserverconfigurer)
@@ -37,7 +37,7 @@
 | 客户端存储 | `ClientDetailsService` → `RegisteredClientRepository` |
 | 新增能力 | 随 Spring Security 7.0 同步获得：PKCE 默认、Dynamic Registration 默认、MFA、Password4j |
 
-> 🎯 **面试点**：授权服务器并入核心意味着"自建 OAuth2 授权服务器"成为 Spring 生态官方一等能力——`spring-boot-starter-security` 即含全套授权服务器能力，独立依赖时代结束。
+> **面试点**：授权服务器并入核心意味着"自建 OAuth2 授权服务器"成为 Spring 生态官方一等能力——`spring-boot-starter-security` 即含全套授权服务器能力，独立依赖时代结束。
 
 ## 2. 架构与配置体系：OAuth2AuthorizationServerConfigurer
 
@@ -135,7 +135,7 @@ RegisteredClient webApp = RegisteredClient.withId(UUID.randomUUID().toString())
 | `JdbcRegisteredClientRepository` | 生产默认（标准表结构 `oauth2_registered_client`） |
 | 自定义（Redis 等） | 高可用/特殊需求 |
 
-> ⚠️ **7.0 迁移注意**：旧 `ClientDetailsService`（Spring Security OAuth2 时代）已废弃——统一用 `RegisteredClientRepository` 接口。
+> **7.0 迁移注意**：旧 `ClientDetailsService`（Spring Security OAuth2 时代）已废弃——统一用 `RegisteredClientRepository` 接口。
 
 ## 4. 授权码流程全链路解析
 
@@ -160,7 +160,7 @@ RegisteredClient webApp = RegisteredClient.withId(UUID.randomUUID().toString())
 | `OAuth2AuthorizationService` | 授权记录存取（Jdbc 实现为标准） |
 | `OAuth2TokenGenerator` | 令牌生成（JWT/不透明） |
 
-> 🎯 **要点**：授权码是一次性短效凭证，令牌换取时必须匹配**客户端身份 + redirect_uri + PKCE 挑战值**——任何一个环节不匹配即拒绝。授权码清除防重放、PKCE 防劫持，两层防护是 OAuth 2.1 的安全基石。
+> **要点**：授权码是一次性短效凭证，令牌换取时必须匹配**客户端身份 + redirect_uri + PKCE 挑战值**——任何一个环节不匹配即拒绝。授权码清除防重放、PKCE 防劫持，两层防护是 OAuth 2.1 的安全基石。
 
 ## 5. 令牌管理：生成、存储与增强
 
@@ -228,7 +228,7 @@ public class ConsentController {
 | 二次授权 | 已有同意记录则跳过同意页（直发授权码） |
 | scope 变更 | scope 变化需重新同意 |
 
-> 💡 **生产要点**：同意页是授权服务器的"用户体验门面"——明确列出申请的 scope 与用途，降低用户顾虑；企业内网可配置"预授权"跳过同意页（`AuthorizationRequestValidator` 定制）。
+> **生产要点**：同意页是授权服务器的"用户体验门面"——明确列出申请的 scope 与用途，降低用户顾虑；企业内网可配置"预授权"跳过同意页（`AuthorizationRequestValidator` 定制）。
 
 ## 7. 生产化：安全、高可用与监控
 
@@ -258,7 +258,7 @@ authorization_server.token.error     // 令牌签发失败
 authorization_server.authorization.* // 授权事件
 ```
 
-> 🎯 **核心要点**：授权服务器 = 客户端注册（RegisteredClient）+ 授权码流程（Provider 链）+ 令牌生成（JWT/不透明）+ 同意授权（Consent）+ 持久化（Jdbc）。7.0 并入核心后配置模型统一为 `OAuth2AuthorizationServerConfigurer`，自建授权服务器的门槛与文档成本大幅下降。生产红线：HTTPS、密钥托管、Jdbc 存储、审计日志四件套缺一不可。
+> **核心要点**：授权服务器 = 客户端注册（RegisteredClient）+ 授权码流程（Provider 链）+ 令牌生成（JWT/不透明）+ 同意授权（Consent）+ 持久化（Jdbc）。7.0 并入核心后配置模型统一为 `OAuth2AuthorizationServerConfigurer`，自建授权服务器的门槛与文档成本大幅下降。生产红线：HTTPS、密钥托管、Jdbc 存储、审计日志四件套缺一不可。
 
 ---
 

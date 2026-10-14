@@ -1,4 +1,4 @@
-# 🚀 Ollama + Java Client 核心知识点
+# Ollama + Java Client 核心知识点
 
 > **核心摘要**：Ollama 是轻量级本地大模型运行工具，支持一行命令下载并运行 Llama、Qwen、Mistral 等开源模型。本文涵盖 Ollama 基础操作、Java 集成（原生 HTTP Client / LangChain4j / Spring AI）、Modelfile 自定义模型、量化优化与生产化部署。
 

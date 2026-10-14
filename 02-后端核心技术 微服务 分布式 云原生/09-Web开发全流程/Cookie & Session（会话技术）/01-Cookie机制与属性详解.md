@@ -1,7 +1,7 @@
 # 01-Cookie 机制与属性详解
 > Cookie 是什么、六大属性（HttpOnly/Secure/SameSite/Domain/Path/Max-Age）、作用域规则、Java 操作——"浏览器存储与自动携带的小纸条"
 
-## 📚 目录
+## 目录
 1. [Cookie 是什么](#1-cookie-是什么)
 2. [六大属性详解](#2-六大属性详解)
 3. [SameSite 策略（现代浏览器默认）](#3-samesite-策略现代浏览器默认)
@@ -31,7 +31,7 @@ Cookie 流转：
 ⑤ 服务器凭 Cookie 识别用户
 ```
 
-> 🎯 核心：**Cookie 是"客户端存储 + 自动携带"**——服务器不主动读浏览器存储，而是浏览器每次自动带上——这就是"无状态 HTTP 记住你"的第一种实现。
+> 核心：**Cookie 是"客户端存储 + 自动携带"**——服务器不主动读浏览器存储，而是浏览器每次自动带上——这就是"无状态 HTTP 记住你"的第一种实现。
 
 ## 2. 六大属性详解
 
@@ -48,7 +48,7 @@ Cookie 流转：
 Set-Cookie: JSESSIONID=abc123; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=3600
 ```
 
-> 🎯 **认证 Cookie 的黄金组合**：`HttpOnly + Secure + SameSite=Lax`——三件套挡住三类攻击（XSS 窃取、明文窃听、CSRF 滥用），现代浏览器默认 SameSite=Lax 已挡住大部分 CSRF。
+> **认证 Cookie 的黄金组合**：`HttpOnly + Secure + SameSite=Lax`——三件套挡住三类攻击（XSS 窃取、明文窃听、CSRF 滥用），现代浏览器默认 SameSite=Lax 已挡住大部分 CSRF。
 
 ## 3. SameSite 策略（现代浏览器默认）
 
@@ -68,7 +68,7 @@ SameSite 的实战影响：
   但未显式配置时存在被 null 覆盖的回归风险（Issue #48830）——显式配置最稳
 ```
 
-> 💡 **SameSite=Lax 的意义**：**现代浏览器的 CSRF 第一道防线**——跨站 POST 不带 Cookie，CSRF 攻击自动失效大半；前后端分离跨域时评估 None+Secure。
+> **SameSite=Lax 的意义**：**现代浏览器的 CSRF 第一道防线**——跨站 POST 不带 Cookie，CSRF 攻击自动失效大半；前后端分离跨域时评估 None+Secure。
 
 ## 4. 作用域规则
 
@@ -87,7 +87,7 @@ Cookie 发送规则：
 | 跨域（前后端分离） | CORS + SameSite=None + Secure |
 | 路径限定 | Path=/api（仅 API 路径携带） |
 
-> ⚠️ **跨域 Cookie 是"三层配合"**：CORS（Access-Control-Allow-Credentials: true）+ SameSite=None + Secure——少一层就失败；纯跨域无 Cookie 场景（移动端/第三方）评估 Token 方案（见 [06](06-Token与JWT无状态方案.md)）。
+> **跨域 Cookie 是"三层配合"**：CORS（Access-Control-Allow-Credentials: true）+ SameSite=None + Secure——少一层就失败；纯跨域无 Cookie 场景（移动端/第三方）评估 Token 方案（见 [06](06-Token与JWT无状态方案.md)）。
 
 ## 5. Java 操作 Cookie（Servlet API）
 
@@ -125,7 +125,7 @@ response.addCookie(delete);
 | 删除 | 同名 Cookie + `setMaxAge(0)` |
 | 属性 | setHttpOnly/setSecure/setMaxAge/setPath |
 
-> 💡 Spring 应用更常用：`HttpSession`（内部用 Cookie 存 JSESSIONID，见 [02](02-Session机制与Java实现.md)）；直接操作 Cookie 用于偏好类数据。
+> Spring 应用更常用：`HttpSession`（内部用 Cookie 存 JSESSIONID，见 [02](02-Session机制与Java实现.md)）；直接操作 Cookie 用于偏好类数据。
 
 ## 6. Cookie 限制与安全
 
@@ -145,11 +145,11 @@ Cookie 安全纪律：
   ⑤ 敏感操作验证（改密码需重新认证）
 ```
 
-> ⚠️ **Cookie 存储的是"凭证或偏好"，不是"机密数据"**——真正的用户信息放服务器（Session/DB），Cookie 只放"标识"（SessionID/Token）。
+> **Cookie 存储的是"凭证或偏好"，不是"机密数据"**——真正的用户信息放服务器（Session/DB），Cookie 只放"标识"（SessionID/Token）。
 
 ## 7. 核心要点
 
-> 🎯 **核心要点**：
+> **核心要点**：
 > - Cookie = 服务器下发 + 浏览器自动携带的键值对（无状态 HTTP 的第一种记忆）；
 > - 六大属性：Domain/Path/Max-Age/HttpOnly/Secure/SameSite；
 > - 认证 Cookie 黄金组合：**HttpOnly + Secure + SameSite=Lax**；

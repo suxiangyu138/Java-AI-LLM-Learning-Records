@@ -1,6 +1,6 @@
 # 04 - Agent Skills 组合与编排
 
-> 🎯 单个 Skill 的能力有限，真正的威力来自 Skill 的组合编排 — 像搭乐高一样，用原子 Skill 构建复杂工作流
+> 单个 Skill 的能力有限，真正的威力来自 Skill 的组合编排 — 像搭乐高一样，用原子 Skill 构建复杂工作流
 
 ---
 
@@ -409,12 +409,12 @@ Level 4：Multi-Agent 协作（多个 Agent 各司其职）
 
 | 框架 | 编排方式 | 声明式 | DAG | 条件分支 | LLM路由 | 人工审批 |
 |------|---------|:---:|:---:|:---:|:---:|:---:|
-| **LangChain LCEL** | `\|` 管道 + RunnableLambda | ✅ | ✅ | ✅ | ❌ | ❌ |
-| **LangGraph** | StateGraph + Node + Edge | ✅ | ✅ | ✅ | ✅ | ✅ |
-| **Spring AI** | TaskFlow + @Bean 注册 | ✅ | ❌ | ❌ | ❌ | ❌ |
-| **Temporal** | Workflow as Code | ❌ | ✅ | ✅ | ❌ | ✅ |
-| **Dify** | 可视化拖拽 | ✅ | ✅ | ✅ | ✅ | ✅ |
-| **Coze** | 可视化 + 插件市场 | ✅ | ✅ | ✅ | ✅ | ❌ |
+| **LangChain LCEL** | `\|` 管道 + RunnableLambda | ✓ | ✓ | ✓ | ✗ | ✗ |
+| **LangGraph** | StateGraph + Node + Edge | ✓ | ✓ | ✓ | ✓ | ✓ |
+| **Spring AI** | TaskFlow + @Bean 注册 | ✓ | ✗ | ✗ | ✗ | ✗ |
+| **Temporal** | Workflow as Code | ✗ | ✓ | ✓ | ✗ | ✓ |
+| **Dify** | 可视化拖拽 | ✓ | ✓ | ✓ | ✓ | ✓ |
+| **Coze** | 可视化 + 插件市场 | ✓ | ✓ | ✓ | ✓ | ✗ |
 
 ### 6.1 框架选型建议
 
@@ -426,7 +426,7 @@ Level 4：Multi-Agent 协作（多个 Agent 各司其职）
 生产级工作流（SLA要求）  → Temporal / AWS Step Functions
 ```
 
-> 🎯 **核心要点**：链式是基础，DAG 是核心，条件分支是灵魂。好的编排 = 原子 Skill 的松耦合 + 声明式的执行图 + 可靠的错误处理
+> **核心要点**：链式是基础，DAG 是核心，条件分支是灵魂。好的编排 = 原子 Skill 的松耦合 + 声明式的执行图 + 可靠的错误处理
 
 ---
 

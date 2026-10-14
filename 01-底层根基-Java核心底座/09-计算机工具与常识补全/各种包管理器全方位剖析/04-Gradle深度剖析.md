@@ -6,7 +6,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [Gradle 的定位与哲学](#1-gradle-的定位与哲学)
 2. [构建脚本：DSL 与配置](#2-构建脚本dsl-与配置)
@@ -52,7 +52,7 @@ Gradle 9.3（2026.06）新看点
 
 ## 2. 构建脚本：DSL 与配置
 
-> 🎯 **Gradle 脚本两种 DSL**——Groovy（历史默认）和 Kotlin（官方推荐新项目用）：
+> **Gradle 脚本两种 DSL**——Groovy（历史默认）和 Kotlin（官方推荐新项目用）：
 
 ```kotlin
 // build.gradle.kts（Kotlin DSL，2026 推荐写法）
@@ -102,17 +102,17 @@ dependencies {
 
 | 维度 | Groovy DSL | Kotlin DSL（推荐） |
 |------|:---:|:---:|
-| 类型安全 | ❌ 运行时才报错 | ✅ 编译期检查 |
-| IDE 支持 | 一般 | ✅ 补全/导航/重构 |
+| 类型安全 | ✗ 运行时才报错 | ✓ 编译期检查 |
+| IDE 支持 | 一般 | ✓ 补全/导航/重构 |
 | 性能 | 快 | 稍慢（Kotlin 编译开销） |
 | 学习成本 | 低（脚本友好） | 中（Kotlin 语法） |
-| 新项目建议 | 存量沿用 | ✅ 新项目首选 |
+| 新项目建议 | 存量沿用 | ✓ 新项目首选 |
 
 ---
 
 ## 3. Task 模型：构建的核心抽象
 
-> 🎯 **Gradle 没有「生命周期阶段」，只有 Task（任务）**——构建 = Task 依赖图的一次遍历执行。
+> **Gradle 没有「生命周期阶段」，只有 Task（任务）**——构建 = Task 依赖图的一次遍历执行。
 
 ```text
 Task 模型
@@ -152,13 +152,13 @@ tasks.register("genConfig") {
 }
 ```
 
-> 💡 **Task 的三个阶段**：注册（register，惰性）→ 配置（configuration）→ 执行（action）——只有**执行阶段**才真正干活，配置阶段只建图。
+> **Task 的三个阶段**：注册（register，惰性）→ 配置（configuration）→ 执行（action）——只有**执行阶段**才真正干活，配置阶段只建图。
 
 ---
 
 ## 4. 配置阶段 vs 执行阶段
 
-> 🎯 **Gradle 构建分两个阶段**——配置阶段建图（慢但只跑一次），执行阶段跑任务（快）。理解这个才能优化构建速度：
+> **Gradle 构建分两个阶段**——配置阶段建图（慢但只跑一次），执行阶段跑任务（快）。理解这个才能优化构建速度：
 
 ```text
 构建执行流程
@@ -171,10 +171,10 @@ tasks.register("genConfig") {
 └── 优化核心：让配置阶段「只建图不干活」
 
 常见性能误区
-├── ❌ 在配置阶段做网络请求/文件 IO → 每次构建都做
-├── ❌ 用 println 排查（配置阶段会打印多次）
-├── ❌ 配置阶段执行耗时逻辑 → 用 doLast/doFirst 包进 action
-└── ✅ 惰性配置：tasks.register（注册不配置，用到才配置）
+├── ✗ 在配置阶段做网络请求/文件 IO → 每次构建都做
+├── ✗ 用 println 排查（配置阶段会打印多次）
+├── ✗ 配置阶段执行耗时逻辑 → 用 doLast/doFirst 包进 action
+└── ✓ 惰性配置：tasks.register（注册不配置，用到才配置）
 ```
 
 ```text
@@ -188,7 +188,7 @@ Gradle 阶段记忆
 
 ## 5. 增量构建机制
 
-> 🎯 **Gradle 的招牌性能能力**——只重跑「输入变了」的 Task，没变的直接跳过：
+> **Gradle 的招牌性能能力**——只重跑「输入变了」的 Task，没变的直接跳过：
 
 ```text
 增量构建原理
@@ -211,13 +211,13 @@ Gradle 阶段记忆
 └── 结论：增量粒度 Gradle 更细——大项目收益更明显
 ```
 
-> ⚠️ **增量失效的常见原因**：Task 未声明 inputs/outputs；输入包含不确定值（时间戳/随机数）；多 Task 共享同一输出文件（冲突导致永远重跑）。
+> **增量失效的常见原因**：Task 未声明 inputs/outputs；输入包含不确定值（时间戳/随机数）；多 Task 共享同一输出文件（冲突导致永远重跑）。
 
 ---
 
 ## 6. 构建缓存
 
-> 🎯 **增量是「本次构建省」，缓存是「跨构建/跨机器省」**——远端缓存让 CI 与其他机器共享产物：
+> **增量是「本次构建省」，缓存是「跨构建/跨机器省」**——远端缓存让 CI 与其他机器共享产物：
 
 ```text
 构建缓存层次
@@ -249,7 +249,7 @@ buildCache {
 
 ## 7. 依赖管理
 
-> 🎯 **Gradle 兼容 Maven 仓库生态**（从 Maven Central/私有 Nexus 拉包），但配置更精细：
+> **Gradle 兼容 Maven 仓库生态**（从 Maven Central/私有 Nexus 拉包），但配置更精细：
 
 ```kotlin
 dependencies {
@@ -293,13 +293,13 @@ configurations.all {
 ./gradlew dependencyInsight --dependency jackson-databind  // 查某包的引入路径
 ```
 
-> ⚠️ **最高版本策略的风险**：默认选最高版本可能导致「新版破坏旧 API」——生产建议用 Version Catalog + constraints 显式锁定关键版本，而不是依赖默认策略。
+> **最高版本策略的风险**：默认选最高版本可能导致「新版破坏旧 API」——生产建议用 Version Catalog + constraints 显式锁定关键版本，而不是依赖默认策略。
 
 ---
 
 ## 8. 多模块与 Version Catalog
 
-> 🎯 **Version Catalog（版本目录）是 Gradle 9 的官方推荐**——统一管理版本号，Maven 的「dependencyManagement + 父 POM」在 Gradle 的对应物：
+> **Version Catalog（版本目录）是 Gradle 9 的官方推荐**——统一管理版本号，Maven 的「dependencyManagement + 父 POM」在 Gradle 的对应物：
 
 ```toml
 # gradle/libs.versions.toml（Version Catalog 文件）
@@ -343,7 +343,7 @@ dependencies {
 }
 ```
 
-> 💡 **Version Catalog vs Maven 对比**：Catalog 是「文件级」统一（所有模块引用同一 toml），比 Maven 的 parent 继承更简洁、IDE 支持更好（跳转/补全）。
+> **Version Catalog vs Maven 对比**：Catalog 是「文件级」统一（所有模块引用同一 toml），比 Maven 的 parent 继承更简洁、IDE 支持更好（跳转/补全）。
 
 ---
 
@@ -392,7 +392,7 @@ org.gradle.configuration-cache=true
 
 ## 10. 核心要点
 
-> 🎯 **核心要点**：
+> **核心要点**：
 > 1. **构建 = 代码**：Task 图驱动，可编程性远超 Maven 的声明式
 > 2. **Task 三要素**：inputs/outputs/action——正确声明才有增量
 > 3. **两阶段**：配置阶段建图（不干活）、执行阶段跑 Task（干正事）

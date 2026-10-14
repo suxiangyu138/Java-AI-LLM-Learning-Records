@@ -28,7 +28,7 @@ security:
 mongod --auth --config /etc/mongod.conf
 ```
 
-> ⚠️ 生产环境必须开启认证。未开启认证的 MongoDB 容易被攻击勒索。
+> 生产环境必须开启认证。未开启认证的 MongoDB 容易被攻击勒索。
 
 ### 1.2 三种认证方式
 
@@ -140,7 +140,7 @@ db.createUser({
 ### 2.3 最小权限原则
 
 ```javascript
-// ✅ 正确：应用只给需要的最小权限
+// ✓ 正确：应用只给需要的最小权限
 db.createUser({
   user: "order_service",
   pwd: "order_pass",
@@ -150,15 +150,15 @@ db.createUser({
   ]
 })
 
-// ❌ 错误：不要给应用 root 权限
+// ✗ 错误：不要给应用 root 权限
 db.createUser({
   user: "order_service",
   pwd: "order_pass",
-  roles: ["root"]   // ❌ 权限过大！
+  roles: ["root"]   // ✗ 权限过大！
 })
 ```
 
-> 💡 最小权限原则：每个用户只应拥有完成其任务所需的最小权限集合。应用账号绝不能用 root。
+> 最小权限原则：每个用户只应拥有完成其任务所需的最小权限集合。应用账号绝不能用 root。
 
 ### 2.4 角色权限速查表
 
@@ -224,7 +224,7 @@ openssl req -new -x509 -days 365 -out mongodb.crt -keyout mongodb.key
 cat mongodb.key mongodb.crt > mongodb.pem
 ```
 
-> ⚠️ 生产环境需要使用权威 CA 签发的证书，自签名证书只适合测试。
+> 生产环境需要使用权威 CA 签发的证书，自签名证书只适合测试。
 
 ### 3.3 静态加密（Enterprise Only）
 
@@ -363,7 +363,7 @@ lvremove /dev/vg/mongo_snap
 # 需要开启 journal 以保证一致性
 ```
 
-> 💡 LVM 快照速度极快（秒级创建），适合大数据量的日常备份。缺点是占用相同磁盘空间。
+> LVM 快照速度极快（秒级创建），适合大数据量的日常备份。缺点是占用相同磁盘空间。
 
 ### 5.4 Atlas 云备份
 
@@ -451,7 +451,7 @@ mongodump --port 27018 --db mydb --collection users
 mongorestore --db mydb --collection users --drop /backup/mongo/users.bson
 ```
 
-> ⚠️ 恢复演练务必在测试环境执行，确认备份文件可用。
+> 恢复演练务必在测试环境执行，确认备份文件可用。
 
 ### 6.4 恢复验证
 
@@ -475,10 +475,10 @@ mongo --eval "db.users.getIndexes()"
 
 | 方案 | 速度 | 存储空间 | 时间点恢复 | 适用场景 |
 |------|:----:|:--------:|:---------:|----------|
-| **mongodump** | 中等 | 小（BSON 压缩） | ✅（带 oplog）| 日常备份（推荐）|
-| **文件系统快照** | 快 | 大（原始数据） | ✅（配合 oplog）| 大数据量（TB 级）|
-| **MongoDB Atlas** | 自动化 | 云存储 | ✅（连续备份）| 云托管环境 |
-| **mongodump + oplog** | 较慢 | 中等 | ✅（精确到秒）| 生产标准方案 |
+| **mongodump** | 中等 | 小（BSON 压缩） | ✓（带 oplog）| 日常备份（推荐）|
+| **文件系统快照** | 快 | 大（原始数据） | ✓（配合 oplog）| 大数据量（TB 级）|
+| **MongoDB Atlas** | 自动化 | 云存储 | ✓（连续备份）| 云托管环境 |
+| **mongodump + oplog** | 较慢 | 中等 | ✓（精确到秒）| 生产标准方案 |
 
 ### 7.2 备份频率建议
 
@@ -573,4 +573,4 @@ mongo --eval "db.users.getIndexes()"
 
 **Q: 审计日志记录什么？** 认证事件、用户管理、数据定义操作（drop/create）等关键操作。
 
-> 🎯 **极简总结**：认证防入侵，备份防丢失，演练保可用——安全无小事。
+> **极简总结**：认证防入侵，备份防丢失，演练保可用——安全无小事。

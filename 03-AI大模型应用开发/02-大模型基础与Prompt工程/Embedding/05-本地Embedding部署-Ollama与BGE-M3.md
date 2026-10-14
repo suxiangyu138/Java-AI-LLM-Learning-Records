@@ -1,6 +1,6 @@
 # 05 - 本地 Embedding 部署：Ollama 与 BGE-M3
 
-> 🎯 本地 Embedding 零成本、零延迟、零数据泄露风险 — Ollama 一行命令启动 BGE-M3，配合 LangChain 实现与云端 API 无缝切换
+> 本地 Embedding 零成本、零延迟、零数据泄露风险 — Ollama 一行命令启动 BGE-M3，配合 LangChain 实现与云端 API 无缝切换
 
 ---
 
@@ -19,16 +19,16 @@
 
 ```text
 云端 API Embedding 的局限：
-  ❌ 数据必须上传 → 隐私/合规风险
-  ❌ 网络延迟 → 每条 50-200ms
-  ❌ 按量计费 → 大规模场景费用可观
-  ❌ API 不可用 → 整个 RAG 瘫痪
+  ✗ 数据必须上传 → 隐私/合规风险
+  ✗ 网络延迟 → 每条 50-200ms
+  ✗ 按量计费 → 大规模场景费用可观
+  ✗ API 不可用 → 整个 RAG 瘫痪
 
 本地 Embedding 的优势：
-  ✅ 完全离线 → 数据不外泄
-  ✅ 零延迟 → 本地推理微秒级
-  ✅ 零成本 → 一次性硬件投入
-  ✅ 可控 → 模型版本、推理参数完全自主
+  ✓ 完全离线 → 数据不外泄
+  ✓ 零延迟 → 本地推理微秒级
+  ✓ 零成本 → 一次性硬件投入
+  ✓ 可控 → 模型版本、推理参数完全自主
 ```
 
 ---
@@ -239,10 +239,10 @@ def batch_encode(model, tokenizer, texts, batch_size=64):
 
 | 维度 | 云端 API (OpenAI) | 本地部署 (Ollama+BGE-M3) |
 |------|:---:|:---:|
-| **精度** | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ |
+| **精度** | ★★★★★ | ★★★★ |
 | **成本** | 按量 $0.02/1M | 免费（硬件除外） |
 | **延迟** | 50-200ms | <10ms |
-| **隐私** | ❌ 数据上传 | ✅ 完全本地 |
+| **隐私** | ✗ 数据上传 | ✓ 完全本地 |
 | **运维** | 零 | 需维护模型服务 |
 | **批量吞吐** | 受 Rate Limit | 取决于硬件 |
 | **模型选择** | 仅 OpenAI 系列 | 任意 HuggingFace 模型 |
@@ -250,10 +250,10 @@ def batch_encode(model, tokenizer, texts, batch_size=64):
 
 ```text
 推荐策略：
-  ✅ 开发/测试 → OpenAI API（快速验证）
-  ✅ 生产/隐私敏感 → Ollama 本地部署
-  ✅ 高精度需求 → text-embedding-3-large
-  ✅ 大规模 → 本地 GPU 批处理
+  ✓ 开发/测试 → OpenAI API（快速验证）
+  ✓ 生产/隐私敏感 → Ollama 本地部署
+  ✓ 高精度需求 → text-embedding-3-large
+  ✓ 大规模 → 本地 GPU 批处理
 ```
 
 ---

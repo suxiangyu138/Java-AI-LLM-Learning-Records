@@ -1,6 +1,6 @@
 # 01 - Bean 生命周期与 PostProcessor 扩展体系
 
-> 🎯 Spring 扩展机制的基石 — 两大基石（BeanFactoryPostProcessor / BeanPostProcessor）、五大扩展点、完整生命周期时序。理解每个阶段"允许干什么、禁止干什么"
+> Spring 扩展机制的基石 — 两大基石（BeanFactoryPostProcessor / BeanPostProcessor）、五大扩展点、完整生命周期时序。理解每个阶段"允许干什么、禁止干什么"
 
 ---
 
@@ -30,7 +30,7 @@ Spring 扩展 = 把"创建 Bean"大流程拆成多个阶段，每个阶段提供
 ⑤ 属性填充（"组装"）→ InstantiationAware#postProcessProperties（@Autowired 在此）
 ⑥ 初始化前 → BeanPostProcessor#beforeInitialization
 ⑦ 初始化（@PostConstruct → afterPropertiesSet → init-method）
-⑧ 初始化后 → BeanPostProcessor#afterInitialization（⚠️ AOP 代理在此创建）
+⑧ 初始化后 → BeanPostProcessor#afterInitialization（AOP 代理在此创建）
 ⑨ 销毁前 → DestructionAwareBeanPostProcessor#postProcessBeforeDestruction
 ```
 
@@ -58,7 +58,7 @@ public interface BeanPostProcessor {
         return bean;
     }
     // 初始化后：@PostConstruct/afterPropertiesSet/init-method 全部完成
-    // ⚠️ AOP 代理正是在这个方法中被创建（AbstractAutoProxyCreator）
+    // AOP 代理正是在这个方法中被创建（AbstractAutoProxyCreator）
     @Nullable
     default Object postProcessAfterInitialization(Object bean, String beanName) {
         return bean;
@@ -107,7 +107,7 @@ public interface BeanDefinitionRegistryPostProcessor extends BeanFactoryPostProc
 ```java
 // 经典落地：PropertySourcesPlaceholderConfigurer 解析 ${} 占位符
 // 调用链：refresh() → invokeBeanFactoryPostProcessors() → postProcessBeanFactory()
-// ⚠️ 严禁此时调 getBean()（会触发提前实例化，破坏依赖顺序）
+// 严禁此时调 getBean()（会触发提前实例化，破坏依赖顺序）
 ```
 
 **执行顺序**（refresh 第 5 步 `invokeBeanFactoryPostProcessors`）：
@@ -144,7 +144,7 @@ PropertyValues postProcessProperties(PropertyValues pvs, Object bean, String bea
 Class<?> predictBeanType(Class<?> beanClass, String beanName);
 // 提供候选构造器（@Autowired 构造器选择）
 Constructor<?>[] determineCandidateConstructors(Class<?> beanClass, String beanName);
-// ⚠️ 提前暴露代理对象 — 三级缓存 getEarlyBeanReference 回调的核心
+// 提前暴露代理对象 — 三级缓存 getEarlyBeanReference 回调的核心
 Object getEarlyBeanReference(Object bean, String beanName);
 ```
 
@@ -198,13 +198,13 @@ void postProcessBeforeDestruction(Object bean, String beanName);
 │ │ ③ InstantiationAwareBPP#beforeInstantiation     │   │ ← 可短路
 │ │ ④ createBeanInstance（反射/构造器）              │   │ ← 实例化
 │ │ ⑤ MergedBeanDefinitionBPP#postProcessMerged     │   │ ← 缓存注入元数据
-│ │ ⑥ addSingletonFactory（⚠️ 三级缓存入口）        │   │ ← 提前暴露
+│ │ ⑥ addSingletonFactory（三级缓存入口）        │   │ ← 提前暴露
 │ │ ⑦ InstantiationAwareBPP#afterInstantiation      │   │ ← 可跳过属性填充
 │ │ ⑧ InstantiationAwareBPP#postProcessProperties   │   │ ← @Autowired 注入
 │ │ ⑨ 属性填充完成                                      │   │
 │ │ ⑩ BPP#beforeInitialization                     │   │
 │ │ ⑪ invokeInitMethods（初始化三步）                  │   │
-│ │ ⑫ BPP#afterInitialization（⚠️ AOP 代理创建）   │   │
+│ │ ⑫ BPP#afterInitialization（AOP 代理创建）   │   │
 │ │ ⑬ addSingleton → 一级缓存                      │   │ ← 成品入库
 │ └─────────────────────────────────────────────────┘   │
 ├─ 销毁时 ────────────────────────────────────────────┤
@@ -252,6 +252,6 @@ for (String name : ctx.getBeanNamesForType(BeanPostProcessor.class)) {
 
 ---
 
-> 🎯 **核心要点**：BPP 体系 = "改成品"，BFPP 体系 = "改图纸"。能画整张时序图 + 能解释"为什么 @Autowired 在 postProcessProperties 而不是在 afterInitialization" + 能指出 AOP 代理在 afterInitialization 创建 — 就是 PostProcessor 体系的面试满分答案。
+> **核心要点**：BPP 体系 = "改成品"，BFPP 体系 = "改图纸"。能画整张时序图 + 能解释"为什么 @Autowired 在 postProcessProperties 而不是在 afterInitialization" + 能指出 AOP 代理在 afterInitialization 创建 — 就是 PostProcessor 体系的面试满分答案。
 
 **下一模块**：[02-SpringBoot启动流程与自动配置内核](02-SpringBoot启动流程与自动配置内核.md) / **返回总览**：[00-深度剖析总览](00-Spring生态深度剖析总览.md)

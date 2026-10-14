@@ -1,5 +1,5 @@
 # 06-Spring Data数据访问层
-> 🎯 Spring Data是Spring生态的统一数据访问抽象层 — 屏蔽不同存储（JPA/Redis/MongoDB）的底层差异，提供一致的Repository编程模型，是从单体到微服务数据层的基石
+> Spring Data是Spring生态的统一数据访问抽象层 — 屏蔽不同存储（JPA/Redis/MongoDB）的底层差异，提供一致的Repository编程模型，是从单体到微服务数据层的基石
 
 ---
 
@@ -20,7 +20,7 @@
 ### 1.1 知识定位
 - **归属**：Spring全家桶数据访问层 → 层级2 P0核心必学
 - **前置依赖**：Spring Boot自动装配 + Spring事务管理 + MySQL/Redis基础
-- **重要性**：⭐⭐⭐⭐⭐（几乎所有后端项目都涉及数据访问，Spring Data是官方推荐实践）
+- **重要性**：★★★★★（几乎所有后端项目都涉及数据访问，Spring Data是官方推荐实践）
 
 ### 1.2 三层学习目标
 
@@ -68,7 +68,7 @@ Spring Data 数据访问层
 
 Spring Data 的核心设计理念是 **Repository 抽象** — 对任意存储后端提供统一的 CRUD + 分页 + 排序编程模型。
 
-> 💡 Spring Data 不是 ORM 框架，而是一个抽象层。JPA 是底层 ORM 实现（默认 Hibernate），Redis 和 MongoDB 则是通过各自的模板 API 实现。
+> Spring Data 不是 ORM 框架，而是一个抽象层。JPA 是底层 ORM 实现（默认 Hibernate），Redis 和 MongoDB 则是通过各自的模板 API 实现。
 
 #### 2.1.2 Repository 接口体系
 
@@ -172,7 +172,7 @@ spring:
         dialect: org.hibernate.dialect.MySQL8Dialect
 ```
 
-> ⚠️ `ddl-auto` 在生产环境建议用 `validate` 或 `none`，禁止使用 `create`（会删表）或 `update`（有风险）。开发阶段可以使用 `update`。
+> `ddl-auto` 在生产环境建议用 `validate` 或 `none`，禁止使用 `create`（会删表）或 `update`（有风险）。开发阶段可以使用 `update`。
 
 #### 2.2.2 Repository 基础 CRUD
 
@@ -259,7 +259,7 @@ public class UserService {
 }
 ```
 
-> 💡 **JPA 更新机制**：在 `@Transactional` 范围内，JPA 通过 **脏检查（Dirty Checking）** 自动对比实体快照和当前状态，提交时自动生成 UPDATE 语句，无需手动调用 `save()`。
+> **JPA 更新机制**：在 `@Transactional` 范围内，JPA 通过 **脏检查（Dirty Checking）** 自动对比实体快照和当前状态，提交时自动生成 UPDATE 语句，无需手动调用 `save()`。
 
 #### 2.2.3 方法命名查询
 
@@ -399,7 +399,7 @@ public class UserPageService {
 }
 ```
 
-> 💡 `Page` 对象在返回给前端时，通常通过 `PageDTO` 转换，避免直接暴露 JPA 内部结构。可以使用 `Page.map()` 方法：
+> `Page` 对象在返回给前端时，通常通过 `PageDTO` 转换，避免直接暴露 JPA 内部结构。可以使用 `Page.map()` 方法：
 > ```java
 > Page<UserDTO> dtoPage = userPage.map(user -> new UserDTO(user.getId(), user.getUserName()));
 > ```
@@ -575,7 +575,7 @@ public class UserQuery {
 }
 ```
 
-> 💡 `cb.conjunction()` 表示 `1=1`（恒真条件），当参数为 null 时不添加该条件，这是 Specification 常用的"短路"写法。
+> `cb.conjunction()` 表示 `1=1`（恒真条件），当参数为 null 时不添加该条件，这是 Specification 常用的"短路"写法。
 
 #### 2.2.7 实体关联关系
 
@@ -671,7 +671,7 @@ public class Course {
 }
 ```
 
-> ⚠️ **最关键的 JPA 性能陷阱**：`@OneToMany` 默认 `FetchType.LAZY` 是必须的！如果使用 `EAGER`，一个 `findAll()` 可能产生 N+1 条 SQL。`@ManyToOne` 默认是 `EAGER`，建议显式改为 `LAZY`。
+> **最关键的 JPA 性能陷阱**：`@OneToMany` 默认 `FetchType.LAZY` 是必须的！如果使用 `EAGER`，一个 `findAll()` 可能产生 N+1 条 SQL。`@ManyToOne` 默认是 `EAGER`，建议显式改为 `LAZY`。
 
 #### 2.2.8 CascadeType 详解
 
@@ -684,7 +684,7 @@ public class Course {
 | `DETACH` | 级联脱管 | 脱管一方时同时脱管多方 |
 | `ALL` | 全部级联 | 包含以上所有 |
 
-> ⚠️ **级联删除需谨慎**：`CascadeType.REMOVE` 或 `orphanRemoval = true` 在删除父实体时会连带删除子实体。如果子实体还被其他业务引用，会导致数据完整性错误。生产环境通常只使用 `PERSIST` 和 `MERGE`。
+> **级联删除需谨慎**：`CascadeType.REMOVE` 或 `orphanRemoval = true` 在删除父实体时会连带删除子实体。如果子实体还被其他业务引用，会导致数据完整性错误。生产环境通常只使用 `PERSIST` 和 `MERGE`。
 
 ---
 
@@ -921,14 +921,14 @@ public class RedisService {
 
 | 序列化器 | 适用位置 | 特点 | 可读性 | 空间 | 推荐度 |
 |----------|----------|------|--------|------|--------|
-| `StringRedisSerializer` | **Key** 和 HashKey | UTF-8 字符串，简洁 | 高 | 小 | ⭐⭐⭐⭐⭐ |
-| `Jackson2JsonRedisSerializer` | Value | JSON格式，支持复杂对象 | 高 | 中 | ⭐⭐⭐⭐⭐ |
-| `GenericJackson2JsonRedisSerializer` | Value | 带 class 信息的 JSON | 高 | 中 | ⭐⭐⭐⭐ |
-| `JdkSerializationRedisSerializer` | Value | Java 原生序列化（默认） | 乱码 | 大 | ❌ 禁止 |
-| `OxmSerializer` | Value | XML 格式 | 中 | 大 | ⭐ |
-| `GenericToStringSerializer` | Value | 基于转换器 | 中 | 小 | ⭐⭐ |
+| `StringRedisSerializer` | **Key** 和 HashKey | UTF-8 字符串，简洁 | 高 | 小 | ★★★★★ |
+| `Jackson2JsonRedisSerializer` | Value | JSON格式，支持复杂对象 | 高 | 中 | ★★★★★ |
+| `GenericJackson2JsonRedisSerializer` | Value | 带 class 信息的 JSON | 高 | 中 | ★★★★ |
+| `JdkSerializationRedisSerializer` | Value | Java 原生序列化（默认） | 乱码 | 大 | ✗ 禁止 |
+| `OxmSerializer` | Value | XML 格式 | 中 | 大 | ★ |
+| `GenericToStringSerializer` | Value | 基于转换器 | 中 | 小 | ★★ |
 
-> ⚠️ **Spring Boot 默认的 RedisTemplate 使用 JdkSerializationRedisSerializer**，存到 Redis 中是二进制乱码，且可读性极差。**务必自定义序列化器！**
+> **Spring Boot 默认的 RedisTemplate 使用 JdkSerializationRedisSerializer**，存到 Redis 中是二进制乱码，且可读性极差。**务必自定义序列化器！**
 
 #### 2.3.4 缓存注解详解
 
@@ -1015,7 +1015,7 @@ public class CacheUserService {
 }
 ```
 
-> 💡 **SpEL 上下文变量**：
+> **SpEL 上下文变量**：
 > - `#root.methodName`：方法名
 > - `#root.targetClass`：目标类
 > - `#root.args`：方法参数数组
@@ -1238,9 +1238,9 @@ public class UserProfileService {
 |------|---------------------------|---------|---------------|
 | **抽象层次** | 全自动 ORM（对象 ↔ 表） | 半自动 ORM（SQL ↔ 对象） | 数据访问工具 |
 | **SQL 控制力** | 弱（自动生成，难以调优） | 强（手写 SQL，完全掌控） | 最强（原生 SQL） |
-| **开发效率** | ⭐⭐⭐⭐⭐ 极高 | ⭐⭐⭐ 中等 | ⭐⭐ 低 |
+| **开发效率** | ★★★★★ 极高 | ★★★ 中等 | ★★ 低 |
 | **学习成本** | 中高（JPA 规范 + Hibernate 特性） | 低（会 SQL 即可） | 低 |
-| **复杂查询** | NP困难（Specification 晦涩） | ⭐⭐⭐⭐⭐ 擅长 | ⭐⭐⭐⭐ |
+| **复杂查询** | NP困难（Specification 晦涩） | ★★★★★ 擅长 | ★★★★ |
 | **动态 SQL** | Specification / @Query 拼凑 | `<if>` `<choose>` 标签强大 | 手拼字符串 |
 | **缓存** | 一级/二级缓存自动管理 | 需手动配置 | 无 |
 | **懒加载** | 原生支持 | 需插件或手动 | 无 |
@@ -1256,17 +1256,17 @@ public class UserProfileService {
 ```
 项目数据层选型
 ├── 团队 SQL 能力强，对性能要求极致？
-│   └── ✅ MyBatis（互联网大厂常用）
+│   └── ✓ MyBatis（互联网大厂常用）
 ├── 团队 Java 能力强，追求开发效率？
-│   └── ✅ JPA（创业公司、内部系统、快速迭代）
+│   └── ✓ JPA（创业公司、内部系统、快速迭代）
 ├── 复杂关联报表、多表 Join？
-│   └── ✅ MyBatis + 手写 SQL
+│   └── ✓ MyBatis + 手写 SQL
 ├── 简单 CRUD、单表操作为主？
-│   └── ✅ JPA（80% 场景都能覆盖）
+│   └── ✓ JPA（80% 场景都能覆盖）
 ├── 不希望引入任何 ORM？
-│   └── ✅ JDBC Template 或 JOOQ
+│   └── ✓ JDBC Template 或 JOOQ
 └── 要两者优点？
-    └── ✅ JPA + MyBatis 混合（JPA 管 CRUD，MyBatis 管复杂查询）
+    └── ✓ JPA + MyBatis 混合（JPA 管 CRUD，MyBatis 管复杂查询）
 ```
 
 #### 2.5.3 相同功能代码对比
@@ -1338,7 +1338,7 @@ public interface UserReportMapper {
 }
 ```
 
-> 🎯 **一句话总结**：JPA 做 80% 的简单 CRUD，MyBatis 做 20% 的复杂查询，各自用最擅长的领域。
+> **一句话总结**：JPA 做 80% 的简单 CRUD，MyBatis 做 20% 的复杂查询，各自用最擅长的领域。
 
 ---
 
@@ -2276,4 +2276,4 @@ spring.jpa.properties:
 | **缓存优化** | Redis 缓存热点数据 | 降低 DB 负载 90%+ |
 | **连接池** | HikariCP 调优 | 避免连接等待 |
 
-> 🎯 **Spring Data 学习心法**：JPA 适合 80% 的简单 CRUD，用约定大于配置的思路理解它；对于复杂 SQL 不要硬用 JPA 的 Specification 去拼，大胆引入 MyBatis 做混合架构。Redis 层重点关注缓存策略（穿透/击穿/雪崩）和序列化配置，这是生产环境出问题最多的地方。牢记"缓存是缓存，数据库是数据库"，两者的一致性是分布式系统最难的挑战之一。
+> **Spring Data 学习心法**：JPA 适合 80% 的简单 CRUD，用约定大于配置的思路理解它；对于复杂 SQL 不要硬用 JPA 的 Specification 去拼，大胆引入 MyBatis 做混合架构。Redis 层重点关注缓存策略（穿透/击穿/雪崩）和序列化配置，这是生产环境出问题最多的地方。牢记"缓存是缓存，数据库是数据库"，两者的一致性是分布式系统最难的挑战之一。

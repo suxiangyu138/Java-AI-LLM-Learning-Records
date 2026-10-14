@@ -1,7 +1,7 @@
 # Spring Core 专题总览
 > IoC 容器的源码级深潜——从 BeanFactory 到 ApplicationContext、从 BeanDefinition 到三级缓存、从 BeanPostProcessor 到 AOP 代理，7 篇文档把 Spring 核心机制从「会用法」推进到「懂源码」（基于 Spring Framework 7.0，2026 现状）
 
-## 📚 目录
+## 目录
 1. [专题定位与边界](#1-专题定位与边界)
 2. [专题导航](#2-专题导航)
 3. [源码阅读地图](#3-源码阅读地图)
@@ -19,7 +19,7 @@
 | Spring全家桶 | 模块全景（IoC→MVC→微服务） | 那边是「全景」，这里是「IoC 源码专项」 |
 | Spring生态 | 家族版图与版本演进 | 那边看「地图」，这里看「引擎」 |
 
-> 🎯 一句话定位：**Spring Core = Spring 的心脏解剖室**——聚焦 `spring-context` 与 `spring-beans` 两个模块的源码实现，其余（MVC/Data/Security）都是建在这个核心上的应用层。
+> 一句话定位：**Spring Core = Spring 的心脏解剖室**——聚焦 `spring-context` 与 `spring-beans` 两个模块的源码实现，其余（MVC/Data/Security）都是建在这个核心上的应用层。
 
 ---
 
@@ -84,7 +84,7 @@ refresh() 十二步（spring-context AbstractApplicationContext）
 | 系统路线 | 01 → 02 → 03 → 04 → 05 → 06 → 07 | 完整源码深潜 |
 | 进阶路线 | 先看 Spring框架核心 00-10 → 再走本专题 | 从使用到源码 |
 
-> 💡 前置要求：先过一遍「Spring框架核心」专题（概念层），再进本专题（源码层），否则会淹没在类名里。
+> 前置要求：先过一遍「Spring框架核心」专题（概念层），再进本专题（源码层），否则会淹没在类名里。
 
 ---
 
@@ -100,7 +100,7 @@ refresh() 十二步（spring-context AbstractApplicationContext）
 | @Configuration 为什么被代理？ | CGLIB 保证 @Bean 单例语义 | 06 篇 |
 | Spring 7.0 容器新特性？ | BeanRegistrar/@Fallback/并行初始化/泛型注入改进 | 01/03 篇 |
 
-> 🎯 **核心要点**：本专题的阅读主线 = **一条 createBean 链**（实例化→填充→初始化）贯穿四篇（01 入口 → 04 全流程 → 05 循环依赖 → 06 代理生成）。面试源码题 90% 落在这一条链上：能画出这条链 + 说出每个环节的扩展点（BeanPostProcessor 家族），Spring Core 源码面就稳了。
+> **核心要点**：本专题的阅读主线 = **一条 createBean 链**（实例化→填充→初始化）贯穿四篇（01 入口 → 04 全流程 → 05 循环依赖 → 06 代理生成）。面试源码题 90% 落在这一条链上：能画出这条链 + 说出每个环节的扩展点（BeanPostProcessor 家族），Spring Core 源码面就稳了。
 
 ---
 

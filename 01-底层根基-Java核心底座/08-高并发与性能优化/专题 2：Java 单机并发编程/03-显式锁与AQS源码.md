@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [Lock 接口：synchronized 之外的选择](#1-lock-接口synchronized-之外的选择)
 2. [ReentrantLock：公平、可中断、超时](#2-reentrantlock公平可中断超时)
@@ -95,7 +95,7 @@ public class OneShotLatch {
 
 最后一条常被忽略：性能、正确性、可维护性三个维度上，锁都是最后手段而非第一手段。写代码前先问"这个状态真的需要共享吗"，比在锁选型表里纠结半天更值钱。
 
-> 🎯 **核心要点**：AQS 是"state + CLH 队列 + park/unpark"的通用骨架，ReentrantLock/Semaphore/CountDownLatch 只是它的不同 tryAcquire 实现；锁选型不是"哪个快"，而是按可中断、超时、公平、读写比例、虚拟线程兼容五维决策。
+> **核心要点**：AQS 是"state + CLH 队列 + park/unpark"的通用骨架，ReentrantLock/Semaphore/CountDownLatch 只是它的不同 tryAcquire 实现；锁选型不是"哪个快"，而是按可中断、超时、公平、读写比例、虚拟线程兼容五维决策。
 
 ---
 

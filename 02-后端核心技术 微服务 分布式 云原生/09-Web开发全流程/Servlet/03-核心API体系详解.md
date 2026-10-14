@@ -1,7 +1,7 @@
 # Servlet 核心 API 体系详解
 > 继承层次源码剖析 + HttpServletRequest/HttpServletResponse 全量 API 分类 + ServletConfig/ServletContext/四大域对象——从接口到实现一次讲透
 
-## 📚 目录
+## 目录
 1. [继承层次与源码逻辑](#1-继承层次与源码逻辑)
 2. [HttpServletRequest 全 API](#2-httpservletrequest-全-api)
 3. [HttpServletResponse 全 API](#3-httpservletresponse-全-api)
@@ -72,7 +72,7 @@ protected void service(HttpServletRequest req, HttpServletResponse resp)
 }
 ```
 
-> 🎯 **核心认知**：HttpServlet 本身**不处理任何业务**——它只是把 HTTP 方法翻译成 Java 方法调用的适配层。Spring MVC 的 `DispatcherServlet` 覆盖了 `service()` 改为 `doService()` 并接管全部请求，本质是"换掉了分发逻辑"。
+> **核心认知**：HttpServlet 本身**不处理任何业务**——它只是把 HTTP 方法翻译成 Java 方法调用的适配层。Spring MVC 的 `DispatcherServlet` 覆盖了 `service()` 改为 `doService()` 并接管全部请求，本质是"换掉了分发逻辑"。
 
 ## 2. HttpServletRequest 全 API
 
@@ -95,7 +95,7 @@ req.getRequestId();        // 容器生成的本请求唯一 ID（Servlet 6.0 �
 req.getProtocolRequestId();// 协议层 ID（HTTP/2 为 stream ID，6.0 新增）
 ```
 
-> 💡 `getRequestURI()` vs `getRequestURL()`：前者是**路径**（无协议主机），后者是**完整 URL**——做鉴权白名单时用 URI（不易被 host 头污染），做绝对链接时用 URL。
+> `getRequestURI()` vs `getRequestURL()`：前者是**路径**（无协议主机），后者是**完整 URL**——做鉴权白名单时用 URI（不易被 host 头污染），做绝对链接时用 URL。
 
 ### 2.2 请求头
 
@@ -123,8 +123,8 @@ req.getParameter("username");          // 单值，不存在返回 null
 req.getParameterValues("hobby");       // 多值（checkbox）
 req.getParameterNames();               // 所有参数名
 req.getParameterMap();                 // Map<String, String[]>（不可修改视图）
-// ⚠️ Servlet 6.1 澄清：参数解析失败（如编码错误）→ 抛 IllegalStateException
-// ⚠️ JSON body 不是参数！getParameter 返回 null，必须读流
+// Servlet 6.1 澄清：参数解析失败（如编码错误）→ 抛 IllegalStateException
+// JSON body 不是参数！getParameter 返回 null，必须读流
 
 // ═══ Attribute ═══
 req.setAttribute("user", userObj);
@@ -133,7 +133,7 @@ req.removeAttribute("user");
 req.getAttributeNames();
 ```
 
-> ⚠️ **参数解析的触发时机**：`getParameter` 首次调用时才惰性解析；且**一次解析后缓存**，之后 `setCharacterEncoding` 不再生效——所以编码设置必须在第一次 getParameter **之前**。
+> **参数解析的触发时机**：`getParameter` 首次调用时才惰性解析；且**一次解析后缓存**，之后 `setCharacterEncoding` 不再生效——所以编码设置必须在第一次 getParameter **之前**。
 
 ### 2.4 请求体与流
 
@@ -148,7 +148,7 @@ ServletInputStream in = req.getInputStream();
 int len; byte[] buf = new byte[8192];
 while ((len = in.read(buf)) != -1) { ... }
 
-// ⚠️ getReader() 与 getInputStream() 互斥，只能二选一！
+// getReader() 与 getInputStream() 互斥，只能二选一！
 ```
 
 ### 2.5 会话与安全
@@ -189,7 +189,7 @@ resp.sendError(401);                  // 错误页分发恒用 GET（6.1 澄清�
 // SC_CONFLICT=409 SC_INTERNAL_SERVER_ERROR=500 SC_SERVICE_UNAVAILABLE=503
 ```
 
-> 💡 6.1 细节：`SC_FOUND` 成为 302 的推荐常量名，`SC_MOVED_TEMPORARILY` 仅为兼容保留；`sendError` 与 `setStatus` 的区别在于前者触发**错误页分发**（web.xml `<error-page>`）。
+> 6.1 细节：`SC_FOUND` 成为 302 的推荐常量名，`SC_MOVED_TEMPORARILY` 仅为兼容保留；`sendError` 与 `setStatus` 的区别在于前者触发**错误页分发**（web.xml `<error-page>`）。
 
 ### 3.2 响应头
 
@@ -215,7 +215,7 @@ ServletOutputStream os = resp.getOutputStream();
 os.write(bytes);
 // 3.1+：WriteListener 非阻塞写；6.1+：write(ByteBuffer)
 
-// ⚠️ getWriter() 与 getOutputStream() 同一响应只能二选一，先调用者锁定
+// getWriter() 与 getOutputStream() 同一响应只能二选一，先调用者锁定
 ```
 
 ### 3.4 重定向（6.1 重大增强）
@@ -239,7 +239,7 @@ resp.sendRedirect("/order/123", SC_SEE_OTHER, false);// 303 保留缓冲内容
 | 永久迁移（SEO） | 301 | 搜索引擎更新索引 |
 | 登录后跳转 | 302 / 303 | 避免缓存中间页 |
 
-> ⚠️ 重定向本质 = `Location` 头 + 状态码：6.1 之前无法自定义状态码，导致 301 场景只能手写 `setStatus` + `setHeader("Location")`——现在有官方 API 了。
+> 重定向本质 = `Location` 头 + 状态码：6.1 之前无法自定义状态码，导致 301 场景只能手写 `setStatus` + `setHeader("Location")`——现在有官方 API 了。
 
 ## 4. ServletConfig 与 ServletContext
 
@@ -266,7 +266,7 @@ ctx.setAttribute("onlineCount", 100);
 
 // 3. 资源访问
 ctx.getResourceAsStream("/WEB-INF/config.properties"); // 流式读取（推荐）
-ctx.getRealPath("/WEB-INF/x");   // ⚠️ 打 War 外置部署时可能返回 null，别依赖
+ctx.getRealPath("/WEB-INF/x");   // 打 War 外置部署时可能返回 null，别依赖
 ctx.getResource("/static/logo.png");  // 返回 URL
 
 // 4. 其他
@@ -280,7 +280,7 @@ ctx.addListener(MyListener.class); // 编程式注册监听器
 ctx.addServlet("x", XServlet.class).addMapping("/x");  // 编程式注册（详见 05）
 ```
 
-> 🎯 **口诀**：Config 管"我自己的参数"，Context 管"全应用的资源"；Config 能拿 Context，Context 拿不到 Config。**Context 全局属性是并发热点**——高并发计数器用 `AtomicInteger`，别用裸 `int`。
+> **口诀**：Config 管"我自己的参数"，Context 管"全应用的资源"；Config 能拿 Context，Context 拿不到 Config。**Context 全局属性是并发热点**——高并发计数器用 `AtomicInteger`，别用裸 `int`。
 
 ## 5. 四大域对象对比
 
@@ -291,7 +291,7 @@ ctx.addServlet("x", XServlet.class).addMapping("/x");  // 编程式注册（详�
 | **Session** | 一次会话 | 默认 30 分钟无操作过期 | 登录态、购物车 |
 | **Application (ServletContext)** | 整个应用 | 启动 → 关闭 | 全局配置、在线人数 |
 
-> 🎯 **选择原则：能用小不用大**——Request > Session > Application。Session 别放大对象（每次请求都要序列化/传输）；Application 别放易变数据（全局竞争）。
+> **选择原则：能用小不用大**——Request > Session > Application。Session 别放大对象（每次请求都要序列化/传输）；Application 别放易变数据（全局竞争）。
 
 ## 6. Servlet 6.0/6.1 API 新增点
 
@@ -309,7 +309,7 @@ ctx.addServlet("x", XServlet.class).addMapping("/x");  // 编程式注册（详�
 | Charset 重载系列 | 6.1 | `setCharacterEncoding(Charset)` 等编译期安全重载 |
 | 新 HTTP 状态码常量 | 6.1 | 补齐 103/425/428/429 等 |
 
-> 🎯 面试差异化：能主动讲出 6.0/6.1 的 API 增量（尤其 `getRequestId` 与 `sendRedirect` 重载），比背老八股高一个段位——版本细节见 [01-规范演进史与版本矩阵](01-规范演进史与版本矩阵.md)。
+> 面试差异化：能主动讲出 6.0/6.1 的 API 增量（尤其 `getRequestId` 与 `sendRedirect` 重载），比背老八股高一个段位——版本细节见 [01-规范演进史与版本矩阵](01-规范演进史与版本矩阵.md)。
 
 ---
 

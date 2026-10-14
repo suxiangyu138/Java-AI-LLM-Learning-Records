@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [ThreadLocal 在虚拟线程时代的三大痛点](#1-threadlocal-在虚拟线程时代的三大痛点)
 2. [JEP 演进史：从孵化到转正](#2-jep-演进史从孵化到转正)
@@ -59,7 +59,7 @@ ThreadLocal 不跨虚拟线程 / 不跨异步链传播：
 - 所以 traceId 在异步代码里"断链"，排查全靠手动传递参数
 ```
 
-> 🎯 **核心要点**：ThreadLocal 的三个问题（内存放大、生命周期手动、异步断链）在虚拟线程时代被集中引爆——JDK 需要一个新的上下文传递原语，这就是 ScopedValue。
+> **核心要点**：ThreadLocal 的三个问题（内存放大、生命周期手动、异步断链）在虚拟线程时代被集中引爆——JDK 需要一个新的上下文传递原语，这就是 ScopedValue。
 
 ## 2. JEP 演进史：从孵化到转正
 
@@ -70,9 +70,9 @@ ThreadLocal 不跨虚拟线程 / 不跨异步链传播：
 | JEP 464 | JDK 22 | 预览 | 增量完善 |
 | JEP 481 | JDK 23 | 预览 | 增量完善 |
 | JEP 487 | JDK 24 | 预览 | 增量完善 |
-| **JEP 506** | **JDK 25 LTS** | **✅ 转正** | 唯一变更：**`orElse` 不再接受 `null` 参数**（禁止返回 null 的缺省值，逼开发者明确表达"无值"） |
+| **JEP 506** | **JDK 25 LTS** | **✓ 转正** | 唯一变更：**`orElse` 不再接受 `null` 参数**（禁止返回 null 的缺省值，逼开发者明确表达"无值"） |
 
-> ⚠️ **版本窗口**：JDK 25 之前是预览 API（需 `--enable-preview`）；JDK 25+ 直接使用，无任何 flag。与结构化并发（JEP 525 仍是预览）形成对比——ScopedValue 已是生产标准特性。
+> **版本窗口**：JDK 25 之前是预览 API（需 `--enable-preview`）；JDK 25+ 直接使用，无任何 flag。与结构化并发（JEP 525 仍是预览）形成对比——ScopedValue 已是生产标准特性。
 
 ## 3. 核心 API 与基本用法
 
@@ -122,7 +122,7 @@ String id = TRACE_ID.orElse("unknown");            // 未绑定 → "unknown"
 String id = TRACE_ID.orElseThrow(() -> new IllegalStateException("缺少 traceId"));
 ```
 
-> ⚠️ **易错点**：`orElse(null)` 在 JDK 25+ 是编译错误。如果业务上确实需要"缺省为空"，用 `orElseThrow` 或 `Optional` 包装——JDK 的意图是逼迫显式处理缺失，而不是静默吞掉。
+> **易错点**：`orElse(null)` 在 JDK 25+ 是编译错误。如果业务上确实需要"缺省为空"，用 `orElseThrow` 或 `Optional` 包装——JDK 的意图是逼迫显式处理缺失，而不是静默吞掉。
 
 ## 4. 与 ThreadLocal 的全方位对比
 
@@ -138,7 +138,7 @@ String id = TRACE_ID.orElseThrow(() -> new IllegalStateException("缺少 traceId
 | 跨异步链 | 断裂 | 结构化并发场景可用 |
 | 转正版本 | JDK 1.2 | **JDK 25（JEP 506）** |
 
-> 💡 **一句话选型**：只读上下文（traceId、userId、租户、配置快照）→ **ScopedValue**；确需线程内可变的局部状态（少见）→ 谨慎用 ThreadLocal 并严控 size 与生命周期。
+> **一句话选型**：只读上下文（traceId、userId、租户、配置快照）→ **ScopedValue**；确需线程内可变的局部状态（少见）→ 谨慎用 ThreadLocal 并严控 size 与生命周期。
 
 ## 5. 实现原理：为何"几乎免费"
 
@@ -172,7 +172,7 @@ ScopedValue 实现（栈式绑定链，JDK 内部）：
     → 可传递：子任务看到的必然是父任务绑定时的值（无竞态）
 ```
 
-> 🎯 **核心要点**：不可变 + 有界生命周期 + 单副本 = ScopedValue 三个"快"的来源（无同步、无每线程复制、常量优化）。它不是 ThreadLocal 的小改款，而是不同性质的机制。
+> **核心要点**：不可变 + 有界生命周期 + 单副本 = ScopedValue 三个"快"的来源（无同步、无每线程复制、常量优化）。它不是 ThreadLocal 的小改款，而是不同性质的机制。
 
 ## 6. 继承机制：子任务自动传递
 
@@ -195,8 +195,8 @@ void parent(String traceId) throws Exception {
 
 | 场景 | ThreadLocal | ScopedValue |
 |------|:---:|:---:|
-| 同线程内直接调用 | ✅ | ✅ |
-| 结构化并发的子任务（fork） | ❌（不继承） | ✅ 自动继承 |
+| 同线程内直接调用 | ✓ | ✓ |
+| 结构化并发的子任务（fork） | ✗（不继承） | ✓ 自动继承 |
 | 普通 `new Thread` / 执行器任务 | 部分（Inheritable，不推荐） | 不自动（需手动传递或换结构化并发） |
 | 虚拟线程 | 不继承 | 结构化并发下继承 |
 
@@ -259,7 +259,7 @@ public class TraceFilter implements Filter {
 
 ## 9. 核心要点与思考题
 
-> 🎯 **本章三句话总结**：
+> **本章三句话总结**：
 > 1. ThreadLocal 的"每线程副本 + 手动清理 + 异步断链"在百万虚拟线程下是内存与正确性双重负担；
 > 2. ScopedValue（JEP 506，JDK 25 转正）用"不可变 + 有界生命周期 + 单副本"实现接近局部变量的读取成本，且结构化并发子任务自动继承；
 > 3. 生产选型：只读上下文一律 ScopedValue，可变的线程局部状态才考虑 ThreadLocal（严控生命周期）。

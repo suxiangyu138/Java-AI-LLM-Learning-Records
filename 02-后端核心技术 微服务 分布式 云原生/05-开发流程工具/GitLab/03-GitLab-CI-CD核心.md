@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [核心概念：pipeline / job / stage](#1-核心概念pipeline--job--stage)
 2. [第一个 .gitlab-ci.yml](#2-第一个-gitlabciyml)
@@ -116,7 +116,7 @@ include:
 
 ## 7. CI/CD 在 MR 中的位置
 
-**GitLab CI 与 MR 深度绑定——"MR 即流水线"**：**开 MR 自动触发 MR 流水线**（跑测试/扫描）；**流水线结果直接显示在 MR 页面**（红色 ✖/绿色 ✔）；**流水线失败可阻止合并**（`Pipeline must succeed` 合并规则，06 篇）；**JUnit 测试报告/覆盖率直接内嵌 MR**（`artifacts:reports:junit`）。**2026 的 MR-First 三件套**（04 篇详讲）：**merge request pipelines**（MR 触发）、**merged results pipelines**（测试"合并后的结果"，更准）、**workflow rules**（按事件路由）——"**GitLab 的哲学：测试与评审在同一时刻同一处——MR 是质量的关卡，CI 是关卡的守卫**"。**覆盖率门禁**：Cobertura 报告进 MR（覆盖率变化一目了然）——"**覆盖率是 MR 的第二个红绿灯**"；**失败体验**：MR 页面红叉 + 失败 job 日志可直接点开看——"排障从 MR 页面开始"。
+**GitLab CI 与 MR 深度绑定——"MR 即流水线"**：**开 MR 自动触发 MR 流水线**（跑测试/扫描）；**流水线结果直接显示在 MR 页面**（红色 ✗/绿色 ✓）；**流水线失败可阻止合并**（`Pipeline must succeed` 合并规则，06 篇）；**JUnit 测试报告/覆盖率直接内嵌 MR**（`artifacts:reports:junit`）。**2026 的 MR-First 三件套**（04 篇详讲）：**merge request pipelines**（MR 触发）、**merged results pipelines**（测试"合并后的结果"，更准）、**workflow rules**（按事件路由）——"**GitLab 的哲学：测试与评审在同一时刻同一处——MR 是质量的关卡，CI 是关卡的守卫**"。**覆盖率门禁**：Cobertura 报告进 MR（覆盖率变化一目了然）——"**覆盖率是 MR 的第二个红绿灯**"；**失败体验**：MR 页面红叉 + 失败 job 日志可直接点开看——"排障从 MR 页面开始"。
 
 ## 8. 五个常见坑
 
@@ -135,7 +135,7 @@ include:
 4. 变量三层与密钥纪律？
 5. rules 与 only/except 的差异？MR 与 CI 的绑定关系？
 
-> 🎯 **核心要点**：CI/CD 核心 = **"stages 骨架 + job 工序 + artifacts 接力 + cache 复用 + rules 路由 + include 分层"**——"MR 即流水线"是 GitLab 的哲学；**2026 新代码一律 rules、密钥必 Masked、include 必锁版本**。
+> **核心要点**：CI/CD 核心 = **"stages 骨架 + job 工序 + artifacts 接力 + cache 复用 + rules 路由 + include 分层"**——"MR 即流水线"是 GitLab 的哲学；**2026 新代码一律 rules、密钥必 Masked、include 必锁版本**。
 
 ---
 

@@ -1,7 +1,7 @@
 # MySQL 连接与表设计
 > pymysql 连接、表结构与字段类型、连接管理——"爬虫数据的家"怎么布置
 
-## 📚 目录
+## 目录
 1. [pymysql 定位与安装](#1-pymysql-定位与安装)
 2. [连接与基础操作](#2-连接与基础操作)
 3. [爬虫场景的表设计](#3-爬虫场景的表设计)
@@ -17,7 +17,7 @@
 | 替代 | mysql-connector-python（官方）、SQLAlchemy（ORM，后续） |
 | 本阶段 | 手写 SQL 理解原理（ORM 思路见 [Spring Data 体系](../../../../02-后端核心技术%20微服务%20分布式%20云原生/06-Spring全家桶/Spring组件汇总/Spring%20Data%20系列【数据访问层】/Spring%20Data%20MongoDB/00-Spring%20Data%20MongoDB组件总览.md)，Java 侧另讲） |
 
-> 🎯 学习定位：**先手写 SQL 懂原理，再上 ORM**——爬虫脚本用 pymysql 完全够（轻量无依赖）；大规模工程再用 SQLAlchemy（ORM 思路见 [Spring Data 体系](../../../../02-后端核心技术%20微服务%20分布式%20云原生/06-Spring全家桶/Spring组件汇总/Spring%20Data%20系列【数据访问层】/Spring%20Data%20MongoDB/00-Spring%20Data%20MongoDB组件总览.md)）。
+> 学习定位：**先手写 SQL 懂原理，再上 ORM**——爬虫脚本用 pymysql 完全够（轻量无依赖）；大规模工程再用 SQLAlchemy（ORM 思路见 [Spring Data 体系](../../../../02-后端核心技术%20微服务%20分布式%20云原生/06-Spring全家桶/Spring组件汇总/Spring%20Data%20系列【数据访问层】/Spring%20Data%20MongoDB/00-Spring%20Data%20MongoDB组件总览.md)）。
 
 ## 2. 连接与基础操作
 
@@ -31,7 +31,7 @@ conn = pymysql.connect(
     user="root",
     password="yourpassword",
     database="crawler_db",
-    charset="utf8mb4",         # ⚠️ 必须 utf8mb4（支持中文+emoji）
+    charset="utf8mb4",         # 必须 utf8mb4（支持中文+emoji）
     cursorclass=pymysql.cursors.DictCursor,   # 返回字典（推荐）
 )
 cur = conn.cursor()
@@ -51,7 +51,7 @@ cur.execute("SELECT * FROM news WHERE title = %s", ("标题",))
 row = cur.fetchone()           # 单条（字典）
 rows = cur.fetchall()          # 全部（列表）
 
-conn.close()                   # ⚠️ 用完必关
+conn.close()                   # 用完必关
 ```
 
 | 连接要点 | 说明 |
@@ -62,7 +62,7 @@ conn.close()                   # ⚠️ 用完必关
 | commit | 写操作必须提交（DML 自动开启事务） |
 | close | 用完关闭（见 §5 上下文管理） |
 
-> ⚠️ 新手三坑：**① 忘 charset=utf8mb4**（中文存进去乱码/报错）；**② 忘 commit**（数据"写进去了"但回滚了）；**③ 忘 close**（连接泄漏——长时间爬虫必炸）。
+> 新手三坑：**① 忘 charset=utf8mb4**（中文存进去乱码/报错）；**② 忘 commit**（数据"写进去了"但回滚了）；**③ 忘 close**（连接泄漏——长时间爬虫必炸）。
 
 ## 3. 爬虫场景的表设计
 
@@ -77,7 +77,7 @@ CREATE TABLE IF NOT EXISTS news (
     publish_time DATETIME,                           -- 发布时间
     crawl_time  DATETIME DEFAULT CURRENT_TIMESTAMP,  -- 抓取时间（审计）
     status      TINYINT DEFAULT 0,                   -- 状态（0待处理/1已处理）
-    UNIQUE KEY uk_url (url(255)),                    -- ⚠️ 去重约束（url 前缀索引）
+    UNIQUE KEY uk_url (url(255)),                    -- 去重约束（url 前缀索引）
     KEY idx_time (publish_time)                      -- 查询索引
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 ```
@@ -90,7 +90,7 @@ CREATE TABLE IF NOT EXISTS news (
 | status 字段 | 抓取状态机（待处理/已处理——增量策略用，见 04） |
 | InnoDB + utf8mb4 | 生产标配（事务 + 全字符集） |
 
-> 🎯 爬虫表设计核心：**"业务字段 + 去重键 + 状态字段 + 时间审计"四件套**——去重键让数据库管"不重复"，状态字段让增量策略有据可依（04 章）。
+> 爬虫表设计核心：**"业务字段 + 去重键 + 状态字段 + 时间审计"四件套**——去重键让数据库管"不重复"，状态字段让增量策略有据可依（04 章）。
 
 ## 4. 字段类型选型
 
@@ -102,10 +102,10 @@ CREATE TABLE IF NOT EXISTS news (
 | URL | VARCHAR(1024) | 长 URL 用前缀索引 |
 | 日期时间 | DATETIME | 存标准格式（清洗成 `%Y-%m-%d`） |
 | 状态/枚举 | TINYINT | 0/1/2 数字状态（别存字符串） |
-| 价格 | DECIMAL(10,2) | ⚠️ 别用 FLOAT（精度） |
+| 价格 | DECIMAL(10,2) | 别用 FLOAT（精度） |
 | 标签列表 | JSON 类型 | MySQL 5.7+ 原生 JSON |
 
-> ⚠️ 类型选型三原则：**① 数字用数字类型**（VARCHAR 存数字 = 排序/计算全废）；**② 金额用 DECIMAL**（FLOAT 精度丢失是财务事故）；**③ 枚举用数字**（TINYINT 而非字符串）。
+> 类型选型三原则：**① 数字用数字类型**（VARCHAR 存数字 = 排序/计算全废）；**② 金额用 DECIMAL**（FLOAT 精度丢失是财务事故）；**③ 枚举用数字**（TINYINT 而非字符串）。
 
 ## 5. 连接管理：上下文与池
 
@@ -150,7 +150,7 @@ finally:
 | 多线程爬虫 | 连接池（每线程取连接，用完归还） |
 | 大型工程 | SQLAlchemy 连接池（后续） |
 
-> 🎯 连接管理认知：**"数据库连接是稀缺资源"**——每次爬取都新建连接 = 握手开销 + 连接数爆表；连接池复用是生产标配。单机爬虫 DBUtils 池 10 连接足够（对应[数据库连接池体系](../../../../02-后端核心技术%20微服务%20分布式%20云原生/01-关系型数据库/数据库连接池/00-数据库连接池知识体系总览.md)）。
+> 连接管理认知：**"数据库连接是稀缺资源"**——每次爬取都新建连接 = 握手开销 + 连接数爆表；连接池复用是生产标配。单机爬虫 DBUtils 池 10 连接足够（对应[数据库连接池体系](../../../../02-后端核心技术%20微服务%20分布式%20云原生/01-关系型数据库/数据库连接池/00-数据库连接池知识体系总览.md)）。
 
 ---
 

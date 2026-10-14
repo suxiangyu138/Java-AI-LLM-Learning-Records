@@ -18,7 +18,7 @@
 ### 1. 什么是进程？什么是线程？两者的区别？
 **进程**是操作系统资源分配的最小单位，每个进程拥有独立的地址空间、文件描述符、堆栈。**线程**是CPU调度的最小单位，是进程内的一个执行路径，共享进程的堆和方法区，但每个线程拥有独立的程序计数器、虚拟机栈和本地方法栈。
 
-> 💡 **核心区别**：进程间相互隔离（一个崩了不影响其他），线程间共享堆空间（一个线程OOM会导致进程内所有线程受影响）。上下文切换成本：进程 >> 线程。
+> **核心区别**：进程间相互隔离（一个崩了不影响其他），线程间共享堆空间（一个线程OOM会导致进程内所有线程受影响）。上下文切换成本：进程 >> 线程。
 
 ### 2. 什么是并发？什么是并行？两者的区别？
 **并发**指两个或多个任务在**同一时间段内**交替执行（宏观同时，微观串行），单核CPU即可实现。**并行**指两个或多个任务在**同一时刻**真正同时执行，需要多核CPU支持。
@@ -37,18 +37,18 @@
 2. **实现Runnable接口**：实现 `run()` 方法，`new Thread(new MyRunnable()).start()`。无返回值，无法抛受检异常。
 3. **实现Callable接口**（配合FutureTask）：实现 `call()` 方法，有返回值，可抛异常。`FutureTask<Integer> ft = new FutureTask<>(new MyCallable()); new Thread(ft).start(); ft.get();`
 
-> 💡 **实际开发**：优先使用Runnable/Callable，避免继承局限。从Java 8起，更推荐使用 `CompletableFuture` 或线程池提交任务。
+> **实际开发**：优先使用Runnable/Callable，避免继承局限。从Java 8起，更推荐使用 `CompletableFuture` 或线程池提交任务。
 
 ### 4. start() 和 run() 的区别？
 - **run()**：普通方法调用，在当前线程中同步执行，不会创建新线程。
 - **start()**：启动新线程，使线程进入就绪状态，由JVM自动调用run()方法。
 
-> ⚠️ 一个线程对象只能调用一次 `start()`，第二次调用会抛出 `IllegalThreadStateException`。
+> 一个线程对象只能调用一次 `start()`，第二次调用会抛出 `IllegalThreadStateException`。
 
 ### 5. 线程的优先级是什么？是否可以保证执行顺序？
 线程优先级用 `setPriority(1-10)` 设置，默认5（`Thread.NORM_PRIORITY`）。**高优先级线程获得CPU时间片的概率更大，但不能保证执行顺序**，最终调度由底层OS决定。Windows/Linux等不同操作系统对优先级的映射处理不同。
 
-> 💡 **不建议依赖优先级来保证执行顺序**，应使用 `join()`、`CountDownLatch` 等同步工具。
+> **不建议依赖优先级来保证执行顺序**，应使用 `join()`、`CountDownLatch` 等同步工具。
 
 ### 6. 什么是守护线程？如何设置？
 守护线程（Daemon Thread）是为用户线程提供服务的后台线程，当所有用户线程结束时，JVM自动退出，**不会等待守护线程执行完毕**。通过 `thread.setDaemon(true)` 设置，**必须在 `start()` 之前调用**。
@@ -71,7 +71,7 @@ Java线程有6种状态（定义在 `Thread.State` 枚举中）：
 | TIMED_WAITING | 限期等待 | `sleep(ms)` / `wait(ms)` / `join(ms)` / `parkNanos()` |
 | TERMINATED | 终止 | `run()` 执行完毕或抛出异常 |
 
-> 💡 **经典流转**：NEW -> (start()) -> RUNNABLE -> (synchronized竞争失败) -> BLOCKED -> (获得锁) -> RUNNABLE -> (wait()) -> WAITING -> (notify()) -> RUNNABLE -> (run()结束) -> TERMINATED
+> **经典流转**：NEW -> (start()) -> RUNNABLE -> (synchronized竞争失败) -> BLOCKED -> (获得锁) -> RUNNABLE -> (wait()) -> WAITING -> (notify()) -> RUNNABLE -> (run()结束) -> TERMINATED
 
 ### 9. sleep() 和 wait() 的区别？
 | 维度 | sleep() | wait() |
@@ -97,7 +97,7 @@ Java线程有6种状态（定义在 `Thread.State` 枚举中）：
 2. **轻量级锁**：偏向锁被其他线程竞争时升级，通过CAS自旋获取锁
 3. **重量级锁**：自旋超过阈值（默认10次或自适应）后升级，线程阻塞等待，依赖OS互斥量（mutex）
 
-> 💡 **对象头Mark Word**是关键。32位JVM中Mark Word存储锁标志位：01（无锁/偏向锁）、00（轻量级锁）、10（重量级锁）、11（GC标记）。
+> **对象头Mark Word**是关键。32位JVM中Mark Word存储锁标志位：01（无锁/偏向锁）、00（轻量级锁）、10（重量级锁）、11（GC标记）。
 
 ### 12. volatile 关键字的作用和原理？
 **作用**：
@@ -108,7 +108,7 @@ Java线程有6种状态（定义在 `Thread.State` 枚举中）：
 - 写volatile变量：在写之前插入StoreStore屏障，写之后插入StoreLoad屏障，强制将修改写入主存
 - 读volatile变量：在读之后插入LoadLoad屏障和LoadStore屏障，强制从主存读取最新值
 
-> ⚠️ volatile **不能保证原子性**！如 `count++` 这种复合操作仍需使用 `synchronized` 或 `AtomicInteger`。
+> volatile **不能保证原子性**！如 `count++` 这种复合操作仍需使用 `synchronized` 或 `AtomicInteger`。
 
 ### 13. 什么是CAS？原理是什么？有什么问题？
 **CAS**（Compare And Swap，比较并交换）是一种无锁原子操作。三个操作数：**内存地址V**、**预期值A**、**新值B**。仅当V当前值为A时才更新为B，否则不更新，返回V当前值。
@@ -142,7 +142,7 @@ Java线程有6种状态（定义在 `Thread.State` 枚举中）：
 3. **不可剥夺**：已获得的资源不能被强制剥夺
 4. **循环等待**：多个线程间形成循环等待链
 
-> 🎯 **破解死锁**只需破坏上述任意一个条件，最常用的是破坏"循环等待"：规定资源获取顺序，所有线程按相同顺序获取锁。
+> **破解死锁**只需破坏上述任意一个条件，最常用的是破坏"循环等待"：规定资源获取顺序，所有线程按相同顺序获取锁。
 
 ### 16. ThreadLocal 的原理？内存泄漏如何解决？
 **ThreadLocal** 为每个线程维护独立的变量副本。每个Thread内部维护一个 `ThreadLocalMap`，键为ThreadLocal弱引用，值为变量副本。
@@ -186,7 +186,7 @@ Java线程有6种状态（定义在 `Thread.State` 枚举中）：
 2. 一个 **CLH双向队列**（FIFO）管理等待线程
 3. 提供模板方法 `tryAcquire()` / `tryRelease()` / `tryAcquireShared()` 等，由子类实现
 
-> 💡 理解AQS = 理解JUC锁的底层。核心方法：`acquire(int arg)` = `tryAcquire` 尝试 + 失败则 `addWaiter` 入队 + `acquireQueued` 阻塞。
+> 理解AQS = 理解JUC锁的底层。核心方法：`acquire(int arg)` = `tryAcquire` 尝试 + 失败则 `addWaiter` 入队 + `acquireQueued` 阻塞。
 
 ### 20. ConcurrentHashMap 实现原理？
 **JDK 1.7**：`Segment` 数组 + `HashEntry` 数组，分段锁（继承ReentrantLock），默认16个Segment，支持16个线程并发写。
@@ -196,7 +196,7 @@ Java线程有6种状态（定义在 `Thread.State` 枚举中）：
 - 写操作：hash位置的Node为空则CAS插入；非空则 `synchronized` 锁定链表头节点
 - 链表转红黑树：链表长度 >= 8 且数组长度 >= 64
 
-> 🎯 **1.8 相比 1.7 的优势**：锁粒度更细（从Segment级别降到桶级别）；CAS减少锁开销；红黑树优化高冲突场景。
+> **1.8 相比 1.7 的优势**：锁粒度更细（从Segment级别降到桶级别）；CAS减少锁开销；红黑树优化高冲突场景。
 
 ---
 
@@ -259,7 +259,7 @@ Java线程有6种状态（定义在 `Thread.State` 枚举中）：
 - 偏向锁 → 轻量级锁：第二个线程尝试获取偏向锁且偏向模式已关闭或已偏向其他线程
 - 轻量级锁 → 重量级锁：自旋超过阈值（默认10次，JDK 1.6+自适应）
 
-> 💡 **锁粗化**：JVM将多个连续的相同锁的加解锁合并为一个（如循环内的synchronized）。
+> **锁粗化**：JVM将多个连续的相同锁的加解锁合并为一个（如循环内的synchronized）。
 > **锁消除**：JVM逃逸分析发现对象不会被其他线程访问时，直接去掉同步。
 
 ### 3. AQS 源码级原理详解
@@ -391,7 +391,7 @@ class Point {
 }
 ```
 
-> 💡 **乐观读完全不加锁**，仅在验证时判断数据是否有效，读多写少场景性能远优于 `ReadWriteLock`。
+> **乐观读完全不加锁**，仅在验证时判断数据是否有效，读多写少场景性能远优于 `ReadWriteLock`。
 
 ### 7. CountDownLatch vs CyclicBarrier vs Semaphore
 
@@ -432,7 +432,7 @@ CompletableFuture.supplyAsync(() -> queryUserInfo(userId), executor)
     });
 ```
 
-> ⚠️ 不带 `Async` 后缀的方法默认使用ForkJoinPool.commonPool()，生产环境必须自定义线程池。
+> 不带 `Async` 后缀的方法默认使用ForkJoinPool.commonPool()，生产环境必须自定义线程池。
 
 ### 9. ForkJoinPool 分治线程池原理
 
@@ -464,7 +464,7 @@ class SumTask extends RecursiveTask<Long> {
 }
 ```
 
-> 💡 `Arrays.parallelSort()`、`Stream.parallel()` 等底层都使用ForkJoinPool。
+> `Arrays.parallelSort()`、`Stream.parallel()` 等底层都使用ForkJoinPool。
 
 ### 10. LongAdder 原理（高并发原子累加器）
 
@@ -483,7 +483,7 @@ LongAdder:     [cells[0]] [cells[1]] ... [base]
 - 高竞争时分配不同的 `Cell` 数组槽位，每个线程只CAS自己的槽位
 - 最终求和时累加 `base + sum(cells)`
 
-> 🎯 **选择建议**：追求最终一致且非频繁读取用 LongAdder；需要强一致实时值用 AtomicLong。
+> **选择建议**：追求最终一致且非频繁读取用 LongAdder；需要强一致实时值用 AtomicLong。
 
 ### 11. Thread.join() 的底层实现
 
@@ -508,7 +508,7 @@ public final synchronized void join(long millis) throws InterruptedException {
 }
 ```
 
-> 💡 **关键点**：`join()` 本身是一个 `synchronized` 方法，内部通过 `wait()` 让调用线程等待；当目标线程执行完毕后，JVM会在线程退出时调用 `this.notifyAll()` 唤醒所有等待在该线程对象上的其他线程。
+> **关键点**：`join()` 本身是一个 `synchronized` 方法，内部通过 `wait()` 让调用线程等待；当目标线程执行完毕后，JVM会在线程退出时调用 `this.notifyAll()` 唤醒所有等待在该线程对象上的其他线程。
 
 ---
 
@@ -545,7 +545,7 @@ public String getData(String key) {
 }
 ```
 
-> 💡 **电商场景**：商品详情页缓存，QPS 10000+，必须防止缓存击穿。
+> **电商场景**：商品详情页缓存，QPS 10000+，必须防止缓存击穿。
 
 ### 场景 2：多线程批量处理百万级数据
 **问题描述**：需要从Excel/数据库中读取100万条记录，逐条调用外部API处理后写入结果，如何提升处理效率？
@@ -576,7 +576,7 @@ latch.await();  // 等待所有批次完成
 executor.shutdown();
 ```
 
-> ⚠️ **注意点**：100万数据内存会OOM，必须分页。外部API需要加断路器（Hystrix/Resilience4j）防止雪崩。
+> **注意点**：100万数据内存会OOM，必须分页。外部API需要加断路器（Hystrix/Resilience4j）防止雪崩。
 
 ### 场景 3：接口限流（Rate Limiter）实现
 **问题描述**：某核心接口每秒最多处理100个请求，如何实现限流？
@@ -607,7 +607,7 @@ public void handleRequest(Request req) {
 }
 ```
 
-> 💡 **阿里 Sentinel** 是生产级限流降级组件，支持QPS/线程数限流、熔断降级、系统自适应保护。
+> **阿里 Sentinel** 是生产级限流降级组件，支持QPS/线程数限流、熔断降级、系统自适应保护。
 
 ### 场景 4：多线程下的日志收集
 **问题描述**：高并发系统，多个线程同时写日志文件，导致日志错乱。如何处理？
@@ -716,7 +716,7 @@ public class Singleton {
 }
 ```
 
-> 💡 **为什么两次 check？** → 第一次避免不必要的加锁；第二次保证在被阻塞的线程中只存在一个实例。
+> **为什么两次 check？** → 第一次避免不必要的加锁；第二次保证在被阻塞的线程中只存在一个实例。
 > **为什么 volatile？** → 防止 `instance = new Singleton()` 的指令重排导致其他线程拿到半初始化对象。
 
 ### 2. 生产者消费者模式（BlockingQueue实现）
@@ -856,7 +856,7 @@ public class SafeCounterByAdder {
 }
 ```
 
-> 💡 **性能对比**（线程数16，每个线程递增100万次）：synchronized < AtomicInteger < LongAdder。LongAdder在高竞争下性能为AtomicInteger的数倍。
+> **性能对比**（线程数16，每个线程递增100万次）：synchronized < AtomicInteger < LongAdder。LongAdder在高竞争下性能为AtomicInteger的数倍。
 
 ### 5. 手写死锁及排查
 
@@ -1150,7 +1150,7 @@ public class RedisDistributedLock {
 }
 ```
 
-> 💡 **生产建议**：使用 **Redisson** 框架，已封装看门狗、可重入、红锁等特性。Redisson的看门狗默认续期30秒。
+> **生产建议**：使用 **Redisson** 框架，已封装看门狗、可重入、红锁等特性。Redisson的看门狗默认续期30秒。
 
 ---
 
@@ -1271,4 +1271,4 @@ public class RedisDistributedLock {
 
 ---
 
-> 🎯 **总结**：多线程面试底层原理（JMM、AQS、CAS）和实战应用（线程池配置、并发容器、异步编排）各占一半。建议将上述Checklist逐项过一遍，确保每个点都能用"一句话总结 + 展开说明 + 举例 + 引导追问"的四段式回答清楚。
+> **总结**：多线程面试底层原理（JMM、AQS、CAS）和实战应用（线程池配置、并发容器、异步编排）各占一半。建议将上述Checklist逐项过一遍，确保每个点都能用"一句话总结 + 展开说明 + 举例 + 引导追问"的四段式回答清楚。

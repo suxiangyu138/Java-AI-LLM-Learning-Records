@@ -2,7 +2,7 @@
 
 > OpenAI 对标准的采用（GA）：内置技能安装器（/skills）、$ 符号调用、配置驱动——但正文 8KB 硬上限、allowed-tools 仅部分支持、无 GUI——"简单直接"路线的代表。
 
-## 📚 目录
+## 目录
 
 1. [Codex CLI 的支持状态](#1-codex-cli-的支持状态)
 2. [技能目录与调用](#2-技能目录与调用)
@@ -174,7 +174,7 @@ Codex CLI（终端）+ ChatGPT（对话）+ IDE 集成
 
 > "Codex CLI 是 OpenAI 对标准的采用（GA）：内置 /skills 安装器（CLI 内浏览安装，像装包）、$skillname 符号调用、Rust 重写后性能大幅提升（SWE-bench 77.3%）。与 Claude Code 的关键差异要记住：正文 8KB 硬上限、allowed-tools 仅部分支持（跨平台静默降级）、无 GUI。同一份 SKILL.md 在 OpenAI 生态（Codex + ChatGPT）多入口可用——这就是标准跨生态的价值。"
 
-> 🎯 核心要点：Codex CLI GA（OpenAI 采用，SWE-bench 77.3%）；.codex/skills/ 目录；内置 /skills 安装器 + $ 符号调用；与 Claude 差异（8KB 上限/部分 allowed-tools/无 GUI）；OpenAI 生态多入口（Codex + ChatGPT）；跨平台注意（8KB 控制 + 降级验证）。
+> 核心要点：Codex CLI GA（OpenAI 采用，SWE-bench 77.3%）；.codex/skills/ 目录；内置 /skills 安装器 + $ 符号调用；与 Claude 差异（8KB 上限/部分 allowed-tools/无 GUI）；OpenAI 生态多入口（Codex + ChatGPT）；跨平台注意（8KB 控制 + 降级验证）。
 
 ---
 

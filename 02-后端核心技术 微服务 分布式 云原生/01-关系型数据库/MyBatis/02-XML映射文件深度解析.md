@@ -1,6 +1,6 @@
 # 02 - XML 映射文件深度解析
 
-> 🎯 XML Mapper 是 MyBatis 的灵魂——resultMap 解决了 90% 的 ORM 难题，association/collection 处理复杂嵌套，discriminator 实现多态映射
+> XML Mapper 是 MyBatis 的灵魂——resultMap 解决了 90% 的 ORM 难题，association/collection 处理复杂嵌套，discriminator 实现多态映射
 
 ---
 
@@ -40,16 +40,16 @@
 
 | 语法 | 机制 | 防注入 | 使用场景 |
 |------|------|:---:|------|
-| `#{name}` | **PreparedStatement ?** 占位 | ✅ 安全 | 99% 的场景 |
-| `${name}` | **字符串拼接** | ❌ 危险 | ORDER BY / 动态表名 |
+| `#{name}` | **PreparedStatement ?** 占位 | ✓ 安全 | 99% 的场景 |
+| `${name}` | **字符串拼接** | ✗ 危险 | ORDER BY / 动态表名 |
 
 ```xml
-<!-- ✅ 安全 -->
+<!-- ✓ 安全 -->
 <select id="findByName" resultType="User">
     SELECT * FROM users WHERE name = #{name}
 </select>
 
-<!-- ⚠️ 仅用于 ORDER BY（白名单校验后） -->
+<!-- 仅用于 ORDER BY（白名单校验后） -->
 <select id="findByOrder">
     SELECT * FROM users ORDER BY ${column} ${direction}
 </select>

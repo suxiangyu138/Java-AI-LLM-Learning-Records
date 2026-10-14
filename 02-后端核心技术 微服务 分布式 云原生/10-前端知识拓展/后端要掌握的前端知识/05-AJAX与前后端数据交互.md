@@ -38,16 +38,16 @@ AJAX 异步请求：
 
 ```javascript
 // 同步请求的痛点：整个页面被阻塞
-// ❌ form 提交会导致页面刷新
+// ✗ form 提交会导致页面刷新
 
-// ✅ AJAX 异步请求：局部更新
+// ✓ AJAX 异步请求：局部更新
 const response = await fetch('/api/data');
 const data = await response.json();
 document.getElementById('result').textContent = data.message;
 // 页面其他部分不受影响，用户可继续操作
 ```
 
-> 💡 后端开发者视角：AJAX 使得前端可以像后端调用 RPC 一样调用 API。每一次 fetch/axios 调用，对应后端一个 controller 方法的执行。理解 AJAX 有助于调试 API 调用和排查跨域问题。
+> 后端开发者视角：AJAX 使得前端可以像后端调用 RPC 一样调用 API。每一次 fetch/axios 调用，对应后端一个 controller 方法的执行。理解 AJAX 有助于调试 API 调用和排查跨域问题。
 
 ---
 
@@ -122,7 +122,7 @@ if (response.ok) {  // HTTP 状态码 200-299
 ### 3.2 重要：Fetch 的错误处理陷阱
 
 ```javascript
-// ❌ 常见错误：Fetch 只在网络故障时 reject，HTTP 4xx/5xx 不会！
+// ✗ 常见错误：Fetch 只在网络故障时 reject，HTTP 4xx/5xx 不会！
 try {
     const response = await fetch('/api/users/999');
     // response.ok === false（例如 404），但不会进入 catch！
@@ -135,7 +135,7 @@ try {
     console.error('网络错误:', error);
 }
 
-// ✅ 正确做法：手动检查 response.ok
+// ✓ 正确做法：手动检查 response.ok
 async function safeFetch(url, options = {}) {
     const response = await fetch(url, options);
     if (!response.ok) {
@@ -187,13 +187,13 @@ try {
 
 | Fetch 特性 | 是否支持 | 说明 |
 |-----------|---------|------|
-| 默认不携带 Cookie | ❌ | 需设置 `credentials: 'include'` |
-| 4xx/5xx 不 reject | ⚠️ | 需手动检查 `response.ok` |
-| 上传进度 | ❌ | Fetch 不原生支持进度回调 |
-| 请求超时 | ❌ | 需用 AbortController 模拟 |
-| JSON 自动解析 | ❌ | 需手动调用 `response.json()` |
+| 默认不携带 Cookie | ✗ | 需设置 `credentials: 'include'` |
+| 4xx/5xx 不 reject | | 需手动检查 `response.ok` |
+| 上传进度 | ✗ | Fetch 不原生支持进度回调 |
+| 请求超时 | ✗ | 需用 AbortController 模拟 |
+| JSON 自动解析 | ✗ | 需手动调用 `response.json()` |
 
-> ⚠️ Fetch 的设计更接近底层 HTTP 操作，它不会对响应状态做任何假设——200 和 404 对 Fetch 都是"成功的 HTTP 请求"。这种设计导致了常见的 `response.ok` 遗漏问题。
+> Fetch 的设计更接近底层 HTTP 操作，它不会对响应状态做任何假设——200 和 404 对 Fetch 都是"成功的 HTTP 请求"。这种设计导致了常见的 `response.ok` 遗漏问题。
 
 ---
 
@@ -263,7 +263,7 @@ const apiClient = axios.create({
 const { data } = await apiClient.get('/users');
 ```
 
-> 🎯 **后端开发者推荐**：在项目中使用 Axios 而不是直接使用 Fetch。Axios 的错误处理方式（非 2xx 自动 reject）更接近后端 HTTP 客户端的直觉。
+> **后端开发者推荐**：在项目中使用 Axios 而不是直接使用 Fetch。Axios 的错误处理方式（非 2xx 自动 reject）更接近后端 HTTP 客户端的直觉。
 
 ---
 
@@ -388,7 +388,7 @@ try {
 }
 ```
 
-> 💡 拦截器模式对后端开发者很熟悉——本质上就是 Servlet 的 Filter 或 Spring 的 HandlerInterceptor。一个典型的拦截器执行链：**请求拦截器** → **实际 HTTP 请求** → **响应拦截器**。
+> 拦截器模式对后端开发者很熟悉——本质上就是 Servlet 的 Filter 或 Spring 的 HandlerInterceptor。一个典型的拦截器执行链：**请求拦截器** → **实际 HTTP 请求** → **响应拦截器**。
 
 ---
 
@@ -572,7 +572,7 @@ public class FileUploadController {
 }
 ```
 
-> ⚠️ 文件上传后端注意事项：1) 必须限制文件大小（防止内存溢出）；2) 校验文件类型（不能只靠扩展名）；3) 防重名（UUID 重命名）；4) 病毒扫描（重要场景）；5) 存储路径不能暴露到公网。
+> 文件上传后端注意事项：1) 必须限制文件大小（防止内存溢出）；2) 校验文件类型（不能只靠扩展名）；3) 防重名（UUID 重命名）；4) 病毒扫描（重要场景）；5) 存储路径不能暴露到公网。
 
 ---
 
@@ -672,7 +672,7 @@ data: {"code": "RATE_LIMIT", "message": "请求过频繁"}
 | 适用场景 | 通知推送、日志流、实时状态 |
 | 浏览器限制 | 同一域名最多 6 个 SSE 连接 |
 
-> 💡 SSE 适用于后端推送数据到前端的场景，比 WebSocket 更轻量，且基于 HTTP 协议，不会被防火墙拦截。缺点：单向传输，不支持客户端向服务器发送数据。
+> SSE 适用于后端推送数据到前端的场景，比 WebSocket 更轻量，且基于 HTTP 协议，不会被防火墙拦截。缺点：单向传输，不支持客户端向服务器发送数据。
 
 ---
 
@@ -728,7 +728,7 @@ ws.onclose = (event) => {
 | 日志流 | SSE | 单向、自动重连 |
 | 普通 API 请求 | HTTP | 请求-响应模式，不需要持久连接 |
 
-> ⚠️ WebSocket 在生产环境中需要注意：1) 连接数限制（每个 WebSocket 都占用服务端资源）；2) 负载均衡的会话保持（sticky session）；3) 心跳检测（检测死连接）；4) 断线重连机制。
+> WebSocket 在生产环境中需要注意：1) 连接数限制（每个 WebSocket 都占用服务端资源）；2) 负载均衡的会话保持（sticky session）；3) 心跳检测（检测死连接）；4) 断线重连机制。
 
 ---
 
@@ -747,7 +747,7 @@ ws.onclose = (event) => {
 | 浏览器兼容 | 现代浏览器 | 所有浏览器（含 IE） | 现代浏览器 | 现代浏览器 | 所有浏览器 |
 | 库体积 | 浏览器内置 | ~14KB min | 浏览器内置 | 浏览器内置 | N/A |
 
-> 🎯 **选型建议**：
+> **选型建议**：
 > - 90% 的 API 调用 → Axios（或 Fetch）
 > - 服务器推送通知 → SSE
 > - 即时通信/游戏 → WebSocket
@@ -789,10 +789,10 @@ public class CorsConfig implements WebMvcConfigurer {
 ### 11.2 Content-Type 不匹配
 
 ```
-❌ 前端发 JSON，后端期待 form 格式：
+✗ 前端发 JSON，后端期待 form 格式：
   POST /api/login 415 Unsupported Media Type
   
-❌ 前端发表单，后端期待 JSON：
+✗ 前端发表单，后端期待 JSON：
   POST /api/users 400 Bad Request（字段解析失败）
 ```
 
@@ -829,13 +829,13 @@ await axios.post('/api/transfer', { amount: 1000 }, {
 ### 11.4 GET 请求携带 Body
 
 ```javascript
-// ❌ 错误：GET 请求不能有 body
+// ✗ 错误：GET 请求不能有 body
 await fetch('/api/search', {
     method: 'GET',
     body: JSON.stringify({ keyword: 'test' })  // 浏览器会忽略 body
 });
 
-// ✅ 正确：GET 使用 URL 参数
+// ✓ 正确：GET 使用 URL 参数
 await fetch('/api/search?keyword=test');
 // 或 Axios
 await axios.get('/api/search', { params: { keyword: 'test' } });
@@ -863,7 +863,7 @@ await axios.get('/api/search', { params: { keyword: 'test' } });
 一个企业级 Axios 封装，包含完整的请求/响应拦截、错误处理、Token 刷新和日志记录：
 
 ```javascript
-// 📁 httpClient.js
+// httpClient.js
 import axios from 'axios';
 import { message } from 'antd';  // 假设使用 Ant Design
 
@@ -1045,7 +1045,7 @@ export default httpClient;
 ### 使用示例
 
 ```javascript
-// 📁 userService.js
+// userService.js
 import httpClient from './httpClient';
 
 export const userService = {
@@ -1072,7 +1072,7 @@ export const userService = {
     }
 };
 
-// 📁 App.js —— 实际调用
+// App.js —— 实际调用
 async function handleCreateUser() {
     try {
         const newUser = await userService.createUser({
@@ -1089,7 +1089,7 @@ async function handleCreateUser() {
 }
 ```
 
-> 🎯 **前后端交互的核心原则**：
+> **前后端交互的核心原则**：
 > 1. **统一封装**：像后端封装 RestTemplate/Feign 一样，前端统一封装 HTTP 客户端
 > 2. **Token 管理**：拦截器自动处理 token 注入和刷新，业务代码无需关心
 > 3. **错误收敛**：全局拦截器处理通用错误，业务代码只处理业务异常

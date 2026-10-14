@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [@Controller 与 @RestController](#1-controller-与-restcontroller)
 2. [@RequestMapping 家族：组合注解](#2-requestmapping-家族组合注解)
@@ -37,7 +37,7 @@ public class UserController {
 | `@RestController` | 控制器 + 消息转换 | 返回对象 → JSON/XML |
 | `@RestControllerAdvice` | 全局异常 + 响应增强（05 篇） | — |
 
-> 🎯 **要点**：@RestController 只做一件事——给类上所有方法加 @ResponseBody。**前后端分离场景一律 @RestController**；@Controller 只留给服务端渲染（Thymeleaf/JSP）。
+> **要点**：@RestController 只做一件事——给类上所有方法加 @ResponseBody。**前后端分离场景一律 @RestController**；@Controller 只留给服务端渲染（Thymeleaf/JSP）。
 
 ## 2. @RequestMapping 家族：组合注解
 
@@ -68,7 +68,7 @@ public class UserController {
 }
 ```
 
-> 💡 **注意**：类级 @RequestMapping 不限定方法（可写 method 限定），组合注解只能用于方法级。
+> **注意**：类级 @RequestMapping 不限定方法（可写 method 限定），组合注解只能用于方法级。
 
 ## 3. 五维匹配：路径、方法、参数、头、媒体类型
 
@@ -92,7 +92,7 @@ public class UserController {
 | produces | Accept 头是否含声明类型 | 406 Not Acceptable |
 | consumes | Content-Type 是否匹配 | 415 Unsupported Media Type |
 
-> 🎯 **要点**：这五维是"候选方法筛选器"——同时满足才命中。**406/415/405 是配置不匹配的信号，不是服务端错误**。
+> **要点**：这五维是"候选方法筛选器"——同时满足才命中。**406/415/405 是配置不匹配的信号，不是服务端错误**。
 
 ## 4. 路径变量与通配
 
@@ -116,7 +116,7 @@ public Order order(@PathVariable Long id, @PathVariable Long orderId) { ... }
 | `/api/{id:[0-9]+}` | `/api/1001` | 正则约束（不匹配 1001a） |
 | `/api/{*path}` | 剩余所有段 | 尾部捕获 |
 
-> ⚠️ **PathPattern 纪律**（与 Security 体系一致）：`**` 只能出现在开头或结尾、单段；尾斜杠不再匹配——`/api/users/` ≠ `/api/users`。
+> **PathPattern 纪律**（与 Security 体系一致）：`**` 只能出现在开头或结尾、单段；尾斜杠不再匹配——`/api/users/` ≠ `/api/users`。
 
 ## 5. produces / consumes：内容协商前置
 
@@ -140,7 +140,7 @@ public Report report() { ... }
 | `consumes` | Content-Type 校验；不匹配 → 415 |
 | 不声明 | 默认按可注册转换器协商（JSON 优先） |
 
-> 💡 **实战建议**：REST API 固定 JSON 时**显式声明 produces**——避免"请求 Accept: text/html 时框架尝试 HTML 渲染"的边界行为；也给接口文档（OpenAPI）提供准确语义。
+> **实战建议**：REST API 固定 JSON 时**显式声明 produces**——避免"请求 Accept: text/html 时框架尝试 HTML 渲染"的边界行为；也给接口文档（OpenAPI）提供准确语义。
 
 ## 6. 匹配规则优先级与冲突
 
@@ -163,7 +163,7 @@ GET /api/users/1001 命中两个方法时：
 | 变量与字面量撞车 | 字面量恒赢 | 避免同层变量与固定路径混用 |
 | 泛型端点重复 | `/api/{type}` 与 `/api/users` | 重构路径设计 |
 
-> ⚠️ **启动报错提示**：`Ambiguous mapping. Cannot map 'xxx' method ...`——排查两个映射的条件是否完全可区分（加 method/params/produces 维度）。
+> **启动报错提示**：`Ambiguous mapping. Cannot map 'xxx' method ...`——排查两个映射的条件是否完全可区分（加 method/params/produces 维度）。
 
 ## 7. 接口设计规范
 
@@ -198,7 +198,7 @@ public List<UserV1> listV1() { ... }
 public List<UserV2> listV2() { ... }
 ```
 
-> 🎯 **核心要点**：请求映射 = 五维匹配（路径/方法/参数/头/媒体类型）的声明式筛选。写接口的纪律：组合注解表达语义、资源化路径 + 方法语义、显式 produces（JSON）、变量用正则约束、避免路径冲突。**REST 接口的"长相"全由这一层决定**。
+> **核心要点**：请求映射 = 五维匹配（路径/方法/参数/头/媒体类型）的声明式筛选。写接口的纪律：组合注解表达语义、资源化路径 + 方法语义、显式 produces（JSON）、变量用正则约束、避免路径冲突。**REST 接口的"长相"全由这一层决定**。
 
 ---
 

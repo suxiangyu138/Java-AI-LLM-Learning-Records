@@ -2,7 +2,7 @@
 
 > "你项目用 Java 几？为什么？"——JDK 版本选型是每个项目的第一道技术决策
 
-## 📚 目录
+## 目录
 
 1. [JDK 版本历史全景](#1)
 2. [LTS 版本深度对比](#2)
@@ -88,7 +88,7 @@ JDK 25 ─── 2025 ── "最新 LTS": 稳定版 ZGC 分代, 稳定版 Strea
 | 并发革命 | JDK 21 | Virtual Threads 改变了 Java 的并发编程模型 |
 | 未来 LTS | JDK 25 | 分代 ZGC、Stream Gatherers 进入稳定 |
 
-> 💡 **版本发布节奏**：JDK 1.0-8 采用"大版本 + 小更新"模式，周期 2-3 年。从 JDK 9 开始采用 **每 6 个月一个特性版本**、**每 3 年一个 LTS 版本** 的时间驱动模式，确保新特性快速交付。
+> **版本发布节奏**：JDK 1.0-8 采用"大版本 + 小更新"模式，周期 2-3 年。从 JDK 9 开始采用 **每 6 个月一个特性版本**、**每 3 年一个 LTS 版本** 的时间驱动模式，确保新特性快速交付。
 
 ---
 
@@ -166,7 +166,7 @@ JDK 17 → 21     虚拟线程 (IO 密集型)   Virtual Threads 模型改变    
                 Memory API (预览)      Sequenced Collections
 ```
 
-> 🎯 **核心要点**：JDK 8→17 的升级带来约 **15-30% 的性能提升**（通过 GC 改进、JIT 优化），JDK 17→21 的升级虽然单体计算性能提升有限（约 5-10%），但 **Virtual Threads 改变了并发编程模型**，对于 IO 密集型服务可带来数倍的吞吐量提升和代码简化。
+> **核心要点**：JDK 8→17 的升级带来约 **15-30% 的性能提升**（通过 GC 改进、JIT 优化），JDK 17→21 的升级虽然单体计算性能提升有限（约 5-10%），但 **Virtual Threads 改变了并发编程模型**，对于 IO 密集型服务可带来数倍的吞吐量提升和代码简化。
 
 ---
 
@@ -228,7 +228,7 @@ JDK 17 → 21     虚拟线程 (IO 密集型)   Virtual Threads 模型改变    
 </properties>
 ```
 
-> ⚠️ **`maven.compiler.release` 比 `source` + `target` 更推荐设置**，因为它会限制编译器只使用目标版本中的 API，防止误用新版 API 导致运行时错误。
+> **`maven.compiler.release` 比 `source` + `target` 更推荐设置**，因为它会限制编译器只使用目标版本中的 API，防止误用新版 API 导致运行时错误。
 
 ### 3.3 模块化 (JPMS) 迁移要点
 
@@ -256,7 +256,7 @@ jdeps --module-path target/classes -s myapp.jar
 | 仅主模块加 module-info | 有清晰模块边界的项目 | 中高 |
 | 全模块化 | 新项目或已设计模块化的老项目 | 高 |
 
-> 💡 **Spring Boot 2.x/3.x 对 JDK 17+ 的兼容性已经非常成熟**，多数情况下只需升级 Spring Boot 版本和修改依赖即可完成迁移。
+> **Spring Boot 2.x/3.x 对 JDK 17+ 的兼容性已经非常成熟**，多数情况下只需升级 Spring Boot 版本和修改依赖即可完成迁移。
 
 ### 3.4 GC 迁移注意点
 
@@ -304,7 +304,7 @@ javax.annotation.*    → jakarta.annotation.*
 | Hibernate | 5.x | 6.x |
 | Jetty | 9.x | 11.x+ |
 
-> ⚠️ **Spring Boot 3.0+ 需要 JDK 17+ 且使用 Jakarta EE 9+**，Spring Boot 2.x 仍使用 javax.*。这是从 Spring Boot 2 升级到 3 的最大迁移成本。
+> **Spring Boot 3.0+ 需要 JDK 17+ 且使用 Jakarta EE 9+**，Spring Boot 2.x 仍使用 javax.*。这是从 Spring Boot 2 升级到 3 的最大迁移成本。
 
 ---
 
@@ -356,7 +356,7 @@ try (var executor = Executors.newVirtualThreadPerTaskExecutor()) {
 | 高并发且任务短暂 | 长时间占用 CPU 的任务 |
 | Microservices 每个请求需要独立上下文 | Pinned 场景 (synchronized 块内执行 IO) |
 
-> 💡 **Virtual Threads 使用建议**：
+> **Virtual Threads 使用建议**：
 > - 避免在虚拟线程中使用 `synchronized` (会导致 pinned)，使用 `ReentrantLock` 替代
 > - 不要池化虚拟线程——它们是轻量的，每次 new 即可
 > - `ThreadLocal` 依然可用但需注意数量，虚拟线程数量巨大可能导致内存问题
@@ -532,7 +532,7 @@ try (var scope = new StructuredTaskScope.ShutdownOnFailure()) {
 // 自动管理：scope 会在 try-with-resources 结束时确保所有子任务已完成
 ```
 
-> 🎯 **核心要点**：JDK 21+ 的新特性集中在 **三** 个方向：**并发革命** (Virtual Threads + Structured Concurrency + Scoped Values)、**模式匹配增强** (Record Patterns + Pattern Matching for switch + Sealed Class)、**数据不可变** (Records + Sequenced Collections)。
+> **核心要点**：JDK 21+ 的新特性集中在 **三** 个方向：**并发革命** (Virtual Threads + Structured Concurrency + Scoped Values)、**模式匹配增强** (Record Patterns + Pattern Matching for switch + Sealed Class)、**数据不可变** (Records + Sequenced Collections)。
 
 ---
 
@@ -598,17 +598,17 @@ try (var scope = new StructuredTaskScope.ShutdownOnFailure()) {
 
 | 评估维度 | JDK 8 | JDK 11 | JDK 17 | JDK 21 | JDK 25 |
 |---------|:-----:|:------:|:------:|:------:|:------:|
-| 稳定性 | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐ |
-| 新特性 | ⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ |
+| 稳定性 | ★★★★★ | ★★★★ | ★★★★★ | ★★★★ | ★★★ |
+| 新特性 | ★★ | ★★★ | ★★★★ | ★★★★★ | ★★★★★ |
 | 性能 (吞吐) | 基准 | +15% | +20% | +30% | +35% |
 | 社区活跃度 | 低 | 中 | 高 | 高 | 中 (初期) |
 | 迁移成本 | — | 中 (JAXB 移除) | 中低 | 低 (JDK 17→21) | 低 |
 | 学习成本 | 低 | 中 | 中 | 高 (VT 新模式) | 中 |
-| 虚拟线程 | ❌ | ❌ | ❌ | ✅ | ✅ |
-| ZGC 分代 | ❌ | ❌ | ❌ | 实验 | ✅ |
+| 虚拟线程 | ✗ | ✗ | ✗ | ✓ | ✓ |
+| ZGC 分代 | ✗ | ✗ | ✗ | 实验 | ✓ |
 | 依赖生态 | 最全 | 完善 | 完善 | 完善 | 较完善 |
 
-> 💡 **推荐结论**：
+> **推荐结论**：
 > - **2026 年新项目首选：JDK 21** (LTS 到 2031，Virtual Threads 稳定，生态完善)
 > - **激进的团队选：JDK 25** (最新 LTS，分代 ZGC 默认)
 > - **保守的项目：JDK 17** (最稳定的 LTS，2029 年 9 月前安全更新)
@@ -622,19 +622,19 @@ try (var scope = new StructuredTaskScope.ShutdownOnFailure()) {
 
 | 发行版 | 厂商 | 免费商业使用 | 支持周期 | 特色优势 |
 |--------|:----:|:-----------:|:--------:|---------|
-| **OpenJDK** | 开源社区 | ✅ 完全免费 | 6 个月 (每版本) | 参考实现，标准纯正 |
-| **Oracle JDK** | Oracle | ❌ 付费 (商业) | 最长 LTS 支持 | 最新修复、MC 认证、高级工具 |
-| **Oracle OpenJDK** | Oracle | ✅ 免费 | 与社区同步 | 官方构建版本 |
-| **Amazon Corretto** | AWS | ✅ 免费 | 长期 (至少 8 年) | 经过 AWS 大规模验证、容器优化 |
-| **Adoptium (Eclipse Temurin)** | Eclipse 基金会 | ✅ 免费 | 长期 (至少 4 年) | 社区主导，最广泛使用 |
-| **Azul Zulu** | Azul | ✅ 免费 | 长期 + 付费超长期 | Prime 版超长支持 (2030+) |
-| **Alibaba Dragonwell** | 阿里巴巴 | ✅ 免费 | 长期 (阿里内部验证) | 中文社区、中文文档、Wisp 协程 |
-| **Huawei Bisheng (毕昇)** | 华为 | ✅ 免费 | 长期 | ARM64 深度优化、Kunpeng 处理器 |
-| **GraalVM** | Oracle | ✅ 免费 | 社区版 | Native Image、多语言、高性能 |
-| **IBM Semeru** | IBM | ✅ 免费 | 长期 | OpenJ9 VM (低内存占用) |
-| **Liberica JDK** | BellSoft | ✅ 免费 | 长期 | 完整 JavaFX 支持、镜像优化 |
-| **SAP Machine** | SAP | ✅ 免费 | 长期 | SAP 应用优化 |
-| **Microsoft Build of OpenJDK** | Microsoft | ✅ 免费 | 长期 | Azure 集成优化 |
+| **OpenJDK** | 开源社区 | ✓ 完全免费 | 6 个月 (每版本) | 参考实现，标准纯正 |
+| **Oracle JDK** | Oracle | ✗ 付费 (商业) | 最长 LTS 支持 | 最新修复、MC 认证、高级工具 |
+| **Oracle OpenJDK** | Oracle | ✓ 免费 | 与社区同步 | 官方构建版本 |
+| **Amazon Corretto** | AWS | ✓ 免费 | 长期 (至少 8 年) | 经过 AWS 大规模验证、容器优化 |
+| **Adoptium (Eclipse Temurin)** | Eclipse 基金会 | ✓ 免费 | 长期 (至少 4 年) | 社区主导，最广泛使用 |
+| **Azul Zulu** | Azul | ✓ 免费 | 长期 + 付费超长期 | Prime 版超长支持 (2030+) |
+| **Alibaba Dragonwell** | 阿里巴巴 | ✓ 免费 | 长期 (阿里内部验证) | 中文社区、中文文档、Wisp 协程 |
+| **Huawei Bisheng (毕昇)** | 华为 | ✓ 免费 | 长期 | ARM64 深度优化、Kunpeng 处理器 |
+| **GraalVM** | Oracle | ✓ 免费 | 社区版 | Native Image、多语言、高性能 |
+| **IBM Semeru** | IBM | ✓ 免费 | 长期 | OpenJ9 VM (低内存占用) |
+| **Liberica JDK** | BellSoft | ✓ 免费 | 长期 | 完整 JavaFX 支持、镜像优化 |
+| **SAP Machine** | SAP | ✓ 免费 | 长期 | SAP 应用优化 |
+| **Microsoft Build of OpenJDK** | Microsoft | ✓ 免费 | 长期 | Azure 集成优化 |
 
 ### 6.2 核心发行版对比 (JDK 21)
 
@@ -677,7 +677,7 @@ try (var scope = new StructuredTaskScope.ShutdownOnFailure()) {
         └── 无特殊需求 → Temurin (社区首选)
 ```
 
-> ⚠️ **重要提醒**：无论选择哪个发行版，核心 JDK 代码都来自同一 OpenJDK 代码库。不同发行版的差异主要体现在：
+> **重要提醒**：无论选择哪个发行版，核心 JDK 代码都来自同一 OpenJDK 代码库。不同发行版的差异主要体现在：
 > 1. **更新/修复的交付速度**
 > 2. **额外工具和增强功能**
 > 3. **商业支持服务**
@@ -761,7 +761,7 @@ try (var scope = new StructuredTaskScope.ShutdownOnFailure()) {
 
 ---
 
-> 🎯 **核心要点**：JDK 版本选型是一个结合技术演进、团队能力、业务场景的**多维度决策**。面试中回答版本选择问题时，要展示出：
+> **核心要点**：JDK 版本选型是一个结合技术演进、团队能力、业务场景的**多维度决策**。面试中回答版本选择问题时，要展示出：
 > 1. **对 JDK 演进脉络的理解** — 知道每个 LTS 的核心特性和定位
 > 2. **对迁移实战的把握** — 了解迁移的痛点和难点，而非纸上谈兵
 > 3. **对业务场景的思考** — 版本选择应服务于业务需求，而非盲目追新

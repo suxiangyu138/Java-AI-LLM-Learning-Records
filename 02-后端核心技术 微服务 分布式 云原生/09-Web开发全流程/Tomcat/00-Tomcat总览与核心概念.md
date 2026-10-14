@@ -2,7 +2,7 @@
 
 > 定位：Tomcat 知识体系入口——Servlet 容器定位、版本现状（2026-07）、体系导图、核心术语表、模块导航
 
-## 📚 目录
+## 目录
 
 1. [Tomcat 是什么](#1-tomcat-是什么)
 2. [版本现状与选型（2026-07 验证）](#2-版本现状与选型2026-07-验证)
@@ -24,7 +24,7 @@ Apache Tomcat = Java Servlet 容器（Web 服务器）
   Spring Boot 默认内嵌容器之一
   与 Nginx（静态/反向代理）分工配合
 
-⚠️ 面试必答：
+面试必答：
 "Tomcat 是 Servlet 容器——实现 Servlet/JSP
  规范、管理 Servlet 生命周期、处理 HTTP 请求。
  Java Web 应用的标准运行环境。"
@@ -40,7 +40,7 @@ Apache Tomcat = Java Servlet 容器（Web 服务器）
 |------|------|:---:|------|
 | Tomcat 9 | Servlet 4.0（javax.*） | Java 8+ | 维护中（老项目） |
 | Tomcat 10.1 | Servlet 6.0（jakarta.*） | Java 11+ | 主流 |
-| **Tomcat 11.0** | **Servlet 6.1（jakarta.*）** | **Java 17+** | ✅ 最新（11.0.24，2026-07-08） |
+| **Tomcat 11.0** | **Servlet 6.1（jakarta.*）** | **Java 17+** | ✓ 最新（11.0.24，2026-07-08） |
 
 ### 2.2 Tomcat 11 亮点
 
@@ -54,12 +54,12 @@ Apache Tomcat = Java Servlet 容器（Web 服务器）
 ### 2.3 迁移注意
 
 ```
-⚠️ Tomcat 10 起 javax.* → jakarta.*（重大变更）
+Tomcat 10 起 javax.* → jakarta.*（重大变更）
   Tomcat 9 → 10/11 需改包名（官方迁移工具）
-⚠️ Spring Boot 内嵌 Tomcat 跟随 Boot 版本
+Spring Boot 内嵌 Tomcat 跟随 Boot 版本
   Boot 3.x = Tomcat 10.1；Boot 4.x（2025 底）= Tomcat 11
 
-⚠️ 面试必答：
+面试必答：
 "Tomcat 10 起 API 从 javax 迁到 jakarta——
  升级是'改名 + 重编译'；生产选型：
  新项目 Tomcat 11 + Java 21 虚拟线程。"
@@ -125,7 +125,7 @@ Apache Tomcat = Java Servlet 容器（Web 服务器）
 
 ---
 
-> 🎯 **本体系学习建议**：Tomcat 面试主线——**请求处理流程**（Connector→Container 九步）、**并发模型**（NIO/线程池/虚拟线程）、**配置**（server.xml 三个连接器）、**安全**（SSL/会话）。先懂架构（01）再学配置（02），并发（03）是进阶分水岭。
+> **本体系学习建议**：Tomcat 面试主线——**请求处理流程**（Connector→Container 九步）、**并发模型**（NIO/线程池/虚拟线程）、**配置**（server.xml 三个连接器）、**安全**（SSL/会话）。先懂架构（01）再学配置（02），并发（03）是进阶分水岭。
 
 ---
 

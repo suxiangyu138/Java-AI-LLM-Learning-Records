@@ -1,6 +1,6 @@
 # 03 - Chroma 入门与实践
 
-> 🎯 Chroma = AI 原生的嵌入式向量数据库 — 5 行代码搭建 RAG 原型，Python 进程内运行，零配置部署
+> Chroma = AI 原生的嵌入式向量数据库 — 5 行代码搭建 RAG 原型，Python 进程内运行，零配置部署
 
 ---
 
@@ -22,14 +22,14 @@ Chroma = 开源的 AI 原生向量数据库
 定位：嵌入式向量库 → 类似 SQLite 之于关系数据库
 
 优势：
-  ✅ pip install 即用，零配置
-  ✅ Python 原生，无需独立服务
-  ✅ 内置 Embedding 函数
-  ✅ LangChain/LlamaIndex 官方支持
+  ✓ pip install 即用，零配置
+  ✓ Python 原生，无需独立服务
+  ✓ 内置 Embedding 函数
+  ✓ LangChain/LlamaIndex 官方支持
 
 劣势：
-  ⚠️ 单机，不支持分布式
-  ⚠️ 百万级向量性能下降
+  单机，不支持分布式
+  百万级向量性能下降
 ```
 
 ---
@@ -184,7 +184,7 @@ Chroma 不适合：生产级多用户/高并发/大规模 → 生产请用 Milvu
 ④ 注意：Embedding 维度与索引参数保持一致（重入库成本高）
 ```
 
-> 🎯 **核心要点**：Chroma 的价值 = "**原型验证器**"（快、零配置）——2026 生产选型时它是"起点"不是"终点"；**"原型 Chroma、生产换库"是标准路径**（换库成本主要在重入库，提前设计好 Schema 可降）。
+> **核心要点**：Chroma 的价值 = "**原型验证器**"（快、零配置）——2026 生产选型时它是"起点"不是"终点"；**"原型 Chroma、生产换库"是标准路径**（换库成本主要在重入库，提前设计好 Schema 可降）。
 
 ---
 
@@ -228,7 +228,7 @@ docs = vector_store.similarity_search(question, k=5)      # 检索
 vector_store.add_documents(docs)                           # 入库
 ```
 
-> 💡 开发期三件套：`PersistentClient`（数据不丢）+ `upsert`（幂等更新）+ `where` 过滤（元数据检索）——覆盖 90% 原型需求。
+> 开发期三件套：`PersistentClient`（数据不丢）+ `upsert`（幂等更新）+ `where` 过滤（元数据检索）——覆盖 90% 原型需求。
 
 ---
 

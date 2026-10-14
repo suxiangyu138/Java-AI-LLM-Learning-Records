@@ -1,7 +1,7 @@
 # 01-Java 生态与 JVM 官方文档
 > JDK API → JLS/JVMS/JEP → Spring Framework → Spring Boot → Spring AI → Spring Cloud 子集 → JUnit：本方向的精读章节清单、优先级与避坑
 
-## 📚 目录
+## 目录
 1. [文档地图与优先级](#1-文档地图与优先级)
 2. [JDK 官方文档（API + 工具 + 规范 + JEP）](#2-jdk-官方文档api--工具--规范--jep)
 3. [Spring Framework Reference](#3-spring-framework-reference)
@@ -16,18 +16,18 @@
 
 | 文档 | 地址 | 优先级 | 版本窗口（2026-08） |
 |------|------|:---:|------|
-| JDK API 文档 | https://docs.oracle.com/en/java/javase/ | 🔴 | 17/21/**25（LTS）** |
-| JLS 语言规范 | https://docs.oracle.com/javase/specs/jls/se25/html/ | 🟡 | Java 25 |
-| JVMS 虚拟机规范 | https://docs.oracle.com/javase/specs/jvms/se25/html/ | 🟡 | Java 25 |
-| JEP 索引 | https://openjdk.org/jeps/ | 🟢 | 滚动 |
-| JDK 工具参考 | https://docs.oracle.com/en/java/javase/25/docs/specs/man/ | 🟢 | 25 |
-| Spring Framework | https://docs.spring.io/spring-framework/reference/ | 🔴 | **7.x**（Boot 4）/ 6.2（Boot 3.5） |
-| Spring Boot | https://docs.spring.io/spring-boot/reference/ | 🔴 | **4.x** |
-| Spring AI | https://docs.spring.io/spring-ai/reference/ | 🟡 | 2.0.x ↔ Boot 4.x；1.1.x ↔ Boot 3.5 |
-| Spring Cloud（子集） | https://docs.spring.io/spring-cloud/ | 🟡 | 2025.1 Oakwood |
-| JUnit | https://junit.org/junit5/docs/current/user-guide/ | 🟢 | 6.x |
+| JDK API 文档 | https://docs.oracle.com/en/java/javase/ | | 17/21/**25（LTS）** |
+| JLS 语言规范 | https://docs.oracle.com/javase/specs/jls/se25/html/ | | Java 25 |
+| JVMS 虚拟机规范 | https://docs.oracle.com/javase/specs/jvms/se25/html/ | | Java 25 |
+| JEP 索引 | https://openjdk.org/jeps/ | | 滚动 |
+| JDK 工具参考 | https://docs.oracle.com/en/java/javase/25/docs/specs/man/ | | 25 |
+| Spring Framework | https://docs.spring.io/spring-framework/reference/ | | **7.x**（Boot 4）/ 6.2（Boot 3.5） |
+| Spring Boot | https://docs.spring.io/spring-boot/reference/ | | **4.x** |
+| Spring AI | https://docs.spring.io/spring-ai/reference/ | | 2.0.x ↔ Boot 4.x；1.1.x ↔ Boot 3.5 |
+| Spring Cloud（子集） | https://docs.spring.io/spring-cloud/ | | 2025.1 Oakwood |
+| JUnit | https://junit.org/junit5/docs/current/user-guide/ | | 6.x |
 
-> 💡 **版本纪律**：页脚版本决定一切。Boot 3.x 网文与 Boot 4 行为差异集中在配置属性、`spring-boot-starter-*` 默认值与 API 调整；看文档务必先核对页脚版本号。
+> **版本纪律**：页脚版本决定一切。Boot 3.x 网文与 Boot 4 行为差异集中在配置属性、`spring-boot-starter-*` 默认值与 API 调整；看文档务必先核对页脚版本号。
 
 ## 2. JDK 官方文档（API + 工具 + 规范 + JEP）
 
@@ -43,7 +43,7 @@
 | java.time | `LocalDateTime`/`Instant` 边界语义 | 时间 API 易错点 |
 | 异常体系 | `Throwable` 层级与受检/非受检 | 面试必问基础 |
 
-> 🎯 **核心要点**：JDK API 的正确读法 = **读类注释与关键方法契约**（`@throws`、线程安全声明、默认值），"类注释讲设计意图，方法注释讲调用约束"，比任何博客都准。
+> **核心要点**：JDK API 的正确读法 = **读类注释与关键方法契约**（`@throws`、线程安全声明、默认值），"类注释讲设计意图，方法注释讲调用约束"，比任何博客都准。
 
 ### 2.2 规范类文档（JLS / JVMS）
 
@@ -52,7 +52,7 @@
 | JLS | 4 类型与值、5 转换、8 类、9 接口、14 语句、15 表达式（含三元/switch）、17 线程语义、6.5 解析（泛型擦除） | 回答"语言层为什么" |
 | JVMS | 2 运行时数据区与栈帧、3 编译为字节码（javac 示例）、5 加载/链接/初始化、6 指令集（查表用） | 回答"虚拟机层怎么实现" |
 
-> 💡 JLS/JVMS 是**规范不是教程**，读法：先被面试题击中（如"类加载过程"），再翻对应章节找官方定义，而不是从头啃。GC 章节（JVMS 2.5.2 堆 + 各收集器行为）配合 JDK 工具参考的 jcmd/jstat 一起学。
+> JLS/JVMS 是**规范不是教程**，读法：先被面试题击中（如"类加载过程"），再翻对应章节找官方定义，而不是从头啃。GC 章节（JVMS 2.5.2 堆 + 各收集器行为）配合 JDK 工具参考的 jcmd/jstat 一起学。
 
 ### 2.3 JEP 与工具参考
 
@@ -61,7 +61,7 @@
 | JEP 索引 | 虚拟线程（425）、结构化并发（525）、ScopedValue（506）、值类型 Valhalla（401）、向量 API、ZGC 演进 |
 | JDK 工具参考 | `java`（启动与调优选项）、`jcmd`、`jstat`、`jmap`、`jstack`、`jfr`、`jshell`、`jdeps` |
 
-> ⚠️ 校招阶段 JEP 挑 3~5 个热点读原文摘要即可（虚拟线程、Loom、ScopedValue 是 2025-2026 面试新宠），不必全读。
+> 校招阶段 JEP 挑 3~5 个热点读原文摘要即可（虚拟线程、Loom、ScopedValue 是 2025-2026 面试新宠），不必全读。
 
 ## 3. Spring Framework Reference
 
@@ -75,7 +75,7 @@
 | 事件 | 事件发布/监听、`@TransactionalEventListener` | 事务后事件 |
 | 基础设施 | Resource 抽象、类型转换、校验（JSR-303）、SpEL | 资源注入、参数绑定 |
 
-> ⚠️ **版本提示**：Framework 7.x 是 Boot 4 基线；若项目仍是 Boot 3.5（Framework 6.2），绝大多数章节通用，但注解默认值、`@Lazy` 行为、AOT 章节需对照 6.2 版本文档。
+> **版本提示**：Framework 7.x 是 Boot 4 基线；若项目仍是 Boot 3.5（Framework 6.2），绝大多数章节通用，但注解默认值、`@Lazy` 行为、AOT 章节需对照 6.2 版本文档。
 
 ### 3.2 读法建议
 
@@ -105,7 +105,7 @@
 | Jackson 3 升级 | `spring-boot-starter-json` 依赖体系变化 |
 | 配置属性调整 | 部分属性改名/默认值变化（以官方 migration guide 为准） |
 
-> 💡 面试前自查：能讲清"一个 `spring-boot-starter-web` 依赖进来后，容器里多了哪些自动配置 Bean、为什么"——这是 Boot 章节学没学透的试金石。
+> 面试前自查：能讲清"一个 `spring-boot-starter-web` 依赖进来后，容器里多了哪些自动配置 Bean、为什么"——这是 Boot 章节学没学透的试金石。
 
 ## 5. Spring AI Reference
 
@@ -118,7 +118,7 @@
 | RAG 与 Vector Store | 文档 ETL 框架、向量库接入（Milvus/PGVector/Redis 等）、检索与重排 | RAG 应用 |
 | Observability 与 Evaluation | 指标、追踪、模型评估 | 生产化 |
 
-> ⚠️ **版本对齐**：Spring AI 2.0.x 只支持 Boot 4.0.x/4.1.x；Boot 3.5 项目必须用 1.1.x。先看 Getting Started 页脚确认版本，再选 starter。
+> **版本对齐**：Spring AI 2.0.x 只支持 Boot 4.0.x/4.1.x；Boot 3.5 项目必须用 1.1.x。先看 Getting Started 页脚确认版本，再选 starter。
 
 ## 6. Spring Cloud 必啃子集
 
@@ -131,7 +131,7 @@
 | Gateway | 路由四要素、过滤器链、限流 | 概念级 |
 | Spring Cloud Stream | 函数式模型、Binder 抽象、重试/DLQ | 概念级（消息链路） |
 
-> 💡 学习顺序：Nacos（原理最重要）→ OpenFeign（最常用）→ Gateway/Stream（概念与选型）。详细内容见本仓库"Spring Cloud 微服务全家桶"系列文档。
+> 学习顺序：Nacos（原理最重要）→ OpenFeign（最常用）→ Gateway/Stream（概念与选型）。详细内容见本仓库"Spring Cloud 微服务全家桶"系列文档。
 
 ## 7. JUnit 用户指南
 

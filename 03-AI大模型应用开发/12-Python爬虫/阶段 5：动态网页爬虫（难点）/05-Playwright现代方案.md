@@ -1,7 +1,7 @@
 # Playwright 现代方案
 > 2026 新项目首选：安装、自动等待、locator、route 拦截、context 隔离——"浏览器自动化的现代标准"
 
-## 📚 目录
+## 目录
 1. [为什么 2026 选 Playwright](#1-为什么-2026-选-playwright)
 2. [安装与启动](#2-安装与启动)
 3. [自动等待：告别 sleep](#3-自动等待告别-sleep)
@@ -23,7 +23,7 @@
 | 调试 | **Trace Viewer/录屏** | 弱 |
 | 生态趋势 | AI Agent 框架默认 | 存量维护 |
 
-> 🎯 2026 结论（检索核实）：**"新爬虫项目渲染方案默认 Playwright"**——自动等待消灭 90% 时序 bug、route() 让"渲染 + 抓接口"合一、context 隔离省资源。Selenium 用于存量代码维护。
+> 2026 结论（检索核实）：**"新爬虫项目渲染方案默认 Playwright"**——自动等待消灭 90% 时序 bug、route() 让"渲染 + 抓接口"合一、context 隔离省资源。Selenium 用于存量代码维护。
 
 ## 2. 安装与启动
 
@@ -62,7 +62,7 @@ print(html[:500])
 | `Page` | 一个标签页（操作主体） |
 | `sync_playwright` | 同步 API（爬虫用）；async 给高并发 |
 
-> 💡 资源管理：**`browser.close()` 必须调用**（与 Selenium 的 quit 同理）；`with` 块/上下文是规范写法（§7 模板）。
+> 资源管理：**`browser.close()` 必须调用**（与 Selenium 的 quit 同理）；`with` 块/上下文是规范写法（§7 模板）。
 
 ## 3. 自动等待：告别 sleep
 
@@ -83,7 +83,7 @@ with sync_playwright() as p:
     page.wait_for_selector("ul.news-list li", timeout=15000)   # 等元素出现
     page.wait_for_load_state("networkidle")     # 等网络空闲（谨慎用）
 
-    # ⚠️ 不再需要：time.sleep / WebDriverWait
+    # 不再需要：time.sleep / WebDriverWait
     # Playwright 所有操作内建"等可操作"（actionability）
 
     html = page.content()
@@ -97,7 +97,7 @@ with sync_playwright() as p:
 | `wait_for_load_state` | 等加载状态（networkidle 慎用——SPA 可能永不 idle） |
 | 超时 | 默认 30s，可按需设置 |
 
-> 🎯 与 Selenium 的对比金句：**"Selenium 要你'等'，Playwright 替你'等'"**——`click`/`fill`/`wait_for_selector` 全部自动等待，消灭了 `WebDriverWait` 与 `time.sleep` 的样板代码。
+> 与 Selenium 的对比金句：**"Selenium 要你'等'，Playwright 替你'等'"**——`click`/`fill`/`wait_for_selector` 全部自动等待，消灭了 `WebDriverWait` 与 `time.sleep` 的样板代码。
 
 ## 4. locator：现代定位
 
@@ -137,7 +137,7 @@ with sync_playwright() as p:
 | `all_text_contents` | 批量取文本（爬虫高频） |
 | `evaluate_all` | **JS 表达式提取**（属性/复杂提取） |
 
-> 🎯 locator 哲学：**"locator 是'可重查'的定位器"**——不像 Selenium 的 find_element 返回"快照"，Playwright locator 每次操作自动重新查找（配合自动等待，元素动态变化也不怕）。
+> locator 哲学：**"locator 是'可重查'的定位器"**——不像 Selenium 的 find_element 返回"快照"，Playwright locator 每次操作自动重新查找（配合自动等待，元素动态变化也不怕）。
 
 ## 5. route()：请求拦截（拿接口数据）
 
@@ -180,7 +180,7 @@ with sync_playwright() as p:
 | `page.route()` | 拦截/修改请求（mock/加速） |
 | 价值 | **渲染时顺手抓接口 = 直取与渲染合一** |
 
-> 🎯 杀手级场景：**"接口有签名拿不到？让浏览器帮你请求，你监听响应"**——Playwright 渲染页面时接口自动带签名请求，`page.on("response")` 把 JSON 截下来——**绕开签名逆向**（本阶段可用的最优兜底，比解析渲染 HTML 更结构化）。
+> 杀手级场景：**"接口有签名拿不到？让浏览器帮你请求，你监听响应"**——Playwright 渲染页面时接口自动带签名请求，`page.on("response")` 把 JSON 截下来——**绕开签名逆向**（本阶段可用的最优兜底，比解析渲染 HTML 更结构化）。
 
 ## 6. BrowserContext：会话隔离
 
@@ -219,7 +219,7 @@ with sync_playwright() as p:
 | 指纹分散 | 每 context 不同 UA/时区 |
 | 资源省 | 一个浏览器进程跑几十个 context（vs Selenium 每实例一进程） |
 
-> 🎯 与阶段 4 的衔接：**"Context = 会话级别的隔离容器"**——之前学的"会话一致性"（UA/Cookie/IP 对应）在 Playwright 里用 Context 一行配置实现，比 requests 的 Session 更彻底。
+> 与阶段 4 的衔接：**"Context = 会话级别的隔离容器"**——之前学的"会话一致性"（UA/Cookie/IP 对应）在 Playwright 里用 Context 一行配置实现，比 requests 的 Session 更彻底。
 
 ## 7. Playwright 爬虫模板
 
@@ -284,7 +284,7 @@ with PlaywrightSpider(headless=True) as spider:
     print(len(soup.select("ul.news-list li")), "条")
 ```
 
-> 🎯 模板设计：**"一次打开页面 = HTML + 接口双收获"**——`fetch_rendered` 同时返回渲染 HTML 与捕获的接口 JSON；接口数据优先（结构化）、HTML 兜底（无接口时）。这是 2026 动态页爬虫的"标准答案"。
+> 模板设计：**"一次打开页面 = HTML + 接口双收获"**——`fetch_rendered` 同时返回渲染 HTML 与捕获的接口 JSON；接口数据优先（结构化）、HTML 兜底（无接口时）。这是 2026 动态页爬虫的"标准答案"。
 
 ---
 

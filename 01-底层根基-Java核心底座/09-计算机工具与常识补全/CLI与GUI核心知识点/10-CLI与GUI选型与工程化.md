@@ -1,6 +1,6 @@
 # 10 - CLI 与 GUI 选型与工程化
 
-> 🎯 什么时候用 CLI、什么时候用 GUI？如何打包分发、如何自动化测试？后端工程师需要掌握工具型应用的工程化
+> 什么时候用 CLI、什么时候用 GUI？如何打包分发、如何自动化测试？后端工程师需要掌握工具型应用的工程化
 
 ---
 
@@ -55,7 +55,7 @@ jlink --add-modules java.base,java.desktop --output runtime
 |----------|------|:---:|:---:|
 | Fat JAR | `.jar` | 30-100MB | 慢（JVM 启动） |
 | jlink + jpackage | `.exe/.dmg/.deb` | 50-150MB | 中 |
-| GraalVM Native | 二进制 | 10-30MB | ⭐ 极快（5ms） |
+| GraalVM Native | 二进制 | 10-30MB | ★ 极快（5ms） |
 
 ---
 
@@ -107,9 +107,9 @@ void testClickButton() {
 |------|-----|-----|
 | 路径分隔符 | `File.separator` / `Paths.get()` | 同 CLI |
 | 换行符 | `System.lineSeparator()` | 同 |
-| 外观 | — | ⚠️ LookAndFeel 差异大 |
-| 字体 | — | ⚠️ 跨平台字体不一致 |
-| DPI 缩放 | — | ⚠️ Windows 高 DPI 需适配 |
+| 外观 | — | LookAndFeel 差异大 |
+| 字体 | — | 跨平台字体不一致 |
+| DPI 缩放 | — | Windows 高 DPI 需适配 |
 | 打包 | JAR 跨平台 | 每个平台单独打包 |
 
 ```java
@@ -119,4 +119,4 @@ if (SystemUtils.IS_OS_WINDOWS) {
 }
 ```
 
-> 🎯 **工程化三件套**：CLI 用 Native Image 毫秒启动、GUI 用 jpackage 原生安装包、Swing 测试用 AssertJ Swing。工具型应用选 CLI 优先，面向普通用户选 GUI。
+> **工程化三件套**：CLI 用 Native Image 毫秒启动、GUI 用 jpackage 原生安装包、Swing 测试用 AssertJ Swing。工具型应用选 CLI 优先，面向普通用户选 GUI。

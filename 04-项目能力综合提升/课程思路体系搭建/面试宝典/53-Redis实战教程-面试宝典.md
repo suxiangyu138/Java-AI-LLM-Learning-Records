@@ -24,7 +24,7 @@
 | Lettuce | 基于 Netty，异步/响应式，线程安全，支持集群、哨兵 | 高性能、Spring Boot 2.x 默认 |
 | Redisson | 封装了大量分布式数据结构（锁、队列、CountDownLatch） | 分布式场景、分布式锁 |
 
-> 💡 Spring Boot 2.x 默认使用 Lettuce，但 Lettuce 在某些场景下存在连接泄漏 bug，如遇问题可切换为 Jedis。
+> Spring Boot 2.x 默认使用 Lettuce，但 Lettuce 在某些场景下存在连接泄漏 bug，如遇问题可切换为 Jedis。
 
 ### 2. RedisTemplate 的序列化问题？
 > Spring Data Redis 使用 RedisTemplate 时需注意序列化配置。
@@ -63,7 +63,7 @@ public class RedisConfig {
 }
 ```
 
-> 💡 Hash 的 key 和 value 的序列化器需要分别设置，否则 Hash 操作可能出现序列化不一致。
+> Hash 的 key 和 value 的序列化器需要分别设置，否则 Hash 操作可能出现序列化不一致。
 
 ### 3. 什么是管道（Pipeline）技术？
 > Pipeline 将多条命令打包一次性发送，减少网络往返时间（RTT）。
@@ -92,7 +92,7 @@ List<Object> results = redisTemplate.executePipelined((RedisCallback<Object>) co
 - **限制**：Pipeline 不保证原子性（Redis 逐条执行），且返回结果需要全部缓存再解析
 - **集群下 Pipeline**：需要计算各 key 所在槽位，按节点分组发送
 
-> 🎯 Pipeline 与原生批量命令（MSET/MGET）的区别：MSET 是原子操作，但单个命令长度有限制；Pipeline 可以处理大量命令，但不保证原子性。
+> Pipeline 与原生批量命令（MSET/MGET）的区别：MSET 是原子操作，但单个命令长度有限制；Pipeline 可以处理大量命令，但不保证原子性。
 
 ### 4. 什么是 Redisson？它的主要功能？
 > Redisson 是 Redis 官方推荐的 Java 客户端，封装了大量分布式数据结构。
@@ -187,7 +187,7 @@ public long generateId(String keyPrefix) {
 | Redis INCR | 实现简单、严格递增 | Redis 单点问题（可集群缓解） |
 | 数据库号段 | 批量获取、无中心化 | 实现略复杂 |
 
-> 💡 美团 Leaf、百度 UidGenerator 都是号段模式或雪花算法的变体。
+> 美团 Leaf、百度 UidGenerator 都是号段模式或雪花算法的变体。
 
 ### 7. 什么是多级缓存？为什么需要多级缓存？
 > 多级缓存将不同层次的缓存组合，兼顾响应速度和缓存命中率。
@@ -207,7 +207,7 @@ public long generateId(String keyPrefix) {
 | Caffeine 本地缓存 | 0.1ms | 小 | 中 |
 | 数据库 | 10-50ms | 极大 | - |
 
-> 🎯 多级缓存的核心思想：将热点数据尽量缓存在离用户最近的层级，最热的数据在本地内存中响应，减少远端调用。
+> 多级缓存的核心思想：将热点数据尽量缓存在离用户最近的层级，最热的数据在本地内存中响应，减少远端调用。
 
 ### 8. Canal 是什么？如何实现缓存同步？
 > Canal 是阿里巴巴开源的 MySQL binlog 增量订阅和消费组件。
@@ -240,7 +240,7 @@ public void handleBinlog(String message) {
 }
 ```
 
-> 💡 Canal 方案实现了"数据库 -> 缓存"的最终一致性，业务代码无需关心缓存更新逻辑。
+> Canal 方案实现了"数据库 -> 缓存"的最终一致性，业务代码无需关心缓存更新逻辑。
 
 ### 9. Redis 的 Stream 数据结构详解？
 > Redis 5.0 引入的 Stream 是 Redis 原生的消息队列实现。
@@ -332,7 +332,7 @@ public Map<String, Object> batchGet(List<String> keys) {
 | LT（水平触发） | 只要数据可读，每次 epoll_wait 都返回 | 不易丢失事件，实现简单 |
 | ET（边缘触发） | 数据从无到有时才通知，需要一次读完 | 效率高，减少系统调用次数 |
 
-> 💡 Redis 使用 epoll 的 LT 模式。虽然 ET 更高效，但需要应用程序配合非阻塞 IO 和循环读取，复杂度高。
+> Redis 使用 epoll 的 LT 模式。虽然 ET 更高效，但需要应用程序配合非阻塞 IO 和循环读取，复杂度高。
 
 **Redis 6.0 多线程网络模型**：
 ```text
@@ -398,7 +398,7 @@ struct dict {
 6. 删除/更新/查找在 ht[0] 和 ht[1] 中依次操作
 7. rehashidx 到底后置 -1，释放 ht[0]，ht[1] 成为新 ht[0]
 
-> 🎯 面试高频追问：渐进式 rehash 在持久化 BGSAVE 期间怎么办？BGSAVE 时提高扩容阈值（负载因子 > 5），减少 COW 内存复制。
+> 面试高频追问：渐进式 rehash 在持久化 BGSAVE 期间怎么办？BGSAVE 时提高扩容阈值（负载因子 > 5），减少 COW 内存复制。
 
 ### 4. ZipList 连锁更新问题及优化
 > ZipList 是 Redis 为了节省内存设计的连续内存数据结构。
@@ -424,7 +424,7 @@ struct dict {
 - ZipList 被 Listpack 替代（在 Stream 等结构中）
 - Listpack 每个 entry 自带长度，不依赖前一个 entry，从根本上解决了连锁更新
 
-> 💡 生产环境中真实触发连锁更新的概率非常低，因为需要连续多个 253-254 字节的 entry 才有可能触发。
+> 生产环境中真实触发连锁更新的概率非常低，因为需要连续多个 253-254 字节的 entry 才有可能触发。
 
 ### 5. Redis 内存碎片问题及解决方案
 > 内存碎片是 Redis 运行一段时间后常见的问题。
@@ -672,7 +672,7 @@ public void updateData(Long id, String value) {
 }
 ```
 
-> 🎯 **最佳实践**：先更新数据库，再删除缓存，配合 TTL 兜底。如果要追求强一致，使用 Canal 监听 binlog 同步。
+> **最佳实践**：先更新数据库，再删除缓存，配合 TTL 兜底。如果要追求强一致，使用 Canal 监听 binlog 同步。
 
 ### 6. 商户查询缓存的缓存更新策略选择
 > 不同业务场景选择不同的缓存策略。
@@ -744,7 +744,7 @@ end
 return 0
 ```
 
-> 💡 Lua 脚本的性能优势：减少网络开销，保证原子性，且 Lua 脚本在 Redis 中可被缓存复用（`SCRIPT LOAD` + `EVALSHA`）。
+> Lua 脚本的性能优势：减少网络开销，保证原子性，且 Lua 脚本在 Redis 中可被缓存复用（`SCRIPT LOAD` + `EVALSHA`）。
 
 ---
 
@@ -1039,7 +1039,7 @@ public class RedisHttpSession implements HttpSession {
 }
 ```
 
-> 💡 实际上 Spring Session 已经提供了基于 Redis 的 Session 管理方案，直接集成 `spring-session-data-redis` 即可。
+> 实际上 Spring Session 已经提供了基于 Redis 的 Session 管理方案，直接集成 `spring-session-data-redis` 即可。
 
 ### 3. 设计一个 Redis 集群管理监控平台
 > 企业级 Redis 集群治理的核心功能。

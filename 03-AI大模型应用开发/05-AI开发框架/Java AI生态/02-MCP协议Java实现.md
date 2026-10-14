@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [MCP 协议回顾](#1-mcp-协议回顾)
 2. [Java MCP 生态全景](#2-java-mcp-生态全景)
@@ -31,11 +31,11 @@ MCP（Model Context Protocol）
 │   └── Prompts —— Server → User（用户驱动的模板）
 │
 └── 重要区分：
-    ├── MCP Client = 消费 MCP 工具（LangChain4j ✅, Spring AI ✅）
-    └── MCP Server = 暴露 MCP 工具（LangChain4j ❌, Spring AI ✅）
+    ├── MCP Client = 消费 MCP 工具（LangChain4j ✓, Spring AI ✓）
+    └── MCP Server = 暴露 MCP 工具（LangChain4j ✗, Spring AI ✓）
 ```
 
-> ⚠️ **关键认知**：LangChain4j 团队明确表示不会实现 MCP Server 端。如果需要用 Java 构建 MCP Server，必须使用 Spring AI 或官方 Java MCP SDK。
+> **关键认知**：LangChain4j 团队明确表示不会实现 MCP Server 端。如果需要用 Java 构建 MCP Server，必须使用 Spring AI 或官方 Java MCP SDK。
 
 ---
 
@@ -228,7 +228,7 @@ public class StdioMcpServer {
             (exchange, request) -> {
                 String name = (String) request.arguments().get("name");
                 return new CallToolResult(
-                    List.of(new TextContent("你好，" + name + "！👋")),
+                    List.of(new TextContent("你好，" + name + "！")),
                     false  // isError = false
                 );
             }
@@ -252,7 +252,7 @@ public class StdioMcpServer {
             ),
             (exchange, request) -> {
                 String expr = (String) request.arguments().get("expression");
-                // ⚠️ 安全警告：生产环境必须校验表达式，禁止 eval！
+                // 安全警告：生产环境必须校验表达式，禁止 eval！
                 double result = evaluateSafely(expr);
                 return new CallToolResult(
                     List.of(new TextContent(expr + " = " + result)),
@@ -336,7 +336,7 @@ public class FileReaderTool {
     public String readFile(String path) {
         // 安全校验：路径必须在允许的目录内
         if (!path.startsWith("/workspace/")) {
-            return "❌ 禁止访问该路径";
+            return "✗ 禁止访问该路径";
         }
         return Files.readString(Path.of(path));
     }
@@ -351,7 +351,7 @@ public class FileReaderTool {
                 .map(Path::toString)
                 .collect(Collectors.joining("\n"));
         } catch (IOException e) {
-            return "❌ 读取目录失败: " + e.getMessage();
+            return "✗ 读取目录失败: " + e.getMessage();
         }
     }
 }
@@ -430,19 +430,19 @@ public class McpClientConfig {
 ```text
 ┌─────────────────────────────────────────────┐
 │ 原则 1：永远不信任模型的参数                    │
-│ ✅ 校验类型、范围、格式                        │
-│ ✅ 使用 Allowlist（白名单）而非 Denylist       │
-│ ❌ 不要假设模型传的参数是"干净"的               │
+│ ✓ 校验类型、范围、格式                        │
+│ ✓ 使用 Allowlist（白名单）而非 Denylist       │
+│ ✗ 不要假设模型传的参数是"干净"的               │
 ├─────────────────────────────────────────────┤
 │ 原则 2：敏感操作需要审批                        │
-│ ✅ 文件删除、数据库写入、网络请求等要确认         │
-│ ✅ 审批不能依赖模型判断                        │
-│ ❌ 不要给模型"自动审批"的权限                   │
+│ ✓ 文件删除、数据库写入、网络请求等要确认         │
+│ ✓ 审批不能依赖模型判断                        │
+│ ✗ 不要给模型"自动审批"的权限                   │
 ├─────────────────────────────────────────────┤
 │ 原则 3：沙箱隔离                              │
-│ ✅ 文件系统限制在指定目录                       │
-│ ✅ 命令执行使用白名单命令集                     │
-│ ❌ 不要让模型参数直接拼接到 shell/ SQL           │
+│ ✓ 文件系统限制在指定目录                       │
+│ ✓ 命令执行使用白名单命令集                     │
+│ ✗ 不要让模型参数直接拼接到 shell/ SQL           │
 └─────────────────────────────────────────────┘
 ```
 
@@ -456,7 +456,7 @@ public String executeQuery(
 
     // 1. 只允许 SELECT（拒绝 INSERT/UPDATE/DELETE/DROP）
     if (!sql.trim().toUpperCase().startsWith("SELECT")) {
-        return "❌ 只允许 SELECT 查询";
+        return "✗ 只允许 SELECT 查询";
     }
 
     // 2. 拒绝危险的 SQL 关键字
@@ -467,7 +467,7 @@ public String executeQuery(
     String upperSql = sql.toUpperCase();
     for (String keyword : dangerous) {
         if (upperSql.contains(keyword)) {
-            return "❌ 禁止的操作: " + keyword;
+            return "✗ 禁止的操作: " + keyword;
         }
     }
 
@@ -484,10 +484,10 @@ public String executeQuery(
 你要构建 MCP Server 还是 MCP Client？
 
 如果是 Server（暴露工具给 AI）：
-├── Spring Boot 项目 → Spring AI MCP Server Starter ✅
-├── Quarkus 项目 → Quarkus MCP Server ✅
-├── 框架无关/纯 Java → 官方 Java MCP SDK ✅
-└── 用 LangChain4j → ❌ 不支持 MCP Server！
+├── Spring Boot 项目 → Spring AI MCP Server Starter ✓
+├── Quarkus 项目 → Quarkus MCP Server ✓
+├── 框架无关/纯 Java → 官方 Java MCP SDK ✓
+└── 用 LangChain4j → ✗ 不支持 MCP Server！
 
 如果是 Client（消费外部 MCP 工具）：
 ├── Spring Boot + Spring AI → Spring AI MCP Client
@@ -498,7 +498,7 @@ public String executeQuery(
 
 ---
 
-> 🎯 **核心要点**：Java MCP 生态在 2026 年已完全成熟。Spring AI 是唯一同时提供 MCP Server 和 Client 完整方案的 Java 框架，LangChain4j 仅在 Client 端支持 MCP。构建 MCP Server 的首选是 Spring AI Starter，框架无关场景用官方 SDK。
+> **核心要点**：Java MCP 生态在 2026 年已完全成熟。Spring AI 是唯一同时提供 MCP Server 和 Client 完整方案的 Java 框架，LangChain4j 仅在 Client 端支持 MCP。构建 MCP Server 的首选是 Spring AI Starter，框架无关场景用官方 SDK。
 
 ---
 

@@ -1,6 +1,6 @@
 # 04 - Ollama 本地部署实战
 
-> 🎯 Ollama = 个人开发者的 LLM 部署神器 — 一行命令启动模型、OpenAI 兼容 API、支持 GPU/Metal 加速
+> Ollama = 个人开发者的 LLM 部署神器 — 一行命令启动模型、OpenAI 兼容 API、支持 GPU/Metal 加速
 
 ### 核心命令
 
@@ -68,8 +68,8 @@ HttpRequest request = HttpRequest.newBuilder()
 
 | 维度 | Ollama | vLLM |
 |------|:------:|:----:|
-| 连续批处理 | ❌ 无 | ✅（吞吐 2-4x） |
-| 张量并行（多卡） | ❌ 不支持 | ✅ |
+| 连续批处理 | ✗ 无 | ✓（吞吐 2-4x） |
+| 张量并行（多卡） | ✗ 不支持 | ✓ |
 | 并发能力 | 低（单用户级） | 高（生产级） |
 | 定位 | 本地验证 | **生产服务** |
 
@@ -101,7 +101,7 @@ curl http://localhost:11434/v1/chat/completions \
 # 流式输出（stream: true）—— SSE 格式
 ```
 
-> 🎯 **核心要点**：Ollama = "**本地模型管理器**"——`ollama pull/run/list/ps` 四命令 + OpenAI 兼容 API 是其全部心智模型；**生产边界明确（无批处理/无并行），验证后请迁移 vLLM**。
+> **核心要点**：Ollama = "**本地模型管理器**"——`ollama pull/run/list/ps` 四命令 + OpenAI 兼容 API 是其全部心智模型；**生产边界明确（无批处理/无并行），验证后请迁移 vLLM**。
 
 ---
 
@@ -149,7 +149,7 @@ POST http://localhost:11434/v1/chat/completions
 {"model": "qwen2.5:7b", "messages": [...]}
 ```
 
-> 🎯 **核心要点**：Ollama 的运维心智 = "**ollama ps 看显存 + KEEP_ALIVE 控驻留 + num_ctx 调上下文**"——本地部署三大件；Java 接入走 Spring AI 或 OpenAI 兼容 API。
+> **核心要点**：Ollama 的运维心智 = "**ollama ps 看显存 + KEEP_ALIVE 控驻留 + num_ctx 调上下文**"——本地部署三大件；Java 接入走 Spring AI 或 OpenAI 兼容 API。
 
 ---
 
@@ -179,7 +179,7 @@ ollama show qwen2.5:7b        # ③ 查看模型信息（参数/量化）
 curl localhost:11434/v1/chat/completions ...   # ④ API 调用
 ```
 
-> 🎯 **核心要点**：Ollama 实战 = "**pull/run/show 三命令 + 六大问题速查**"——**中文用 Qwen 系、上下文调 num_ctx、并发调 NUM_PARALLEL** 是本地部署三大实践。
+> **核心要点**：Ollama 实战 = "**pull/run/show 三命令 + 六大问题速查**"——**中文用 Qwen 系、上下文调 num_ctx、并发调 NUM_PARALLEL** 是本地部署三大实践。
 
 ---
 
@@ -207,4 +207,4 @@ curl localhost:11434/v1/chat/completions ...   # ④ API 调用
 结论：API 层兼容让迁移成本集中在"模型格式与量化"，应用代码基本不动。
 ```
 
-> 🎯 **核心要点**：Ollama → vLLM 迁移 = "**模型格式（GGUF→HF）+ 量化重评估**"两项工作——**OpenAI 兼容 API 让应用层零改动**，这是两条路共用同一生态的最大红利。
+> **核心要点**：Ollama → vLLM 迁移 = "**模型格式（GGUF→HF）+ 量化重评估**"两项工作——**OpenAI 兼容 API 让应用层零改动**，这是两条路共用同一生态的最大红利。

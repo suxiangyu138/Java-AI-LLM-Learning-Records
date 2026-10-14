@@ -2,7 +2,7 @@
 
 > 定位：Java 与 PG 的最佳实践——JDBC/HikariCP 配置、JPA 适配、JSONB 映射、pgvector 检索、Flyway 迁移、读写分离
 
-## 📚 目录
+## 目录
 
 1. [快速集成](#1-快速集成)
 2. [JSONB 映射实战](#2-jsonb-映射实战)
@@ -27,7 +27,7 @@
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/myapp
-    # ⚠️ PG 18 驱动 URL 常用参数：
+    # PG 18 驱动 URL 常用参数：
     #   ?sslmode=require（生产强制 TLS）
     #   &currentSchema=public（指定 schema）
     #   &stringtype=unspecified（兼容空字符串插入）
@@ -38,7 +38,7 @@ spring:
       minimum-idle: 5
       connection-timeout: 30000
       max-lifetime: 1800000
-      # ⚠️ PG 专用：不自动提交（以便使用事务）
+      # PG 专用：不自动提交（以便使用事务）
       auto-commit: false
   jpa:
     hibernate:
@@ -50,7 +50,7 @@ spring:
 ```
 
 ```
-⚠️ 注意事项：
+注意事项：
   ① 驱动类：org.postgresql.Driver（Spring Boot 自动检测）
   ② 默认端口 5432
   ③ Schema：默认 public（相当于 MySQL 的 database）
@@ -80,7 +80,7 @@ for (int i = 0; i < 100000; i++) {
 ```sql
 -- JSONB = 二进制 JSON（可索引、查询快）
 -- JSON = 纯文本存储（原样保留，查询慢）
--- ⚠️ 生产一律用 JSONB
+-- 生产一律用 JSONB
 ```
 
 ```java
@@ -94,7 +94,7 @@ public class Product {
 
     @Type(type = "jsonb")
     @Column(columnDefinition = "jsonb")
-    private Map<String, Object> attributes;    // ⚠️ Map 自动序列化为 JSONB
+    private Map<String, Object> attributes;    // Map 自动序列化为 JSONB
 }
 
 // ② 原生 SQL + JSONB 查询
@@ -114,7 +114,7 @@ private List<SpecItem> specs;          // List<对象> 存为 JSON 数组
 // ④ 插入 JSONB 的正确姿势（String → jsonb 转换）
 product.setAttributes(Map.of("color", "red", "size", "L"));
 // JPA 自动处理：String/Map → JSON 字符串 → jsonb 列
-// ⚠️ 不要手动拼 JSON 字符串插入，容易出引号/类型错误
+// 不要手动拼 JSON 字符串插入，容易出引号/类型错误
 
 // ⑤ 指定提取某个字段（避免整行查询）
 @Query(value = """
@@ -132,16 +132,16 @@ List<Object[]> countByColor(@Param("filter") String filter);
 -- 常用 JSONB 操作（Java 侧用 @Query native）
 attributes -> 'key'         -- 取 JSON 对象字段（返回 jsonb）
 attributes ->> 'key'        -- 取文本值（返回 text）
-attributes @> '{"color":"red"}'   -- 包含判断（⚠️ 走 GIN 索引）
+attributes @> '{"color":"red"}'   -- 包含判断（走 GIN 索引）
 attributes ? 'key'          -- 键存在
 attributes #> '{a,b}'       -- 路径取值（返回 jsonb）
 attributes #>> '{a,b}'      -- 路径取值（返回 text）
 
--- ⚠️ 区分：@> 判断包含（GIN 可索引）；->> 提取值（无索引也可）
--- ⚠️ 中文查询：值须为合法 UTF-8，JSON 内中文无转义问题
+-- 区分：@> 判断包含（GIN 可索引）；->> 提取值（无索引也可）
+-- 中文查询：值须为合法 UTF-8，JSON 内中文无转义问题
 ```
 
-> 🎯 **要点**：JSONB = 无模式的灵活性 + 索引能力——适合"属性多变"的产品/配置场景。GIN 索引 + `@>` 操作符是查询效率关键；Java 侧 Map/List 自动序列化是最大的开发效率点。
+> **要点**：JSONB = 无模式的灵活性 + 索引能力——适合"属性多变"的产品/配置场景。GIN 索引 + `@>` 操作符是查询效率关键；Java 侧 Map/List 自动序列化是最大的开发效率点。
 
 ---
 
@@ -157,7 +157,7 @@ public class Document {
     @Id private Long id;
 
     @Column(columnDefinition = "vector(1536)")
-    private float[] embedding;                 // ⚠️ PGVector 类型 → float[]
+    private float[] embedding;                 // PGVector 类型 → float[]
 }
 
 // ③ 向量检索（原生 SQL）
@@ -178,7 +178,7 @@ List<Document> searchSimilar(
 // store.similaritySearch(SearchRequest.query(query).withTopK(5));
 ```
 
-> 🎯 **要点**：pgvector + Spring Boot = AI 应用的轻量向量方案——已有 PG 零额外部署、结构化过滤 + 向量检索一条 SQL。详见 Java AI 体系 03 篇（RAG）。
+> **要点**：pgvector + Spring Boot = AI 应用的轻量向量方案——已有 PG 零额外部署、结构化过滤 + 向量检索一条 SQL。详见 Java AI 体系 03 篇（RAG）。
 
 ---
 
@@ -190,14 +190,14 @@ spring:
   flyway:
     enabled: true
     locations: classpath:db/migration
-    # ⚠️ PG 专用配置：CREATE EXTENSION 不能在事务内
+    # PG 专用配置：CREATE EXTENSION 不能在事务内
     # pgvector/postgis 等扩展需手动创建或使用 Flyway callback
 ```
 
 ```sql
 -- V1__init.sql
 CREATE TABLE users (
-    id BIGSERIAL PRIMARY KEY,       -- ⚠️ PG 自增（BIGSERIAL = BIGINT + SEQUENCE）
+    id BIGSERIAL PRIMARY KEY,       -- PG 自增（BIGSERIAL = BIGINT + SEQUENCE）
     name VARCHAR(50) NOT NULL,
     attributes JSONB                -- PG 独有类型
 );
@@ -221,7 +221,7 @@ CREATE INDEX idx_doc_embedding ON documents USING ivfflat(embedding vector_cosin
 ```
 
 ```
-⚠️ Flyway + PG 实战注意：
+Flyway + PG 实战注意：
   ① CREATE EXTENSION 不能放事务内 → 单独建库执行 或
      用 flyway 事务模式：spring.flyway.transactional=false
      （迁移含 CREATE EXTENSION 时全局关闭事务包裹）
@@ -261,7 +261,7 @@ spring:
           driver-class-name: org.postgresql.Driver
           username: ${PG_USER}
           password: ${PG_PASSWORD}
-          hikari: { read-only: true }      # ⚠️ 从库强制只读
+          hikari: { read-only: true }      # 从库强制只读
 ```
 
 ```java
@@ -277,7 +277,7 @@ public class OrderService {
 ```
 
 ```sql
--- ⚠️ PG 特有：同步复制配置
+-- PG 特有：同步复制配置
 -- 主库 postgresql.conf
 synchronous_commit = on
 synchronous_standby_names = 'slave1'
@@ -299,7 +299,7 @@ synchronous_standby_names = 'slave1'
 | 大批量慢 | 逐条 INSERT | JPA 批处理（batch_size + flush 分批）/ COPY |
 
 ```
-⚠️ 面试必答：
+面试必答：
 "PG + Spring Boot 集成成本极低——
  驱动一换、方言自动检测；
  JSONB 用 Hibernate Types 映射、
@@ -310,7 +310,7 @@ synchronous_standby_names = 'slave1'
 
 ---
 
-> 🎯 **核心要点**：PG + SpringBoot 集成 = **换驱动即可**（与 MySQL 接口一致）+ **JSONB 无模式设计**（Map/List 自动映射 + GIN 索引加速）+ **pgvector 向量**（AI 场景）+ **Flyway 迁移**（BIGSERIAL 自增 + 扩展需免事务）+ **流复制读写分离**（dynamic-datasource 注解路由）。"PG 换 MySQL 成本极低"是技术选型时的重要考量。
+> **核心要点**：PG + SpringBoot 集成 = **换驱动即可**（与 MySQL 接口一致）+ **JSONB 无模式设计**（Map/List 自动映射 + GIN 索引加速）+ **pgvector 向量**（AI 场景）+ **Flyway 迁移**（BIGSERIAL 自增 + 扩展需免事务）+ **流复制读写分离**（dynamic-datasource 注解路由）。"PG 换 MySQL 成本极低"是技术选型时的重要考量。
 
 ---
 

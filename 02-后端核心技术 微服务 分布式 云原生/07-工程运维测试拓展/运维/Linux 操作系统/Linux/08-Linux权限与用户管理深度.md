@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [基础权限模型](#1-基础权限模型)
 2. [特殊权限：SUID、SGID、Sticky Bit](#2-特殊权限suidsgidsticky-bit)
@@ -98,12 +98,12 @@ ls -l /usr/bin/passwd
 # -rwsr-xr-x 1 root root ... /usr/bin/passwd
 #    ↑ s 表示 SUID（如果所有者本来有 x，显示 s；没 x 显示 S）
 
-# ⚠️ SUID 是安全风险点！不要给自定义脚本/程序设 SUID
+# SUID 是安全风险点！不要给自定义脚本/程序设 SUID
 # 攻击者可通过 SUID 程序提权
 
 # ═══ SGID (Set Group ID) — 2000 ═══
 # 文件：以组的身份执行
-# 目录：目录中新建文件的组自动继承目录的组（⭐ 团队共享目录必用）
+# 目录：目录中新建文件的组自动继承目录的组（★ 团队共享目录必用）
 
 mkdir /shared/project
 chown :developers /shared/project
@@ -255,7 +255,7 @@ last                                  # 最近登录记录
 ### 5.1 sudoers 语法
 
 ```bash
-# ⚠️ 永远用 visudo 编辑，不要直接改 /etc/sudoers！
+# 永远用 visudo 编辑，不要直接改 /etc/sudoers！
 visudo
 visudo -f /etc/sudoers.d/java-app  # 推荐：单独文件
 
@@ -268,10 +268,10 @@ visudo -f /etc/sudoers.d/java-app  # 推荐：单独文件
 # 给 appuser 完全 sudo 权限
 appuser ALL=(ALL) ALL
 
-# 给 appuser 无需密码的 sudo（⭐ 常用于 CI/CD）
+# 给 appuser 无需密码的 sudo（★ 常用于 CI/CD）
 appuser ALL=(ALL) NOPASSWD: ALL
 
-# 仅允许执行特定命令（⭐ 安全最佳实践）
+# 仅允许执行特定命令（★ 安全最佳实践）
 appuser ALL=(root) NOPASSWD: /bin/systemctl restart myapp
 appuser ALL=(root) NOPASSWD: /bin/systemctl status myapp
 appuser ALL=(root) NOPASSWD: /usr/bin/journalctl -u myapp -n *
@@ -350,7 +350,7 @@ Capabilities：将 root 的权限拆分为细粒度的能力
 
 | Capability | 说明 | Java 后端场景 |
 |-----------|------|-------------|
-| `CAP_NET_BIND_SERVICE` | 绑定 1024 以下端口 | ⭐ Java 应用绑定 80/443 |
+| `CAP_NET_BIND_SERVICE` | 绑定 1024 以下端口 | ★ Java 应用绑定 80/443 |
 | `CAP_NET_RAW` | 使用 RAW/PACKET 套接字 | `ping` 命令 |
 | `CAP_SYS_PTRACE` | 跟踪进程 | JVM 调试/性能分析 |
 | `CAP_SYS_TIME` | 修改系统时间 | NTP 同步 |
@@ -361,7 +361,7 @@ Capabilities：将 root 的权限拆分为细粒度的能力
 # ═══ 给 Java 应用绑定 80 端口 ═══
 # 方式一：setcap
 sudo setcap 'cap_net_bind_service=+ep' /usr/lib/jvm/java-17/bin/java
-# ⚠️ 这会让所有 Java 程序都能绑 80 端口，谨慎！
+# 这会让所有 Java 程序都能绑 80 端口，谨慎！
 
 # 方式二：用 authbind（推荐，更精细）
 sudo apt install authbind

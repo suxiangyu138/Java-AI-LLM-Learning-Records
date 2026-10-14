@@ -1,4 +1,4 @@
-# 🚀 主流大模型 API 调用：统一逻辑 + 极简代码 + 开箱即用
+# 主流大模型 API 调用：统一逻辑 + 极简代码 + 开箱即用
 
 > **核心摘要**：所有主流大模型 API 遵循统一的 HTTPS + POST + JSON + API-Key 协议。本文提供各平台的极简调用代码（原始 HTTP 与 OpenAI 兼容 SDK 两种方式），涵盖通义千问、智谱 GLM、DeepSeek、本地 Ollama，以及 Java 后端集成方案。
 

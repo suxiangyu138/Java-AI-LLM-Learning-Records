@@ -27,7 +27,7 @@
   ④ 无法判断 → 澄清问题（Agent 场景）或按 tool_choice 策略
 ```
 
-> 🎯 核心要点（背诵版）：**调用工具是模型的权利，不是义务**——`content=None + tool_calls` 表示"我选工具"，`content=文本 + 空 tool_calls` 表示"我直接答"；Harness 必须两种都处理（判空铁律：`if message.tool_calls:`，不要用 `is not None`）。
+> 核心要点（背诵版）：**调用工具是模型的权利，不是义务**——`content=None + tool_calls` 表示"我选工具"，`content=文本 + 空 tool_calls` 表示"我直接答"；Harness 必须两种都处理（判空铁律：`if message.tool_calls:`，不要用 `is not None`）。
 
 ## 3. 响应结构（背诵版代码）
 
@@ -64,7 +64,7 @@ response.choices[0].message
 | `required` | 必须调一次（强制） | 路由/提取场景——强制走工具出口 |
 | `"function_name"` | 指定必须调某工具 | 单工具任务（强约束） |
 
-> 💡 高级用法（面试加分）：**`required`/指定函数 + 严格参数校验 = "结构化输出"的替代实现**——用工具协议强制模型走 JSON 出口（比 response_format 更灵活，可并行关闭）。注意：强制调用在并行模式下会失效（strict + 并行组合需验证）。
+> 高级用法（面试加分）：**`required`/指定函数 + 严格参数校验 = "结构化输出"的替代实现**——用工具协议强制模型走 JSON 出口（比 response_format 更灵活，可并行关闭）。注意：强制调用在并行模式下会失效（strict + 并行组合需验证）。
 
 ## 5. 面试速记
 

@@ -2,7 +2,7 @@
 
 > 定位：函数形态、作用域与闭包、this 指向、箭头函数、高阶函数——JS 面试第一核心域
 
-## 📚 目录
+## 目录
 
 1. [函数形态](#1-函数形态)
 2. [作用域链与提升](#2-作用域链与提升)
@@ -18,7 +18,7 @@
 ### 1.1 五种定义方式
 
 ```javascript
-// ① 函数声明（提升 ✅）
+// ① 函数声明（提升 ✓）
 function add(a, b) { return a + b; }
 
 // ② 函数表达式（不提升）
@@ -30,7 +30,7 @@ const add = (a, b) => a + b;
 // ④ 立即执行 IIFE
 (function () { console.log('立即执行'); })();
 
-// ⑤ 构造函数（⚠️ 基本不用，用 class 替代）
+// ⑤ 构造函数（基本不用，用 class 替代）
 const fn = new Function('a', 'b', 'return a + b');
 ```
 
@@ -46,7 +46,7 @@ function sum(...nums) { return nums.reduce((a, b) => a + b, 0); }
 // 展开调用
 Math.max(...[1, 3, 2]);
 
-// arguments（⚠️ 箭头函数没有，用 rest 替代）
+// arguments（箭头函数没有，用 rest 替代）
 function log() { console.log(arguments); }
 ```
 
@@ -65,7 +65,7 @@ JS 作用域（ES6+）：
 作用域链：内层找不到 → 向外层找 → 全局
   变量查找是"词法作用域"（写代码的位置决定，不是调用位置！）
 
-⚠️ 面试必答：
+面试必答：
 "作用域链按'定义位置'而非'调用位置'查找——
  词法作用域是闭包与 this 理解的基础。"
 ```
@@ -74,7 +74,7 @@ JS 作用域（ES6+）：
 
 ```javascript
 // 函数声明提升（整个函数可用）
-console.log(fn());        // ✅ 函数已提升
+console.log(fn());        // ✓ 函数已提升
 function fn() { return 1; }
 
 // var 提升（值为 undefined）
@@ -82,7 +82,7 @@ console.log(x);           // undefined
 var x = 1;
 
 // let/const 暂时性死区（TDZ）
-console.log(y);           // ❌ ReferenceError
+console.log(y);           // ✗ ReferenceError
 let y = 1;
 
 // 函数与变量的提升优先级：函数声明 > var 声明
@@ -123,7 +123,7 @@ const module = (function () {
 // ② 防抖/节流（面试手写高频）
 function debounce(fn, delay) {
     let timer = null;
-    return function (...args) {       // ⚠️ 闭包持有 timer
+    return function (...args) {       // 闭包持有 timer
         clearTimeout(timer);
         timer = setTimeout(() => fn.apply(this, args), delay);
     };
@@ -136,7 +136,7 @@ for (var i = 0; i < 3; i++) {
 // 解决：let（块级）或 IIFE 捕获
 ```
 
-> 🎯 **要点**：闭包 = "函数记住外层变量"。三大应用——私有变量、防抖节流、模块模式。循环陷阱（var + setTimeout 输出 3,3,3）是必考。
+> **要点**：闭包 = "函数记住外层变量"。三大应用——私有变量、防抖节流、模块模式。循环陷阱（var + setTimeout 输出 3,3,3）是必考。
 
 ---
 
@@ -154,7 +154,7 @@ this 指向（调用时决定，不是定义时！）：
 
 优先级：new > 显式 > 隐式 > 默认
 
-⚠️ 面试必答：
+面试必答：
 "this 由'调用方式'决定——
  谁调用指向谁（隐式）、
  显式指定（call/apply/bind）、
@@ -187,8 +187,8 @@ const getUser = api.get.bind(api);
 | 维度 | 普通函数 | 箭头函数 |
 |------|:---:|:---:|
 | this | 调用时决定 | **定义时捕获（词法）** |
-| arguments | ✅ | ❌（用 rest） |
-| 构造函数 | ✅ new | ❌ |
+| arguments | ✓ | ✗（用 rest） |
+| 构造函数 | ✓ new | ✗ |
 | 提升 | 声明提升 | 不提升 |
 | 简写 | — | 单表达式省略 return |
 
@@ -197,7 +197,7 @@ const getUser = api.get.bind(api);
 ```javascript
 // 箭头函数没有自己的 this → 捕获外层（解决回调 this 丢失）
 
-// ❌ 普通函数回调中 this 丢失
+// ✗ 普通函数回调中 this 丢失
 const obj = {
     items: [1, 2, 3],
     process() {
@@ -207,18 +207,18 @@ const obj = {
     },
 };
 
-// ✅ 箭头函数捕获外层 this
+// ✓ 箭头函数捕获外层 this
 const obj2 = {
     items: [1, 2, 3],
     process() {
         this.items.forEach(x => {
-            console.log(this);              // ✅ this = obj2
+            console.log(this);              // ✓ this = obj2
         });
     },
 };
 ```
 
-> 🎯 **要点**：箭头函数无自己的 this/arguments/原型——它"捕获定义时的 this"。回调、事件、定时器里用箭头函数是标配。
+> **要点**：箭头函数无自己的 this/arguments/原型——它"捕获定义时的 this"。回调、事件、定时器里用箭头函数是标配。
 
 ---
 
@@ -263,11 +263,11 @@ const addTen = bind(add3, 10);
 addTen(1)(2);     // 13? add3(10,1,2)
 ```
 
-> 🎯 **要点**：高阶函数（map/filter 都是）+ 柯里化（参数收集链）是函数式编程基础——面试手写 curry 是常见题。
+> **要点**：高阶函数（map/filter 都是）+ 柯里化（参数收集链）是函数式编程基础——面试手写 curry 是常见题。
 
 ---
 
-> 🎯 **核心要点**：函数体系 = **闭包**（词法作用域 + 记住变量）+ **this 四规则**（调用决定 + new 最高）+ **箭头函数**（捕获 this）+ **高阶/柯里化**（函数是一等公民）。这四块是 JS 面试的第一核心域——闭包、this、防抖节流是手写题常客。
+> **核心要点**：函数体系 = **闭包**（词法作用域 + 记住变量）+ **this 四规则**（调用决定 + new 最高）+ **箭头函数**（捕获 this）+ **高阶/柯里化**（函数是一等公民）。这四块是 JS 面试的第一核心域——闭包、this、防抖节流是手写题常客。
 
 ---
 

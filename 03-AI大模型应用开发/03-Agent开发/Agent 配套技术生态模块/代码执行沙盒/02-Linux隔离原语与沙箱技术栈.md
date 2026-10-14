@@ -23,7 +23,7 @@ Linux 沙箱的全部能力由内核提供的四类原语组合而成。现代�
 | 只有 Landlock | 路径读写 | 网络访问、资源耗尽、ptrace 横向 |
 | 只有 cgroup | 资源风暴 | 恶意读写、网络外泄 |
 
-> 🎯 核心要点：namespace 管"看不见"，cgroup 管"用不完"，seccomp 管"不许调"，LSM 管"不许碰"——四者覆盖不同威胁面，缺一层就多一个逃逸口。
+> 核心要点：namespace 管"看不见"，cgroup 管"用不完"，seccomp 管"不许调"，LSM 管"不许碰"——四者覆盖不同威胁面，缺一层就多一个逃逸口。
 
 ## 2. namespace：进程视图隔离
 
@@ -77,7 +77,7 @@ echo 512 > /sys/fs/cgroup/agent-sandboxes/session-001/pids.max
 echo $PID > /sys/fs/cgroup/agent-sandboxes/session-001/cgroup.procs
 ```
 
-> ⚠️ 生产共识：**内存限制是第一位的**——OOM 只应杀死该会话的进程，绝不波及宿主；`pids.max` 不设，一行 fork 炸弹（`:(){ :|:& };:`）打满全机 PID 表。
+> 生产共识：**内存限制是第一位的**——OOM 只应杀死该会话的进程，绝不波及宿主；`pids.max` 不设，一行 fork 炸弹（`:(){ :|:& };:`）打满全机 PID 表。
 
 ## 4. seccomp-bpf：系统调用门禁
 

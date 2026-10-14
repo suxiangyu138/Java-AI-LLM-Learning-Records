@@ -12,7 +12,7 @@
 | 启动耗时 | **微秒级**（vs 容器数百 ms、微VM ~125ms） |
 | 密度 | 单节点 500-800 会话（wasmsh 实测）——容器密度的 10-100 倍 |
 
-> 💡 2026 生态：WASM 已进主流 Agent 栈——Claude Agent SDK、LangChain Deep Agents、MCP server（Wassette）均有 WASM 沙箱实现；ClamBot 等安全向项目把全部 LLM 代码跑在 QuickJS-in-Wasmtime。
+> 2026 生态：WASM 已进主流 Agent 栈——Claude Agent SDK、LangChain Deep Agents、MCP server（Wassette）均有 WASM 沙箱实现；ClamBot 等安全向项目把全部 LLM 代码跑在 QuickJS-in-Wasmtime。
 
 ## 2. 语言运行时选型
 
@@ -20,7 +20,7 @@
 |---|---|---|
 | QuickJS（WASM） | JS/TS | 沙箱化 REPL 标准做法：`@langchain/quickjs`、Simon Willison playground；无 `require`/`import`/`fetch`/文件系统（显式桥接除外） |
 | MicroQuickJS（MQuickJS） | JS | Bellard 出品（2026 新锐）：内存/时间限制内建（低至 10kB RAM、~100kB ROM）；**正则回溯也触发中断器**——时间限制对病理回溯有效 |
-| Pyodide | Python（CPython→WASM） | **⚠️ 不是安全边界**（见下节） |
+| Pyodide | Python（CPython→WASM） | **不是安全边界**（见下节） |
 | Deno | JS/TS | 权限标志模型（`--allow-*` 白名单），Python 生态羡慕的能力模型；但 Pyodide-in-Deno 组合仍不安全 |
 | RestrictedPython | Python | 语言级 AST 限制；`__builtins__` 清洗不全会 RCE（CVE-2026-54769） |
 | Pydantic Monty | Python 子集 | Rust 写的 Python 子集→WASM，断网断文件断环境变量，仅暴露开发者控制的函数；2026-02 发布，无 class（迭代快） |

@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [dump 参数全解](#1-dump-参数全解)
 2. [中文与编码](#2-中文与编码)
@@ -149,7 +149,7 @@ def dump_config(config: dict, path: str):
 4. block 与 flow 风格的选型？空映射会输出成什么？
 5. representer 与 constructor 的对称关系？"能转 dict 就转 dict"？
 
-> 🎯 **核心要点**：dump = **六个显式参数（排序/风格/中文/缩进/分隔/引号）+ 中文三纪律（utf-8 + allow_unicode + newline）+ representer 压纯数据**——"dump 的输出由参数决定，不是由直觉决定；人读的配置每个参数都要显式配"。
+> **核心要点**：dump = **六个显式参数（排序/风格/中文/缩进/分隔/引号）+ 中文三纪律（utf-8 + allow_unicode + newline）+ representer 压纯数据**——"dump 的输出由参数决定，不是由直觉决定；人读的配置每个参数都要显式配"。
 
 ---
 

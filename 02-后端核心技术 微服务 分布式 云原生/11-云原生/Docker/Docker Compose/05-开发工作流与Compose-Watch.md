@@ -1,7 +1,7 @@
 # 05-开发工作流与 Compose Watch
 > 摆脱 down/build/up 三步曲：Compose Watch 热重载的三种 action、dev/prod 分离、调试与测试工作流
 
-## 📚 目录
+## 目录
 1. [开发工作流演进](#1-开发工作流演进)
 2. [Compose Watch 三种 action](#2-compose-watch-三种-action)
 3. [watch 配置详解](#3-watch-配置详解)
@@ -29,7 +29,7 @@ Watch 方式（持续开发）：
 | 上下文 | 丢失 | 持续运行 |
 | 适用 | CI/CD、发布 | **本地开发** |
 
-> 🎯 **核心价值**：把"容器内开发"体验拉回"本地开发"级别——文件保存即生效，同时保留容器的环境一致性。
+> **核心价值**：把"容器内开发"体验拉回"本地开发"级别——文件保存即生效，同时保留容器的环境一致性。
 
 ## 2. Compose Watch 三种 action
 
@@ -54,7 +54,7 @@ services:
           action: sync+restart    # 启动时读取的配置：同步 + 重启
 ```
 
-> ⚠️ **2025-2026 增强**：`initial_sync: full` 在 watch 启动时立即全量同步（之前要等第一次文件变化）；`docker compose watch --prune` 自动清理 watch 期间的未用资源。
+> **2025-2026 增强**：`initial_sync: full` 在 watch 启动时立即全量同步（之前要等第一次文件变化）；`docker compose watch --prune` 自动清理 watch 期间的未用资源。
 
 ## 3. watch 配置详解
 
@@ -137,7 +137,7 @@ docker compose -f compose.yaml -f compose.dev.yaml watch
 docker compose -f compose.yaml -f compose.prod.yaml up -d   # 生产不受影响
 ```
 
-> 🎯 原则：**watch 配置永远不随生产文件发布**——用 profile 或独立 dev 文件隔离。
+> 原则：**watch 配置永远不随生产文件发布**——用 profile 或独立 dev 文件隔离。
 
 ## 5. Java 开发工作流实战
 
@@ -251,7 +251,7 @@ Compose Watch 管理开发环境（常驻服务）
 
 ## 8. 核心要点
 
-> 🎯 **核心要点**：
+> **核心要点**：
 > - watch 三 action 选择：**源码→sync（热重载框架自动生效）、依赖清单→rebuild、启动期配置→sync+restart**；
 > - `initial_sync: full` 让 watch 启动即同步，不用等第一次改动；
 > - watch 配置用 profile 或独立 dev 文件隔离，**永不进生产**；

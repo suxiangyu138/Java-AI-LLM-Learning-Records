@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [URI URL URN 三者关系](#1-uri-url-urn-三者关系)
 2. [RFC 3986 通用语法](#2-rfc-3986-通用语法)
@@ -33,20 +33,20 @@
 |------|-----|-----|-----|
 | 全称 | Uniform Resource Identifier | Uniform Resource Locator | Uniform Resource Name |
 | 作用 | **标识**资源 | **定位**资源（含访问方式） | **命名**资源（持久唯一） |
-| 是否含协议 | 不一定 | ✅ 必含 Scheme 且可访问 | `urn:` 固定前缀 |
-| 资源迁移后 | — | ❌ 失效 | ✅ 仍有效 |
+| 是否含协议 | 不一定 | ✓ 必含 Scheme 且可访问 | `urn:` 固定前缀 |
+| 资源迁移后 | — | ✗ 失效 | ✓ 仍有效 |
 | 示例 | 两者皆是 | `https://a.com/b.png` | `urn:isbn:9787111213826` |
 
 **实际工程中的用法差异**：
 
 ```java
 // Java 中的语义区分非常明显
-java.net.URI  uri = URI.create("urn:uuid:6e8bc430-9c3a-11d9-9669-0800200c9a66"); // ✅ OK
-java.net.URL  url = URI.create("urn:uuid:...").toURL();  // ❌ MalformedURLException
+java.net.URI  uri = URI.create("urn:uuid:6e8bc430-9c3a-11d9-9669-0800200c9a66"); // ✓ OK
+java.net.URL  url = URI.create("urn:uuid:...").toURL();  // ✗ MalformedURLException
 // 原因：URL 必须有可用的协议处理器（http/https/file/jar/ftp...），URN 没有
 ```
 
-> 🎯 **核心要点**：`URI` 是纯语法层面的字符串标识；`URL` 额外要求"能按协议访问到"。写代码优先用 `URI` 做解析和拼装，只在真正要发起连接时转成 `URL`。
+> **核心要点**：`URI` 是纯语法层面的字符串标识；`URL` 额外要求"能按协议访问到"。写代码优先用 `URI` 做解析和拼装，只在真正要发起连接时转成 `URL`。
 
 ---
 
@@ -93,7 +93,7 @@ authority = [ userinfo "@" ] host [ ":" port ]
 | Query 为空 | `https://a.com/p?` | `?` 存在但 query 是空串（≠ 无 query） |
 | Fragment 为空 | `https://a.com/p#` | 同理 |
 
-> ⚠️ `https://a.com/p` 与 `https://a.com/p?` 在 RFC 层面**不等价**（一个 query 为 `null`，一个为 `""`），Java `URI.getQuery()` 分别返回 `null` 与 `""`。
+> `https://a.com/p` 与 `https://a.com/p?` 在 RFC 层面**不等价**（一个 query 为 `null`，一个为 `""`），Java `URI.getQuery()` 分别返回 `null` 与 `""`。
 
 ---
 
@@ -126,7 +126,7 @@ https://admin:123456@internal.corp.com/panel
 | 钓鱼利用 | `https://www.bank.com@evil.com` —— 真实主机是 `evil.com` |
 | 浏览器策略 | Chrome/Firefox 对子资源请求直接忽略甚至阻止 |
 
-> ⚠️ RFC 3986 明确"**不推荐**"在 URI 中使用 `user:password@` 形式。生产环境凭证一律走 Header 或 Body。
+> RFC 3986 明确"**不推荐**"在 URI 中使用 `user:password@` 形式。生产环境凭证一律走 Header 或 Body。
 
 **Host 三种形态**
 
@@ -138,8 +138,8 @@ https://admin:123456@internal.corp.com/panel
 
 ```java
 // IPv6 必须带方括号，否则 : 会被当成端口分隔符
-URI ok  = URI.create("http://[::1]:8080/health");   // ✅ host = [::1]
-URI bad = URI.create("http://::1:8080/health");     // ❌ 解析异常
+URI ok  = URI.create("http://[::1]:8080/health");   // ✓ host = [::1]
+URI bad = URI.create("http://::1:8080/health");     // ✗ 解析异常
 ```
 
 **Port 与默认端口**
@@ -152,7 +152,7 @@ URI bad = URI.create("http://::1:8080/health");     // ❌ 解析异常
 | `smtp` | 25 | `dns` | 53 |
 | `ldap` | 389 | `ldaps` | 636 |
 
-> 💡 归一化规则：**显式写出默认端口应被移除**。`https://a.com:443/p` ≡ `https://a.com/p`，但 `https://a.com:8443/p` 不可省略。这也是 CORS 同源判断的关键——`http://a.com` 与 `http://a.com:80` 同源，与 `http://a.com:8080` **不同源**。
+> 归一化规则：**显式写出默认端口应被移除**。`https://a.com:443/p` ≡ `https://a.com/p`，但 `https://a.com:8443/p` 不可省略。这也是 CORS 同源判断的关键——`http://a.com` 与 `http://a.com:80` 同源，与 `http://a.com:8080` **不同源**。
 
 ### 3.3 Path 路径
 
@@ -206,7 +206,7 @@ https://a.com/app#/user/42/profile         ← SPA hash 路由
 https://a.com/x#:~:text=URL%20编码          ← 滚动并高亮
 ```
 
-> 🎯 **核心要点**：任何需要服务端感知的信息，绝不能放在 Fragment 里；反之，任何不想让服务端看到的客户端状态（如 hash 路由），放 Fragment 最安全。
+> **核心要点**：任何需要服务端感知的信息，绝不能放在 Fragment 里；反之，任何不想让服务端看到的客户端状态（如 hash 路由），放 Fragment 最安全。
 
 ---
 
@@ -227,16 +227,16 @@ https://a.com/x#:~:text=URL%20编码          ← 滚动并高亮
 | 仅 Fragment | `#top` | `https://a.com/docs/guide/intro.html#top` |
 | 空串 | `` | 当前 URL（去掉 fragment） |
 
-> ⚠️ **协议相对 URL `//cdn.com/x` 已不推荐**：在 HTTPS 全面普及后它只带来解析歧义，且在 `file://` 页面下会失效。直接写 `https://`。
+> **协议相对 URL `//cdn.com/x` 已不推荐**：在 HTTPS 全面普及后它只带来解析歧义，且在 `file://` 页面下会失效。直接写 `https://`。
 
 ### 4.2 尾斜杠对相对解析的致命影响
 
 ```text
 Base: https://a.com/docs/guide     （无尾斜杠 → "guide" 被当成文件名）
-  相对 "api.html"  →  https://a.com/docs/api.html      ⚠️ guide 被替换
+  相对 "api.html"  →  https://a.com/docs/api.html      guide 被替换
 
 Base: https://a.com/docs/guide/    （有尾斜杠 → "guide" 是目录）
-  相对 "api.html"  →  https://a.com/docs/guide/api.html  ✅
+  相对 "api.html"  →  https://a.com/docs/guide/api.html  ✓
 ```
 
 ### 4.3 点段移除算法（Remove Dot Segments）
@@ -264,7 +264,7 @@ System.out.println(URI.create("https://a.com/a/b/c/./../../g").normalize());
 // → https://a.com/a/g
 ```
 
-> ⚠️ **安全提醒**：`..` 的移除必须在**解码之后**再做一次校验。攻击者用 `%2e%2e%2f` 绕过第一次检查，服务器解码后才变成 `../` —— 这是路径穿越的经典手法（详见 06 篇）。
+> **安全提醒**：`..` 的移除必须在**解码之后**再做一次校验。攻击者用 `%2e%2e%2f` 绕过第一次检查，服务器解码后才变成 `../` —— 这是路径穿越的经典手法（详见 06 篇）。
 
 ---
 
@@ -294,7 +294,7 @@ public Result search(
 ) { ... }
 ```
 
-> 💡 **对外 API 建议**：统一用**重复 key**（`ids=1&ids=2`）或**逗号分隔**（`ids=1,2`），并在 OpenAPI 文档中显式声明 `style`/`explode`，避免前后端各写一套。
+> **对外 API 建议**：统一用**重复 key**（`ids=1&ids=2`）或**逗号分隔**（`ids=1,2`），并在 OpenAPI 文档中显式声明 `style`/`explode`，避免前后端各写一套。
 
 ---
 
@@ -390,7 +390,7 @@ UrlNormalizer.canonicalize("https://blog.example.com/post/43/../42/?id=7");
 // → https://blog.example.com/post/42/?id=7
 ```
 
-> 🎯 **核心要点**：归一化的目标不是"最短"，而是"**幂等且一致**"。同一份规则要同时用在写入端和查询端，否则去重会失效。
+> **核心要点**：归一化的目标不是"最短"，而是"**幂等且一致**"。同一份规则要同时用在写入端和查询端，否则去重会失效。
 
 ---
 
@@ -412,25 +412,25 @@ UrlNormalizer.canonicalize("https://blog.example.com/post/43/../42/?id=7");
 | CDN（Cloudflare 等） | 常见 8~16 KB | 各家不同 |
 | 搜索引擎抓取 | 建议 < 2048 | SEO 最佳实践 |
 
-> 💡 **工程结论**：对外 URL 控制在 **2000 字符以内**最安全。超长参数（如批量 ID、长 Prompt、Base64 图片）改用 `POST` + Body。
+> **工程结论**：对外 URL 控制在 **2000 字符以内**最安全。超长参数（如批量 ID、长 Prompt、Base64 图片）改用 `POST` + Body。
 
 ### 7.2 大小写敏感性对照表
 
 | 组件 | 是否敏感 | 依据 |
 |------|:---:|------|
-| Scheme | ❌ | RFC 3986 明确不敏感 |
-| Host | ❌ | DNS 不区分大小写 |
+| Scheme | ✗ | RFC 3986 明确不敏感 |
+| Host | ✗ | DNS 不区分大小写 |
 | Port | — | 纯数字 |
-| **Path** | ✅ | 由服务端文件系统/路由决定 |
-| **Query** | ✅ | 由应用解释 |
-| **Fragment** | ✅ | 由客户端解释 |
-| 百分号编码的 hex | ❌ | `%3A` ≡ `%3a`，规范写法用大写 |
+| **Path** | ✓ | 由服务端文件系统/路由决定 |
+| **Query** | ✓ | 由应用解释 |
+| **Fragment** | ✓ | 由客户端解释 |
+| 百分号编码的 hex | ✗ | `%3A` ≡ `%3a`，规范写法用大写 |
 
-> ⚠️ **跨平台经典事故**：Windows 本地开发 `/Static/Logo.PNG` 能访问，部署到 Linux 直接 404。约定**全小写 + 中划线**的 URL 路径（`/static/logo.png`、`/user-profile`）可彻底规避。
+> **跨平台经典事故**：Windows 本地开发 `/Static/Logo.PNG` 能访问，部署到 Linux 直接 404。约定**全小写 + 中划线**的 URL 路径（`/static/logo.png`、`/user-profile`）可彻底规避。
 
 ---
 
-> 🎯 **本篇核心要点**
+> **本篇核心要点**
 > 1. URI ⊃ URL / URN；写代码用 `URI` 解析，发请求时才转 `URL`
 > 2. 六大组件里只有 **Fragment 不发给服务端**
 > 3. Scheme 与 Host 大小写不敏感，**Path/Query 敏感**——统一小写路径

@@ -1,6 +1,6 @@
 # 02 - Agent Skills 类型与设计模式
 
-> 🎯 Skill 的类型决定了它的职责边界和调用方式。掌握分类法和设计模式，是设计高质量 Skill 体系的关键
+> Skill 的类型决定了它的职责边界和调用方式。掌握分类法和设计模式，是设计高质量 Skill 体系的关键
 
 ---
 
@@ -20,20 +20,20 @@
 
 | 大类 | 子类 | 典型 Skill | 输入 → 输出 | Agent 使用场景 |
 |------|------|-----------|-------------|---------------|
-| **📡 感知型** | 搜索 | `WebSearch` | query → results[] | 信息获取、事实核查 |
+| **感知型** | 搜索 | `WebSearch` | query → results[] | 信息获取、事实核查 |
 | | 读取 | `FileRead` | path → content | 代码分析、文档阅读 |
 | | 监听 | `EventListen` | channel → events[] | 实时监控、告警 |
-| **🔧 操作型** | 创建 | `FileCreate` | content+path → file | 文件生成、项目初始化 |
+| **操作型** | 创建 | `FileCreate` | content+path → file | 文件生成、项目初始化 |
 | | 修改 | `CodeEdit` | file+diff → result | 代码重构、Bug 修复 |
 | | 删除 | `FileDelete` | path → status | 清理、回滚 |
 | | 执行 | `BashExec` | command → output | 构建、部署、测试 |
-| **🧠 分析型** | 审查 | `CodeReview` | diff → findings[] | PR Review、质量检查 |
+| **分析型** | 审查 | `CodeReview` | diff → findings[] | PR Review、质量检查 |
 | | 测试 | `TestRunner` | target → report | CI/CD、回归测试 |
 | | 诊断 | `LogAnalyzer` | logs → diagnosis | 故障排查、根因分析 |
-| **🔄 转换型** | 格式 | `JsonToYaml` | json → yaml | 配置转换 |
+| **转换型** | 格式 | `JsonToYaml` | json → yaml | 配置转换 |
 | | 翻译 | `I18nTranslate` | text+locale → text | 国际化 |
 | | 摘要 | `TextSummarize` | long_text → summary | 文档处理 |
-| **🤝 协调型** | 编排 | `WorkflowOrch` | plan → execution | 多步骤任务 |
+| **协调型** | 编排 | `WorkflowOrch` | plan → execution | 多步骤任务 |
 | | 通信 | `NotifySkill` | message+channel → status | 消息推送、告警 |
 | | 调度 | `TaskScheduler` | tasks[] → schedule | 定时任务、批处理 |
 
@@ -130,14 +130,14 @@ public class DeploySkill implements AsyncSkill {
 
 ```text
 幂等 Skill：重复调用 N 次 = 调用 1 次（安全重试）
-  ✅ FileCreate（文件已存在 → 跳过）
-  ✅ ConfigSet（设置相同值 → 无变化）
-  ✅ RecordUpsert（存在则更新）
+  ✓ FileCreate（文件已存在 → 跳过）
+  ✓ ConfigSet（设置相同值 → 无变化）
+  ✓ RecordUpsert（存在则更新）
 
 非幂等 Skill：每次调用都有新副作用（不能盲目重试）
-  ⚠️ EmailSend（重复发送 → 用户收到多封）
-  ⚠️ OrderCreate（重复创建 → 重复订单）
-  ⚠️ ChargeMoney（重复扣款 → 资金损失）
+  EmailSend（重复发送 → 用户收到多封）
+  OrderCreate（重复创建 → 重复订单）
+  ChargeMoney（重复扣款 → 资金损失）
 
 解决方案：
   ① 引入幂等键（idempotency_key）
@@ -166,7 +166,7 @@ public class DeploySkill implements AsyncSkill {
 ```text
 Agent Skills 领域分布
 │
-├── 💻 软件工程领域
+├── 软件工程领域
 │   ├── code_review      代码审查
 │   ├── code_generate    代码生成
 │   ├── test_write       测试编写
@@ -174,25 +174,25 @@ Agent Skills 领域分布
 │   ├── bug_fix          缺陷修复
 │   └── doc_generate     文档生成
 │
-├── 🔒 安全领域
+├── 安全领域
 │   ├── vulnerability_scan  漏洞扫描
 │   ├── secret_detect       密钥检测
 │   ├── dependency_check    依赖检查
 │   └── compliance_audit    合规审计
 │
-├── 📊 数据领域
+├── 数据领域
 │   ├── data_analyze     数据分析
 │   ├── data_clean       数据清洗
 │   ├── data_visualize   数据可视化
 │   └── etl_execute      ETL执行
 │
-├── 🌐 DevOps领域
+├── DevOps领域
 │   ├── deploy           部署
 │   ├── monitor          监控
 │   ├── alert_handle     告警处理
 │   └── incident_response 故障响应
 │
-└── 📝 知识领域
+└── 知识领域
     ├── research          调研
     ├── summarize         摘要
     ├── translate         翻译
@@ -346,21 +346,21 @@ ReviewResult result = enhancedSkill.execute(input);
 ### 5.2 何时封装为 Skill
 
 ```text
-✅ 应该封装为 Skill：
+✓ 应该封装为 Skill：
   • 3 个以上 Tool 的组合且经常一起使用
   • 包含领域知识判断逻辑
   • 需要在多处复用
   • 有明确的输入输出契约
   • 需要独立的测试和版本管理
 
-❌ 不需要封装为 Skill：
+✗ 不需要封装为 Skill：
   • 只有一个 Tool 调用（直接用 Tool）
   • 一次性使用（不值得封装）
   • 逻辑极度简单（封装成本 > 收益）
   • 强依赖特定上下文无法复用
 ```
 
-> 🎯 **核心要点**：按能力+范式+领域三维分类，善用策略/适配器/装饰器/责任链四种模式，让 Skill 体系可扩展、可维护、可复用
+> **核心要点**：按能力+范式+领域三维分类，善用策略/适配器/装饰器/责任链四种模式，让 Skill 体系可扩展、可维护、可复用
 
 ---
 

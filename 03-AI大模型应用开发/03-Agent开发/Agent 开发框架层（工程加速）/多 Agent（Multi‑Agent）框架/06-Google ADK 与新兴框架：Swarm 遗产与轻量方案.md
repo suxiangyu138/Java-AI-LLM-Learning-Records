@@ -2,7 +2,7 @@
 
 > 定位：框架深潜第四站——Google ADK（代码优先、多语言、云原生）、OpenAI Swarm 遗产（极简 handoff 范式）、以及"单 Agent 工具化"轻量方案（2026-08 基准）
 
-## 📚 目录
+## 目录
 
 1. [Google ADK 定位](#1-google-adk-定位)
 2. [ADK 2.0：workflow runtime 补齐确定性](#2-adk-20workflow-runtime-补齐确定性)
@@ -24,7 +24,7 @@
 | 内置 | Memory Bank、pytest 评估工具、Web UI 调试器 |
 | 市场 | 生产部署 ~4%（2026 Q1 估计），Google 系产品内部在用 |
 
-> 🎯 **一句话**：ADK = "Google 生态的代码优先 Agent 框架"——多语言 SDK 与 Vertex AI 深度集成是独有优势；**离开 Google 生态价值快速衰减**。
+> **一句话**：ADK = "Google 生态的代码优先 Agent 框架"——多语言 SDK 与 Vertex AI 深度集成是独有优势；**离开 Google 生态价值快速衰减**。
 
 ## 2. ADK 2.0：workflow runtime 补齐确定性
 
@@ -76,7 +76,7 @@ workflow = Workflow(nodes=[search_agent, analysis_agent], fan_out=True)
 | 需要 A2A 跨厂商互操作 | 学习曲线陡 |
 | 企业级部署（Vertex Agent Engine） | 部分 SDK 仍 beta；Cloud Run 会话持久化需显式外部存储 |
 
-> 🎯 **适用结论**：ADK 的选型判据是**生态**——已在 Google 栈或用多语言 SDK，选 ADK；否则 LangGraph/CrewAI 更通用。
+> **适用结论**：ADK 的选型判据是**生态**——已在 Google 栈或用多语言 SDK，选 ADK；否则 LangGraph/CrewAI 更通用。
 
 ## 5. OpenAI Swarm 遗产：极简 handoff 范式
 
@@ -95,7 +95,7 @@ Swarm 的历史地位：证明了"多 Agent 可以极简"——
 → 现代实现：OpenAI Agents SDK（五原语）、LangGraph handoff、CrewAI sequential
 ```
 
-> 💡 **学习价值**：Swarm 源码（~2000 行）是理解 handoff 范式的最佳教材——先读它，再学框架的封装。
+> **学习价值**：Swarm 源码（~2000 行）是理解 handoff 范式的最佳教材——先读它，再学框架的封装。
 
 ## 6. 轻量方案：单 Agent 工具化嵌套
 
@@ -124,11 +124,11 @@ Swarm 的历史地位：证明了"多 Agent 可以极简"——
 | AgentOS / 其他 | 概念期 | "Agent 操作系统"叙事 vs 实用框架差距 |
 | 语言侧框架（LangChain4j/Spring AI） | Java 生态多 Agent 雏形 | Java 学习者对照（见 [Java AI 生态](../../../05-AI开发框架/Java%20AI生态/)） |
 
-> ⚠️ 新兴框架评估原则：2026 框架格局已收敛（LangGraph/CrewAI/MAF/ADK 四强 + OpenAI/Claude 原生），**新框架先看"解决了四强没解决的问题吗"**，再投精力。
+> 新兴框架评估原则：2026 框架格局已收敛（LangGraph/CrewAI/MAF/ADK 四强 + OpenAI/Claude 原生），**新框架先看"解决了四强没解决的问题吗"**，再投精力。
 
 ## 8. 核心要点
 
-> 🎯 **核心要点**：
+> **核心要点**：
 > 1. Google ADK：多语言（Py/Java/Go/TS）+ Vertex AI 原生 + A2A 联合方——Google 生态判据
 > 2. ADK 2.0 workflow runtime（2026-05/06）补齐确定性执行，对齐 2026 框架共识（自由循环 + 确定性工作流双轨）
 > 3. Swarm 遗产 = 极简 handoff 范式：handoff 是特殊工具调用——已融入 Agents SDK/LangGraph

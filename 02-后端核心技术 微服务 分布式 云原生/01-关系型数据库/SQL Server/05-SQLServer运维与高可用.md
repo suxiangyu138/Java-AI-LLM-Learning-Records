@@ -2,7 +2,7 @@
 
 > 定位：备份恢复、Always On 集群、日志管理、监控视图、升级迁移、SQL Server 面试题——企业运维全体系
 
-## 📚 目录
+## 目录
 
 1. [备份与恢复](#1-备份与恢复)
 2. [Always On 高可用](#2-always-on-高可用)
@@ -41,8 +41,8 @@ RESTORE LOG MyDB FROM DISK = 'E:\backups\MyDB_log.bak'
 
 | 模式 | 日志 | PITR | 适用 |
 |------|:---:|:---:|------|
-| FULL | 全记录 | ✅ | 生产默认 |
-| SIMPLE | 自动截断 | ❌ | 开发/测试 |
+| FULL | 全记录 | ✓ | 生产默认 |
+| SIMPLE | 自动截断 | ✗ | 开发/测试 |
 | BULK_LOGGED | 减少大操作日志 | 有限 | ETL |
 
 ---
@@ -59,7 +59,7 @@ Always On = SQL Server 的高可用与灾难恢复方案
   ② 可用性组（AG）：数据库级复制（多副本）
   ③ 可读辅助副本：读写分离（applicationIntent=ReadOnly）
 
-⚠️ 对比 MySQL 主从：
+对比 MySQL 主从：
   Always On：更完整的自动切换 + 可读副本路由透明
   MySQL 主从：需额外中间件（MHA/ProxySQL）
 ```
@@ -74,7 +74,7 @@ AG 核心能力：
   在线索引维护（辅助副本上重建索引）
 ```
 
-> 🎯 **要点**：Always On 是 SQL Server 的高可用护城河——MySQL/PostgreSQL 均需第三方方案才能达到同等效果（MySQL MHA/Orchestrator + ProxySQL、PG Patroni）。
+> **要点**：Always On 是 SQL Server 的高可用护城河——MySQL/PostgreSQL 均需第三方方案才能达到同等效果（MySQL MHA/Orchestrator + ProxySQL、PG Patroni）。
 
 ---
 
@@ -87,7 +87,7 @@ AG 核心能力：
   FULL 恢复模式下日志持续增长！
   必须定期备份日志来截断（释放空间）
 
-⚠️ 日志满的后果：数据库只读（无法写入）
+日志满的后果：数据库只读（无法写入）
 
 监控：
   DBCC SQLPERF(LOGSPACE)   -- 查看日志使用率
@@ -231,7 +231,7 @@ BIT → Boolean、IDENTITY → 自增；
 
 ---
 
-> 🎯 **核心要点**：SQL Server 运维 = **三种备份**（FULL/DIFF/LOG + PITR）+ **Always On**（AG 自动切换 + 可读副本）+ **DMV 监控**（等待/慢查询/缺失索引）+ **Query Store**（性能回归检测）。"Always On + Query Store + 存储过程"是政务/国企 SQL Server 的三把运维利器。
+> **核心要点**：SQL Server 运维 = **三种备份**（FULL/DIFF/LOG + PITR）+ **Always On**（AG 自动切换 + 可读副本）+ **DMV 监控**（等待/慢查询/缺失索引）+ **Query Store**（性能回归检测）。"Always On + Query Store + 存储过程"是政务/国企 SQL Server 的三把运维利器。
 
 ---
 

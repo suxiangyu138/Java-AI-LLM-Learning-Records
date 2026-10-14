@@ -2,7 +2,7 @@
 
 > 对话记忆的关键：Session 负责跨运行的历史持久化——没有 Session，每次 Runner.run() 都是冷启动；InMemory/SQLite/Redis 三档实现，从测试到生产。
 
-## 📚 目录
+## 目录
 
 1. [为什么需要 Sessions](#1-为什么需要-sessions)
 2. [Session 机制](#2-session-机制)
@@ -251,7 +251,7 @@ Session：跨运行保存（对话级状态）
 | "会话无限保留" | 要 TTL/清理（成本与隐私） |
 | "单实例够" | 多实例必须 Redis 共享 |
 
-> 🎯 核心要点：Session = 跨运行对话持久化（免冷启动）；三档实现（InMemory 测试/SQLite 单机/Redis 多实例）；多轮 = 同一 Session 传入 Runner；RunState 支持中断恢复；RunContextWrapper（应用数据）vs Session（对话状态）生命周期不同；工程四件事（TTL/上限/归档/多实例共享）；多用户按 user_id 隔离 + 权限校验。
+> 核心要点：Session = 跨运行对话持久化（免冷启动）；三档实现（InMemory 测试/SQLite 单机/Redis 多实例）；多轮 = 同一 Session 传入 Runner；RunState 支持中断恢复；RunContextWrapper（应用数据）vs Session（对话状态）生命周期不同；工程四件事（TTL/上限/归档/多实例共享）；多用户按 user_id 隔离 + 权限校验。
 
 ---
 

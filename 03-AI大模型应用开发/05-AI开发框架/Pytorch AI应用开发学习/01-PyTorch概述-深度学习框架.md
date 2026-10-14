@@ -2,7 +2,7 @@
 
 > PyTorch 2.x 是 AI 工程的事实标准框架（2.10.0，2026）——动态图让研究友好，torch.compile 让生产不慢；官方已把 torch.compile 定位为 torch.jit 的替代。
 
-## 📚 目录
+## 目录
 
 1. [PyTorch 是什么](#1-pytorch-是什么)
 2. [2.x 时代：编译与动态图的统一](#2-2x-时代编译与动态图的统一)
@@ -190,7 +190,7 @@ PyTorch = AI 工程的"语言底座"：
 （08 篇有完整代码）
 ```
 
-> 🎯 核心要点：PyTorch = 张量 + autograd + 动态图（上手最易）+ torch.compile（性能补齐）；2.x 统一研究灵活与生产性能；torch.compile 三阶段（追踪/优化/生成）；jit 被官方弃用（迁移 compile/export）；LLM 全栈靠 HF 生态；选型新项目首选、存量 TF 继续、实验 JAX；六个误区校准认知。
+> 核心要点：PyTorch = 张量 + autograd + 动态图（上手最易）+ torch.compile（性能补齐）；2.x 统一研究灵活与生产性能；torch.compile 三阶段（追踪/优化/生成）；jit 被官方弃用（迁移 compile/export）；LLM 全栈靠 HF 生态；选型新项目首选、存量 TF 继续、实验 JAX；六个误区校准认知。
 
 ---
 

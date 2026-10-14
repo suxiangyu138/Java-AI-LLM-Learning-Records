@@ -23,7 +23,7 @@ Spring 是一个轻量级的**控制反转（IoC）**和**面向切面（AOP）*
 
 **DI（依赖注入）**：IoC 的具体实现方式。容器在创建对象时，将依赖的对象通过构造函数、setter 或字段注入的方式传给目标对象。
 
-> 🎯 关系：IoC 是设计思想，DI 是实现方式。**IoC 是目标，DI 是手段。**
+> 关系：IoC 是设计思想，DI 是实现方式。**IoC 是目标，DI 是手段。**
 
 ### 1.3 IoC 的实现方式有哪些？
 | 注入方式 | 说明 | 优点 | 缺点 |
@@ -32,7 +32,7 @@ Spring 是一个轻量级的**控制反转（IoC）**和**面向切面（AOP）*
 | 构造器注入 | 通过构造函数参数注入 | 不可变，保证依赖完整性 | 参数过多时构造器臃肿 |
 | 字段注入（@Autowired） | 直接注入字段 | 代码简洁 | 难测试，依赖不明确 |
 
-> 💡 Spring 官方推荐**构造器注入**，因为可以保证依赖不可变且非空。
+> Spring 官方推荐**构造器注入**，因为可以保证依赖不可变且非空。
 
 ### 1.4 Bean 的作用域有哪些？
 | 作用域 | 说明 | 适用场景 |
@@ -71,7 +71,7 @@ Spring 是一个轻量级的**控制反转（IoC）**和**面向切面（AOP）*
 | 组合 | 常搭配 @Qualifier | 可用 name 属性指定 |
 | 推荐度 | Spring 项目推荐 | 通用性更好 |
 
-> 💡 @Autowired 属于 Spring 生态，@Resource 是 JavaEE 标准。如果两个实现都没有指定名称，@Autowired 可能因为多实现报错，需要 @Qualifier 辅助。
+> @Autowired 属于 Spring 生态，@Resource 是 JavaEE 标准。如果两个实现都没有指定名称，@Autowired 可能因为多实现报错，需要 @Qualifier 辅助。
 
 ### 1.7 ApplicationContext 和 BeanFactory 的区别？
 | 特性 | BeanFactory | ApplicationContext |
@@ -149,7 +149,7 @@ public Object around(ProceedingJoinPoint pjp) { // 环绕通知
 | 性能（调用）| 较慢（反射）| 快（FastClass 机制）|
 | 不可代理 | — | final 类和方法 |
 
-> 🎯 Spring 的选择逻辑：如果目标类实现了接口，默认用 JDK 动态代理；否则用 CGLIB。可以通过 `@EnableAspectJAutoProxy(proxyTargetClass=true)` 强制使用 CGLIB。
+> Spring 的选择逻辑：如果目标类实现了接口，默认用 JDK 动态代理；否则用 CGLIB。可以通过 `@EnableAspectJAutoProxy(proxyTargetClass=true)` 强制使用 CGLIB。
 
 ### 1.12 Spring 事务的传播行为有哪些？
 | 传播行为 | 说明 |
@@ -280,7 +280,7 @@ public class DefaultSingletonBeanRegistry {
 5. B 完成创建 → 放入一级缓存
 6. A 拿到 B 引用继续 → 属性赋值完成 → 放入一级缓存
 
-> ⚠️ 注意：构造器注入无法解决循环依赖（因为实例化阶段就需要依赖），prototype 作用域也无法解决（不缓存）。
+> 注意：构造器注入无法解决循环依赖（因为实例化阶段就需要依赖），prototype 作用域也无法解决（不缓存）。
 
 ### 2.3 AOP 通知的执行顺序是怎样的？
 ```
@@ -297,7 +297,7 @@ Around Before
 Around After
 ```
 
-> 💡 多个切面时，通过 `@Order` 决定执行顺序。**值越小优先级越高**，但环绕通知的执行顺序是嵌套的（洋葱模型）。
+> 多个切面时，通过 `@Order` 决定执行顺序。**值越小优先级越高**，但环绕通知的执行顺序是嵌套的（洋葱模型）。
 
 ### 2.4 Spring 的事务管理如何实现？
 Spring 事务管理的核心是 `TransactionInterceptor`（实现 `MethodInterceptor`），通过 AOP 的环绕通知实现。
@@ -489,7 +489,7 @@ public class NotificationService {
     }
 }
 
-// ⚠️ 注意事项：
+// 注意事项：
 // 1. 默认使用 SimpleAsyncTaskExecutor（不推荐生产），需自定义线程池
 // 2. 方法不能是 private
 // 3. 同类方法调用 @Async 失效（AOP 代理问题）

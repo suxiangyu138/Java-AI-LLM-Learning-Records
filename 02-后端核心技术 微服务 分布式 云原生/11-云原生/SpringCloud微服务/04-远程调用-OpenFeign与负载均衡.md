@@ -1,6 +1,6 @@
 # 04 - 远程调用：OpenFeign 与负载均衡
 
-> 🎯 OpenFeign = 声明式 HTTP 客户端，LoadBalancer = 客户端负载均衡 — 两者组合替代 RestTemplate + Ribbon，是 Spring Cloud 微服务间通信的标准姿势
+> OpenFeign = 声明式 HTTP 客户端，LoadBalancer = 客户端负载均衡 — 两者组合替代 RestTemplate + Ribbon，是 Spring Cloud 微服务间通信的标准姿势
 
 ---
 
@@ -84,7 +84,7 @@ public class OrderController {
 
 // 3. 启动类
 @SpringBootApplication
-@EnableFeignClients    // ⭐ 开启 Feign
+@EnableFeignClients    // ★ 开启 Feign
 public class OrderApplication { }
 ```
 
@@ -124,7 +124,7 @@ public class FeignConfig {
 }
 ```
 
-### 3.2 请求拦截器（⭐ 传递 Token/TraceId）
+### 3.2 请求拦截器（★ 传递 Token/TraceId）
 
 ```java
 @Component
@@ -176,11 +176,11 @@ spring:
 @Bean
 public Retryer feignRetryer() {
     return new Retryer.Default(100, 1000, 3);  // 初始100ms, 最大1s, 重试3次
-    // return Retryer.NEVER_RETRY;             // 不重试（⭐ 非幂等接口）
+    // return Retryer.NEVER_RETRY;             // 不重试（★ 非幂等接口）
 }
 ```
 
-> ⚠️ Feign 默认重试器会重试 5 次！非幂等接口务必设为 `Retryer.NEVER_RETRY`。
+> Feign 默认重试器会重试 5 次！非幂等接口务必设为 `Retryer.NEVER_RETRY`。
 
 ---
 
@@ -188,9 +188,9 @@ public Retryer feignRetryer() {
 
 | 方案 | 适用场景 | 代码量 |
 |------|----------|:---:|
-| **OpenFeign** | ⭐ 90% 的服务间调用 | 少 |
+| **OpenFeign** | ★ 90% 的服务间调用 | 少 |
 | **RestTemplate + @LoadBalanced** | 简单 GET 请求、非标准调用 | 中 |
 | **WebClient（响应式）** | Spring WebFlux 项目 | 中 |
 | **Dubbo** | 高性能 RPC 需求 | 少（需额外配置） |
 
-> 🎯 **最佳实践**：服务间调用统一用 OpenFeign，简洁、声明式、自动负载均衡。Token/TraceId 透传用 RequestInterceptor，非幂等接口用 `Retryer.NEVER_RETRY`。
+> **最佳实践**：服务间调用统一用 OpenFeign，简洁、声明式、自动负载均衡。Token/TraceId 透传用 RequestInterceptor，非幂等接口用 `Retryer.NEVER_RETRY`。

@@ -1,7 +1,7 @@
 # 05-与 curl 对比与生产实践
 > HTTPie vs curl 逐场景对照、脚本迁移、生产避坑清单、面试题——"调试用 HTTPie，传输用 curl"的工程化边界
 
-## 📚 目录
+## 目录
 1. [HTTPie vs curl 逐场景对照](#1-httpie-vs-curl-逐场景对照)
 2. [从 curl 迁移到 HTTPie](#2-从-curl-迁移到-httpie)
 3. [从 HTTPie 迁移到 curl（分享场景）](#3-从-httpie-迁移到-curl分享场景)
@@ -26,11 +26,11 @@
 | 查看请求+响应 | `http -v url` | `curl -v url` |
 | 只显示头 | `http --headers url` | `curl -I url` / `curl -D -` |
 | 流式/SSE | `http --stream url`（SSE 自动） | `curl -N url` |
-| 会话持久化 | `http --session=name url` | ❌ 无内置 |
+| 会话持久化 | `http --session=name url` | ✗ 无内置 |
 | 失败即退出码 | `http --check-status url` | `curl -f url` |
-| 输出高亮 | 默认 | ❌（需插件） |
+| 输出高亮 | 默认 | ✗（需插件） |
 
-> 🎯 **对照结论**：同样一件事，HTTPie 平均少敲 50% 的字符且可读性更强；curl 胜在**无处不在**（所有系统预装）与**传输级能力**（FTP、SMTP、多协议）。
+> **对照结论**：同样一件事，HTTPie 平均少敲 50% 的字符且可读性更强；curl 胜在**无处不在**（所有系统预装）与**传输级能力**（FTP、SMTP、多协议）。
 
 ## 2. 从 curl 迁移到 HTTPie
 
@@ -58,7 +58,7 @@ http POST https://api.example.com/login \
   username=admin password=secret
 ```
 
-> 💡 迁移不是必须的——**共存策略**：日常调试/脚本用 HTTPie，系统脚本/容器内（无 HTTPie 环境）用 curl。
+> 迁移不是必须的——**共存策略**：日常调试/脚本用 HTTPie，系统脚本/容器内（无 HTTPie 环境）用 curl。
 
 ## 3. 从 HTTPie 迁移到 curl（分享场景）
 
@@ -79,7 +79,7 @@ http POST url key=value
 | 容器/服务器无 HTTPie | 用生成的 curl |
 | 文档示例 | curl 更通用（读者环境都有） |
 
-> 💡 **互转价值**：HTTPie 负责"写起来爽"，curl 负责"到处能跑"——`--offline` 是两者的桥。
+> **互转价值**：HTTPie 负责"写起来爽"，curl 负责"到处能跑"——`--offline` 是两者的桥。
 
 ## 4. 生产避坑清单
 
@@ -113,7 +113,7 @@ http POST url key=value
 | 性能压测 | JMeter |
 | 系统脚本/传输 | curl |
 
-> 🎯 **定位总结**：HTTPie 是"开发者的第二双手"（终端调试），不是任何工具的替代品——与 APIFox/JMeter/curl 形成互补梯队。
+> **定位总结**：HTTPie 是"开发者的第二双手"（终端调试），不是任何工具的替代品——与 APIFox/JMeter/curl 形成互补梯队。
 
 ## 6. 面试题
 
@@ -130,7 +130,7 @@ http POST url key=value
 
 ## 7. 核心要点
 
-> 🎯 **核心要点**：
+> **核心要点**：
 > - 定位边界：**调试用 HTTPie（可读、少敲），传输用 curl（通用、无处不在）**；
 > - 迁移规则：方法前置、`-H`→`:`、`-d`→`=`/`:=`、`-F`→`-m @`；
 > - 互转桥：`--offline` 生成等价 curl 命令；

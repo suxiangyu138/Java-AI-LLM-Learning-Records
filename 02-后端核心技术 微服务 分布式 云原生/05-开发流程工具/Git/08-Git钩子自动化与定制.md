@@ -1,7 +1,7 @@
 # 08-Git 钩子自动化与定制
 > 钩子做轻量检查、CI 做重量检查：Hooks 全景、示例脚本、husky/pre-commit 框架、CI 集成、config 三层体系与别名定制
 
-## 📚 目录
+## 目录
 1. [Git Hooks 全景](#1-git-hooks-全景)
 2. [示例脚本（可直接使用）](#2-示例脚本可直接使用)
 3. [Hook 共享方案：core.hooksPath](#3-hook-共享方案corehookspath)
@@ -66,13 +66,13 @@ ls .git/hooks/
 
 # 禁止提交包含 console.log 的代码
 if git diff --cached | grep -q "^+.*console\.log"; then
-    echo "❌ 发现 console.log，请在提交前移除"
+    echo "✗ 发现 console.log，请在提交前移除"
     exit 1
 fi
 
 # 检查 .env 文件是否被提交
 if git diff --cached --name-only | grep -q "\.env$"; then
-    echo "❌ 禁止提交 .env 文件！"
+    echo "✗ 禁止提交 .env 文件！"
     exit 1
 fi
 
@@ -95,7 +95,7 @@ COMMIT_MSG=$(cat "$1")
 PATTERN="^(feat|fix|docs|style|refactor|test|chore|perf|ci)(\(.+\))?: .{1,72}$"
 
 if ! echo "$COMMIT_MSG" | grep -qE "$PATTERN"; then
-    echo "❌ Commit message 不符合规范"
+    echo "✗ Commit message 不符合规范"
     echo "格式: <type>(<scope>): <subject>"
     echo "type: feat|fix|docs|style|refactor|test|chore|perf|ci"
     exit 1
@@ -108,36 +108,36 @@ fi
 #!/bin/bash
 # .git/hooks/pre-commit — Java 项目提交流程
 
-echo "🔍 运行提交前检查..."
+echo "运行提交前检查..."
 
 # 1. 编译检查（只检查暂存的 Java 文件）
 STAGED_JAVA=$(git diff --cached --name-only --diff-filter=ACM | grep '\.java$')
 if [ -n "$STAGED_JAVA" ]; then
-    echo "📦 编译检查..."
+    echo "编译检查..."
     mvn -q compile
     if [ $? -ne 0 ]; then
-        echo "❌ 编译失败，请修复后重新提交"
+        echo "✗ 编译失败，请修复后重新提交"
         exit 1
     fi
 fi
 
 # 2. Checkstyle（仅检查暂存文件）
 if [ -n "$STAGED_JAVA" ]; then
-    echo "📐 Checkstyle检查..."
+    echo "Checkstyle检查..."
     mvn -q checkstyle:check
     if [ $? -ne 0 ]; then
-        echo "❌ Checkstyle不通过，请修复"
+        echo "✗ Checkstyle不通过，请修复"
         exit 1
     fi
 fi
 
 # 3. 禁止提交调试代码
 if git diff --cached | grep -qE '(System\.out\.println|console\.log|debugger)'; then
-    echo "❌ 检测到调试代码（System.out.println等），请移除后重新提交"
+    echo "✗ 检测到调试代码（System.out.println等），请移除后重新提交"
     exit 1
 fi
 
-echo "✅ 检查通过！"
+echo "✓ 检查通过！"
 ```
 
 ### 2.4 post-receive（服务端自动部署）
@@ -150,13 +150,13 @@ while read oldrev newrev refname; do
     BRANCH=$(echo $refname | sed 's/refs\/heads\///')
 
     if [ "$BRANCH" = "main" ]; then
-        echo "🚀 检测到main分支更新，触发生产部署..."
+        echo "检测到main分支更新，触发生产部署..."
         WORKTREE="/var/www/prod"
         git --work-tree=$WORKTREE checkout -f main
         cd $WORKTREE
         mvn clean package -DskipTests
         systemctl restart myapp
-        echo "✅ 部署完成"
+        echo "✓ 部署完成"
     fi
 done
 ```
@@ -254,7 +254,7 @@ git commit -n -m "..."        # -n = --no-verify，跳过所有 hooks
 git push --no-verify          # 跳过 push hooks
 ```
 
-> ⚠️ 只在明确知道为什么需要跳过时使用；**CI 应作为第二道防线兜底**（hook 可跳过，CI 不可）。
+> 只在明确知道为什么需要跳过时使用；**CI 应作为第二道防线兜底**（hook 可跳过，CI 不可）。
 
 ```text
 钩子最佳实践：
@@ -312,14 +312,14 @@ jobs:
         run: |
           git log origin/main..HEAD --format='%s' | while read msg; do
             if ! echo "$msg" | grep -qE '^(feat|fix|docs|style|refactor|test|chore|perf|ci)'; then
-              echo "❌ 不符合规范: $msg"
+              echo "✗ 不符合规范: $msg"
               exit 1
             fi
           done
       - name: 检查无大型二进制文件
         run: |
           if git diff --stat origin/main..HEAD | grep -qE '\.jar|\.war|\.zip'; then
-            echo "❌ 禁止提交JAR/WAR/ZIP等二进制文件"
+            echo "✗ 禁止提交JAR/WAR/ZIP等二进制文件"
             exit 1
           fi
 ```
@@ -383,7 +383,7 @@ git config --show-origin user.name
     email = personal@gmail.com
 ```
 
-> 💡 `~/work/` 下仓库自动用工作身份，`~/personal/` 下自动用个人身份——开源/公司项目切换零操作。
+> `~/work/` 下仓库自动用工作身份，`~/personal/` 下自动用个人身份——开源/公司项目切换零操作。
 
 ### 9.2 基础配置
 
@@ -504,9 +504,9 @@ git config --global commit.template ~/.gitmessage
 #!/bin/bash
 # setup-git.sh — 新成员入职一键配置
 
-echo "👤 请输入你的姓名:"
+echo "请输入你的姓名:"
 read NAME
-echo "📧 请输入你的企业邮箱:"
+echo "请输入你的企业邮箱:"
 read EMAIL
 
 git config --global user.name "$NAME"
@@ -539,14 +539,14 @@ Thumbs.db
 IGNORE
 git config --global core.excludesfile ~/.gitignore_global
 
-echo "✅ Git配置完成！"
+echo "✓ Git配置完成！"
 ```
 
-> 💡 Java 后端补充推荐：`git config --global core.ignorecase false`（大小写敏感——Mac/Windows 默认不敏感，极易踩坑）、`git config --global core.filemode false`（忽略文件权限变更）。
+> Java 后端补充推荐：`git config --global core.ignorecase false`（大小写敏感——Mac/Windows 默认不敏感，极易踩坑）、`git config --global core.filemode false`（忽略文件权限变更）。
 
 ## 13. 核心要点
 
-> 🎯 **核心要点**：
+> **核心要点**：
 > - 钩子定位：**轻量前置、重量后置**——本地 hook 快检查，CI 兜底重检查；
 > - 团队共享 hooks：`core.hooksPath` 指向版本化目录 `.githooks/`；
 > - 三种自动化框架：手写 bash（灵活）、husky+lint-staged（前端）、pre-commit 框架（多语言）；

@@ -1,6 +1,6 @@
 # 01 - Nginx 概述与核心原理
 
-> 🎯 Nginx 是高性能 HTTP 服务器与反向代理，Master-Worker 进程模型+事件驱动架构，单机 10 万+并发 — 理解其底层原理是用好 Nginx 的前提
+> Nginx 是高性能 HTTP 服务器与反向代理，Master-Worker 进程模型+事件驱动架构，单机 10 万+并发 — 理解其底层原理是用好 Nginx 的前提
 
 ---
 

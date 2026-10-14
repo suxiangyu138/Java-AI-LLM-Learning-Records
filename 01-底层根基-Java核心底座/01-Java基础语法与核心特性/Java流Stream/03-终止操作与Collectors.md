@@ -6,7 +6,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [终止操作分类](#1-终止操作分类)
 2. [收集：toList 家族](#2-收集tolist-家族)
@@ -36,7 +36,7 @@
 | **查找** | findFirst/findAny | Optional | 短路 |
 | **遍历** | forEach/forEachOrdered | void | 副作用 |
 
-> 🎯 **短路终止操作**（性能关键）：anyMatch/allMatch/findFirst/findAny——结果确定即停止（不全量）。
+> **短路终止操作**（性能关键）：anyMatch/allMatch/findFirst/findAny——结果确定即停止（不全量）。
 
 ---
 
@@ -45,12 +45,12 @@
 ```java
 // ① toList（Java 16+ 推荐——不可变！）
 List<String> result = list.stream().filter(...).toList();
-// ⚠️ toList() 返回不可变 List（修改抛异常）
+// toList() 返回不可变 List（修改抛异常）
 
 // ② collect(toList())（Java 8——可变）
 List<String> result = list.stream()
     .collect(Collectors.toList());
-// ⚠️ 可变（可 add）——但具体类型未保证（通常 ArrayList）
+// 可变（可 add）——但具体类型未保证（通常 ArrayList）
 
 // ③ 指定实现（toCollection）
 List<String> result = list.stream()
@@ -61,7 +61,7 @@ Set<String> set = list.stream()
 // ④ toSet
 Set<String> unique = list.stream().collect(Collectors.toSet());
 
-// ⑤ toMap（⚠️ 必须处理键冲突！）
+// ⑤ toMap（必须处理键冲突！）
 // 两参数：键冲突抛 IllegalStateException！
 Map<String, User> byId = users.stream()
     .collect(Collectors.toMap(User::getId, u -> u));
@@ -73,7 +73,7 @@ Map<String, User> byId = users.stream()
     .collect(Collectors.toMap(User::getId, u -> u, (a, b) -> a, LinkedHashMap::new));
 ```
 
-> ⚠️ **toList vs collect(toList())**：Java 16+ 推荐 `toList()`（不可变、简洁）；需要可变集合用 `collect(toCollection(...))`。
+> **toList vs collect(toList())**：Java 16+ 推荐 `toList()`（不可变、简洁）；需要可变集合用 `collect(toCollection(...))`。
 
 ---
 
@@ -102,15 +102,15 @@ int sum = list.stream().reduce(0, Integer::sum);
 // 用法 3：并行安全的三参数（identity/accumulator/combiner）
 int sum = list.stream()
     .reduce(0, (a, b) -> a + b, Integer::sum);
-// ⚠️ 并行流必须三参数（combiner 合并分片结果）
+// 并行流必须三参数（combiner 合并分片结果）
 
 // 用法 4：字符串连接（自定义）
 String joined = words.stream()
     .reduce("", (a, b) -> a + "|" + b);
-// ⚠️ 复杂归约优先用 Collectors（可读性）
+// 复杂归约优先用 Collectors（可读性）
 ```
 
-> 🎯 **reduce 的选择**：数值聚合用原始流方法（sum/average）；通用归约用 reduce；**字符串连接/拼接用 Collectors.joining**（可读性）。
+> **reduce 的选择**：数值聚合用原始流方法（sum/average）；通用归约用 reduce；**字符串连接/拼接用 Collectors.joining**（可读性）。
 
 ---
 
@@ -140,10 +140,10 @@ Order order = orders.stream()
     .filter(o -> o.getId().equals("ORD-1"))
     .findFirst()
     .orElseThrow(() -> new OrderNotFoundException("ORD-1"));
-// ⚠️ 业务查找：orElseThrow 比 orElse(null) 安全
+// 业务查找：orElseThrow 比 orElse(null) 安全
 ```
 
-> 🎯 **findFirst vs findAny**：顺序敏感用 findFirst（并行流额外开销）；只需要「任意一个」用 findAny（并行性能更好）。
+> **findFirst vs findAny**：顺序敏感用 findFirst（并行流额外开销）；只需要「任意一个」用 findAny（并行性能更好）。
 
 ---
 
@@ -237,8 +237,8 @@ stats.getSum();      // 总和
 stats.getMin();      // 最小
 stats.getMax();      // 最大
 stats.getAverage();  // 平均
-// ⚠️ 对比：分别调用 count/sum/min/max 会多次遍历（慢）
-// ✅ summarizing 一次遍历全拿到
+// 对比：分别调用 count/sum/min/max 会多次遍历（慢）
+// ✓ summarizing 一次遍历全拿到
 
 // ② joining（字符串连接——比手动拼接优雅）
 String csv = orders.stream()
@@ -346,7 +346,7 @@ String joined = words.stream().collect(joiningCollector);  // a,b,c
 
 ## 10. 核心要点
 
-> 🎯 **核心要点**：
+> **核心要点**：
 > 1. 终止操作触发执行——短路操作（anyMatch/findFirst）结果确定即停
 > 2. toList（Java 16+ 不可变）vs collect(toList())（可变）；toMap 必须处理键冲突（三参数）
 > 3. reduce 数值聚合用原始流方法；字符串连接用 joining（可读性）

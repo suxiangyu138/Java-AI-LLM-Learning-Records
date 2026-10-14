@@ -1,6 +1,6 @@
 # 01 - MiniMax 模型家族与选型
 
-> 🎯 MiniMax 全模态家族 — 文本（M3/M2.7）+ 语音（Speech-2.8）+ 视频（Hailuo 2.3）+ 配套产品（MiniMax Code）。M3 是 2026 年"三项能力兼备"的国产旗舰
+> MiniMax 全模态家族 — 文本（M3/M2.7）+ 语音（Speech-2.8）+ 视频（Hailuo 2.3）+ 配套产品（MiniMax Code）。M3 是 2026 年"三项能力兼备"的国产旗舰
 
 ---
 
@@ -46,7 +46,7 @@
 | 架构 | MSA 稀疏注意力 |
 | 多模态 | 原生（文本+图像+视频交错训练） |
 | 编程 | SWE-Bench Pro **59.0%** |
-| 开源 | ✅ MiniMax Community License（可商用） |
+| 开源 | ✓ MiniMax Community License（可商用） |
 | 模型名 | `MiniMax-M3`（另有 M3-highspeed） |
 
 **M3 的"三个第一"：**
@@ -123,6 +123,6 @@
 
 ---
 
-> 🎯 **核心要点**：MiniMax 选型四句话 — **① 旗舰 → M3（三项兼备：Coding 59% + 1M 上下文 + 原生多模态）② 成本 → M2.7（$0.30/$1.20）③ 语音 → Speech-2.8（HD/Turbo + 音色克隆）④ 视频 → Hailuo 2.3（1080P）**。M3 双协议（Anthropic + OpenAI）让它在编程工具生态中即插即用。
+> **核心要点**：MiniMax 选型四句话 — **① 旗舰 → M3（三项兼备：Coding 59% + 1M 上下文 + 原生多模态）② 成本 → M2.7（$0.30/$1.20）③ 语音 → Speech-2.8（HD/Turbo + 音色克隆）④ 视频 → Hailuo 2.3（1080P）**。M3 双协议（Anthropic + OpenAI）让它在编程工具生态中即插即用。
 
 **下一模块**：[02-M3架构与核心技术](02-M3架构与核心技术.md) / **返回总览**：[00-总览](00-MiniMax-API知识体系总览.md)

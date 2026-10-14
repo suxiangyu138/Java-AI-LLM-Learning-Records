@@ -1,6 +1,6 @@
 # 05 - Spring 技术选型实战指南
 
-> 🎯 技术选型 = 面试高分区 + 架构师基本功。本章给出 2026 年 Spring 生态的"决策树"：框架怎么选、架构怎么定、数据层怎么办、AI 怎么接 — 每个决策带理由
+> 技术选型 = 面试高分区 + 架构师基本功。本章给出 2026 年 Spring 生态的"决策树"：框架怎么选、架构怎么定、数据层怎么办、AI 怎么接 — 每个决策带理由
 
 ---
 
@@ -48,10 +48,10 @@
 **2026 决策：**
 
 ```text
-✅ 默认选 Spring MVC + 虚拟线程（Boot 4 默认）
+✓ 默认选 Spring MVC + 虚拟线程（Boot 4 默认）
    —— 虚拟线程让"同步写法"获得接近响应式的并发能力，
       同时保留 MVC 的可读性和生态
-⚠️ 只有当：极端 IO 场景（网关/长连接/流式）+ 团队熟练响应式
+只有当：极端 IO 场景（网关/长连接/流式）+ 团队熟练响应式
    才选 WebFlux
 ```
 
@@ -73,14 +73,14 @@
 **2026 决策：**
 
 ```text
-✅ 起步：模块化单体（Spring Modulith）—— 模块边界在代码里，
+✓ 起步：模块化单体（Spring Modulith）—— 模块边界在代码里，
    后续按需拆微服务，边界天然
-⚠️ 何时拆微服务？
+何时拆微服务？
    ① 团队规模 ≥ 3-4 个独立交付组
    ② 模块资源需求差异大（如推荐引擎 vs 简单 CRUD）
    ③ 故障隔离成为硬需求（核心链路不容被拖垮）
    ④ 已经出现"改一行等全量回归"
-❌ 不要为了"架构好看"而微服务 —— 分布式事务/链路排查/发布
+✗ 不要为了"架构好看"而微服务 —— 分布式事务/链路排查/发布
    复杂度是真实的成本
 ```
 
@@ -102,11 +102,11 @@
 **2026 决策：**
 
 ```text
-✅ 国内互联网业务（重 SQL、高并发）：MyBatis-Plus
+✓ 国内互联网业务（重 SQL、高并发）：MyBatis-Plus
    —— SQL 可控 + 代码生成 + 分页/逻辑删除开箱即用
-✅ 领域模型驱动（DDD）/ 表结构简单：Spring Data JPA
+✓ 领域模型驱动（DDD）/ 表结构简单：Spring Data JPA
    —— 实体建模、仓库模式、约定优于配置
-⚠️ 混合使用也常见：JPA 做领域主链路 + JdbcTemplate 做复杂查询
+混合使用也常见：JPA 做领域主链路 + JdbcTemplate 做复杂查询
 ```
 
 **追问：** MyBatis-Plus 和原生 MyBatis？→ Plus 是增强封装（CRUD 方法、条件构造器、分页插件），国内新项目基本直接用 Plus。
@@ -146,15 +146,15 @@
 ```text
 场景：2026 年新启动的"Java 后端 + AI 能力"业务系统
 ─────────────────────────────────────────────
-✅ Spring Boot 4.1 + Framework 7.1 + Java 21 LTS
-✅ 架构：模块化单体起步（Spring Modulith），预留拆服务边界
-✅ Web：Spring MVC + 虚拟线程（默认）
-✅ 持久层：MyBatis-Plus（业务库）+ Spring Data Redis
-✅ 微服务预留：Nacos + Sentinel + Gateway（规模到了再启）
-✅ AI：Spring AI 2.x + RAG（向量库 pgvector 起步）+ MCP
-✅ 可观测：starter-opentelemetry + Grafana 栈
-✅ 构建：Maven + 可选 GraalVM 原生镜像（Serverless 场景）
-✅ 安全：Spring Security 7 + OAuth2（授权服务器独立）
+✓ Spring Boot 4.1 + Framework 7.1 + Java 21 LTS
+✓ 架构：模块化单体起步（Spring Modulith），预留拆服务边界
+✓ Web：Spring MVC + 虚拟线程（默认）
+✓ 持久层：MyBatis-Plus（业务库）+ Spring Data Redis
+✓ 微服务预留：Nacos + Sentinel + Gateway（规模到了再启）
+✓ AI：Spring AI 2.x + RAG（向量库 pgvector 起步）+ MCP
+✓ 可观测：starter-opentelemetry + Grafana 栈
+✓ 构建：Maven + 可选 GraalVM 原生镜像（Serverless 场景）
+✓ 安全：Spring Security 7 + OAuth2（授权服务器独立）
 ```
 
 ---
@@ -173,6 +173,6 @@
 
 ---
 
-> 🎯 **核心要点**：选型的本质是"用成本换收益的显式决策" — MVC+虚拟线程 > 盲目 WebFlux；模块化单体 > 盲目微服务；MyBatis-Plus 适合国内业务；组件按需混搭。面试答选型题的口诀：**结论 → 三个理由 → 一个例外场景**。
+> **核心要点**：选型的本质是"用成本换收益的显式决策" — MVC+虚拟线程 > 盲目 WebFlux；模块化单体 > 盲目微服务；MyBatis-Plus 适合国内业务；组件按需混搭。面试答选型题的口诀：**结论 → 三个理由 → 一个例外场景**。
 
 **下一模块**：[06-Spring生态面试题集锦](06-Spring生态面试题集锦.md) / **返回总览**：[00-Spring生态知识体系总览](00-Spring生态知识体系总览.md)

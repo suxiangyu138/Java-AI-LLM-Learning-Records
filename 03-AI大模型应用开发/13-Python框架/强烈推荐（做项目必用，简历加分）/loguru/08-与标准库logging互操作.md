@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [为什么必须互操作](#1-为什么必须互操作)
 2. [两个方向的对接](#2-两个方向的对接)
@@ -90,7 +90,7 @@ def setup_logging():
 
 **重复日志是接管后第一高频问题**：同一消息出现两遍——loguru 一遍 + 标准库 root 一遍。根因：`logging` 的 handler 会沿 logger 层级传播，`logging.basicConfig` 挂到 root 后，被 InterceptHandler 处理的记录**继续 propagate 到 root 又打了一遍**。解法就是第 3 节代码里的 `propagate = False`——**接管一个就断一个的传播**。
 
-> 💡 **提示**：如果还有漏网的重复，检查是否 `logging.root.addHandler(...)` 被别的库偷偷加过 handler；统一收口的原则是"**标准库侧只留 InterceptHandler 一个挂载点，root 清空其他 handler**"。
+> **提示**：如果还有漏网的重复，检查是否 `logging.root.addHandler(...)` 被别的库偷偷加过 handler；统一收口的原则是"**标准库侧只留 InterceptHandler 一个挂载点，root 清空其他 handler**"。
 
 ## 5. 第三方库日志治理实战
 
@@ -139,7 +139,7 @@ logger.add("logs/app.log", filter={
 4. 重复日志的根因和两种解法？
 5. 迁移三步走每步的验收标准是什么？
 
-> 🎯 **核心要点**：日志大一统 = **InterceptHandler 接管标准库 + propagate=False 防重复 + filter 字典调级 + depth 修正定位**；迁移走"并行双写 → 接管第三方 → 替换业务代码"三步，每步独立可上线——**生产日志只有一套格式、一个出口、一个轮转文件**。
+> **核心要点**：日志大一统 = **InterceptHandler 接管标准库 + propagate=False 防重复 + filter 字典调级 + depth 修正定位**；迁移走"并行双写 → 接管第三方 → 替换业务代码"三步，每步独立可上线——**生产日志只有一套格式、一个出口、一个轮转文件**。
 
 ---
 

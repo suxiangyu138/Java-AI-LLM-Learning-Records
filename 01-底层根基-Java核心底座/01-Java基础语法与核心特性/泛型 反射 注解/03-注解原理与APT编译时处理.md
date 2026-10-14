@@ -2,7 +2,7 @@
 
 > 注解不是注释——它是代码的元数据。面试官问注解，其实是在问：你知道运行时注解（反射）和编译时注解（APT）的本质区别吗？
 
-## 📚 目录
+## 目录
 
 1. [注解的本质](#1-注解的本质)
 2. [RetentionPolicy三级别](#2-retentionpolicy三级别)
@@ -57,7 +57,7 @@ javap -verbose MyAnnotation.class
 #       default_value: I=0
 ```
 
-> 💡 **注解的本质**：`@interface` 只是一个语法糖，编译后就是 `interface extends Annotation`。注解中的"方法"对应的是注解的**元素（element）**，`default` 关键字设置默认值。
+> **注解的本质**：`@interface` 只是一个语法糖，编译后就是 `interface extends Annotation`。注解中的"方法"对应的是注解的**元素（element）**，`default` 关键字设置默认值。
 
 ### 1.2 元注解（Meta-Annotations）
 
@@ -140,16 +140,16 @@ public @interface ValidAnnotation {
 }
 
 public @interface InvalidAnnotation {
-    // ❌ 不合法——不能使用包装类型（除Class外）
+    // ✗ 不合法——不能使用包装类型（除Class外）
     // Integer count();
 
-    // ❌ 不合法——不能是Object或其他任意引用类型
+    // ✗ 不合法——不能是Object或其他任意引用类型
     // Object obj();
 
-    // ❌ 不合法——不能是数组的数组
+    // ✗ 不合法——不能是数组的数组
     // String[][] matrix();
 
-    // ❌ 不合法——不能有泛型
+    // ✗ 不合法——不能有泛型
     // <T> T value();
 }
 
@@ -158,7 +158,7 @@ enum Status {
 }
 ```
 
-> 🎯 **核心要点**：注解是特殊的接口，用 `@interface` 定义，编译器生成 `interface extends Annotation` 的字节码。元注解控制注解的行为（目标、生命周期、继承等）。注解元素只能是**基本类型、String、Class、枚举、注解、以及这些类型的数组**。
+> **核心要点**：注解是特殊的接口，用 `@interface` 定义，编译器生成 `interface extends Annotation` 的字节码。元注解控制注解的行为（目标、生命周期、继承等）。注解元素只能是**基本类型、String、Class、枚举、注解、以及这些类型的数组**。
 
 ---
 
@@ -233,7 +233,7 @@ Method method = ClassLevelDemo.class.getMethod("someMethod");
 // 因为CLASS级别的注解在运行时不可见！
 ```
 
-> ⚠️ **陷阱**：很多初学者以为只要写了 `@interface` 就能在运行时通过反射读取到，这是错的！如果忘记加 `@Retention(RetentionPolicy.RUNTIME)`，默认是CLASS级别，运行时**读不到**。这是面试中常见的概念性错误。
+> **陷阱**：很多初学者以为只要写了 `@interface` 就能在运行时通过反射读取到，这是错的！如果忘记加 `@Retention(RetentionPolicy.RUNTIME)`，默认是CLASS级别，运行时**读不到**。这是面试中常见的概念性错误。
 
 ### 2.4 RUNTIME级别详解
 
@@ -256,13 +256,13 @@ RUNTIME是框架最常用的级别。注解保留在字节码中，JVM会在运�
 // }
 ```
 
-> 💡 **选择建议**：
+> **选择建议**：
 > - 自己写工具或IDE插件用：**SOURCE**
 > - 依赖字节码增强（如Lombok、AspectJ)：**CLASS**或**SOURCE**
 > - Spring/MyBatis等通过反射读取：**RUNTIME**
 > - 不确定时：**RUNTIME**（灵活性最高，但会增加运行时内存开销）
 
-> 🎯 **核心要点**：RetentionPolicy的三个级别决定注解的**可见性和生命周期**。框架注解通常用RUNTIME（运行时反射读取）；IDE提示/编译器检查用SOURCE；字节码增强工具用CLASS。默认是CLASS，**如果不加@Retention，运行时反射读不到**。
+> **核心要点**：RetentionPolicy的三个级别决定注解的**可见性和生命周期**。框架注解通常用RUNTIME（运行时反射读取）；IDE提示/编译器检查用SOURCE；字节码增强工具用CLASS。默认是CLASS，**如果不加@Retention，运行时反射读不到**。
 
 ---
 
@@ -445,7 +445,7 @@ class LogAspect {
 [日志] 耗时: 1ms, 结果: User{username='Alice', email='alice@example.com'}
 ```
 
-> 🎯 **核心要点**：运行时注解通过 `Class.getAnnotation()` / `getDeclaredFields()` / `getDeclaredMethods()` 等反射API读取。Spring AOP + 运行时注解是实现声明式编程（@Transactional、@Cacheable）的基础。记住：**只有@Retention(RUNTIME)的注解才能在运行时通过反射获取**。
+> **核心要点**：运行时注解通过 `Class.getAnnotation()` / `getDeclaredFields()` / `getDeclaredMethods()` 等反射API读取。Spring AOP + 运行时注解是实现声明式编程（@Transactional、@Cacheable）的基础。记住：**只有@Retention(RUNTIME)的注解才能在运行时通过反射获取**。
 
 ---
 
@@ -751,13 +751,13 @@ public class MainActivity_ViewBinding implements Unbinder {
 }
 ```
 
-> 💡 **Lombok的限制**：
+> **Lombok的限制**：
 > - 依赖非公开javac API，每个JDK版本可能需要适配
 > - 与某些IDE的增量编译可能冲突
 > - 团队中如果有人不知道Lombok，会看到编译错误
 > - 生成的代码在源码中不可见，调试时可能困惑
 
-> 🎯 **核心要点**：标准APT（Dagger2、AutoService等）只能**生成新文件**，不能修改已有类。Lombok**修改AST**做到了"修改已有类"，但这是非标准的hack。理解这两者的区别，是注解面试中的分水岭问题。
+> **核心要点**：标准APT（Dagger2、AutoService等）只能**生成新文件**，不能修改已有类。Lombok**修改AST**做到了"修改已有类"，但这是非标准的hack。理解这两者的区别，是注解面试中的分水岭问题。
 
 ---
 
@@ -1010,7 +1010,7 @@ public class BuilderProcessor extends AbstractProcessor {
 }
 ```
 
-> 🎯 **核心要点**：两个实战展示了**运行时反射处理注解**和**编译时APT处理注解**两种范式。运行时反射处理灵活（可修改已有逻辑），但有性能开销；编译时APT处理零运行时开销，但只能生成新文件。选择原则：能用编译时解决的就不要用运行时。
+> **核心要点**：两个实战展示了**运行时反射处理注解**和**编译时APT处理注解**两种范式。运行时反射处理灵活（可修改已有逻辑），但有性能开销；编译时APT处理零运行时开销，但只能生成新文件。选择原则：能用编译时解决的就不要用运行时。
 
 ---
 
@@ -1045,10 +1045,10 @@ public class InheritedDemo {
                 (childAnno != null ? childAnno.value() : "无"));
         // 输出: 子类有注解: parent
 
-        // ❌ @Inherited 对接口无效
+        // ✗ @Inherited 对接口无效
         // 实现接口的类不会继承接口上的@Inherited注解
 
-        // ❌ @Inherited 对方法/字段等无效
+        // ✗ @Inherited 对方法/字段等无效
         // 仅对类/接口上的注解有效
     }
 }
@@ -1070,7 +1070,7 @@ class Base {
 class Derived extends Base {
     @Override
     public void doSomething() {}
-    // ❌ 子类重写的方法上 @MethodAnnotation 不会继承
+    // ✗ 子类重写的方法上 @MethodAnnotation 不会继承
     // getAnnotation(MethodAnnotation.class) -> null
 }
 ```
@@ -1080,7 +1080,7 @@ class Derived extends Base {
 Java的注解**不能使用 `extends` 关键字继承另一个注解**。这与接口的继承不同。
 
 ```java
-// ❌ 这不会编译！注解不能继承注解
+// ✗ 这不会编译！注解不能继承注解
 // public @interface SubAnnotation extends BaseAnnotation {
 // }
 
@@ -1176,7 +1176,7 @@ class SpringAnnotationUtils {
 }
 ```
 
-> 🎯 **核心要点**：
+> **核心要点**：
 > - `@Inherited` 只支持**类继承**，不支持**接口实现**和**方法/字段注解继承**
 > - Java注解**不能直接继承**另一个注解，但Spring通过 `@AliasFor` 模拟了类似功能
 > - **组合注解**是Spring框架的核心设计模式，`@SpringBootApplication` = `@SpringBootConfiguration` + `@EnableAutoConfiguration` + `@ComponentScan`
@@ -1370,7 +1370,7 @@ public class AutowiredDemo {
 - isAnnotationPresent() vs getDeclaredAnnotation() != null（判断存在性）
 ```
 
-> 🎯 **面试核心**：注解面试题的核心脉络——**源码级（SOURCE）**、**编译时处理（APT/CLASS）**、**运行时处理（RUNTIME）**。理解这三个层级的本质区别和使用场景，远比背诵具体API重要。真正体现深度的，是能讲清楚**Lombok修改AST vs 标准APT生成新文件**的本质区别。
+> **面试核心**：注解面试题的核心脉络——**源码级（SOURCE）**、**编译时处理（APT/CLASS）**、**运行时处理（RUNTIME）**。理解这三个层级的本质区别和使用场景，远比背诵具体API重要。真正体现深度的，是能讲清楚**Lombok修改AST vs 标准APT生成新文件**的本质区别。
 
 ---
 

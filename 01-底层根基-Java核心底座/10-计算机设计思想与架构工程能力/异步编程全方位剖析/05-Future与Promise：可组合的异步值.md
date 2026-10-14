@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [异步值的读写两侧：Future 与 Promise](#1-异步值的读写两侧future-与-promise)
 2. [CompletableFuture：组合子家族](#2-completablefuture组合子家族)
@@ -134,11 +134,11 @@ CompletableFuture.runAsync(() -> riskyOperation())
 
 **Promise 三态与 Future 完成语义的对照**再补一笔（面试对比题常客）：两者都是"一次性容器"——Promise 的 fulfilled/rejected 不可逆，CompletableFuture 的 complete/completeExceptionally 同样只能一次；区别在**组合层**——Promise 只有 then/catch 链与 all/race 静态方法，CompletableFuture 有完整的组合子家族（thenCompose/thenCombine/handle）与显式完成能力（complete/obtrudeValue），**"可写"是 Java 版本的独有设计**（Promise 的写侧只属于执行者，CompletableFuture 任何人都能 complete）——这把"异步结果"从"封闭的未来"变成"可编程的完成器"，是编排类框架（Netty 的 Promise 扩展）依赖它的原因。
 
-> 🎯 **核心要点**：Future/Promise 把异步变成可组合的值（map/flatMap/zip/catch 组合子），链式顺序与集中错误处理是实质进步；三新坑——着色问题分裂生态（透明轻量线程是解法）、futurelock 栈不可见（超时是解药）、静默失败（终止分支纪律）——构成协程与虚拟线程登场的完整理由。
+> **核心要点**：Future/Promise 把异步变成可组合的值（map/flatMap/zip/catch 组合子），链式顺序与集中错误处理是实质进步；三新坑——着色问题分裂生态（透明轻量线程是解法）、futurelock 栈不可见（超时是解药）、静默失败（终止分支纪律）——构成协程与虚拟线程登场的完整理由。
 
 ## 7. 核心要点与思考题
 
-> 🎯 **本章三句话总结**：
+> **本章三句话总结**：
 > 1. 异步值模型：Future 读侧 + Promise 写侧，组合子家族（thenApply/thenCompose/allOf）让异步可编排；
 > 2. 着色问题 = 同步/异步不可互调，生态被迫双写；虚拟线程/goroutine 透明绕过，显式协程选择接受；
 > 3. futurelock（等待成环 + 栈丢失）与静默失败（未处理拒绝）是这代模型的新债——超时 + 终止分支是两条纪律。

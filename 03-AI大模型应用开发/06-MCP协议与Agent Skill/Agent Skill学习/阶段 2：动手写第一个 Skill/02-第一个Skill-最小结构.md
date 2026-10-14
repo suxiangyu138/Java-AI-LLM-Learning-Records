@@ -2,7 +2,7 @@
 
 > 亲手创建第一个技能：一个目录 + 一个 SKILL.md——frontmatter（name/description）+ 简单正文，5 分钟跑通"最小可用技能"。
 
-## 📚 目录
+## 目录
 
 1. [最小技能的结构](#1-最小技能的结构)
 2. [创建步骤](#2-创建步骤)
@@ -23,8 +23,8 @@ scripts/references/assets 都是可选的（后续再加）
 
 | 元素 | 最小技能 |
 |---|---|
-| 目录 | ✅（名字 = 技能名） |
-| SKILL.md | ✅（frontmatter + 正文） |
+| 目录 | ✓（名字 = 技能名） |
+| SKILL.md | ✓（frontmatter + 正文） |
 | scripts/ | 暂不需要 |
 | references/ | 暂不需要 |
 | assets/ | 暂不需要 |
@@ -207,7 +207,7 @@ allowed-tools: []
 
 > 演进原则：**先跑通再丰富**——最小结构触发后，逐层加内容（每次验证），别一上来追求完整。
 
-> 🎯 核心要点：最小技能 = 目录 + SKILL.md；frontmatter 最小（name+description）；建议加 version + allowed-tools；正文最少"何时使用 + 执行步骤"；创建顺序（目录→frontmatter→正文→新会话→测试）；六个常见错误（尤其 name 一致性/description 笼统/SKILL 大写）；演进路径（最小→可用→生产级），先跑通再丰富。
+> 核心要点：最小技能 = 目录 + SKILL.md；frontmatter 最小（name+description）；建议加 version + allowed-tools；正文最少"何时使用 + 执行步骤"；创建顺序（目录→frontmatter→正文→新会话→测试）；六个常见错误（尤其 name 一致性/description 笼统/SKILL 大写）；演进路径（最小→可用→生产级），先跑通再丰富。
 
 ---
 

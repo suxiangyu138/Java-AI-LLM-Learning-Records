@@ -1,6 +1,6 @@
 # 01 - Webhook 基础与事件驱动机制
 
-> 🎯 Webhook = 反向 API — 系统在事件发生时主动推送数据，而非你主动去查。它是 AI 平台（Coze/Dify/n8n）与外部系统集成的核心通道。本章覆盖 Webhook 的工程全链路
+> Webhook = 反向 API — 系统在事件发生时主动推送数据，而非你主动去查。它是 AI 平台（Coze/Dify/n8n）与外部系统集成的核心通道。本章覆盖 Webhook 的工程全链路
 
 ---
 
@@ -44,7 +44,7 @@ Webhook（系统主动）：
 | **Webhook（被动推）** | 服务器→客户端 | **实时** | **低** | 事件通知 |
 | **WebSocket** | 双向 | 实时 | 中（长连接） | 即时通讯 |
 
-> 💡 Webhook 是"事件消费"的最佳模式 — 不用轮询、实时响应、资源效率最高。但要求你的服务**公网可达**。
+> Webhook 是"事件消费"的最佳模式 — 不用轮询、实时响应、资源效率最高。但要求你的服务**公网可达**。
 
 ---
 
@@ -64,7 +64,7 @@ Webhook（系统主动）：
    }
 
 ③ 你的服务接收 → 验证签名 → 返回 200 OK → 异步处理业务逻辑
-   ⚠️ 必须在 10-30 秒内返回 200（否则平台认为失败并重试）
+   必须在 10-30 秒内返回 200（否则平台认为失败并重试）
 ```
 
 ---
@@ -78,7 +78,7 @@ Webhook（系统主动）：
 public boolean verifySignature(String payload, String signatureHeader, String secret) {
     String expected = "sha256=" + HmacUtils.hmacSha256Hex(secret, payload);
     return MessageDigest.isEqual(expected.getBytes(), signatureHeader.getBytes());
-    // ⚠️ 必须用时序安全的比较（防时序攻击），不要用 .equals()
+    // 必须用时序安全的比较（防时序攻击），不要用 .equals()
 }
 ```
 
@@ -145,6 +145,6 @@ curl -X POST https://localhost:8080/webhook/test \
 
 ---
 
-> 🎯 **核心要点**：Webhook 工程的"安全四件套+可靠性保障" = **签名验证（防伪造）+ IP 白名单 + 时间戳防重放 + 事件 ID 幂等** + **快速 200→异步处理→消息队列→DLQ 告警**。缺任何一个，生产环境都可能"丢事件或重复处理"。
+> **核心要点**：Webhook 工程的"安全四件套+可靠性保障" = **签名验证（防伪造）+ IP 白名单 + 时间戳防重放 + 事件 ID 幂等** + **快速 200→异步处理→消息队列→DLQ 告警**。缺任何一个，生产环境都可能"丢事件或重复处理"。
 
 **下一模块**：[02-AI平台Webhook实战](02-AI平台Webhook实战.md) / **返回总览**：[00-Hook总览](00-Hook知识体系总览.md)

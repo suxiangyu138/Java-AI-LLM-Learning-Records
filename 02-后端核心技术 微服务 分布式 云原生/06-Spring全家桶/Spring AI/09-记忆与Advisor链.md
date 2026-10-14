@@ -1,7 +1,7 @@
 # 09-记忆与 Advisor 链
 > 多轮会话记忆的实现层次、ChatMemory 抽象、记忆与工具循环的交互、Advisor 链排序与自定义扩展
 
-## 📚 目录
+## 目录
 1. [记忆的三个层次](#1-记忆的三个层次)
 2. [ChatMemoryRepository 抽象](#2-chatmemoryrepository-抽象)
 3. [窗口裁剪策略](#3-窗口裁剪策略)
@@ -19,7 +19,7 @@
 | 会话记忆 | `ChatMemory` | 多轮对话（同会话） | `ChatMemoryRepository` + 记忆 Advisor |
 | 长期记忆 | 外部存储 | 跨会话（用户画像/偏好） | 向量库/DB 检索（RAG 化记忆） |
 
-> 🎯 **核心要点**：Spring AI 的"记忆"默认指**会话记忆**——把历史消息注入当前 prompt（上下文窗口管理），并随轮次回写存储。跨会话长期记忆是 RAG 的活学活用（用户资料入库检索），不是框架内置。
+> **核心要点**：Spring AI 的"记忆"默认指**会话记忆**——把历史消息注入当前 prompt（上下文窗口管理），并随轮次回写存储。跨会话长期记忆是 RAG 的活学活用（用户资料入库检索），不是框架内置。
 
 ## 2. ChatMemoryRepository 抽象
 
@@ -57,7 +57,7 @@ MessageWindowChatMemory memory = MessageWindowChatMemory.builder()
         .build();
 ```
 
-> ⚠️ **裁剪切分问题（2.0 修复）**：旧版按条数硬切可能把"用户提问-助手回答"切在中间（上下文残缺）；2.0 将裁剪点吸附到最近 USER 消息边界，保证轮次完整。
+> **裁剪切分问题（2.0 修复）**：旧版按条数硬切可能把"用户提问-助手回答"切在中间（上下文残缺）；2.0 将裁剪点吸附到最近 USER 消息边界，保证轮次完整。
 
 ## 4. 两个记忆 Advisor 的区别
 
@@ -87,7 +87,7 @@ MessageWindowChatMemory memory = MessageWindowChatMemory.builder()
 | 工具循环内部历史 | `ToolCallingAdvisor` 自己维护中间对话历史（工具请求/结果），不落记忆存储 |
 | `DEFAULT_CHAT_MEMORY_PRECEDENCE_ORDER` 下调 | 2.0 调整记忆 Advisor 优先级，使其包裹工具循环而非参与每轮 |
 
-> ⚠️ **易错点**：自定义记忆逻辑时别把记忆 Advisor 排在 `ToolCallingAdvisor` 之内——每轮工具循环都注入记忆会造成 prompt 膨胀与工具判定漂移。
+> **易错点**：自定义记忆逻辑时别把记忆 Advisor 排在 `ToolCallingAdvisor` 之内——每轮工具循环都注入记忆会造成 prompt 膨胀与工具判定漂移。
 
 ## 6. 自定义 Advisor 实战
 
@@ -127,7 +127,7 @@ ChatClient client = builder.defaultAdvisors(costLoggingAdvisor()).build();
 
 ## 7. 核心要点
 
-> 🎯 **核心要点**：
+> **核心要点**：
 > - 记忆 = ChatMemoryRepository 存储 + 记忆 Advisor 注入 + 窗口裁剪策略；
 > - 两 Advisor 选择：保真（Message）vs 压缩（Prompt），按历史长度定；
 > - 2.0 记忆在工具循环之外、只注入一次——自定义记忆别排进工具循环；

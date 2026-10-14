@@ -1,6 +1,6 @@
 # 03 - Nginx 核心配置
 
-> 🎯 理解 Nginx 配置的层级结构（全局→events→http→server→location）是写对配置的前提 — 本节系统拆解每一层的关键指令
+> 理解 Nginx 配置的层级结构（全局→events→http→server→location）是写对配置的前提 — 本节系统拆解每一层的关键指令
 
 ---
 

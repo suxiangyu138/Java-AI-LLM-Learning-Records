@@ -1,6 +1,6 @@
 # 01 - Hermes 模型系列全景与演进
 
-> 🎯 Hermes 是 Nous Research 打造的"无审查、高可控"开源 LLM 系列，从 2023 年 Hermes 1 起步，历经 Hermes 2 Pro → Hermes 3（2024）→ DeepHermes 3（2025），逐步成为开源社区 Agent 开发的首选基座模型之一
+> Hermes 是 Nous Research 打造的"无审查、高可控"开源 LLM 系列，从 2023 年 Hermes 1 起步，历经 Hermes 2 Pro → Hermes 3（2024）→ DeepHermes 3（2025），逐步成为开源社区 Agent 开发的首选基座模型之一
 
 ---
 
@@ -24,7 +24,7 @@
 | 2024 Q4 | **Hermes 3 3B** | Llama 3.2 | 3B | 小模型 Function Calling 标杆 |
 | 2025 Q1 | **DeepHermes 3** | Llama 3.1 / Llama 3.2 / Mistral | 3B/8B/24B | **一键切换**直觉/深度推理模式 |
 
-> 💡 Hermes 3 405B 是**业界首个**对 Llama 3.1 405B 进行全参数微调的开源模型——在 LambdaLabs 8 节点 H100 集群上仅用数周完成训练
+> Hermes 3 405B 是**业界首个**对 Llama 3.1 405B 进行全参数微调的开源模型——在 LambdaLabs 8 节点 H100 集群上仅用数周完成训练
 
 ## 2. 各代模型架构对比
 
@@ -33,13 +33,13 @@
 | 基座架构 | Llama 2 | Mistral/Llama 3 | Llama 3.1/3.2 | Llama 3.1/3.2/Mistral |
 | 对话格式 | 无标准格式 | ChatML | ChatML | **Llama-Chat** |
 | 上下文长度 | 4K | 32K | 32K | **32K** |
-| Function Calling | ❌ | ✅ (初代) | ✅ (增强) | ✅ (继承) |
-| JSON Mode | ❌ | ✅ | ✅ | ✅ |
-| 推理模式 | ❌ | ❌ | ❌ | ✅ (`<think>`) |
+| Function Calling | ✗ | ✓ (初代) | ✓ (增强) | ✓ (继承) |
+| JSON Mode | ✗ | ✓ | ✓ | ✓ |
+| 推理模式 | ✗ | ✗ | ✗ | ✓ (`<think>`) |
 | 量化支持 | 4bit/8bit | 4bit/8bit | FP8 (Neural Magic) | GGUF/FP8 |
 | 训练数据 | 混合开源 | 合成数据 | 合成数据+RLHF | R1 蒸馏+合成 |
 
-> ⚠️ **重要变更**：DeepHermes 3 从 ChatML 格式迁移到 **Llama-Chat 格式**（`<|start_header_id|>`），与 Hermes 3 不兼容，迁移时需更新模板
+> **重要变更**：DeepHermes 3 从 ChatML 格式迁移到 **Llama-Chat 格式**（`<|start_header_id|>`），与 Hermes 3 不兼容，迁移时需更新模板
 
 ## 3. Hermes 3 核心特性
 
@@ -56,15 +56,15 @@
 
 ```
 Hermes 3 能力矩阵
-├── 🧠 通用推理         ← 对标 Llama 3.1 Instruct，多基准持平或超越
-├── 🔧 Function Calling  ← ChatML + <tool_call> XML，支持多工具递归调用
-├── 📋 结构化输出        ← <schema> 标签 + Pydantic JSON 约束
-├── 🎭 角色扮演          ← 内置内心独白能力（internal monologue）
-├── 💬 多轮对话          ← 长上下文连贯性，32K 窗口
-└── 🎯 用户可控性        ← 极强的 system prompt 遵从度（aggressively follows）
+├── 通用推理         ← 对标 Llama 3.1 Instruct，多基准持平或超越
+├── Function Calling  ← ChatML + <tool_call> XML，支持多工具递归调用
+├── 结构化输出        ← <schema> 标签 + Pydantic JSON 约束
+├── 角色扮演          ← 内置内心独白能力（internal monologue）
+├── 多轮对话          ← 长上下文连贯性，32K 窗口
+└── 用户可控性        ← 极强的 system prompt 遵从度（aggressively follows）
 ```
 
-> 💡 "Aggressively follows the system prompt" 是 Hermes 3 的标志性特征——它在遵循用户指令方面极为激进，这也意味着一份好的 system prompt 能带来极致的可控性
+> "Aggressively follows the system prompt" 是 Hermes 3 的标志性特征——它在遵循用户指令方面极为激进，这也意味着一份好的 system prompt 能带来极致的可控性
 
 ## 4. DeepHermes 3：混合推理时代
 
@@ -101,7 +101,7 @@ Hermes 3 能力矩阵
 | 内容生成 | 3.0% | 模板化输出 |
 | 对齐/指令遵从 | 2.5% | 安全与可控 |
 
-> ⚠️ **已知限制**：推理模式在首轮响应正常激活，但**长对话中可能失效**。变通方案：强制以 `<think>\n` 开头（类似 DeepSeek-R1）
+> **已知限制**：推理模式在首轮响应正常激活，但**长对话中可能失效**。变通方案：强制以 `<think>\n` 开头（类似 DeepSeek-R1）
 
 ### 4.3 推理 Benchmark
 
@@ -110,7 +110,7 @@ Hermes 3 能力矩阵
 | DeepSeek R1 (distilled) | 89.1% | 纯推理专家 |
 | **DeepHermes 3** | **67%** | **通才+推理双模式** |
 
-> 💡 DeepHermes 3 不走纯数学路线，而是追求"既能日常聊天，又能深度推理"的通才定位
+> DeepHermes 3 不走纯数学路线，而是追求"既能日常聊天，又能深度推理"的通才定位
 
 ## 5. 训练方法演进
 

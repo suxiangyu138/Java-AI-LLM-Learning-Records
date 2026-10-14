@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [组件一句话定位](#1-组件一句话定位)
 2. [版本现状（2026-08）](#2-版本现状2026-08)
@@ -58,7 +58,7 @@
 - **测试上下文暂停**：`spring.test.context.cache.pause` 属性（`always`/`never`，7.0.3+ 起默认"仅切换上下文时才暂停"），空闲测试上下文可暂停后台进程；
 - **`<lang:*` XML 命名空间、BeanShell、Kotlin 脚本模板废弃**（7.0 起不再推荐）。
 
-> ⚠️ **要点**：7.0 的 context 变化是"清理 + 内建"——javax→jakarta 是硬性迁移项；其余（CGLIB 默认、弹性注解）是新能力叠加，不影响存量配置类代码。
+> **要点**：7.0 的 context 变化是"清理 + 内建"——javax→jakarta 是硬性迁移项；其余（CGLIB 默认、弹性注解）是新能力叠加，不影响存量配置类代码。
 
 ### 2.1 版本支持策略与升级窗口
 
@@ -66,10 +66,10 @@ Spring Framework 官方对每个大版本提供约 12 个月的 OSS（开源免�
 
 | 版本线 | 状态（2026-08） | 安全补丁 | 建议 |
 |--------|----------------|---------|------|
-| 7.1.x | 最新维护线（Boot 4.1 配套） | ✅ 持续 | 新项目与已有项目优先对齐 |
-| 7.0.x | 当前主线（Boot 4.0 配套） | ✅ 持续 | 已上线的 7.0 项目可跟进 7.1 补丁 |
-| 6.2.x | 存量主线（Boot 3.x 配套） | ⚠️ 窗口收窄 | 有计划迁移者尽早规划 |
-| 6.1.x 及更早 | 已 EOL | ❌ | 存在已知 CVE 风险，尽快升级 |
+| 7.1.x | 最新维护线（Boot 4.1 配套） | ✓ 持续 | 新项目与已有项目优先对齐 |
+| 7.0.x | 当前主线（Boot 4.0 配套） | ✓ 持续 | 已上线的 7.0 项目可跟进 7.1 补丁 |
+| 6.2.x | 存量主线（Boot 3.x 配套） | 窗口收窄 | 有计划迁移者尽早规划 |
+| 6.1.x 及更早 | 已 EOL | ✗ | 存在已知 CVE 风险，尽快升级 |
 
 **升级 6.x → 7.x 的三类工作（按风险排序）**：
 
@@ -79,7 +79,7 @@ Spring Framework 官方对每个大版本提供约 12 个月的 OSS（开源免�
 | 行为变化 | 代理默认改 CGLIB；`spring-jcl` 移除（日志走 core 的适配）；测试上下文缓存暂停策略调整 | 强依赖 JDK 接口代理的存量代码行为改变 |
 | 能力叠加 | `@EnableResilientMethods`、`@Retryable`、`@ConcurrencyLimit` | 低风险，不开启即无影响 |
 
-> 💡 升级节奏建议：先跑依赖树（`mvn dependency:tree` / Gradle `dependencies`）定位 javax 依赖来源（往往藏在第三方 jar），全局替换 import 后**优先回归测试启动与注入**——javax 注解失效的最大特征是"启动成功但 Bean 没注入"。
+> 升级节奏建议：先跑依赖树（`mvn dependency:tree` / Gradle `dependencies`）定位 javax 依赖来源（往往藏在第三方 jar），全局替换 import 后**优先回归测试启动与注入**——javax 注解失效的最大特征是"启动成功但 Bean 没注入"。
 
 ## 3. 能力地图
 
@@ -108,7 +108,7 @@ Spring Framework 官方对每个大版本提供约 12 个月的 OSS（开源免�
 | HTTP 客户端 | spring-web | context 无网络能力 |
 | Bean 定义与生命周期 | spring-beans | context 在其上做"预加载 + 编排" |
 
-> 🎯 **判断口诀**："**接口在 core，工厂在 beans，编排在 context，专项能力在各自模块**"——面试被问"XXX 在哪个模块"，先按这个口诀定位，再补充"开关类注解（@EnableXxx）在 context"这个特例。
+> **判断口诀**："**接口在 core，工厂在 beans，编排在 context，专项能力在各自模块**"——面试被问"XXX 在哪个模块"，先按这个口诀定位，再补充"开关类注解（@EnableXxx）在 context"这个特例。
 
 ## 4. 与深度体系的映射
 
@@ -121,7 +121,7 @@ Spring Framework 官方对每个大版本提供约 12 个月的 OSS（开源免�
 | 06-国际化与资源访问速查 | [Spring框架核心-09-资源国际化与测试](../../../Spring框架核心/09-资源国际化与测试.md) |
 | 07-集成地图与常见问题 | [Spring生态深度剖析-02-Boot启动流程与自动配置内核](../../../Spring生态深度剖析/02-SpringBoot启动流程与自动配置内核.md) |
 
-> 💡 本系列定位"查得快"，深度体系定位"学得透"——容器启动全流程、refresh() 十二步、事件内部机制的源码深挖见 [Spring生态深度剖析-06](../../../Spring生态深度剖析/06-事件驱动模型与ApplicationContext内部机制.md)。
+> 本系列定位"查得快"，深度体系定位"学得透"——容器启动全流程、refresh() 十二步、事件内部机制的源码深挖见 [Spring生态深度剖析-06](../../../Spring生态深度剖析/06-事件驱动模型与ApplicationContext内部机制.md)。
 
 ### 4.1 溯源示范：一个真实问题如何从速查走到源码
 
@@ -135,19 +135,19 @@ Spring Framework 官方对每个大版本提供约 12 个月的 OSS（开源免�
 | ④ 源码深挖 | refresh 第 8 步多播器 → 事件注册 → 事务同步注册点逐行 | [Spring生态深度剖析-06](../../../Spring生态深度剖析/06-事件驱动模型与ApplicationContext内部机制.md) |
 | ⑤ 方案落地 | `fallbackExecution=true` 或改发布位置（事务内发布） | 05 第 3 节代码示例 |
 
-> 🎯 **使用心法**：速查文档是"**症状 → 语义**"的索引，深度体系是"**语义 → 机制**"的推导——排查问题时先到速查确认"它本该怎样"，再进深度体系弄懂"它为什么这样"，最后动手改代码。**先语义后机制，避免对着源码猜行为**。
+> **使用心法**：速查文档是"**症状 → 语义**"的索引，深度体系是"**语义 → 机制**"的推导——排查问题时先到速查确认"它本该怎样"，再进深度体系弄懂"它为什么这样"，最后动手改代码。**先语义后机制，避免对着源码猜行为**。
 
 ### 4.2 两个体系的取舍建议
 
 | 场景 | 用速查 | 用深度体系 |
 |------|:------:|:----------:|
-| 日常开发查 API/语义 | ✅ | |
-| 排查启动/事件/配置故障 | ✅ 先定位 | ✅ 后追根因 |
-| 面试复习容器考点 | ✅ 速记 | ✅ 源码细节 |
-| 写方案/评审（讲原理） | | ✅ |
-| 阅读 Spring 源码 | | ✅ |
+| 日常开发查 API/语义 | ✓ | |
+| 排查启动/事件/配置故障 | ✓ 先定位 | ✓ 后追根因 |
+| 面试复习容器考点 | ✓ 速记 | ✓ 源码细节 |
+| 写方案/评审（讲原理） | | ✓ |
+| 阅读 Spring 源码 | | ✓ |
 
-> 💡 **最佳节奏**：**速查建立地图 → 深度体系建立深度 → 回到速查做索引**——三轮循环后，context 的知识从"零散知识点"固化为"可检索的体系"；这也是本系列 8 篇速查 + 深度体系 6 篇的分工初衷。
+> **最佳节奏**：**速查建立地图 → 深度体系建立深度 → 回到速查做索引**——三轮循环后，context 的知识从"零散知识点"固化为"可检索的体系"；这也是本系列 8 篇速查 + 深度体系 6 篇的分工初衷。
 
 ## 5. 快速上手 3 步
 
@@ -223,15 +223,15 @@ public class Main {
 }
 ```
 
-> 💡 无 Boot 场景最容易踩的两个坑：① **缺日志实现**——spring-jcl 找不到绑定时启动仅打一行警告，看似无害，但运行期监听器异常、懒加载失败全部无日志可查；② **忘了关闭**——main 结束直接退 JVM 不会触发 destroy 回调，`@PreDestroy` 清理（连接池关闭等）被跳过，非 Web 常驻进程务必 `registerShutdownHook()` 或 try-with-resources。
+> 无 Boot 场景最容易踩的两个坑：① **缺日志实现**——spring-jcl 找不到绑定时启动仅打一行警告，看似无害，但运行期监听器异常、懒加载失败全部无日志可查；② **忘了关闭**——main 结束直接退 JVM 不会触发 destroy 回调，`@PreDestroy` 清理（连接池关闭等）被跳过，非 Web 常驻进程务必 `registerShutdownHook()` 或 try-with-resources。
 
 ### 5.2 三种构建方式的取舍
 
 | 方式 | 是否自动 refresh | 适用场景 | 代价 |
 |------|----------------|---------|------|
-| `AnnotationConfigApplicationContext` | ✅ 构造即 refresh | 常规注解应用（首选） | 无法在构造与启动之间插入自定义步骤 |
-| `GenericApplicationContext` | ❌ 必须手动 | 测试、动态注册、工具型容器 | 漏调 refresh 会拿到空容器 |
-| `ClassPathXmlApplicationContext` | ✅ 构造即 refresh | 存量 XML 系统 | 无注解配置能力，与 7.0 新特性脱节 |
+| `AnnotationConfigApplicationContext` | ✓ 构造即 refresh | 常规注解应用（首选） | 无法在构造与启动之间插入自定义步骤 |
+| `GenericApplicationContext` | ✗ 必须手动 | 测试、动态注册、工具型容器 | 漏调 refresh 会拿到空容器 |
+| `ClassPathXmlApplicationContext` | ✓ 构造即 refresh | 存量 XML 系统 | 无注解配置能力，与 7.0 新特性脱节 |
 
 **什么时候该用 GenericApplicationContext 而不是注解上下文**：
 
@@ -242,7 +242,7 @@ ctx.registerBean("svc", OrderService.class, () -> new OrderService("test"));
 ctx.refresh();          // 忘写这行 → getBean 抛 IllegalStateException
 ```
 
-> 🎯 **面试追问**："AnnotationConfigApplicationContext 构造器做了什么？"——它内部是 `GenericApplicationContext + AnnotatedBeanDefinitionReader + ClassPathBeanDefinitionScanner` 的组合：构造即注册容器自身与内建后置处理器，随后 refresh() 走完整十二步；所以它本质是"Generic 的快捷封装"，不是另一套实现。
+> **面试追问**："AnnotationConfigApplicationContext 构造器做了什么？"——它内部是 `GenericApplicationContext + AnnotatedBeanDefinitionReader + ClassPathBeanDefinitionScanner` 的组合：构造即注册容器自身与内建后置处理器，随后 refresh() 走完整十二步；所以它本质是"Generic 的快捷封装"，不是另一套实现。
 
 ### 5.3 常见入门报错速查
 
@@ -256,7 +256,7 @@ ctx.refresh();          // 忘写这行 → getBean 抛 IllegalStateException
 | 中文乱码（配置文件） | 文件非 UTF-8 | 统一 UTF-8 保存 + `setDefaultEncoding` |
 | 启动只有一行 WARN 无其他日志 | 缺日志实现绑定 | 加 log4j2 / logback 依赖 |
 
-> 💡 **排查顺序铁律**：先看**最底层 Caused by**（根因），再逐层向上还原触发路径；启动失败 80% 是"类没注册 / 依赖缺失 / 条件没满足"三类，用 `getBeanDefinitionNames()` 打印一遍即可快速定位。
+> **排查顺序铁律**：先看**最底层 Caused by**（根因），再逐层向上还原触发路径；启动失败 80% 是"类没注册 / 依赖缺失 / 条件没满足"三类，用 `getBeanDefinitionNames()` 打印一遍即可快速定位。
 
 ### 5.4 无 Boot 与 Boot 语境的关键差异
 
@@ -268,7 +268,7 @@ ctx.refresh();          // 忘写这行 → getBean 抛 IllegalStateException
 | 日志体系 | 需自行绑定实现 | starter 自带 |
 | 配置类处理 | 完全一致（Boot 复用 context 管线） | 相同管线 + DeferredImportSelector 追加 |
 
-> 💡 **心智模型**：Boot 不是另一套容器，而是"**context + 默认配置 + 自动装配 + 服务器**"的装配层——理解这点后，纯 context 项目与 Boot 项目排障思路完全通用：先定位"它在 refresh 哪一步"，再判断该步骤行为是否被 Boot 定制过。同理，面试答"Boot 启动流程"时把 refresh 十二步作为主干、Boot 的扩展（自动配置、内嵌服务器）作为分支来组织，逻辑最清晰、最不易漏点。
+> **心智模型**：Boot 不是另一套容器，而是"**context + 默认配置 + 自动装配 + 服务器**"的装配层——理解这点后，纯 context 项目与 Boot 项目排障思路完全通用：先定位"它在 refresh 哪一步"，再判断该步骤行为是否被 Boot 定制过。同理，面试答"Boot 启动流程"时把 refresh 十二步作为主干、Boot 的扩展（自动配置、内嵌服务器）作为分支来组织，逻辑最清晰、最不易漏点。
 
 ## 6. 速查导航
 

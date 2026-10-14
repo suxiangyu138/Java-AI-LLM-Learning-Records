@@ -22,7 +22,7 @@
 | SpringMVC | Web MVC 框架 | 请求接收、分发、响应 |
 | MyBatis | 持久层框架 | 数据库操作、ORM 映射 |
 
-> 💡 SSM 整合本质上就是：Spring 管理 Service + 事务，SpringMVC 管理 Controller，MyBatis 管理 DAO。三者通过 Spring IoC 容器串联。
+> SSM 整合本质上就是：Spring 管理 Service + 事务，SpringMVC 管理 Controller，MyBatis 管理 DAO。三者通过 Spring IoC 容器串联。
 
 ### 1.2 SpringMVC 的核心组件有哪些？
 | 组件 | 说明 |

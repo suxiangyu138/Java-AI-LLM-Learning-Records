@@ -2,7 +2,7 @@
 
 > 定位：Agent 子组件专项之「输出解析器」——模型输出是"建议"不是"数据"：解析器负责把模型输出变成可靠的结构化契约。2026 年核心：strict 模式成默认、评测从"解析率"转向"语义质量"。总览做索引与速查，子主题各一篇。
 
-## 📚 目录
+## 目录
 
 1. [知识体系导图](#1-知识体系导图)
 2. [模块导航](#2-模块导航)
@@ -70,7 +70,7 @@ Output Parser 输出解析器
 
 ## 5. 2026 生态基准
 
-> 📅 基准窗口：2026-08。版本与事实以各模块【参考来源】为准。
+> 基准窗口：2026-08。版本与事实以各模块【参考来源】为准。
 
 - **Strict 模式成默认**：OpenAI strict（json_schema + strict:true）在采样层保证 schema 合规（必填字段/无额外属性/类型/枚举/嵌套）；legacy JSON mode 只保证语法合法，2026 视为过时；Amazon Bedrock 也推出结构化输出（Draft 2020-12 子集 + 24h 文法缓存）。
 - **各家强制力不同**：Anthropic 无 strict 标志——用 tool use + `tool_choice` 强制 schema（提示词级非采样级）；Gemini 用 responseMimeType + responseJsonSchema（5+ 成员 union 有已知失败）；**OpenAI 兼容厂商（DeepSeek 等）接口兼容但强制力各异**——"兼容 ≠ 同能力"必须实测。

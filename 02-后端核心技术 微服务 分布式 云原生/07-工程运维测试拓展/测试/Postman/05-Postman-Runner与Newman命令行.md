@@ -1,10 +1,10 @@
 # Postman Runner 与 Newman CLI
 
-> 🚀 Collection Runner 批量执行 + Newman 命令行集成 CI/CD + 数据驱动测试 + HTML 报告 —— 自动化测试完整方案
+> Collection Runner 批量执行 + Newman 命令行集成 CI/CD + 数据驱动测试 + HTML 报告 —— 自动化测试完整方案
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [Collection Runner](#1-collection-runner)
 2. [Newman CLI](#2-newman-cli)
@@ -53,16 +53,16 @@ Runner 面板配置：
 ┌────────────────────────────────────────┐
 │  Runner Results                         │
 ├────────────────────────────────────────┤
-│  ✅ 18 passed  ❌ 2 failed  20 total    │
+│  ✓ 18 passed  ✗ 2 failed  20 total    │
 │  Duration: 12.5s  Avg: 625ms           │
 ├────────────────────────────────────────┤
-│  GET  /users          200 OK  45ms ✅   │
-│  POST /users          201 C   120ms ✅  │
-│  GET  /users/1        200 OK  38ms ✅   │
-│  PUT  /users/1        200 OK  89ms ✅   │
-│  GET  /users/999      404 NF  25ms ✅   │ ← 预期 404
-│  DELETE /users/1      204 NC  52ms ✅   │
-│  POST /users (dupl)   409 CF  30ms ❌   │ ← 断言失败！
+│  GET  /users          200 OK  45ms ✓   │
+│  POST /users          201 C   120ms ✓  │
+│  GET  /users/1        200 OK  38ms ✓   │
+│  PUT  /users/1        200 OK  89ms ✓   │
+│  GET  /users/999      404 NF  25ms ✓   │ ← 预期 404
+│  DELETE /users/1      204 NC  52ms ✓   │
+│  POST /users (dupl)   409 CF  30ms ✗   │ ← 断言失败！
 │         Expected 201 but got 409         │
 └────────────────────────────────────────┘
 ```
@@ -295,7 +295,7 @@ if (pm.response.code === 201) {
 
 ---
 
-> 🎯 **核心要点**：Runner 做本地批量验证，Newman 做 CI/CD 集成。Collection Variables 做请求间管道传参，CSV/JSON 做数据驱动。`postman.setNextRequest()` 实现条件跳转和循环。
+> **核心要点**：Runner 做本地批量验证，Newman 做 CI/CD 集成。Collection Variables 做请求间管道传参，CSV/JSON 做数据驱动。`postman.setNextRequest()` 实现条件跳转和循环。
 
 ---
 

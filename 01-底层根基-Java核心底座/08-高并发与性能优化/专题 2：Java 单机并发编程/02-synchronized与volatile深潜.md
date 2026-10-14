@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [synchronized 语义与三种用法](#1-synchronized-语义与三种用法)
 2. [对象头、Monitor 与锁升级](#2-对象头monitor-与锁升级)
@@ -71,9 +71,9 @@ JIT 编译器在 C2 层做两个看似矛盾的优化：
 
 volatile 提供两种保证，**不提供**第三种：
 
-- ✅ **可见性**：写入 volatile 变量立即刷新主内存并使其他核心缓存行失效；读 volatile 强制从主内存取。这是它最常见的使用场景——状态标志位、DCL 单例、发布"已初始化完成"信号。
-- ✅ **有序性**：volatile 写禁止与其前后的读写重排序（JMM 插入内存屏障：写前 StoreStore、写后 StoreLoad，读后 LoadLoad/LoadStore）。DCL 单例全靠这条保证对象构造完成先于引用发布。
-- ❌ **原子性**：`volatile int i; i++` 依然是读-改-写三步，高并发下丢更新。计数必须用 AtomicInteger 或 LongAdder（见 [04 篇](04-CAS与原子类.md)）。
+- ✓ **可见性**：写入 volatile 变量立即刷新主内存并使其他核心缓存行失效；读 volatile 强制从主内存取。这是它最常见的使用场景——状态标志位、DCL 单例、发布"已初始化完成"信号。
+- ✓ **有序性**：volatile 写禁止与其前后的读写重排序（JMM 插入内存屏障：写前 StoreStore、写后 StoreLoad，读后 LoadLoad/LoadStore）。DCL 单例全靠这条保证对象构造完成先于引用发布。
+- ✗ **原子性**：`volatile int i; i++` 依然是读-改-写三步，高并发下丢更新。计数必须用 AtomicInteger 或 LongAdder（见 [04 篇](04-CAS与原子类.md)）。
 
 DCL 单例是 volatile 有序性的教科书案例——`instance = new Singleton()` 在字节码层是"分配内存 → 构造 → 引用赋值"三步，普通引用下后两步可能重排，线程 B 拿到"非空但未构造完成"的实例，调用即崩：
 
@@ -95,7 +95,7 @@ public static Singleton getInstance() {
 
 **volatile vs synchronized 选型**：只有"单写多读"或"标志位"语义时用 volatile（开销低、不阻塞）；需要"读-改-写"原子性或有复合操作时用锁或原子类。volatile 写入不阻塞，但读也不保证拿到最新值之外的任何新鲜度承诺——它只是"写后立即可见"，不是"读时必然最新"。
 
-> 🎯 **核心要点**：synchronized 是现代 JVM 上开销可控的完整互斥方案（升级路径 + 锁消除）；volatile 只做可见性与有序性，不做原子性；虚拟线程时代 synchronized 的 pinning 已被 JEP 491 基本解决，但持锁阻塞路径仍建议换 ReentrantLock。
+> **核心要点**：synchronized 是现代 JVM 上开销可控的完整互斥方案（升级路径 + 锁消除）；volatile 只做可见性与有序性，不做原子性；虚拟线程时代 synchronized 的 pinning 已被 JEP 491 基本解决，但持锁阻塞路径仍建议换 ReentrantLock。
 
 ---
 

@@ -2,7 +2,7 @@
 
 > 定位：上线后"看得见"的基础——用 OpenTelemetry GenAI 语义约定把每次 Agent 循环变成可回放的 trace（2026-08 基准）
 
-## 📚 目录
+## 目录
 
 1. [Agent 可观测性与传统 APM 的区别](#1-agent-可观测性与传统-apm-的区别)
 2. [OTel GenAI 语义约定：字段标准](#2-otel-genai-语义约定字段标准)
@@ -48,7 +48,7 @@ Agent 关心：   一次请求内部的 决策链（模型调用 + 工具调用 
 | temperature / top_p / max_tokens / stop_sequences | 请求参数（可选） |
 | `user.id` / `session.id` | 用户与会话上下文 |
 
-> 💡 三条附加规则：① span 带 `gen_ai.*` 属性即被后端渲染为"generation"（带模型/成本）；② 用 **OTel Baggage** 传播 trace 级属性（user id、session id、版本号、flag）保证全 span 可聚合；③ 实验性新字段用 `OTEL_SEMCONV_STABILITY_OPT_IN=gen_ai_latest_experimental` 开启。
+> 三条附加规则：① span 带 `gen_ai.*` 属性即被后端渲染为"generation"（带模型/成本）；② 用 **OTel Baggage** 传播 trace 级属性（user id、session id、版本号、flag）保证全 span 可聚合；③ 实验性新字段用 `OTEL_SEMCONV_STABILITY_OPT_IN=gen_ai_latest_experimental` 开启。
 
 ## 3. 埋点实战：Agent 循环插桩
 
@@ -88,7 +88,7 @@ with tracer.start_as_current_span("agent.run", attributes={
             run_span.add_event("tool.result", {"summary": truncate(result.summary)})
 ```
 
-> ⚠️ **脱敏纪律**：prompt/工具参数/结果进 trace 前必须脱敏（手机号、身份证、密钥 mask）。trace 后端是敏感数据汇聚点，本身要按数据治理管控（08 篇）。
+> **脱敏纪律**：prompt/工具参数/结果进 trace 前必须脱敏（手机号、身份证、密钥 mask）。trace 后端是敏感数据汇聚点，本身要按数据治理管控（08 篇）。
 
 ## 4. Trace 后端选型：Langfuse 与生态
 
@@ -102,7 +102,7 @@ with tracer.start_as_current_span("agent.run", attributes={
 | 非 Python/JS 栈 | 无需等官方 SDK——OTel 标准接入即可 |
 | Collector | 可选，用于扇出/采样/网络隔离 |
 
-> 💡 **混合架构**：OpenInference 插桩 → OTLP 到 Langfuse/Phoenix → 仓库汇（ClickHouse 等）是 2026 中位生产形态。与 Datadog（2026-07 起产品名"Agent Observability"）可同源双发，很多团队两个都跑。
+> **混合架构**：OpenInference 插桩 → OTLP 到 Langfuse/Phoenix → 仓库汇（ClickHouse 等）是 2026 中位生产形态。与 Datadog（2026-07 起产品名"Agent Observability"）可同源双发，很多团队两个都跑。
 
 ### 4.2 工具对比
 

@@ -1,7 +1,7 @@
 # 10-Docker 与 Kubernetes 衔接
 > 从 Docker 到 K8s 的桥：K8s 解决了 Compose 无法覆盖的多机集群/自动扩缩/故障自愈/滚动更新——概念速览、部署实战、蓝绿/金丝雀发布、CI/CD 流水线
 
-## 📚 目录
+## 目录
 1. [为什么需要 Kubernetes](#1-为什么需要-kubernetes)
 2. [K8s 核心概念速览](#2-k8s-核心概念速览)
 3. [探针（Probe）与 Spring Boot Actuator](#3-探针probe与-spring-boot-actuator)
@@ -14,7 +14,7 @@
 10. [核心要点](#10-核心要点)
 11. [参考来源](#11-参考来源)
 
-> 💡 **体系衔接**：K8s 完整知识体系见同级 `Kubernetes/` 目录（12 篇：核心概念/Pod/Deployment/Service/ConfigMap/Ingress/HPA/存储/部署实战等）。本篇聚焦"Docker → K8s"的桥接视角与发布策略。
+> **体系衔接**：K8s 完整知识体系见同级 `Kubernetes/` 目录（12 篇：核心概念/Pod/Deployment/Service/ConfigMap/Ingress/HPA/存储/部署实战等）。本篇聚焦"Docker → K8s"的桥接视角与发布策略。
 
 ## 1. 为什么需要 Kubernetes
 
@@ -147,7 +147,7 @@ spec:
 | **Readiness** | 从 Service Endpoints 中移除 | 启动加载依赖、缓存预热、短暂高负载 |
 | **Startup** | 重启容器（通过前禁用 Liveness） | 启动时间很长的应用（Spring Boot 加载大量 Bean） |
 
-> ⚠️ **重要原则**：不要在 Liveness Probe 中检查外部依赖（数据库、Redis 等）——外部依赖故障会导致应用被重启，而重启通常不能解决外部依赖问题。Readiness Probe 适合检查依赖就绪状态。
+> **重要原则**：不要在 Liveness Probe 中检查外部依赖（数据库、Redis 等）——外部依赖故障会导致应用被重启，而重启通常不能解决外部依赖问题。Readiness Probe 适合检查依赖就绪状态。
 
 ```yaml
 # Spring Boot Actuator 配合
@@ -344,7 +344,7 @@ deploy-k8s:
   only: [main]
 ```
 
-> 💡 版本标签用 `${CI_PIPELINE_ID}` 保证唯一；构建阶段用 `docker:dind` 服务；`only: main` 分支触发。
+> 版本标签用 `${CI_PIPELINE_ID}` 保证唯一；构建阶段用 `docker:dind` 服务；`only: main` 分支触发。
 
 ## 6. 蓝绿部署
 
@@ -463,11 +463,11 @@ kubectl scale deployment my-app-v1 --replicas=0   # 100% v2
 生产实践：监控（Prometheus + Grafana）· 日志（EFK/ELK）· 链路追踪（Jaeger/Zipkin）· CI/CD
 ```
 
-> 🎯 **最后建议**：不要试图一次性掌握所有概念。从 Docker 入手——先能让 Spring Boot 应用在容器中运行，然后通过 Compose 将 MySQL+Redis+应用一键拉起。理解了容器化便利后，再引入 K8s——先部署一个无状态应用，再逐步添加 ConfigMap、Secret、Probe、HPA。**先跑起来，再优化**。
+> **最后建议**：不要试图一次性掌握所有概念。从 Docker 入手——先能让 Spring Boot 应用在容器中运行，然后通过 Compose 将 MySQL+Redis+应用一键拉起。理解了容器化便利后，再引入 K8s——先部署一个无状态应用，再逐步添加 ConfigMap、Secret、Probe、HPA。**先跑起来，再优化**。
 
 ## 10. 核心要点
 
-> 🎯 **核心要点**：
+> **核心要点**：
 > - K8s 解决 Compose 的四大问题：多机集群、自动扩缩、故障自愈、滚动更新；
 > - 映射关系：镜像→Pod、容器→Pod 内容器、Compose 服务→Deployment+Service；
 > - 三探针配合：Liveness（重启）/ Readiness（摘流量）/ Startup（慢启动保护）；

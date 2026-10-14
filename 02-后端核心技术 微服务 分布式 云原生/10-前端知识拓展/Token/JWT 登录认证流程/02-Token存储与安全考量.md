@@ -1,6 +1,6 @@
 # 02 - Token 存储与安全考量
 
-> 🎯 Token 存储方式直接决定安全性 — localStorage 有 XSS 风险、Cookie HttpOnly 防 XSS 但不防 CSRF、内存存最安全但不持久，三种方案各有取舍
+> Token 存储方式直接决定安全性 — localStorage 有 XSS 风险、Cookie HttpOnly 防 XSS 但不防 CSRF、内存存最安全但不持久，三种方案各有取舍
 
 ---
 
@@ -17,15 +17,15 @@
 
 | 存储位置 | XSS 风险 | CSRF 风险 | 持久化 | 适用 |
 |----------|:---:|:---:|:---:|------|
-| **localStorage** | ⚠️ 高（JS 可读） | ✅ 安全（不自动发送） | ✅ | 内部后台 |
-| **Cookie HttpOnly** | ✅ 安全（JS 不可读） | ⚠️ 需防 CSRF | ✅ | ⭐ 推荐 |
-| **内存（变量）** | ✅ 安全 | ✅ 安全 | ❌（刷新丢失） | SPA + 静默刷新 |
+| **localStorage** | 高（JS 可读） | ✓ 安全（不自动发送） | ✓ | 内部后台 |
+| **Cookie HttpOnly** | ✓ 安全（JS 不可读） | 需防 CSRF | ✓ | ★ 推荐 |
+| **内存（变量）** | ✓ 安全 | ✓ 安全 | ✗（刷新丢失） | SPA + 静默刷新 |
 
 ```javascript
-// ❌ 不推荐 — 完全的 localStorage（XSS 攻击可窃取）
+// ✗ 不推荐 — 完全的 localStorage（XSS 攻击可窃取）
 localStorage.setItem('accessToken', token);
 
-// ⭐ 推荐 — Cookie HttpOnly + Secure
+// ★ 推荐 — Cookie HttpOnly + Secure
 // 由后端 Set-Cookie，JS 完全无法访问
 // Response Headers: Set-Cookie: token=xxx; HttpOnly; Secure; SameSite=Strict; Max-Age=900
 ```
@@ -35,13 +35,13 @@ localStorage.setItem('accessToken', token);
 ## 2. Cookie HttpOnly + Secure 方案
 
 ```java
-// ⭐ 后端设置安全 Cookie（推荐）
+// ★ 后端设置安全 Cookie（推荐）
 @PostMapping("/login")
 public ResponseEntity<Result<?>> login(@RequestBody LoginDTO dto) {
     String accessToken = JwtUtil.createAccessToken(user.getId(), roles);
 
     ResponseCookie cookie = ResponseCookie.from("access_token", accessToken)
-        .httpOnly(true)          // ⚠️ JS 不可读取（防 XSS）
+        .httpOnly(true)          // JS 不可读取（防 XSS）
         .secure(true)            // 仅 HTTPS 发送
         .sameSite("Strict")      // 防 CSRF（跨站不发 Cookie）
         .maxAge(900)             // 15 分钟
@@ -108,14 +108,14 @@ public class ReplayAttackFilter implements Filter {
 
 | 检查项 | 措施 | 优先级 |
 |--------|------|:---:|
-| 密码传输 | HTTPS + 前端先 SHA256 再传给后端 | 🔴 |
-| 密码存储 | BCrypt（后端不可逆加密）| 🔴 |
-| JWT 签名 | RS256（非对称，私钥签名+公钥验签）| 🔴 |
-| Token 存储 | Cookie HttpOnly + Secure + SameSite | 🔴 |
-| RefreshToken | Redis 存储，退出时删除 | 🟡 |
-| Token 黑名单 | Redis Set — 强制下线 | 🟡 |
-| 防暴力破解 | 登录接口限流 + 验证码 | 🟡 |
-| 防重放 | Timestamp + Nonce（敏感接口）| 🟢 |
-| 异常检测 | 异地登录/频繁失败 告警 | 🟢 |
+| 密码传输 | HTTPS + 前端先 SHA256 再传给后端 | |
+| 密码存储 | BCrypt（后端不可逆加密）| |
+| JWT 签名 | RS256（非对称，私钥签名+公钥验签）| |
+| Token 存储 | Cookie HttpOnly + Secure + SameSite | |
+| RefreshToken | Redis 存储，退出时删除 | |
+| Token 黑名单 | Redis Set — 强制下线 | |
+| 防暴力破解 | 登录接口限流 + 验证码 | |
+| 防重放 | Timestamp + Nonce（敏感接口）| |
+| 异常检测 | 异地登录/频繁失败 告警 | |
 
-> 🎯 **安全铁三角**：HTTPS（传输加密）+ Cookie HttpOnly Secure SameSite（存储安全）+ BCrypt（密码不可逆）。这三个到位，90% 的认证安全问题就解决了。
+> **安全铁三角**：HTTPS（传输加密）+ Cookie HttpOnly Secure SameSite（存储安全）+ BCrypt（密码不可逆）。这三个到位，90% 的认证安全问题就解决了。

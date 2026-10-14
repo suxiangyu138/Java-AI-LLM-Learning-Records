@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [Needs：DAG 并行依赖](#1-needsdag-并行依赖)
 2. [Parallel：并行与矩阵](#2-parallel并行与矩阵)
@@ -136,7 +136,7 @@ deploy-all:
 4. MR-First 三件套是什么？各自解决什么？
 5. Components 与 include 的差异？动态生成的适用场景？
 
-> 🎯 **核心要点**：高级 CI/CD = **"needs 并行化（DAG）+ parallel/matrix 展开 + trigger 分层 + Schedule 定时 + workflow rules 路由 + Components 版本化"**——"流水线从'直线'走向'编排'，2026 的模板工程化答案是 Components"。
+> **核心要点**：高级 CI/CD = **"needs 并行化（DAG）+ parallel/matrix 展开 + trigger 分层 + Schedule 定时 + workflow rules 路由 + Components 版本化"**——"流水线从'直线'走向'编排'，2026 的模板工程化答案是 Components"。
 
 ---
 

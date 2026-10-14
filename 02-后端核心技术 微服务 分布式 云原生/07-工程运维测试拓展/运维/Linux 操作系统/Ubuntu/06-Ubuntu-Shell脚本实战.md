@@ -1,10 +1,10 @@
 # Ubuntu Shell 脚本实战
 
-> 📜 Bash 语法速查、变量与函数、条件判断、循环、定时任务、实战脚本模板 —— 让重复劳动自动化
+> Bash 语法速查、变量与函数、条件判断、循环、定时任务、实战脚本模板 —— 让重复劳动自动化
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [Bash 基础语法](#1-bash-基础语法)
 2. [变量与字符串处理](#2-变量与字符串处理)
@@ -140,7 +140,7 @@ ENV=$1
 VERSION=$2
 
 if [ "$ENV" = "prod" ]; then
-    echo "⚠️ 生产环境部署，确认要继续吗？(yes/no)"
+    echo "生产环境部署，确认要继续吗？(yes/no)"
     read CONFIRM
     if [ "$CONFIRM" != "yes" ]; then
         echo "已取消"
@@ -298,18 +298,18 @@ JAVA_OPTS="-Xms512m -Xmx2048m -XX:+UseG1GC"
 
 start() {
     if [ -f "$PID_FILE" ] && kill -0 $(cat "$PID_FILE") 2>/dev/null; then
-        echo "⚠️ ${APP_NAME} 已在运行"
+        echo "${APP_NAME} 已在运行"
         exit 1
     fi
     echo "启动 ${APP_NAME}..."
     nohup java $JAVA_OPTS -jar "$JAR_PATH" > "$LOG_PATH" 2>&1 &
     echo $! > "$PID_FILE"
-    echo "✅ PID: $(cat $PID_FILE)"
+    echo "✓ PID: $(cat $PID_FILE)"
 }
 
 stop() {
     if [ ! -f "$PID_FILE" ]; then
-        echo "⚠️ ${APP_NAME} 未运行"
+        echo "${APP_NAME} 未运行"
         return
     fi
     PID=$(cat "$PID_FILE")
@@ -321,14 +321,14 @@ stop() {
     done
     kill -9 "$PID" 2>/dev/null || true
     rm -f "$PID_FILE"
-    echo "✅ 已停止"
+    echo "✓ 已停止"
 }
 
 status() {
     if [ -f "$PID_FILE" ] && kill -0 $(cat "$PID_FILE") 2>/dev/null; then
-        echo "✅ ${APP_NAME} 运行中 (PID: $(cat $PID_FILE))"
+        echo "✓ ${APP_NAME} 运行中 (PID: $(cat $PID_FILE))"
     else
-        echo "❌ ${APP_NAME} 未运行"
+        echo "✗ ${APP_NAME} 未运行"
     fi
 }
 
@@ -365,12 +365,12 @@ mysqldump -u"$DB_USER" -p"$DB_PASS" --single-transaction --routines "$DB_NAME" \
 echo "清理 ${RETENTION_DAYS} 天前的备份"
 find "$BACKUP_DIR" -name "*.sql.gz" -mtime +$RETENTION_DAYS -delete
 
-echo "✅ 备份完成，大小: $(du -h $BACKUP_FILE | cut -f1)"
+echo "✓ 备份完成，大小: $(du -h $BACKUP_FILE | cut -f1)"
 ```
 
 ---
 
-> 🎯 **核心要点**：脚本开头加 `set -euo pipefail`；变量用 `{}` 包裹；`$?` 检查上条命令；`local` 限定函数内变量；**crontab** 定时自动执行。Shell 不追求完美，实用至上。
+> **核心要点**：脚本开头加 `set -euo pipefail`；变量用 `{}` 包裹；`$?` 检查上条命令；`local` 限定函数内变量；**crontab** 定时自动执行。Shell 不追求完美，实用至上。
 
 ---
 

@@ -2,7 +2,7 @@
 
 > 定位：把五大框架剥开——所有单 Agent 框架共享的 agent loop 骨架、终止条件、上下文管理（2026-08 基准）
 
-## 📚 目录
+## 目录
 
 1. [Agent Loop：一切框架的共同骨架](#1-agent-loop一切框架的共同骨架)
 2. [循环的三层实现形态](#2-循环的三层实现形态)
@@ -31,7 +31,7 @@
   Smolagents        循环 + 代码执行合并（一次执行多步）
 ```
 
-> 🎯 **结论**：会手写一遍循环（Function Calling 体系 03 篇），任何框架都只是"循环的托管版"——框架概念迁移时，先找它的循环在哪。
+> **结论**：会手写一遍循环（Function Calling 体系 03 篇），任何框架都只是"循环的托管版"——框架概念迁移时，先找它的循环在哪。
 
 ## 2. 循环的三层实现形态
 
@@ -69,7 +69,7 @@
 | 暂停 | `pause_turn`（服务端工具迭代上限） | 追加 assistant 轮次重发，服务端自动续 |
 | 死循环 | 同一工具连续调用 | 框架上限兜底 + 业务层 `retry:false` |
 
-> ⚠️ **生产必配**：轮次上限与成本上限在所有框架里都是"默认不设"——不设 = 开放式 prompt 跑到天荒地老（工程化模块 11 篇治理呼应）。
+> **生产必配**：轮次上限与成本上限在所有框架里都是"默认不设"——不设 = 开放式 prompt 跑到天荒地老（工程化模块 11 篇治理呼应）。
 
 ## 5. 上下文管理共识
 
@@ -110,7 +110,7 @@
 | 压缩 | 无原生（自建） | 无原生 | 无原生 | OpenAI/Anthropic Compaction | 自动压缩原生 |
 | 结构化输出 | 模型层 schema | output_type（Pydantic 可选） | 无强制 | 一等公民 | output_format json_schema |
 
-> 💡 **读表方法**：选框架 = 看你最在意的那一行（持久化→LangGraph；类型→Pydantic AI；现成 harness→Claude Agent SDK；轻量→OpenAI SDK；代码任务→Smolagents），其余行用工程手段补齐。
+> **读表方法**：选框架 = 看你最在意的那一行（持久化→LangGraph；类型→Pydantic AI；现成 harness→Claude Agent SDK；轻量→OpenAI SDK；代码任务→Smolagents），其余行用工程手段补齐。
 
 ---
 

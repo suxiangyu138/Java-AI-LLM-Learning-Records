@@ -2,7 +2,7 @@
 
 > 从零跑通 AutoGen v0.4：三层架构的安装方式、双 Agent 对话的完整代码全解、运行验证——先让两个 Agent 聊起来，再理解每一行。
 
-## 📚 目录
+## 目录
 
 1. [v0.4 三层架构与安装](#1-v04-三层架构与安装)
 2. [环境准备](#2-环境准备)
@@ -39,7 +39,7 @@ pip install -U "autogen-agentchat" "autogen-ext[openai]"
 | MCP 支持 | autogen-ext[mcp] |
 | 全部扩展 | autogen-ext[all] |
 
-> ⚠️ 注意：v0.4 起安装的是 `autogen-agentchat`（不是旧的 `pyautogen`）——v0.2 时代 `pip install pyautogen`，两者 API 不兼容（07 篇详解差异）。
+> 注意：v0.4 起安装的是 `autogen-agentchat`（不是旧的 `pyautogen`）——v0.2 时代 `pip install pyautogen`，两者 API 不兼容（07 篇详解差异）。
 
 ## 2. 环境准备
 
@@ -125,7 +125,7 @@ if __name__ == "__main__":
 | `GroupChatManager` | `RoundRobinGroupChat` 等团队 |
 | `pip install pyautogen` | `pip install autogen-agentchat` |
 
-> ⚠️ v0.4 是破坏性重构：v0.2 代码不能直接升级，需要重写——这也是 AG2 分叉存在的根本原因（07 篇）。
+> v0.4 是破坏性重构：v0.2 代码不能直接升级，需要重写——这也是 AG2 分叉存在的根本原因（07 篇）。
 
 ## 5. 运行验证
 
@@ -221,7 +221,7 @@ def fib(n): ...
 | 无限对话 | 无终止 | max_turns 兜底 |
 | 结果不对 | 没给验证环节 | 加 reviewer Agent |
 
-> 🎯 核心要点：v0.4 三层架构（core/agentchat/ext）；安装用 autogen-agentchat；最小应用 = 两个 AssistantAgent + RoundRobinGroupChat + run_stream；max_turns 是终止兜底；OpenAI 兼容客户端让 DeepSeek/本地模型一行切换；v0.2 代码不能直接升级（破坏性重构）；五个扩展练习按顺序做，失败定位用四张表。
+> 核心要点：v0.4 三层架构（core/agentchat/ext）；安装用 autogen-agentchat；最小应用 = 两个 AssistantAgent + RoundRobinGroupChat + run_stream；max_turns 是终止兜底；OpenAI 兼容客户端让 DeepSeek/本地模型一行切换；v0.2 代码不能直接升级（破坏性重构）；五个扩展练习按顺序做，失败定位用四张表。
 
 ---
 

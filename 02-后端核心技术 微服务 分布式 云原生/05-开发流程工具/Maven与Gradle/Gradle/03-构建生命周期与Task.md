@@ -1,6 +1,6 @@
 # 03 - 构建生命周期与 Task
 
-> 🎯 构建 = 任务 DAG：初始化 → 配置 → 执行三阶段。Task 有类型、依赖、inputs/outputs 与 up-to-date 检查——增量构建的底层机制。9.5 的 Task provenance 让"任务从哪来"可追溯
+> 构建 = 任务 DAG：初始化 → 配置 → 执行三阶段。Task 有类型、依赖、inputs/outputs 与 up-to-date 检查——增量构建的底层机制。9.5 的 Task provenance 让"任务从哪来"可追溯
 
 ---
 
@@ -154,6 +154,6 @@ tasks.named("build") {
 
 ---
 
-> 🎯 **核心要点**：生命周期 = 初始化/配置/执行三阶段，配置阶段跑脚本、执行阶段跑任务体（分离理解是排错前提）。Task = 定义（register 懒注册）+ 依赖（DAG）+ 增量（inputs/outputs → UP-TO-DATE）。三条纪律：正确声明 IO、不用绝对路径、不写未声明文件。9.5 Task provenance 让"任务从哪来"一目了然。
+> **核心要点**：生命周期 = 初始化/配置/执行三阶段，配置阶段跑脚本、执行阶段跑任务体（分离理解是排错前提）。Task = 定义（register 懒注册）+ 依赖（DAG）+ 增量（inputs/outputs → UP-TO-DATE）。三条纪律：正确声明 IO、不用绝对路径、不写未声明文件。9.5 Task provenance 让"任务从哪来"一目了然。
 
 **下一模块**：[04-依赖管理](04-依赖管理.md) / **返回总览**：[00-总览](00-Gradle知识体系总览.md)

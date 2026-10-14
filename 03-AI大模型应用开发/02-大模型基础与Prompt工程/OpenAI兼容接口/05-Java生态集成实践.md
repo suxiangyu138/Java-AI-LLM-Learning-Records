@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [Java AI 框架的兼容策略](#1-java-ai-框架的兼容策略)
 2. [Spring AI 集成 OpenAI 兼容接口](#2-spring-ai-集成-openai-兼容接口)
@@ -756,20 +756,20 @@ app:
 ### 7.1 安全区原则
 
 ```text
-✅ 安全区（所有兼容接口都支持）：
+✓ 安全区（所有兼容接口都支持）：
    ├── /v1/chat/completions 基础调用
    ├── user + assistant 消息
    ├── Streaming (SSE)
    ├── temperature, max_tokens, top_p
    └── stop 序列
 
-⚠️ 条件区（大部分支持，需测试）：
+条件区（大部分支持，需测试）：
    ├── system message
    ├── JSON Mode (response_format: json_object)
    ├── Tool Calling
    └── seed 参数
 
-❌ 风险区（少数支持，建议避免）：
+✗ 风险区（少数支持，建议避免）：
    ├── json_schema (Structured Output) — 仅 OpenAI
    ├── n > 1 — 大部分不支持
    ├── logprobs — vLLM 部分支持
@@ -873,7 +873,7 @@ public class CapabilityAwareService {
 
 ---
 
-> 🎯 **核心要点**：Java 生态中，Spring AI 和 LangChain4j 都提供了成熟的 OpenAI 兼容客户端。核心技巧是**多用配置少写代码**——切换模型只需改 yaml/base_url，不碰业务代码。生产环境建议配合 One-API 网关做统一管理和灰度切换。
+> **核心要点**：Java 生态中，Spring AI 和 LangChain4j 都提供了成熟的 OpenAI 兼容客户端。核心技巧是**多用配置少写代码**——切换模型只需改 yaml/base_url，不碰业务代码。生产环境建议配合 One-API 网关做统一管理和灰度切换。
 
 ---
 

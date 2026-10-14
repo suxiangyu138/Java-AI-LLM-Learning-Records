@@ -24,11 +24,11 @@
 
 | 项目名称 | 技术栈 | 难度 | 核心亮点 | 适合方向 |
 |---------|------|:---:|---------|:---:|
-| **苍穹外卖** | Spring Boot + MyBatis-Plus + Redis + MySQL + JWT | ⭐⭐⭐ | 订单状态机、微信支付模拟、缓存策略 | 后端通用 |
-| **谷粒商城** | Spring Cloud Alibaba + Redis + ES + RabbitMQ + Seata | ⭐⭐⭐⭐⭐ | 微服务拆分、分布式事务、全文检索、秒杀 | 后端/微服务 |
-| **黑马头条** | Spring Boot + MyBatis + Redis + Kafka + MongoDB | ⭐⭐⭐⭐ | 文章推荐算法、消息队列削峰、MongoDB 非结构化存储 | 后端/大数据 |
-| **学成在线** | Spring Cloud + MyBatis + Redis + RabbitMQ + Elasticsearch | ⭐⭐⭐⭐ | 课程搜索（ES）、微服务架构、支付对接 | 后端/教育方向 |
-| **小智医疗** | Spring Boot + MyBatis-Plus + Redis + MySQL | ⭐⭐⭐ | 医疗业务流程、权限管理、数据脱敏 | 后端/医疗方向 |
+| **苍穹外卖** | Spring Boot + MyBatis-Plus + Redis + MySQL + JWT | ★★★ | 订单状态机、微信支付模拟、缓存策略 | 后端通用 |
+| **谷粒商城** | Spring Cloud Alibaba + Redis + ES + RabbitMQ + Seata | ★★★★★ | 微服务拆分、分布式事务、全文检索、秒杀 | 后端/微服务 |
+| **黑马头条** | Spring Boot + MyBatis + Redis + Kafka + MongoDB | ★★★★ | 文章推荐算法、消息队列削峰、MongoDB 非结构化存储 | 后端/大数据 |
+| **学成在线** | Spring Cloud + MyBatis + Redis + RabbitMQ + Elasticsearch | ★★★★ | 课程搜索（ES）、微服务架构、支付对接 | 后端/教育方向 |
+| **小智医疗** | Spring Boot + MyBatis-Plus + Redis + MySQL | ★★★ | 医疗业务流程、权限管理、数据脱敏 | 后端/医疗方向 |
 
 ### 各项目详解
 
@@ -39,7 +39,7 @@
 | 核心功能 | 用户点餐、购物车、订单管理、商家菜品管理、骑手配送 |
 | 技术亮点 | Redis 缓存热点菜品、订单状态机设计、JWT 登录认证、全局异常处理 |
 | 面试要点 | 缓存穿透/击穿/雪崩解决方案、订单状态流转、接口幂等性 |
-| 推荐指数 | ⭐⭐⭐⭐⭐ 实习生入门首选——难度适中、技术栈经典、面试素材丰富 |
+| 推荐指数 | ★★★★★ 实习生入门首选——难度适中、技术栈经典、面试素材丰富 |
 
 #### 谷粒商城
 
@@ -48,7 +48,7 @@
 | 核心功能 | 商品管理、购物车、订单、秒杀、全文检索、用户中心 |
 | 技术亮点 | Spring Cloud Alibaba 全套微服务组件、Redis 分布式锁、Seata 分布式事务、ES 商品检索、RabbitMQ 异步 |
 | 面试要点 | 微服务治理、分布式事务方案对比、秒杀系统设计、ES 倒排索引 |
-| 推荐指数 | ⭐⭐⭐⭐⭐ 冲击大厂首选——技术栈最全面，面试亮点最多，但耗时最长 |
+| 推荐指数 | ★★★★★ 冲击大厂首选——技术栈最全面，面试亮点最多，但耗时最长 |
 
 #### 黑马头条
 
@@ -57,7 +57,7 @@
 | 核心功能 | 文章发布与管理、Feed 流推荐、用户互动（评论/点赞）、自媒体后台 |
 | 技术亮点 | Kafka 异步处理文章审核、MongoDB 存储文章内容、Redis 缓存热点文章、推荐算法基础 |
 | 面试要点 | 消息队列削峰、Feed 流设计、MongoDB vs MySQL 选型、缓存预热 |
-| 推荐指数 | ⭐⭐⭐⭐ 适合想展示中间件与大数据方向能力的同学 |
+| 推荐指数 | ★★★★ 适合想展示中间件与大数据方向能力的同学 |
 
 ---
 
@@ -65,11 +65,11 @@
 
 | 项目名称 | 技术栈 | 难度 | 适合人群 | 简历价值 |
 |---------|------|:---:|---------|:---:|
-| **通用购物商城** | Spring Boot + MyBatis + MySQL + Thymeleaf | ⭐⭐ | 刚学完 Spring Boot 的入门者 | 体现 CRUD 基本功 |
-| **个人博客系统** | Spring Boot + MyBatis-Plus + Redis + Vue | ⭐⭐ | 想要全栈项目经验 | 前后端联调 + 缓存实战 |
-| **图书借阅系统** | Spring Boot + MyBatis + MySQL + Bootstrap | ⭐⭐ | 在校生常见选题 | 业务逻辑完整，适合拿来深化 |
-| **博客论坛系统** | Spring Boot + MyBatis + Redis + MySQL | ⭐⭐ | 想展示社区类项目 | 文章/评论/用户体系完整 |
-| **图书商城** | Spring Boot + MyBatis + MySQL + Vue | ⭐⭐⭐ | 商城类入门首选 | 商品/购物车/订单完整链路 |
+| **通用购物商城** | Spring Boot + MyBatis + MySQL + Thymeleaf | ★★ | 刚学完 Spring Boot 的入门者 | 体现 CRUD 基本功 |
+| **个人博客系统** | Spring Boot + MyBatis-Plus + Redis + Vue | ★★ | 想要全栈项目经验 | 前后端联调 + 缓存实战 |
+| **图书借阅系统** | Spring Boot + MyBatis + MySQL + Bootstrap | ★★ | 在校生常见选题 | 业务逻辑完整，适合拿来深化 |
+| **博客论坛系统** | Spring Boot + MyBatis + Redis + MySQL | ★★ | 想展示社区类项目 | 文章/评论/用户体系完整 |
+| **图书商城** | Spring Boot + MyBatis + MySQL + Vue | ★★★ | 商城类入门首选 | 商品/购物车/订单完整链路 |
 
 ### 小型项目通用技术点
 

@@ -1,5 +1,5 @@
 # 02-Spring AOP面向切面编程
-> 🎯 AOP是Spring两大核心之一 — 掌握代理机制、通知类型、切点表达式，理解AOP底层如何实现事务、日志、权限等横切关注点
+> AOP是Spring两大核心之一 — 掌握代理机制、通知类型、切点表达式，理解AOP底层如何实现事务、日志、权限等横切关注点
 
 ---
 
@@ -40,7 +40,7 @@
 
 ### 2.1 AOP要解决什么问题
 
-> 🔍 **横切关注点**：散布在多个模块中的相同逻辑（日志、事务、权限），与核心业务代码耦合，难以维护。
+> **横切关注点**：散布在多个模块中的相同逻辑（日志、事务、权限），与核心业务代码耦合，难以维护。
 
 ```
 传统方式：每个方法都写一遍                         AOP方式：统一切面拦截
@@ -78,11 +78,11 @@
 
 | 通知类型 | 注解 | 执行时机 | 能否阻止目标方法执行 | 获取返回值 |
 |----------|------|----------|---------------------|-----------|
-| **前置通知** | `@Before` | 目标方法执行前 | ❌ 不能（不抛异常则目标必执行） | ❌ |
-| **后置通知** | `@After` | 目标方法执行后（finally语义） | ❌ | ❌ |
-| **返回通知** | `@AfterReturning` | 目标方法正常返回后 | ❌ | ✅ `returning`属性 |
-| **异常通知** | `@AfterThrowing` | 目标方法抛出异常后 | ❌ | ✅ `throwing`属性获取异常 |
-| **环绕通知** | `@Around` | 包裹目标方法前后 | ✅ `proceed()`控制 | ✅ |
+| **前置通知** | `@Before` | 目标方法执行前 | ✗ 不能（不抛异常则目标必执行） | ✗ |
+| **后置通知** | `@After` | 目标方法执行后（finally语义） | ✗ | ✗ |
+| **返回通知** | `@AfterReturning` | 目标方法正常返回后 | ✗ | ✓ `returning`属性 |
+| **异常通知** | `@AfterThrowing` | 目标方法抛出异常后 | ✗ | ✓ `throwing`属性获取异常 |
+| **环绕通知** | `@Around` | 包裹目标方法前后 | ✓ `proceed()`控制 | ✓ |
 
 ### 3.2 完整代码演示
 
@@ -144,7 +144,7 @@ public class LoggingAspect {
 }
 ```
 
-> ⚠️ **关键点**：`@Around`环绕通知中**必须调用**`joinPoint.proceed()`且**必须return其返回值**或抛出异常，否则目标方法不会执行且返回值丢失。
+> **关键点**：`@Around`环绕通知中**必须调用**`joinPoint.proceed()`且**必须return其返回值**或抛出异常，否则目标方法不会执行且返回值丢失。
 
 ### 3.3 多个通知的执行顺序
 
@@ -201,7 +201,7 @@ public Object around(ProceedingJoinPoint pjp) { ... }
 
 ## 5. JDK动态代理 vs CGLIB代理
 
-> 🔥 面试高频：Spring AOP什么时候用JDK代理？什么时候用CGLIB？
+> 面试高频：Spring AOP什么时候用JDK代理？什么时候用CGLIB？
 
 ### 5.1 对比表
 
@@ -226,8 +226,8 @@ public class UserServiceImpl implements UserService {
     public void save() { ... }
 }
 // → 代理对象类型: com.sun.proxy.$Proxy (实现了UserService接口)
-// → 获取方式: ctx.getBean(UserService.class) ✅
-//            ctx.getBean(UserServiceImpl.class) ❌ 类型不匹配！
+// → 获取方式: ctx.getBean(UserService.class) ✓
+//            ctx.getBean(UserServiceImpl.class) ✗ 类型不匹配！
 
 // 场景2：无接口 → CGLIB代理
 @Service
@@ -241,7 +241,7 @@ public class OrderService {  // 没有实现接口
 // 或代码: @EnableAspectJAutoProxy(proxyTargetClass = true)
 ```
 
-> 💡 **最佳实践**：面向接口编程 + 构造器注入，可以不受代理类型影响。
+> **最佳实践**：面向接口编程 + 构造器注入，可以不受代理类型影响。
 
 ---
 
@@ -272,7 +272,7 @@ public class TimeLogAspect {
             : timeLog.value();
         
         if (cost > 500) {
-            log.warn("⚠️ 慢方法: {} 耗时 {}ms", desc, cost);
+            log.warn("慢方法: {} 耗时 {}ms", desc, cost);
         } else {
             log.info("{} 耗时 {}ms", desc, cost);
         }
@@ -347,9 +347,9 @@ public class WebLogAspect {
 
 ## 7. 代理失效场景全解
 
-> 🔥 AOP代理失效是面试和生产环境最高频问题之一
+> AOP代理失效是面试和生产环境最高频问题之一
 
-### ❌ 场景1：同类内部方法调用
+### ✗ 场景1：同类内部方法调用
 
 ```java
 @Service
@@ -362,47 +362,47 @@ public class UserService {
     
     public void outerMethod() {
         // 直接通过this调用，绕过了代理对象
-        this.doSomething(); // ❌ AOP不生效！
+        this.doSomething(); // ✗ AOP不生效！
     }
 }
 ```
 
-> 💡 **原因**：`this`是目标对象本身，不是代理对象。AOP拦截发生在代理对象的方法调用上。
+> **原因**：`this`是目标对象本身，不是代理对象。AOP拦截发生在代理对象的方法调用上。
 >
 > **解决方案**：
 > 1. 注入自己：`@Autowired private UserService self; self.doSomething();`
 > 2. 获取代理：`((UserService) AopContext.currentProxy()).doSomething();`（需`@EnableAspectJAutoProxy(exposeProxy = true)`）
 > 3. 拆分到不同类（推荐）
 
-### ❌ 场景2：private方法
+### ✗ 场景2：private方法
 
 ```java
 @Service
 public class UserService {
     
     @TimeLog
-    private void doSomething() { // ❌ CGLIB通过继承，无法代理private方法
+    private void doSomething() { // ✗ CGLIB通过继承，无法代理private方法
         ...
     }
 }
 ```
 
-### ❌ 场景3：final方法/类
+### ✗ 场景3：final方法/类
 
 ```java
 @Service
-public final class UserService { // ❌ CGLIB无法代理final类
+public final class UserService { // ✗ CGLIB无法代理final类
     @TimeLog
-    public final void doSomething() { // ❌ CGLIB无法代理final方法
+    public final void doSomething() { // ✗ CGLIB无法代理final方法
         ...
     }
 }
 ```
 
-### ❌ 场景4：static方法
+### ✗ 场景4：static方法
 
 ```java
-// ❌ Spring AOP不支持static方法代理
+// ✗ Spring AOP不支持static方法代理
 @TimeLog
 public static String format() { ... }
 ```
@@ -522,7 +522,7 @@ public void deleteUser(Long userId) {
 | 织入时机 | 运行时（代理） | 编译时/类加载时/运行时 |
 | 连接点 | 仅方法执行 | 方法执行、构造器、字段访问... |
 | 性能 | 略有代理开销 | 几乎无开销（编译期织入） |
-| 使用便利性 | ⭐⭐⭐⭐⭐ | ⭐⭐⭐ |
+| 使用便利性 | ★★★★★ | ★★★ |
 | 功能完整度 | 80%常见场景 | 100%所有场景 |
 
 ### 13.2 AOP在Spring事务中的应用

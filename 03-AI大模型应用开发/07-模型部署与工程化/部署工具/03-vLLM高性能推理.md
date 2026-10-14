@@ -1,6 +1,6 @@
 # 03 - vLLM 高性能推理
 
-> 🎯 vLLM = LLM 推理的事实标准 — PagedAttention 显存利用率提升 4×、连续批处理 QPS 提升 10×、OpenAI 兼容 API 零迁移成本
+> vLLM = LLM 推理的事实标准 — PagedAttention 显存利用率提升 4×、连续批处理 QPS 提升 10×、OpenAI 兼容 API 零迁移成本
 
 ---
 
@@ -165,7 +165,7 @@ HttpResponse<String> response = client.send(request, BodyHandlers.ofString());
 环境：VLLM_USE_V1=1（V1 引擎开关）
 ```
 
-> 🎯 **核心要点**：vLLM 2026 = "**生产默认首选（45% 份额）**"——V1 引擎默认、FP8 支持、硬件最广；**调优四参数（max-len/显存利用率/张量并行/前缀缓存）**是生产标准动作。
+> **核心要点**：vLLM 2026 = "**生产默认首选（45% 份额）**"——V1 引擎默认、FP8 支持、硬件最广；**调优四参数（max-len/显存利用率/张量并行/前缀缓存）**是生产标准动作。
 
 ---
 
@@ -209,4 +209,4 @@ OpenAiApi api = new OpenAiApi("http://localhost:8000/v1", "EMPTY");
 | --max-num-seqs | 并发批大小（显存换吞吐） |
 | --dtype bfloat16 | 精度（默认） |
 
-> 🎯 **核心要点**：vLLM 使用 = "**一条命令启动 + OpenAI 兼容调用 + 三参数调优（显存利用率/张量并行/前缀缓存）**"——Java 端零特殊适配（OpenAI SDK 直连）；/metrics 端点开箱即用。
+> **核心要点**：vLLM 使用 = "**一条命令启动 + OpenAI 兼容调用 + 三参数调优（显存利用率/张量并行/前缀缓存）**"——Java 端零特殊适配（OpenAI SDK 直连）；/metrics 端点开箱即用。

@@ -2,7 +2,7 @@
 
 > 定位：JmsTemplate 完整 API、@JmsListener 深度配置（容器/线程/事务）、消息转换器的类型安全与 MappingJackson 原理、连接池配置、同步/异步发送对比、请求-应答模式——Spring JMS 从基础到生产的完整实践
 
-## 📚 目录
+## 目录
 
 1. [JmsTemplate 完整能力](#1-jmstemplate-完整能力)
 2. [连接管理：单连接 vs 连接池](#2-连接管理单连接-vs-连接池)
@@ -60,7 +60,7 @@ public class MessageProducer {
             for (OrderDTO o : orders) {
                 p.send(session.createTextMessage(toJson(o)));
             }
-            return null;   // ⚠️ Void 用 null
+            return null;   // Void 用 null
         }, true);          // 启动连接
     }
 }
@@ -85,7 +85,7 @@ public JmsTemplate jmsTemplate(ConnectionFactory factory) {
     // ===== 会话配置 =====
     t.setSessionTransacted(false);                   // 不启用事务（监听器开启更合适）
     t.setSessionAcknowledgeMode(Session.CLIENT_ACKNOWLEDGE);
-    t.setExplicitQosEnabled(true);                   // ⚠️ 启用 QoS（优先级/TTL/DeliveryMode 才生效）
+    t.setExplicitQosEnabled(true);                   // 启用 QoS（优先级/TTL/DeliveryMode 才生效）
 
     // ===== 消息转换器 =====
     t.setMessageConverter(jacksonConverter());
@@ -101,7 +101,7 @@ public JmsTemplate jmsTemplate(ConnectionFactory factory) {
 ### 2.1 连接池的必要性
 
 ```
-⚠️ JMS Connection 是重量级对象（TCP 连接）
+JMS Connection 是重量级对象（TCP 连接）
   每次发送新建 Connection → 慢 + 资源浪费
   JmsTemplate 默认缓存 Session 但 Connection 数量有限
 
@@ -120,7 +120,7 @@ public ConnectionFactory pooledConnectionFactory() {
 
     PooledConnectionFactory pool = new PooledConnectionFactory();
     pool.setConnectionFactory(amq);
-    pool.setMaxConnections(20);        // ⚠️ 最大连接数
+    pool.setMaxConnections(20);        // 最大连接数
     pool.setMaximumActiveSessionPerConnection(50);  // 每连接 50 个 Session
     pool.setIdleTimeout(30000);        // 空闲 30 秒回收
     pool.setBlockIfSessionPoolIsFull(true);  // 池满阻塞等待
@@ -152,11 +152,11 @@ public DefaultJmsListenerContainerFactory jmsFactory(ConnectionFactory cf) {
 
     // ===== 并发控制 =====
     f.setConcurrency("3-10");              // 3 常驻、最大 10
-    f.setMaxMessagesPerTask(1);            // ⚠️ 每次取一条（处理完再取，防堆积）
+    f.setMaxMessagesPerTask(1);            // 每次取一条（处理完再取，防堆积）
     f.setReceiveTimeout(5000);             // 接收等待超时
 
     // ===== 事务 =====
-    f.setSessionTransacted(true);          // ⚠️ 监听器事务（异常回滚）
+    f.setSessionTransacted(true);          // 监听器事务（异常回滚）
 
     // ===== 确认 =====
     f.setSessionAcknowledgeMode(Session.CLIENT_ACKNOWLEDGE);
@@ -194,7 +194,7 @@ public class OrderListener {
     public void handleManual(Message message, Session session) throws JMSException {
         try {
             process(message);
-            message.acknowledge();        // ⚠️ 成功才确认
+            message.acknowledge();        // 成功才确认
         } catch (Exception e) {
             session.recover();            // 回滚 → 重投
         }
@@ -231,7 +231,7 @@ MappingJackson2MessageConverter 的工作流程：
   发送端：Java 对象 → Jackson 序列化 → JSON 字符串 → TextMessage
   接收端：TextMessage → JSON 字符串 → _type 属性定位 Java 类 → Jackson 反序列化
 
-⚠️ _type 是类型映射的关键：
+_type 是类型映射的关键：
   发消息时自动写入 msg.setStringProperty("_type", "com.example.OrderDTO")
   收消息时根据 _type 反序列化为正确的 Java 类型
 ```
@@ -243,7 +243,7 @@ public MessageConverter jacksonConverter() {
 
     // ① 发送 TextMessage（兼容性好）
     c.setTargetType(MessageType.TEXT);
-    c.setTypeIdPropertyName("_type");       // ⚠️ 类型标识属性名
+    c.setTypeIdPropertyName("_type");       // 类型标识属性名
 
     // ② 接收时：只信任白名单包（安全）
     c.setTrustedPackages(
@@ -260,7 +260,7 @@ public MessageConverter jacksonConverter() {
 ### 4.2 多类型转换实现
 
 ```java
-// ⚠️ 同队列发送多种类型消息时：手动设置类型
+// 同队列发送多种类型消息时：手动设置类型
 jms.convertAndSend("events.queue", new OrderCreatedEvent(1L), msg -> {
     msg.setStringProperty("_type", OrderCreatedEvent.class.getName());
     return msg;
@@ -293,7 +293,7 @@ jms.convertAndSend("orders.queue", order);
 
 // 性能调优：异步发送（不等待确认，较快但有丢失风险）
 ActiveMQConnectionFactory amq = (ActiveMQConnectionFactory) factory;
-amq.setUseAsyncSend(true);              // ⚠️ Broker DMA 异常时丢消息
+amq.setUseAsyncSend(true);              // Broker DMA 异常时丢消息
 // 适用：日志/通知类可承受丢失的场景
 ```
 
@@ -301,13 +301,13 @@ amq.setUseAsyncSend(true);              // ⚠️ Broker DMA 异常时丢消息
 
 | 维度 | 同步（默认） | 异步 |
 |------|:---:|:---:|
-| 可靠性 | ✅ Broker 确认 | ⚠️ 可能丢 |
-| 延迟 | 较高（等确认） | ✅ 低 |
-| 吞吐 | 中 | ✅ 高 |
+| 可靠性 | ✓ Broker 确认 | 可能丢 |
+| 延迟 | 较高（等确认） | ✓ 低 |
+| 吞吐 | 中 | ✓ 高 |
 | 适用 | 关键业务 | 日志/通知/指标 |
 
 ```
-⚠️ 面试必答：
+面试必答：
 "同步（等 Broker 确认，可靠）、
  异步（不等确认，快但可能丢）——
  关键业务（订单/支付）必须同步发送；
@@ -329,7 +329,7 @@ public OrderVO requestReply(OrderDTO request) {
 
         // ② 发送请求（含临时队列为回复地址）
         TextMessage msg = session.createTextMessage(toJson(request));
-        msg.setJMSReplyTo(replyQueue);       // ⚠️ 回调地址
+        msg.setJMSReplyTo(replyQueue);       // 回调地址
         msg.setJMSCorrelationID(UUID.randomUUID().toString());
         producer.send(msg);
 
@@ -347,17 +347,17 @@ public Message handleRpc(Message request, Session session) throws JMSException {
     String correlationId = request.getJMSCorrelationID();
 
     TextMessage reply = session.createTextMessage(process(request));
-    reply.setJMSCorrelationID(correlationId);  // ⚠️ 关联请求
+    reply.setJMSCorrelationID(correlationId);  // 关联请求
     session.createProducer(replyTo).send(reply);
     return reply;
 }
 ```
 
-> 🎯 **要点**：请求-应答 = JMS 版的 RPC——通过 `JMSReplyTo` + `JMSCorrelationID` 实现同步调用语义。临时队列生命周期随会话销毁，免清理。
+> **要点**：请求-应答 = JMS 版的 RPC——通过 `JMSReplyTo` + `JMSCorrelationID` 实现同步调用语义。临时队列生命周期随会话销毁，免清理。
 
 ---
 
-> 🎯 **核心要点**：Spring JMS = **JmsTemplate 五种发送**（raw/convert/header/Destination/execute）+ **连接池**（PooledConnectionFactory 调优）+ **@JmsListener 深度配置**（容器工厂/并发/事务/ACK/错误处理）+ **类型安全转换**（MappingJackson2 + _type + 白名单）+ **同步 vs 异步发送**（可靠性 vs 性能）+ **请求-应答**（JMSReplyTo + 临时队列 RPC）。
+> **核心要点**：Spring JMS = **JmsTemplate 五种发送**（raw/convert/header/Destination/execute）+ **连接池**（PooledConnectionFactory 调优）+ **@JmsListener 深度配置**（容器工厂/并发/事务/ACK/错误处理）+ **类型安全转换**（MappingJackson2 + _type + 白名单）+ **同步 vs 异步发送**（可靠性 vs 性能）+ **请求-应答**（JMSReplyTo + 临时队列 RPC）。
 
 ---
 

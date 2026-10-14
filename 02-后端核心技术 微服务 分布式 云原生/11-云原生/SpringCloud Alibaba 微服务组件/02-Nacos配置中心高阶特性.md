@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [配置管理的三层模型](#1-配置管理的三层模型)
 2. [动态刷新：@RefreshScope 原理](#2-动态刷新refreshscope-原理)
@@ -96,7 +96,7 @@ public void refreshAll() {
 ### 2.3 使用注意事项
 
 ```java
-// ✅ 正确：@RefreshScope + @Value
+// ✓ 正确：@RefreshScope + @Value
 @RefreshScope
 @RestController
 public class ConfigController {
@@ -107,7 +107,7 @@ public class ConfigController {
     public int get() { return timeout; }
 }
 
-// ✅ 正确：@ConfigurationProperties 天然支持
+// ✓ 正确：@ConfigurationProperties 天然支持
 @ConfigurationProperties(prefix = "app.pay")
 @Component
 @Data
@@ -117,11 +117,11 @@ public class PayProperties {
     // @ConfigurationProperties 的 Bean 自动支持刷新
 }
 
-// ❌ 错误：static 变量
+// ✗ 错误：static 变量
 @Value("${app.staticVal}")
 private static String staticVal;  // 不会被刷新！
 
-// ⚠️ 注意：@RefreshScope 的 Bean 是 Lazy 的
+// 注意：@RefreshScope 的 Bean 是 Lazy 的
 // 如果启动时就需要初始化，配合 @PostConstruct 使用
 ```
 
@@ -165,11 +165,11 @@ t1: 创建 Beta 配置 v2-beta
   ↓
 t2: 观察 10.0.1.10 的日志/监控 30 分钟
   ↓
-t3a: ✅ 一切正常 → 点击"正式发布"
+t3a: ✓ 一切正常 → 点击"正式发布"
   → v2-beta 变为 v2
   → 全量实例生效
   ↓
-t3b: ❌ 出现问题 → 点击"停止 Beta"
+t3b: ✗ 出现问题 → 点击"停止 Beta"
   → v2-beta 被删除
   → 10.0.1.10 恢复读 v1
   → 零影响范围
@@ -178,11 +178,11 @@ t3b: ❌ 出现问题 → 点击"停止 Beta"
 ### 3.3 灰度最佳实践
 
 ```text
-✅ 生产配置变更必须走灰度流程
-✅ 灰度验证至少 30 分钟
-✅ 选择典型流量实例做金丝雀（不是低流量实例）
-✅ 关注的不只是错误日志，还有业务指标（订单量、支付成功率）
-✅ 黄金法则：能灰度的配置才配叫"动态配置"
+✓ 生产配置变更必须走灰度流程
+✓ 灰度验证至少 30 分钟
+✓ 选择典型流量实例做金丝雀（不是低流量实例）
+✓ 关注的不只是错误日志，还有业务指标（订单量、支付成功率）
+✓ 黄金法则：能灰度的配置才配叫"动态配置"
 ```
 
 ---
@@ -471,7 +471,7 @@ test (测试环境)
 
 ---
 
-> 🎯 **核心要点**：Nacos 配置中心的三个杀手特性——灰度发布（零风险变更）、配置加密（安全合规）、长轮询（实时性 + 低开销）。生产环境中，namespace 分层 + 灰度发布流程是"必须做"的基础设施规范，不是可选项。
+> **核心要点**：Nacos 配置中心的三个杀手特性——灰度发布（零风险变更）、配置加密（安全合规）、长轮询（实时性 + 低开销）。生产环境中，namespace 分层 + 灰度发布流程是"必须做"的基础设施规范，不是可选项。
 
 ---
 

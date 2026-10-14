@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [从匿名内部类到 Lambda](#1-从匿名内部类到-lambda)
 2. [完整语法与简化规则](#2-完整语法与简化规则)
@@ -67,7 +67,7 @@ System.out.println(names);   // [alice, Bob, Charlie]
 | 可实现抽象方法数 | 任意多个 | 恰好 1 个 | 恰好 1 个 |
 | 可否有实例字段 | 可以（带状态） | 不可以（无状态） | 不可以 |
 
-> 🎯 **核心要点**：Lambda 与匿名内部类**语法目的相似，语义并不等价**。表格里 `this`、作用域、编译产物这三行的差异，是后面所有"为什么这里报错"的根源。
+> **核心要点**：Lambda 与匿名内部类**语法目的相似，语义并不等价**。表格里 `this`、作用域、编译产物这三行的差异，是后面所有"为什么这里报错"的根源。
 
 ### 1.3 一个关键认知：Lambda 没有自己的类型
 
@@ -91,7 +91,7 @@ Comparator<String>         f3 = (a, b) -> a.length() - b.length();
 Object o = (Runnable) () -> System.out.println("cast 赋予了类型");
 ```
 
-> ⚠️ 这也解释了为什么 `Object o = () -> {};` 编译失败——`Object` 不是函数式接口，无法充当目标类型。
+> 这也解释了为什么 `Object o = () -> {};` 编译失败——`Object` 不是函数式接口，无法充当目标类型。
 
 ---
 
@@ -120,18 +120,18 @@ Object o = (Runnable) () -> System.out.println("cast 赋予了类型");
 Runnable r = () -> System.out.println("必须写空括号");
 
 // 2. 单个"隐式类型"参数才可以省括号
-Function<String, Integer> ok1 = s -> s.length();          // ✅
-Function<String, Integer> ok2 = (s) -> s.length();        // ✅
-Function<String, Integer> ok3 = (String s) -> s.length(); // ✅ 显式类型必须带括号
-// Function<String,Integer> bad = String s -> s.length(); // ❌ 编译错误
+Function<String, Integer> ok1 = s -> s.length();          // ✓
+Function<String, Integer> ok2 = (s) -> s.length();        // ✓
+Function<String, Integer> ok3 = (String s) -> s.length(); // ✓ 显式类型必须带括号
+// Function<String,Integer> bad = String s -> s.length(); // ✗ 编译错误
 
 // 3. 类型标注必须"全有或全无"，不能混用
-BiFunction<String, String, String> okAll   = (String a, String b) -> a + b;   // ✅
-BiFunction<String, String, String> okNone  = (a, b) -> a + b;                 // ✅
-// BiFunction<String,String,String> bad2 = (String a, b) -> a + b;            // ❌ 不能一半一半
+BiFunction<String, String, String> okAll   = (String a, String b) -> a + b;   // ✓
+BiFunction<String, String, String> okNone  = (a, b) -> a + b;                 // ✓
+// BiFunction<String,String,String> bad2 = (String a, b) -> a + b;            // ✗ 不能一半一半
 ```
 
-> 💡 `var` 参数存在的唯一理由是**给参数加注解或 `final`**。`(@NonNull var s) -> ...` 是合法的，而 `(@NonNull s) -> ...` 不是。同样，`var` 也遵守"全有或全无"：`(var a, String b)` 非法。
+> `var` 参数存在的唯一理由是**给参数加注解或 `final`**。`(@NonNull var s) -> ...` 是合法的，而 `(@NonNull s) -> ...` 不是。同样，`var` 也遵守"全有或全无"：`(var a, String b)` 非法。
 
 ### 2.3 函数体部分：表达式体 vs 语句块体
 
@@ -158,13 +158,13 @@ Function<Integer, String> classify = x -> {
 一个容易踩的坑是"半简化"：
 
 ```java
-// ❌ 有花括号就不能省 return
+// ✗ 有花括号就不能省 return
 // Function<Integer,Integer> bad = x -> { x * x; };
 
-// ❌ 没花括号就不能写 return
+// ✗ 没花括号就不能写 return
 // Function<Integer,Integer> bad2 = x -> return x * x;
 
-// ✅ 两种正确写法
+// ✓ 两种正确写法
 Function<Integer, Integer> good1 = x -> x * x;
 Function<Integer, Integer> good2 = x -> { return x * x; };
 ```
@@ -184,7 +184,7 @@ Function<Integer, Integer> good2 = x -> { return x * x; };
         s -> s.trim().toLowerCase()          ← 终点
 ```
 
-> 🎯 **核心要点**：简化不是"随便删"，而是四条独立规则的叠加——**类型可推断则省类型；单隐式参数则省括号；单表达式则省花括号；省花括号则必须同时省 `return`**。
+> **核心要点**：简化不是"随便删"，而是四条独立规则的叠加——**类型可推断则省类型；单隐式参数则省括号；单表达式则省花括号；省花括号则必须同时省 `return`**。
 
 ---
 
@@ -256,21 +256,21 @@ exec(() -> { list.add("x"); });       // 输出：Runnable
 真正会报 `对 xxx 的引用不明确` 的，是**两个接口的形状与返回类型都能匹配**的时候：
 
 ```java
-// ❌ 实测报错：Supplier<String> 和 Callable<String> 都匹配
+// ✗ 实测报错：Supplier<String> 和 Callable<String> 都匹配
 static void run(Supplier<String> s) { }
 static void run(Callable<String> c) { }
 // run(() -> "abc");
 
-// ❌ 实测报错：Predicate<String> 和 Function<String,Boolean> 都匹配
+// ✗ 实测报错：Predicate<String> 和 Function<String,Boolean> 都匹配
 static void p(Predicate<String> f) { }
 static void p(Function<String, Boolean> f) { }
 // p(s -> s.isEmpty());
 
-// ✅ 统一解法：强制类型转换指明目标类型
+// ✓ 统一解法：强制类型转换指明目标类型
 run((Supplier<String>) () -> "abc");
 ```
 
-> ⚠️ **设计建议**：写 API 时**不要用不同函数式接口重载同名方法**——这是 Effective Java Item 44 的明确告诫。理由正是上面这组实验：有时报歧义（编译期就拦住你），更糟的情况是**不报歧义但选了你没想到的那个重载**。宁可起两个名字（`execute` / `submitTask`）。
+> **设计建议**：写 API 时**不要用不同函数式接口重载同名方法**——这是 Effective Java Item 44 的明确告诫。理由正是上面这组实验：有时报歧义（编译期就拦住你），更糟的情况是**不报歧义但选了你没想到的那个重载**。宁可起两个名字（`execute` / `submitTask`）。
 >
 > 顺带一个相关陷阱：`void h(Function<String,Integer> f)` 与 `void h(Function<Integer,Integer> f)` **根本无法共存**，编译器直接报"名称冲突：具有相同疑符（erasure）"——泛型擦除后两者签名一致。想重载必须换用不同的接口类型（如 `Function` 与 `ToIntFunction`），但那又会掉进上面的歧义坑。
 
@@ -293,12 +293,12 @@ List<Integer> lengths = words.stream()
 
 ```java
 // 空集合 + 链式调用，R 无从推断
-// ❌ List<String> r = Collections.<String>emptyList().stream().map(x -> x).collect(...);
+// ✗ List<String> r = Collections.<String>emptyList().stream().map(x -> x).collect(...);
 
-// ✅ 显式方法类型参数
+// ✓ 显式方法类型参数
 List<Object> r1 = Stream.<Object>of("a", 1).collect(Collectors.toList());
 
-// ✅ 给 Lambda 参数写上类型，帮助编译器
+// ✓ 给 Lambda 参数写上类型，帮助编译器
 Function<String, Integer> f = (String s) -> s.length();
 ```
 
@@ -316,7 +316,7 @@ Comparator<String> c = (a, b) -> a.compareTo(b);
 步骤 1：目标类型 = Comparator<String>
 步骤 2：唯一抽象方法 = int compare(String o1, String o2)
 步骤 3：形参对位 → a : String, b : String
-步骤 4：校验函数体 → a.compareTo(b) 返回 int，与 compare 返回类型一致 ✅
+步骤 4：校验函数体 → a.compareTo(b) 返回 int，与 compare 返回类型一致 ✓
 ```
 
 因此**同一段 Lambda 文本，在不同目标类型下参数类型完全不同**：
@@ -343,7 +343,7 @@ Comparator<Integer> byInt = (a, b) -> a.compareTo(b);   // a, b 是 Integer
 static void h(Function<String, Integer> f) { }
 static void h(ToIntFunction<String> f)     { }
 
-// ❌ 实测报错："对 h 的引用不明确"，而不是任何关于函数体的抱怨
+// ✗ 实测报错："对 h 的引用不明确"，而不是任何关于函数体的抱怨
 // h(s -> s.length());
 ```
 
@@ -356,10 +356,10 @@ static void exec2(Runnable r)         { }
 static void exec2(Callable<String> c) { }
 
 // 形状先筛掉 Callable<String>（boolean 对不上 String），锁定 Runnable
-exec2(() -> list.add("x"));           // ✅ 通过
+exec2(() -> list.add("x"));           // ✓ 通过
 ```
 
-> 💡 **排错口诀**：看到 `引用不明确 / ambiguous`，去数**参数个数与返回值有无**，别盯着函数体改；看到 `不兼容的类型 / incompatible types`，才该检查函数体的返回值和类型。两类错误的诊断路径完全不同。
+> **排错口诀**：看到 `引用不明确 / ambiguous`，去数**参数个数与返回值有无**，别盯着函数体改；看到 `不兼容的类型 / incompatible types`，才该检查函数体的返回值和类型。两类错误的诊断路径完全不同。
 >
 > 还有第三类容易混淆的：`名称冲突…具有相同疑符`。它跟 Lambda 无关，是**方法声明本身**过不了泛型擦除检查（如 `Function<String,Integer>` 与 `Function<Integer,Integer>` 同名重载），报错位置在方法定义行而不是调用行。
 
@@ -378,10 +378,10 @@ public class CaptureDemo {
         int localVar = 3;                   // 局部变量
 
         Runnable r = () -> {
-            instanceField++;                // ✅ 可读可写
-            staticField++;                  // ✅ 可读可写
-            System.out.println(localVar);   // ✅ 可读
-            // localVar++;                  // ❌ 编译错误
+            instanceField++;                // ✓ 可读可写
+            staticField++;                  // ✓ 可读可写
+            System.out.println(localVar);   // ✓ 可读
+            // localVar++;                  // ✗ 编译错误
         };
         r.run();
         System.out.println(instanceField + " " + staticField);  // 2 3
@@ -391,10 +391,10 @@ public class CaptureDemo {
 
 | 变量类型 | 存储位置 | Lambda 能否读 | Lambda 能否写 | 约束 |
 |---------|---------|:---:|:---:|------|
-| 局部变量 / 形参 | 虚拟机栈 | ✅ | ❌ | 必须 effectively final |
-| 实例字段 | 堆（对象内） | ✅ | ✅ | 隐式捕获 `this` |
-| 静态字段 | 堆（Class 对象） | ✅ | ✅ | 无捕获，直接访问 |
-| 数组元素 / 对象内部状态 | 堆 | ✅ | ✅ | 引用本身需 effectively final |
+| 局部变量 / 形参 | 虚拟机栈 | ✓ | ✗ | 必须 effectively final |
+| 实例字段 | 堆（对象内） | ✓ | ✓ | 隐式捕获 `this` |
+| 静态字段 | 堆（Class 对象） | ✓ | ✓ | 无捕获，直接访问 |
+| 数组元素 / 对象内部状态 | 堆 | ✓ | ✓ | 引用本身需 effectively final |
 
 关键区别在于**捕获的是什么**：局部变量捕获的是**值的拷贝**（栈帧会消失，必须复制走）；实例字段访问的其实是**捕获了 `this` 引用**，然后通过引用读写堆上的对象。
 
@@ -418,27 +418,27 @@ count = 1;
 ### 5.3 边界案例：什么算"只赋值一次"
 
 ```java
-// ✅ 分支赋值：每条路径只赋值一次，仍是 effectively final
+// ✓ 分支赋值：每条路径只赋值一次，仍是 effectively final
 int a;
 if (args.length == 0) { a = 1; } else { a = 2; }
 Supplier<Integer> s1 = () -> a;        // 合法，实测通过
 
-// ✅ 增强 for：循环变量每次迭代都是"新变量"
+// ✓ 增强 for：循环变量每次迭代都是"新变量"
 List<Supplier<String>> subs = new ArrayList<>();
 for (String x : List.of("A", "B")) {
     subs.add(() -> x);                 // 合法
 }
 subs.forEach(su -> System.out.print(su.get() + " "));   // 输出：A B
 
-// ❌ 传统 for：i 在同一变量槽上反复自增，不是 effectively final
+// ✗ 传统 for：i 在同一变量槽上反复自增，不是 effectively final
 for (int i = 0; i < 2; i++) {
     // subs.add(() -> i);              // 编译错误
-    int copy = i;                      // ✅ 每轮新建局部变量
+    int copy = i;                      // ✓ 每轮新建局部变量
     nums.add(() -> copy);
 }
 ```
 
-> 🎯 **核心要点**：增强 for 的循环变量在**每次迭代都是一个全新的变量**，所以可以捕获；传统 for 的 `i` 是**同一个变量被反复修改**，所以不行。这个差异经常在面试里被问到。
+> **核心要点**：增强 for 的循环变量在**每次迭代都是一个全新的变量**，所以可以捕获；传统 for 的 `i` 是**同一个变量被反复修改**，所以不行。这个差异经常在面试里被问到。
 
 ### 5.4 "绕过"限制的两种写法及其代价
 
@@ -447,7 +447,7 @@ for (int i = 0; i < 2; i++) {
 ```java
 // 写法一：数组技巧
 int[] counter = {0};
-Runnable r = () -> counter[0]++;       // ✅ counter 引用没变，改的是堆上数组元素
+Runnable r = () -> counter[0]++;       // ✓ counter 引用没变，改的是堆上数组元素
 r.run(); r.run();
 System.out.println(counter[0]);        // 2
 
@@ -458,7 +458,7 @@ r2.run();
 System.out.println(sb);                // start-more
 ```
 
-> ⚠️ **能做不等于该做**。这两种写法**绕过了限制，但没有绕过限制想防的问题**：如果 Lambda 被提交到线程池或并行流，`counter[0]++` 就是彻头彻尾的数据竞争。语言帮你挡住了栈变量，挡不住堆上的共享可变状态。
+> **能做不等于该做**。这两种写法**绕过了限制，但没有绕过限制想防的问题**：如果 Lambda 被提交到线程池或并行流，`counter[0]++` 就是彻头彻尾的数据竞争。语言帮你挡住了栈变量，挡不住堆上的共享可变状态。
 >
 > 需要并发计数请用 `AtomicInteger`/`LongAdder`；需要在流里累积请用 `Collectors.counting()`、`reduce`、`Collectors.toList()` 这类**规约**操作，而不是在 `forEach` 里往外部集合塞数据。
 
@@ -508,7 +508,7 @@ public class ThisDemo {
 | `super.m()` | 外围类的父类方法 | 匿名类实现的接口/父类方法 |
 | `this.getClass()` | 外围类的 Class | 匿名类的 Class（`getSimpleName()` 返回空串） |
 
-> 💡 实测细节：匿名内部类的 `getClass().getSimpleName()` 返回的是**空字符串**（匿名类没有简单名），`getName()` 才会给出 `ThisDemo$1`。用它做日志时容易踩坑。
+> 实测细节：匿名内部类的 `getClass().getSimpleName()` 返回的是**空字符串**（匿名类没有简单名），`getName()` 才会给出 `ThisDemo$1`。用它做日志时容易踩坑。
 
 ### 6.2 作用域：Lambda 不引入新的变量作用域
 
@@ -517,11 +517,11 @@ public class ThisDemo {
 ```java
 int x = 1;
 
-// ❌ Lambda 与外层共享作用域，不能定义同名变量
+// ✗ Lambda 与外层共享作用域，不能定义同名变量
 // Consumer<Integer> c = n -> { int x = 5; System.out.println(x); };
 // 错误: 已在方法 main(String[])中定义了变量 x
 
-// ✅ 匿名内部类有独立作用域，可以遮蔽
+// ✓ 匿名内部类有独立作用域，可以遮蔽
 Runnable r = new Runnable() {
     @Override public void run() {
         int x = 5;                                  // 合法，遮蔽外层
@@ -536,11 +536,11 @@ System.out.println("outer x=" + x);                 // outer x=1
 
 ```java
 int s = 0;
-// ❌ 参数名 s 与外层局部变量 s 冲突
+// ✗ 参数名 s 与外层局部变量 s 冲突
 // Function<String, Integer> f = s -> s.length();
 ```
 
-> 🎯 **核心要点**：Lambda 是**词法作用域（lexical scope）**的——它在语法上"就地展开"，与外围代码共享同一个作用域；匿名内部类则是一个**真正的新类体**，自带独立作用域。记住这一条，`variable is already defined` 这个错误就不再神秘。
+> **核心要点**：Lambda 是**词法作用域（lexical scope）**的——它在语法上"就地展开"，与外围代码共享同一个作用域；匿名内部类则是一个**真正的新类体**，自带独立作用域。记住这一条，`variable is already defined` 这个错误就不再神秘。
 
 ### 6.3 静态上下文中的限制
 
@@ -549,25 +549,25 @@ public class StaticDemo {
     private int field = 1;
 
     static void staticMethod() {
-        // ❌ 静态方法里没有 this，Lambda 自然也捕获不到实例字段
+        // ✗ 静态方法里没有 this，Lambda 自然也捕获不到实例字段
         // Runnable r = () -> System.out.println(field);
     }
 
     void instanceMethod() {
-        Runnable r = () -> System.out.println(field);   // ✅ 隐式捕获 this
+        Runnable r = () -> System.out.println(field);   // ✓ 隐式捕获 this
         r.run();
     }
 }
 ```
 
-> ⚠️ **内存泄漏预警**：只要 Lambda 访问了任何实例字段（哪怕只读一个），它就**持有整个外围对象的强引用**。把这种 Lambda 注册到全局监听器、静态缓存或长生命周期的线程池队列里，外围对象就永远无法回收。
+> **内存泄漏预警**：只要 Lambda 访问了任何实例字段（哪怕只读一个），它就**持有整个外围对象的强引用**。把这种 Lambda 注册到全局监听器、静态缓存或长生命周期的线程池队列里，外围对象就永远无法回收。
 >
 > 规避方式：把需要的字段**先复制到局部变量**，让 Lambda 只捕获那个值。
 >
 > ```java
-> // ❌ 捕获整个 this
+> // ✗ 捕获整个 this
 > registry.register(() -> handle(this.config));
-> // ✅ 只捕获需要的值
+> // ✓ 只捕获需要的值
 > Config snapshot = this.config;
 > registry.register(() -> handle(snapshot));
 > ```
@@ -584,19 +584,19 @@ public class StaticDemo {
 List<String> list = new ArrayList<>();
 
 // list.add 返回 boolean，但赋给 Consumer（void）合法——返回值被丢弃
-Consumer<String> c = s -> list.add(s);      // ✅ 实测通过
+Consumer<String> c = s -> list.add(s);      // ✓ 实测通过
 
 // 同一段代码也能当作有返回值使用
-Supplier<Boolean> sp = () -> list.add("x"); // ✅
+Supplier<Boolean> sp = () -> list.add("x"); // ✓
 ```
 
 但这个宽容有边界——**只对"语句表达式"生效**。语句表达式是指那些**单独加个分号就能成为一条语句**的表达式：方法调用、赋值、自增自减、`new`。其余表达式（算术运算、字面量、三元）不行：
 
 ```java
-// ✅ 方法调用是语句表达式，返回值可静默丢弃
+// ✓ 方法调用是语句表达式，返回值可静默丢弃
 Consumer<String> ok = s -> s.length();          // 实测通过
 
-// ❌ 算术表达式不是语句表达式
+// ✗ 算术表达式不是语句表达式
 // Consumer<Integer> bad = n -> 1 + 1;
 // 实测错误: lambda 主体与 void 函数接口不兼容
 //          (请考虑使用块 lambda 主体, 或者改为使用语句表达式)
@@ -606,20 +606,20 @@ Consumer<String> ok = s -> s.length();          // 实测通过
 
 | 函数体形式 | 赋给 `Supplier<String>` | 赋给 `Runnable` | 说明 |
 |-----------|:---:|:---:|------|
-| `() -> "abc"` | ✅ | ❌ | 字面量不是语句表达式 |
-| `() -> list.add("x")` | ❌ 类型不符 | ✅ | 方法调用，返回值可丢弃 |
-| `() -> { return "abc"; }` | ✅ | ❌ | 显式返回值与 void 冲突 |
-| `() -> { list.add("x"); }` | ❌ 缺返回值 | ✅ | 值已被语句块丢弃 |
-| `() -> System.out.println("x")` | ❌ 无值 | ✅ | `void` 方法调用 |
-| `() -> { }` | ❌ 缺返回值 | ✅ | 实测错误："缺少返回值" |
+| `() -> "abc"` | ✓ | ✗ | 字面量不是语句表达式 |
+| `() -> list.add("x")` | ✗ 类型不符 | ✓ | 方法调用，返回值可丢弃 |
+| `() -> { return "abc"; }` | ✓ | ✗ | 显式返回值与 void 冲突 |
+| `() -> { list.add("x"); }` | ✗ 缺返回值 | ✓ | 值已被语句块丢弃 |
+| `() -> System.out.println("x")` | ✗ 无值 | ✓ | `void` 方法调用 |
+| `() -> { }` | ✗ 缺返回值 | ✓ | 实测错误："缺少返回值" |
 
 ### 7.2 语句块体必须"所有路径都有返回值"
 
 ```java
-// ❌ 缺少 else 分支的返回
+// ✗ 缺少 else 分支的返回
 // Function<Integer,String> bad = x -> { if (x > 0) return "正"; };
 
-// ✅ 补全所有路径
+// ✓ 补全所有路径
 Function<Integer, String> good = x -> {
     if (x > 0) return "正";
     return "非正";
@@ -635,7 +635,7 @@ Function<Integer, String> good = x -> {
 ```java
 static String risky() throws Exception { return "x"; }
 
-// ❌ 实测错误：未报告的异常错误Exception; 必须对其进行捕获或声明以便抛出
+// ✗ 实测错误：未报告的异常错误Exception; 必须对其进行捕获或声明以便抛出
 // Supplier<String> s = () -> risky();
 ```
 
@@ -703,7 +703,7 @@ result.ifPresentOrElse(System.out::println, () -> System.out.println("失败"));
 | `unchecked` 包装器 | 大量同类调用（IO、反射） | 异常类型信息丢失 |
 | `Optional` / Result | 失败是正常业务分支 | 丢失异常细节，需另行记录 |
 
-> ⚠️ 千万别写 `catch (Exception e) { }` 这种空吞。包装时**务必把原异常作为 cause 传下去**，否则线上排查会直接失去堆栈。
+> 千万别写 `catch (Exception e) { }` 这种空吞。包装时**务必把原异常作为 cause 传下去**，否则线上排查会直接失去堆栈。
 
 ### 7.4 非受检异常自由通过
 
@@ -761,14 +761,14 @@ interface GenericSam { <T> T pick(T a, T b); }
 static <T> T first(T a, T b) { return a; }
 
 public static void main(String[] args) {
-    // ❌ 错误: lambda 表达式的函数描述符无效 —— 方法 (T,T)T 为泛型方法
+    // ✗ 错误: lambda 表达式的函数描述符无效 —— 方法 (T,T)T 为泛型方法
     // GenericSam g = (a, b) -> a;
 
-    // ✅ 方法引用可以
+    // ✓ 方法引用可以
     GenericSam g = MyClass::first;
     System.out.println(g.pick("A", "B"));    // A
 
-    // ✅ 匿名内部类也可以
+    // ✓ 匿名内部类也可以
     GenericSam anon = new GenericSam() {
         @Override public <T> T pick(T a, T b) { return b; }
     };
@@ -778,7 +778,7 @@ public static void main(String[] args) {
 
 原因：Lambda 的形参类型必须在编译期**确定**，而泛型方法的类型参数要到**每个调用点**才确定，Lambda 无法为"每个 T"都生成一份实现。
 
-> 💡 这条规则的实践含义：**设计自定义函数式接口时，把泛型放在接口上（`interface Picker<T>`），不要放在方法上（`<T> T pick(...)`）**，否则接口无法用 Lambda 实现，等于废掉了一半的价值。
+> 这条规则的实践含义：**设计自定义函数式接口时，把泛型放在接口上（`interface Picker<T>`），不要放在方法上（`<T> T pick(...)`）**，否则接口无法用 Lambda 实现，等于废掉了一半的价值。
 
 ---
 
@@ -962,7 +962,7 @@ Lambda 语法与捕获的四条主线
 └── 语义边界在哪？  → this 指外围、无独立作用域、异常受签名约束
 ```
 
-> 🎯 **一句话收束**：Lambda 的所有"怪异"编译错误，追根溯源只有两个原因——**它没有自己的类型**（所以需要目标类型），**它没有自己的作用域和 this**（所以共享外围环境）。把这两点想透，第 8 节的十个误区会自动瓦解。
+> **一句话收束**：Lambda 的所有"怪异"编译错误，追根溯源只有两个原因——**它没有自己的类型**（所以需要目标类型），**它没有自己的作用域和 this**（所以共享外围环境）。把这两点想透，第 8 节的十个误区会自动瓦解。
 
 ---
 

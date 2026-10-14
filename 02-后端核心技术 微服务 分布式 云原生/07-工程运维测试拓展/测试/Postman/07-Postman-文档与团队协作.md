@@ -1,10 +1,10 @@
 # Postman 文档与团队协作
 
-> 📄 API 文档自动生成与发布、Workspace 团队空间、Collection 版本管理、导入导出 —— 让 API 成为团队共享资产
+> API 文档自动生成与发布、Workspace 团队空间、Collection 版本管理、导入导出 —— 让 API 成为团队共享资产
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [API 文档生成](#1-api-文档生成)
 2. [文档增强技巧](#2-文档增强技巧)
@@ -78,11 +78,11 @@
 
 ```text
 Request Example 命名规范：
-  ✅ "正常创建 - 邮箱注册"
-  ✅ "正常创建 - 手机号注册"
-  ✅ "异常 - 用户名已存在"
-  ✅ "异常 - 密码过短"
-  ✅ "边界 - 用户名恰好20位"
+  ✓ "正常创建 - 邮箱注册"
+  ✓ "正常创建 - 手机号注册"
+  ✓ "异常 - 用户名已存在"
+  ✓ "异常 - 密码过短"
+  ✓ "边界 - 用户名恰好20位"
 
 → 文档中会显示为清晰的分组下拉列表
 → 前端/测试可以直接看到所有情况的示例
@@ -235,9 +235,9 @@ Postman 提供了丰富的 REST API 来管理 Postman 中的资源：
   POST   https://api.getpostman.com/monitors/{{uid}}/run → 手动触发 Monitor
 
 使用场景：
-  ✅ 程序化更新 Collection（如自动生成接口文档）
-  ✅ CI/CD 动态创建 Mock Server
-  ✅ 定时触发 Monitor
+  ✓ 程序化更新 Collection（如自动生成接口文档）
+  ✓ CI/CD 动态创建 Mock Server
+  ✓ 定时触发 Monitor
 ```
 
 ```bash
@@ -248,7 +248,7 @@ curl -X POST "https://api.getpostman.com/monitors/{{monitorId}}/run" \
 
 ---
 
-> 🎯 **核心要点**：文档不是"写完接口再补"——利用 Example + Markdown 描述，让文档随 Collection 自动生成。Workspace + Fork + PR 让 API 管理像代码一样严谨。
+> **核心要点**：文档不是"写完接口再补"——利用 Example + Markdown 描述，让文档随 Collection 自动生成。Workspace + Fork + PR 让 API 管理像代码一样严谨。
 
 ---
 

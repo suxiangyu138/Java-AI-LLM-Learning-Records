@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [刷题五步法](#1-刷题五步法)
 2. [如何看题解最高效](#2-如何看题解最高效)
@@ -25,7 +25,7 @@
 
 ```text
 题号：LeetCode 1. Two Sum（两数之和）
-难度：⭐ Easy
+难度：★ Easy
 标签：数组、哈希表
 
 题目：给定整数数组 nums 和一个整数 target，返回两数之和等于 target 的下标。
@@ -88,7 +88,7 @@ class Solution {
 nums = [2, 7, 11, 15], target = 9
 
 i=0: complement=7, map={} 无 → put(2,0) → map={2:0}
-i=1: complement=2, map有2 → return [0, 1] ✅
+i=1: complement=2, map有2 → return [0, 1] ✓
 ```
 
 边界测试：
@@ -96,7 +96,7 @@ i=1: complement=2, map有2 → return [0, 1] ✅
 ```text
 nums = [3, 3], target = 6
 i=0: complement=3, map={} 无 → put(3,0) → map={3:0}
-i=1: complement=3, map有3 → return [0, 1] ✅
+i=1: complement=3, map有3 → return [0, 1] ✓
 ```
 
 ### 第 5 步：复盘与模板化（5 分钟）
@@ -132,7 +132,7 @@ i=1: complement=3, map有3 → return [0, 1] ✅
 - 有思路但不确定是否最优 → 先自己写，哪怕不是最优，写完再看题解对比
 - 已经会做但想更优解 → 自己先尝试优化，实在想不出再看
 
-> 💡 **核心原则**：题解是"老师"不是"答案"。看了要关掉自己写一遍，才算真会。
+> **核心原则**：题解是"老师"不是"答案"。看了要关掉自己写一遍，才算真会。
 
 ---
 
@@ -176,7 +176,7 @@ O(n²)  → 用了二维矩阵
 O(n)   → 递归深度 n（注意递归栈也算空间！）
 ```
 
-> ⚠️ **常见陷阱**：
+> **常见陷阱**：
 > 1. 递归不算空间？—— 递归栈算空间！快排最坏 O(n) 栈空间
 > 2. 输入不计入空间复杂度，但辅助空间要算
 > 3. `String` 拼接是 O(n²) 空间（每次创建新字符串），要用 `StringBuilder`
@@ -193,7 +193,7 @@ O(n)   → 递归深度 n（注意递归栈也算空间！）
 但那样时间复杂度会升到 O(n log n)，是典型的空间换时间权衡。"
 ```
 
-> 🎯 **要点**：说清"循环层数 × 每层操作" + 解释为什么不能更优 + 给出 trade-off 方案。
+> **要点**：说清"循环层数 × 每层操作" + 解释为什么不能更优 + 给出 trade-off 方案。
 
 ---
 
@@ -388,7 +388,7 @@ import java.util.*;
 public class StackQueueTemplates {
     public static void main(String[] args) {
         // ===== Stack（推荐用 ArrayDeque）=====
-        // ⚠️ Stack 是遗留类，性能较差，推荐用 ArrayDeque
+        // Stack 是遗留类，性能较差，推荐用 ArrayDeque
         Deque<Integer> stack = new ArrayDeque<>();
         stack.push(1);                                  // 入栈
         stack.push(2);
@@ -1570,17 +1570,17 @@ public class BitTemplate {
 ### 6.4 其他常见边界
 
 ```text
-✅ 树：root 为 null → 返回 0 / null / []
-✅ 矩阵：行/列为 0 → 返回 0 / []
-✅ 排序：全相同元素 → 检查去重逻辑
-✅ 负值：target/路径和为负数 → 检查条件
-✅ 大值：Integer.MAX_VALUE / MIN_VALUE → 防溢出
-✅ 图：有环/自环 → visited 集合防死循环
-✅ 递归：深度过大 → 栈溢出 → 考虑迭代
-✅ 双指针：左指针超过右指针 → 停止
+✓ 树：root 为 null → 返回 0 / null / []
+✓ 矩阵：行/列为 0 → 返回 0 / []
+✓ 排序：全相同元素 → 检查去重逻辑
+✓ 负值：target/路径和为负数 → 检查条件
+✓ 大值：Integer.MAX_VALUE / MIN_VALUE → 防溢出
+✓ 图：有环/自环 → visited 集合防死循环
+✓ 递归：深度过大 → 栈溢出 → 考虑迭代
+✓ 双指针：左指针超过右指针 → 停止
 ```
 
-> 💡 **写代码时就在注释中标出边界**，比写完再检查更高效。
+> **写代码时就在注释中标出边界**，比写完再检查更高效。
 
 ---
 
@@ -1656,7 +1656,7 @@ public void debugSlidingWindow(String s) {
 ## [题号] 题目名称
 
 ### 信息
-- **难度**：⭐ Easy / ⭐⭐ Medium / ⭐⭐⭐ Hard
+- **难度**：★ Easy / ★★ Medium / ★★★ Hard
 - **标签**：数组 | 哈希表 | 双指针
 - **LeetCode**：[链接](https://leetcode.com/problems/xxx)
 
@@ -1714,7 +1714,7 @@ public void debugSlidingWindow(String s) {
 | 146 | LRU 缓存 | LinkedHashMap API 不熟 | 7天后 |
 ```
 
-> 🎯 **复盘远比刷题本身重要**。每道题花 5 分钟复盘，这笔时间的 ROI 是最高的。
+> **复盘远比刷题本身重要**。每道题花 5 分钟复盘，这笔时间的 ROI 是最高的。
 
 ---
 

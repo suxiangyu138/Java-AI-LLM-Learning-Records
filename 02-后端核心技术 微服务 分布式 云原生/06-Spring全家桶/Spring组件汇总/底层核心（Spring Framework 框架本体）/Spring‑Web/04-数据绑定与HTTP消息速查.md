@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [HTTP 消息四件套](#1-http-消息四件套)
 2. [HttpHeaders 速查](#2-httpheaders-速查)
@@ -34,7 +34,7 @@ public ResponseEntity<Order> get(@PathVariable Long id) {
 }
 ```
 
-> 🎯 **核心要点**：`ResponseEntity` 是"状态码 + 头 + 体"三合一的响应表达——**要自定义状态码/响应头时用它**；纯业务数据直接返回对象即可（MVC 自动 200 + 转换器）。
+> **核心要点**：`ResponseEntity` 是"状态码 + 头 + 体"三合一的响应表达——**要自定义状态码/响应头时用它**；纯业务数据直接返回对象即可（MVC 自动 200 + 转换器）。
 
 ### 1.1 四件套选型场景
 
@@ -58,7 +58,7 @@ HttpInputMessage input;     // read() 的入参：头 + 字节流
 HttpOutputMessage output;   // write() 的出参：头 + 字节流
 ```
 
-> 💡 面试小点：`HttpMessage` 只有"头 + 体"两个概念；`RequestEntity` 在它之上加"方法 + URI"，`ResponseEntity` 加"状态码"——**继承链就是 HTTP 语义的累加**。
+> 面试小点：`HttpMessage` 只有"头 + 体"两个概念；`RequestEntity` 在它之上加"方法 + URI"，`ResponseEntity` 加"状态码"——**继承链就是 HTTP 语义的累加**。
 
 ### 1.2 HttpMessage 体系源码级结构
 
@@ -85,7 +85,7 @@ HttpMessage（接口）
 | 不可变性 | RequestEntity/ResponseEntity 构造后不可改（复制构造） |
 | 便捷静态方法 | `ResponseEntity.ok()/created()/noContent()` 等链式入口 |
 
-> 💡 面试加分：`ResponseEntity` 的泛型 T 与转换器的 `GenericHttpMessageConverter` 是配套设计——**泛型信息从实体一路传到转换器**（ResolvableType），List/Page 等复杂类型才能精确转换。
+> 面试加分：`ResponseEntity` 的泛型 T 与转换器的 `GenericHttpMessageConverter` 是配套设计——**泛型信息从实体一路传到转换器**（ResolvableType），List/Page 等复杂类型才能精确转换。
 
 ## 2. HttpHeaders 速查
 
@@ -111,7 +111,7 @@ List<String> setCookie = headers.get(HttpHeaders.SET_COOKIE);
 | `setContentLength` / `setContentDisposition` | 长度/附件（下载名） |
 | `getFirst` / `get` / `containsKey` | 读取（大小写不敏感） |
 
-> 💡 7.x 修复：`HttpHeaders` 与 `WebSocketHttpHeaders` 的互操作（跨模块头字段一致）在 7.0.x 已收敛——头字段读写行为全栈统一。
+> 7.x 修复：`HttpHeaders` 与 `WebSocketHttpHeaders` 的互操作（跨模块头字段一致）在 7.0.x 已收敛——头字段读写行为全栈统一。
 
 ### 2.1 HttpHeaders 完整方法速查
 
@@ -137,7 +137,7 @@ String etag = headers.getFirst(HttpHeaders.IF_NONE_MATCH);
 List<String> cookies = headers.get(HttpHeaders.SET_COOKIE);   // 多值头
 ```
 
-> ⚠️ **ETag 引号坑**：`setETag` 期望的是带引号的 `"abc123"`——不带引号会被服务端比较逻辑误判；`set-cookie` 是**多值语义**（追加用 `add`，`set` 会覆盖）。
+> **ETag 引号坑**：`setETag` 期望的是带引号的 `"abc123"`——不带引号会被服务端比较逻辑误判；`set-cookie` 是**多值语义**（追加用 `add`，`set` 会覆盖）。
 
 ### 2.2 头字段的安全与透传实践
 
@@ -157,7 +157,7 @@ restClient.requestInterceptor((request, body, execution) -> {
 });
 ```
 
-> 💡 头字段是"跨服务契约"的一部分——**接口文档里要列全自定义头**（traceId/幂等键/版本号），否则排查问题靠猜。
+> 头字段是"跨服务契约"的一部分——**接口文档里要列全自定义头**（traceId/幂等键/版本号），否则排查问题靠猜。
 
 ### 2.3 缓存控制深入
 
@@ -181,7 +181,7 @@ public ResponseEntity<String> report(HttpServletRequest req) {
 }
 ```
 
-> ⚠️ **缓存与安全**：`Cache-Control: no-store` 用于敏感数据（token/个人信息）——只 `no-cache` 仍可能落盘；304 协商的前提是请求携带 `If-None-Match`，客户端（如 RestClient）默认不自动携带，需显式设置。
+> **缓存与安全**：`Cache-Control: no-store` 用于敏感数据（token/个人信息）——只 `no-cache` 仍可能落盘；304 协商的前提是请求携带 `If-None-Match`，客户端（如 RestClient）默认不自动携带，需显式设置。
 
 ## 3. UriComponentsBuilder：URI 构建
 
@@ -214,7 +214,7 @@ client.get().uri(b -> b.path("/orders/{id}")
 | 模板 | `UriTemplate` / `fromUriString` |
 | 服务端 | `ServletUriComponentsBuilder`（基于当前请求重建） |
 
-> ⚠️ **安全要点**：拼接用户输入进 URI 必须走 `queryParam` + `.encode()`——**字符串拼 URL 是注入漏洞**（`?redirect=` 场景尤甚）；路径变量用 `buildAndExpand` 自动编码。
+> **安全要点**：拼接用户输入进 URI 必须走 `queryParam` + `.encode()`——**字符串拼 URL 是注入漏洞**（`?redirect=` 场景尤甚）；路径变量用 `buildAndExpand` 自动编码。
 
 ### 3.1 URI 编码模式与 ServletUriComponentsBuilder
 
@@ -243,16 +243,16 @@ URI next = ServletUriComponentsBuilder.fromCurrentRequest()
 **字符串拼接反例**（经典安全题）：
 
 ```java
-// ❌ 危险：用户输入直接进 URL，& 可篡改其他参数
+// ✗ 危险：用户输入直接进 URL，& 可篡改其他参数
 String url = "https://api.com/q?keyword=" + userInput;
 
-// ✅ 正确：queryParam 自动编码
+// ✓ 正确：queryParam 自动编码
 URI url = UriComponentsBuilder.fromUriString("https://api.com/q")
         .queryParam("keyword", userInput)
         .build().toUri();
 ```
 
-> 🎯 **一句话**：`UriComponentsBuilder` 的职责是"结构 + 编码"两件事——**结构你负责（path/queryParam），编码它负责（encode）**；任何时候不要让用户输入以裸字符串形态进 URL。
+> **一句话**：`UriComponentsBuilder` 的职责是"结构 + 编码"两件事——**结构你负责（path/queryParam），编码它负责（encode）**；任何时候不要让用户输入以裸字符串形态进 URL。
 
 ### 3.2 UriTemplate 与路径匹配
 
@@ -278,7 +278,7 @@ URI uri = UriComponentsBuilder
         .toUri();
 ```
 
-> 💡 服务端 `@GetMapping("/orders/{id}")` 的 `{id}` 与客户端 `UriComponentsBuilder` 的 `{id}` 是**同一套模板语法**——只是"匹配"（服务端）与"填充"（客户端）两个方向。
+> 服务端 `@GetMapping("/orders/{id}")` 的 `{id}` 与客户端 `UriComponentsBuilder` 的 `{id}` 是**同一套模板语法**——只是"匹配"（服务端）与"填充"（客户端）两个方向。
 
 ## 4. MediaType 与 MimeType
 
@@ -303,7 +303,7 @@ mt.includes(MediaType.parseMediaType("application/*"));  // 通配包含
 | `getCharset` / `getParameters` | 参数读取 |
 | `sortBySpecificity` | 媒体类型特异度排序（协商用） |
 
-> 💡 面试小点：MimeType 是通用 MIME（无参数语义），MediaType 是 HTTP 专用（带 charset 等参数）——转换器匹配用 MediaType。
+> 面试小点：MimeType 是通用 MIME（无参数语义），MediaType 是 HTTP 专用（带 charset 等参数）——转换器匹配用 MediaType。
 
 ### 4.1 MediaType 细节与解析异常
 
@@ -329,7 +329,7 @@ boolean canNegotiate = acceptTypes.stream()
         .anyMatch(a -> a.isCompatibleWith(producedType));
 ```
 
-> ⚠️ **charset 陷阱**：`MediaType.APPLICATION_JSON` 常量不带 charset；`application/json;charset=UTF-8` 与它 `isCompatibleWith` 为 true，但 `equals` 为 false——**用 equals 比较媒体类型是常见 bug 源头**，转换器匹配用的是兼容比较。
+> **charset 陷阱**：`MediaType.APPLICATION_JSON` 常量不带 charset；`application/json;charset=UTF-8` 与它 `isCompatibleWith` 为 true，但 `equals` 为 false——**用 equals 比较媒体类型是常见 bug 源头**，转换器匹配用的是兼容比较。
 
 ### 4.2 MediaType 生产实战
 
@@ -353,7 +353,7 @@ return ResponseEntity.ok()
         .body(bytes);
 ```
 
-> ⚠️ 中文文件名必须走 `ContentDisposition.filename(name, UTF_8)`——裸拼接会乱码；浏览器解析附件名有跨浏览器差异，统一用 RFC 5987 编码最稳。
+> 中文文件名必须走 `ContentDisposition.filename(name, UTF_8)`——裸拼接会乱码；浏览器解析附件名有跨浏览器差异，统一用 RFC 5987 编码最稳。
 
 ### 4.3 MediaType 与内容协商实战
 
@@ -377,7 +377,7 @@ ResponseEntity<Order> json = restClient.get()
         .retrieve().toEntity(Order.class);          // 直接绑定对象
 ```
 
-> 💡 生产约定：**接口只对外提供一种主流格式**（JSON），XML/其他格式按需开放——协商能力存在，但"多格式契约"维护成本高；服务端用 `produces` 锁定格式可减少 406 类问题的排查面。
+> 生产约定：**接口只对外提供一种主流格式**（JSON），XML/其他格式按需开放——协商能力存在，但"多格式契约"维护成本高；服务端用 `produces` 锁定格式可减少 406 类问题的排查面。
 
 ## 5. 请求/响应实体：RequestEntity 与 ResponseEntity
 
@@ -408,7 +408,7 @@ public ResponseEntity<PaymentResult> charge(@RequestBody PaymentReq req) {
 | 404 | `ResponseEntity.notFound().build()` |
 | 202 异步接受 | `ResponseEntity.accepted().build()` |
 
-> 🎯 **核心要点**：RequestEntity/ResponseEntity 是"完整 HTTP 语义"的载体——客户端用它表达方法+URI+头+体，服务端用它表达状态码+头+体；RestClient 的 `.retrieve().toEntity(Type)` 返回的就是 ResponseEntity。
+> **核心要点**：RequestEntity/ResponseEntity 是"完整 HTTP 语义"的载体——客户端用它表达方法+URI+头+体，服务端用它表达状态码+头+体；RestClient 的 `.retrieve().toEntity(Type)` 返回的就是 ResponseEntity。
 
 ### 5.1 状态码场景扩展与面试追问
 
@@ -470,7 +470,7 @@ return ResponseEntity.badRequest()
 | 返回值写回时 | 对象 → 转换器写 HttpOutputMessage |
 | RestClient 收发时 | 客户端用同一套消息模型 |
 
-> 🎯 **本模块一句话**：四件套（HttpMessage/HttpHeaders/RequestEntity/ResponseEntity）是 HTTP 的"对象化表达"——配 UriComponentsBuilder 建 URL、MediaType 定类型、ResponseEntity 定状态码，一次 HTTP 交互的所有结构都有了。
+> **本模块一句话**：四件套（HttpMessage/HttpHeaders/RequestEntity/ResponseEntity）是 HTTP 的"对象化表达"——配 UriComponentsBuilder 建 URL、MediaType 定类型、ResponseEntity 定状态码，一次 HTTP 交互的所有结构都有了。
 
 ### 5.3 常见坑速查
 
@@ -490,7 +490,7 @@ return ResponseEntity.badRequest()
 | 大响应体内存暴涨 | 对象绑定整读 | 流式消费（exchange 读 InputStream 或 WebClient bodyToFlux） |
 | 绑定失败吞异常 | 转换器异常未转 4xx | 抛 `HttpMessageNotReadableException` 交异常处理器转 400 |
 
-> ⚠️ **写体前设置头** 是最隐蔽的坑：`HttpOutputMessage` 一旦开始写流，头集合就被"冻结"——先 setContentType/ContentDisposition 再写字节，顺序反了静默丢失。
+> **写体前设置头** 是最隐蔽的坑：`HttpOutputMessage` 一旦开始写流，头集合就被"冻结"——先 setContentType/ContentDisposition 再写字节，顺序反了静默丢失。
 
 ### 5.4 快速记忆卡
 

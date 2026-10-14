@@ -1,7 +1,7 @@
 # Pipeline 语法
 > 声明式 vs 脚本式、pipeline 块结构、stage/steps/agent/post、环境变量与参数化——Jenkins 代码化流水线的完整语法
 
-## 📚 目录
+## 目录
 1. [两种语法：声明式 vs 脚本式](#1-两种语法声明式-vs-脚本式)
 2. [声明式结构总览](#2-声明式结构总览)
 3. [agent：在哪执行](#3-agent在哪执行)
@@ -17,11 +17,11 @@
 |------|:---:|:---:|
 | 风格 | **结构化 YAML 风格**（pipeline {}） | Groovy 脚本（node {}） |
 | 学习曲线 | 低 | 高 |
-| 语法校验 | ✅ 内置校验 | 运行时才知道 |
+| 语法校验 | ✓ 内置校验 | 运行时才知道 |
 | 复杂逻辑 | 有限（script 块转义） | 无限（完整 Groovy） |
-| 官方推荐 | **✅ 首选** | 特殊需求才用 |
+| 官方推荐 | **✓ 首选** | 特殊需求才用 |
 
-> 🎯 2026 标准：**一律声明式**——结构化、可校验、好审查；复杂逻辑用 `script {}` 块局部转义 Groovy，而不是整条流水线用脚本式。
+> 2026 标准：**一律声明式**——结构化、可校验、好审查；复杂逻辑用 `script {}` 块局部转义 Groovy，而不是整条流水线用脚本式。
 
 ## 2. 声明式结构总览
 
@@ -57,9 +57,9 @@ pipeline {                                    // 顶层：pipeline 块
 
 | 块 | 职责 | 必填 |
 |----|------|:---:|
-| `pipeline` | 顶层容器 | ✅ |
-| `agent` | 执行位置 | ✅ |
-| `stages` | 阶段序列 | ✅ |
+| `pipeline` | 顶层容器 | ✓ |
+| `agent` | 执行位置 | ✓ |
+| `stages` | 阶段序列 | ✓ |
 | `options` | 全局选项 | - |
 | `parameters` | 参数化 | - |
 | `environment` | 环境变量 | - |
@@ -95,7 +95,7 @@ pipeline {
 | `kubernetes {}` | K8s 动态 Pod |
 | 阶段级 agent | 不同阶段不同环境 |
 
-> 🎯 设计模式：**"构建用 Docker 容器（环境一致），部署用专用 Agent（有凭证/网络）"**——阶段级 agent 让流水线天然支持"构建环境"与"部署环境"分离。
+> 设计模式：**"构建用 Docker 容器（环境一致），部署用专用 Agent（有凭证/网络）"**——阶段级 agent 让流水线天然支持"构建环境"与"部署环境"分离。
 
 ## 4. stage/steps：流程骨架
 
@@ -140,7 +140,7 @@ pipeline {
 | `script {}` | 转义 Groovy 逻辑 |
 | `timeout` / `retry` | 步骤级控制 |
 
-> ⚠️ **凭证铁律**：`docker login -p ${密码}` 这种把密码暴露进构建日志的做法是反模式——必须 `withCredentials` 注入（[04-凭证与安全](04-凭证与安全.md) 专章）。
+> **凭证铁律**：`docker login -p ${密码}` 这种把密码暴露进构建日志的做法是反模式——必须 `withCredentials` 注入（[04-凭证与安全](04-凭证与安全.md) 专章）。
 
 ## 5. post：收尾处理
 
@@ -177,7 +177,7 @@ pipeline {
 | `aborted` | 手动终止 |
 | `cleanup` | 最后（7.2+ 可嵌套条件） |
 
-> 🎯 post 是**"finally 语义"**：失败也要清理 workspace、发通知——比"每个 stage 里 try-catch"优雅得多。面试答"流水线怎么保证失败也清理"→ `post { always { cleanWs() } }`。
+> post 是**"finally 语义"**：失败也要清理 workspace、发通知——比"每个 stage 里 try-catch"优雅得多。面试答"流水线怎么保证失败也清理"→ `post { always { cleanWs() } }`。
 
 ## 6. 环境变量与全局变量
 
@@ -210,7 +210,7 @@ pipeline {
 | `params.xxx` | 参数化变量（02 §6） |
 | `currentBuild.result` | 当前构建结果 |
 
-> ⚠️ **env 访问两种写法**：Groovy 表达式里 `env.VAR` 或 `${env.VAR}`；**shell 里直接 `$VAR`**（环境变量自动注入）。在双引号字符串里用 `${VAR}`，单引号不解析——Groovy 语法细节是 Pipeline 报错高频区。
+> **env 访问两种写法**：Groovy 表达式里 `env.VAR` 或 `${env.VAR}`；**shell 里直接 `$VAR`**（环境变量自动注入）。在双引号字符串里用 `${VAR}`，单引号不解析——Groovy 语法细节是 Pipeline 报错高频区。
 
 ## 7. when 条件与 parallel 并行
 
@@ -230,7 +230,7 @@ pipeline {
             steps { sh 'deploy.sh' }
         }
         stage('并行验证') {
-            parallel {                                     // ⚠️ parallel 是 stage 内
+            parallel {                                     // parallel 是 stage 内
                 stage('SonarQube') { steps { sh 'sonar-scan.sh' } }
                 stage('安全扫描') { steps { sh 'trivy image demo' } }
                 stage('压测') { steps { sh 'jmeter-run.sh' } }
@@ -248,7 +248,7 @@ pipeline {
 | `not { }` | 取反 |
 | `allOf / anyOf` | 组合条件 |
 
-> 🎯 **parallel 的正确位置**：并行必须放在 `stage('X') { parallel { ... } }` 结构里——多个独立验证（代码扫描/安全/测试）并行执行，总耗时 = 最慢那个。这是流水线提速的第一手段（构建时间从"串行和"变"最大值"）。
+> **parallel 的正确位置**：并行必须放在 `stage('X') { parallel { ... } }` 结构里——多个独立验证（代码扫描/安全/测试）并行执行，总耗时 = 最慢那个。这是流水线提速的第一手段（构建时间从"串行和"变"最大值"）。
 
 ## 8. 脚本块与 Groovy 能力
 
@@ -282,7 +282,7 @@ pipeline {
 | 调用其他 Job | `build 'deploy-job', parameters: [...]` |
 | 异常处理 | try-catch（配合 post 兜底） |
 
-> 💡 边界把握：**"声明式是骨架，script 是补丁"**——80% 流水线用纯声明式表达；复杂逻辑收敛进 script 块或共享库函数（[07-共享库与工程化](07-共享库与工程化.md)），别让整条流水线变成 Groovy 泥潭。
+> 边界把握：**"声明式是骨架，script 是补丁"**——80% 流水线用纯声明式表达；复杂逻辑收敛进 script 块或共享库函数（[07-共享库与工程化](07-共享库与工程化.md)），别让整条流水线变成 Groovy 泥潭。
 
 ---
 

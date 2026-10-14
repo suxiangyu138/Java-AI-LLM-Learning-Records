@@ -2,7 +2,7 @@
 
 > 定位：Vue Router 4、Pinia 状态管理、工程化（Vite/项目结构）、Vue 面试题精选
 
-## 📚 目录
+## 目录
 
 1. [Vue Router 4](#1-vue-router-4)
 2. [Pinia 状态管理](#2-pinia-状态管理)
@@ -21,11 +21,11 @@ import { createRouter, createWebHistory } from 'vue-router';
 import Home from '@/views/Home.vue';
 
 const router = createRouter({
-    history: createWebHistory(),          // ⚠️ HTML5 history（vs hash）
+    history: createWebHistory(),          // HTML5 history（vs hash）
     routes: [
         { path: '/', name: 'home', component: Home },
         { path: '/user/:id', name: 'user',
-          component: () => import('@/views/User.vue') },   // ⚠️ 路由懒加载
+          component: () => import('@/views/User.vue') },   // 路由懒加载
         { path: '/:pathMatch(.*)*', redirect: '/' },       // 404 兜底
     ],
 });
@@ -39,7 +39,7 @@ export default router;
     <RouterLink to="/">首页</RouterLink>
     <RouterLink :to="{ name: 'user', params: { id: 1 } }">用户</RouterLink>
 
-    <!-- ⚠️ 视图出口（必须） -->
+    <!-- 视图出口（必须） -->
     <RouterView />
     <!-- 命名视图 -->
     <RouterView name="sidebar" />
@@ -66,7 +66,7 @@ router.beforeEach((to, from) => {
     if (to.meta.requiresAuth && !isLoggedIn) {
         return { name: 'login', query: { redirect: to.fullPath } };
     }
-    // ⚠️ 返回 false 阻止、返回路径重定向、返回 true/undefined 放行
+    // 返回 false 阻止、返回路径重定向、返回 true/undefined 放行
 });
 
 // 路由级守卫
@@ -88,7 +88,7 @@ onBeforeRouteLeave(() => { /* 离开确认 */ });
 | beforeEnter | 路由级 |
 | onBeforeRouteLeave/Update | 组件内 |
 
-> 🎯 **要点**：路由三件套——懒加载（打包优化）、路由守卫（鉴权）、meta 元信息（权限标记）。SPA 权限控制 = beforeEach + meta.requiresAuth。
+> **要点**：路由三件套——懒加载（打包优化）、路由守卫（鉴权）、meta 元信息（权限标记）。SPA 权限控制 = beforeEach + meta.requiresAuth。
 
 ---
 
@@ -100,7 +100,7 @@ onBeforeRouteLeave(() => { /* 离开确认 */ });
 // stores/user.js
 import { defineStore } from 'pinia';
 
-// ⚠️ 选项式 store（类似 Vuex 风格）
+// 选项式 store（类似 Vuex 风格）
 export const useUserStore = defineStore('user', {
     state: () => ({ name: '张三', token: '' }),
     getters: {
@@ -134,7 +134,7 @@ import { useUserStore } from '@/stores/user';
 
 const userStore = useUserStore();
 
-// ⚠️ 解构保响应：必须用 storeToRefs（直接解构会丢失响应）
+// 解构保响应：必须用 storeToRefs（直接解构会丢失响应）
 const { name, token } = storeToRefs(userStore);
 const { login, logout } = userStore;     // actions 直接解构
 
@@ -148,12 +148,12 @@ const { login, logout } = userStore;     // actions 直接解构
 | 维度 | Vuex 4 | Pinia |
 |------|:---:|:---:|
 | API | 选项式（state/getters/mutations/actions） | 组合式（简洁） |
-| mutations | ✅ 必须（同步） | ❌ 去掉（直接改 state） |
-| 类型推导 | 弱 | ✅ 强 |
+| mutations | ✓ 必须（同步） | ✗ 去掉（直接改 state） |
+| 类型推导 | 弱 | ✓ 强 |
 | 模块 | modules 嵌套 | 独立 store（扁平） |
-| DevTools | ✅ | ✅ |
+| DevTools | ✓ | ✓ |
 
-> 🎯 **要点**：Pinia 是 Vue 官方推荐的状态管理（替代 Vuex）——"去掉 mutations、组合式 API、TypeScript 友好"。状态管理选型一句话：**全局共享用 Pinia、局部跨层用 provide/inject**。
+> **要点**：Pinia 是 Vue 官方推荐的状态管理（替代 Vuex）——"去掉 mutations、组合式 API、TypeScript 友好"。状态管理选型一句话：**全局共享用 Pinia、局部跨层用 provide/inject**。
 
 ---
 
@@ -204,7 +204,7 @@ export default defineConfig({
         alias: { '@': fileURLToPath(new URL('./src', import.meta.url)) },
     },
     server: {
-        proxy: {                             // ⚠️ 开发代理（解决跨域）
+        proxy: {                             // 开发代理（解决跨域）
             '/api': {
                 target: 'http://localhost:8080',
                 changeOrigin: true,
@@ -223,13 +223,13 @@ export default defineConfig({
 ### 3.3 工程最佳实践清单
 
 ```
-✅ 路由懒加载 + 异步组件（包体积）
-✅ API 统一封装（拦截器/错误处理）
-✅ 环境变量（.env.development/.production）
-✅ ESLint + Prettier（代码规范）
-✅ 组件命名 PascalCase、composable 用 use 前缀
-✅ 样式 scoped（全局样式集中管理）
-⚠️ 敏感信息不进前端（token 内存/httponly）
+✓ 路由懒加载 + 异步组件（包体积）
+✓ API 统一封装（拦截器/错误处理）
+✓ 环境变量（.env.development/.production）
+✓ ESLint + Prettier（代码规范）
+✓ 组件命名 PascalCase、composable 用 use 前缀
+✓ 样式 scoped（全局样式集中管理）
+敏感信息不进前端（token 内存/httponly）
 ```
 
 ---
@@ -270,7 +270,7 @@ watch：副作用（请求/日志），显式监听
 ```
 虚拟 DOM diff 的复用标识——key 唯一稳定时
 可精确复用节点（避免误删重建）。
-⚠️ 不要用 index 作 key（排序/过滤时 bug）。
+不要用 index 作 key（排序/过滤时 bug）。
 ```
 
 **Q6: nextTick 原理？**
@@ -310,7 +310,7 @@ Vue 3 编译优化：静态节点提升、动态节点 patchFlags
 
 ---
 
-> 🎯 **核心要点**：工程实践体系 = **Router**（懒加载 + 守卫鉴权）+ **Pinia**（组合式 store + storeToRefs）+ **工程化**（Vite 代理/别名/分包）+ **面试十问**（响应式/通信/nextTick/虚拟 DOM 是最高频）。Vue 面试主线：原理（响应式）→ 实践（通信）→ 优化（首屏）。
+> **核心要点**：工程实践体系 = **Router**（懒加载 + 守卫鉴权）+ **Pinia**（组合式 store + storeToRefs）+ **工程化**（Vite 代理/别名/分包）+ **面试十问**（响应式/通信/nextTick/虚拟 DOM 是最高频）。Vue 面试主线：原理（响应式）→ 实践（通信）→ 优化（首屏）。
 
 ---
 

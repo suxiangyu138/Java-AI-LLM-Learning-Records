@@ -1,7 +1,7 @@
 # 07-GitOps 与 ArgoCD
 > Git 为唯一事实来源：GitOps 理念、ArgoCD 架构与同步机制、应用管理、与 Flux 对比——"部署也能走 Code Review"
 
-## 📚 目录
+## 目录
 1. [GitOps 理念](#1-gitops-理念)
 2. [ArgoCD 架构](#2-argocd-架构)
 3. [核心概念：Application 与 Sync](#3-核心概念application-与-sync)
@@ -27,7 +27,7 @@ GitOps 模式：Git 中声明期望状态 → 控制器自动同步到集群
   ③ 自动同步：控制器持续对比 Git 与集群，收敛到期望状态
 ```
 
-> 🎯 **GitOps 的本质价值**：**部署也走 Code Review**——改配置和改代码一样有审查、有历史、可回滚。集群漂移（手改的）会被控制器"纠正"回来。
+> **GitOps 的本质价值**：**部署也走 Code Review**——改配置和改代码一样有审查、有历史、可回滚。集群漂移（手改的）会被控制器"纠正"回来。
 
 ## 2. ArgoCD 架构
 
@@ -108,7 +108,7 @@ Sync 流程：
 | Healthy | 应用运行健康（结合健康检查） |
 | Progressing | 同步/发布进行中 |
 
-> ⚠️ **自动化策略选择**：`selfHeal: true` 会纠正人工 `kubectl` 修改（漂移防御）；**生产环境建议先手动同步 + 审批**，成熟后再自动化——自动化是目标，不是起点。
+> **自动化策略选择**：`selfHeal: true` 会纠正人工 `kubectl` 修改（漂移防御）；**生产环境建议先手动同步 + 审批**，成熟后再自动化——自动化是目标，不是起点。
 
 ## 4. 部署工作流（CI → GitOps）
 
@@ -138,7 +138,7 @@ git push
 # ArgoCD 检测到 Git 变更 → 自动同步部署
 ```
 
-> 🎯 **"CI 不碰集群"是 GitOps 的安全边界**：CI 只改 Git，集群状态完全由 ArgoCD 管理——**权限最小化（CI 无集群权限）+ 变更全走 Git 审计**。
+> **"CI 不碰集群"是 GitOps 的安全边界**：CI 只改 Git，集群状态完全由 ArgoCD 管理——**权限最小化（CI 无集群权限）+ 变更全走 Git 审计**。
 
 ## 5. App of Apps 模式
 
@@ -185,12 +185,12 @@ apps/
 | 定位 | GitOps 主流（UI/功能全） | GitOps 轻量（控制器优先） |
 | 界面 | 完整 Web UI | CLI/CRD（UI 弱） |
 | 渐进交付 | 集成 Argo Rollouts | Kustomize 原生 + 部分支持 |
-| 多集群 | ✅ | ✅ |
+| 多集群 | ✓ | ✓ |
 | 学习曲线 | 中 | 中 |
 | 生态 | Argo 家族（Rollouts/Workflow/Events） | Flux 家族（Helm/Kustomize/Image） |
 | 适用 | **需要 UI/团队协作** | 极简/与 Kustomize 深度结合 |
 
-> 🎯 **选型结论**：需要完整 UI 与团队协作 → ArgoCD（主流）；追求极简与 Kustomize 原生 → Flux。**两者都是 CNCF 毕业项目，选团队熟悉的**。
+> **选型结论**：需要完整 UI 与团队协作 → ArgoCD（主流）；追求极简与 Kustomize 原生 → Flux。**两者都是 CNCF 毕业项目，选团队熟悉的**。
 
 ## 7. 回滚与灾难恢复
 
@@ -212,7 +212,7 @@ argocd app rollback order-service 1    # 回滚到历史部署
 这就是 GitOps 的"备份"：Git 仓库 = 集群的完整状态备份
 ```
 
-> 🎯 **GitOps 回滚的独特价值**：**回滚 = Git 回退**——与深红发布理念一致（见 [05](05-发布策略全景.md)），且回滚本身也走 Code Review 与审计。
+> **GitOps 回滚的独特价值**：**回滚 = Git 回退**——与深红发布理念一致（见 [05](05-发布策略全景.md)），且回滚本身也走 Code Review 与审计。
 
 ## 8. 高频避坑
 
@@ -229,7 +229,7 @@ argocd app rollback order-service 1    # 回滚到历史部署
 
 ## 9. 核心要点
 
-> 🎯 **核心要点**：
+> **核心要点**：
 > - GitOps 三原则：声明式 + 版本化 + 自动同步（Git = 唯一事实来源）；
 > - ArgoCD 核心：Application 声明 + Sync 对比 + selfHeal 漂移纠正；
 > - **CI 不碰集群**：CI 只更新 Git 镜像 tag，ArgoCD 负责部署（权限最小化）；

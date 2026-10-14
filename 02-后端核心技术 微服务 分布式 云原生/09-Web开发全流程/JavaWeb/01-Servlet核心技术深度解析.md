@@ -45,7 +45,7 @@ Servlet 是运行在 Web 服务器（Servlet 容器）中的 Java 类，用于�
 | **共享数据** | 进程间通信困难 | ServletContext 共享 |
 | **内存占用** | 每请求独立内存空间 | 堆内存共享 |
 
-> 🎯 CGI 每个请求 fork 一个进程 → 1000 并发 = 1000 个进程；Servlet 用线程池处理 → 1000 并发可能只需几十个线程。
+> CGI 每个请求 fork 一个进程 → 1000 并发 = 1000 个进程；Servlet 用线程池处理 → 1000 并发可能只需几十个线程。
 
 ### 1.3 Servlet 容器职责
 
@@ -136,7 +136,7 @@ public class LifecycleServlet extends HttpServlet {
 | `destroy()` | 容器关闭 | **1次** | 是 |
 | 构造方法 | 首次请求时 | **1次** | 不需 |
 
-> ⚠️ `init(ServletConfig)` 与 `init()`：如果覆盖 `init(ServletConfig)` 必须调用 `super.init(config)`，否则 `getServletConfig()` 返回 null。推荐只覆盖无参 `init()`。
+> `init(ServletConfig)` 与 `init()`：如果覆盖 `init(ServletConfig)` 必须调用 `super.init(config)`，否则 `getServletConfig()` 返回 null。推荐只覆盖无参 `init()`。
 
 ---
 
@@ -191,7 +191,7 @@ protected void service(HttpServletRequest req, HttpServletResponse resp) {
 }
 ```
 
-> ⚠️ 覆盖 `service()` 方法后，HTTP 方法分发逻辑将失效——所有请求都进入你的 service()。除非有特殊需求（如自定义协议），否则只覆盖 doXxx()。
+> 覆盖 `service()` 方法后，HTTP 方法分发逻辑将失效——所有请求都进入你的 service()。除非有特殊需求（如自定义协议），否则只覆盖 doXxx()。
 
 ---
 
@@ -212,7 +212,7 @@ req.getServletPath();     // /user/list
 req.getQueryString();     // page=1&size=20
 ```
 
-> 💡 URL 拆解示例：`http://localhost:8080/app/user/list?page=1`
+> URL 拆解示例：`http://localhost:8080/app/user/list?page=1`
 > - `getScheme()` → `http`
 > - `getServerName()` → `localhost`，`getServerPort()` → `8080`
 > - `getContextPath()` → `/app`
@@ -267,7 +267,7 @@ while ((len = inputStream.read(buffer)) != -1) {
 }
 byte[] bodyBytes = baos.toByteArray();
 
-// ⚠️ getReader() 和 getInputStream() 互斥，只能选其一调用
+// getReader() 和 getInputStream() 互斥，只能选其一调用
 ```
 
 ### 4.2 请求转发与包含
@@ -369,7 +369,7 @@ resp.setHeader("Content-Disposition", "attachment; filename=\"report.pdf\"");
 outputStream.write(fileBytes);
 outputStream.flush();
 
-// ⚠️ getWriter() 和 getOutputStream() 互斥，只能选其一！
+// getWriter() 和 getOutputStream() 互斥，只能选其一！
 ```
 
 ### 5.4 重定向
@@ -457,7 +457,7 @@ context.getMajorVersion();     // 4 (Servlet 4.0)
 | **HttpSession** | 一次会话 | 会话过期（默认30分钟） | 用户登录信息、购物车 |
 | **ServletContext** | 整个应用 | 应用启动到关闭 | 全局配置、在线人数统计 |
 
-> 🎯 选择原则：能用小范围不用大范围。Request > Session > Application，减少内存占用和并发冲突。
+> 选择原则：能用小范围不用大范围。Request > Session > Application，减少内存占用和并发冲突。
 
 ---
 
@@ -470,7 +470,7 @@ context.getMajorVersion();     // 4 (Servlet 4.0)
 | **行为** | 服务器内部跳转 | 浏览器重新发起请求 |
 | **URL 变化** | 不变（浏览器看不到） | 变为目标地址 |
 | **请求次数** | **1 次** | **2 次**（第一次 302） |
-| **能否跨域** | ❌ 只能应用内 | ✅ 可以跳转到外部 URL |
+| **能否跨域** | ✗ 只能应用内 | ✓ 可以跳转到外部 URL |
 | **Request 对象** | 同一个（可共享 Attribute） | 不同的（数据丢失） |
 | **速度** | 快 | 慢（多一次网络往返） |
 | **状态码** | — | 301（永久）/ 302（临时） |
@@ -489,7 +489,7 @@ public class ForwardServlet extends HttpServlet {
 
         // 转发到另一个 Servlet 或 JSP
         req.getRequestDispatcher("/result").forward(req, resp);
-        // ⚠️ forward 之后的代码不会执行（但会编译通过，容易遗漏逻辑）
+        // forward 之后的代码不会执行（但会编译通过，容易遗漏逻辑）
         // 如果 forward 前已通过 resp 写入未刷新的内容，forward 时会清空
     }
 }
@@ -507,8 +507,8 @@ public class RedirectServlet extends HttpServlet {
         // 方式二：快捷方法
         resp.sendRedirect("/app/result");
 
-        // ⚠️ sendRedirect() 前不能有内容已提交到浏览器
-        // ⚠️ 路径不以 / 开头时为相对路径
+        // sendRedirect() 前不能有内容已提交到浏览器
+        // 路径不以 / 开头时为相对路径
     }
 }
 ```
@@ -541,7 +541,7 @@ resp.sendRedirect("/result");       // 错误：丢失了 /app
 | Servlet → JSP 渲染 | **Forward** | 高效，共享 Request 数据 |
 | 跨站跳转 | **Redirect** | Forward 不支持外部 URL |
 
-> 🎯 **PRG 模式（Post-Redirect-Get）**：POST 处理完 → `sendRedirect` 到结果页 → 浏览器 GET 结果页。防止用户刷新时重复提交表单。
+> **PRG 模式（Post-Redirect-Get）**：POST 处理完 → `sendRedirect` 到结果页 → 浏览器 GET 结果页。防止用户刷新时重复提交表单。
 
 ---
 
@@ -645,7 +645,7 @@ public class AppInitializer implements ServletContainerInitializer {
 // 请求：/user/login
 // 候选：/user/login (精确) > /user/* (路径) > *.do (扩展名) > / (缺省)
 
-// ⚠️ 不能同时使用路径匹配和扩展名匹配
+// 不能同时使用路径匹配和扩展名匹配
 // @WebServlet("/user/*.do")  // 非法！部署时抛异常
 ```
 
@@ -707,32 +707,32 @@ public class IndexServlet extends HttpServlet { }
 ```java
 @WebServlet("/unsafe")
 public class UnsafeServlet extends HttpServlet {
-    // ❌ 危险：成员变量 — 被所有线程共享
+    // ✗ 危险：成员变量 — 被所有线程共享
     private String sharedData;       // 线程不安全
     private Connection conn;         // 线程不安全（连接不可重入）
     private StringBuilder sb = new StringBuilder(); // 线程不安全
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
-        // ✅ 安全：局部变量 — 每个线程独立栈帧
+        // ✓ 安全：局部变量 — 每个线程独立栈帧
         String localData = req.getParameter("data");  // 线程安全
         int localCount = 0;                            // 线程安全
 
-        // ❌ 危险：写共享成员变量
+        // ✗ 危险：写共享成员变量
         sharedData = localData;    // 竞态条件！另一个线程可能覆盖
 
-        // ✅ 安全：只读共享成员变量（必须保证初始化后不变）
+        // ✓ 安全：只读共享成员变量（必须保证初始化后不变）
         // 在 init() 中初始化且之后不再修改的成员变量是安全的
     }
 
-    // ✅ 安全做法：使用 ThreadLocal
+    // ✓ 安全做法：使用 ThreadLocal
     private ThreadLocal<String> threadLocalData = new ThreadLocal<>();
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) {
         threadLocalData.set(req.getParameter("data"));
         // ... 处理
-        threadLocalData.remove();  // ⚠️ 务必清理，避免内存泄漏
+        threadLocalData.remove();  // 务必清理，避免内存泄漏
     }
 }
 ```
@@ -745,9 +745,9 @@ public class UnsafeServlet extends HttpServlet {
 | **局部变量** | 低 | 好 | 所有请求相关数据 |
 | **ThreadLocal** | 中 | 较好 | 线程级上下文（如当前用户） |
 | **synchronized** | 中 | 差 | 有共享状态必须同步时 |
-| **SingleThreadModel** | 低 | 极差 | ❌ 已废弃，不要用 |
+| **SingleThreadModel** | 低 | 极差 | ✗ 已废弃，不要用 |
 
-> ⚠️ **SingleThreadModel**：Servlet 2.x 的接口，容器为每个请求创建新实例。性能极差，Servlet 2.4 已废弃。绝对不要使用！
+> **SingleThreadModel**：Servlet 2.x 的接口，容器为每个请求创建新实例。性能极差，Servlet 2.4 已废弃。绝对不要使用！
 
 ### 10.4 Spring MVC 的线程安全
 
@@ -755,10 +755,10 @@ public class UnsafeServlet extends HttpServlet {
 // Spring MVC Controller 默认也是单例，同样需要注意线程安全：
 @RestController
 public class UserController {
-    // ❌ 危险：成员变量
+    // ✗ 危险：成员变量
     private String currentUser;  // 多线程共享，不安全
 
-    // ✅ 安全：通过方法参数接收（实际上是 Request 域属性）
+    // ✓ 安全：通过方法参数接收（实际上是 Request 域属性）
     @GetMapping("/user")
     public String getUser(@RequestParam String userId) {
         return userId;  // userId 是局部变量，线程安全
@@ -828,7 +828,7 @@ public class UploadServlet extends HttpServlet {
 
         // 获取其他表单字段
         String description = req.getParameter("description");
-        // ⚠️ getParameter 在 multipart 请求中可用（Servlet 3.0+）
+        // getParameter 在 multipart 请求中可用（Servlet 3.0+）
 
         // 获取所有文件
         for (Part part : req.getParts()) {
@@ -862,7 +862,7 @@ public class UploadServlet extends HttpServlet {
 </web-fragment>
 ```
 
-> 💡 jar 包可自带 `web-fragment.xml`，应用启动时自动合并，无需手动配置。类似 Spring Boot 的自动配置思想。
+> jar 包可自带 `web-fragment.xml`，应用启动时自动合并，无需手动配置。类似 Spring Boot 的自动配置思想。
 
 ---
 

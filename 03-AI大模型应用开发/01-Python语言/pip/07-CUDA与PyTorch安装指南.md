@@ -1,6 +1,6 @@
 # 07 - CUDA 与 PyTorch 安装指南
 
-> 🎯 CUDA 是 AI 开发的"地基"。PyTorch 的 CUDA 版本装错，GPU 就废了。本章提供完整的 CUDA/PyTorch 版本矩阵和安装决策树
+> CUDA 是 AI 开发的"地基"。PyTorch 的 CUDA 版本装错，GPU 就废了。本章提供完整的 CUDA/PyTorch 版本矩阵和安装决策树
 
 ---
 
@@ -37,9 +37,9 @@
 
 | PyTorch | CUDA | cuDNN | Python | 推荐 |
 |------|:---:|:---:|:---:|:---:|
-| 2.5.x | 12.4 | 9.x | 3.9-3.12 | 🆕 最新 |
-| **2.4.0** | **12.1** / 12.4 | 9.x | 3.9-3.12 | ✅ 当前推荐 |
-| 2.3.0 | 11.8 / 12.1 | 8.9 | 3.8-3.12 | ✅ 稳定 |
+| 2.5.x | 12.4 | 9.x | 3.9-3.12 | 最新 |
+| **2.4.0** | **12.1** / 12.4 | 9.x | 3.9-3.12 | ✓ 当前推荐 |
+| 2.3.0 | 11.8 / 12.1 | 8.9 | 3.8-3.12 | ✓ 稳定 |
 | 2.2.0 | 11.8 / 12.1 | 8.9 | 3.8-3.11 | 兼容旧驱动 |
 | 2.0.0 | 11.7 / 11.8 | 8.7 | 3.8-3.11 | 旧项目 |
 
@@ -68,26 +68,26 @@ nvidia-smi topo -m            # GPU 拓扑（多卡时重要）
 ```text
 你的情况？
 │
-├── 🆕 新项目，2080Ti 以上 GPU
+├── 新项目，2080Ti 以上 GPU
 │   └── PyTorch 2.4 + CUDA 12.1
 │       conda install pytorch torchvision pytorch-cuda=12.1 -c pytorch -c nvidia
 │       或 pip install torch --index-url https://download.pytorch.org/whl/cu121
 │
-├── 🏢 服务器，A100/H100
+├── 服务器，A100/H100
 │   └── PyTorch 2.4+ + CUDA 12.4 (支持新架构)
 │       pip install torch --index-url https://download.pytorch.org/whl/cu124
 │
-├── 🕰️ 旧 GPU（GTX 10系列 / 驱动 < 525）
+├── 旧 GPU（GTX 10系列 / 驱动 < 525）
 │   ├── nvidia-smi → CUDA Version: 11.x?
 │   │   └── pip install torch --index-url https://download.pytorch.org/whl/cu118
 │   └── nvidia-smi → CUDA Version: 12.x?
 │       └── pip install torch --index-url https://download.pytorch.org/whl/cu121
 │
-├── 💻 无 NVIDIA GPU（Mac / AMD / Intel）
+├── 无 NVIDIA GPU（Mac / AMD / Intel）
 │   └── pip install torch  (CPU 版自动)
 │       或 conda install pytorch cpuonly -c pytorch
 │
-└── 🤖 想用 Apple Silicon GPU (M1/M2/M3)
+└── 想用 Apple Silicon GPU (M1/M2/M3)
     └── pip install torch (自动支持 MPS 后端)
         device = torch.device("mps")
 ```

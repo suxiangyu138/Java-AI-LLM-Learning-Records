@@ -1,6 +1,6 @@
 # 06 - 分布式锁与 Leader 选举
 
-> 🎯 这是 ZooKeeper 最核心的实战场景 — 互斥锁/读写锁/信号量、Leader 选举/计数器/屏障，Curator 封装了所有分布式协调原语
+> 这是 ZooKeeper 最核心的实战场景 — 互斥锁/读写锁/信号量、Leader 选举/计数器/屏障，Curator 封装了所有分布式协调原语
 
 ---
 
@@ -76,12 +76,12 @@ try {
 ## 2. 羊群效应与优化
 
 ```text
-❌ 羊群效应（错误做法）：
+✗ 羊群效应（错误做法）：
   所有客户端 Watch 同一个 /lock 节点
   → /lock 变化 → 所有客户端同时被唤醒
   → 竞争激烈、大量无用唤醒
 
-✅ 临时顺序节点 + Watch 前驱（Curator 做法）：
+✓ 临时顺序节点 + Watch 前驱（Curator 做法）：
   每个客户端 Watch 自己的前驱节点
   → 只有前驱释放时，自己被唤醒
   → 精确唤醒，零竞争
@@ -99,7 +99,7 @@ try {
 ## 3. Leader 选举
 
 ```java
-// ⭐ LeaderSelector — Curator 封装
+// ★ LeaderSelector — Curator 封装
 LeaderSelectorListener listener = new LeaderSelectorListenerAdapter() {
     @Override
     public void takeLeadership(CuratorFramework client) throws Exception {
@@ -158,4 +158,4 @@ if (result.succeeded()) {
 }
 ```
 
-> 🎯 **核心思想**：临时顺序节点 + Watch 前驱 = 分布式锁 + Leader 选举。Session 断连自动释放 = 天然的故障容错。这组原语是 ZooKeeper 分布式协调的全部精华。
+> **核心思想**：临时顺序节点 + Watch 前驱 = 分布式锁 + Leader 选举。Session 断连自动释放 = 天然的故障容错。这组原语是 ZooKeeper 分布式协调的全部精华。

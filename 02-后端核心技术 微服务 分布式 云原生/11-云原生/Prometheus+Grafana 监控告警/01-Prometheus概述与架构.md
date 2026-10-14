@@ -1,6 +1,6 @@
 # 01 - Prometheus 概述与架构
 
-> 🎯 Prometheus 是 CNCF 第二个毕业项目（仅次于 K8s），基于拉模型 + 时序数据库 + PromQL 的监控体系 — 理解其架构选择是用好整个技术栈的前提
+> Prometheus 是 CNCF 第二个毕业项目（仅次于 K8s），基于拉模型 + 时序数据库 + PromQL 的监控体系 — 理解其架构选择是用好整个技术栈的前提
 
 ---
 
@@ -71,10 +71,10 @@ Prometheus（普罗米修斯）是 SoundCloud 开源的系统监控与告警工�
 | 健康检测 | 拉取失败 = 目标 down | 需额外心跳机制 |
 | 服务发现 | 天然匹配 K8s/Consul | 需 Agent 注册 |
 | 安全控制 | Server 端集中控制 | 需 Agent 端认证 |
-| 短任务 | ❌ 不友好（需 Pushgateway） | ✅ 任务结束前推送 |
+| 短任务 | ✗ 不友好（需 Pushgateway） | ✓ 任务结束前推送 |
 | 网络要求 | Server 需可达 Target | Agent 需可达 Server |
 
-> 💡 Prometheus 选择拉模型的核心原因：**服务发现 + 健康检测一体化**。拉取成功说明 Target 存活，拉取失败可立即告警。K8s 环境下，Prometheus 通过 K8s API 自动发现 Pod/Service 并抓取。
+> Prometheus 选择拉模型的核心原因：**服务发现 + 健康检测一体化**。拉取成功说明 Target 存活，拉取失败可立即告警。K8s 环境下，Prometheus 通过 K8s API 自动发现 Pod/Service 并抓取。
 
 ---
 
@@ -110,11 +110,11 @@ Prometheus（普罗米修斯）是 SoundCloud 开源的系统监控与告警工�
 | 存储 | 本地 TSDB（短期） | MySQL/PostgreSQL | Elasticsearch |
 | 可视化 | Grafana（最佳拍档） | 内置（较弱） | Kibana |
 | 告警 | AlertManager（灵活） | 内置（完善） | Watcher |
-| 云原生 | ⭐⭐⭐ K8s 原生 | ⭐ | ⭐⭐ |
-| 学习曲线 | ⭐⭐⭐ 较陡 | ⭐⭐ 中等 | ⭐⭐⭐ 陡峭 |
+| 云原生 | ★★★ K8s 原生 | ★ | ★★ |
+| 学习曲线 | ★★★ 较陡 | ★★ 中等 | ★★★ 陡峭 |
 | **主场景** | **微服务/K8s 指标监控** | 传统 IDC 基础设施 | **日志分析** |
 
-> 💡 **选型建议**：微服务/云原生场景选 Prometheus + Grafana；传统机房运维选 Zabbix；日志分析选 ELK。三者可互补共存。
+> **选型建议**：微服务/云原生场景选 Prometheus + Grafana；传统机房运维选 Zabbix；日志分析选 ELK。三者可互补共存。
 
 ---
 
@@ -132,4 +132,4 @@ Prometheus（普罗米修斯）是 SoundCloud 开源的系统监控与告警工�
 └─────────────────────────────────────────────┘
 ```
 
-> 🎯 **每一层都有对应的 Prometheus Exporter 和 Grafana Dashboard**。从下往上逐步建设：先 L1+L2 保底，再 L3+L4 精细化。
+> **每一层都有对应的 Prometheus Exporter 和 Grafana Dashboard**。从下往上逐步建设：先 L1+L2 保底，再 L3+L4 精细化。

@@ -1,6 +1,6 @@
 # 06 - 快速精通 Claude API（Anthropic）
 
-> 🎯 Claude 系列是 Anthropic 打造的安全优先、推理能力顶尖的闭源大模型。其 API 以 Tool Use（工具调用）、200K 超长上下文、Computer Use（计算机操作）三大核心能力著称，是企业级 Agent 开发的首选之一
+> Claude 系列是 Anthropic 打造的安全优先、推理能力顶尖的闭源大模型。其 API 以 Tool Use（工具调用）、200K 超长上下文、Computer Use（计算机操作）三大核心能力著称，是企业级 Agent 开发的首选之一
 
 > **前置阅读**：[[02-大模型API调用实践]]、[[01-LLM API协议与核心概念]]
 
@@ -80,7 +80,7 @@ Claude:
 | 停止序列 | `stop` 参数 | `stop_sequences` 参数 |
 | 多模态 | `image_url` | `source.type: "base64"` |
 
-> ⚠️ **关键差异**：Claude 的 `max_tokens` 是**必填参数**且必须 > 0，不设会报错
+> **关键差异**：Claude 的 `max_tokens` 是**必填参数**且必须 > 0，不设会报错
 
 ### 2.3 Java SDK
 
@@ -186,11 +186,11 @@ if response.stop_reason == "tool_use":
 | 维度 | Claude Tool Use | OpenAI Function Calling |
 |------|:---:|:---:|
 | 格式 | `tool_use` block (自定义) | `tool_calls` JSON |
-| 并行调用 | ✅ 原生支持 | ✅ 原生支持 |
+| 并行调用 | ✓ 原生支持 | ✓ 原生支持 |
 | 工具定义 | `input_schema` (JSON Schema) | `parameters` (JSON Schema) |
 | 结果回填 | `tool_result` block | `role: "tool"` message |
-| 强制调用 | ❌ 建议而不强制 | ✅ `tool_choice` 可强制 |
-| 准确率 | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ |
+| 强制调用 | ✗ 建议而不强制 | ✓ `tool_choice` 可强制 |
+| 准确率 | ★★★★★ | ★★★★ |
 
 ## 4. 超长上下文实战
 
@@ -219,7 +219,7 @@ response = client.messages.create(
 )
 ```
 
-> 💡 200K 上下文意味着你可以把整个微服务的代码仓库丢给 Claude 做 code review
+> 200K 上下文意味着你可以把整个微服务的代码仓库丢给 Claude 做 code review
 
 ## 5. 流式输出与 SSE
 

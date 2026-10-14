@@ -1,6 +1,6 @@
 # 04 - 结构化输出与 JSON Mode
 
-> 🎯 Hermes 的结构化输出能力让模型严格按照你指定的 JSON Schema 生成结果——告别"格式不对、缺字段、多废话"的烦恼，是构建 API 级可靠 LLM 应用的基石
+> Hermes 的结构化输出能力让模型严格按照你指定的 JSON Schema 生成结果——告别"格式不对、缺字段、多废话"的烦恼，是构建 API 级可靠 LLM 应用的基石
 
 ---
 
@@ -27,7 +27,7 @@ Here's the json schema you must adhere to:
 </schema><|im_end|>
 ```
 
-> 💡 原理很简单：在 system prompt 中用 `<schema>` XML 标签注入完整的 JSON Schema，模型被训练为**严格输出符合该 schema 的 JSON**
+> 原理很简单：在 system prompt 中用 `<schema>` XML 标签注入完整的 JSON Schema，模型被训练为**严格输出符合该 schema 的 JSON**
 
 ### 1.2 工作机制
 
@@ -45,11 +45,11 @@ System Prompt 包含 <schema> 注入
 
 | 维度 | 普通模型 | Hermes JSON Mode |
 |------|---------|-----------------|
-| 格式保证 | ❌ 可能输出 markdown/废话 | ✅ 纯 JSON |
-| Schema 遵循 | ❌ 自己猜结构 | ✅ 严格匹配 schema |
-| 缺字段 | ❌ 经常发生 | ✅ 强制填充 |
+| 格式保证 | ✗ 可能输出 markdown/废话 | ✓ 纯 JSON |
+| Schema 遵循 | ✗ 自己猜结构 | ✓ 严格匹配 schema |
+| 缺字段 | ✗ 经常发生 | ✓ 强制填充 |
 | 可 parse 率 | ~70-80% | **~99%** |
-| 多一层校验 | ❌ 需要 retry logic | ✅ 基本不需要 |
+| 多一层校验 | ✗ 需要 retry logic | ✓ 基本不需要 |
 
 ## 2. Pydantic Schema 生成
 
@@ -213,7 +213,7 @@ curl http://localhost:8000/v1/chat/completions \
 | 代码分析 | `{language, functions, dependencies, complexity}` | 代码审查 |
 | API 响应标准化 | `{code, data, message}` | 统一 API 格式 |
 
-> 🎯 **最佳场景**：当你需要将 LLM 的输出直接传给下游代码处理，且不允许格式错误时，JSON Mode 是最优解
+> **最佳场景**：当你需要将 LLM 的输出直接传给下游代码处理，且不允许格式错误时，JSON Mode 是最优解
 
 ## 5. 与 Function Calling 的区别
 
@@ -221,7 +221,7 @@ curl http://localhost:8000/v1/chat/completions \
 |------|-----------|-----------------|
 | 目标 | 模型输出结构化数据 | 模型**主动调用**外部工具 |
 | 模型角色 | 数据生成器 | 工具编排器 |
-| 是否需要执行函数 | ❌ | ✅ |
+| 是否需要执行函数 | ✗ | ✓ |
 | 典型用途 | 分类/抽取/摘要结构化 | 查天气/发邮件/操作数据库 |
 | System Prompt 标签 | `<schema>` | `<tools>` |
 | 适用场景 | 下游代码直接消费 | Agent 式多步任务执行 |

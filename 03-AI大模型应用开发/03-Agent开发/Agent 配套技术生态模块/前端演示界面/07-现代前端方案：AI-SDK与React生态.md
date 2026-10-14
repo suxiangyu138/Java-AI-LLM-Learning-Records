@@ -12,7 +12,7 @@
 | 上手门槛 | 中 | 环境/路由/打包一次到位，约 100 行可跑 |
 | 支持框架 | React/Vue/Svelte/Solid | 官方适配齐全 |
 
-> 🎯 核心要点：**Python 框架解决"演示"，AI SDK 解决"产品"**——要品牌化、复杂交互、HITL 审批、深度定制时，这是唯一正确的方向；其余场景先用 [03](03-Streamlit快速演示.md)/[05](05-Chainlit对话界面.md) 顶住。
+> 核心要点：**Python 框架解决"演示"，AI SDK 解决"产品"**——要品牌化、复杂交互、HITL 审批、深度定制时，这是唯一正确的方向；其余场景先用 [03](03-Streamlit快速演示.md)/[05](05-Chainlit对话界面.md) 顶住。
 
 ## 2. AI SDK 7 核心能力（2026-08 基准）
 
@@ -70,7 +70,7 @@ export default function Chat() {
 
 流程：前端 `useChat` → POST `/api/chat` → `streamText` 驱动 Agent → `toDataStreamResponse`（AI 数据流协议）→ `useChat` 增量渲染。约 100 行完成 [06 模块](06-FastAPI+原生前端手写流式对话.md) 全部手写工作量。
 
-> 💡 本仓库后端以 Java 为主：AI SDK 是 TS 方案；Java 侧等价物是 [Spring AI 的 ChatClient + SSE](..%2F..%2F..%2F02-大模型基础与Prompt工程%2FFunction%20Calling%20函数调用%E3%80%90Agent%20基石%E3%80%91%2F00-FunctionCalling知识体系总览.md)（协议仍是同一套 SSE 事件设计，前端可共用）。
+> 本仓库后端以 Java 为主：AI SDK 是 TS 方案；Java 侧等价物是 [Spring AI 的 ChatClient + SSE](..%2F..%2F..%2F02-大模型基础与Prompt工程%2FFunction%20Calling%20函数调用%E3%80%90Agent%20基石%E3%80%91%2F00-FunctionCalling知识体系总览.md)（协议仍是同一套 SSE 事件设计，前端可共用）。
 
 ## 4. Agent 组件库：不用从零画卡片
 
@@ -123,7 +123,7 @@ const stream = useStream({
 | 多端（Web/移动/桌面） | React 生态全覆盖 |
 | 团队有前端 | 有专人才值得持续投入 |
 
-> 🎯 核心要点：AI SDK 方案的护城河不在"能聊天"（Python 框架也行），而在**工具审批、Agent 直连、类型化事件、性能统计**这些产品化能力——它把 [08 模块](08-Agent专属界面：思考过程与工具调用可视化.md) 的复杂可视化变成了组件与 Hook 的组装。
+> 核心要点：AI SDK 方案的护城河不在"能聊天"（Python 框架也行），而在**工具审批、Agent 直连、类型化事件、性能统计**这些产品化能力——它把 [08 模块](08-Agent专属界面：思考过程与工具调用可视化.md) 的复杂可视化变成了组件与 Hook 的组装。
 
 ---
 

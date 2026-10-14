@@ -18,7 +18,7 @@
 ### 1.1 什么是JDBC？
 JDBC（Java Database Connectivity）是 **Java 官方提供的一套操作数据库的标准规范（接口）**，位于 `java.sql` 和 `javax.sql` 包中。它定义了数据库操作的统一 API，由各数据库厂商提供具体实现（驱动）。
 
-> 💡 **本质理解**：JDBC 是一组接口，驱动才是实现。就像 USB 规范与 U 盘的关系——规范统一，实现各异。
+> **本质理解**：JDBC 是一组接口，驱动才是实现。就像 USB 规范与 U 盘的关系——规范统一，实现各异。
 
 ### 1.2 JDBC 编程六步骤是什么？
 | 步骤 | 操作 | 核心 API |
@@ -36,7 +36,7 @@ JDBC（Java Database Connectivity）是 **Java 官方提供的一套操作数据
 | `Class.forName()` | `Class.forName("com.mysql.cj.jdbc.Driver")` | 利用类加载机制，触发 Driver 类的静态代码块，自动向 `DriverManager` 注册 |
 | `DriverManager.registerDriver()` | `new com.mysql.cj.jdbc.Driver()` | 显式创建驱动实例并注册，会导致驱动注册两次（Driver 静态块也会注册）且依赖具体实现类 |
 
-> ⚠️ **推荐使用 `Class.forName()` 方式**，解耦、简洁，驱动类名可配置在属性文件中。
+> **推荐使用 `Class.forName()` 方式**，解耦、简洁，驱动类名可配置在属性文件中。
 
 ### 1.4 MySQL JDBC URL 的格式是什么？
 ```text
@@ -60,7 +60,7 @@ jdbc:mysql://host:port/database?参数1=值1&参数2=值2
 | **批量操作** | 不支持 | 支持 `addBatch()` + `executeBatch()` |
 | **BLOB 写入** | 困难 | 支持 `setBinaryStream()` |
 
-> 🎯 **面试结论**：永远优先使用 `PreparedStatement`，只有在执行静态 DDL 或存储过程时考虑 `Statement`。
+> **面试结论**：永远优先使用 `PreparedStatement`，只有在执行静态 DDL 或存储过程时考虑 `Statement`。
 
 ### 1.6 JDBC 中有哪些核心接口？
 | 接口 | 作用 |
@@ -94,7 +94,7 @@ for (int i = 1; i <= columnCount; i++) {
 - **提高响应速度**：连接预先创建，使用时直接获取
 - **统一管理**：监控连接状态、超时、泄漏检测
 
-> 💡 每次创建连接的时间大约 100~300ms，连接池可将其降低到接近 0ms。
+> 每次创建连接的时间大约 100~300ms，连接池可将其降低到接近 0ms。
 
 ### 1.9 常见连接池对比
 | 连接池 | 特点 | 适用场景 |
@@ -117,7 +117,7 @@ try {
 }
 ```
 
-> ⚠️ 必须关闭自动提交（默认 true），否则每条 SQL 独立事务。
+> 必须关闭自动提交（默认 true），否则每条 SQL 独立事务。
 
 ### 1.11 JDBC 支持哪些事务隔离级别？
 | 隔离级别 | 值 | 脏读 | 不可重复读 | 幻读 |
@@ -216,7 +216,7 @@ JDBC 的本质是 **Java 官方定义的一组数据库操作规范（接口）*
 
 JDK 只提供接口，不提供实现。数据库厂商提供驱动 jar 包（mysql-connector-java、ojdbc 等）。切换数据库只需替换驱动 jar 包和连接信息，Java 代码无需改动。
 
-> 🎯 这就是面向接口编程的威力——是 JDBC 最核心的设计思想。
+> 这就是面向接口编程的威力——是 JDBC 最核心的设计思想。
 
 ### 2.2 深入理解 `Class.forName()` 注册驱动原理（字节常问）
 当执行 `Class.forName("com.mysql.cj.jdbc.Driver")` 时：
@@ -241,7 +241,7 @@ public class Driver extends NonRegisteringDriver implements java.sql.Driver {
 }
 ```
 
-> 💡 JDBC 4.0+（Java 6+）支持 SP I自动加载：`META-INF/services/java.sql.Driver` 文件列出驱动全类名，`ServiceLoader` 自动加载。因此现代项目中可以省略 `Class.forName()`。
+> JDBC 4.0+（Java 6+）支持 SP I自动加载：`META-INF/services/java.sql.Driver` 文件列出驱动全类名，`ServiceLoader` 自动加载。因此现代项目中可以省略 `Class.forName()`。
 
 ### 2.3 SQL 注入原理与预编译防护机制
 **SQL 注入原理**：通过拼接字符串构造 SQL，用户输入被当作 SQL 代码执行：
@@ -276,7 +276,7 @@ ps.setString(2, password);
 4. **执行阶段**：`ps.executeQuery()` 使用已编译的计划 + 参数值执行
 5. **重用阶段**：再次 `executeQuery()` 可绑定不同参数，跳过编译
 
-> ⚠️ MySQL 默认客户端预编译，`useServerPrepStmts=true` 开启服务端预编译才真正在服务端缓存执行计划。
+> MySQL 默认客户端预编译，`useServerPrepStmts=true` 开启服务端预编译才真正在服务端缓存执行计划。
 
 ### 2.5 数据库连接池核心原理（阿里P6面试题）
 连接池本质上是一个 **生产者-消费者模式** 的资源池：
@@ -355,7 +355,7 @@ connection.setAutoCommit(false)
 不 commit 不回滚，连接归还到池时，事务状态不确定！
 ```
 
-> ⚠️ **连接池 + 事务的常见坑**：`setAutoCommit(false)` 后，如果在 `finally` 中忘记 `setAutoCommit(true)`，归还连接后下次获取时仍处于非自动提交模式，导致 SQL 执行后不提交，造成死锁或数据不一致。
+> **连接池 + 事务的常见坑**：`setAutoCommit(false)` 后，如果在 `finally` 中忘记 `setAutoCommit(true)`，归还连接后下次获取时仍处于非自动提交模式，导致 SQL 执行后不提交，造成死锁或数据不一致。
 
 ### 2.10 Savepoint 保存点/回滚点
 ```java
@@ -450,7 +450,7 @@ conn.commit();              // 提交事务
 // INSERT INTO emp(name,age,dept_id) VALUES ('a',1,1),('b',2,2),...
 ```
 
-> 💡 `rewriteBatchedStatements=true` 可提升批处理性能 10-100 倍。
+> `rewriteBatchedStatements=true` 可提升批处理性能 10-100 倍。
 
 ### 3.4 模糊查询时 PreparedStatement 如何使用？
 ```java
@@ -460,7 +460,7 @@ ps.setString(1, "%" + keyword + "%");  // 在参数中拼接 %
 ResultSet rs = ps.executeQuery();
 ```
 
-> ⚠️ 不要在 SQL 模板中写 `LIKE '%?%'`，占位符不支持这种写法。必须在 setString 时拼接 `%`。
+> 不要在 SQL 模板中写 `LIKE '%?%'`，占位符不支持这种写法。必须在 setString 时拼接 `%`。
 
 ### 3.5 如何在获取新增数据的自增主键？
 ```java
@@ -500,7 +500,7 @@ for (int i = 0; i < 10000; i++) {
 | 低流量管理后台 | 2 | 10 | 10000ms | 1800000ms |
 | 微服务 API 层 | 10 | 30 | 5000ms | 1800000ms |
 
-> 💡 HikariCP 官方建议 `maximumPoolSize` 不宜过大。经验值 `maxPoolSize = Tn * (Cm - 1) + 1`，其中 Tn = CPU 核数，Cm = 单连接并发数。过多连接反而因上下文切换导致性能下降。
+> HikariCP 官方建议 `maximumPoolSize` 不宜过大。经验值 `maxPoolSize = Tn * (Cm - 1) + 1`，其中 Tn = CPU 核数，Cm = 单连接并发数。过多连接反而因上下文切换导致性能下降。
 
 ---
 
@@ -1061,4 +1061,4 @@ JDBC 本地事务无法解决跨库/跨服务问题，需要分布式事务方�
 
 ---
 
-> 🎯 **面试终极总结**：JDBC 面试的核心在于理解"规范与实现分离"的设计思想，以及 PreparedStatement、事务管理、连接池这三个高频考点的原理深度。手写 BaseDao 和连接池配置是最常见的编程题。按照本宝典的八大模块逐一对照，即可全面备战 JDBC 面试。
+> **面试终极总结**：JDBC 面试的核心在于理解"规范与实现分离"的设计思想，以及 PreparedStatement、事务管理、连接池这三个高频考点的原理深度。手写 BaseDao 和连接池配置是最常见的编程题。按照本宝典的八大模块逐一对照，即可全面备战 JDBC 面试。

@@ -25,7 +25,7 @@
 | 网络依赖 | 必须在线，不可离线使用 | 部分功能可离线运行 |
 | 开发成本 | 开发周期短，成本低 | 开发周期长，成本高 |
 
-> 💡 现代趋势：大型应用多采用BS为主、CS为辅的混合架构，或使用PWA弥补BS离线能力的不足。
+> 现代趋势：大型应用多采用BS为主、CS为辅的混合架构，或使用PWA弥补BS离线能力的不足。
 
 ### 1.2 URL、URI、URN的区别
 - **URI（Uniform Resource Identifier）**：统一资源标识符，最宽泛的概念，用于标识某个资源
@@ -74,7 +74,7 @@ URN = 命名空间 + 名称            例：urn:isbn:0-486-27557-4
 | 502 | Bad Gateway | 网关错误 |
 | 503 | Service Unavailable | 服务不可用（过载/维护） |
 
-> 🎯 **面试重点**：301 vs 302（永久重定向 vs 临时重定向）；401 vs 403（未认证 vs 无权限）
+> **面试重点**：301 vs 302（永久重定向 vs 临时重定向）；401 vs 403（未认证 vs 无权限）
 
 ### 1.6 GET与POST请求的区别
 | 对比维度 | GET | POST |
@@ -88,7 +88,7 @@ URN = 命名空间 + 名称            例：urn:isbn:0-486-27557-4
 | 编码类型 | application/x-www-form-urlencoded | multipart/form-data 或 application/x-www-form-urlencoded |
 | 后退/刷新 | 无害 | 会提示重新提交表单 |
 
-> 💡 选择原则：查询操作用GET，增删改用POST。RESTful规范中PUT（幂等）和DELETE也可用于增删。
+> 选择原则：查询操作用GET，增删改用POST。RESTful规范中PUT（幂等）和DELETE也可用于增删。
 
 ### 1.7 URL编码（Percent-Encoding）
 ```java
@@ -106,7 +106,7 @@ String decoded = URLDecoder.decode(encoded, "UTF-8");
 // 输出: 中文参数
 ```
 
-> ⚠️ Tomcat 8.0+ 默认使用 UTF-8 解码URL，8.0以下使用 ISO-8859-1，需手动配置 URIEncoding="UTF-8"。
+> Tomcat 8.0+ 默认使用 UTF-8 解码URL，8.0以下使用 ISO-8859-1，需手动配置 URIEncoding="UTF-8"。
 
 ### 1.8 转发（Forward）与重定向（Redirect）的区别
 | 对比维度 | 转发 Forward | 重定向 Redirect |
@@ -127,7 +127,7 @@ request.getRequestDispatcher("/WEB-INF/views/success.jsp")
 response.sendRedirect(request.getContextPath() + "/login");
 ```
 
-> 🎯 选择原则：需要携带数据到下一页用转发；需要避免重复提交用重定向（POST-Redirect-GET模式）。
+> 选择原则：需要携带数据到下一页用转发；需要避免重复提交用重定向（POST-Redirect-GET模式）。
 
 ### 1.9 Servlet生命周期
 Servlet生命周期由Servlet容器（Tomcat）管理，核心方法如下：
@@ -163,7 +163,7 @@ public class DemoServlet extends HttpServlet {
 }
 ```
 
-> 💡 `loadOnStartup` 为正数时在容器启动阶段实例化，为负数或未设置时在首次请求时实例化。
+> `loadOnStartup` 为正数时在容器启动阶段实例化，为负数或未设置时在首次请求时实例化。
 
 ### 1.10 GenericServlet与HttpServlet的关系
 ```
@@ -331,7 +331,7 @@ String originalStr = new String(decoded, "UTF-8");
 // 输出: admin:123456
 ```
 
-> ⚠️ Base64是编码（Encoding）而非加密（Encryption），可被逆向解码还原原文。敏感信息不能仅靠Base64保护，需配合哈希或加密算法。
+> Base64是编码（Encoding）而非加密（Encryption），可被逆向解码还原原文。敏感信息不能仅靠Base64保护，需配合哈希或加密算法。
 
 ### 1.18 SLF4J + Logback日志配置
 ```xml
@@ -447,7 +447,7 @@ Tomcat Server
 ```java
 @WebServlet("/unsafe")
 public class UnsafeServlet extends HttpServlet {
-    // ❌ 危险：成员变量存在线程安全问题
+    // ✗ 危险：成员变量存在线程安全问题
     private int count = 0;
     private String userName;
     
@@ -470,7 +470,7 @@ public class UnsafeServlet extends HttpServlet {
 3. **加锁同步**：使用 `synchronized`（但会降低并发性能）
 
 ```java
-// ✅ 推荐：使用局部变量或ThreadLocal
+// ✓ 推荐：使用局部变量或ThreadLocal
 @WebServlet("/safe")
 public class SafeServlet extends HttpServlet {
     private static final ThreadLocal<SimpleDateFormat> DATE_FORMAT = 
@@ -519,7 +519,7 @@ public class ThreadLocal<T> {
 线程2 ──→ ThreadLocalMap ──→ {key=ThreadLocal实例(弱引用), value=值2}
 ```
 
-> ⚠️ ThreadLocal内存泄漏风险：ThreadLocalMap的key是弱引用（GC时被回收），但value是强引用。如果ThreadLocal实例被回收而线程还在运行（如Tomcat线程池中的线程），value永远无法被访问到但也不会被GC回收。**解决方案**：每次使用后调用 `remove()` 方法。
+> ThreadLocal内存泄漏风险：ThreadLocalMap的key是弱引用（GC时被回收），但value是强引用。如果ThreadLocal实例被回收而线程还在运行（如Tomcat线程池中的线程），value永远无法被访问到但也不会被GC回收。**解决方案**：每次使用后调用 `remove()` 方法。
 
 ### 2.4 Filter与经典责任链模式的区别
 | 对比维度 | 经典责任链模式 | Filter Chain |
@@ -599,7 +599,7 @@ public abstract class HttpServlet extends GenericServlet {
 }
 ```
 
-> 🎯 模板方法模式定义算法骨架（service方法），具体步骤（doGet/doPost等）由子类实现。
+> 模板方法模式定义算法骨架（service方法），具体步骤（doGet/doPost等）由子类实现。
 
 ### 2.6 适配器模式在Servlet中的应用
 ```java
@@ -632,7 +632,7 @@ public abstract class GenericServlet implements Servlet, ServletConfig {
 }
 ```
 
-> 💡 **缺省适配器模式**：提供接口所有方法的默认空实现（如上例），子类无需实现所有方法，只需选择自己需要的进行覆写。
+> **缺省适配器模式**：提供接口所有方法的默认空实现（如上例），子类无需实现所有方法，只需选择自己需要的进行覆写。
 
 ### 2.7 Session机制深入理解
 ```java
@@ -661,7 +661,7 @@ String redirectURL = response.encodeRedirectURL("/app/dashboard");
 response.sendRedirect(redirectURL);
 ```
 
-> 🎯 一次完整的会话：从用户打开浏览器访问网站到关闭浏览器（或Session超时）期间的所有请求。
+> 一次完整的会话：从用户打开浏览器访问网站到关闭浏览器（或Session超时）期间的所有请求。
 
 ### 2.8 事务管理原理
 ```java
@@ -850,7 +850,7 @@ public class PasswordEncoder {
 | 移动端 | 支持不友好 | 天然适配移动端 |
 | 性能 | 每次请求查询服务端状态 | 无需服务端查询（JWT自包含） |
 
-> 🎯 传统Web应用（服务端渲染）推荐Session；前后端分离/移动端推荐Token。
+> 传统Web应用（服务端渲染）推荐Session；前后端分离/移动端推荐Token。
 
 ---
 
@@ -1565,7 +1565,7 @@ public class EncodingFilter implements Filter {
 }
 ```
 
-> ⚠️ GET请求乱码处理：Tomcat 8.0以下需配置 `server.xml` 中 Connector 的 `URIEncoding="UTF-8"`；8.0+默认UTF-8。
+> GET请求乱码处理：Tomcat 8.0以下需配置 `server.xml` 中 Connector 的 `URIEncoding="UTF-8"`；8.0+默认UTF-8。
 
 ### 4.5 手写一个分页工具类
 ```java
@@ -2124,4 +2124,4 @@ Filter责任链：
 Filter1 → Filter2 → Filter3 → Servlet → Filter3 → Filter2 → Filter1 → 响应
 ```
 
-> 🎯 本面试宝典覆盖了JavaWeb从入门到精通的160节课程核心知识点，建议结合课程大纲对照学习，重点练习手写代码部分，面试前优先完成Checklist中的"必须能口述清楚"和"必须能手写"项目。
+> 本面试宝典覆盖了JavaWeb从入门到精通的160节课程核心知识点，建议结合课程大纲对照学习，重点练习手写代码部分，面试前优先完成Checklist中的"必须能口述清楚"和"必须能手写"项目。

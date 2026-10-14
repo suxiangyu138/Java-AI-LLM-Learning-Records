@@ -1,6 +1,6 @@
 # 02 - Requests 库与网页抓取实战
 
-> 🎯 Requests 是 Python 最流行的 HTTP 库（月下载量 2 亿+）。掌握 Session、代理、超时、重试四大能力，就能应对 80% 的静态网页抓取需求
+> Requests 是 Python 最流行的 HTTP 库（月下载量 2 亿+）。掌握 Session、代理、超时、重试四大能力，就能应对 80% 的静态网页抓取需求
 
 ---
 
@@ -89,11 +89,11 @@ resp.encoding = "utf-8"      # 强制指定编码
 ### 2.1 为什么用 Session
 
 ```python
-# ❌ 不用 Session：每次都是新连接，Cookie 不共享
+# ✗ 不用 Session：每次都是新连接，Cookie 不共享
 r1 = requests.get("https://example.com/login")
 r2 = requests.get("https://example.com/profile")  # Cookie 丢失
 
-# ✅ 用 Session：自动管理 Cookie + 连接池复用
+# ✓ 用 Session：自动管理 Cookie + 连接池复用
 session = requests.Session()
 
 # 登录

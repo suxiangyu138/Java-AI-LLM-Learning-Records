@@ -1,6 +1,6 @@
 # 05 - Kimi Agent 与智能体集群
 
-> 🎯 K2.6 的最大差异化是"Agent 原生" — 300 个子 Agent 集群、4000 步协作、5 天自主运行。本章拆解 Agent Swarm 架构、长程自主机制、Claw Groups 生态，以及与 OpenClaw 的结合
+> K2.6 的最大差异化是"Agent 原生" — 300 个子 Agent 集群、4000 步协作、5 天自主运行。本章拆解 Agent Swarm 架构、长程自主机制、Claw Groups 生态，以及与 OpenClaw 的结合
 
 ---
 
@@ -146,6 +146,6 @@ OpenClaw 中配置 Kimi：
 
 ---
 
-> 🎯 **核心要点**：K2.6 的 Agent 三张王牌 — **① Agent Swarm（300 子 Agent/4000 步协作，端到端交付）② 长程自主（5 天连续运行，OpenClaw 搭档）③ Claw Groups（异构 Agent 协作生态）**。与 K2.5 的本质区别：从"能执行 Agent 任务"升级为"能管理 Agent 团队"。选型启示：**长链路 Agent 任务（调研/运维/文档）→ K2.6 是当前开源最佳选择**。
+> **核心要点**：K2.6 的 Agent 三张王牌 — **① Agent Swarm（300 子 Agent/4000 步协作，端到端交付）② 长程自主（5 天连续运行，OpenClaw 搭档）③ Claw Groups（异构 Agent 协作生态）**。与 K2.5 的本质区别：从"能执行 Agent 任务"升级为"能管理 Agent 团队"。选型启示：**长链路 Agent 任务（调研/运维/文档）→ K2.6 是当前开源最佳选择**。
 
 **下一模块**：[06-Kimi在开发框架中的集成](06-Kimi在开发框架中的集成.md) / **返回总览**：[00-总览](00-Kimi知识体系总览.md)

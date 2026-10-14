@@ -1,10 +1,10 @@
 # CentOS SELinux 深度解析与安全加固
 
-> 🔒 MAC 强制访问控制、安全上下文(Type/User/Role)、策略排障、audit2allow 自动生成规则、Java 应用部署中 5 个经典 SELinux 问题及解法
+> MAC 强制访问控制、安全上下文(Type/User/Role)、策略排障、audit2allow 自动生成规则、Java 应用部署中 5 个经典 SELinux 问题及解法
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [SELinux 原理](#1-selinux-原理)
 2. [安全上下文深度解析](#2-安全上下文深度解析)
@@ -41,7 +41,7 @@ sestatus                          # SELinux 完整状态
 
 # Enforcing  → 强制执行，拒绝+审计日志（生产）
 # Permissive → 仅警告不拒绝（调试用）
-# Disabled   → 完全关闭（❌ 自废武功）
+# Disabled   → 完全关闭（✗ 自废武功）
 
 # 临时切换
 sudo setenforce 0                 # → Permissive
@@ -157,7 +157,7 @@ sudo semodule -l | grep -v "^100\b"
 
   4. audit2allow 生成策略
 
-  5. ✅ 永久解决，而非 setenforce 0
+  5. ✓ 永久解决，而非 setenforce 0
 ```
 
 ---
@@ -257,7 +257,7 @@ sudo systemctl enable --now dnf-automatic.timer
 
 ---
 
-> 🎯 **核心原则**：遇到"权限明明对但就是不行"→ **先查 SELinux**（`ausearch -m avc`）。不要第一反应 `setenforce 0`，而是用 `audit2allow` 生成正确策略。SELinux 是看门狗，不是拦路虎。
+> **核心原则**：遇到"权限明明对但就是不行"→ **先查 SELinux**（`ausearch -m avc`）。不要第一反应 `setenforce 0`，而是用 `audit2allow` 生成正确策略。SELinux 是看门狗，不是拦路虎。
 
 ---
 

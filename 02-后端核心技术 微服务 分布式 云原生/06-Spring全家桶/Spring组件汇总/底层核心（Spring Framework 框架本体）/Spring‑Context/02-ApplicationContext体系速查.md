@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [接口层次](#1-接口层次)
 2. [refresh() 十二步启动流程](#2-refresh-十二步启动流程)
@@ -39,7 +39,7 @@ ConfigurableApplicationContext（可配置：refresh/close/registerShutdownHook�
 | `AbstractApplicationContext` | refresh() 模板实现 | 自定义容器继承点（少见） |
 | `MessageSource` / `ApplicationEventPublisher` | `getMessage(code,args,locale)` / `publishEvent(obj)` | 国际化、事件 |
 
-> 🎯 **核心要点**：`ApplicationContext` 是**多接口合并**的复合契约——它能当 BeanFactory 用（`getBean`）、能发布事件、能取消息、能加载资源，全因接口继承；容器关闭时 `registerShutdownHook()` 保证 JVM 退出前执行 destroy。
+> **核心要点**：`ApplicationContext` 是**多接口合并**的复合契约——它能当 BeanFactory 用（`getBean`）、能发布事件、能取消息、能加载资源，全因接口继承；容器关闭时 `registerShutdownHook()` 保证 JVM 退出前执行 destroy。
 
 ### 1.1 关键接口方法速查（含签名细节）
 
@@ -60,7 +60,7 @@ boolean local = child.containsLocalBean("svc");   // false
 boolean any = child.containsBean("svc");          // true（上溯找到父容器中的）
 ```
 
-> 💡 `publishEvent(Object)` 的重载细节：传 `ApplicationEvent` 子类直接按原类型分发；传普通 POJO 会被包装成 `PayloadApplicationEvent` 再分发——所以监听器签名可以直接写 `OrderCreatedEvent`，Spring 通过泛型解包；但监听 `PayloadApplicationEvent` 也能收到（多个匹配监听器全部触发，注意重复消费）。
+> `publishEvent(Object)` 的重载细节：传 `ApplicationEvent` 子类直接按原类型分发；传普通 POJO 会被包装成 `PayloadApplicationEvent` 再分发——所以监听器签名可以直接写 `OrderCreatedEvent`，Spring 通过泛型解包；但监听 `PayloadApplicationEvent` 也能收到（多个匹配监听器全部触发，注意重复消费）。
 
 ### 1.2 WebApplicationContext：容器族的 Web 分支
 
@@ -80,7 +80,7 @@ WebApplicationContext（接口，spring-web 定义）
 | 特有 Bean | - | servletContext / request / session 等作用域代理 |
 | 初始化入口 | 手动 refresh | Servlet 容器监听器 / Boot run |
 
-> ⚠️ **作用域边界**：request/session 作用域**只在 Web 容器内有效**——在纯 context 测试中声明 `@Scope("request")` 的 Bean 会因找不到作用域注册而报 `IllegalStateException: No Scope registered for scope name 'request'`；单元测试要么 mock 容器，要么改用 `@Scope(proxyMode = ScopedProxyMode.TARGET_CLASS)` 降级。这也是"测试里为什么跑不过 Web 专用配置"的根因。
+> **作用域边界**：request/session 作用域**只在 Web 容器内有效**——在纯 context 测试中声明 `@Scope("request")` 的 Bean 会因找不到作用域注册而报 `IllegalStateException: No Scope registered for scope name 'request'`；单元测试要么 mock 容器，要么改用 `@Scope(proxyMode = ScopedProxyMode.TARGET_CLASS)` 降级。这也是"测试里为什么跑不过 Web 专用配置"的根因。
 
 ## 2. refresh() 十二步启动流程
 
@@ -101,7 +101,7 @@ refresh() 核心步骤（AbstractApplicationContext，面试背诵版）：
   12 finishRefresh()           完成：发布 ContextRefreshedEvent、启动 Lifecycle
 ```
 
-> 💡 **记忆锚点**：5-6 步 = "改图纸、招工人"（PostProcessor）；7-10 = "后勤就位"（消息/事件）；11 = "开工"（单例实例化）；12 = "剪彩"（ContextRefreshedEvent）。Boot 自动配置跑在 5 步之后（`AutoConfigurationImportSelector` 通过 `@Import` 参与配置类处理）。
+> **记忆锚点**：5-6 步 = "改图纸、招工人"（PostProcessor）；7-10 = "后勤就位"（消息/事件）；11 = "开工"（单例实例化）；12 = "剪彩"（ContextRefreshedEvent）。Boot 自动配置跑在 5 步之后（`AutoConfigurationImportSelector` 通过 `@Import` 参与配置类处理）。
 
 ### 2.1 refresh() 失败时的行为与兜底
 
@@ -122,7 +122,7 @@ refresh() 是**非原子**操作——每一步都可能抛异常，且失败后
   "context already refreshed"——模板方法没有幂等设计，这是刻意为之）。
 ```
 
-> ⚠️ **生产教训**：第 11 步失败时**部分单例已被创建并可能持有外部资源**（连接池、线程池）——如果只打印异常不 close()，这些资源会泄漏。Boot 中 `SpringApplication.run` 失败时会自行清理，但手写 main 的嵌入式应用必须自己 try-catch-close。
+> **生产教训**：第 11 步失败时**部分单例已被创建并可能持有外部资源**（连接池、线程池）——如果只打印异常不 close()，这些资源会泄漏。Boot 中 `SpringApplication.run` 失败时会自行清理，但手写 main 的嵌入式应用必须自己 try-catch-close。
 
 ### 2.2 每步对应的源码类速查
 
@@ -141,7 +141,7 @@ refresh() 是**非原子**操作——每一步都可能抛异常，且失败后
 | 11 | `finishBeanFactoryInstantiation()` | 逐一遍历非懒加载单例 `getBean` |
 | 12 | `finishRefresh()` | 发布 `ContextRefreshedEvent`、`Lifecycle.start()` |
 
-> 🎯 **面试升级点**：第 7-8 步的"找不到就注册兜底实现"是模板方法设计的典范——`DelegatingMessageSource` 保证 `getMessage` 永不 NPE（返回 code 原样），`SimpleApplicationEventMulticaster` 保证事件发布永不 NPE。**不配置也有默认行为**，这是 context 与 beans 层最大的人性化差异。
+> **面试升级点**：第 7-8 步的"找不到就注册兜底实现"是模板方法设计的典范——`DelegatingMessageSource` 保证 `getMessage` 永不 NPE（返回 code 原样），`SimpleApplicationEventMulticaster` 保证事件发布永不 NPE。**不配置也有默认行为**，这是 context 与 beans 层最大的人性化差异。
 
 ### 2.3 启动耗时因素与优化方向
 
@@ -161,7 +161,7 @@ ctx.refresh();   // 整体时间
 // 生产实践：启动日志打"Startup took X ms"并分段记录（Boot 的 StartedApplication 时间）
 ```
 
-> 💡 **边界认知**：启动慢 ≠ context 慢——绝大多数时间是**业务 Bean 的构造器与依赖初始化**；先 `--debug` 启动看 Bean 创建耗时分布（Boot 的 `spring.main.startup` 探测可精确到每步），再决定优化方向，**不要盲目上 @Indexed**。
+> **边界认知**：启动慢 ≠ context 慢——绝大多数时间是**业务 Bean 的构造器与依赖初始化**；先 `--debug` 启动看 Bean 创建耗时分布（Boot 的 `spring.main.startup` 探测可精确到每步），再决定优化方向，**不要盲目上 @Indexed**。
 
 ### 2.4 十二步的"谁驱动谁"记忆链
 
@@ -175,14 +175,14 @@ ctx.refresh();   // 整体时间
 ④ 落点：所有结果写进 BeanDefinitionRegistry（= DefaultListableBeanFactory）
 ```
 
-> 🎯 **面试表达升级**：把"十二步"从背诵升级为**三问**——"谁调用"（AbstractApplicationContext.refresh）、"谁执行"（PostProcessor 体系）、"数据落在哪"（BeanDefinitionRegistry）——三个答案覆盖 90% 的容器源码题，比背步骤号更有迁移力。例如问"@Bean 方法何时变成定义"，答"第 5 步由 ConfigurationClassBeanDefinitionReader 写入 registry"，即完成三问闭环。
+> **面试表达升级**：把"十二步"从背诵升级为**三问**——"谁调用"（AbstractApplicationContext.refresh）、"谁执行"（PostProcessor 体系）、"数据落在哪"（BeanDefinitionRegistry）——三个答案覆盖 90% 的容器源码题，比背步骤号更有迁移力。例如问"@Bean 方法何时变成定义"，答"第 5 步由 ConfigurationClassBeanDefinitionReader 写入 registry"，即完成三问闭环。
 
 ## 3. 常见实现对照
 
 | 实现 | 配置来源 | 场景 |
 |------|---------|------|
-| `AnnotationConfigApplicationContext` | 注解 + 配置类 | ✅ 现代标准（独立/嵌入式应用） |
-| `GenericApplicationContext` | 编程式 `registerBean`/`registerBeanDefinition` | ✅ 工具型/动态容器 |
+| `AnnotationConfigApplicationContext` | 注解 + 配置类 | ✓ 现代标准（独立/嵌入式应用） |
+| `GenericApplicationContext` | 编程式 `registerBean`/`registerBeanDefinition` | ✓ 工具型/动态容器 |
 | `ClassPathXmlApplicationContext` | XML 文件 | 存量系统 |
 | `FileSystemXmlApplicationContext` | 文件系统 XML | 存量 |
 | `AnnotationConfigServletWebServerApplicationContext` | 注解 | Boot Web 应用（**Boot 内部使用**） |
@@ -201,7 +201,7 @@ ctx.registerBean(OrderService.class);
 ctx.refresh();   // 手动刷新后才可用
 ```
 
-> ⚠️ **GenericApplicationContext 必须手动 refresh()**——它没有自动刷新的构造器；`AnnotationConfigApplicationContext` 构造后自动 refresh。
+> **GenericApplicationContext 必须手动 refresh()**——它没有自动刷新的构造器；`AnnotationConfigApplicationContext` 构造后自动 refresh。
 
 ### 3.1 实现类选择决策树
 
@@ -226,7 +226,7 @@ ctx.refresh();   // 手动刷新后才可用
 | 动态热注册 Bean | `GenericApplicationContext.getDefaultListableBeanFactory().registerBeanDefinition(...)` | 注解上下文构造后注册也可但语义混乱 |
 | 需要父子容器 | `AnnotationConfigApplicationContext` 构造时传 parent | 手动管理两套 XML 极易错乱 |
 
-> 💡 **自定义 ApplicationContext 的正确姿势**：99% 的场景继承 `AbstractApplicationContext` 都是错的（十多个抽象钩子要补）；正确的扩展点是**实现 `ApplicationContextInitializer`**（Boot 提供回调）或在 `GenericApplicationContext` 上组合。面试若被问"如何扩展容器"，答"选型 + Initializer + BeanFactoryPostProcessor"比"继承 AbstractApplicationContext"得分高。
+> **自定义 ApplicationContext 的正确姿势**：99% 的场景继承 `AbstractApplicationContext` 都是错的（十多个抽象钩子要补）；正确的扩展点是**实现 `ApplicationContextInitializer`**（Boot 提供回调）或在 `GenericApplicationContext` 上组合。面试若被问"如何扩展容器"，答"选型 + Initializer + BeanFactoryPostProcessor"比"继承 AbstractApplicationContext"得分高。
 
 ### 3.2 上下文关闭与优雅停机
 
@@ -245,7 +245,7 @@ ctx.close() 的执行链（与 refresh 对称的"拆解"）：
 | try-with-resources | 块结束 | 局部容器（测试最常用） |
 | Boot 的 `SpringApplication.exit` | 应用退出 | Boot 托管（含退出码） |
 
-> ⚠️ **常见坑**：① 单例销毁顺序按依赖逆序，但**循环依赖的 Bean 销毁顺序未定义**——资源清理别依赖顺序；② `@PreDestroy` 抛异常会**中断后续销毁**（默认），清理代码要 try-catch；③ 停机期间新请求到达的竞态——先摘流量（注册中心下线）再 close，顺序反了会出现"处理中请求被打断"。
+> **常见坑**：① 单例销毁顺序按依赖逆序，但**循环依赖的 Bean 销毁顺序未定义**——资源清理别依赖顺序；② `@PreDestroy` 抛异常会**中断后续销毁**（默认），清理代码要 try-catch；③ 停机期间新请求到达的竞态——先摘流量（注册中心下线）再 close，顺序反了会出现"处理中请求被打断"。
 
 ## 4. getBean 查找链路
 
@@ -260,7 +260,7 @@ ctx.getBean(OrderService.class)
       5. 放入单例缓存
 ```
 
-> 🎯 **核心要点**：ApplicationContext 的 getBean 本质是**委托给内部持有的 DefaultListableBeanFactory**——"上下文 = 工厂 + 企业能力"的心智模型再次印证；作用域、代理、生命周期全在 beans 层完成，context 只负责编排。
+> **核心要点**：ApplicationContext 的 getBean 本质是**委托给内部持有的 DefaultListableBeanFactory**——"上下文 = 工厂 + 企业能力"的心智模型再次印证；作用域、代理、生命周期全在 beans 层完成，context 只负责编排。
 
 ### 4.1 getBean 常见异常速查（面试与排障双用）
 
@@ -285,20 +285,20 @@ private PaymentHandler alipay;              // ② 按名字精确取
 private Map<String, PaymentHandler> map;    // ③ key=Bean 名，动态路由
 ```
 
-> ⚠️ **7.0 新增坑**：代理默认 CGLIB 后，`getBean(SomeClass.class)` 返回的是**子类代理**——若代码里做 `x.getClass().isAssignableFrom(...)` 之类精确类型判断会意外失效；接口类型 `getBean(IFace.class)` 则不受影响。生产代码优先面向接口取 Bean。
+> **7.0 新增坑**：代理默认 CGLIB 后，`getBean(SomeClass.class)` 返回的是**子类代理**——若代码里做 `x.getClass().isAssignableFrom(...)` 之类精确类型判断会意外失效；接口类型 `getBean(IFace.class)` 则不受影响。生产代码优先面向接口取 Bean。
 
 ## 5. ApplicationContext 与 BeanFactory 的本质差异
 
 | 维度 | BeanFactory | ApplicationContext |
 |------|-------------|-------------------|
 | 加载策略 | 懒加载（getBean 时才创建） | **预加载**（refresh 时创建全部单例） |
-| 事件/国际化/属性 | ❌ | ✅ |
-| 配置类处理 | 无（需手动接 `ConfigurationClassPostProcessor`） | ✅ 内建 |
-| 资源模式加载 | 无 | ✅ |
+| 事件/国际化/属性 | ✗ | ✓ |
+| 配置类处理 | 无（需手动接 `ConfigurationClassPostProcessor`） | ✓ 内建 |
+| 资源模式加载 | 无 | ✓ |
 | 扩展钩子 | BeanPostProcessor 可注册 | refresh() 十二步 + `onRefresh`/`postProcessBeanFactory` |
 | 使用场景 | 嵌入式/工具型 IoC | 一切应用容器 |
 
-> ⚠️ 面试高频辨析："BeanFactory 是懒加载"——准确说是"按需创建"；`getBean` 懒与预加载取决于容器类型，而非绝对。
+> 面试高频辨析："BeanFactory 是懒加载"——准确说是"按需创建"；`getBean` 懒与预加载取决于容器类型，而非绝对。
 
 ### 5.1 面试追问与答题要点
 
@@ -310,7 +310,7 @@ private Map<String, PaymentHandler> map;    // ③ key=Bean 名，动态路由
 | "父子容器查 Bean 的顺序？" | **先查本级**再上溯父容器；`getBeansOfType` 只查本级（`Listable` 语义），`getBean` 会上溯 | 混淆 `containsBean`（上溯）与 `containsLocalBean`（本级） |
 | "为什么 Boot 用 ServletWebServer 上下文？" | 需要第 9 步 `onRefresh()` 创建内嵌服务器 + request/session 作用域，普通注解上下文没有这些钩子 | 答不出"作用域注册在第 4 步、服务器在第 9 步"的时机 |
 
-> 🎯 **一句话总结**：ApplicationContext = 一个被"企业能力"包装起来的 `DefaultListableBeanFactory`；面试只要抓住"**持有并委托工厂、模板方法定义生命周期、钩子留给子类**"三条主线，任何容器题都能组织出结构化答案。
+> **一句话总结**：ApplicationContext = 一个被"企业能力"包装起来的 `DefaultListableBeanFactory`；面试只要抓住"**持有并委托工厂、模板方法定义生命周期、钩子留给子类**"三条主线，任何容器题都能组织出结构化答案。
 
 ---
 

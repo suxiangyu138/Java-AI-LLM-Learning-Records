@@ -1,6 +1,6 @@
 # 07 - 安全开发流程 SDL
 
-> 🎯 在代码写完后再加安全 = 补漏洞。SDL（Security Development Lifecycle）的核心思想是"安全左移"——从需求阶段就开始考虑安全，每阶段都有安全检查
+> 在代码写完后再加安全 = 补漏洞。SDL（Security Development Lifecycle）的核心思想是"安全左移"——从需求阶段就开始考虑安全，每阶段都有安全检查
 
 ---
 

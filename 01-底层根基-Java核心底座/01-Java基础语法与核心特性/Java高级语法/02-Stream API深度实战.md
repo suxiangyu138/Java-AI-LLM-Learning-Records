@@ -1,6 +1,6 @@
 # 02 - Stream API 深度实战
 
-> 🎯 Stream 是 Java 函数式编程的核心——filter/map/reduce 替代 for 循环，代码量减少 70%。AI 数据处理（筛选、转换、聚合）几乎离不开 Stream
+> Stream 是 Java 函数式编程的核心——filter/map/reduce 替代 for 循环，代码量减少 70%。AI 数据处理（筛选、转换、聚合）几乎离不开 Stream
 
 ---
 
@@ -117,15 +117,15 @@ List<Integer> result = list.parallelStream()
     .map(this::heavyComputation)
     .toList();
 
-// ⚠️ 陷阱 1: 不要用并行流操作共享可变状态
-int[] sum = {0};  // ❌ 线程不安全
+// 陷阱 1: 不要用并行流操作共享可变状态
+int[] sum = {0};  // ✗ 线程不安全
 list.parallelStream().forEach(i -> sum[0] += i);
 
-// ⚠️ 陷阱 2: parallelStream 使用 ForkJoinPool.commonPool()
+// 陷阱 2: parallelStream 使用 ForkJoinPool.commonPool()
 // Hibernate Session 绑定在主线程 → parallelStream 中不可用
 // 解决：Spring @Async 代替，或用自定义 ForkJoinPool
 
-// ⚠️ 陷阱 3: 小数据量用并行反而更慢（线程调度开销）
+// 陷阱 3: 小数据量用并行反而更慢（线程调度开销）
 // < 1000 条数据 → 不用并行
 ```
 

@@ -1,6 +1,6 @@
 # 03 - 异步编程：Promise 与 async/await
 
-> 🎯 Node.js 的灵魂是异步 I/O——理解事件循环、Promise、async/await，才能写出不阻塞、不卡死的代码。这是 Java 开发者最容易踩坑的地方
+> Node.js 的灵魂是异步 I/O——理解事件循环、Promise、async/await，才能写出不阻塞、不卡死的代码。这是 Java 开发者最容易踩坑的地方
 
 ---
 
@@ -40,7 +40,7 @@ Node.js 单线程怎么处理 1000 个并发请求？
 ### 2.1 Callback（回调地狱）
 
 ```javascript
-// ❌ 回调地狱 — 深层嵌套，不可维护
+// ✗ 回调地狱 — 深层嵌套，不可维护
 fs.readFile('a.txt', (err, dataA) => {
     if (err) throw err;
     fs.readFile('b.txt', (err, dataB) => {
@@ -56,7 +56,7 @@ fs.readFile('a.txt', (err, dataA) => {
 ### 2.2 Promise
 
 ```javascript
-// ✅ Promise — 链式调用，告别嵌套
+// ✓ Promise — 链式调用，告别嵌套
 function readFile(path) {
     return new Promise((resolve, reject) => {
         fs.readFile(path, (err, data) => {
@@ -76,7 +76,7 @@ readFile('a.txt')
 ### 2.3 async/await（推荐）
 
 ```javascript
-// 🏆 async/await — 像写同步代码一样写异步
+// async/await — 像写同步代码一样写异步
 async function readAll() {
     try {
         const [dataA, dataB, dataC] = await Promise.all([
@@ -132,8 +132,8 @@ fetchData()
 })();
 
 // 规则 4：绝不要混用 async/await 和 .then()
-// ✅ 统一用 async/await
-// ❌ const data = await fetch().then(r => r.json())  // 混乱
+// ✓ 统一用 async/await
+// ✗ const data = await fetch().then(r => r.json())  // 混乱
 ```
 
 ## 核心要点回顾

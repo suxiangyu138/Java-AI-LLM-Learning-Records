@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [Wrapper 体系与选型](#1-wrapper-体系与选型)
 2. [条件方法全景](#2-条件方法全景)
@@ -21,7 +21,7 @@
 ```text
 Wrapper（抽象基类）
 ├── QueryWrapper        —— 查询条件（字符串字段名）
-│     └── LambdaQueryWrapper —— 查询条件（方法引用，类型安全）✅ 首选
+│     └── LambdaQueryWrapper —— 查询条件（方法引用，类型安全）✓ 首选
 ├── UpdateWrapper       —— 更新条件 + set 列（字符串）
 │     └── LambdaUpdateWrapper —— 同上（方法引用）
 └── AbstractLambdaWrapper —— 两者的 Lambda 公共基类
@@ -30,8 +30,8 @@ Wrapper（抽象基类）
 | 维度 | QueryWrapper | LambdaQueryWrapper |
 |------|:------------:|:------------------:|
 | 字段写法 | 字符串 `"user_name"` | **方法引用 `User::getUserName`** |
-| 编译期检查 | ❌ 写错静默（SQL 报错才知） | ✅ 类型安全 |
-| 重构友好 | ❌ 字段改名要改字符串 | ✅ 编译器自动 | 
+| 编译期检查 | ✗ 写错静默（SQL 报错才知） | ✓ 类型安全 |
+| 重构友好 | ✗ 字段改名要改字符串 | ✓ 编译器自动 | 
 | 适用 | 多表联查（跨表字段用字符串） | **单表操作（默认首选）** |
 
 ```java
@@ -48,7 +48,7 @@ List<Map<String, Object>> rows = userMapper.selectMaps(
                 .orderByDesc("u.create_time"));
 ```
 
-> 🎯 **核心要点**：**单表无脑 Lambda**（编译期安全），多表联查用 QueryWrapper 字符串（跨表字段必须字符串）。3.5.17 起 Wrapper 支持 XML 别名配置与 typeHandler 自动识别——复杂映射场景更顺手。
+> **核心要点**：**单表无脑 Lambda**（编译期安全），多表联查用 QueryWrapper 字符串（跨表字段必须字符串）。3.5.17 起 Wrapper 支持 XML 别名配置与 typeHandler 自动识别——复杂映射场景更顺手。
 
 ---
 
@@ -80,7 +80,7 @@ userMapper.selectList(new LambdaQueryWrapper<User>()
         .last("limit 20"));                                    // 追加（慎用）
 ```
 
-> 💡 **性能提示**：`like`（`%x%`）无法走索引（前导通配）；前缀匹配用 `likeRight`（`x%`）可走索引——数据量大时这是隐性性能差异。
+> **性能提示**：`like`（`%x%`）无法走索引（前导通配）；前缀匹配用 `likeRight`（`x%`）可走索引——数据量大时这是隐性性能差异。
 
 ---
 
@@ -89,12 +89,12 @@ userMapper.selectList(new LambdaQueryWrapper<User>()
 **陷阱**：`.eq(User::getStatus, null)` 会生成 `WHERE status = null`——**SQL 三值逻辑下永远查不到数据**（不是"跳过条件"！）：
 
 ```java
-// ❌ 危险：条件值为 null 时查询结果为空
+// ✗ 危险：条件值为 null 时查询结果为空
 List<User> list = userMapper.selectList(
         new LambdaQueryWrapper<User>()
                 .eq(User::getStatus, status));      // status=null → WHERE status = null → 空结果
 
-// ✅ 条件重载：第一个参数是 boolean condition
+// ✓ 条件重载：第一个参数是 boolean condition
 List<User> list = userMapper.selectList(
         new LambdaQueryWrapper<User>()
                 .eq(status != null, User::getStatus, status));   // false → 整段条件跳过
@@ -116,7 +116,7 @@ List<User> list = userMapper.selectList(new LambdaQueryWrapper<User>()
 // 或者封装工具：eqIfNotNull(wrapper, col, val)
 ```
 
-> ⚠️ **同类陷阱**：`like(col, null)` 拼 `%null%`；`in(col, 空集合)` 拼 `IN ()` 语法错误——**动态条件一律用条件重载**（或判空后拼接）。
+> **同类陷阱**：`like(col, null)` 拼 `%null%`；`in(col, 空集合)` 拼 `IN ()` 语法错误——**动态条件一律用条件重载**（或判空后拼接）。
 
 ---
 
@@ -134,10 +134,10 @@ wrapper.and(w -> w.like(User::getName, "张").or().eq(User::getStatus, 1))
 **or 的正确使用**（经典坑：or 裸用会扩大范围）：
 
 ```java
-// ❌ 坑：eq(...).or().eq(...) —— OR 与前面的条件平级，可能破坏语义
+// ✗ 坑：eq(...).or().eq(...) —— OR 与前面的条件平级，可能破坏语义
 // SQL：WHERE a = 1 OR b = 2 AND c = 3（AND 优先级更高，结果与直觉不符）
 
-// ✅ 规范：or 包裹成组
+// ✓ 规范：or 包裹成组
 wrapper.eq(User::getStatus, 1)
        .and(w -> w.like(User::getName, "张").or().eq(User::getPhone, "138"));
 // SQL：WHERE status = 1 AND (name LIKE '%张%' OR phone = '138')
@@ -149,10 +149,10 @@ wrapper.eq(User::getStatus, 1)
 // 子查询：查"有订单的用户"
 wrapper.inSql(User::getId, "SELECT user_id FROM order WHERE status = 1");
 // SQL：WHERE id IN (SELECT user_id FROM order WHERE status = 1)
-// ⚠️ inSql 是 SQL 拼接 —— 内容必须是可信常量，禁止拼接用户输入！
+// inSql 是 SQL 拼接 —— 内容必须是可信常量，禁止拼接用户输入！
 ```
 
-> 🎯 **核心要点**：嵌套条件的规则 = **"or 必须进括号"**——`and(w -> ...)` 包裹组条件，避免 OR 平级扩大语义；子查询用 `inSql` 时**内容必须可信**（拼接用户输入 = SQL 注入）。
+> **核心要点**：嵌套条件的规则 = **"or 必须进括号"**——`and(w -> ...)` 包裹组条件，避免 OR 平级扩大语义；子查询用 `inSql` 时**内容必须可信**（拼接用户输入 = SQL 注入）。
 
 ---
 
@@ -193,7 +193,7 @@ userMapper.update(null, new LambdaUpdateWrapper<User>()
         .set(age != null, User::getAge, age));
 ```
 
-> 🎯 **核心要点**：动态条件 = **条件重载（condition 参数）是首选写法**——可读、安全、无 null 陷阱；"定位条件 + 动态 set"是 UpdateWrapper 的标配姿势。**UPDATE 永远先写定位条件**（配合防全表插件，见 06 模块）。
+> **核心要点**：动态条件 = **条件重载（condition 参数）是首选写法**——可读、安全、无 null 陷阱；"定位条件 + 动态 set"是 UpdateWrapper 的标配姿势。**UPDATE 永远先写定位条件**（配合防全表插件，见 06 模块）。
 
 ---
 
@@ -232,7 +232,7 @@ List<UserOrderDto> list = userMapper.selectUserWithOrders(
 | 参数名固定 `ew` | `@Param(Constants.WRAPPER)`（常量值 `"ew"`，不能改） |
 | 返回类型 | 可以是 DTO（`resultType` 指定），不限于实体 |
 
-> ⚠️ **安全注意**：`${ew.customSqlSegment}` 拼接的是 **Wrapper 生成的 SQL 片段**——Wrapper 内部对值参数做预编译（`?`），但**手动 `.apply("...")` 拼的内容是裸 SQL**——生产禁止把用户输入拼进 apply/last（见下节）。
+> **安全注意**：`${ew.customSqlSegment}` 拼接的是 **Wrapper 生成的 SQL 片段**——Wrapper 内部对值参数做预编译（`?`），但**手动 `.apply("...")` 拼的内容是裸 SQL**——生产禁止把用户输入拼进 apply/last（见下节）。
 
 ---
 
@@ -246,13 +246,13 @@ List<UserOrderDto> list = userMapper.selectUserWithOrders(
 | `.apply("DATE(create_time) = {0}", date)` | 追加条件片段（可用占位符） | 占位符安全；字符串拼接危险 |
 
 ```java
-// ✅ 安全用法：占位符方式（值参数预编译）
+// ✓ 安全用法：占位符方式（值参数预编译）
 wrapper.apply("DATE(create_time) = {0}", LocalDate.now());   // 值走占位符 → 安全
 wrapper.last("FOR UPDATE");                                   // 悲观锁（合法用途）
 
-// ❌ 危险用法：拼接用户输入
-wrapper.apply("status = " + status);        // ❌ SQL 注入！（status 是用户输入）
-wrapper.last("and name like '%" + name + "%'");   // ❌ 双重危险
+// ✗ 危险用法：拼接用户输入
+wrapper.apply("status = " + status);        // ✗ SQL 注入！（status 是用户输入）
+wrapper.last("and name like '%" + name + "%'");   // ✗ 双重危险
 ```
 
 **使用规范**（生产红线）：
@@ -262,7 +262,7 @@ wrapper.last("and name like '%" + name + "%'");   // ❌ 双重危险
 3. **优先官方方法**：分页用 `Page`（不要 last 拼 limit）、锁行用 `selectForUpdate` 或专门的 wrapper 方式；
 4. **代码评审拦截**：`.apply(` 带 `+` 拼接、`.last(` 非白名单——直接打回。
 
-> 🎯 **核心要点**：apply/last 是 Wrapper 的"后门"——**用占位符保安全、用白名单保语义**。能不用就不用（官方方法覆盖 95% 场景），用了就按两条红线评审。
+> **核心要点**：apply/last 是 Wrapper 的"后门"——**用占位符保安全、用白名单保语义**。能不用就不用（官方方法覆盖 95% 场景），用了就按两条红线评审。
 
 ---
 

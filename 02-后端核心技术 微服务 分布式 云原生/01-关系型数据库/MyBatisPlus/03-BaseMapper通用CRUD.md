@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [API 全景：四大方法族](#1-api-全景四大方法族)
 2. [select 家族详解](#2-select-家族详解)
@@ -46,7 +46,7 @@ public interface BaseMapper<T> extends Mapper<T> {
 
 **统一返回值语义**：所有写方法返回 **int（影响行数）**——**必须检查**（尤其乐观锁场景，见 02 模块第 5 节）。
 
-> 🎯 **核心要点**：BaseMapper = "**单表操作全家桶**"——查询四种形态（按 id/按条件/按 Map/分页）+ 写操作三件套。80% 的单表需求它直接覆盖，剩下的交给 Wrapper 与自定义 SQL。
+> **核心要点**：BaseMapper = "**单表操作全家桶**"——查询四种形态（按 id/按条件/按 Map/分页）+ 写操作三件套。80% 的单表需求它直接覆盖，剩下的交给 Wrapper 与自定义 SQL。
 
 ---
 
@@ -76,7 +76,7 @@ Long count = userMapper.selectCount(                         // 计数
         new LambdaQueryWrapper<User>().ge(User::getAge, 18));
 ```
 
-> ⚠️ **selectOne 的两个坑**：① 条件不唯一（查到多条）抛 `TooManyResultsException`；② 配合逻辑删除时"已删数据"不参与——**判断"手机号是否被占用"前要想清楚逻辑删除语义**（见 08 模块唯一索引冲突）。
+> **selectOne 的两个坑**：① 条件不唯一（查到多条）抛 `TooManyResultsException`；② 配合逻辑删除时"已删数据"不参与——**判断"手机号是否被占用"前要想清楚逻辑删除语义**（见 08 模块唯一索引冲突）。
 
 ---
 
@@ -100,10 +100,10 @@ int rows = userMapper.insert(user);
 User u = new User();
 u.setName("张三");
 userMapper.insert(u);
-System.out.println(u.getId());    // ✅ 雪花 ID 已回填 —— 无需再次查询
+System.out.println(u.getId());    // ✓ 雪花 ID 已回填 —— 无需再次查询
 ```
 
-> 🎯 **核心要点**：insert 的智能点 = **null 字段不插入 + 主键回填 + 自动填充**——实体只需设置非默认字段；"insert 后马上用 id"是标配姿势。
+> **核心要点**：insert 的智能点 = **null 字段不插入 + 主键回填 + 自动填充**——实体只需设置非默认字段；"insert 后马上用 id"是标配姿势。
 
 ---
 
@@ -126,7 +126,7 @@ userMapper.updateById(u);
 // 显式置 null：用 UpdateWrapper.set
 userMapper.update(null, new LambdaUpdateWrapper<User>()
         .eq(User::getId, 1L)
-        .set(User::getRemark, null));     // ✅ 显式 SET remark = null
+        .set(User::getRemark, null));     // ✓ 显式 SET remark = null
 ```
 
 **三个高频坑**：
@@ -135,7 +135,7 @@ userMapper.update(null, new LambdaUpdateWrapper<User>()
 2. **无 WHERE 条件更新**：`update(entity, wrapper)` 传空 Wrapper = 全表更新（**生产禁止**——用 `BlockAttackInnerInterceptor` 拦截，见 06 模块）；
 3. **乐观锁字段**：`@Version` 字段自动参与 `WHERE version=?`（插件注册后，见 02 模块第 5 节）。
 
-> 🎯 **核心要点**：**"updateById 更新非 null 字段"是 MP 的核心更新语义**——做"部分更新"（表单只传修改字段）极其方便；但"置 null""全表更新"需要显式手段。记一句：**想跳过 null 用 updateById，想操作 null 用 UpdateWrapper**。
+> **核心要点**：**"updateById 更新非 null 字段"是 MP 的核心更新语义**——做"部分更新"（表单只传修改字段）极其方便；但"置 null""全表更新"需要显式手段。记一句：**想跳过 null 用 updateById，想操作 null 用 UpdateWrapper**。
 
 ---
 
@@ -163,7 +163,7 @@ int rows2 = userMapper.delete(new LambdaQueryWrapper<User>()
 
 **选择建议**：**有审计/恢复需求的表用逻辑删除**（用户、订单）；纯临时数据（日志明细）用物理删除。逻辑删除的代价 = 所有查询自动加条件 + 唯一索引冲突风险（08 模块）。
 
-> 🎯 **核心要点**：delete 的语义由 **@TableLogic 决定**——删除操作"看起来一样"，实际执行可能完全不同。**"delete 前先想清楚物理还是逻辑"是设计决策，不是代码决策**。
+> **核心要点**：delete 的语义由 **@TableLogic 决定**——删除操作"看起来一样"，实际执行可能完全不同。**"delete 前先想清楚物理还是逻辑"是设计决策，不是代码决策**。
 
 ---
 
@@ -188,7 +188,7 @@ int rows2 = userMapper.delete(new LambdaQueryWrapper<User>()
 - `@TableField(exist = false)` 的字段**不参与**生成 SQL（否则报"列不存在"）；
 - 手写自定义方法（XML/`@Select`）**不经过** SQL 注入器——逻辑删除条件等不会自动拼（02 模块第 4 节）。
 
-> 🎯 **核心要点**：MP 通用方法的本质 = **启动期用 SQL 注入器为接口方法生成 SQL**（与手写 XML 走同一条 MappedStatement 通道）。排障口诀：**"SQL 不对先看生成的 SQL 长什么样"**（开启 `log-impl: StdOutImpl`），再回到实体映射找原因（源码见 `MyBatis/09-MyBatis源码导读.md`）。
+> **核心要点**：MP 通用方法的本质 = **启动期用 SQL 注入器为接口方法生成 SQL**（与手写 XML 走同一条 MappedStatement 通道）。排障口诀：**"SQL 不对先看生成的 SQL 长什么样"**（开启 `log-impl: StdOutImpl`），再回到实体映射找原因（源码见 `MyBatis/09-MyBatis源码导读.md`）。
 
 **CRUD 场景 → 方法对照速查**（面试/开发速记）：
 
@@ -206,7 +206,7 @@ int rows2 = userMapper.delete(new LambdaQueryWrapper<User>()
 | 按主键删除 | `deleteById(id)`（逻辑删除自动改写） |
 | 条件删除 | `delete(wrapper)` |
 
-> 💡 速记逻辑：**查询四形态（id/one/list/page）+ 写入三件套（insert/updateById/条件 update）+ 删除按主键或条件**——BaseMapper 的核心方法覆盖全部单表需求。
+> 速记逻辑：**查询四形态（id/one/list/page）+ 写入三件套（insert/updateById/条件 update）+ 删除按主键或条件**——BaseMapper 的核心方法覆盖全部单表需求。
 
 ---
 

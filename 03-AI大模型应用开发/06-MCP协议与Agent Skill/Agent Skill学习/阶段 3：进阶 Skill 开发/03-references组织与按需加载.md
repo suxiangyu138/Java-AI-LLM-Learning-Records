@@ -2,7 +2,7 @@
 
 > 深度的正确存放方式：references 用 JIT 指针（明确告诉 Agent"何时读哪个文件"）、保持一层深度（防跳过）、超 100 行加目录、大操作走 --help——"不读则不加载，要读则明确指路"。
 
-## 📚 目录
+## 目录
 
 1. [references 的定位](#1-references-的定位)
 2. [JIT 指针：明确告诉何时读](#2-jit-指针明确告诉何时读)
@@ -92,9 +92,9 @@ SKILL.md → references/edge-cases.md（直接可达）
 
 ```
 所有引用文件直接放 references/ 根（或一层子目录）：
-✅ references/edge-cases.md
-✅ references/style/overview.md（一层子目录可接受）
-❌ references/a.md → 引 b.md → 引 c.md（链式）
+✓ references/edge-cases.md
+✓ references/style/overview.md（一层子目录可接受）
+✗ references/a.md → 引 b.md → 引 c.md（链式）
 ```
 
 ### 判断标准
@@ -219,7 +219,7 @@ SKILL.md 只列 80% 的常用操作：
 
 > "references 的组织目标是'读得准、读得少'：JIT 指针在正文里精确写'遇到 X 读 references/Y.md'，而不是模糊说参考文档；保持一层深度（链式嵌套 Agent 会跳过）；超 100 行加目录、超几百行按主题拆文件。配合 --help 模式（SKILL.md 只列 80% 常用）和路由列表（文件+内容+何时读），L3 加载完全可控。"
 
-> 🎯 核心要点：references = L3 按需加载（读得准读得少）；JIT 指针三要素（触发条件/文件/目的）；一层深度（一跳可达）；大文件加目录/按主题拆；--help 模式（精简 + 自维护）；路由列表（文件/内容/何时读）；文件级指针防目录级全加载。
+> 核心要点：references = L3 按需加载（读得准读得少）；JIT 指针三要素（触发条件/文件/目的）；一层深度（一跳可达）；大文件加目录/按主题拆；--help 模式（精简 + 自维护）；路由列表（文件/内容/何时读）；文件级指针防目录级全加载。
 
 ---
 

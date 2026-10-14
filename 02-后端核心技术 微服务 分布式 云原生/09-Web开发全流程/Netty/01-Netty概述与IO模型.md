@@ -1,6 +1,6 @@
 # 01 - Netty 概述与 IO 模型
 
-> 🎯 Netty 的选择不是偶然 — BIO 的阻塞困境、NIO 的编程复杂度、AIO 的成熟度不足。理解 IO 模型的演进才能理解 Netty 为什么是最终答案
+> Netty 的选择不是偶然 — BIO 的阻塞困境、NIO 的编程复杂度、AIO 的成熟度不足。理解 IO 模型的演进才能理解 Netty 为什么是最终答案
 
 ---
 
@@ -46,11 +46,11 @@
 // 每个连接一个线程 — 线程资源浪费
 ServerSocket server = new ServerSocket(8080);
 while (true) {
-    Socket client = server.accept();   // ⚠️ 阻塞等待连接
+    Socket client = server.accept();   // 阻塞等待连接
     new Thread(() -> {
         InputStream in = client.getInputStream();
         byte[] buf = new byte[1024];
-        int len = in.read(buf);        // ⚠️ 阻塞等待数据
+        int len = in.read(buf);        // 阻塞等待数据
         // 处理...
     }).start();
 }
@@ -91,12 +91,12 @@ while (true) {
 
 | 模型 | 阻塞 | 数据读写 | 线程模型 | 适用 |
 |------|:---:|------|------|------|
-| **BIO** | ✅ | 流式 | 1 连接 1 线程 | 低并发（< 1000） |
-| **NIO** | ❌ | 缓冲区 | 1 线程 N 连接 | ⭐ 高并发 |
-| **AIO** | ❌ | 回调 | OS 通知 | Windows（Linux 不成熟） |
-| **Epoll** | ❌ | 缓冲区 | 1 线程 N 连接 | Linux 高性能（Netty 底层） |
+| **BIO** | ✓ | 流式 | 1 连接 1 线程 | 低并发（< 1000） |
+| **NIO** | ✗ | 缓冲区 | 1 线程 N 连接 | ★ 高并发 |
+| **AIO** | ✗ | 回调 | OS 通知 | Windows（Linux 不成熟） |
+| **Epoll** | ✗ | 缓冲区 | 1 线程 N 连接 | Linux 高性能（Netty 底层） |
 
-> ⚠️ **Java NIO 的痛点**：API 复杂（Buffer/Channel/Selector）、Epoll 空轮询 Bug、断线重连/粘包拆包需手写 → **Netty 封装了这一切**。
+> **Java NIO 的痛点**：API 复杂（Buffer/Channel/Selector）、Epoll 空轮询 Bug、断线重连/粘包拆包需手写 → **Netty 封装了这一切**。
 
 ---
 
@@ -124,7 +124,7 @@ Reactor（单线程）           Worker 线程池
          └──→ 分发到 Worker 线程池
 ```
 
-### 3.3 主从 Reactor 多线程（⭐ Netty 采用）
+### 3.3 主从 Reactor 多线程（★ Netty 采用）
 
 ```
 Main Reactor（Boss Group）          Sub Reactor（Worker Group）
@@ -174,4 +174,4 @@ ChannelFuture future = bootstrap.bind(8080).sync();
 | **Spring WebFlux** | Reactor Netty 作为默认服务器 |
 | **Spark** | Shuffle 数据传输 |
 
-> 🎯 **Netty 是 Java 中间件的"通用 TCP 引擎"** — 掌握了 Netty，就掌握了 Java 网络通信的底层密码。
+> **Netty 是 Java 中间件的"通用 TCP 引擎"** — 掌握了 Netty，就掌握了 Java 网络通信的底层密码。

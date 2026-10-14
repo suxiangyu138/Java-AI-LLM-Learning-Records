@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [双 API 现状：标准与新方向](#1-双-api-现状标准与新方向)
 2. [chat.completions：参数全解](#2-chatcompletions参数全解)
@@ -127,7 +127,7 @@ resp2 = client.responses.create(
 4. responses 的四个核心价值？previous_response_id 解决什么？
 5. 迁移映射表的五个关键映射？迁移节奏？
 
-> 🎯 **核心要点**：双 API = **chat 标准（messages 全量回放 + max_completion_tokens）+ responses 新方向（previous_response_id 服务端状态 + 内置工具 + 缓存提升 40-80%）**——"新项目 responses、存量不急着迁、两个都会用——参数映射表背熟，迁移只是换写法"。
+> **核心要点**：双 API = **chat 标准（messages 全量回放 + max_completion_tokens）+ responses 新方向（previous_response_id 服务端状态 + 内置工具 + 缓存提升 40-80%）**——"新项目 responses、存量不急着迁、两个都会用——参数映射表背熟，迁移只是换写法"。
 
 ---
 

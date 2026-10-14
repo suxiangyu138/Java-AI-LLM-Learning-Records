@@ -1,7 +1,7 @@
 # 04-Token的存储与传输
 > 定位：Token 存哪里、怎么送，直接决定安全基线——localStorage 是 2026 公认反模式，HttpOnly Cookie 与内存 + 静默刷新是两条正路；Bearer 头与 Cookie 两条传输线各有攻防配套。
 
-## 📚 目录
+## 目录
 1. [存储三方案对比](#1-存储三方案对比)
 2. [Cookie 安全属性全配](#2-cookie-安全属性全配)
 3. [内存存储与静默刷新](#3-内存存储与静默刷新)
@@ -15,9 +15,9 @@
 
 | 存储位置 | XSS 风险 | CSRF 风险 | 持久化 | 适用 |
 |----------|:---:|:---:|:---:|------|
-| **localStorage** | ⚠️ 高（JS 可读） | ✅ 安全（不自动发送） | ✅ | **2026 反模式** |
-| **Cookie HttpOnly** | ✅ 安全（JS 不可读） | ⚠️ 需防 CSRF | ✅ | Web 应用推荐 |
-| **内存（变量）** | ✅ 安全 | ✅ 安全 | ❌（刷新丢失） | SPA + 静默刷新 |
+| **localStorage** | 高（JS 可读） | ✓ 安全（不自动发送） | ✓ | **2026 反模式** |
+| **Cookie HttpOnly** | ✓ 安全（JS 不可读） | 需防 CSRF | ✓ | Web 应用推荐 |
+| **内存（变量）** | ✓ 安全 | ✓ 安全 | ✗（刷新丢失） | SPA + 静默刷新 |
 
 **localStorage 的判决**：任何 XSS（哪怕一行注入）都能 `localStorage.getItem('accessToken')` 偷走全部凭证——XSS 是 Web 第一大漏洞，把令牌放在 XSS 的射程内是 2026 年的公认反模式。内部后台、低安全场景也许可用，但「能用」不等于「应该用」——选 Cookie 或内存。
 
@@ -116,7 +116,7 @@ export async function ensureToken() {
 4. 内存存储为什么必须配静默刷新？
 5. Bearer 头与 Cookie 的攻防配套各是什么？
 
-> 🎯 **核心要点**：存储三方案——localStorage 反模式、Cookie HttpOnly 是 Web 标准、内存 + 静默刷新是 SPA 现代答案；Cookie 属性一个都不能省；Bearer 头防 CSRF 但防不了 XSS；跨域三件套；防重放是纵深防御。
+> **核心要点**：存储三方案——localStorage 反模式、Cookie HttpOnly 是 Web 标准、内存 + 静默刷新是 SPA 现代答案；Cookie 属性一个都不能省；Bearer 头防 CSRF 但防不了 XSS；跨域三件套；防重放是纵深防御。
 
 ---
 

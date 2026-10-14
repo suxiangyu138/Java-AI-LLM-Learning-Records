@@ -1,7 +1,7 @@
 # 04-Git 合并与变基
 > merge vs rebase 是 Git 最经典的争论——核心是在"保留真实历史"和"整洁线性历史"之间做选择，外加冲突解决与 cherry-pick
 
-## 📚 目录
+## 目录
 1. [合并（Merge）的三种策略](#1-合并merge的三种策略)
 2. [变基（Rebase）深度解析](#2-变基rebase深度解析)
 3. [交互式 Rebase：整理提交历史](#3-交互式-rebase整理提交历史)
@@ -71,7 +71,7 @@ git commit -m "feat: complete login module"
 | Three-Way | `git merge <branch>` | 分叉后再汇聚 | 分支并行开发 |
 | No Fast-Forward | `git merge --no-ff <branch>` | 保留分叉记录 | 需要追溯 feature 边界（企业推荐） |
 
-> 💡 企业级建议：**禁止快进，保留合并记录**（`git merge --no-ff`）→ 历史可追溯。
+> 企业级建议：**禁止快进，保留合并记录**（`git merge --no-ff`）→ 历史可追溯。
 
 ## 2. 变基（Rebase）深度解析
 
@@ -92,11 +92,11 @@ main:    A ── B                     main:    A ── B ── C' (feature �
 feature: A ── C (与 B 分叉)         feature:      └ C' ┘ (历史线性化)
 ```
 
-> ⚠️ 注意：`C'` 是**全新的 commit**，hash 不同了！这就是"改写历史"的含义。
+> 注意：`C'` 是**全新的 commit**，hash 不同了！这就是"改写历史"的含义。
 
 ### 2.2 Rebase 黄金法则
 
-> ⚠️ **永远不要 rebase 已经推送到公共仓库的 commit**
+> **永远不要 rebase 已经推送到公共仓库的 commit**
 
 ```text
 为什么？
@@ -110,16 +110,16 @@ feature: A ── C (与 B 分叉)         feature:      └ C' ┘ (历史线�
 ```
 
 ```bash
-# ✅ 安全：rebase 从未 push 过的本地分支
+# ✓ 安全：rebase 从未 push 过的本地分支
 git checkout feature/draft
 git rebase main
 
-# ❌ 危险：rebase 已 push 的分支
+# ✗ 危险：rebase 已 push 的分支
 git checkout feature/shared
 git rebase main
 git push --force    # 同事的本地分支会乱掉！
 
-# ✅ 安全替代：merge
+# ✓ 安全替代：merge
 git checkout feature/shared
 git merge main      # 不重写历史，多一个 merge commit 而已
 ```
@@ -223,7 +223,7 @@ git cherry-pick -n 8a2f8c9           # 只应用变更不自动提交（可合�
 git cherry-pick -e 8a2f8c9           # 提交前编辑 message
 ```
 
-> ⚠️ **独有知识点**：cherry-pick 会创建**新的 commit**（SHA-1 不同），即使内容完全相同。这导致同一修改在两个分支有不同 hash，后续 merge 时 Git 可能无法识别为"已合并"。
+> **独有知识点**：cherry-pick 会创建**新的 commit**（SHA-1 不同），即使内容完全相同。这导致同一修改在两个分支有不同 hash，后续 merge 时 Git 可能无法识别为"已合并"。
 
 ## 5. merge vs rebase 终极对比
 
@@ -262,7 +262,7 @@ Git 自动合并逻辑：
   BASE没这个文件，只有一方有 → 用有的一方
 ```
 
-> 💡 理解 merge 不是"自动合并命令"，而是"**人工判断 + 自动辅助**"。遇到冲突时，任务是理解两边代码的意图，做出正确的业务决策。
+> 理解 merge 不是"自动合并命令"，而是"**人工判断 + 自动辅助**"。遇到冲突时，任务是理解两边代码的意图，做出正确的业务决策。
 
 ## 7. 冲突解决完整指南
 
@@ -318,7 +318,7 @@ git rebase --abort       # 回到 rebase 前
 >>>>>>> feat: add config ← 你的 commit message
 ```
 
-> 💡 **记忆技巧**：Merge：`HEAD` = 你当前分支，`>>>` = 被合并分支；Rebase：`HEAD` = 基准分支（main），`>>>` = 你的补丁。
+> **记忆技巧**：Merge：`HEAD` = 你当前分支，`>>>` = 被合并分支；Rebase：`HEAD` = 基准分支（main），`>>>` = 你的补丁。
 
 ### 7.4 冲突解决高级手段
 
@@ -337,7 +337,7 @@ git config --global mergetool.prompt false
 git diff --name-only --diff-filter=U | xargs wc -l | sort -n
 ```
 
-> 💡 IntelliJ IDEA 三栏可视化：VCS → Git → Resolve Conflicts → 左(ours)/中(base)/右(theirs) → 点击合并（快捷键见 [12](12-Git工具链与IDE集成.md)）。
+> IntelliJ IDEA 三栏可视化：VCS → Git → Resolve Conflicts → 左(ours)/中(base)/右(theirs) → 点击合并（快捷键见 [12](12-Git工具链与IDE集成.md)）。
 
 ### 7.5 策略性放弃与换策略
 
@@ -371,13 +371,13 @@ git config --global rerere.enabled true
 # 2. 相同冲突再次出现 → rerere 自动应用之前的解决方案！
 ```
 
-> 💡 对频繁 rebase 的团队是神器——相同的冲突只需要解决一次。
+> 对频繁 rebase 的团队是神器——相同的冲突只需要解决一次。
 
 ## 9. PR/MR 合并选项
 
 | 选项 | 命令 | 历史效果 | 适用 |
 |------|------|----------|------|
-| **Merge Commit** | `git merge --no-ff` | 保留分支拓扑 + 合并节点 | ✅ 推荐，历史最清晰 |
+| **Merge Commit** | `git merge --no-ff` | 保留分支拓扑 + 合并节点 | ✓ 推荐，历史最清晰 |
 | **Squash and Merge** | `git merge --squash` | 所有 commit 压为 1 个 | 小功能、清理杂乱提交 |
 | **Rebase and Merge** | `git rebase` + `git merge --ff` | 线性历史 | 追求线性历史 |
 
@@ -416,7 +416,7 @@ GitHub/GitLab PR 合并按钮对应：
 
 ## 11. 核心要点
 
-> 🎯 **核心要点**：
+> **核心要点**：
 > - 三种合并：快进（线性）、三方（分叉汇聚）、--no-ff（强制留痕，企业推荐）；
 > - Rebase = 重放提交，产生新 hash；黄金法则：公共分支永不 rebase；
 > - 交互式 rebase 六指令：pick/reword/edit/squash/fixup/drop；

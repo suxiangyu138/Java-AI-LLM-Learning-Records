@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [组件一句话定位](#1-组件一句话定位)
 2. [版本现状（2026-08）](#2-版本现状2026-08)
@@ -56,20 +56,20 @@ R2DBC 驱动本身只提供"非阻塞的 SQL 执行"，业务层仍要面对：*
 | 结果映射 | 手写 RowMapper | 自动映射（R2dbcEntityTemplate 约定） |
 | 与 Spring 生态 | 无集成 | Repository、审计、事件、Boot 自动配置 |
 
-> 🎯 判断标准一句话：**"你的服务是高并发 IO 密集、需要全链路响应式（WebFlux）吗？"**——是，用 Spring Data R2DBC；传统 MVC + 阻塞 JDBC 能扛住的业务，用 [Spring Data JPA](../../Spring%20Data%20系列【数据访问层】/Spring%20Data%20JPA/00-Spring%20Data%20JPA组件总览.md) 更简单——**R2DBC 是"高并发专用武器"，不是默认选项**。
+> 判断标准一句话：**"你的服务是高并发 IO 密集、需要全链路响应式（WebFlux）吗？"**——是，用 Spring Data R2DBC；传统 MVC + 阻塞 JDBC 能扛住的业务，用 [Spring Data JPA](../../Spring%20Data%20系列【数据访问层】/Spring%20Data%20JPA/00-Spring%20Data%20JPA组件总览.md) 更简单——**R2DBC 是"高并发专用武器"，不是默认选项**。
 
 ### 1.2 适用与不适用场景
 
 | 场景 | 适合？ | 说明 |
 |------|:---:|------|
-| WebFlux 全链路响应式服务 | ✅ | 非阻塞从 HTTP 到 SQL 全程（[08 篇](08-WebFlux响应式集成速查.md)） |
-| 高并发 IO 密集（网关、聚合服务、实时推送） | ✅ | 不占线程，线程数需求降低一个量级 |
-| 大数据量流式处理（SQL 流） | ✅ | Flux + 背压天然流式（[07 篇](07-性能优化与批量速查.md)） |
-| 常规业务 CRUD（并发不高） | ⚠️ 可以但没必要 | JPA 更省事（缓存/懒加载/关联） |
-| 复杂关联对象图 | ❌ | **无关联映射**（聚合根模型，关联查询手写 SQL） |
-| 强事务 + 复杂传播 | ⚠️ 部分 | 支持 @Transactional，但响应式场景有线程传播注意（[06 篇](06-响应式事务与并发控制速查.md)） |
+| WebFlux 全链路响应式服务 | ✓ | 非阻塞从 HTTP 到 SQL 全程（[08 篇](08-WebFlux响应式集成速查.md)） |
+| 高并发 IO 密集（网关、聚合服务、实时推送） | ✓ | 不占线程，线程数需求降低一个量级 |
+| 大数据量流式处理（SQL 流） | ✓ | Flux + 背压天然流式（[07 篇](07-性能优化与批量速查.md)） |
+| 常规业务 CRUD（并发不高） | 可以但没必要 | JPA 更省事（缓存/懒加载/关联） |
+| 复杂关联对象图 | ✗ | **无关联映射**（聚合根模型，关联查询手写 SQL） |
+| 强事务 + 复杂传播 | 部分 | 支持 @Transactional，但响应式场景有线程传播注意（[06 篇](06-响应式事务与并发控制速查.md)） |
 
-> ⚠️ **最大认知误区**：把 R2DBC 当"更快的 JDBC"用——性能提升来自**并发模型**（不占线程），不是单条 SQL 更快；单条 SQL 它通常比 JDBC **略慢**（协议开销）。**响应式的前提是整条链路都非阻塞**（连接池、中间件、第三方调用都要 reactive），否则只换数据层没意义（[08 篇](08-WebFlux响应式集成速查.md) 有"阻塞陷阱"专节）。
+> **最大认知误区**：把 R2DBC 当"更快的 JDBC"用——性能提升来自**并发模型**（不占线程），不是单条 SQL 更快；单条 SQL 它通常比 JDBC **略慢**（协议开销）。**响应式的前提是整条链路都非阻塞**（连接池、中间件、第三方调用都要 reactive），否则只换数据层没意义（[08 篇](08-WebFlux响应式集成速查.md) 有"阻塞陷阱"专节）。
 
 ### 1.3 与其他 Spring Data 组件的定位差异
 
@@ -81,7 +81,7 @@ R2DBC 驱动本身只提供"非阻塞的 SQL 执行"，业务层仍要面对：*
 | Spring Data Elasticsearch | ES 9 | 双模 | 文档+向量 | 无 SQL、无事务 |
 | Spring Data Redis | Redis | 双模 | K/V | 无查询 DSL |
 
-> 💡 记忆抓手：**R2DBC = "JDBC 的响应式 + JPA 的简化（聚合根）"**——会 JPA 的开发者上手很快（Repository 语法同源），但必须放下三样东西：一级缓存、懒加载、关联导航（`order.getItems()` 这种直接不行，要手写 join SQL）。
+> 记忆抓手：**R2DBC = "JDBC 的响应式 + JPA 的简化（聚合根）"**——会 JPA 的开发者上手很快（Repository 语法同源），但必须放下三样东西：一级缓存、懒加载、关联导航（`order.getItems()` 这种直接不行，要手写 join SQL）。
 
 ## 2. 版本现状（2026-08）
 
@@ -93,7 +93,7 @@ R2DBC 驱动本身只提供"非阻塞的 SQL 执行"，业务层仍要面对：*
 | 2024.1 | 3.4.x | 1.0.0.RELEASE | 3.4.x | 停止维护 |
 | 2021.2 | 1.5.x | 0.9.x | 2.7.x | EOL |
 
-> ⚠️ **版本策略（2026 起）**：R2DBC 规范在 2020 年 12 月出 1.0（GA）后协议稳定，**新项目直接 Boot 4.1 + SDR 4.1 + r2dbc-spi 1.0**；驱动版本与 Boot 对齐（**r2dbc-mysql 用 `io.asyncer:r2dbc-mysql:1.4.2`**——`dev.miku:r2dbc-mysql` 已归档停更，别用旧坐标，见 [01 篇](01-模块清单.md)）。
+> **版本策略（2026 起）**：R2DBC 规范在 2020 年 12 月出 1.0（GA）后协议稳定，**新项目直接 Boot 4.1 + SDR 4.1 + r2dbc-spi 1.0**；驱动版本与 Boot 对齐（**r2dbc-mysql 用 `io.asyncer:r2dbc-mysql:1.4.2`**——`dev.miku:r2dbc-mysql` 已归档停更，别用旧坐标，见 [01 篇](01-模块清单.md)）。
 
 ### 2.1 4.x 线关键变化（3.5 → 4.0 迁移要点）
 
@@ -145,7 +145,7 @@ R2DBC 驱动本身只提供"非阻塞的 SQL 执行"，业务层仍要面对：*
 | 分布式事务 | Seata / 本地消息表 | @Transactional 只覆盖单数据源 |
 | 复杂 SQL 优化 | 数据库 + 手写 SQL | R2DBC 反而更适合手写 SQL（无 ORM 生成层的干扰） |
 
-> ⚠️ **常见归因错误**：R2DBC 查询慢怪"响应式没用"——单条 SQL 响应式不比 JDBC 快（协议开销略高）；性能价值在**并发模型**（1000 并发下线程占用少一个量级）；排查应看"链路是否全非阻塞 + SQL 是否走索引"，不是看单查询耗时。
+> **常见归因错误**：R2DBC 查询慢怪"响应式没用"——单条 SQL 响应式不比 JDBC 快（协议开销略高）；性能价值在**并发模型**（1000 并发下线程占用少一个量级）；排查应看"链路是否全非阻塞 + SQL 是否走索引"，不是看单查询耗时。
 
 ## 4. 与深度体系的映射
 
@@ -157,7 +157,7 @@ R2DBC 驱动本身只提供"非阻塞的 SQL 执行"，业务层仍要面对：*
 | 07-性能优化与批量速查 | [MySQL 索引原理](../../../../01-关系型数据库/MySQL/04-索引原理与设计.md)、[SQL调优系列](../../../../01-关系型数据库/SQL调优/) |
 | 09-集成地图与常见问题 | [Spring Data JPA 系列](../../Spring%20Data%20系列【数据访问层】/Spring%20Data%20JPA/00-Spring%20Data%20JPA组件总览.md)（双写/迁移对照） |
 
-> 💡 分工约定：**速查页回答"API 怎么写"，深度页回答"数据库/JDBC 怎么工作"**——SQL 执行计划、事务隔离实现、索引原理在 MySQL/JDBC 系列；本系列聚焦"响应式模型 + 聚合根映射 + Repository 编排"。
+> 分工约定：**速查页回答"API 怎么写"，深度页回答"数据库/JDBC 怎么工作"**——SQL 执行计划、事务隔离实现、索引原理在 MySQL/JDBC 系列；本系列聚焦"响应式模型 + 聚合根映射 + Repository 编排"。
 
 ## 5. 快速上手 3 步
 
@@ -226,7 +226,7 @@ spring:
     url: r2dbc:h2:mem:///shop?options=DB_CLOSE_DELAY=-1
 ```
 
-> 💡 注意与 JDBC 的差异：**R2DBC 连接串前缀是 `r2dbc:`**（`r2dbc:mysql:` / `r2dbc:postgresql:` / `r2dbc:h2:`），不是 `jdbc:`；配错前缀启动直接报"Unknown driver"。
+> 注意与 JDBC 的差异：**R2DBC 连接串前缀是 `r2dbc:`**（`r2dbc:mysql:` / `r2dbc:postgresql:` / `r2dbc:h2:`），不是 `jdbc:`；配错前缀启动直接报"Unknown driver"。
 
 ### 5.2 三步验证集成真的通了
 
@@ -236,7 +236,7 @@ spring:
 | ② 写读验证 | save 一条 → findById（block 或测试里 stepVerifier） | 返回同一实体，id 已回填 |
 | ③ 控制台核对 | mysql 客户端查 `select * from product` | 行存在，列与实体一致 |
 
-> 💡 排障起点：**先确认 R2DBC URL 前缀与驱动坐标**——`NoSuchBeanDefinitionException: ConnectionFactory` 或 `Unknown driver` 一般是 starter 没引全/URL 写错；数据库层问题同 JDBC 排查路径（[JDBC-00](../../../../01-关系型数据库/JDBC/00-JDBC知识体系总览.md)）。
+> 排障起点：**先确认 R2DBC URL 前缀与驱动坐标**——`NoSuchBeanDefinitionException: ConnectionFactory` 或 `Unknown driver` 一般是 starter 没引全/URL 写错；数据库层问题同 JDBC 排查路径（[JDBC-00](../../../../01-关系型数据库/JDBC/00-JDBC知识体系总览.md)）。
 
 ## 6. 速查导航
 

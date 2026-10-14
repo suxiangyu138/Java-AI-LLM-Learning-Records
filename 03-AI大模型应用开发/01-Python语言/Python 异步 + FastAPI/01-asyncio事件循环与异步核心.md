@@ -1,7 +1,7 @@
 # 01 asyncio 事件循环与异步核心
 > 异步的地基：事件循环运行模型 + Task 生命周期 + 取消与超时 + Python 3.14 的变化
 
-## 📚 目录
+## 目录
 1. [事件循环：单线程如何"并发"](#1-事件循环单线程如何并发)
 2. [协程 / Task / Future 三件套](#2-协程--task--future-三件套)
 3. [调度细节：await 时发生了什么](#3-调度细节await-时发生了什么)
@@ -41,17 +41,17 @@
 | Future | 结果容器（IO 完成时由回调填充） |
 | epoll/select | 事件循环的"眼睛"，监听 socket 可读/可写/超时 |
 
-> 🎯 **核心要点**：异步高并发的秘密 = **"等待的时间交给别人"**。一个请求的 IO 等待（网络往返常占 90%+ 耗时）期间，事件循环去跑其他请求的代码——单线程也能扛千级并发，代价是不能有长时间阻塞操作（§4 反模式）。
+> **核心要点**：异步高并发的秘密 = **"等待的时间交给别人"**。一个请求的 IO 等待（网络往返常占 90%+ 耗时）期间，事件循环去跑其他请求的代码——单线程也能扛千级并发，代价是不能有长时间阻塞操作（§4 反模式）。
 
 ### 1.2 IO 密集 vs CPU 密集（适用性判断）
 
 | 场景 | 异步效果 | 说明 |
 |------|:---:|------|
-| 网络请求 / 数据库 / 文件 | ⭐⭐⭐ | 等待时间长，让出收益巨大 |
-| 计算 / 正则 / 解析大量数据 | ⭐ | 不等待，让出无收益，还增加开销 |
-| 混合 | ⭐⭐ | CPU 部分用 to_thread / 进程池（02 章） |
+| 网络请求 / 数据库 / 文件 | ★★★ | 等待时间长，让出收益巨大 |
+| 计算 / 正则 / 解析大量数据 | ★ | 不等待，让出无收益，还增加开销 |
+| 混合 | ★★ | CPU 部分用 to_thread / 进程池（02 章） |
 
-> 💡 判断口诀：**"如果这段代码是等外部结果，用 async；如果是在算，别用 async 骗自己"**。
+> 判断口诀：**"如果这段代码是等外部结果，用 async；如果是在算，别用 async 骗自己"**。
 
 ## 2. 协程 / Task / Future 三件套
 
@@ -76,11 +76,11 @@ await task                        # 等结果
 
 | 对象 | 谁创建 | 能 await 吗 | 说明 |
 |------|--------|:---:|------|
-| 协程对象 | `fetch()` 调用 | ✅ | 不 await 会告警 `never awaited` |
-| Task | `asyncio.create_task()` | ✅ | 并发单元，自动调度 |
-| Future | 框架内部 | ✅ | 结果占位符，Task 是它的子类 |
+| 协程对象 | `fetch()` 调用 | ✓ | 不 await 会告警 `never awaited` |
+| Task | `asyncio.create_task()` | ✓ | 并发单元，自动调度 |
+| Future | 框架内部 | ✓ | 结果占位符，Task 是它的子类 |
 
-> ⚠️ 三大新手坑：(1) `fetch()` 不 await 不 create_task → 协程永远不执行（还能漏出 `RuntimeWarning: coroutine was never awaited`）；(2) `create_task` 必须在**运行中的事件循环**里调用（在 `asyncio.run` 的协程内部才安全）；(3) 创建了 Task 就要负责等它/取消它——挂着不等的 Task 在程序退出时可能被静默丢弃（3.14 起改为显式警告）。
+> 三大新手坑：(1) `fetch()` 不 await 不 create_task → 协程永远不执行（还能漏出 `RuntimeWarning: coroutine was never awaited`）；(2) `create_task` 必须在**运行中的事件循环**里调用（在 `asyncio.run` 的协程内部才安全）；(3) 创建了 Task 就要负责等它/取消它——挂着不等的 Task 在程序退出时可能被静默丢弃（3.14 起改为显式警告）。
 
 ## 3. 调度细节：await 时发生了什么
 
@@ -115,7 +115,7 @@ await expr 展开为三步：
  ③ 目标完成（结果填充/异常抛出）→ 当前协程回到就绪队列继续
 ```
 
-> 🎯 **核心要点**：`await` 不是"等待"的意思，是"**让出 + 注册回调**"。理解这一点，就能解释为什么异步服务能同时处理上千请求——每个请求的协程都在"等 IO"时让出了。
+> **核心要点**：`await` 不是"等待"的意思，是"**让出 + 注册回调**"。理解这一点，就能解释为什么异步服务能同时处理上千请求——每个请求的协程都在"等 IO"时让出了。
 
 ## 4. 任务取消与 shield
 
@@ -159,10 +159,10 @@ async def main():
         print("外层取消了，但关键操作还在跑")
 
 async def shield_critical():
-    await asyncio.shield(critical_commit())   # ⚠️ 结果是"取消被推迟到 critical 完成后"
+    await asyncio.shield(critical_commit())   # 结果是"取消被推迟到 critical 完成后"
 ```
 
-> ⚠️ shield 的语义陷阱：`shield` 包住的协程**不是真的不可取消**——外层取消时，`await shield(...)` 立即抛 CancelledError，**被 shield 的协程继续在后台运行**（成孤儿任务）。正确用法是 3.11+ 的 `TaskGroup` + 手动管理，或确认"被 shield 的操作可安全后台完成"。
+> shield 的语义陷阱：`shield` 包住的协程**不是真的不可取消**——外层取消时，`await shield(...)` 立即抛 CancelledError，**被 shield 的协程继续在后台运行**（成孤儿任务）。正确用法是 3.11+ 的 `TaskGroup` + 手动管理，或确认"被 shield 的操作可安全后台完成"。
 
 ## 5. 超时：asyncio.timeout 与 wait_for
 
@@ -180,12 +180,12 @@ result = await asyncio.wait_for(slow_api(), timeout=2)
 
 | API | 行为 | 适用 |
 |-----|------|------|
-| `asyncio.timeout(sec)` | 超时抛 `TimeoutError`，**自动取消被包协程** | ⭐ 首选（3.11+） |
+| `asyncio.timeout(sec)` | 超时抛 `TimeoutError`，**自动取消被包协程** | ★ 首选（3.11+） |
 | `asyncio.wait_for` | 同上 | 老代码/需 Task 对象 |
 | `asyncio.timeout_at(deadline)` | 绝对时间点（循环调用的截止线） | 多次调用的总预算 |
 | `loop.sock_*` 内部超时 | socket 级 | 底层库 |
 
-> 💡 超时是异步代码的**必备卫生习惯**：任何 await 外部 IO（HTTP/DB/第三方）都必须有超时，否则一个卡死的上游会把整个事件循环的服务拖满（FastAPI 一章会反复强调）。
+> 超时是异步代码的**必备卫生习惯**：任何 await 外部 IO（HTTP/DB/第三方）都必须有超时，否则一个卡死的上游会把整个事件循环的服务拖满（FastAPI 一章会反复强调）。
 
 ## 6. 结构化并发：TaskGroup
 
@@ -204,12 +204,12 @@ async def main():
 
 | 特性 | TaskGroup | gather / create_task 裸用 |
 |------|:---:|:---:|
-| 失败即取消全体 | ✅（任一失败，全组取消） | ❌（其他任务继续跑） |
-| 等待全部完成 | ✅（with 退出即屏障） | 需手动 gather |
+| 失败即取消全体 | ✓（任一失败，全组取消） | ✗（其他任务继续跑） |
+| 等待全部完成 | ✓（with 退出即屏障） | 需手动 gather |
 | 异常处理 | 组内首个异常抛出 | 需 return_exceptions 分析 |
-| 资源安全 | ✅（退出必回收） | 容易泄漏孤儿任务 |
+| 资源安全 | ✓（退出必回收） | 容易泄漏孤儿任务 |
 
-> 🎯 **核心要点**：2026 年写并发**默认 TaskGroup**——"结构化并发"把"创建/等待/清理/失败传播"绑定在一个代码块里，杜绝孤儿任务与半途而废的并发。gather 仅保留在"需要部分结果、失败不扩散"的场合。
+> **核心要点**：2026 年写并发**默认 TaskGroup**——"结构化并发"把"创建/等待/清理/失败传播"绑定在一个代码块里，杜绝孤儿任务与半途而废的并发。gather 仅保留在"需要部分结果、失败不扩散"的场合。
 
 ## 7. asyncio.run 与 Runner 的正确用法
 
@@ -235,7 +235,7 @@ with Runner() as runner:
 | 其他线程提交任务 | `asyncio.run_coroutine_threadsafe()`（02 章线程桥接） |
 | 获取当前循环 | `asyncio.get_running_loop()`（**禁止** get_event_loop 隐式创建） |
 
-> ⚠️ **3.14 铁律**：`asyncio.get_event_loop()` 在无当前循环时**抛 RuntimeError**（不再隐式创建，主线程也一样）；在协程内部调用直接废弃（deprecated）——一律改用 `get_running_loop()`。老库（如 grpc.aio）因此报错，升级项目时先排查。
+> **3.14 铁律**：`asyncio.get_event_loop()` 在无当前循环时**抛 RuntimeError**（不再隐式创建，主线程也一样）；在协程内部调用直接废弃（deprecated）——一律改用 `get_running_loop()`。老库（如 grpc.aio）因此报错，升级项目时先排查。
 
 ## 8. Python 3.14 异步变化全景
 
@@ -252,7 +252,7 @@ with Runner() as runner:
 
 **3.15（2026-10 发布）预告**：PEP 686 默认 UTF-8（影响文件编码），异步核心继续按弃用通道收尾。
 
-> 🎯 **核心要点**：3.14 的异步主题 = "**线程安全化 + 收紧 API**"。写新代码只要记住三条：`asyncio.run` 进、`get_running_loop` 取、任务归 TaskGroup——就与 3.14 完全兼容。
+> **核心要点**：3.14 的异步主题 = "**线程安全化 + 收紧 API**"。写新代码只要记住三条：`asyncio.run` 进、`get_running_loop` 取、任务归 TaskGroup——就与 3.14 完全兼容。
 
 ## 9. 核心要点
 

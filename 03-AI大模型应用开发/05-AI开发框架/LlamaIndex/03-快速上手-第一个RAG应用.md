@@ -2,7 +2,7 @@
 
 > 从零跑通 LlamaIndex：安装（llama-index 核心 + 集成包）、最小 RAG（VectorStoreIndex 四行建库 + QueryEngine 一行查询）、代码全解——体验"基础 RAG 代码比 LangChain 少 30-40%"。
 
-## 📚 目录
+## 目录
 
 1. [安装与环境](#1-安装与环境)
 2. [最小 RAG 应用](#2-最小-rag-应用)
@@ -192,7 +192,7 @@ for n in nodes:
 
 > 对照结论：**每一行手写代码都有 LlamaIndex 对应物**——原理不变，封装升级；先手写（阶段 2）再框架（本体系），理解不会丢。
 
-> 🎯 核心要点：最小 RAG = 4 行（读取/建索引/引擎/查询）；Settings 是全局配置中心（一次配置全链路）；DeepSeek 走 OpenAI 兼容（api_base 指向 deepseek.com）；中文嵌入换 BGE；排错三问（模型/数据/检索）；代码量少 30-40% 是它的封装红利；六练习 + 手写对照表加深理解。
+> 核心要点：最小 RAG = 4 行（读取/建索引/引擎/查询）；Settings 是全局配置中心（一次配置全链路）；DeepSeek 走 OpenAI 兼容（api_base 指向 deepseek.com）；中文嵌入换 BGE；排错三问（模型/数据/检索）；代码量少 30-40% 是它的封装红利；六练习 + 手写对照表加深理解。
 
 ---
 

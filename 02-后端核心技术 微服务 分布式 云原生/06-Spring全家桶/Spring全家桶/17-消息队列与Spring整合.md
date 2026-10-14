@@ -1,5 +1,5 @@
 # 17-消息队列与Spring整合
-> 🎯 P1 就业必备 — RabbitMQ/RocketMQ/Kafka 三大消息中间件的Spring Boot整合实战，覆盖消息可靠性、幂等性、延迟消息、事务消息、死信队列等核心生产场景
+> P1 就业必备 — RabbitMQ/RocketMQ/Kafka 三大消息中间件的Spring Boot整合实战，覆盖消息可靠性、幂等性、延迟消息、事务消息、死信队列等核心生产场景
 
 ---
 
@@ -27,7 +27,7 @@
 ### 1.1 知识定位
 - **归属**：Spring全家桶与微服务 → 层级3 微服务配套中间件 P1 就业必备
 - **前置依赖**：Spring Boot自动装配、RabbitMQ/RocketMQ/Kafka基础概念（建议先学03-RabbitMQ消息队列模块）
-- **重要性**：⭐⭐⭐⭐⭐（微服务解耦、异步、削峰的核心基础设施，面试必考）
+- **重要性**：★★★★★（微服务解耦、异步、削峰的核心基础设施，面试必考）
 
 ### 1.2 三层学习目标
 
@@ -68,7 +68,7 @@
 
 #### 2.1.1 消息队列的本质
 
-> 💡 消息队列（Message Queue）是一种**异步通信中间件**，核心作用是**解耦**、**削峰**、**异步**。
+> 消息队列（Message Queue）是一种**异步通信中间件**，核心作用是**解耦**、**削峰**、**异步**。
 
 | 作用 | 说明 | 典型场景 |
 |------|------|----------|
@@ -514,7 +514,7 @@ public class OrderMultiHandler {
 
 #### 2.2.7 死信队列（DLX）深度解析
 
-> ⚠️ **死信队列是消息可靠性保障的最后一道防线**，理解DLX对生产环境至关重要。
+> **死信队列是消息可靠性保障的最后一道防线**，理解DLX对生产环境至关重要。
 
 **什么是死信队列（Dead Letter Exchange）？**
 
@@ -543,7 +543,7 @@ x-death                   = 死亡历史列表
 | **延迟插件** | 安装 `rabbitmq_delayed_message_exchange` 插件 | 精确延迟、灵活 | 需要额外安装插件 |
 | **官方推荐** | TTL + DLX 适合简单场景，复杂场景用插件 | — | — |
 
-> 💡 **典型应用**：订单超时未支付自动取消。创建订单时发送一条延迟30分钟的消息，30分钟后消费者检查订单状态，如未支付则自动取消。
+> **典型应用**：订单超时未支付自动取消。创建订单时发送一条延迟30分钟的消息，30分钟后消费者检查订单状态，如未支付则自动取消。
 
 ```java
 // 订单超时取消 — 基于TTL+DLX方案
@@ -706,7 +706,7 @@ public SimpleRabbitListenerContainerFactory rabbitListenerContainerFactory(
 }
 ```
 
-> 💡 **Prefetch 调优原则**：`prefetch=1` 适用于任务耗时不均的场景，可避免某个消费者积压大量消息导致其他消费者空闲；`prefetch>1` 可提升吞吐量，但会降低公平性。一般建议 `prefetch=(预期处理时间/网络延迟)*2` 作为起点。
+> **Prefetch 调优原则**：`prefetch=1` 适用于任务耗时不均的场景，可避免某个消费者积压大量消息导致其他消费者空闲；`prefetch>1` 可提升吞吐量，但会降低公平性。一般建议 `prefetch=(预期处理时间/网络延迟)*2` 作为起点。
 
 ---
 
@@ -837,13 +837,13 @@ public class RocketMQNotificationConsumer implements RocketMQListener<OrderCreat
 }
 ```
 
-> 💡 **RocketMQ 消费者两种模式：**
+> **RocketMQ 消费者两种模式：**
 > - `RocketMQListener<T>`：实现 `onMessage` 方法，抛出异常即重试（默认重试16次）
 > - `RocketMQPushConsumer`：原生API，更灵活的控制
 
 #### 2.3.5 事务消息
 
-> ⚠️ **事务消息是RocketMQ区别于其他MQ的核心特性**，用于保证本地事务与消息发送的一致性。
+> **事务消息是RocketMQ区别于其他MQ的核心特性**，用于保证本地事务与消息发送的一致性。
 
 **事务消息流程：**
 
@@ -922,7 +922,7 @@ public class TransactionProducer {
 
 #### 2.3.6 顺序消息
 
-> 💡 顺序消息保证同一业务ID的消息按发送顺序被消费。RocketMQ利用MessageQueue的FIFO特性实现。
+> 顺序消息保证同一业务ID的消息按发送顺序被消费。RocketMQ利用MessageQueue的FIFO特性实现。
 
 **生产者 — 消息队列选择器：**
 
@@ -1212,7 +1212,7 @@ public class KafkaConsumerConfig {
 
 #### 2.5.1 为什么需要幂等性
 
-> ⚠️ **MQ天然存在重复消息**：生产者重试、消费者重试、网络故障等都会导致消息重复。**消费端必须做幂等处理**，即同一条消息处理多次与处理一次的结果相同。
+> **MQ天然存在重复消息**：生产者重试、消费者重试、网络故障等都会导致消息重复。**消费端必须做幂等处理**，即同一条消息处理多次与处理一次的结果相同。
 
 #### 2.5.2 幂等性实现方案
 
@@ -1309,7 +1309,7 @@ public void processOrderPaid(String orderId) {
 | **DB唯一索引** | 绝对可靠 | 性能低于Redis | 金融、交易类（不允许重复） |
 | **业务幂等** | 无需额外存储 | 需要业务支持乐观锁 | 状态流转类业务 |
 
-> 💡 **生产推荐组合**：Redis去重（高性能兜底） + DB唯一索引（最终一致性保障），两条防线确保不会因重复消息造成数据错误。
+> **生产推荐组合**：Redis去重（高性能兜底） + DB唯一索引（最终一致性保障），两条防线确保不会因重复消息造成数据错误。
 
 ---
 
@@ -1431,7 +1431,7 @@ public Queue reliableQueue() {
 | **第二道：MQ保证消息不丢** | 持久化 + 主从同步(镜像队列/ISR) | 集群部署 |
 | **第三道：消费者保证消息必达** | 手动ACK + 幂等 + 重试 + 死信 | 死信队列人工处理 |
 
-> 🎯 **可靠性设计的核心思想**：每条消息的生命周期都要可追踪、可追溯、可补偿。关键路径上的消息必须有唯一的消息ID贯穿始终。
+> **可靠性设计的核心思想**：每条消息的生命周期都要可追踪、可追溯、可补偿。关键路径上的消息必须有唯一的消息ID贯穿始终。
 
 ---
 
@@ -1461,7 +1461,7 @@ public Queue reliableQueue() {
 | **Spring Cloud Stream** | 支持 | 支持 | 支持 |
 | **适用规模** | 中小型到大型 | 中大型（阿里核心场景验证） | 大型到超大型 |
 
-> 🎯 **选型建议**：
+> **选型建议**：
 > - **中小型业务 + 对延迟敏感 + 需要死信队列** → RabbitMQ
 > - **电商/金融 + 需要事务消息 + 需要顺序消息** → RocketMQ
 > - **海量日志/大数据 + 超高吞吐 + 流式计算** → Kafka
@@ -1485,13 +1485,13 @@ public Queue reliableQueue() {
 ### 3.2 RabbitMQ典型错误示例
 
 ```java
-// ❌ 错误：自动ACK + 未处理异常，消息丢失
+// ✗ 错误：自动ACK + 未处理异常，消息丢失
 @RabbitListener(queues = "order.queue")
 public void onMessage(OrderCreatedEvent event) {  // 默认AUTO，抛异常消息被丢弃
     orderService.create(event);  // 如果抛异常，消费者已自动ACK，消息丢失！
 }
 
-// ✅ 正确：手动ACK + 异常处理
+// ✓ 正确：手动ACK + 异常处理
 @RabbitListener(queues = "order.queue")
 public void onMessage(OrderCreatedEvent event, Channel channel,
                       @Header(AmqpHeaders.DELIVERY_TAG) long tag) {
@@ -2346,7 +2346,7 @@ public class OrderEventReceiver {
 }
 ```
 
-> 💡 Spring Cloud Stream 适合需要同时支持多种MQ或未来可能切换MQ的场景，但会牺牲各MQ的原生高级特性（如RocketMQ事务消息）。
+> Spring Cloud Stream 适合需要同时支持多种MQ或未来可能切换MQ的场景，但会牺牲各MQ的原生高级特性（如RocketMQ事务消息）。
 
 ### 8.2 消息堆积处理方案
 
@@ -2460,4 +2460,4 @@ public class MqTraceInterceptor {
 
 ---
 
-> 🎯 **本章核心一句话**：消息队列是微服务解耦与异步的基石，RabbitMQ掌握死信和确认机制，RocketMQ精通事务和顺序消息，Kafka理解分区和消费组，三者结合幂等性和全链路可靠性设计，才能在生产环境中真正用好MQ。
+> **本章核心一句话**：消息队列是微服务解耦与异步的基石，RabbitMQ掌握死信和确认机制，RocketMQ精通事务和顺序消息，Kafka理解分区和消费组，三者结合幂等性和全链路可靠性设计，才能在生产环境中真正用好MQ。

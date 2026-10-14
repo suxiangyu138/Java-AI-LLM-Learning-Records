@@ -1,5 +1,5 @@
 # 20-容器化部署-Docker与K8s
-> 🎯 容器化是现代微服务部署的基石 — 掌握Docker镜像构建、容器编排、Kubernetes集群管理，实现从开发到生产的标准化交付流程
+> 容器化是现代微服务部署的基石 — 掌握Docker镜像构建、容器编排、Kubernetes集群管理，实现从开发到生产的标准化交付流程
 
 ---
 
@@ -26,12 +26,12 @@
 
 - **归属**：Spring全家桶核心组件 → 层级2 P2精通拓展 → 微服务容器化部署
 - **前置依赖**：Spring Boot（微服务构建基础）、Linux基础（文件系统/进程/网络概念）、微服务架构理论、基础的YAML/JSON语法
-- **难度等级**：⭐⭐⭐⭐（涉及两个大型技术栈Docker+K8s，操作性强）
-- **重要性**：⭐⭐⭐⭐⭐（容器化是现代后端开发的必备技能，面试高频考点）
+- **难度等级**：★★★★（涉及两个大型技术栈Docker+K8s，操作性强）
+- **重要性**：★★★★★（容器化是现代后端开发的必备技能，面试高频考点）
 
 ### 1.2 为什么需要容器化部署
 
-> 💡 环境不一致是软件交付最大的痛点。"在我电脑上能跑"不应该成为生产事故的借口。
+> 环境不一致是软件交付最大的痛点。"在我电脑上能跑"不应该成为生产事故的借口。
 
 | 问题 | 传统部署 | 容器化部署 |
 |------|---------|-----------|
@@ -78,7 +78,7 @@ Kubernetes进阶
 | **容器** | Container | 镜像的运行实例，可读可写层，独立进程空间 | 对象（Instance）— 具体运行中 |
 | **仓库** | Registry | 存储和分发镜像的中心化服务 | Maven中央仓库 / Git仓库 |
 
-> 🎯 **镜像=构建时产物，容器=运行时实例，仓库=分发渠道。**
+> **镜像=构建时产物，容器=运行时实例，仓库=分发渠道。**
 
 ### 2.2 Docker架构
 
@@ -161,7 +161,7 @@ Kubernetes进阶
 └──────────────────────────────────────────┘
 ```
 
-> 💡 **分层机制**：每一层都是只读的。当修改文件时，Docker在可写层复制修改（Copy-on-Write）。多个镜像可以共享底层，节省磁盘空间。
+> **分层机制**：每一层都是只读的。当修改文件时，Docker在可写层复制修改（Copy-on-Write）。多个镜像可以共享底层，节省磁盘空间。
 
 **镜像分层的好处**：
 - **节省存储**：多个基于openjdk:17的镜像共享同一层
@@ -207,7 +207,7 @@ kill（直接发送SIGKILL → 状态：Exited(137)）
 rm（彻底删除容器）
 ```
 
-> ⚠️ `docker stop`先发送SIGTERM信号，默认等待10秒后再发送SIGKILL。Spring Boot应用应该捕获SIGTERM实现优雅关闭。
+> `docker stop`先发送SIGTERM信号，默认等待10秒后再发送SIGKILL。Spring Boot应用应该捕获SIGTERM实现优雅关闭。
 
 ---
 
@@ -268,7 +268,7 @@ ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar app.jar"]
 
 ### 3.2 .dockerignore文件
 
-> ⚠️ 不配置.dockerignore会导致构建上下文过大，甚至将敏感信息打包进镜像。
+> 不配置.dockerignore会导致构建上下文过大，甚至将敏感信息打包进镜像。
 
 ```dockerignore
 # .dockerignore — 排除不需要进入构建上下文的文件
@@ -314,13 +314,13 @@ ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar app.jar"]
 ### 3.4 合并RUN指令的层优化
 
 ```dockerfile
-# ❌ 坏实践：每行一个RUN指令，生成多个层
+# ✗ 坏实践：每行一个RUN指令，生成多个层
 RUN apk update
 RUN apk add curl
 RUN apk add tzdata
 RUN rm -rf /var/cache/apk/*
 
-# ✅ 好实践：合并RUN指令，只生成一层
+# ✓ 好实践：合并RUN指令，只生成一层
 RUN apk update && \
     apk add --no-cache curl tzdata && \
     rm -rf /var/cache/apk/*
@@ -431,7 +431,7 @@ gradle jibDockerBuild --image=myapp:1.0
 | **适用场景** | 需要精细控制镜像 | Java项目快速容器化 | Heroku/PaaS风格 | 企业级标准化构建 |
 | **Docker分离（CI友好）** | 需要Docker socket | 无需Docker完全CI友好 | 需要Docker | 无需Docker |
 
-> 💡 **选择建议**：团队对Dockerfile熟悉选Dockerfile；追求构建速度和CI友好选Jib；企业级标准化选Cloud Native Buildpacks。
+> **选择建议**：团队对Dockerfile熟悉选Dockerfile；追求构建速度和CI友好选Jib；企业级标准化选Cloud Native Buildpacks。
 
 ---
 
@@ -732,7 +732,7 @@ services:
 | **none** | 无网络，仅loopback | 完全隔离 | 不通信 | 安全敏感场景 |
 | **macvlan** | 容器有独立MAC地址，像物理机一样接入网络 | 中等 | 需物理网络支持 | 遗留应用网络兼容 |
 
-> 💡 在Docker Compose中不指定network时，默认创建bridge网络。生产环境推荐自定义bridge网络，因为：
+> 在Docker Compose中不指定network时，默认创建bridge网络。生产环境推荐自定义bridge网络，因为：
 > - 自动DNS解析（可以通过服务名称互相访问）
 > - 更好的隔离性
 > - 可以连接多个容器而不对外暴露端口
@@ -747,7 +747,7 @@ services:
 | `depends_on` + `condition: service_healthy` | 等待健康检查通过后才启动依赖服务 | 会持续检查直到状态变为healthy |
 | **典型场景** | 先启动数据库再启动应用 | 确保应用真正就绪了才接收请求 |
 
-> ⚠️ **常见误区**：只写`depends_on: - mysql`而不加`condition: service_healthy`，会导致应用在MySQL尚未就绪时就启动，出现数据库连接失败。
+> **常见误区**：只写`depends_on: - mysql`而不加`condition: service_healthy`，会导致应用在MySQL尚未就绪时就启动，出现数据库连接失败。
 
 ### 4.5 .env文件与环境变量管理
 
@@ -897,7 +897,7 @@ kube-public       Active   30d     # 公共资源，所有用户可读
 kube-node-lease   Active   30d     # 节点心跳
 ```
 
-> 💡 **Namespace最佳实践**：
+> **Namespace最佳实践**：
 > - 环境隔离：`dev` / `staging` / `prod` 分属不同Namespace
 > - 业务隔离：每个业务线使用独立Namespace
 > - 权限绑定：RBAC绑定到Namespace级别
@@ -1028,7 +1028,7 @@ data:
 #   -n micro-dev
 ```
 
-> ⚠️ Secret的Base64编码不是加密！只是编码。生产环境应启用etcd加密（EncryptionConfiguration）或使用外部密钥管理（Vault、AWS Secrets Manager）。
+> Secret的Base64编码不是加密！只是编码。生产环境应启用etcd加密（EncryptionConfiguration）或使用外部密钥管理（Vault、AWS Secrets Manager）。
 
 #### 6.1.3 Deployment — 应用部署
 
@@ -1334,7 +1334,7 @@ kubectl rollout resume deployment/service-a -n micro-dev
 
 ### 6.4 资源Requests和Limits
 
-> 💡 正确设置资源限制是Spring Boot在K8s上稳定运行的关键。不设置资源限制可能导致节点OOM，Pod被驱逐。
+> 正确设置资源限制是Spring Boot在K8s上稳定运行的关键。不设置资源限制可能导致节点OOM，Pod被驱逐。
 
 ```yaml
 resources:
@@ -1367,7 +1367,7 @@ spec:
               value: "-XX:+UseContainerSupport -XX:MaxRAMPercentage=75.0 -XX:+UseZGC -XX:+ExitOnOutOfMemoryError"
 ```
 
-> ⚠️ **关键注意事项**：
+> **关键注意事项**：
 > - Pod的memory limit必须大于等于JVM最大堆内存 + 元空间 + 线程栈 + 其他开销
 > - 建议Pod内存limit = JVM MaxHeap / 0.75（预留25%给JVM其他开销和OS）
 > - 未设置`-XX:+UseContainerSupport`时，JVM会看到宿主机全部内存而不是容器限制
@@ -1384,7 +1384,7 @@ spec:
 | **就绪探针** | readinessProbe | 检测容器是否准备好接收流量 | 从Service端点中移除 | 启动加载、缓存预热、依赖未就绪 |
 | **启动探针** | startupProbe | 检测容器是否已完成启动 | 重启容器（慢启动保护） | 启动慢的应用（避免liveness误杀） |
 
-> 🎯 **三者关系**：startupProbe先运行，成功后移交livenessProbe + readinessProbe。startupProbe保护慢启动应用不被livenessProbe误杀。
+> **三者关系**：startupProbe先运行，成功后移交livenessProbe + readinessProbe。startupProbe保护慢启动应用不被livenessProbe误杀。
 
 ### 7.2 Spring Boot Actuator健康端点配置
 
@@ -1432,7 +1432,7 @@ management:
       show-details: always
 ```
 
-> ⚠️ Spring Boot 2.3之前使用`/actuator/health`作为单一健康端点。所有K8s探针指向同一个路径，无法区分存活和就绪。
+> Spring Boot 2.3之前使用`/actuator/health`作为单一健康端点。所有K8s探针指向同一个路径，无法区分存活和就绪。
 
 ### 7.3 完整探针配置示例
 
@@ -1563,7 +1563,7 @@ spec:
 7. terminationGracePeriodSeconds到期后，发送SIGKILL强制终止
 ```
 
-> ⚠️ `terminationGracePeriodSeconds`必须大于`spring.lifecycle.timeout-per-shutdown-phase`，否则Spring Boot会被K8s强制杀死。
+> `terminationGracePeriodSeconds`必须大于`spring.lifecycle.timeout-per-shutdown-phase`，否则Spring Boot会被K8s强制杀死。
 
 ### 7.7 PreStop钩子
 
@@ -1642,10 +1642,10 @@ docker run -e TZ=Asia/Shanghai myapp
 
 ### 8.4 Docker Compose网络DNS问题
 
-> ⚠️ Docker Compose默认创建的bridge网络提供自动DNS解析。但以下情况会导致DNS解析失败：
+> Docker Compose默认创建的bridge网络提供自动DNS解析。但以下情况会导致DNS解析失败：
 
 ```yaml
-# ❌ 错误：服务不在同一网络
+# ✗ 错误：服务不在同一网络
 services:
   service-a:
     networks:
@@ -1658,7 +1658,7 @@ networks:
   net-a:
   net-b:
 
-# ✅ 正确：所有需要通信的服务在同一网络
+# ✓ 正确：所有需要通信的服务在同一网络
 services:
   service-a:
     networks:
@@ -3132,7 +3132,7 @@ helm status myapp-release
 helm history myapp-release
 ```
 
-> 💡 **Helm最佳实践**：
+> **Helm最佳实践**：
 > - 使用多values文件分层管理配置（values.yaml → values-{env}.yaml）
 > - 生产环境中锁定Chart版本（`helm dependency update`）
 > - CI/CD中通过`--set image.tag=$CI_COMMIT_SHA`注入构建版本
@@ -3288,7 +3288,7 @@ spec:
 | **服务发现** | Docker DNS（同一网络） | Service + DNS + 多种发现机制 |
 | **存储** | Volume绑定 | PV/PVC + StorageClass + CSI |
 
-> 🎯 **选择建议**：
+> **选择建议**：
 > - **开发/测试环境** → Docker Compose（快速启动、轻量、成本低）
 > - **小型生产（单机）** → Docker Compose + 监控 + 备份
 > - **中大型生产（多机）** → Kubernetes（功能完备、生态丰富）
@@ -3561,4 +3561,4 @@ kubectl get events -n <namespace> --field-selector type=Warning
 
 ---
 
-> 🎯 **本章总结**：容器化部署是现代微服务架构的基石。Docker解决了环境一致性和标准化交付问题，Kubernetes则解决了大规模容器编排和高可用问题。从Dockerfile编写到Docker Compose编排，再到Kubernetes集群管理，构成了完整的容器化部署技术栈。掌握这些技能，是后端工程师从P1走向P2精通进阶的关键一步。
+> **本章总结**：容器化部署是现代微服务架构的基石。Docker解决了环境一致性和标准化交付问题，Kubernetes则解决了大规模容器编排和高可用问题。从Dockerfile编写到Docker Compose编排，再到Kubernetes集群管理，构成了完整的容器化部署技术栈。掌握这些技能，是后端工程师从P1走向P2精通进阶的关键一步。

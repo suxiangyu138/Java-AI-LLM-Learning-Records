@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [模块化的动机：JDK 为什么要拆](#1-模块化的动机jdk-为什么要拆)
 2. [module-info.java 与模块描述符](#2-module-infojava-与模块描述符)
@@ -31,7 +31,7 @@ JDK 9 前：JDK 是一大包 rt.jar —— 全部类一个包，内部可任意�
 JDK 9+：74 个模块，每个模块声明 exports（导出）与 requires（依赖）
 ```
 
-> 🎯 **核心要点**：模块化 = **"SDK 内部的可维护性"与"消费端的可裁剪性"双重升级**——这是 SDK 工程的最高形态，也是面试"JDK 9 为什么模块化"的标准答案三连（封装/可靠/裁剪）。
+> **核心要点**：模块化 = **"SDK 内部的可维护性"与"消费端的可裁剪性"双重升级**——这是 SDK 工程的最高形态，也是面试"JDK 9 为什么模块化"的标准答案三连（封装/可靠/裁剪）。
 
 ---
 
@@ -69,7 +69,7 @@ module com.example.paysdk {
 | 依赖 | 靠 ClassNotFoundException 运行时发现 | 启动时校验依赖图（缺失即报错） |
 | 冲突 | 同名类静默覆盖 | 模块名唯一，冲突启动报错 |
 
-> 💡 只加 `module-info.java` 不改造代码 = 获得"强封装 + 启动期依赖校验"——**遗留 jar 渐进式模块化的第一步**。注意：`opens` 别乱开（反射面 = 攻击面）。
+> 只加 `module-info.java` 不改造代码 = 获得"强封装 + 启动期依赖校验"——**遗留 jar 渐进式模块化的第一步**。注意：`opens` 别乱开（反射面 = 攻击面）。
 
 ---
 
@@ -95,7 +95,7 @@ java --describe-module java.base | head -20
 2. **启动诊断**：模块缺失/循环依赖在启动时报 `ModuleResolutionException`（比 ClassNotFoundException 早且准）；
 3. **体积意识**：`java.desktop` 模块占 JDK 约 40% 体积——**服务器应用从不 require 它**，jlink 自动剔除。
 
-> 🎯 **核心要点**：理解依赖图 = 理解 jlink 为什么能裁——**"用不到的模块及其依赖不进运行时"**。查依赖用 `jdeps -s`，查模块用 `java --describe-module`。
+> **核心要点**：理解依赖图 = 理解 jlink 为什么能裁——**"用不到的模块及其依赖不进运行时"**。查依赖用 `jdeps -s`，查模块用 `java --describe-module`。
 
 ---
 
@@ -148,7 +148,7 @@ COPY --from=build /runtime /runtime
 ENTRYPOINT ["/runtime/bin/app"]
 ```
 
-> 🎯 **核心要点**：jlink 是"**SDK 消费端的终极裁剪**"——从"装一个 300MB 的 JDK"变成"一个 50MB 的专用运行时"。容器化时代它是镜像精简的标配手段（配合 AOT 可达性分析，Spring Boot 4 原生镜像也走类似思路）。
+> **核心要点**：jlink 是"**SDK 消费端的终极裁剪**"——从"装一个 300MB 的 JDK"变成"一个 50MB 的专用运行时"。容器化时代它是镜像精简的标配手段（配合 AOT 可达性分析，Spring Boot 4 原生镜像也走类似思路）。
 
 ---
 
@@ -174,7 +174,7 @@ java.base.jmod —— 包含：
 | 使用场景 | 类路径/模块路径 | jlink 原料 |
 | 运行 | 可运行/可依赖 | **不可直接依赖**（仅链接期使用） |
 
-> 💡 **jmod 命令**（JDK 9+）：`jmod create/describe/list` 管理模块文件——日常开发几乎不用（它服务于 JDK 构建者与 jlink），面试知道"jlink 的原料是 jmods 目录"即可。
+> **jmod 命令**（JDK 9+）：`jmod create/describe/list` 管理模块文件——日常开发几乎不用（它服务于 JDK 构建者与 jlink），面试知道"jlink 的原料是 jmods 目录"即可。
 
 ---
 
@@ -209,7 +209,7 @@ public void demo() {
 | 冲突处理 | 显式单类 import 优先于模块导入 |
 | 适用 | 大量使用同一模块类型的**新代码**（简化样板） |
 
-> ⚠️ 模块导入是"组织 import 的语法糖"，**不是运行时特性**——字节码层面无变化，不影响模块化语义。它让"JDK 作为 SDK 的使用体验"更简洁。
+> 模块导入是"组织 import 的语法糖"，**不是运行时特性**——字节码层面无变化，不影响模块化语义。它让"JDK 作为 SDK 的使用体验"更简洁。
 
 ---
 
@@ -230,7 +230,7 @@ public void demo() {
 // 效果：消费者可以 requires com.example.paysdk（即使没有 module-info.java）
 ```
 
-> 🎯 **核心要点**：模块化的工程判断 = **"库给模块名（Automatic-Module-Name），部署用 jlink，应用层不强求"**——模块化是 SDK 工程的进阶武器，不是日常开发的必选项（Java 高级语法系统有完整实战）。
+> **核心要点**：模块化的工程判断 = **"库给模块名（Automatic-Module-Name），部署用 jlink，应用层不强求"**——模块化是 SDK 工程的进阶武器，不是日常开发的必选项（Java 高级语法系统有完整实战）。
 
 ---
 

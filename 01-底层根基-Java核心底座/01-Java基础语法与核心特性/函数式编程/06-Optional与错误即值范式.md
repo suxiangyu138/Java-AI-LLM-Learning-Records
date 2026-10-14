@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [Optional 的范式意义](#1-optional-的范式意义)
 2. [正确链式与常见反模式](#2-正确链式与常见反模式)
@@ -62,10 +62,10 @@ BigDecimal total = optAmount.orElseThrow(() -> new BizException("amount missing"
 也要承认 Optional 链的**可读性上限**：超过四个操作符的链（`map→flatMap→filter→orElseThrow` 再叠加）开始难以阅读，每步失败原因也说不清。此时两种选择：拆成带名字的中间变量（每步一个 `Optional<X> step = ...`），或直接换守卫链——**链式适合"路径单一、语义简单"的判空，守卫链适合"多条件分支、需要原因"的校验**。判据是 review 时"读一遍能否复述语义"。
 
 ```java
-// ❌ orElse 陷阱：默认值每次都构建
+// ✗ orElse 陷阱：默认值每次都构建
 return find(id).orElse(new User());        // 即使有值也 new 了
 
-// ✅ 惰性默认值
+// ✓ 惰性默认值
 return find(id).orElseGet(User::new);
 ```
 
@@ -80,7 +80,7 @@ Optional 是"返回类型"而非"万能容器"，四条红线（Java 8 至今官
 | 做集合元素 | 集合自身已表达"没有"，`Optional` 嵌套无信息增量 | `Stream<Optional<T>>` → `flatMap(Optional::stream)` |
 | 存业务状态 | "无值"和"错误"是两回事，Optional 表达不了原因 | 用 Result 模式（下节） |
 
-> 💡 **关键区分**：Optional 表达**缺失（absence）**，不表达**失败（failure）**。"查无此人"是缺失，"数据库连不上"是失败——后者若也用 Optional 吞掉，错误原因就丢了，这是 2026 年代码评审中最常纠正的设计错误。
+> **关键区分**：Optional 表达**缺失（absence）**，不表达**失败（failure）**。"查无此人"是缺失，"数据库连不上"是失败——后者若也用 Optional 吞掉，错误原因就丢了，这是 2026 年代码评审中最常纠正的设计错误。
 
 ## 4. 错误即值：sealed interface 实现 Result
 
@@ -157,11 +157,11 @@ Java 生态的 Option/Either 库（Vavr 前身 Javaslang 等）曾在 Java 8 时
 - 从 2026-08 检索情况看，**Vavr 的维护状态与 JDK 25/26 兼容性未见权威确认**——新项目不建议引入，存量项目谨慎升级，避免把"标准范式"押在低活跃库上
 - 判断标准：先问"JDK 能不能做"，答案是否再引第三方（元组这类 JDK 至今没有的场景才考虑）
 
-> 🎯 **核心要点**：Optional 管"缺失"，Result（sealed + record + 模式匹配）管"失败"——前者 Java 8，后者 JDK 17 后的原生手法。两者组合，确定性核心内的代码可以做到"无异常、无 null、全显式"。
+> **核心要点**：Optional 管"缺失"，Result（sealed + record + 模式匹配）管"失败"——前者 Java 8，后者 JDK 17 后的原生手法。两者组合，确定性核心内的代码可以做到"无异常、无 null、全显式"。
 
 ## 7. 核心要点与思考题
 
-> 🎯 **本章三句话总结**：
+> **本章三句话总结**：
 > 1. Optional 的价值是类型化缺失语义：链式 map/flatMap 替代嵌套判空，`orElse` 注意无条件求值陷阱；
 > 2. Optional 四条红线：字段/参数/集合元素/业务状态，缺失 ≠ 失败，失败要用 Result；
 > 3. sealed interface + record + switch 模式匹配实现原生 Result，业务失败走值、意外故障走异常，边界分层清晰。

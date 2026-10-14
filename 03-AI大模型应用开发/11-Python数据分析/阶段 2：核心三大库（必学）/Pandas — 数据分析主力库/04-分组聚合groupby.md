@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [分组三件套](#1-分组三件套)
 2. [agg 多函数聚合](#2-agg-多函数聚合)
@@ -151,7 +151,7 @@ pd.crosstab(df["Sex"], df["Pclass"])       # 交叉表（二维计数——透�
 
 **验收动作**：泰坦尼克分组分析——① 三件套算"性别 × 幸存率"；② `agg` 多函数（舱位 × 票价 mean/median/max）；③ transform 算"每行票价偏离组均值"；④ pivot_table 二维透视（舱位 × 性别 × 幸存率——09 篇热力图的原料）；⑤ `crosstab` 交叉计数——**"三件套 + 透视 = 分组层通过"**——**练习纪律**：每题结果打印验证——"分组结果要 reset_index 后再看"。
 
-> 🎯 **核心要点**：分组三件套 = groupby → agg → reset_index（拆算拼——**reset_index 是新手最大坎**）；agg 多函数（列表/字典/命名聚合）；agg 压缩行数 vs transform 保持行数（"每组一个数" vs "每行一个值"）；pivot_table 二维分组（index/columns/values/aggfunc——热力图原料）；value_counts/crosstab 计数族——**"分组是分析的核心动作——'发生了什么'全靠分组回答"**。
+> **核心要点**：分组三件套 = groupby → agg → reset_index（拆算拼——**reset_index 是新手最大坎**）；agg 多函数（列表/字典/命名聚合）；agg 压缩行数 vs transform 保持行数（"每组一个数" vs "每行一个值"）；pivot_table 二维分组（index/columns/values/aggfunc——热力图原料）；value_counts/crosstab 计数族——**"分组是分析的核心动作——'发生了什么'全靠分组回答"**。
 
 ---
 

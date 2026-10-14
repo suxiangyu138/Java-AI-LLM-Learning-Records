@@ -1,6 +1,6 @@
 # 04 - Spring AI 与 AI 应用生态
 
-> 🎯 Spring AI 是 Java 开发者构建企业级大模型应用（RAG / Agent / MCP）的官方一站式框架 — 2025 年中 1.0 GA，2026 年 1.0/1.1 稳定双轨 + 2.0 适配 Boot 4。与 LangChain4j 并称 Java AI 两大框架
+> Spring AI 是 Java 开发者构建企业级大模型应用（RAG / Agent / MCP）的官方一站式框架 — 2025 年中 1.0 GA，2026 年 1.0/1.1 稳定双轨 + 2.0 适配 Boot 4。与 LangChain4j 并称 Java AI 两大框架
 
 ---
 
@@ -220,6 +220,6 @@ ChatClient client = ChatClient.builder(chatModel)
 
 ---
 
-> 🎯 **核心要点**：Spring AI 记忆三句话 — ① **ChatClient** 是唯一入口（模型/流式/结构化）② **RAG + Agent + MCP** 是三大能力（检索增强、工作流、工具生态）③ **1.x 给 Boot 3、2.0 给 Boot 4**。面试被问"Java 怎么做 AI 应用"：Spring AI + RAG + MCP 是标准答案，能讲 5 种 Agent 工作流就是加分。
+> **核心要点**：Spring AI 记忆三句话 — ① **ChatClient** 是唯一入口（模型/流式/结构化）② **RAG + Agent + MCP** 是三大能力（检索增强、工作流、工具生态）③ **1.x 给 Boot 3、2.0 给 Boot 4**。面试被问"Java 怎么做 AI 应用"：Spring AI + RAG + MCP 是标准答案，能讲 5 种 Agent 工作流就是加分。
 
 **下一模块**：[05-Spring技术选型实战指南](05-Spring技术选型实战指南.md) / **返回总览**：[00-Spring生态知识体系总览](00-Spring生态知识体系总览.md)

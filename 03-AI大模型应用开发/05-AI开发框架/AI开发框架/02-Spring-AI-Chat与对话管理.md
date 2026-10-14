@@ -1,6 +1,6 @@
 # 02 - Spring AI Chat 与对话管理
 
-> 🎯 对话不只是"一问一答" — 本章覆盖 Prompt 模板、流式 SSE、多轮对话记忆（Advisor 自动管理）、结构化输出、输出解析器、Advisors 拦截链。从简单对话到生产级多会话系统
+> 对话不只是"一问一答" — 本章覆盖 Prompt 模板、流式 SSE、多轮对话记忆（Advisor 自动管理）、结构化输出、输出解析器、Advisors 拦截链。从简单对话到生产级多会话系统
 
 ---
 
@@ -269,6 +269,6 @@ public class MultiUserChatController {
 
 ---
 
-> 🎯 **核心要点**：Spring AI 对话管理的四个核心机制 — **① ChatClient 统一入口 ② MessageChatMemoryAdvisor 自动管理多轮记忆（替代手动 List<Message>）③ .entity() 结构化输出 ④ Advisors 洋葱链（日志→记忆→RAG→安全）**。多用户隔离只需改 `chat_memory_conversation_id` 一个参数。
+> **核心要点**：Spring AI 对话管理的四个核心机制 — **① ChatClient 统一入口 ② MessageChatMemoryAdvisor 自动管理多轮记忆（替代手动 List<Message>）③ .entity() 结构化输出 ④ Advisors 洋葱链（日志→记忆→RAG→安全）**。多用户隔离只需改 `chat_memory_conversation_id` 一个参数。
 
 **下一模块**：[03-Spring AI RAG实战](03-Spring-AI-RAG实战.md) / **返回总览**：[00-总览](00-Java-AI开发框架体系总览.md)

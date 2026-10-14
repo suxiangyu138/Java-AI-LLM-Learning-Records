@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [聚合函数家族](#1-聚合函数家族)
 2. [axis 折叠思维深潜](#2-axis-折叠思维深潜)
@@ -146,7 +146,7 @@ a3.sum(axis=2)      # 形状 (2, 3) —— 折叠第 2 维（4 没了）
 
 **验收动作**：① 造 1000 个正态随机数（`np.random.normal(50, 10, 1000)`——阶段 3 预演）算全套统计（sum/mean/std/median/percentile 25-50-75/argmax）；② 2×3 数组做 axis=0/1 聚合并打印结果形状（验证折叠）；③ `np.unique` 统计类别占比；④ 统计前先 `isnan().sum()` 体检——**"全套统计 + axis 形状验证 = 统计层通过"**——**练习纪律**：axis 题打印结果形状验证——**"形状对 = axis 对"**——统计题用 `np.random` 造数据自测（随机数据是免费的练习场——`seed` 固定——08 篇纪律）；median 题先预测再跑——验证"median 是 np. 函数"的认知（预测错 = 坑没记住）。
 
-> 🎯 **核心要点**：聚合家族（sum/mean/std/median/percentile/argmax——**median 是 np. 函数不是方法**）；axis = 折叠思维（axis=k 折叠第 k 维——结果形状去掉该维——看形状验对错）；缺失统计（nan* 家族默认忽略——聚合前先数 nan）；唯一值与计数（unique(return_counts)——bincount 整数快计数）；排序（np.sort 新数组/arr.sort 原地/argsort 索引）——**"统计是分析的语言——axis 是统计的方向"**。
+> **核心要点**：聚合家族（sum/mean/std/median/percentile/argmax——**median 是 np. 函数不是方法**）；axis = 折叠思维（axis=k 折叠第 k 维——结果形状去掉该维——看形状验对错）；缺失统计（nan* 家族默认忽略——聚合前先数 nan）；唯一值与计数（unique(return_counts)——bincount 整数快计数）；排序（np.sort 新数组/arr.sort 原地/argsort 索引）——**"统计是分析的语言——axis 是统计的方向"**。
 
 ---
 

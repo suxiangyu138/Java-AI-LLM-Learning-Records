@@ -52,7 +52,7 @@ public class BioServer {
 
 NIO（Non-blocking I/O / New I/O）由JDK 1.4引入，位于`java.nio`包。核心思想是**多路复用**——一个线程管理多个连接，仅在有I/O事件就绪时才处理，从根本上解决了BIO的高并发瓶颈。
 
-> 💡 **本质区别**：BIO是"线程等数据"，NIO是"数据就绪了通知线程"。
+> **本质区别**：BIO是"线程等数据"，NIO是"数据就绪了通知线程"。
 
 ---
 
@@ -115,7 +115,7 @@ while (buffer.hasRemaining()) {
 buffer.clear();  // 切回写模式
 ```
 
-> ⚠️ **常见错误**：`flip()`后若继续写入会覆盖未读数据，需保留未读数据时用`compact()`而非`clear()`。
+> **常见错误**：`flip()`后若继续写入会覆盖未读数据，需保留未读数据时用`compact()`而非`clear()`。
 
 ### 3.3 Buffer类型
 
@@ -141,7 +141,7 @@ ByteBuffer wrapBuf = ByteBuffer.wrap(new byte[1024]);     // 包装数组
 | **I/O性能** | 慢（需一次额外拷贝） | 快（OS直接操作） |
 | **适用场景** | 小数据量、临时Buffer | 大数据量、网络I/O、长生命周期 |
 
-> 💡 网络编程中写入SocketChannel优先用Direct ByteBuffer，避免额外拷贝。Netty通过池化技术解决Direct Buffer分配慢的问题。
+> 网络编程中写入SocketChannel优先用Direct ByteBuffer，避免额外拷贝。Netty通过池化技术解决Direct Buffer分配慢的问题。
 
 ---
 
@@ -236,7 +236,7 @@ SelectionKey.OP_WRITE   = 4   // 写就绪（可写入数据）
 | `interestOps(int ops)` | 动态修改关注的事件 |
 | `cancel()` | 取消注册 |
 
-> ⚠️ **OP_WRITE陷阱**：Socket发送缓冲区大部分时间空闲，OP_WRITE**几乎永远就绪**。仅在确有大量数据待发送时注册OP_WRITE，发送完成后立即取消，否则`select()`会持续返回导致CPU空转。
+> **OP_WRITE陷阱**：Socket发送缓冲区大部分时间空闲，OP_WRITE**几乎永远就绪**。仅在确有大量数据待发送时注册OP_WRITE，发送完成后立即取消，否则`select()`会持续返回导致CPU空转。
 
 ---
 
@@ -504,7 +504,7 @@ channel.write(new ByteBuffer[]{header, body});  // 聚集写入（先写header�
 极致异步场景        → AIO（较少使用）
 ```
 
-> 🎯 **NIO是Netty的基础**：几乎所有Java高性能网络框架（Netty、Tomcat NIO、gRPC、Dubbo）底层都基于NIO。Netty对NIO的增强包括：解决Selector空轮询bug、提供ByteBuf池化与自动扩容、Reactor线程模型、更易用的编解码API。掌握NIO三大组件是理解这些框架的前提。
+> **NIO是Netty的基础**：几乎所有Java高性能网络框架（Netty、Tomcat NIO、gRPC、Dubbo）底层都基于NIO。Netty对NIO的增强包括：解决Selector空轮询bug、提供ByteBuf池化与自动扩容、Reactor线程模型、更易用的编解码API。掌握NIO三大组件是理解这些框架的前提。
 
 ### 核心要点速记
 

@@ -1,6 +1,6 @@
 # 01 - npm 概述与核心概念
 
-> 🎯 npm 之于 Node.js = Maven 之于 Java — 包管理器、构建工具、脚本运行器三位一体。用 Java 后端的视角来理解 npm
+> npm 之于 Node.js = Maven 之于 Java — 包管理器、构建工具、脚本运行器三位一体。用 Java 后端的视角来理解 npm
 
 ---
 
@@ -44,11 +44,11 @@ npm（Node Package Manager）是 Node.js 的默认包管理器，同时也是一
 mvn clean install    # 构建+安装到本地
 
 # Node.js npm 项目
-npm install          # ⬅ 仅安装依赖（不构建！）
-npm run build        # ⬅ 构建项目
+npm install          # ← 仅安装依赖（不构建！）
+npm run build        # ← 构建项目
 ```
 
-> ⚠️ **最大差异**：`npm install` ≠ `mvn install`！前者是下载依赖，后者是构建 + 安装到本地仓库。`npm run build` 才类似 Maven 的构建。
+> **最大差异**：`npm install` ≠ `mvn install`！前者是下载依赖，后者是构建 + 安装到本地仓库。`npm run build` 才类似 Maven 的构建。
 
 ---
 
@@ -108,4 +108,4 @@ my-app/                              my-app/
 └── target/                          └── dist/                 ← 构建产物
 ```
 
-> 🎯 **核心理解**：`package.json` = `pom.xml`、`npm install` = 下载依赖（非构建）、`npm run build` = 构建、`node_modules/` = 依赖存放目录（类似 Maven 的 classpath，但物理存在项目中）。
+> **核心理解**：`package.json` = `pom.xml`、`npm install` = 下载依赖（非构建）、`npm run build` = 构建、`node_modules/` = 依赖存放目录（类似 Maven 的 classpath，但物理存在项目中）。

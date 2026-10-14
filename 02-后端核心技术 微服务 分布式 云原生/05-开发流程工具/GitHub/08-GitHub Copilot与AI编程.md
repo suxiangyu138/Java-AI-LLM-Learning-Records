@@ -50,7 +50,7 @@
 
 3. 配置
    → Settings → Tools → GitHub Copilot
-   → ✅ Enable GitHub Copilot
+   → ✓ Enable GitHub Copilot
 
 4. 快捷键
    → Tab：接受建议
@@ -66,7 +66,7 @@
 ### 2.1 让 Copilot 理解你的意图
 
 ```java
-// ═══ ✅ 好：提供清晰的上下文 ═══
+// ═══ ✓ 好：提供清晰的上下文 ═══
 
 // 方法名和参数清晰表达意图
 public List<User> findActiveUsersByDepartment(Long departmentId) {
@@ -76,7 +76,7 @@ public List<User> findActiveUsersByDepartment(Long departmentId) {
         departmentId, UserStatus.ACTIVE);
 }
 
-// ═══ ❌ 差：模糊的上下文 ═══
+// ═══ ✗ 差：模糊的上下文 ═══
 
 // Copilot 不知道你想做什么
 public List<User> getUsers(Long id) {
@@ -124,14 +124,14 @@ public int binarySearch(int[] arr, int target) {
 
 | 场景 | 效果 | 示例 |
 |------|------|------|
-| **重复模式** | ⭐⭐⭐⭐⭐ | CRUD 接口、Builder 模式、DTO 转换 |
-| **单元测试** | ⭐⭐⭐⭐⭐ | Given-When-Then 模板、边界用例 |
-| **正则表达式** | ⭐⭐⭐⭐ | 邮箱校验、手机号匹配 |
-| **SQL 查询** | ⭐⭐⭐⭐ | 复杂 JOIN、分页查询 |
-| **YAML/XMl 配置** | ⭐⭐⭐⭐ | Spring 配置、CI 配置文件 |
-| **JavaDoc 注释** | ⭐⭐⭐⭐ | 类/方法文档 |
-| **复杂算法** | ⭐⭐⭐ | 需清晰的注释引导 |
-| **业务逻辑** | ⭐⭐ | 需完整上下文 |
+| **重复模式** | ★★★★★ | CRUD 接口、Builder 模式、DTO 转换 |
+| **单元测试** | ★★★★★ | Given-When-Then 模板、边界用例 |
+| **正则表达式** | ★★★★ | 邮箱校验、手机号匹配 |
+| **SQL 查询** | ★★★★ | 复杂 JOIN、分页查询 |
+| **YAML/XMl 配置** | ★★★★ | Spring 配置、CI 配置文件 |
+| **JavaDoc 注释** | ★★★★ | 类/方法文档 |
+| **复杂算法** | ★★★ | 需清晰的注释引导 |
+| **业务逻辑** | ★★ | 需完整上下文 |
 
 ---
 
@@ -176,9 +176,9 @@ Copilot Chat 的上下文来源：
   5. 手动 @file 引用特定文件
 
 最佳实践：
-  ✅ 打开相关文件再提问（让 Copilot 获得更多上下文）
-  ✅ 选中代码 + 右键 → Copilot → Explain This
-  ✅ 使用 @workspace 进行跨文件分析
+  ✓ 打开相关文件再提问（让 Copilot 获得更多上下文）
+  ✓ 选中代码 + 右键 → Copilot → Explain This
+  ✓ 使用 @workspace 进行跨文件分析
 ```
 
 ---
@@ -190,8 +190,8 @@ Copilot Chat 的上下文来源：
 ```markdown
 # ═══ 在 IDE 中打开相关文件 ═══
 提问"如何创建新的 API 端点？"
-  ✅ 打开已有的 Controller 类 → Copilot 会参考你的风格
-  ❌ 不打开任何文件 → Copilot 生成通用模板（可能不符合项目规范）
+  ✓ 打开已有的 Controller 类 → Copilot 会参考你的风格
+  ✗ 不打开任何文件 → Copilot 生成通用模板（可能不符合项目规范）
 
 # ═══ 使用 @workspace 引用 ═══
 "@workspace 数据库连接配置在哪里？"
@@ -314,13 +314,13 @@ void shouldReturnEmptyList_whenNoActiveUsers() {
 ### 6.1 Copilot 的局限性
 
 ```
-⚠️ 不能做的：
+不能做的：
 1. 完全理解你的业务逻辑（只能基于公开代码和当前上下文）
 2. 保证代码安全性（必须人工审查）
 3. 理解项目历史决策（为什么这样设计）
 4. 精确匹配你公司内部库的 API（私有代码不在训练数据中）
 
-⚠️ 注意：
+注意：
 1. Copilot 生成的代码可能有版权问题（从公开代码学习）
 2. 不要粘贴敏感数据（API Key、密码等）到 Chat 中
 3. AI 可能产生幻觉——自信地输出错误代码
@@ -330,12 +330,12 @@ void shouldReturnEmptyList_whenNoActiveUsers() {
 ### 6.2 安全使用准则
 
 ```
-✅ 所有 AI 生成代码必须 Review
-✅ 不在 Chat 中粘贴公司私有代码
-✅ 敏感配置使用环境变量，不让 AI 看到
-✅ 生成的 SQL 必须检查是否安全（防注入）
-✅ 生成的认证/授权代码必须安全审查
-✅ 遵守公司 AI 使用政策
+✓ 所有 AI 生成代码必须 Review
+✓ 不在 Chat 中粘贴公司私有代码
+✓ 敏感配置使用环境变量，不让 AI 看到
+✓ 生成的 SQL 必须检查是否安全（防注入）
+✓ 生成的认证/授权代码必须安全审查
+✓ 遵守公司 AI 使用政策
 ```
 
 ---

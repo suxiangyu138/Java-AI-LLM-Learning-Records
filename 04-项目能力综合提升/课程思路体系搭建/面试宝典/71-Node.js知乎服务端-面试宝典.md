@@ -61,7 +61,7 @@ project/
       └── uploads/
 ```
 
-> 🎯 分层架构的核心原则：**每一层只关注自己的职责**，路由层只做路由分发，控制器层处理请求上下文，服务层实现业务逻辑，模型层处理数据持久化。
+> 分层架构的核心原则：**每一层只关注自己的职责**，路由层只做路由分发，控制器层处理请求上下文，服务层实现业务逻辑，模型层处理数据持久化。
 
 ### 1.3 Koa 应用生命周期
 
@@ -336,7 +336,7 @@ if (cluster.isMaster) {
 }
 ```
 
-> 💡 PM2 内部也是基于 cluster 模块实现，但提供了更完善的进程管理、日志、监控能力。PM2 的 cluster 模式会自动处理进程重启、负载均衡等复杂逻辑。
+> PM2 内部也是基于 cluster 模块实现，但提供了更完善的进程管理、日志、监控能力。PM2 的 cluster 模式会自动处理进程重启、负载均衡等复杂逻辑。
 
 ### 2.2 PM2 进程管理进阶
 
@@ -629,7 +629,7 @@ const user = await UserWrite.create({ name: 'Alice' });
 const questions = await Question.find({});
 for (const question of questions) {
   const answerCount = await Answer.countDocuments({ questionId: question._id });
-  question.answerCount = answerCount; // ❌ 每次循环都查一次数据库
+  question.answerCount = answerCount; // ✗ 每次循环都查一次数据库
 }
 
 // 正例：批量聚合查询

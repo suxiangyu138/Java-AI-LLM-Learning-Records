@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [为什么需要 API 聚合网关](#1-为什么需要-api-聚合网关)
 2. [One-API：开源多模型管理平台](#2-one-api开源多模型管理平台)
@@ -133,22 +133,22 @@ docker run -d \
 ### 2.5 高级特性
 
 ```text
-✅ 负载均衡
+✓ 负载均衡
    → 同一模型配置多个渠道，One-API 自动分发请求
 
-✅ 自动重试
+✓ 自动重试
    → 渠道 A 失败 → 自动切换到渠道 B
 
-✅ 速率限制
+✓ 速率限制
    → 按令牌、按用户组设置 RPM/TPM 上限
 
-✅ 额度管理
+✓ 额度管理
    → 预充值模式，超额度自动拒绝
 
-✅ 日志审计
+✓ 日志审计
    → 每次请求的模型、Token 消耗、费用一目了然
 
-✅ 多租户
+✓ 多租户
    → 一个 One-API 实例服务多个团队
 ```
 
@@ -180,15 +180,15 @@ docker run -d \
 
 | 特性 | One-API | New-API |
 |------|:---:|:---:|
-| 渠道管理 | ✅ | ✅ |
-| 负载均衡 | ✅ | ✅ |
-| 令牌/用户管理 | ✅ | ✅ |
-| **计费系统** | ❌ | ✅ 按量计费 |
-| **用户充值** | ❌ | ✅ 在线充值 |
-| **套餐管理** | ❌ | ✅ 月/季/年套餐 |
-| **渠道价格设置** | ❌ | ✅ 设置利润率 |
-| **用户仪表盘** | ❌ | ✅ 用量统计前端 |
-| **分组倍率** | ⚠️ | ✅ 不同模型不同价格 |
+| 渠道管理 | ✓ | ✓ |
+| 负载均衡 | ✓ | ✓ |
+| 令牌/用户管理 | ✓ | ✓ |
+| **计费系统** | ✗ | ✓ 按量计费 |
+| **用户充值** | ✗ | ✓ 在线充值 |
+| **套餐管理** | ✗ | ✓ 月/季/年套餐 |
+| **渠道价格设置** | ✗ | ✓ 设置利润率 |
+| **用户仪表盘** | ✗ | ✓ 用量统计前端 |
+| **分组倍率** | | ✓ 不同模型不同价格 |
 
 ### 3.3 适用场景
 
@@ -249,28 +249,28 @@ general_settings:
 ### 4.3 LiteLLM 的独特优势
 
 ```text
-✅ 支持 100+ 模型提供商（远超 One-API）
+✓ 支持 100+ 模型提供商（远超 One-API）
    → AWS Bedrock, Azure OpenAI, Vertex AI, HuggingFace...
    → OpenAI, Anthropic, Cohere, Replicate, Together AI...
 
-✅ drop_params: true
+✓ drop_params: true
    → 自动去掉模型不支持的参数，避免报错
    → 例：GPT-4o 支持 seed，但 DeepSeek 不支持
    → LiteLLM 自动把 seed 从发给 DeepSeek 的请求中删除
 
-✅ 模型降级 (Fallback)
+✓ 模型降级 (Fallback)
    router:
      - model: gpt-4o
        fallbacks: [gpt-4o-mini, local-qwen]
 
-✅ 多模型重试 (Retry)
+✓ 多模型重试 (Retry)
    router:
      - model: gpt-4o
        num_retries: 3
        retry_policy:
          - strategy: "exponential_backoff"
 
-✅ 成本追踪
+✓ 成本追踪
    → 每次调用自动记录 token 消耗和费用
    → 支持 Postgres / Prometheus 存储
 ```
@@ -279,16 +279,16 @@ general_settings:
 
 ```text
 选 LiteLLM 如果：
-  ✅ Python 是你的主力技术栈
-  ✅ 需要对接 AWS Bedrock / Azure / Vertex 等云平台
-  ✅ 需要灵活的 Fallback / Retry 策略
-  ✅ 需要 drop_params 自动适配
+  ✓ Python 是你的主力技术栈
+  ✓ 需要对接 AWS Bedrock / Azure / Vertex 等云平台
+  ✓ 需要灵活的 Fallback / Retry 策略
+  ✓ 需要 drop_params 自动适配
 
 选 One-API 如果：
-  ✅ 需要 Web 管理界面（非开发人员也能配置）
-  ✅ 团队技术栈以 Java/Go 为主
-  ✅ 需要多租户 + 用户体系
-  ✅ 需要开箱即用的计费（New-API）
+  ✓ 需要 Web 管理界面（非开发人员也能配置）
+  ✓ 团队技术栈以 Java/Go 为主
+  ✓ 需要多租户 + 用户体系
+  ✓ 需要开箱即用的计费（New-API）
 ```
 
 ---
@@ -313,11 +313,11 @@ curl https://openrouter.ai/api/v1/chat/completions \
 ### 5.3 适合场景
 
 ```text
-✅ 快速原型 → 不需要自己部署网关
-✅ 模型探索 → 一个 Key 试遍所有模型
-✅ 个人项目 → 用量不大，不值得自建网关
+✓ 快速原型 → 不需要自己部署网关
+✓ 模型探索 → 一个 Key 试遍所有模型
+✓ 个人项目 → 用量不大，不值得自建网关
 
-❌ 不适合：
+✗ 不适合：
   → 对数据隐私有要求（请求经过第三方）
   → 大量调用（价格包含 OpenRouter 溢价）
   → 需要自定义路由策略
@@ -329,15 +329,15 @@ curl https://openrouter.ai/api/v1/chat/completions \
 
 | 能力 | One-API | New-API | LiteLLM Proxy | OpenRouter |
 |------|:---:|:---:|:---:|:---:|
-| 开源 | ✅ MIT | ✅ MIT | ✅ MIT | ❌ |
-| Web 管理界面 | ✅ | ✅ | ⚠️ 社区版 | ✅ SaaS |
-| 多租户 | ✅ | ✅ | ⚠️ 通过 key 隔离 | ✅ |
-| 负载均衡 | ✅ | ✅ | ✅ | ✅ |
-| 自动重试 | ✅ | ✅ | ✅ | ✅ |
-| 计费系统 | ❌ | ✅ | ⚠️ | ✅ |
+| 开源 | ✓ MIT | ✓ MIT | ✓ MIT | ✗ |
+| Web 管理界面 | ✓ | ✓ | 社区版 | ✓ SaaS |
+| 多租户 | ✓ | ✓ | 通过 key 隔离 | ✓ |
+| 负载均衡 | ✓ | ✓ | ✓ | ✓ |
+| 自动重试 | ✓ | ✓ | ✓ | ✓ |
+| 计费系统 | ✗ | ✓ | | ✓ |
 | API 调用 | OpenAI 格式 | OpenAI 格式 | OpenAI 格式 | OpenAI 格式 |
 | 模型数量 | ~20 类型 | ~20 类型 | 100+ | 200+ |
-| 自部署 | ✅ | ✅ | ✅ | ❌ |
+| 自部署 | ✓ | ✓ | ✓ | ✗ |
 | 语言 | Go | Go | Python | — |
 
 ---
@@ -476,7 +476,7 @@ spring:
 
 ---
 
-> 🎯 **核心要点**：团队超过 5 人或对接超过 3 个模型提供商时，就该引入网关。One-API（Go + Web UI）和 LiteLLM Proxy（Python + 灵活性）是两个最优解，选哪个取决于技术栈和是否需要 Web 管理界面。
+> **核心要点**：团队超过 5 人或对接超过 3 个模型提供商时，就该引入网关。One-API（Go + Web UI）和 LiteLLM Proxy（Python + 灵活性）是两个最优解，选哪个取决于技术栈和是否需要 Web 管理界面。
 
 ---
 

@@ -6,7 +6,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [conda 的正确定位](#1-conda-的正确定位)
 2. [Miniconda vs Anaconda](#2-miniconda-vs-anaconda)
@@ -23,7 +23,7 @@
 
 ### 1.1 conda 是什么
 
-> ⚠️ **最常见的误解**：把 conda 当「Python 版本管理器」。正确认知：conda 是**跨语言二进制包管理器**——管理 Python 的同时还能管理 C/C++ 库、CUDA、编译器、R 包等系统级依赖。
+> **最常见的误解**：把 conda 当「Python 版本管理器」。正确认知：conda 是**跨语言二进制包管理器**——管理 Python 的同时还能管理 C/C++ 库、CUDA、编译器、R 包等系统级依赖。
 
 ```
 conda 管理范围
@@ -40,14 +40,14 @@ conda 管理范围
 
 ```text
 必须 conda 的场景
-├── ✅ CUDA 版 PyTorch/TensorFlow（GPU 环境）
-├── ✅ GDAL/PROJ 等地理空间库（编译地狱）
-├── ✅ 生信软件（Bioconductor 生态）
-├── ✅ 需要编译的 C++ 项目依赖
-└── ❌ 纯 Python 项目（uv 更快更好）
+├── ✓ CUDA 版 PyTorch/TensorFlow（GPU 环境）
+├── ✓ GDAL/PROJ 等地理空间库（编译地狱）
+├── ✓ 生信软件（Bioconductor 生态）
+├── ✓ 需要编译的 C++ 项目依赖
+└── ✗ 纯 Python 项目（uv 更快更好）
 ```
 
-> 🎯 **2026 年定位**：**仅在需要非 Python 原生依赖时使用 conda**——纯 Python 项目的默认是 uv。
+> **2026 年定位**：**仅在需要非 Python 原生依赖时使用 conda**——纯 Python 项目的默认是 uv。
 
 ---
 
@@ -62,7 +62,7 @@ conda 管理范围
 | 适合 | 初学者尝鲜（不推荐 2026） | **推荐（2026 主流）** |
 | 自由度 | 高（预装可卸载） | 高（按需安装） |
 
-> 💡 **2026 建议**：一律用 **Miniconda**——Anaconda 预装的大量包大多数项目用不上，且版本固定易冲突。
+> **2026 建议**：一律用 **Miniconda**——Anaconda 预装的大量包大多数项目用不上，且版本固定易冲突。
 
 ### 2.2 安装 Miniconda
 
@@ -124,7 +124,7 @@ dependencies:
     - fastapi
 ```
 
-> 🎯 **environment.yml 是 conda 项目的复现基石**——包含通道（channels）、Python 版本、conda 包与 pip 包，必须提交 Git。
+> **environment.yml 是 conda 项目的复现基石**——包含通道（channels）、Python 版本、conda 包与 pip 包，必须提交 Git。
 
 ---
 
@@ -132,7 +132,7 @@ dependencies:
 
 ### 4.1 为什么需要 mamba
 
-> ⚠️ **conda 的痛点**：依赖求解器慢（大型环境可能卡几分钟）——mamba 用 C++ 重写求解器，**快 10-30 倍**。
+> **conda 的痛点**：依赖求解器慢（大型环境可能卡几分钟）——mamba 用 C++ 重写求解器，**快 10-30 倍**。
 
 | 维度 | conda | mamba |
 |------|-------|-------|
@@ -150,7 +150,7 @@ mamba create -n ml python=3.10
 mamba install pytorch pytorch-cuda -c pytorch -c nvidia
 ```
 
-> 💡 **实践**：`conda` 与 `mamba` 命令可混用（同一环境体系），日常安装用 mamba、习惯性脚本用 conda。
+> **实践**：`conda` 与 `mamba` 命令可混用（同一环境体系），日常安装用 mamba、习惯性脚本用 conda。
 
 ---
 
@@ -158,7 +158,7 @@ mamba install pytorch pytorch-cuda -c pytorch -c nvidia
 
 ### 5.1 混用的冲突根源
 
-> ⚠️ **冲突根源**：conda 与 pip 各自维护 `site-packages` 元数据——两边装同名的不同版本包时，互相看不见对方，导致环境损坏。
+> **冲突根源**：conda 与 pip 各自维护 `site-packages` 元数据——两边装同名的不同版本包时，互相看不见对方，导致环境损坏。
 
 ### 5.2 黄金规则
 
@@ -182,7 +182,7 @@ mamba install pytorch pytorch-cuda -c pytorch -c nvidia
     uv pip install -r requirements.txt  # 2. 纯 Python 包（uv 加速）
 ```
 
-> 🎯 **2026 共识**：conda 管环境与底层二进制，**内部用 uv 装纯 Python 包**——兼具 conda 的原生能力与 uv 的速度。
+> **2026 共识**：conda 管环境与底层二进制，**内部用 uv 装纯 Python 包**——兼具 conda 的原生能力与 uv 的速度。
 
 ---
 
@@ -190,7 +190,7 @@ mamba install pytorch pytorch-cuda -c pytorch -c nvidia
 
 ### 6.1 分层思路（Windows 推荐）
 
-> 💡 Windows 平台实践共识：**Anaconda/Miniconda 统一管理所有 Python 版本（作为解释器仓库）→ 各版本内安装 uv/poetry 等工具 → 项目目录内用工具创建独立 .venv**。
+> Windows 平台实践共识：**Anaconda/Miniconda 统一管理所有 Python 版本（作为解释器仓库）→ 各版本内安装 uv/poetry 等工具 → 项目目录内用工具创建独立 .venv**。
 
 ```
 Windows 分层管理架构
@@ -252,7 +252,7 @@ Windows 分层管理架构
 
 ## 8. 核心要点
 
-> 🎯 **核心要点**：
+> **核心要点**：
 > 1. conda 是跨语言二进制包管理器（CUDA/GCC/GDAL），不是普通 Python 工具——只在需要原生依赖时用
 > 2. Miniconda（~100MB）替代 Anaconda（3GB+）；mamba 替代 conda 求解器（快 10-30 倍）
 > 3. 混用黄金规则：**先 conda 后 pip**，纯 Python 包用 uv/pip；2026 组合 = conda 管环境 + uv 装包

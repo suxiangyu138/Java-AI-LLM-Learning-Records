@@ -2,7 +2,7 @@
 
 > jps/jstat/jstack/jmap——这四个工具是Java后端线上排障的"四大名捕"，面试必问，工作必用
 
-## 📚 目录
+## 目录
 
 1. [jps — JVM进程状态](#1-jps--jvm进程状态)
 2. [jstat — JVM统计监控（重点）](#2-jstat--jvm统计监控重点)
@@ -52,7 +52,7 @@ jps -v
 
 ### 1.3 实战场景
 
-> 💡 **场景**：服务器上运行了多个Spring Boot应用，无法区分进程对应哪个服务。
+> **场景**：服务器上运行了多个Spring Boot应用，无法区分进程对应哪个服务。
 
 ```bash
 # 使用 -l 查看完整路径，区分不同应用
@@ -63,12 +63,12 @@ jps -l -v | grep -v Jps
 
 ### 1.4 常见问题
 
-> ⚠️ **注意**：
+> **注意**：
 > - `jps` 依赖于 `/tmp/hsperfdata_<username>` 文件，如果该目录被清理或权限不足，`jps` 将无法显示对应进程
 > - 使用 `-v` 时输出可能较长，建议配合 `grep` 过滤
 > - `jps` 只能看到当前用户的Java进程（除非有root权限）
 
-> 🎯 **核心要点**：jps是JVM工具链的入口，它告诉你"系统上运行了哪些Java进程、每个进程的PID是什么"。先用jps拿到PID，后续所有诊断工具（jstat/jstack/jmap）都依赖这个PID。
+> **核心要点**：jps是JVM工具链的入口，它告诉你"系统上运行了哪些Java进程、每个进程的PID是什么"。先用jps拿到PID，后续所有诊断工具（jstat/jstack/jmap）都依赖这个PID。
 
 ---
 
@@ -128,7 +128,7 @@ jstat -gc <PID> 1000 5
 5120.0 5120.0 2048.0  0.0   33792.0  18432.0   67584.0    45200.0   48640.0 46208.0  15   0.235   2     0.180   0.415
 ```
 
-> 💡 **解读**：
+> **解读**：
 > - Survivor区S0用了2MB，S1未使用 → 正常，每次YGC后存活对象从Eden+From区移到To区
 > - Eden区使用18MB/33MB → 使用率约55%，还算健康
 > - 老年代使用45MB/67MB → 使用率约67%，需要关注增长趋势
@@ -163,7 +163,7 @@ jstat -gcutil <PID> 2000 10
 
 ### 2.5 实战：持续监控GC频率
 
-> 💡 **场景**：线上应用响应变慢，怀疑GC过于频繁。
+> **场景**：线上应用响应变慢，怀疑GC过于频繁。
 
 ```bash
 # 每1秒输出一次GC统计，持续监控
@@ -209,7 +209,7 @@ jstat -gccapacity <PID>
 # 65536.0 524288.0 262144.0 51200.0 51200.0 159744.0  131072.0 1048576.0   524288.0   524288.0    0.0  1075200.0  48640.0
 ```
 
-> 🎯 **核心要点**：
+> **核心要点**：
 > - `jstat -gcutil <PID> 1000` 是线上监控GC的第一命令，用它可以快速判断当前GC频率是否正常
 > - 重点关注 **YGC频率** 和 **FGC次数**：YGC每秒超过1次说明新生代太小；FGC出现说明老年代已到瓶颈
 > - 结合 `OU`（Old Used）的增长趋势判断是否存在内存泄漏：持续增长不下降 = 危险信号
@@ -273,7 +273,7 @@ jstack [-l] [-e] <PID>
         at com.example.controller.OrderController.submitOrder(OrderController.java:55)
 ```
 
-> 💡 **解读要点**：
+> **解读要点**：
 > - 线程名称：`http-nio-8080-exec-7`是Tomcat工作线程，`dubbo-thread-12`是Dubbo线程
 > - `nid`：操作系统级别的线程ID（十六进制），排查CPU问题时需要用到
 > - `Thread.State`：当前线程状态
@@ -311,7 +311,7 @@ Java stack information for the threads listed above:
     - locked <0x000000076b4f3e50> (a java.lang.Object)
 ```
 
-> 💡 **诊断**：Thread-A持有锁A等待锁B，Thread-B持有锁B等待锁A，典型的死锁场景。修复方式是保证两个线程加锁顺序一致。
+> **诊断**：Thread-A持有锁A等待锁B，Thread-B持有锁B等待锁A，典型的死锁场景。修复方式是保证两个线程加锁顺序一致。
 
 ### 3.5 CPU飙高排查（完整案例）
 
@@ -355,7 +355,7 @@ jstack 23456 | grep -A 100 '5ba4'
 top → top -Hp <PID> → printf '%x\n' <TID> → jstack <PID> | grep -A 50 '<nid>'
 ```
 
-> 💡 **Step-by-step解释**：
+> **Step-by-step解释**：
 > - `top`：找到CPU占用最高的进程（PID），确认是Java进程
 > - `top -Hp <PID>`：查看该进程中哪个线程占用CPU最高（TID）
 > - `printf '%x\n' <TID>`：将十进制线程ID转为十六进制（小写），因为jstack用十六进制表示nid
@@ -404,7 +404,7 @@ grep -B 5 "BLOCKED" threaddump_1.txt | head -50
 
 ### 3.7 死锁排查实战
 
-> 💡 **场景**：线上业务出现间歇性卡死，部分请求完全无法处理。
+> **场景**：线上业务出现间歇性卡死，部分请求完全无法处理。
 
 ```bash
 # 多次dump（间隔3秒），对比分析
@@ -431,7 +431,7 @@ for i in {1..5}; do
 done
 ```
 
-> 🎯 **核心要点**：
+> **核心要点**：
 > - `jstack` 是线程诊断的"核武器"，尤其 **CPU飙高** 排查是面试必考题
 > - 排查流程四步法：`top` → `top -Hp` → `printf '%x'` → `jstack`（必须背熟！）
 > - `BLOCKED` 线程过多 → 锁竞争严重或资源池耗尽
@@ -511,7 +511,7 @@ Old Generation:
 43685 interned Strings occupying 4891696 bytes.
 ```
 
-> 💡 **解读**：
+> **解读**：
 > - 老年代使用率84.96% → 接近满，需要FGC或即将OOM
 > - 新生代From区使用率82%，To区为0 → 说明From刚完成GC回收
 > - `MaxHeapSize=2048MB`，当前总使用约870+666=1536MB → 内存压力较大
@@ -567,7 +567,7 @@ diff histo_before.txt histo_after.txt
 | `#bytes` | 占用内存 | 重点关注占用最大TOP10 |
 | `class name` | 类名 | `[B`是byte[]，`[C`是char[]，`[I`是int[] |
 
-> ⚠️ **注意**：`jmap -histo:live` 会触发一次Full GC，在线上慎用！生产环境建议使用`jmap -histo`（不带live）或改用jcmd。
+> **注意**：`jmap -histo:live` 会触发一次Full GC，在线上慎用！生产环境建议使用`jmap -histo`（不带live）或改用jcmd。
 
 ### 4.4 `-dump` — 导出堆快照
 
@@ -585,7 +585,7 @@ jmap -dump:live,format=b,file=/tmp/heap_live.hprof <PID>
 
 ### 4.5 OOM排查完整案例
 
-> 💡 **场景**：线上应用报错 `java.lang.OutOfMemoryError: Java heap space`。
+> **场景**：线上应用报错 `java.lang.OutOfMemoryError: Java heap space`。
 
 **排查步骤**：
 
@@ -622,7 +622,7 @@ jmap -dump:format=b,file=/tmp/oom_dump_$(date +%Y%m%d_%H%M%S).hprof <PID>
 
 ### 4.6 生产环境注意事项
 
-> ⚠️ **生产环境使用jmap的禁忌**：
+> **生产环境使用jmap的禁忌**：
 >
 > 1. **`jmap -histo:live` 会触发Full GC**！如果Full GC耗时很长（比如几十秒），业务会完全卡顿
 > 2. **`jmap -dump:live` 也会触发Full GC**
@@ -634,7 +634,7 @@ jmap -dump:format=b,file=/tmp/oom_dump_$(date +%Y%m%d_%H%M%S).hprof <PID>
 - 或配置 `-XX:+HeapDumpOnOutOfMemoryError` 让JVM在OOM时自动dump
 - 预分配dump目录，确保磁盘空间足够（dump文件 ≈ 堆大小）
 
-> 🎯 **核心要点**：
+> **核心要点**：
 > - `jmap -heap` 看配置和总览，`jmap -histo` 看对象分布，`jmap -dump` 导出堆快照
 > - OOM排查三件套：**自动dump配置 + jmap -histo定位嫌疑对象 + MAT分析泄漏根源**
 > - 注意 `:live` 的FGC副作用，生产环境慎用
@@ -697,9 +697,9 @@ jcmd <PID> GC.heap_info
 #  old: 1024 regions
 ```
 
-> 💡 **推荐**：从JDK 8开始，`jcmd` 应作为首选的诊断工具，因为它设计更现代、对运行中应用的影响更小。一个 `jcmd` 基本覆盖了jstack/jmap/jinfo的所有功能。
+> **推荐**：从JDK 8开始，`jcmd` 应作为首选的诊断工具，因为它设计更现代、对运行中应用的影响更小。一个 `jcmd` 基本覆盖了jstack/jmap/jinfo的所有功能。
 
-> 🎯 **核心要点**：jcmd是"一把刀切所有"的综合诊断工具，JDK官方推荐替代jstack+jmap+jinfo。记忆方法：`jcmd <PID> <command>` 格式统一，`Thread.print`=线程，`GC.heap_dump`=堆dump，`GC.class_histogram`=对象统计，`VM.flags`=JVM参数。
+> **核心要点**：jcmd是"一把刀切所有"的综合诊断工具，JDK官方推荐替代jstack+jmap+jinfo。记忆方法：`jcmd <PID> <command>` 格式统一，`Thread.print`=线程，`GC.heap_dump`=堆dump，`GC.class_histogram`=对象统计，`VM.flags`=JVM参数。
 
 ---
 
@@ -764,7 +764,7 @@ jinfo -flag +PrintGCTimeStamps <PID>
 # 设置GC日志文件（动态生效）
 jinfo -flag +PrintGC <PID>
 
-# 修改堆大小（⚠️ 不可动态修改）
+# 修改堆大小（不可动态修改）
 jinfo -flag MaxHeapSize=4g <PID>
 # 报错：java.lang.IllegalArgumentException: 'MaxHeapSize' is not a manageable flag
 ```
@@ -778,9 +778,9 @@ jinfo -flag MaxHeapSize=4g <PID>
 | `PrintGCTimeStamps` | 打印GC相对时间 | 配合GC日志 |
 | `HeapDumpOnOutOfMemoryError` | OOM自动dump | 动态开启dump |
 | `HeapDumpPath` | dump路径 | 修改dump目录 |
-| `UseG1GC` | 切换GC（⚠️ 不推荐动态改） | - |
+| `UseG1GC` | 切换GC（不推荐动态改） | - |
 
-> 🎯 **核心要点**：jinfo最实用的场景是**在线上不重启应用的前提下，动态开启GC日志**来排查问题。但大部分JVM参数（如堆大小）不支持动态修改。
+> **核心要点**：jinfo最实用的场景是**在线上不重启应用的前提下，动态开启GC日志**来排查问题。但大部分JVM参数（如堆大小）不支持动态修改。
 
 ---
 
@@ -818,7 +818,7 @@ jhat -port 8000 heap_dump.hprof
 | **VisualVM + plugins** | 开源全能 | 推荐 |
 | **GCeasy** | 在线GC日志分析 | 推荐（网页版） |
 
-> 🎯 **核心要点**：jhat已废弃，记住它能做什么即可（打开hprof文件），实际的堆分析工作用 **Eclipse MAT** 完成。
+> **核心要点**：jhat已废弃，记住它能做什么即可（打开hprof文件），实际的堆分析工作用 **Eclipse MAT** 完成。
 
 ---
 
@@ -879,7 +879,7 @@ jinfo -flag MaxHeapSize <PID>       # 查看参数值
 
 ### 8.3 面试高频问题
 
-> 💡 **面试官常问**：
+> **面试官常问**：
 > 1. "线上CPU飙到100%，怎么排查？" → 四步法：top→top -Hp→printf→jstack
 > 2. "怎么判断是否有内存泄漏？" → jstat观察OU持续增长 + jmap -histo对比对象增长
 > 3. "怎么定位死锁？" → jstack -l自动检测，或连续dump对比
@@ -891,7 +891,7 @@ jinfo -flag MaxHeapSize <PID>       # 查看参数值
 
 ---
 
-> 🎯 **总结**：四个工具的定位可以用一句话记住——**jps找进程，jstat看GC，jstack查线程，jmap分析内存**。建议优先级：`jcmd` > `jstack+jmap` > 其他。线上排查四步法（CPU场景）必须烂熟于心。
+> **总结**：四个工具的定位可以用一句话记住——**jps找进程，jstat看GC，jstack查线程，jmap分析内存**。建议优先级：`jcmd` > `jstack+jmap` > 其他。线上排查四步法（CPU场景）必须烂熟于心。
 
 ---
 

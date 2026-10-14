@@ -9,7 +9,7 @@
 | Streamlit/Gradio/Chainlit | 高层 API | 事件格式、缓冲、断线、取消 |
 | 手写全链路（本文） | 协议与工程细节 | —— |
 
-> 🎯 核心要点：**手写一次，三层架构就固化了**——此后用任何框架都是在"贴这层皮"。同时它是面试"聊天流式怎么实现"的标准答案骨架。
+> 核心要点：**手写一次，三层架构就固化了**——此后用任何框架都是在"贴这层皮"。同时它是面试"聊天流式怎么实现"的标准答案骨架。
 
 ## 2. 系统结构
 
@@ -110,7 +110,7 @@ async function send() {
   });
   es.addEventListener('tool_call', (e) => {
     const t = JSON.parse(e.data);
-    bubble.innerHTML += `<p class="tool">🔧 ${t.name}(${t.args})</p>`;
+    bubble.innerHTML += `<p class="tool">${t.name}(${t.args})</p>`;
   });
   es.addEventListener('done', () => es.close());
   es.onerror = () => { /* 自动重连：浏览器原生行为 */ };
@@ -159,7 +159,7 @@ def stop(req: dict):
     return {"ok": True}
 ```
 
-> 💡 更优做法：直接 abort 上游模型请求（OpenAI SDK 支持请求取消），否则模型还在烧钱生成。
+> 更优做法：直接 abort 上游模型请求（OpenAI SDK 支持请求取消），否则模型还在烧钱生成。
 
 ### 5.2 token 渲染优化
 
@@ -190,7 +190,7 @@ es.addEventListener('done', () => flush(bubble, true));
 </script>
 ```
 
-> ⚠️ 直接用 `innerHTML` 拼接时，若模型输出含 HTML 标签会注入执行——上线前对回答做 HTML 转义（`marked` 默认转义原始 HTML）或走白名单；外部 CDN 脚本必须带 `integrity`（SRI）与 `crossorigin="anonymous"`，防 CDN 被攻陷。
+> 直接用 `innerHTML` 拼接时，若模型输出含 HTML 标签会注入执行——上线前对回答做 HTML 转义（`marked` 默认转义原始 HTML）或走白名单；外部 CDN 脚本必须带 `integrity`（SRI）与 `crossorigin="anonymous"`，防 CDN 被攻陷。
 
 ### 5.3 错误处理
 
@@ -247,7 +247,7 @@ def append_message(sid: str, msg: dict):
 | 断线后无法续传 | 缺 id/Last-Event-ID | 事件带递增 id；服务端按 id 缓存最近 N 条事件 |
 | 事件到了但前端不显示 | 事件名不匹配 | 浏览器 Network → EventStream 标签直接看事件帧格式 |
 
-> 💡 Chrome DevTools 的 Network 面板对 SSE 有专门的 EventStream 视图，逐帧可见——手写方案调试的第一利器。
+> Chrome DevTools 的 Network 面板对 SSE 有专门的 EventStream 视图，逐帧可见——手写方案调试的第一利器。
 
 ## 6. 与框架方案的等价关系
 
@@ -262,11 +262,11 @@ def append_message(sid: str, msg: dict):
 
 | 场景 | 结论 |
 |---|---|
-| 学习/面试/后端主导的小工具 | ✅ 手写，零依赖可运维 |
-| 已有 FastAPI 服务，前端需求简单 | ✅ 手写一个 /api/chat + 单页 |
+| 学习/面试/后端主导的小工具 | ✓ 手写，零依赖可运维 |
+| 已有 FastAPI 服务，前端需求简单 | ✓ 手写一个 /api/chat + 单页 |
 | 需要复杂交互（过程可视化/审批） | 换 Chainlit 或 AI SDK，别手搓 |
 
-> 🎯 核心要点：手写方案的全部价值在于**协议掌握与最小依赖**——把 [02](02-流式传输基础：SSE与WebSocket.md) 的事件协议吃透后，前端渲染就是"按类型画不同卡片"的体力活，届时换任何框架都是降维。
+> 核心要点：手写方案的全部价值在于**协议掌握与最小依赖**——把 [02](02-流式传输基础：SSE与WebSocket.md) 的事件协议吃透后，前端渲染就是"按类型画不同卡片"的体力活，届时换任何框架都是降维。
 
 ---
 

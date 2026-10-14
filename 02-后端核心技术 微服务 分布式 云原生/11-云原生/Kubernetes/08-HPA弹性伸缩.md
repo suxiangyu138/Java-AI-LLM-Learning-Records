@@ -1,5 +1,5 @@
 # 08-HPA弹性伸缩
-> 🎯 弹性伸缩是K8s最吸引人的特性之一 — 让集群根据业务负载自动调整Pod副本数，高峰期自动扩容承载流量，低谷期自动缩容节省资源，实现"按需付费"的云原生理想
+> 弹性伸缩是K8s最吸引人的特性之一 — 让集群根据业务负载自动调整Pod副本数，高峰期自动扩容承载流量，低谷期自动缩容节省资源，实现"按需付费"的云原生理想
 
 ---
 
@@ -41,14 +41,14 @@ HPA自动伸缩：
 
 | 场景 | 是否适合HPA | 原因 |
 |------|------------|------|
-| 无状态Web服务（SpringBoot/Go） | ✅ 非常适合 | 每个Pod独立，扩容无副作用 |
-| API网关 / 代理 | ✅ 非常适合 | 水平扩展友好 |
-| 消息消费者 | ✅ 非常适合 | 根据队列深度动态调整消费者数量 |
-| MySQL / Redis | ❌ 不适合 | 有状态应用HPA会导致数据混乱 |
-| WebSocket长连接服务 | ⚠️ 需谨慎 | 扩容后连接迁移复杂，需业务层支持 |
-| 批处理任务 | ❌ 不适合 | 由Job或Workflow管理，不需HPA |
+| 无状态Web服务（SpringBoot/Go） | ✓ 非常适合 | 每个Pod独立，扩容无副作用 |
+| API网关 / 代理 | ✓ 非常适合 | 水平扩展友好 |
+| 消息消费者 | ✓ 非常适合 | 根据队列深度动态调整消费者数量 |
+| MySQL / Redis | ✗ 不适合 | 有状态应用HPA会导致数据混乱 |
+| WebSocket长连接服务 | 需谨慎 | 扩容后连接迁移复杂，需业务层支持 |
+| 批处理任务 | ✗ 不适合 | 由Job或Workflow管理，不需HPA |
 
-> 💡 HPA最适合**无状态**应用。对于Deployment管理的有状态应用（StatefulSet），HPA也可以工作，但需要确保每个副本能独立处理请求（如分片模式）。
+> HPA最适合**无状态**应用。对于Deployment管理的有状态应用（StatefulSet），HPA也可以工作，但需要确保每个副本能独立处理请求（如分片模式）。
 
 ---
 
@@ -100,7 +100,7 @@ desiredReplicas = ceil[currentReplicas × (currentMetricValue / desiredMetricVal
   desiredReplicas = ceil[4 × (85 / 50)] = ceil[4 × 1.7] = ceil[6.8] = 7
 ```
 
-> ⚠️ HPA的扩缩容是按比例平滑进行的，不会一次性从4跳到7，而是逐步调整。同时受`--horizontal-pod-autoscaler-tolerance`（默认0.1，即10%偏差）影响，偏差小于10%时不调整。
+> HPA的扩缩容是按比例平滑进行的，不会一次性从4跳到7，而是逐步调整。同时受`--horizontal-pod-autoscaler-tolerance`（默认0.1，即10%偏差）影响，偏差小于10%时不调整。
 
 ### 2.4 多条指标的聚合
 
@@ -163,11 +163,11 @@ minikube addons enable metrics-server
 
 | 能力 | Metrics Server | Prometheus（自定义指标用） |
 |------|---------------|---------------------------|
-| CPU使用率 | ✅ | ✅ |
-| 内存使用率 | ✅ | ✅ |
-| 自定义指标（QPS/RT） | ❌ | ✅ |
-| 历史数据存储 | ❌ | ✅（PromQL查询） |
-| 长期趋势 | ❌ | ✅ |
+| CPU使用率 | ✓ | ✓ |
+| 内存使用率 | ✓ | ✓ |
+| 自定义指标（QPS/RT） | ✗ | ✓ |
+| 历史数据存储 | ✗ | ✓（PromQL查询） |
+| 长期趋势 | ✗ | ✓ |
 | 存储消耗 | 极小（仅当前值） | 较大（时间序列） |
 | 资源消耗 | 极低 | 较高 |
 
@@ -178,7 +178,7 @@ minikube addons enable metrics-server
 ### 4.1 最简单的CPU HPA
 
 ```yaml
-apiVersion: autoscaling/v2          # ⭐ v2支持多种指标
+apiVersion: autoscaling/v2          # ★ v2支持多种指标
 kind: HorizontalPodAutoscaler
 metadata:
   name: user-service-hpa
@@ -187,9 +187,9 @@ spec:
     apiVersion: apps/v1
     kind: Deployment
     name: user-service
-  minReplicas: 2                    # ⭐ 最小副本数
-  maxReplicas: 10                   # ⭐ 最大副本数
-  metrics:                          # ⭐ 指标定义
+  minReplicas: 2                    # ★ 最小副本数
+  maxReplicas: 10                   # ★ 最大副本数
+  metrics:                          # ★ 指标定义
   - type: Resource
     resource:
       name: cpu
@@ -198,7 +198,7 @@ spec:
         averageUtilization: 70      # CPU平均使用率超过70%触发
 ```
 
-> 💡 `averageUtilization: 70`意味着：所有Pod的CPU使用率平均值超过70%时触发扩容。例如deployment有3个Pod，request.cpu=500m，当前平均使用率为350m（70%），正好在阈值，不触发。
+> `averageUtilization: 70`意味着：所有Pod的CPU使用率平均值超过70%时触发扩容。例如deployment有3个Pod，request.cpu=500m，当前平均使用率为350m（70%），正好在阈值，不触发。
 
 ### 4.2 CPU + Memory双重指标
 
@@ -227,7 +227,7 @@ spec:
       target:
         type: Utilization
         averageUtilization: 80      # 或内存超过80%
-  # ⭐ 两种指标遵循"取最大值"原则
+  # ★ 两种指标遵循"取最大值"原则
 ```
 
 ### 4.3 手动测试HPA
@@ -335,14 +335,14 @@ spec:
   minReplicas: 2
   maxReplicas: 20
   metrics:
-  - type: Pods                     # ⭐ Pods类型：每个Pod的指标平均值
+  - type: Pods                     # ★ Pods类型：每个Pod的指标平均值
     pods:
       metric:
         name: qps_per_pod
       target:
         type: AverageValue
-        averageValue: 100          # ⭐ 每个Pod QPS超过100时扩容
-  behavior:                        # ⭐ 扩缩容策略
+        averageValue: 100          # ★ 每个Pod QPS超过100时扩容
+  behavior:                        # ★ 扩缩容策略
     scaleDown:
       stabilizationWindowSeconds: 60  # 缩容稳定窗口
     scaleUp:
@@ -423,7 +423,7 @@ spec:
         averageValue: 1000          # 每个消费者积压超过1000条时扩容
 ```
 
-> 🎯 **自定义指标的最佳实践**：不同的业务场景选择不同的指标。Web服务用QPS或RT，消息消费者用队列深度，批处理任务用待处理任务数。建议将CPU/内存作为保底配置（防止自定义指标服务宕机），再加一个业务指标。
+> **自定义指标的最佳实践**：不同的业务场景选择不同的指标。Web服务用QPS或RT，消息消费者用队列深度，批处理任务用待处理任务数。建议将CPU/内存作为保底配置（防止自定义指标服务宕机），再加一个业务指标。
 
 ---
 
@@ -454,9 +454,9 @@ spec:
       target:
         type: Utilization
         averageUtilization: 70
-  behavior:                            # ⭐ 精确控制扩缩容行为
+  behavior:                            # ★ 精确控制扩缩容行为
     scaleDown:                         # 缩容策略
-      stabilizationWindowSeconds: 300  # ⭐ 缩容冷静期（5分钟）
+      stabilizationWindowSeconds: 300  # ★ 缩容冷静期（5分钟）
       policies:                        # 多条策略，取最大变化量
       - type: Percent
         value: 10                      # 每次最多缩容10%
@@ -586,7 +586,7 @@ behavior:
 # VPA场景：有状态服务、批处理
 # ── Pod内存不足 → VPA分析历史使用率 → 增大内存limits → Pod重建生效
 # ── 需求：Elasticsearch、Cassandra（需要精确资源，但不愿改代码）
-# ⚠️ VPA重调度Pod会导致短暂中断
+# VPA重调度Pod会导致短暂中断
 
 # Cluster Autoscaler场景：所有Pod扩容后仍Pending
 # ── HPA将Pod从5扩到20，但节点资源不足 → Pod卡在Pending
@@ -594,7 +594,7 @@ behavior:
 # ── 缩容：节点利用率低于阈值持续一段时间 → 驱逐Pod → 删除节点
 ```
 
-> ⚠️ CDP（Critical Deployment Pattern）：**三者协同使用**才能实现完整的弹性伸缩。仅配HPA而没用Cluster Autoscaler，当节点资源耗尽时新Pod会一直Pending。建议：HPA + Cluster Autoscaler 配合使用，VPA按需引入。
+> CDP（Critical Deployment Pattern）：**三者协同使用**才能实现完整的弹性伸缩。仅配HPA而没用Cluster Autoscaler，当节点资源耗尽时新Pod会一直Pending。建议：HPA + Cluster Autoscaler 配合使用，VPA按需引入。
 
 ---
 
@@ -612,7 +612,7 @@ kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/late
 
 ### 8.2 Deployment — 必须设置资源限制
 
-> ⚠️ **HPA必须配合resources.requests使用**！如果没有设置CPU request，HPA无法计算Utilization，会自动忽略CPU指标。
+> **HPA必须配合resources.requests使用**！如果没有设置CPU request，HPA无法计算Utilization，会自动忽略CPU指标。
 
 ```yaml
 apiVersion: apps/v1
@@ -623,7 +623,7 @@ metadata:
   labels:
     app: user-service
 spec:
-  replicas: 2                        # ⭐ 初始副本
+  replicas: 2                        # ★ 初始副本
   selector:
     matchLabels:
       app: user-service
@@ -642,7 +642,7 @@ spec:
           value: "production"
         - name: JAVA_OPTS
           value: "-Xms512m -Xmx512m -XX:+UseG1GC"
-        resources:                     # ⭐ HPA依赖这里！
+        resources:                     # ★ HPA依赖这里！
           requests:                    # ─ 必须设置requests
             cpu: "500m"                #   request 0.5核CPU
             memory: "512Mi"            #   request 512MB内存
@@ -676,23 +676,23 @@ spec:
     apiVersion: apps/v1
     kind: Deployment
     name: user-service
-  minReplicas: 2                      # ⭐ 保底：至少2个副本
-  maxReplicas: 10                     # ⭐ 上限：最多10个副本
+  minReplicas: 2                      # ★ 保底：至少2个副本
+  maxReplicas: 10                     # ★ 上限：最多10个副本
   metrics:
   - type: Resource
     resource:
       name: cpu
       target:
         type: Utilization
-        averageUtilization: 70        # ⭐ CPU平均使用率70% → 扩容
+        averageUtilization: 70        # ★ CPU平均使用率70% → 扩容
   - type: Resource
     resource:
       name: memory
       target:
         type: Utilization
-        averageUtilization: 80        # ⭐ 内存80% → 扩容
+        averageUtilization: 80        # ★ 内存80% → 扩容
   behavior:
-    scaleUp:                          # ⭐ 扩容策略：激进
+    scaleUp:                          # ★ 扩容策略：激进
       stabilizationWindowSeconds: 0
       policies:
       - type: Percent
@@ -702,7 +702,7 @@ spec:
         value: 4
         periodSeconds: 15
       selectPolicy: Max               # 取最大值（扩更快）
-    scaleDown:                        # ⭐ 缩容策略：保守
+    scaleDown:                        # ★ 缩容策略：保守
       stabilizationWindowSeconds: 300 # 等5分钟确认稳定
       policies:
       - type: Percent
@@ -774,8 +774,8 @@ kubectl top pod -n production -l app=user-service
 # │ scaleDown = 300s稳定 / 10%平滑         ← 缓慢缩容
 ```
 
-> 💡 **CPU阈值为什么建议70%？** 因为要达到70%阈值意味着实际当前值=request×0.7=350m（500m request时）。还有30%的缓冲空间应对突发流量，不会因短时毛刺就立即扩容。设置太低（如30%）会导致频繁扩缩，设置太高（如90%）则扩容不及时可能已经超时了。
+> **CPU阈值为什么建议70%？** 因为要达到70%阈值意味着实际当前值=request×0.7=350m（500m request时）。还有30%的缓冲空间应对突发流量，不会因短时毛刺就立即扩容。设置太低（如30%）会导致频繁扩缩，设置太高（如90%）则扩容不及时可能已经超时了。
 
 ---
 
-> 🎯 **HPA核心要点总结**：HPA是K8s无状态应用的"自动变速箱" — 根据CPU/内存/业务指标自动调整Pod副本数。**前提条件**：部署Metrics Server并给Pod设置resources.requests。生产环境建议"CPU+自定义指标"双指标监控，扩容策略激进（立即扩、快速扩）、缩容策略保守（5分钟冷静期、每次缩10%）。配合Cluster Autoscaler实现真正的端到端弹性伸缩。**没有HPA的K8s集群等于开手动挡汽车** — 永远在手动调整副本数的路上疲于奔命。
+> **HPA核心要点总结**：HPA是K8s无状态应用的"自动变速箱" — 根据CPU/内存/业务指标自动调整Pod副本数。**前提条件**：部署Metrics Server并给Pod设置resources.requests。生产环境建议"CPU+自定义指标"双指标监控，扩容策略激进（立即扩、快速扩）、缩容策略保守（5分钟冷静期、每次缩10%）。配合Cluster Autoscaler实现真正的端到端弹性伸缩。**没有HPA的K8s集群等于开手动挡汽车** — 永远在手动调整副本数的路上疲于奔命。

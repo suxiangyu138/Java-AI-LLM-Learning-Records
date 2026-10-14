@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [IoC 的本质：容器反转了什么](#1-ioc-的本质容器反转了什么)
 2. [BeanFactory：最底层的容器能力](#2-beanfactory最底层的容器能力)
@@ -42,7 +42,7 @@ public class OrderService {
 
 **为什么值得反转**：解耦（依赖抽象而非实现）→ 可替换（换实现零改动）→ 可测试（注入 Mock）→ 统一管理（单例、代理、事务）。
 
-> 🎯 **核心要点**：IoC 不是 Spring 发明的模式，而是"**依赖倒置原则**"（DIP，见 `Java面向对象/09`）的工程化实现——Spring 只是把"谁创建、谁注入、何时销毁"变成了容器基础设施。
+> **核心要点**：IoC 不是 Spring 发明的模式，而是"**依赖倒置原则**"（DIP，见 `Java面向对象/09`）的工程化实现——Spring 只是把"谁创建、谁注入、何时销毁"变成了容器基础设施。
 
 ---
 
@@ -78,7 +78,7 @@ factory.registerBeanDefinition("orderService",
 OrderService service = factory.getBean(OrderService.class); // 惰性创建
 ```
 
-> 💡 面试点：`DefaultListableBeanFactory` 是 Spring 的"万能容器"——ApplicationContext 都把 Bean 注册与获取委托给它。**理解了这个类，就理解了容器的一半**。
+> 面试点：`DefaultListableBeanFactory` 是 Spring 的"万能容器"——ApplicationContext 都把 Bean 注册与获取委托给它。**理解了这个类，就理解了容器的一半**。
 
 ---
 
@@ -111,7 +111,7 @@ ApplicationContext ctx = new AnnotationConfigApplicationContext(AppConfig.class)
 OrderService service = ctx.getBean(OrderService.class);   // 已预加载，直接可用
 ```
 
-> 🎯 **核心要点**：**BeanFactory = 会造 Bean 的容器；ApplicationContext = 企业级容器**（加资源/事件/国际化/预加载）。日常开发用 ApplicationContext，BeanFactory 只出现在源码与框架内部。
+> **核心要点**：**BeanFactory = 会造 Bean 的容器；ApplicationContext = 企业级容器**（加资源/事件/国际化/预加载）。日常开发用 ApplicationContext，BeanFactory 只出现在源码与框架内部。
 
 ---
 
@@ -123,9 +123,9 @@ BeanFactory                          —— 最底层契约
         └── ApplicationContext       —— 企业级容器（组合）
               ├── ClassPathXmlApplicationContext   （XML 时代，已边缘化）
               ├── FileSystemXmlApplicationContext  （XML 文件）
-              ├── AnnotationConfigApplicationContext  ✅ 现代主力（注解驱动）
+              ├── AnnotationConfigApplicationContext  ✓ 现代主力（注解驱动）
               └── GenericWebApplicationContext / ServletWebServerApplicationContext
-                    └── AnnotationConfigServletWebServerApplicationContext  ✅ Boot 内部容器
+                    └── AnnotationConfigServletWebServerApplicationContext  ✓ Boot 内部容器
 
 核心实现组合：
 ApplicationContext
@@ -142,7 +142,7 @@ ApplicationContext
 | `ClassPathXmlApplicationContext` | XML | 遗留项目 |
 | `AnnotationConfigServletWebServerApplicationContext` | 注解 + 内嵌 Web 服务器 | Spring Boot 内部 |
 
-> 💡 **Spring Boot 与容器**：`SpringApplication.run()` 最终创建的是 `AnnotationConfigServletWebServerApplicationContext`（web）或 `AnnotationConfigApplicationContext`（非 web）——Boot 的自动配置本质上就是向这个容器注册大量 `@Configuration` 类。
+> **Spring Boot 与容器**：`SpringApplication.run()` 最终创建的是 `AnnotationConfigServletWebServerApplicationContext`（web）或 `AnnotationConfigApplicationContext`（非 web）——Boot 的自动配置本质上就是向这个容器注册大量 `@Configuration` 类。
 
 ---
 
@@ -170,7 +170,7 @@ getBean(type)
 | `BeanCurrentlyInCreationException` | 循环依赖无法解决 | 构造器循环依赖/原型循环依赖 |
 | `BeanCreationException` | 创建过程失败 | 看 cause（初始化方法、依赖注入出错） |
 
-> 🎯 **核心要点**：getBean 的路径 = **缓存 → 父容器 → 定义解析 → 创建**——排查"Bean 找不到"时按这条链逐环检查：注册了没有 → 注册成没成 → 名字对不对 → 有没有歧义。
+> **核心要点**：getBean 的路径 = **缓存 → 父容器 → 定义解析 → 创建**——排查"Bean 找不到"时按这条链逐环检查：注册了没有 → 注册成没成 → 名字对不对 → 有没有歧义。
 
 ---
 
@@ -193,7 +193,7 @@ refresh()
 
 **启动失败 vs 运行失败**：单例预加载意味着**启动期就暴露配置错误**（Bean 缺失、依赖注入失败、循环依赖）——这是 ApplicationContext 的重要工程价值：错误前置。
 
-> 💡 与源码系统的分工：本模块给"8 步启动地图"，`Spring生态深度剖析/02-SpringBoot启动流程与自动配置内核.md` 给逐行源码与自动配置细节——两篇配合阅读。
+> 与源码系统的分工：本模块给"8 步启动地图"，`Spring生态深度剖析/02-SpringBoot启动流程与自动配置内核.md` 给逐行源码与自动配置细节——两篇配合阅读。
 
 ---
 

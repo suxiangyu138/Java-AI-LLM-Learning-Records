@@ -24,7 +24,7 @@
 | 核心注解 | `@Test`, `@BeforeEach`, `@ParameterizedTest` | `@Mock`, `@Spy`, `@InjectMocks`, `@Captor` |
 | Spring 集成 | `@SpringBootTest`, `@WebMvcTest`, `@DataJpaTest` | `MockitoExtension` + `@MockitoBean` |
 
-> 💡 2026 年 AI 生成测试代码已显著降低测试编写成本，GitHub Copilot / 通义灵码 可节约约 40% 的测试编写时间，但人工审查逻辑正确性仍是必要环节。
+> 2026 年 AI 生成测试代码已显著降低测试编写成本，GitHub Copilot / 通义灵码 可节约约 40% 的测试编写时间，但人工审查逻辑正确性仍是必要环节。
 
 ---
 
@@ -189,7 +189,7 @@ public class LoggingExtension implements TestInstancePostProcessor {
 }
 ```
 
-> 💡 `@ExtendWith(MockitoExtension.class)` 是 Mockito 提供的 Extension，自动初始化 `@Mock`、`@Spy`、`@InjectMocks` 等注解，无需手动调用 `MockitoAnnotations.openMocks(this)`。
+> `@ExtendWith(MockitoExtension.class)` 是 Mockito 提供的 Extension，自动初始化 `@Mock`、`@Spy`、`@InjectMocks` 等注解，无需手动调用 `MockitoAnnotations.openMocks(this)`。
 
 ### 2.6 @Nested 嵌套测试
 
@@ -240,7 +240,7 @@ class UserServiceTest {
 }
 ```
 
-> 💡 `@Nested` 内部类可以不使用 `static`，内部类中的 `@BeforeEach` / `@AfterEach` 按外层 -> 内层顺序执行。
+> `@Nested` 内部类可以不使用 `static`，内部类中的 `@BeforeEach` / `@AfterEach` 按外层 -> 内层顺序执行。
 
 ### 2.7 测试生命周期与 Spring Context 缓存
 
@@ -263,7 +263,7 @@ class OrderServiceTest2 { /* 复用 Context A */ }
 class OrderServiceTest3 { /* 启动 Context B */ }
 ```
 
-> ⚠️ 使用 `@MockBean` / `@DirtiesContext` 会导致上下文缓存失效，影响测试执行速度。优先使用 `@WebMvcTest` / `@DataJpaTest` 等切片测试替代 `@SpringBootTest` 以减少上下文启动开销。
+> 使用 `@MockBean` / `@DirtiesContext` 会导致上下文缓存失效，影响测试执行速度。优先使用 `@WebMvcTest` / `@DataJpaTest` 等切片测试替代 `@SpringBootTest` 以减少上下文启动开销。
 
 ---
 
@@ -410,7 +410,7 @@ class UserServiceTest {
 }
 ```
 
-> 💡 Mockito 通过**类型匹配**注入，若有多个同类型 Mock，使用 `@Mock(name = "xxx")` 按字段名匹配。
+> Mockito 通过**类型匹配**注入，若有多个同类型 Mock，使用 `@Mock(name = "xxx")` 按字段名匹配。
 
 #### ArgumentCaptor 详例
 
@@ -542,7 +542,7 @@ verifyNoInteractions(userRepository);
 verifyNoMoreInteractions(userRepository); // 除已 verify 的方法外无其他交互
 ```
 
-> 💡 `verifyNoMoreInteractions()` 是"严格的验证"，强烈建议单元测试中每个测试方法只验证相关的 Mock 调用，避免过度验证导致维护困难。
+> `verifyNoMoreInteractions()` 是"严格的验证"，强烈建议单元测试中每个测试方法只验证相关的 Mock 调用，避免过度验证导致维护困难。
 
 ### 3.10 @Spy vs @Mock 对比
 
@@ -572,7 +572,7 @@ doReturn(100).when(spyList).size();
 assertEquals(100, spyList.size());  // 覆盖后返回 Mock 值
 ```
 
-> ⚠️ Spy 使用 `doReturn()` / `doThrow()` 而非 `when().thenReturn()` 以避免真实方法被提前执行。`when(spy.method()).thenReturn(x)` 会导致 `spy.method()` 先真实执行一次，若方法有副作用则会产生问题。
+> Spy 使用 `doReturn()` / `doThrow()` 而非 `when().thenReturn()` 以避免真实方法被提前执行。`when(spy.method()).thenReturn(x)` 会导致 `spy.method()` 先真实执行一次，若方法有副作用则会产生问题。
 
 ---
 
@@ -765,7 +765,7 @@ class UserRepositoryTest {
 | `@JdbcTest` | 仅加载 JDBC 组件（无 JPA） |
 | `@MybatisTest` | MyBatis 切片测试（需额外 starter） |
 
-> 🌐 替代方案：**Testcontainers** 可在集成测试中使用真实 MySQL / PostgreSQL 容器替代 H2 内嵌数据库，适用于需要验证数据库方言特性的场景。
+> 替代方案：**Testcontainers** 可在集成测试中使用真实 MySQL / PostgreSQL 容器替代 H2 内嵌数据库，适用于需要验证数据库方言特性的场景。
 
 ---
 
@@ -987,7 +987,7 @@ void calculateDiscount_StandardCustomer_AppliesTenPercent() {
  ╱────────────────────╲
 ```
 
-> 💡 实际项目中 75% 单元测试 + 20% 服务层集成测试 + 5% E2E 测试为推荐比例。AI 可大幅降低单元测试编写成本，使开发者将更多精力放在关键业务流程的 E2E 测试上。
+> 实际项目中 75% 单元测试 + 20% 服务层集成测试 + 5% E2E 测试为推荐比例。AI 可大幅降低单元测试编写成本，使开发者将更多精力放在关键业务流程的 E2E 测试上。
 
 ---
 

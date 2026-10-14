@@ -1,10 +1,10 @@
 # CentOS 生产环境部署实战
 
-> 🚀 内核调优、systemd 服务、Spring Boot 部署、性能基线、日志轮转、故障排查 —— Java 应用从部署到稳定的全链路
+> 内核调优、systemd 服务、Spring Boot 部署、性能基线、日志轮转、故障排查 —— Java 应用从部署到稳定的全链路
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [内核参数调优](#1-内核参数调优)
 2. [Systemd 服务深度定制](#2-systemd-服务深度定制)
@@ -130,7 +130,7 @@ sudo systemctl start myapp
 
 # 等待启动完成
 sleep 10
-sudo systemctl is-active --quiet myapp && echo "✅ 启动成功" || echo "❌ 启动失败"
+sudo systemctl is-active --quiet myapp && echo "✓ 启动成功" || echo "✗ 启动失败"
 
 # 健康检查
 curl -f http://localhost:8080/actuator/health || exit 1
@@ -192,16 +192,16 @@ sleep 15
 # 4. 健康检查（最多重试 5 次）
 for i in {1..5}; do
     if curl -sf http://localhost:8080/actuator/health > /dev/null; then
-        echo "✅ 部署成功！v${VERSION}"
+        echo "✓ 部署成功！v${VERSION}"
         sudo systemctl status ${APP} --no-pager -l | head -5
         exit 0
     fi
-    echo "⏳ 等待健康检查... ($i/5)"
+    echo "等待健康检查... ($i/5)"
     sleep 5
 done
 
 # 5. 健康检查失败 → 回滚
-echo "❌ 部署失败，回滚中..."
+echo "✗ 部署失败，回滚中..."
 ln -sfn "$OLD" "$JAR_PATH"
 sudo systemctl restart ${APP}
 echo "已回滚"
@@ -300,7 +300,7 @@ echo "内存 RSS: $(ps -o rss -p $PID | tail -1) KB"
 
 ---
 
-> 🎯 **生产三件套**：**内核调优**（sysctl limits）保证并发能力、**systemd 完整配置**（资源限制+日志+优雅关闭）、**部署脚本+健康检查**确保零失误。
+> **生产三件套**：**内核调优**（sysctl limits）保证并发能力、**systemd 完整配置**（资源限制+日志+优雅关闭）、**部署脚本+健康检查**确保零失误。
 
 ---
 

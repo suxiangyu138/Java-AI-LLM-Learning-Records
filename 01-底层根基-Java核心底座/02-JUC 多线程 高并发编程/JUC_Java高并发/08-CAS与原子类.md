@@ -25,8 +25,8 @@
 
 ```
 CAS流程（read-modify-write 合并为一条CPU指令）：
-Thread1: 读 V=5 → CAS(V,5→6) → 匹配 ✅ → 写入6
-Thread2: 读 V=5 → CAS(V,5→6) → V已是6，不匹配 ❌ → 自旋重试 → CAS(V,6→7) ✅
+Thread1: 读 V=5 → CAS(V,5→6) → 匹配 ✓ → 写入6
+Thread2: 读 V=5 → CAS(V,5→6) → V已是6，不匹配 ✗ → 自旋重试 → CAS(V,6→7) ✓
 ```
 
 ### 1.2 CPU底层指令：cmpxchg
@@ -48,7 +48,7 @@ public final class CasSimulation {
 }
 ```
 
-> 💡 CAS比锁更轻量的本质原因：直接在CPU指令层面实现原子性，不需要操作系统介入线程挂起和恢复，避免了用户态与内核态的切换开销。
+> CAS比锁更轻量的本质原因：直接在CPU指令层面实现原子性，不需要操作系统介入线程挂起和恢复，避免了用户态与内核态的切换开销。
 
 ### 1.3 CAS自旋重试模型
 
@@ -76,7 +76,7 @@ public class CasSpinDemo {
 }
 ```
 
-> ⚠️ **自旋CPU开销**：如果CAS长时间不成功（竞争激烈），线程会持续占用CPU空转，造成CPU飙升。这是CAS的核心代价。
+> **自旋CPU开销**：如果CAS长时间不成功（竞争激烈），线程会持续占用CPU空转，造成CPU飙升。这是CAS的核心代价。
 
 ---
 
@@ -108,7 +108,7 @@ public class UnsafeDemo {
 }
 ```
 
-> 💡 JUC不用反射而用Unsafe，是因为Unsafe直接操作内存地址，绕过访问权限检查，比反射更快。
+> JUC不用反射而用Unsafe，是因为Unsafe直接操作内存地址，绕过访问权限检查，比反射更快。
 
 **JUC调用链路**：
 ```
@@ -118,7 +118,7 @@ AtomicInteger.incrementAndGet()
           volatile读当前值 → CAS写新值 → 失败则自旋重试
 ```
 
-> 🎯 所有JUC原子类最终通过Unsafe的native方法调用CPU的 `lock cmpxchg` 指令。
+> 所有JUC原子类最终通过Unsafe的native方法调用CPU的 `lock cmpxchg` 指令。
 
 ---
 
@@ -129,8 +129,8 @@ AtomicInteger.incrementAndGet()
 ```
 ABA问题：
 Thread1: 读 V=A → 被阻塞 ...
-Thread2: CAS(A→B) ✅ → CAS(B→A) ✅  → V又变回A
-Thread1: 恢复 → CAS(A→X) ✅  → ⚠️ CAS成功，但V已被修改过！
+Thread2: CAS(A→B) ✓ → CAS(B→A) ✓  → V又变回A
+Thread1: 恢复 → CAS(A→X) ✓  → CAS成功，但V已被修改过！
 ```
 
 **ABA问题场景**：线程1读取值A后被阻塞，线程2将值A改为B再改回A。线程1恢复后CAS成功，但值已经"面目全非"。
@@ -186,7 +186,7 @@ public class AbaFixByStampDemo {
 }
 ```
 
-> ⚠️ `AtomicStampedReference` 使用整型版本号（stamp），可完全防止ABA；`AtomicMarkableReference` 使用布尔标记（mark），只能标记对象是否被修改过，无法追踪修改次数。
+> `AtomicStampedReference` 使用整型版本号（stamp），可完全防止ABA；`AtomicMarkableReference` 使用布尔标记（mark），只能标记对象是否被修改过，无法追踪修改次数。
 
 ### 3.3 三大问题总结
 
@@ -196,7 +196,7 @@ public class AbaFixByStampDemo {
 | **自旋开销** | 竞争激烈时CAS持续失败 | CPU飙升，吞吐量下降 | `LongAdder`分段思想、退避策略 |
 | **单变量限制** | CAS只能操作单个变量 | 无法多字段原子更新 | `AtomicReference`封装对象 |
 
-> 💡 自旋优化退避策略：CAS失败后让出CPU（`Thread.yield()`）、短暂休眠（`Thread.sleep(0)`）或`Thread.onSpinWait()`（JDK 9+），减少CPU竞争。
+> 自旋优化退避策略：CAS失败后让出CPU（`Thread.yield()`）、短暂休眠（`Thread.sleep(0)`）或`Thread.onSpinWait()`（JDK 9+），减少CPU竞争。
 
 ---
 
@@ -365,11 +365,11 @@ public class AtomicStampedRefDemo {
 
 | 类名 | 更新条件 | ABA防护 | 使用场景 |
 |------|---------|---------|---------|
-| `AtomicReference<V>` | 值变化检测 | ❌ 无防护 | 无锁数据结构、配置更新 |
-| `AtomicStampedReference<V>` | 值 + int版本号 | ✅ 完全防护 | 资金操作、版本敏感数据 |
-| `AtomicMarkableReference<V>` | 值 + boolean标记 | ⚠️ 有限防护 | 标记对象是否"被删除/失效" |
+| `AtomicReference<V>` | 值变化检测 | ✗ 无防护 | 无锁数据结构、配置更新 |
+| `AtomicStampedReference<V>` | 值 + int版本号 | ✓ 完全防护 | 资金操作、版本敏感数据 |
+| `AtomicMarkableReference<V>` | 值 + boolean标记 | 有限防护 | 标记对象是否"被删除/失效" |
 
-> 💡 `AtomicStampedReference` 内部将 `reference` 和 `stamp` 封装为 `Pair` 对象，每次修改创建新 `Pair`，有一定GC压力。
+> `AtomicStampedReference` 内部将 `reference` 和 `stamp` 封装为 `Pair` 对象，每次修改创建新 `Pair`，有一定GC压力。
 
 ---
 
@@ -392,7 +392,7 @@ LongAdder 内部结构：
   cellsBusy: 0=未锁定 1=锁定中（CAS自旋锁）
 
 sum() = base + 遍历所有Cell求和
-⚠️ sum() 无锁，只保证最终一致性，非强一致快照
+sum() 无锁，只保证最终一致性，非强一致快照
 ```
 
 ### 7.2 LongAdder核心逻辑
@@ -448,7 +448,7 @@ public class LongAccumulatorDemo {
 | 高竞争（32线程） | ~1M ops/s | ~30M ops/s | LongAdder优30倍 |
 | 内存占用 | 1个long值 | Cell[]数组 + base | LongAdder更多 |
 
-> 🎯 选型建议：高并发统计（QPS、访问量、延迟）优先 `LongAdder`；需要强一致性的ID生成器用 `AtomicLong`。
+> 选型建议：高并发统计（QPS、访问量、延迟）优先 `LongAdder`；需要强一致性的ID生成器用 `AtomicLong`。
 
 ---
 
@@ -457,7 +457,7 @@ public class LongAccumulatorDemo {
 | 维度 | CAS（无锁） | synchronized | ReentrantLock |
 |------|-----------|-------------|---------------|
 | 原理 | CPU指令原子性 | Monitor管程 | AQS + CLH队列 |
-| 线程阻塞 | ❌ 不阻塞（自旋） | ✅ 阻塞（BLOCKED） | ✅ 阻塞（WAITING） |
+| 线程阻塞 | ✗ 不阻塞（自旋） | ✓ 阻塞（BLOCKED） | ✓ 阻塞（WAITING） |
 | 上下文切换 | 无 | 用户态↔内核态 | 有 |
 | 适用竞争强度 | 低竞争 | 中高竞争 | 中高竞争 |
 | 代码复杂度 | 简单（不需释放） | 简单（自动释放） | 需finally解锁 |
@@ -469,7 +469,7 @@ public class LongAccumulatorDemo {
 高竞争synchronized ≈ Lock >> CAS（CAS自旋风暴导致性能急剧下降）
 ```
 
-> ⚠️ 不要盲目使用CAS：高竞争下CAS自旋风暴会导致CPU飙升，JDK 8+的synchronized经过锁升级优化，高竞争下表现已很好。
+> 不要盲目使用CAS：高竞争下CAS自旋风暴会导致CPU飙升，JDK 8+的synchronized经过锁升级优化，高竞争下表现已很好。
 
 ---
 
@@ -586,4 +586,4 @@ TLAB是JVM的线程私有Eden分配缓冲区，通过CAS更新`top`指针快速�
 
 ---
 
-> 🎯 **核心总结**：CAS是CPU提供的无锁并发原语，是JUC原子类的基石。理解CAS原理、ABA问题与解决方案、LongAdder的分段思想，是掌握Java高并发的关键一步。工程实践中：低竞争直接用AtomicInteger，高并发统计用LongAdder，防ABA用AtomicStampedReference。
+> **核心总结**：CAS是CPU提供的无锁并发原语，是JUC原子类的基石。理解CAS原理、ABA问题与解决方案、LongAdder的分段思想，是掌握Java高并发的关键一步。工程实践中：低竞争直接用AtomicInteger，高并发统计用LongAdder，防ABA用AtomicStampedReference。

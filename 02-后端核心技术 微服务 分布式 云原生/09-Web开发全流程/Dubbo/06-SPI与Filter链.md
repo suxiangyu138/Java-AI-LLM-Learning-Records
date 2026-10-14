@@ -1,6 +1,6 @@
 # 06 - Dubbo SPI 与 Filter 链
 
-> 🎯 Dubbo 的可扩展性源于其 SPI 机制 — 自适应扩展、AOP 包装、IOC 注入；Filter 链则实现了调用过程的拦截编排。这两者是 Dubbo 高级用法的核心
+> Dubbo 的可扩展性源于其 SPI 机制 — 自适应扩展、AOP 包装、IOC 注入；Filter 链则实现了调用过程的拦截编排。这两者是 Dubbo 高级用法的核心
 
 ---
 
@@ -24,8 +24,8 @@
 | 维度 | JDK SPI | Dubbo SPI |
 |------|---------|-----------|
 | 加载方式 | 全量加载（`ServiceLoader`） | 按 Key 加载（按需） |
-| IOC | ❌ | ✅ 自动注入 |
-| AOP | ❌ | ✅ Wrapper 包装 |
+| IOC | ✗ | ✓ 自动注入 |
+| AOP | ✗ | ✓ Wrapper 包装 |
 | 扩展点 | 接口 | 接口 + @SPI |
 | 配置文件 | `META-INF/services/` | `META-INF/dubbo/` |
 
@@ -77,7 +77,7 @@ public class AdaptiveSerialization implements Serialization {
     }
 }
 
-// 方式2：注解在方法上 — Dubbo 自动生成自适应类（⭐ 常用）
+// 方式2：注解在方法上 — Dubbo 自动生成自适应类（★ 常用）
 @SPI("hessian2")
 public interface Serialization {
     @Adaptive("serialization")    // 从 URL 参数 serialization 获取扩展名
@@ -201,7 +201,7 @@ Provider 端：
 
 ## 5. 泛化调用
 
-> 💡 不需要引入服务接口的 class，直接通过接口名和方法名调用 — 适合网关/测试平台。
+> 不需要引入服务接口的 class，直接通过接口名和方法名调用 — 适合网关/测试平台。
 
 ```java
 // 配置泛化调用
@@ -260,7 +260,7 @@ future.whenComplete((user, ex) -> {
 | 维度 | 隐式传参 | 显式传参 |
 |------|----------|----------|
 | 方式 | `RpcContext.setAttachment` | 方法参数 |
-| 接口侵入 | ❌ 无侵入 | ✅ 需要改接口 |
+| 接口侵入 | ✗ 无侵入 | ✓ 需要改接口 |
 | 适用 | 横切关注点（traceId/用户信息） | 业务数据 |
 
-> 🎯 **最佳实践**：全链路追踪 ID 通过自定义 Filter + RpcContext 隐式传参；业务数据通过接口参数显式传递。两者互补。
+> **最佳实践**：全链路追踪 ID 通过自定义 Filter + RpcContext 隐式传参；业务数据通过接口参数显式传递。两者互补。

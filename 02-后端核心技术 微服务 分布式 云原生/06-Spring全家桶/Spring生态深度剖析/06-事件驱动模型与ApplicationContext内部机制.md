@@ -1,6 +1,6 @@
 # 06 - 事件驱动模型与 ApplicationContext 内部机制
 
-> 🎯 refresh 12 步是 ApplicationContext 的"发动机" — 从资源加载到单例预实例化，12 个步骤严格有序。事件广播器是 Spring 内通信的总线，理解它才能理解微服务组件的启动时序
+> refresh 12 步是 ApplicationContext 的"发动机" — 从资源加载到单例预实例化，12 个步骤严格有序。事件广播器是 Spring 内通信的总线，理解它才能理解微服务组件的启动时序
 
 ---
 
@@ -202,6 +202,6 @@ public void sendNotification(OrderCreatedEvent event) { ... }
 
 ---
 
-> 🎯 **核心要点**：refresh 12 步 = Spring 的"一次启动全流程"。每个微服务组件选择在哪个步骤/哪个事件点做初始化，是架构设计水平的体现。事件体系 = **同步广播 + 泛型匹配 + 事务绑定可选**。能讲清楚 `ContextRefreshedEvent` 和 `WebServerInitializedEvent` 的先后关系，面试就是源码级理解。
+> **核心要点**：refresh 12 步 = Spring 的"一次启动全流程"。每个微服务组件选择在哪个步骤/哪个事件点做初始化，是架构设计水平的体现。事件体系 = **同步广播 + 泛型匹配 + 事务绑定可选**。能讲清楚 `ContextRefreshedEvent` 和 `WebServerInitializedEvent` 的先后关系，面试就是源码级理解。
 
 **下一模块**：[07-自定义Starter与扩展点实战](07-自定义Starter与扩展点实战.md) / **返回总览**：[00-深度剖析总览](00-Spring生态深度剖析总览.md)

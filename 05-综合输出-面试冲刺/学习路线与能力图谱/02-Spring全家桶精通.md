@@ -40,9 +40,9 @@
 |---------|------------|-------------------|
 | 定位 | IoC 底层容器接口 | 应用上下文，继承 BeanFactory |
 | Bean 加载 | 延迟加载（getBean() 时才实例化） | 预加载（容器启动时实例化单例 Bean） |
-| 国际化 | ❌ | ✅ MessageSource |
-| 事件发布 | ❌ | ✅ ApplicationEvent |
-| 资源加载 | ❌ | ✅ ResourceLoader |
+| 国际化 | ✗ | ✓ MessageSource |
+| 事件发布 | ✗ | ✓ ApplicationEvent |
+| 资源加载 | ✗ | ✓ ResourceLoader |
 | 使用场景 | 内存敏感的嵌入式设备 | 99% 的企业应用 |
 
 ### 1.3 循环依赖 —— 三级缓存方案
@@ -143,7 +143,7 @@ Spring Boot 3.x 默认：全部使用 CGLIB
 │ 容器     │ Servlet 容器   │ Spring 容器             │
 │ 范围     │ 所有请求       │ 只拦截 Controller 请求    │
 │ 粒度     │ 只能在 doFilter│ pre/post/after 三阶段    │
-│ 依赖注入 │ ❌ 不能注入 Bean│ ✅ 可以注入 Spring Bean   │
+│ 依赖注入 │ ✗ 不能注入 Bean│ ✓ 可以注入 Spring Bean   │
 └──────────┴──────────────┴───────────────────────┘
 ```
 
@@ -280,7 +280,7 @@ SqlSession → Executor → StatementHandler → ParameterHandler → ResultSetH
 │          │ 一级缓存        │ 二级缓存               │
 ├──────────┼────────────────┼──────────────────────┤
 │ 作用域   │ SqlSession 级别 │ Mapper 级别（跨 Session）│
-│ 默认开启 │ ✅ 是          │ ❌ 否                  │
+│ 默认开启 │ ✓ 是          │ ✗ 否                  │
 │ 数据一致 │ 安全            │ 可能读到脏数据          │
 │ 注意事项 │ —              │ 同一 Mapper 跨 Namespace│
 │          │                │ 时需注意缓存失效         │

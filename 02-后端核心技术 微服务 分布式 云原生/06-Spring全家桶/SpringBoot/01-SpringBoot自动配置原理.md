@@ -2,7 +2,7 @@
 
 > 定位：@SpringBootApplication 三合一、自动配置加载流程、条件装配、Starter 机制、自定义 Starter——Spring Boot 面试第一考点
 
-## 📚 目录
+## 目录
 
 1. [@SpringBootApplication 三合一](#1-springbootapplication-三合一)
 2. [自动配置加载流程](#2-自动配置加载流程)
@@ -15,7 +15,7 @@
 ## 1. @SpringBootApplication 三合一
 
 ```java
-// ⚠️ @SpringBootApplication = 三个注解的组合
+// @SpringBootApplication = 三个注解的组合
 @SpringBootApplication
 public class Application {
     public static void main(String[] args) {
@@ -27,7 +27,7 @@ public class Application {
 ```java
 // 等价展开：
 @SpringBootConfiguration      // ① 配置类（@Configuration 派生）
-@EnableAutoConfiguration      // ② ⚠️ 开启自动配置（核心）
+@EnableAutoConfiguration      // ② 开启自动配置（核心）
 @ComponentScan                // ③ 组件扫描（当前包及子包）
 public class Application { }
 ```
@@ -38,7 +38,7 @@ public class Application { }
 | **@EnableAutoConfiguration** | **自动配置入口（核心）** |
 | @ComponentScan | 扫描当前包及子包的 @Component |
 
-> 🎯 **要点**：三合一——配置类 + 自动配置 + 组件扫描。**扫描范围是当前包及子包**——启动类位置错误会导致 Bean 找不到（经典坑）。
+> **要点**：三合一——配置类 + 自动配置 + 组件扫描。**扫描范围是当前包及子包**——启动类位置错误会导致 Bean 找不到（经典坑）。
 
 ---
 
@@ -54,7 +54,7 @@ public class Application { }
   ③ 逐个检查条件（@ConditionalOnClass/Property/Bean...）
   ④ 条件满足 → 注册配置类 → 装配 Bean
 
-⚠️ 面试必答：
+面试必答：
 "自动配置 = 读取 imports 清单 →
  条件判断 → 满足才装配。
  核心：'有依赖才装配'（条件注解驱动）。"
@@ -73,7 +73,7 @@ org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration
 ```java
 // 自动配置类的特征：@AutoConfiguration = @Configuration + 条件
 @AutoConfiguration
-@ConditionalOnClass({ DataSource.class })          // ⚠️ classpath 有才装配
+@ConditionalOnClass({ DataSource.class })          // classpath 有才装配
 @EnableConfigurationProperties(DataSourceProperties.class)
 public class DataSourceAutoConfiguration {
     // 装配 DataSource Bean（默认 HikariCP）
@@ -95,7 +95,7 @@ public class DataSourceAutoConfiguration {
 | @ConditionalOnExpression | SpEL 表达式 | 复杂条件 |
 
 ```java
-// ⚠️ 面试必答示例：
+// 面试必答示例：
 // @ConditionalOnMissingBean：用户自定义则用户优先（覆盖机制）
 @Bean
 @ConditionalOnMissingBean
@@ -117,7 +117,7 @@ public CacheManager cacheManager() { }
   ② 配置开关（@ConditionalOnProperty）
   ③ 依赖驱动（@ConditionalOnClass）
 
-⚠️ 面试必答：
+面试必答：
 "条件装配 = 自动配置的'智能开关'——
  依赖在才装、用户配了不装、
  开关关了不装。这是 Boot 可定制性的根基。"
@@ -130,7 +130,7 @@ public CacheManager cacheManager() { }
 ### 4.1 Starter 是什么
 
 ```xml
-<!-- ⚠️ Starter = 依赖集合 + 自动配置的打包 -->
+<!-- Starter = 依赖集合 + 自动配置的打包 -->
 <dependency>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-web</artifactId>
@@ -155,7 +155,7 @@ spring-boot-starter-amqp       <!-- RabbitMQ -->
   ② 自动配置：META-INF 里的 AutoConfiguration.imports
      （依赖引入 → 自动配置生效）
 
-⚠️ 面试必答：
+面试必答：
 "Starter = 依赖 + 自动配置的组合——
  引入依赖后配置类自动生效；
  BOM（依赖管理）保证版本兼容。"
@@ -209,14 +209,14 @@ public class DemoService {
 ### 5.2 自定义 Starter 规范
 
 ```
-✅ 命名：xxx-spring-boot-starter（官方约定）
-✅ 配置属性：@ConfigurationProperties（类型安全）
-✅ 条件装配：@ConditionalOnMissingBean（用户可覆盖）
-✅ 开关控制：@ConditionalOnProperty
-✅ 自动配置注册：AutoConfiguration.imports
-✅ 提供 spring.factories 兼容（旧版）或 imports（新版）
+✓ 命名：xxx-spring-boot-starter（官方约定）
+✓ 配置属性：@ConfigurationProperties（类型安全）
+✓ 条件装配：@ConditionalOnMissingBean（用户可覆盖）
+✓ 开关控制：@ConditionalOnProperty
+✓ 自动配置注册：AutoConfiguration.imports
+✓ 提供 spring.factories 兼容（旧版）或 imports（新版）
 
-⚠️ 面试必答：
+面试必答：
 "自定义 Starter 五步——属性类、配置类、
  条件装配、imports 注册、命名规范；
  这是'给团队写公共组件'的标准姿势。"
@@ -224,7 +224,7 @@ public class DemoService {
 
 ---
 
-> 🎯 **核心要点**：自动配置体系 = **三合一启动类**（配置 + 自动配置 + 扫描）+ **加载流程**（imports 清单 → 条件判断 → 装配）+ **条件装配**（OnClass/MissingBean/Property）+ **Starter 机制**（依赖 + 自动配置打包）+ **自定义 Starter**（属性 + 条件 + 注册）。"为什么引入依赖就能用"是 Boot 面试第一问。
+> **核心要点**：自动配置体系 = **三合一启动类**（配置 + 自动配置 + 扫描）+ **加载流程**（imports 清单 → 条件判断 → 装配）+ **条件装配**（OnClass/MissingBean/Property）+ **Starter 机制**（依赖 + 自动配置打包）+ **自定义 Starter**（属性 + 条件 + 注册）。"为什么引入依赖就能用"是 Boot 面试第一问。
 
 ---
 

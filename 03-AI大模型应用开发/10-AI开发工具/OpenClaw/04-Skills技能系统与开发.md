@@ -1,6 +1,6 @@
 # 04 - Skills 技能系统与开发
 
-> 🎯 OpenClaw 的独特创新："写文档 = 扩展 AI 能力"。Skill 不是代码插件，而是一个 `SKILL.md` 文件 — LLM 自己读取、理解、执行。ClawHub 已积累 4.4 万个 Skills，按需安装
+> OpenClaw 的独特创新："写文档 = 扩展 AI 能力"。Skill 不是代码插件，而是一个 `SKILL.md` 文件 — LLM 自己读取、理解、执行。ClawHub 已积累 4.4 万个 Skills，按需安装
 
 ---
 
@@ -87,12 +87,12 @@ gs -sDEVICE=pdfwrite -dPDFSETTINGS=/ebook -q -o compressed.pdf input.pdf
 
 | 章节 | 必须 | 说明 |
 |------|:---:|------|
-| `# Skill: <name>` | ✅ | 技能名称 |
-| `> 一句话描述` | ✅ | Tagline |
-| `## 触发条件` | ✅ | LLM 据此判断是否启用此 Skill |
-| `## 依赖` | ⬜ | 需要的系统工具/库，Agent 自动检查安装 |
-| `## 工作流程` | ✅ | 分步骤的执行指令（LLM 按步骤执行） |
-| `## 注意事项` | ⬜ | 安全提示、限制条件 |
+| `# Skill: <name>` | ✓ | 技能名称 |
+| `> 一句话描述` | ✓ | Tagline |
+| `## 触发条件` | ✓ | LLM 据此判断是否启用此 Skill |
+| `## 依赖` | □ | 需要的系统工具/库，Agent 自动检查安装 |
+| `## 工作流程` | ✓ | 分步骤的执行指令（LLM 按步骤执行） |
+| `## 注意事项` | □ | 安全提示、限制条件 |
 
 ---
 
@@ -194,12 +194,12 @@ Skill 安全机制：
    敏感命令执行 → Gateway 推送 exec.approval.requested 事件 → Operator 审批
 
 ③ 第三方 Skill 审查：
-   ⚠️ ClawHub 曾遭遇 "ClawHavoc" 供应链攻击
+   ClawHub 曾遭遇 "ClawHavoc" 供应链攻击
    安装前检查：是否执行 Shell 命令？是否访问网络？是否修改系统配置？
 ```
 
 ---
 
-> 🎯 **核心要点**：Skill = **SKILL.md（知识文件）+ LLM 理解 + Pi-embedded 执行**。它不是代码插件，而是"写给 AI 看的操作手册"。开发一个 Skill 只需三步：创建目录 → 写 SKILL.md（触发条件 + 工作流程 + 注意事项）→ 放入 skills/ 目录。安装第三方 Skill 前必须审查其中的 Shell 命令和网络访问。
+> **核心要点**：Skill = **SKILL.md（知识文件）+ LLM 理解 + Pi-embedded 执行**。它不是代码插件，而是"写给 AI 看的操作手册"。开发一个 Skill 只需三步：创建目录 → 写 SKILL.md（触发条件 + 工作流程 + 注意事项）→ 放入 skills/ 目录。安装第三方 Skill 前必须审查其中的 Shell 命令和网络访问。
 
 **下一模块**：[05-部署与配置实战](05-部署与配置实战.md) / **返回总览**：[00-总览](00-OpenClaw知识体系总览.md)

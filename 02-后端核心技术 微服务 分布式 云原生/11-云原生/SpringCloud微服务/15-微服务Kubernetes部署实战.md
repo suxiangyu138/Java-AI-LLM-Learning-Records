@@ -1,6 +1,6 @@
 # 15 - 微服务 Kubernetes 部署实战
 
-> 🎯 微服务的家永远是 K8s — 从 Deployment 声明式部署到 Service 服务暴露、从 ConfigMap/Secret 配置注入到 Ingress 统一入口，这套 YAML 模板覆盖了微服务上 K8s 的全部姿势
+> 微服务的家永远是 K8s — 从 Deployment 声明式部署到 Service 服务暴露、从 ConfigMap/Secret 配置注入到 Ingress 统一入口，这套 YAML 模板覆盖了微服务上 K8s 的全部姿势
 
 ---
 
@@ -22,8 +22,8 @@
 | 适用 | 单机开发测试 | 生产集群 |
 | 扩缩容 | 手动 | 自动 HPA |
 | 服务发现 | Docker DNS | 内置 Service + CoreDNS |
-| 滚动更新 | ❌ 手动 | ✅ RollingUpdate 自动 |
-| 自愈 | ❌ | ✅ 自动重启/迁移 |
+| 滚动更新 | ✗ 手动 | ✓ RollingUpdate 自动 |
+| 自愈 | ✗ | ✓ 自动重启/迁移 |
 | 配置管理 | 环境变量/文件 | ConfigMap + Secret |
 
 ---
@@ -73,7 +73,7 @@ spec:
                 name: user-service-config
             - secretRef:
                 name: user-service-secret
-          resources:                    # ⭐ 资源限制必配
+          resources:                    # ★ 资源限制必配
             requests:
               memory: "512Mi"
               cpu: "250m"
@@ -213,7 +213,7 @@ management:
   endpoint:
     health:
       probes:
-        enabled: true        # ⭐ 开启 liveness/readiness 探针
+        enabled: true        # ★ 开启 liveness/readiness 探针
       show-details: always
 ```
 
@@ -293,4 +293,4 @@ kubectl rollout undo deployment/user-service -n prod
 | `kubectl top pods -n prod` | 资源使用 |
 | `kubectl logs -f deploy/user-service --tail=50` | 实时日志 |
 
-> 🎯 **K8s 微服务三板斧**：Deployment 管理 Pod + Service 暴露端口 + Ingress 对外路由。ConfigMap 管配置、Secret 管密码、探针管健康、RollingUpdate 管发布。
+> **K8s 微服务三板斧**：Deployment 管理 Pod + Service 暴露端口 + Ingress 对外路由。ConfigMap 管配置、Secret 管密码、探针管健康、RollingUpdate 管发布。

@@ -1,6 +1,6 @@
 # 07 - 链路追踪：Micrometer Tracing 与 Zipkin
 
-> 🎯 微服务中一个请求跨 N 个服务 — 没有链路追踪就像蒙眼开车。TraceId 贯穿全链路、Zipkin 可视化调用链、SkyWalking 零侵入 APM
+> 微服务中一个请求跨 N 个服务 — 没有链路追踪就像蒙眼开车。TraceId 贯穿全链路、Zipkin 可视化调用链、SkyWalking 零侵入 APM
 
 ---
 
@@ -103,7 +103,7 @@ docker run -d --name zipkin -p 9411:9411 \
 ### 4.1 线程池透传
 
 ```java
-// ⚠️ @Async 会切换线程，TraceId 会丢失！需要手动透传
+// @Async 会切换线程，TraceId 会丢失！需要手动透传
 
 // 方式1：使用 LazyTraceExecutor 包装
 @Bean
@@ -152,11 +152,11 @@ public void handle(String msg) {
 
 | 维度 | Zipkin | SkyWalking |
 |------|--------|-----------|
-| 侵入性 | 需引入依赖 | ⭐ Agent 零侵入 |
+| 侵入性 | 需引入依赖 | ★ Agent 零侵入 |
 | 安装 | 简单（单容器） | 较重（OAP + ES + UI） |
 | 功能 | 链路追踪 | APM（追踪+指标+拓扑+告警） |
 | 存储 | 内存/ES/MySQL | ES/H2/MySQL |
-| 适用 | 开发/测试/小规模 | ⭐ 生产/大规模 |
+| 适用 | 开发/测试/小规模 | ★ 生产/大规模 |
 
 ```bash
 # SkyWalking 快速启动（Docker）
@@ -174,4 +174,4 @@ java -javaagent:/path/to/skywalking-agent.jar \
   -jar user-service.jar
 ```
 
-> 🎯 **选型**：开发测试用 Micrometer Tracing + Zipkin（轻量简单）；生产环境上 SkyWalking（零侵入 APM + 指标 + 拓扑）。两者不冲突，可并存。
+> **选型**：开发测试用 Micrometer Tracing + Zipkin（轻量简单）；生产环境上 SkyWalking（零侵入 APM + 指标 + 拓扑）。两者不冲突，可并存。

@@ -2,7 +2,7 @@
 
 > 定位：梳理并发哈希的演进路线（Hashtable → JDK 7 分段锁 → JDK 8 CAS+synchronized），逐段剖析 put/get/size 的并发设计
 
-## 📚 目录
+## 目录
 
 1. [并发哈希的演进路线](#1-并发哈希的演进路线)
 2. [JDK 7：分段锁设计](#2-jdk-7分段锁设计)
@@ -73,7 +73,7 @@ private transient volatile int sizeCtl;
 //   正数             ：扩容阈值（表已初始化时）= 容量 * 0.75
 ```
 
-> 🎯 **sizeCtl 是 CHM 的"状态寄存器"**：初始化竞争、扩容进度、扩容阈值全靠这一个 volatile 字段 + CAS 完成同步。
+> **sizeCtl 是 CHM 的"状态寄存器"**：初始化竞争、扩容进度、扩容阈值全靠这一个 volatile 字段 + CAS 完成同步。
 
 ### 3.3 spread()：CHM 的扰动函数
 
@@ -93,7 +93,7 @@ final V putVal(K key, V value, boolean onlyIfAbsent) {
     if (key == null || value == null) throw new NullPointerException();
     int hash = spread(key.hashCode());
     int binCount = 0;
-    for (Node<K,V>[] tab = table;;) {          // ⭐ 自旋：失败就重试
+    for (Node<K,V>[] tab = table;;) {          // ★ 自旋：失败就重试
         Node<K,V> f; int n, i, fh;
         if (tab == null || (n = tab.length) == 0)
             tab = initTable();                              // ① 初始化
@@ -165,7 +165,7 @@ static final class ForwardingNode<K,V> extends Node<K,V> {
 | 数据一致性 | 迁移完成的桶用 CAS 写入新表，未完成的桶仍在旧表 |
 | 读一致性 | get 遇到 ForwardingNode 会**转发到新表**继续找 |
 
-> 🎯 **核心思想**：扩容不阻塞——正在扩容时新写入照常进行（写旧表或转发新表），每个线程"搭把手"让总迁移时间随线程数下降。
+> **核心思想**：扩容不阻塞——正在扩容时新写入照常进行（写旧表或转发新表），每个线程"搭把手"让总迁移时间随线程数下降。
 
 ---
 
@@ -200,7 +200,7 @@ private transient volatile CounterCell[] counterCells;
 // 计数不准时（竞争激烈）才退化为加锁快照统计
 ```
 
-> 💡 `mappingCount()` 与 `size()` 等价（返回值 long），官方建议用前者，因为 size 可能溢出。
+> `mappingCount()` 与 `size()` 等价（返回值 long），官方建议用前者，因为 size 可能溢出。
 
 ---
 
@@ -225,13 +225,13 @@ private transient volatile CounterCell[] counterCells;
 ### 8.1 使用规范
 
 ```java
-// ✅ 正确姿势
+// ✓ 正确姿势
 ConcurrentHashMap<String, Integer> map = new ConcurrentHashMap<>();
 map.putIfAbsent("k", 1);                       // 原子：没有才放
 map.computeIfAbsent("k", k -> expensive());    // 原子：懒计算（JDK 8 保证每个 key 只执行一次）
 map.compute("k", (k, v) -> v == null ? 1 : v + 1);   // 原子：读改写
 
-// ❌ 错误姿势（非原子的先查后写，多线程下丢更新）
+// ✗ 错误姿势（非原子的先查后写，多线程下丢更新）
 if (!map.containsKey("k")) map.put("k", 1);    // 竞态窗口存在！
 ```
 
@@ -271,7 +271,7 @@ if (!map.containsKey("k")) map.put("k", 1);    // 竞态窗口存在！
 
 ---
 
-> 🎯 **核心要点**：CHM 的并发哲学是"把锁拆到最小 + 让无锁路径覆盖最频繁操作"。空桶 CAS、非空桶锁头、扩容协作、分片计数——四个机制组合出 JDK 8 至今最优的并发哈希方案。
+> **核心要点**：CHM 的并发哲学是"把锁拆到最小 + 让无锁路径覆盖最频繁操作"。空桶 CAS、非空桶锁头、扩容协作、分片计数——四个机制组合出 JDK 8 至今最优的并发哈希方案。
 
 ---
 

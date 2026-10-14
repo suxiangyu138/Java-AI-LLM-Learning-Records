@@ -29,7 +29,7 @@ messages.append({
     "tool_call_id": tool_call.id,        # 铁律B：原样复制，不重建！
     "content": json.dumps(result)        # content 必须是字符串
 })
-# ⚠️ 铁律C：assistant 消息也必须追加（在 tool 消息之前）
+# 铁律C：assistant 消息也必须追加（在 tool 消息之前）
 messages.append(assistant_msg_with_tool_calls)  # 顺序：assistant → tool
 ```
 
@@ -41,7 +41,7 @@ messages.append(assistant_msg_with_tool_calls)  # 顺序：assistant → tool
 | 消息追加 | assistant + tool 都追加 | 断上下文/请求被拒 |
 | 消息顺序 | assistant(tool_calls) 在前，tool 在后 | 非法消息顺序报错 |
 
-> ⚠️ 2026 细节：**顺序敏感**——assistant 的 tool_calls 消息必须在其对应的 tool 消息之前；流式下若先收到文本增量后收到工具增量（部分 OpenAI 兼容提供商），会产生非法顺序 `assistant(tool_calls) → assistant(text) → tool`——openai-agents-python 的 `buffer_streamed_tool_calls` 模式就是为此兜底。
+> 2026 细节：**顺序敏感**——assistant 的 tool_calls 消息必须在其对应的 tool 消息之前；流式下若先收到文本增量后收到工具增量（部分 OpenAI 兼容提供商），会产生非法顺序 `assistant(tool_calls) → assistant(text) → tool`——openai-agents-python 的 `buffer_streamed_tool_calls` 模式就是为此兜底。
 
 ## 3. 多条并行调用的回传
 
@@ -55,7 +55,7 @@ for tc in tool_calls:
 # → 顺序：assistant(tool_calls) → tool(call_1) → tool(call_2)
 ```
 
-> 💡 要点：**每条 tool 消息必须带自己的 ID**；执行顺序无关（无依赖才并行），但回传时每条都配对正确。有依赖的调用**不能**并行（模型可能假设 B 的结果已就绪——并行是 2026 新失败面）。
+> 要点：**每条 tool 消息必须带自己的 ID**；执行顺序无关（无依赖才并行），但回传时每条都配对正确。有依赖的调用**不能**并行（模型可能假设 B 的结果已就绪——并行是 2026 新失败面）。
 
 ## 4. 结果格式化的三个纪律
 

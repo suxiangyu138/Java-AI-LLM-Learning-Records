@@ -2,7 +2,7 @@
 
 > 定位：Advisors 机制、Memory 管理、ChatClient 全能力、RAG 集成、结构化输出、多模型路由——Spring AI 完整实践
 
-## 📚 目录
+## 目录
 
 1. [Spring AI 架构](#1-spring-ai-架构)
 2. [Advisors 拦截机制](#2-advisors-拦截机制)
@@ -23,7 +23,7 @@ Spring AI 分层：
   VectorStore：向量库抽象
   Tools/MCP：工具集成
 
-⚠️ 面试必答：
+面试必答：
 "Spring AI = 模型统一抽象 + ChatClient
  + Advisor 拦截 + 向量抽象——
  一套 API 对接 20+ 模型（OpenAI/Claude/DeepSeek/Qwen）。"
@@ -46,7 +46,7 @@ Advisor = AI 调用链的拦截器（类似 Spring AOP/Around）
   SimpleLoggerAdvisor：日志审计
   VectorStoreChatMemoryAdvisor：向量记忆
 
-⚠️ 面试必答：
+面试必答：
 "Advisor = AI 调用链的拦截器——
  内置 RAG/记忆/安全/日志四类；
  自定义 Advisor 实现审计/合规。"
@@ -57,7 +57,7 @@ Advisor = AI 调用链的拦截器（类似 Spring AOP/Around）
 ```java
 // 使用内置 Advisor
 ChatClient client = ChatClient.builder(chatModel)
-        .defaultAdvisors(new QuestionAnswerAdvisor(vectorStore))   // ⚠️ RAG 一行开启
+        .defaultAdvisors(new QuestionAnswerAdvisor(vectorStore))   // RAG 一行开启
         .defaultAdvisors(new MessageChatMemoryAdvisor(chatMemory))
         .build();
 
@@ -67,7 +67,7 @@ public class AuditAdvisor implements CallAdvisor {
     @Override
     public ChatResponse aroundCall(AdvisedRequest request, CallAdvisorChain chain) {
         long start = System.currentTimeMillis();
-        ChatResponse response = chain.next(request);   // ⚠️ 执行调用
+        ChatResponse response = chain.next(request);   // 执行调用
         // 审计：记录请求/响应/耗时/成本
         auditService.log(request.userText(), response.getResult(), 
                          System.currentTimeMillis() - start);
@@ -76,7 +76,7 @@ public class AuditAdvisor implements CallAdvisor {
 }
 ```
 
-> 🎯 **要点**：Advisor = AI 的 AOP——RAG（QuestionAnswerAdvisor）、记忆（ChatMemoryAdvisor）、审计（自定义）都是拦截器。**一行开启 RAG** 是 Spring AI 的标志性能力。
+> **要点**：Advisor = AI 的 AOP——RAG（QuestionAnswerAdvisor）、记忆（ChatMemoryAdvisor）、审计（自定义）都是拦截器。**一行开启 RAG** 是 Spring AI 的标志性能力。
 
 ---
 
@@ -93,7 +93,7 @@ public class MemoryConfig {
         return new MessageWindowChatMemory(
             MessageWindowChatMemory.builder()
                 .chatMemoryStore(new InMemoryChatMemoryStore())
-                .maxMessages(20)              // ⚠️ 最近 20 条
+                .maxMessages(20)              // 最近 20 条
                 .build());
     }
 }
@@ -108,7 +108,7 @@ public class ChatService {
         return chatClient.prompt()
                 .user(question)
                 .advisors(advisors -> advisors
-                    // ⚠️ 按会话 ID 隔离记忆
+                    // 按会话 ID 隔离记忆
                     .param(ChatMemory.CHAT_MEMORY_CONVERSATION_ID_KEY, userId)
                     .param(ChatMemory.CHAT_MEMORY_RETRIEVE_SIZE_KEY, 10))
                 .call().content();
@@ -124,7 +124,7 @@ public class ChatService {
 | TokenWindowChatMemory | 按 token 裁剪 | 控制成本 |
 | VectorStoreChatMemory | 向量检索历史 | 长期记忆 |
 
-> 🎯 **要点**：ChatMemory = 会话历史的存储与检索——conversationId 隔离 + retrieveSize 控制窗口。**多用户场景 conversationId 必传**（否则串会话）。
+> **要点**：ChatMemory = 会话历史的存储与检索——conversationId 隔离 + retrieveSize 控制窗口。**多用户场景 conversationId 必传**（否则串会话）。
 
 ---
 
@@ -133,7 +133,7 @@ public class ChatService {
 ### 4.1 一键 RAG（Advisor 方式）
 
 ```java
-// ⚠️ 最简单：QuestionAnswerAdvisor 自动检索
+// 最简单：QuestionAnswerAdvisor 自动检索
 ChatClient ragClient = ChatClient.builder(chatModel)
         .defaultAdvisors(new QuestionAnswerAdvisor(vectorStore,
                 SearchRequest.builder()
@@ -146,7 +146,7 @@ ChatClient ragClient = ChatClient.builder(chatModel)
 String answer = ragClient.prompt()
         .user("订单如何退款？")
         .call().content();
-// ⚠️ 内部流程：问题向量化 → 检索 → 拼接知识 → 模型回答
+// 内部流程：问题向量化 → 检索 → 拼接知识 → 模型回答
 ```
 
 ### 4.2 手动 RAG（精细控制）
@@ -171,7 +171,7 @@ public String ragChat(String question) {
 }
 ```
 
-> 🎯 **要点**：RAG 两条路——Advisor 一行开启（默认流程）vs 手动检索（精细控制）。**生产建议手动 + 溯源**（回答带来源可验证）。
+> **要点**：RAG 两条路——Advisor 一行开启（默认流程）vs 手动检索（精细控制）。**生产建议手动 + 溯源**（回答带来源可验证）。
 
 ---
 
@@ -217,7 +217,7 @@ Spring AI 2.0（2026 开发中，M 版本）：
   MCP 集成深化
   模型抽象重构（多模态扩展）
 
-⚠️ 面试必答：
+面试必答：
 "Spring AI 2.0 方向——Java 21 基线、
  Agent 编排增强、MCP 深化；
  当前 1.x 已覆盖 Chat/RAG/工具/MCP
@@ -226,7 +226,7 @@ Spring AI 2.0（2026 开发中，M 版本）：
 
 ---
 
-> 🎯 **核心要点**：Spring AI 体系 = **架构**（Model API + ChatClient + Advisor + VectorStore）+ **Advisors**（RAG/记忆/审计拦截器）+ **ChatMemory**（conversationId 隔离 + 窗口控制）+ **RAG 集成**（一行 Advisor vs 手动精细）+ **ChatClient 全能力**（输入/工具/流式/结构化）。"Advisor 机制是 Spring AI 的灵魂"——AOP 思想在 AI 调用的复现。
+> **核心要点**：Spring AI 体系 = **架构**（Model API + ChatClient + Advisor + VectorStore）+ **Advisors**（RAG/记忆/审计拦截器）+ **ChatMemory**（conversationId 隔离 + 窗口控制）+ **RAG 集成**（一行 Advisor vs 手动精细）+ **ChatClient 全能力**（输入/工具/流式/结构化）。"Advisor 机制是 Spring AI 的灵魂"——AOP 思想在 AI 调用的复现。
 
 ---
 

@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [事务三件套与 JDBC 的关系](#1-事务三件套与-jdbc-的关系)
 2. [DataSourceTransactionManager 原理](#2-datasourcetransactionmanager-原理)
@@ -27,7 +27,7 @@
       → 所有 JdbcTemplate 操作自动在同一事务中
 ```
 
-> 🎯 **核心要点**：spring-jdbc 与 spring-tx 的接缝就是 **DataSourceTransactionManager + DataSourceUtils 的线程绑定**——只要走模板（JdbcTemplate/JdbcClient），事务开不开都由绑定连接决定，业务代码零感知。
+> **核心要点**：spring-jdbc 与 spring-tx 的接缝就是 **DataSourceTransactionManager + DataSourceUtils 的线程绑定**——只要走模板（JdbcTemplate/JdbcClient），事务开不开都由绑定连接决定，业务代码零感知。
 
 ### 1.1 编程式事务：TransactionTemplate
 
@@ -61,7 +61,7 @@ public class BatchService {
 | 单元测试 | 需 Spring 容器 / 代理 | 可直接 new + mock |
 | 适用 | 99% 的常规服务方法 | 批处理逐条、动态分组、工具类 |
 
-> 💡 面试点：TransactionTemplate 内部就是 `TransactionManager.getTransaction + commit/rollback` 的模板化封装——它和 @Transactional 走同一条事务资源绑定机制，混用安全。
+> 面试点：TransactionTemplate 内部就是 `TransactionManager.getTransaction + commit/rollback` 的模板化封装——它和 @Transactional 走同一条事务资源绑定机制，混用安全。
 
 ### 1.2 TransactionDefinition 关键属性速查
 
@@ -80,7 +80,7 @@ def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRES_NEW);
 def.setTimeout(10);
 ```
 
-> 💡 面试常问"readOnly=true 到底做了什么"：MySQL / InnoDB 下它主要是**优化提示**（允许引擎跳过部分写准备），不强制只读；PostgreSQL 下会真正禁止写。答出"不同库行为不同"是加分项，别一刀切。
+> 面试常问"readOnly=true 到底做了什么"：MySQL / InnoDB 下它主要是**优化提示**（允许引擎跳过部分写准备），不强制只读；PostgreSQL 下会真正禁止写。答出"不同库行为不同"是加分项，别一刀切。
 
 补充：timeout 与数据库层的配合——事务超时由 Spring 计时并触发回滚，但数据库端的长事务可能已经执行了大量工作；实践上"事务超时 + 语句超时（queryTimeout）双保险"才是完整防护。面试延伸：传播行为与超时是正交的，REQUIRES_NEW 的内层事务有自己独立的超时计时。
 
@@ -101,7 +101,7 @@ public DataSourceTransactionManager transactionManager(DataSource dataSource) {
 }
 ```
 
-> ⚠️ **单事务=单连接**：REQUIRED 传播下整个事务一条物理连接；`REQUIRES_NEW` 挂起外层、**另取一条连接**——连接池 `maximumPoolSize` 必须容纳"并发事务数 × 嵌套层数"，否则池耗尽（见 [04-DataSource 与连接池速查](04-DataSource与连接池速查.md)）。
+> **单事务=单连接**：REQUIRED 传播下整个事务一条物理连接；`REQUIRES_NEW` 挂起外层、**另取一条连接**——连接池 `maximumPoolSize` 必须容纳"并发事务数 × 嵌套层数"，否则池耗尽（见 [04-DataSource 与连接池速查](04-DataSource与连接池速查.md)）。
 
 ### 2.1 回滚规则与保存点
 
@@ -122,7 +122,7 @@ public void createOrder(OrderCmd cmd) {
 }
 ```
 
-> ⚠️ **受检异常不回滚是新手第一大坑**：默认只回滚运行时异常——捕获了 Exception 再抛出去的代码，若抛的是受检异常，事务会"正常提交"；规则：**异常要抛出代理边界才生效，且类型必须被 rollbackFor 覆盖**。
+> **受检异常不回滚是新手第一大坑**：默认只回滚运行时异常——捕获了 Exception 再抛出去的代码，若抛的是受检异常，事务会"正常提交"；规则：**异常要抛出代理边界才生效，且类型必须被 rollbackFor 覆盖**。
 
 ### 2.2 隔离级别与锁（与 JDBC 的关系）
 
@@ -138,7 +138,7 @@ public void createOrder(OrderCmd cmd) {
 public void readConsistent() { ... }
 ```
 
-> 💡 注意：隔离级别是**连接级**属性——DataSourceTransactionManager 开启事务时对绑定连接执行 `setTransactionIsolation`；所以"同一个事务内多次查询"的一致性由隔离级别保证，这解释了"事务内查不到刚插入数据"的隔离级别场景（见 [08-集成地图与常见问题](08-集成地图与常见问题.md) 高频问题表）。
+> 注意：隔离级别是**连接级**属性——DataSourceTransactionManager 开启事务时对绑定连接执行 `setTransactionIsolation`；所以"同一个事务内多次查询"的一致性由隔离级别保证，这解释了"事务内查不到刚插入数据"的隔离级别场景（见 [08-集成地图与常见问题](08-集成地图与常见问题.md) 高频问题表）。
 
 补充：保存点（Savepoint）的底层行为——NESTED 传播在支持保存点的数据库（MySQL / PostgreSQL）上，内层回滚只回滚到保存点，外层仍可继续提交；在不支持保存点的数据库上，Spring 会退化为"同事务"行为（内层回滚即整体回滚）。所以 NESTED 的"部分回滚"语义是**有条件的**，依赖数据库能力——面试被问"NESTED 和 REQUIRES_NEW 区别"时，先答保存点机制，再答数据库差异，完整度立刻拉开。
 
@@ -173,7 +173,7 @@ public class OrderService {
 | 代理限制 | 同类自调用 `this.createOrder` 绕过代理 → 事务失效（见 [Spring-AOP-00](../Spring‑AOP/00-Spring AOP组件总览.md)） |
 | 7.0 注意 | 全局 CGLIB 代理默认——JDK 接口代理依赖的存量代码行为变化，`@Proxyable(INTERFACES)` 按 Bean 恢复 |
 
-> 💡 **测试配合**：`@SpringBootTest + @Transactional`（测试方法事务自动回滚）是 DAO 集成测试标准姿势——每方法独立事务、测完回滚，数据零残留。
+> **测试配合**：`@SpringBootTest + @Transactional`（测试方法事务自动回滚）是 DAO 集成测试标准姿势——每方法独立事务、测完回滚，数据零残留。
 
 ### 3.1 事务失效场景大全（排查清单）
 
@@ -188,7 +188,7 @@ public class OrderService {
 | 绕过模板取连接 | 裸 `Connection` 不走 DataSourceUtils | 统一走 JdbcTemplate / JdbcClient |
 | 事务内切数据源 | 连接已绑定第一个库 | 见第 5 节多数据源边界 |
 
-> 🎯 **排查口诀**："自调用、非 public、吞异常、绕模板、跨线程"——事务没生效先从这五条里找。
+> **排查口诀**："自调用、非 public、吞异常、绕模板、跨线程"——事务没生效先从这五条里找。
 
 ### 3.2 面试官追问什么
 
@@ -200,7 +200,7 @@ public class OrderService {
 | 传播 REQUIRES_NEW 会怎样 | 挂起外层事务、另取连接——两条连接、两个独立事务 |
 | 编程式与声明式能混用吗 | 能——同一事务管理器、同一绑定机制 |
 
-> 🎯 面试主线："代理是事务的载体、绑定是事务的机制、连接是事务的容器"——代理（AOP 拦截）、绑定（TransactionSynchronizationManager）、连接（DataSourceUtils）三者串起来，事务问题基本都能答；这条主线也是从"速查"通向 [Spring-TX 系列](../Spring‑TX（Spring‑Transaction）/00-Spring TX组件总览.md) 的桥。
+> 面试主线："代理是事务的载体、绑定是事务的机制、连接是事务的容器"——代理（AOP 拦截）、绑定（TransactionSynchronizationManager）、连接（DataSourceUtils）三者串起来，事务问题基本都能答；这条主线也是从"速查"通向 [Spring-TX 系列](../Spring‑TX（Spring‑Transaction）/00-Spring TX组件总览.md) 的桥。
 
 延伸：面试常问"@Transactional 与 AOP 的关系"——@Transactional 是 Spring AOP 的声明式事务实现，底层是 TransactionInterceptor 环绕通知；7.0 全局 CGLIB 代理的变更影响所有 AOP 注解，@Proxyable 可以按 Bean 恢复接口代理（见 [Spring-AOP-00](../Spring‑AOP/00-Spring AOP组件总览.md)）。
 
@@ -221,15 +221,15 @@ public class OrderService {
   例外：JPA 使用"持久化上下文"（EntityManager），与 JDBC 混用需注意缓存一致性。
 ```
 
-> 🎯 **核心要点**：MyBatis-Spring 与 Spring Data JDBC **都构建在 spring-jdbc 的 DataSource 管理之上**；JPA 相对独立但事务资源仍由 Spring 协调——"多 ORM 混用"的底线是**共享 DataSource**。
+> **核心要点**：MyBatis-Spring 与 Spring Data JDBC **都构建在 spring-jdbc 的 DataSource 管理之上**；JPA 相对独立但事务资源仍由 Spring 协调——"多 ORM 混用"的底线是**共享 DataSource**。
 
 ### 4.1 混用 JdbcTemplate 与 MyBatis/JPA 的注意点
 
 | 组合 | 事务一致性 | 注意点 |
 |------|-----------|--------|
-| JdbcTemplate + MyBatis（同 DataSource） | ✅ 同一物理连接 | 跨事务注意 MyBatis 二级缓存可能读到旧数据 |
-| JdbcTemplate + JPA（同 DataSource） | ✅ 同一物理连接 | JPA 一级缓存（EntityManager）与 JDBC 直查结果可能不一致 |
-| 任一组合（不同 DataSource） | ❌ 各自独立 | 必须设计跨库方案（见第 5 节） |
+| JdbcTemplate + MyBatis（同 DataSource） | ✓ 同一物理连接 | 跨事务注意 MyBatis 二级缓存可能读到旧数据 |
+| JdbcTemplate + JPA（同 DataSource） | ✓ 同一物理连接 | JPA 一级缓存（EntityManager）与 JDBC 直查结果可能不一致 |
+| 任一组合（不同 DataSource） | ✗ 各自独立 | 必须设计跨库方案（见第 5 节） |
 
 ```java
 // 典型混用场景：JPA 管领域实体，JdbcClient 做批量/报表
@@ -249,7 +249,7 @@ public class MixedService {
 }
 ```
 
-> 💡 底线原则：**同一事务内共享同一个 DataSource**——这是多 ORM 混用的前提；JPA 的缓存一致性问题用 `entityManager.refresh(entity)` 或减少混用边界（谁写谁查）。
+> 底线原则：**同一事务内共享同一个 DataSource**——这是多 ORM 混用的前提；JPA 的缓存一致性问题用 `entityManager.refresh(entity)` 或减少混用边界（谁写谁查）。
 
 补充：JPA 与 JDBC 混用还有一个隐藏成本——JPA 的 flush 时机（默认事务提交前 flush）意味着同一事务内 JdbcTemplate 先写、JPA 后读时可能读到旧数据；解决方式是 `entityManager.flush()` 主动同步，或约定"一种技术写、另一种只读"的职责边界。
 
@@ -262,7 +262,7 @@ public class MixedService {
 | 分布式事务 | Seata（AT/TCC）/ 本地消息表 | 见 [Spring全家桶-14-分布式事务-Seata](../../../Spring全家桶/14-分布式事务-Seata.md) |
 | 跨库"伪事务" | 业务补偿 + 最终一致 | 高可用优先场景 |
 
-> ⚠️ **多数据源头号坑**：事务开启时连接已被绑定到第一个 DataSource——中途切到第二个库的操作**不在事务内**（且可能抛 "Cannot switch DataSource in transaction"）；多数据源 + 事务 = 先设计边界（独立事务 / 分布式事务 / 最终一致）。
+> **多数据源头号坑**：事务开启时连接已被绑定到第一个 DataSource——中途切到第二个库的操作**不在事务内**（且可能抛 "Cannot switch DataSource in transaction"）；多数据源 + 事务 = 先设计边界（独立事务 / 分布式事务 / 最终一致）。
 
 ### 5.1 AbstractRoutingDataSource：读写分离的最小实现
 
@@ -296,7 +296,7 @@ public DataSource routingDataSource(@Qualifier("master") DataSource master,
 | 主从延迟怎么办 | 读关键数据强制走主（路由 hint 或 `@Transactional(readOnly=false)`） |
 | 什么时候该上分布式事务 | 多库强一致且无法用补偿 / 消息最终一致时——先评估业务能否接受最终一致 |
 
-> 🎯 决策顺序：单库 → 读写分离（路由 + 延迟容忍）→ 分库分表（中间件）→ 分布式事务（最后手段）——每上一级复杂度翻倍，别为不存在的规模买单。
+> 决策顺序：单库 → 读写分离（路由 + 延迟容忍）→ 分库分表（中间件）→ 分布式事务（最后手段）——每上一级复杂度翻倍，别为不存在的规模买单。
 
 ### 5.2 跨库事务方案对比（何时选什么）
 
@@ -308,7 +308,7 @@ public DataSource routingDataSource(@Qualifier("master") DataSource master,
 | XA（JTA） | 强一致 | 低 | 高 | 短事务、小众场景 |
 | 业务补偿 + 对账 | 最终一致 | 高 | 高 | 无法用事务的场景 |
 
-> ⚠️ 选型提醒：先问"这个跨库强一致真的需要吗"——多数场景可以通过"单库聚合 + 最终一致"降低复杂度；XA 在 2026 年的生产占比已经很小（性能与协调器复杂度高），Seata 类方案才是主流；具体细节见 [Spring全家桶-14-分布式事务-Seata](../../../Spring全家桶/14-分布式事务-Seata.md)。
+> 选型提醒：先问"这个跨库强一致真的需要吗"——多数场景可以通过"单库聚合 + 最终一致"降低复杂度；XA 在 2026 年的生产占比已经很小（性能与协调器复杂度高），Seata 类方案才是主流；具体细节见 [Spring全家桶-14-分布式事务-Seata](../../../Spring全家桶/14-分布式事务-Seata.md)。
 
 补充一个判断框架：什么时候"必须"分布式事务？——资金强一致、跨库唯一约束、跨服务数据依赖不可重试；什么时候"不该"用？——单次请求内多个独立操作（本可用本地事务）、可补偿业务（订单状态机）、读多写少（可用最终一致）。先做这个判断题，再谈方案选型，是面试的加分路径。
 

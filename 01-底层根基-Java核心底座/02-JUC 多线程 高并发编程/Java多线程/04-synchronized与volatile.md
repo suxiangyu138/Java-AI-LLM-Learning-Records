@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [synchronized 三种用法与语义](#1-synchronized-三种用法与语义)
 2. [Monitor 与对象头](#2-monitor-与对象头)
@@ -48,7 +48,7 @@ public class Account {
 3. **可重入**：同一线程可重复获取同一把锁（`synchronized` 方法调用自身 `synchronized` 方法不死锁）——**实现上锁与线程关联（持有计数）**；
 4. **异常自动释放**：临界区抛异常，锁自动释放（区别于手动 Lock 必须 finally unlock）。
 
-> 🎯 **核心要点**：synchronized 锁的是**对象**而非代码——"锁哪个对象"决定了互斥范围：两个线程锁不同对象则不互斥。可重入 + 异常自动释放，是它比手动 Lock 更"省心"的两个特性。
+> **核心要点**：synchronized 锁的是**对象**而非代码——"锁哪个对象"决定了互斥范围：两个线程锁不同对象则不互斥。可重入 + 异常自动释放，是它比手动 Lock 更"省心"的两个特性。
 
 ---
 
@@ -84,7 +84,7 @@ Monitor（C++ 实现，每个对象可关联一个）：
 | 为什么 `wait()` 必须在 synchronized 块里？ | wait 要把线程放入 Monitor 的 WaitSet 并释放锁——不持有锁就无法"释放"和"登记"，编译器直接检查 |
 | BLOCKED 和 WAITING 状态对应什么？ | BLOCKED = 在 EntryList 等锁；WAITING = 在 WaitSet 等 notify |
 
-> 🎯 **核心要点**：synchronized 的本质 = **获取对象 Monitor（Mark Word 指向它）**——锁状态存在对象头里，所以"每个对象都能当锁"；wait/notify 操作的就是 Monitor 的 WaitSet，所以必须持有 Monitor 才能调用（对象头与 Mark Word 细节见 `03-JVM完整底层/`）。
+> **核心要点**：synchronized 的本质 = **获取对象 Monitor（Mark Word 指向它）**——锁状态存在对象头里，所以"每个对象都能当锁"；wait/notify 操作的就是 Monitor 的 WaitSet，所以必须持有 Monitor 才能调用（对象头与 Mark Word 细节见 `03-JVM完整底层/`）。
 
 ---
 
@@ -115,7 +115,7 @@ JDK 8-14 的路径：无锁 → 偏向锁 → 轻量级锁 → 重量级锁
 ③ 重量级锁：自旋失败/超时 → 膨胀为 Monitor → 线程进入 EntryList（BLOCKED）
 ```
 
-> 🎯 **核心要点**：**2025 年面试答"锁升级"必须带版本意识**——"JDK 8 的偏向锁升级路径"已是历史知识；现代 JDK（15 废弃、18 移除）的路径是**无锁 → 轻量级（CAS+自旋）→ 重量级**。答出这个版本窗口 = 区分"背老教程"与"追最新"。
+> **核心要点**：**2025 年面试答"锁升级"必须带版本意识**——"JDK 8 的偏向锁升级路径"已是历史知识；现代 JDK（15 废弃、18 移除）的路径是**无锁 → 轻量级（CAS+自旋）→ 重量级**。答出这个版本窗口 = 区分"背老教程"与"追最新"。
 
 ---
 
@@ -124,9 +124,9 @@ JDK 8-14 的路径：无锁 → 偏向锁 → 轻量级锁 → 重量级锁
 | 维度 | synchronized | ReentrantLock |
 |------|:------------:|:-------------:|
 | 获取/释放 | 自动（语言级） | 手动（lock/unlock，**必须 finally unlock**） |
-| 可中断 | ❌ 不可中断获取 | ✅ `lockInterruptibly()` |
-| 超时获取 | ❌ | ✅ `tryLock(timeout)`（避免死锁利器） |
-| 公平锁 | ❌ 非公平 | ✅ `new ReentrantLock(true)` |
+| 可中断 | ✗ 不可中断获取 | ✓ `lockInterruptibly()` |
+| 超时获取 | ✗ | ✓ `tryLock(timeout)`（避免死锁利器） |
+| 公平锁 | ✗ 非公平 | ✓ `new ReentrantLock(true)` |
 | 条件变量 | wait/notify（一个队列） | **多条件 Condition**（精确唤醒） |
 | 可观测性 | 弱 | `isLocked()`/`getQueueLength()`（监控友好） |
 | 性能 | 现代 JVM 与 Lock 相当 | 同左（竞争激烈时同量级） |
@@ -151,7 +151,7 @@ if (lock.tryLock(2, TimeUnit.SECONDS)) {        // 拿不到锁 2 秒后放弃�
 - **选 ReentrantLock 的四种场景**：需要**可中断/超时**获取、需要**公平性**、需要**多条件变量**、需要**锁的可观测性**（监控队列长度）；
 - **虚拟线程场景（Java 21-23）**：synchronized 有 pinning 问题，ReentrantLock 优先（见下节；**Java 24+ 修复后恢复默认**）。
 
-> 🎯 **核心要点**：synchronized 是"省心锁"（自动释放、可重入），ReentrantLock 是"精细锁"（超时/中断/公平/多条件）——**能用 synchronized 就 synchronized**，需要"拿不到就放弃"的场景换 ReentrantLock（tryLock 是防死锁的标准武器，见 06 模块）。
+> **核心要点**：synchronized 是"省心锁"（自动释放、可重入），ReentrantLock 是"精细锁"（超时/中断/公平/多条件）——**能用 synchronized 就 synchronized**，需要"拿不到就放弃"的场景换 ReentrantLock（tryLock 是防死锁的标准武器，见 06 模块）。
 
 ---
 
@@ -182,7 +182,7 @@ synchronized 的问题：JVM 不希望在持锁时卸载（锁在载体线程栈
 // JFR 事件：jdk.VirtualThreadPinned            → 监控面板告警
 ```
 
-> 🎯 **核心要点**：这是"**多线程基础与最新 Java 交汇**"的最佳考题——答链 = **synchronized 原理（持锁与栈绑定）→ 虚拟线程 pinning 表现（载体线程被占）→ JEP 491 修复（JDK 24）→ 当前结论（24+ 可正常用 synchronized）**。能讲清这条链 = 既懂基础又追最新。
+> **核心要点**：这是"**多线程基础与最新 Java 交汇**"的最佳考题——答链 = **synchronized 原理（持锁与栈绑定）→ 虚拟线程 pinning 表现（载体线程被占）→ JEP 491 修复（JDK 24）→ 当前结论（24+ 可正常用 synchronized）**。能讲清这条链 = 既懂基础又追最新。
 
 ---
 
@@ -212,14 +212,14 @@ volatile double progress;
 
 | 场景 | volatile | synchronized |
 |------|:--------:|:------------:|
-| 状态标志/开关 | ✅ 首选 | 重了 |
-| 复合操作（i++） | ❌ 不安全 | ✅ |
-| 多字段一致性 | ❌（单字段） | ✅ |
+| 状态标志/开关 | ✓ 首选 | 重了 |
+| 复合操作（i++） | ✗ 不安全 | ✓ |
+| 多字段一致性 | ✗（单字段） | ✓ |
 | 性能 | 无锁，极轻 | 有锁开销 |
 
-> ⚠️ **volatile 的三大误用**（面试陷阱）：① `volatile int i; i++` 以为安全（**不修原子性**）；② 用 volatile 保证"多个字段的组合一致"（**只保单字段**）；③ 以为 volatile 是弱化版锁（**它没有互斥**——两个线程同时写 volatile 依然竞态）。
+> **volatile 的三大误用**（面试陷阱）：① `volatile int i; i++` 以为安全（**不修原子性**）；② 用 volatile 保证"多个字段的组合一致"（**只保单字段**）；③ 以为 volatile 是弱化版锁（**它没有互斥**——两个线程同时写 volatile 依然竞态）。
 
-> 🎯 **核心要点**：volatile 的记忆锚 = **"单字段的可见性通道，不是锁"**——标志位用它，复合操作用锁/CAS。能说出"volatile 的三大场景 + 三大误用" = 此题满分。
+> **核心要点**：volatile 的记忆锚 = **"单字段的可见性通道，不是锁"**——标志位用它，复合操作用锁/CAS。能说出"volatile 的三大场景 + 三大误用" = 此题满分。
 
 ---
 

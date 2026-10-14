@@ -1,6 +1,6 @@
 # 03 - Cursor AI IDE 实战
 
-> 🎯 Cursor = VS Code 内核 + AI 原生 — Agent 模式自主编辑多文件、Composer 对话式重构、`.cursorrules` 项目级配置
+> Cursor = VS Code 内核 + AI 原生 — Agent 模式自主编辑多文件、Composer 对话式重构、`.cursorrules` 项目级配置
 
 ## 1. 基础定义
 
@@ -38,10 +38,10 @@ Cursor 的 Repo 级索引：
 | 维度 | Cursor | GitHub Copilot | Claude Code |
 |------|:---:|:---:|:---:|
 | 定位 | AI-native IDE | VS Code 插件 | Terminal Agent |
-| 多文件编辑 | ✅ Agent 自主 | ⚠️ 有限 | ✅ 自主 |
-| 终端操作 | ✅ 内置 | ❌ | ✅ |
-| 代码库索引 | ✅ 向量检索 | ✅ 语义检索 | ✅ grep+rg |
-| GUI | ✅ | ✅ | ❌ |
+| 多文件编辑 | ✓ Agent 自主 | 有限 | ✓ 自主 |
+| 终端操作 | ✓ 内置 | ✗ | ✓ |
+| 代码库索引 | ✓ 向量检索 | ✓ 语义检索 | ✓ grep+rg |
+| GUI | ✓ | ✓ | ✗ |
 | 学习曲线 | 低（VS Code 用户） | 极低 | 中 |
 
 ## 5. 价值与应用

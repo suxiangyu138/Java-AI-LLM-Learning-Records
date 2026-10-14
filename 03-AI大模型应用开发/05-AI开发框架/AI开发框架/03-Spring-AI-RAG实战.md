@@ -1,6 +1,6 @@
 # 03 - Spring AI RAG 实战
 
-> 🎯 Spring AI 的 RAG 原生集成 — DocumentReader → Splitter → VectorStore → Retriever → ChatClient，一条链走完
+> Spring AI 的 RAG 原生集成 — DocumentReader → Splitter → VectorStore → Retriever → ChatClient，一条链走完
 
 ## 1. RAG 完整链路
 

@@ -2,7 +2,7 @@
 
 > 用 fastmcp 写一个 30 行的最小 Server：`@mcp.tool` 注册工具、docstring 自动生成 Schema、stdio 传输本地运行——并用原始 JSON-RPC 验证它真的在工作。
 
-## 📚 目录
+## 目录
 
 1. [最小 Server：30 行跑通](#1-最小-server30-行跑通)
 2. [装饰器魔法：签名→Schema](#2-装饰器魔法签名schema)
@@ -62,7 +62,7 @@ uv run python server.py
 2. **类型注解要具体**——`str` 能用，但 `Literal["UTC", "Asia/Shanghai"]` 能让模型不传错值。
 3. **参数默认值减少模型负担**——可省略的参数别设为必填。
 
-> 💡 查看生成的 Schema：`uv run python -c "from server import mcp; print(mcp.get_tools())"`——这是理解"工具即 Schema"最快的方式。
+> 查看生成的 Schema：`uv run python -c "from server import mcp; print(mcp.get_tools())"`——这是理解"工具即 Schema"最快的方式。
 
 ## 3. stdio 传输原理
 
@@ -169,7 +169,7 @@ printf '{"jsonrpc":"2.0","id":1,"method":"tools/list","params":{}}' | npx tsx se
 2. 每个工具只做一件事（参数即决策负担）。
 3. 验证顺序固定：`tools/list` → 手发调用 → Inspector 可视化。
 
-> 🎯 **核心要点**：第一个 Server 的本质是"把一个普通 Python 函数暴露成模型可调用的工具"——`@mcp.tool` 替你完成了 Schema 生成与 JSON-RPC 协议处理；stdio 模式下 Server 就是"读 stdin 回 stdout 的过滤器"。亲手用 `printf` 发一次 `tools/list`，你就看穿了 MCP 的最小本质：**协议只是换了个格式的 RPC**。
+> **核心要点**：第一个 Server 的本质是"把一个普通 Python 函数暴露成模型可调用的工具"——`@mcp.tool` 替你完成了 Schema 生成与 JSON-RPC 协议处理；stdio 模式下 Server 就是"读 stdin 回 stdout 的过滤器"。亲手用 `printf` 发一次 `tools/list`，你就看穿了 MCP 的最小本质：**协议只是换了个格式的 RPC**。
 
 ---
 

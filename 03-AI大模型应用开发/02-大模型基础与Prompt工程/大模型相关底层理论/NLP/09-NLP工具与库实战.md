@@ -1,6 +1,6 @@
 # 09 - NLP 工具与库实战
 
-> 🎯 NLTK、spaCy、jieba、HuggingFace — 从传统 NLP 到 LLM，四套工具覆盖全场景。选对工具，生产力翻倍
+> NLTK、spaCy、jieba、HuggingFace — 从传统 NLP 到 LLM，四套工具覆盖全场景。选对工具，生产力翻倍
 
 ---
 
@@ -196,10 +196,10 @@ token_classifier = pipeline("token-classification",
 ```text
 LLM 时代的工具选择建议：
 
-  ✅ 首先尝试 HuggingFace pipeline → 零代码验证可行性
-  ✅ 需要定制 → 加载模型微调或用 LLM Prompt
-  ✅ 中文预处理 → jieba 分词 + spaCy 中文模型
-  ✅ 生产级 RAG → LangChain/LlamaIndex + 向量数据库
+  ✓ 首先尝试 HuggingFace pipeline → 零代码验证可行性
+  ✓ 需要定制 → 加载模型微调或用 LLM Prompt
+  ✓ 中文预处理 → jieba 分词 + spaCy 中文模型
+  ✓ 生产级 RAG → LangChain/LlamaIndex + 向量数据库
 ```
 
 ---

@@ -55,7 +55,7 @@ SDS 根据字符串长度自动选择不同的头部类型，以节省内存：
 | sdshdr32 | 4 GB | uint32_t | 9 字节 |
 | sdshdr64 | 2^64 字节 | uint64_t | 17 字节 |
 
-> 💡 sdshdr5 是特殊优化类型，直接将长度编码在 flags 字段中，不单独占用 len/alloc。Redis 7.0+ 简化了 SDS，移除了 sdshdr5 类型。
+> sdshdr5 是特殊优化类型，直接将长度编码在 flags 字段中，不单独占用 len/alloc。Redis 7.0+ 简化了 SDS，移除了 sdshdr5 类型。
 
 ### 1.3 空间预分配策略
 
@@ -93,7 +93,7 @@ sds sdsMakeRoomFor(sds s, size_t addlen) {
 
 当 SDS 字符串缩短时，并不立即释放多余内存，而是用 free 字段记录空闲字节数，以备将来拼接时直接使用。如果需要真正释放内存，可以调用 `sdsRemoveFreeSpace()`。
 
-> ⚠️ 惰性释放的优势是避免频繁内存操作，但若写入大量临时数据后不再使用，会导致内存浪费。好在 Redis 本身有 `maxmemory` 限制，可以通过淘汰策略回收。
+> 惰性释放的优势是避免频繁内存操作，但若写入大量临时数据后不再使用，会导致内存浪费。好在 Redis 本身有 `maxmemory` 限制，可以通过淘汰策略回收。
 
 ---
 
@@ -130,7 +130,7 @@ raw 编码（非连续内存）：
     两次 malloc
 ```
 
-> 💡 Redis 7.0+ 的 embstr 上限为 48 字节。
+> Redis 7.0+ 的 embstr 上限为 48 字节。
 
 ### 2.2 核心命令
 
@@ -169,7 +169,7 @@ raw 编码（非连续内存）：
 不会出现并发安全问题（对比 Java 多线程 +1 需要 synchronized）
 ```
 
-> 💡 INCR 是原子操作，因为 Redis 命令执行是单线程串行的，天然无竞争。这也是 Redis 分布式锁的基础。
+> INCR 是原子操作，因为 Redis 命令执行是单线程串行的，天然无竞争。这也是 Redis 分布式锁的基础。
 
 ### 2.4 Java 实战
 
@@ -233,7 +233,7 @@ if (Boolean.TRUE.equals(locked)) {
 | listpack（7.0+） | 元素 < 512 且所有 value < 64B | 更优的紧凑结构 | 消除连锁更新 |
 | hashtable | 超出阈值 | 数组 + 链表/红黑树 | O(1) 读写，内存消耗大 |
 
-> ⚠️ ziplist 的连锁更新问题：ziplist 每个 entry 包含前一个 entry 的长度，当插入/删除导致后续 entry 长度变化时，需要级联更新所有后续 entry 的 prevlen 字段，最坏情况 O(n²)。Redis 7.0 用 listpack 彻底解决了这个问题——listpack 每个 entry 只记录自己的长度，不依赖前一个 entry。
+> ziplist 的连锁更新问题：ziplist 每个 entry 包含前一个 entry 的长度，当插入/删除导致后续 entry 长度变化时，需要级联更新所有后续 entry 的 prevlen 字段，最坏情况 O(n²)。Redis 7.0 用 listpack 彻底解决了这个问题——listpack 每个 entry 只记录自己的长度，不依赖前一个 entry。
 
 ```
 ziplist 内存布局：
@@ -359,7 +359,7 @@ quicklist 结构：
 
 每个 quicklist 节点是一个 listpack（Redis 7.0+）或 ziplist（旧版本），通过 `list-max-listpack-size` 配置每个节点的最大大小。
 
-> 💡 quicklist 兼顾了双向链表的插入删除效率和压缩列表的内存紧凑性。头尾操作 O(1)，中间操作 O(n)。`list-compress-depth` 可以配置两端不压缩的节点数，进一步节省内存。
+> quicklist 兼顾了双向链表的插入删除效率和压缩列表的内存紧凑性。头尾操作 O(1)，中间操作 O(n)。`list-compress-depth` 可以配置两端不压缩的节点数，进一步节省内存。
 
 ### 4.2 核心命令
 
@@ -558,7 +558,7 @@ Level 1:  HEAD ─→ 5 ─→ 10 ─→ 20 ─→ 30 ─→ 50 ─→ 70 ─→
 | 平衡维护 | 概率平衡，无需调整 | 严格平衡，插入删除需旋转 |
 | 调试难度 | 易于调试和可视化 | 调试困难 |
 
-> 💡 跳表通过概率算法决定节点层数，避免了红黑树复杂的旋转操作。Redis 中跳表的层数上限为 32 层，概率 p = 0.25。
+> 跳表通过概率算法决定节点层数，避免了红黑树复杂的旋转操作。Redis 中跳表的层数上限为 32 层，概率 p = 0.25。
 
 ### 6.3 核心命令
 
@@ -698,5 +698,5 @@ redis-cli HDEL bigkey field1 field2 ...
 redis-cli ZREMRANGEBYRANK bigkey 0 99   # ZSet 分批删除
 ```
 
-> 🎯 核心选型原则：根据访问模式、数据规模、操作类型综合选择。没有万能结构，只有最合适的。
+> 核心选型原则：根据访问模式、数据规模、操作类型综合选择。没有万能结构，只有最合适的。
 

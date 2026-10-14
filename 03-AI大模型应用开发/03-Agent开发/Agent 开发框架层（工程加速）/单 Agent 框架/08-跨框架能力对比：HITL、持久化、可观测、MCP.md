@@ -2,7 +2,7 @@
 
 > 定位：决定"换不换框架"的四个关键能力维度的深度对比——人工介入、持久化、可观测、工具生态（2026-08 基准）
 
-## 📚 目录
+## 目录
 
 1. [对比方法论](#1-对比方法论)
 2. [维度一：Human-in-the-Loop 人工介入](#2-维度一human-in-the-loop-人工介入)
@@ -32,7 +32,7 @@
 | Pydantic AI | ★★ | deps 注入回调 + Hooks Capability | 机制有，要自己编排流程 |
 | Smolagents | ★ | 无原生 | 回调自己搭 |
 
-> 🎯 **结论**：审批型业务（退款/发信/删数据）优先 LangGraph 或 Claude Agent SDK；其余框架要用工程手段补（工程化模块 08 篇审批门）。
+> **结论**：审批型业务（退款/发信/删数据）优先 LangGraph 或 Claude Agent SDK；其余框架要用工程手段补（工程化模块 08 篇审批门）。
 
 ## 3. 维度二：持久化与会话恢复
 
@@ -44,7 +44,7 @@
 | Pydantic AI | ★★ | message_history 跨调用 | 轻量；断点恢复/时间旅行无 |
 | Smolagents | ★ | 无 | 完全自建 |
 
-> 🎯 **结论**：需要"挂了能续、改错了能回放"→ LangGraph；需要"多实例共享会话"→ OpenAI Sessions（Redis）或 Claude session_store；只要对话连续性 → Pydantic message_history 够。
+> **结论**：需要"挂了能续、改错了能回放"→ LangGraph；需要"多实例共享会话"→ OpenAI Sessions（Redis）或 Claude session_store；只要对话连续性 → Pydantic message_history 够。
 
 ## 4. 维度三：可观测性
 
@@ -68,7 +68,7 @@
 | LangGraph | ★★★ 原生（langchain-mcp-adapters） | LangChain 生态最大 |
 | Smolagents | ★★ 工具层可接 MCP | 极简——第三方生态小 |
 
-> 💡 **MCP 的框架不可知价值**：工具按 MCP 实现一次，五大框架通用——框架切换时工具层零重写（工程化模块 02 篇"MCP 是集成层不是架构起点"）。
+> **MCP 的框架不可知价值**：工具按 MCP 实现一次，五大框架通用——框架切换时工具层零重写（工程化模块 02 篇"MCP 是集成层不是架构起点"）。
 
 ## 6. 维度五：性能成本特征
 

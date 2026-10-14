@@ -2,7 +2,7 @@
 
 > OpenAI Agents SDK 的定位一句话："框架替你跑 Agent 循环"——你定义 Agent、工具、护栏、交接，Runner 托管整个循环直到产出最终输出；与 Responses API 深度集成。
 
-## 📚 目录
+## 目录
 
 1. [OpenAI Agents SDK 是什么](#1-openai-agents-sdk-是什么)
 2. [托管式流程的含义](#2-托管式流程的含义)
@@ -191,7 +191,7 @@ SDK = OpenAI 生态的"少样板托管式 Agent 框架"
 ⑥ Tracing 全链路 + HITL 高危审批
 ```
 
-> 🎯 核心要点：SDK = OpenAI 官方托管式 Agent 框架（Swarm 继任者，v0.19.3）；三大原语（Agent/Handoffs/Guardrails）；托管循环（Runner）vs 显式图（LangGraph）vs 对话（AutoGen）是三种编排哲学；适合 OpenAI 生态 + 快速上线；无检索层（组合 LlamaIndex/Haystack）；六个误区 + 客服落地骨架校准认知。
+> 核心要点：SDK = OpenAI 官方托管式 Agent 框架（Swarm 继任者，v0.19.3）；三大原语（Agent/Handoffs/Guardrails）；托管循环（Runner）vs 显式图（LangGraph）vs 对话（AutoGen）是三种编排哲学；适合 OpenAI 生态 + 快速上线；无检索层（组合 LlamaIndex/Haystack）；六个误区 + 客服落地骨架校准认知。
 
 ---
 

@@ -51,7 +51,7 @@ Java:   多线程 + synchronized
 JS:     单线程 + async/await + Promise
 ```
 
-> 💡 对于后端开发者，**最重要的 JS 概念**按优先级排序：async/await > Promise > 箭头函数 > 解构 > 数组方法(map/filter/reduce) > 模块化。
+> 对于后端开发者，**最重要的 JS 概念**按优先级排序：async/await > Promise > 箭头函数 > 解构 > 数组方法(map/filter/reduce) > 模块化。
 
 ---
 
@@ -59,9 +59,9 @@ JS:     单线程 + async/await + Promise
 
 | 关键字 | 作用域 | 提升(Hoisting) | 重复声明 | 重新赋值 | 建议 |
 |--------|--------|----------------|----------|---------|------|
-| `var` | 函数作用域 | 变量提升（初始化为 undefined） | 允许 | 允许 | ❌ 不要使用 |
-| `let` | 块作用域 | 提升但不初始化（暂时性死区） | 不允许 | 允许 | ✅ 可变变量 |
-| `const` | 块作用域 | 提升但不初始化（暂时性死区） | 不允许 | 不允许 | ✅ 首选（不变优先） |
+| `var` | 函数作用域 | 变量提升（初始化为 undefined） | 允许 | 允许 | ✗ 不要使用 |
+| `let` | 块作用域 | 提升但不初始化（暂时性死区） | 不允许 | 允许 | ✓ 可变变量 |
+| `const` | 块作用域 | 提升但不初始化（暂时性死区） | 不允许 | 不允许 | ✓ 首选（不变优先） |
 
 ### 变量提升（Hoisting）
 
@@ -76,7 +76,7 @@ console.log(a);  // undefined
 a = 10;
 
 // let 的暂时性死区（Temporal Dead Zone）
-console.log(b);  // ❌ ReferenceError: Cannot access 'b' before initialization
+console.log(b);  // ✗ ReferenceError: Cannot access 'b' before initialization
 let b = 10;
 ```
 
@@ -90,16 +90,16 @@ if (true) {
     const z = 3; // 块作用域——仅在 {} 内有效
 }
 console.log(x);  // 1
-console.log(y);  // ❌ ReferenceError
+console.log(y);  // ✗ ReferenceError
 
 // const 对象的值可变
 const obj = { name: '张三' };
-obj.name = '李四';      // ✅ 属性可以修改
-obj.age = 25;           // ✅ 可以添加新属性
-// obj = { name: '王五' }  // ❌ 不能重新赋值
+obj.name = '李四';      // ✓ 属性可以修改
+obj.age = 25;           // ✓ 可以添加新属性
+// obj = { name: '王五' }  // ✗ 不能重新赋值
 ```
 
-> 🎯 **后端开发者的原则**：总是用 `const` 声明变量，只有确实需要重新赋值时才用 `let`。永远不要用 `var`。
+> **后端开发者的原则**：总是用 `const` 声明变量，只有确实需要重新赋值时才用 `let`。永远不要用 `var`。
 
 ---
 
@@ -145,7 +145,7 @@ false, 0, '' (空字符串), null, undefined, NaN
 const name = user?.name ?? '默认用户';  // 可选链 + 空值合并
 ```
 
-> ⚠️ `NaN` 不等于任何值，包括它自己：`NaN === NaN` → `false`。判断使用 `Number.isNaN(x)`。
+> `NaN` 不等于任何值，包括它自己：`NaN === NaN` → `false`。判断使用 `Number.isNaN(x)`。
 
 ---
 
@@ -167,7 +167,7 @@ console.log(0 === false);        // false
 console.log(null === undefined); // false
 ```
 
-> 💡 面试可能会问 `==` 的规则，但实际开发中**没有理由使用 `==`**。几乎所有现代 ESLint 配置都禁止使用 `==`。
+> 面试可能会问 `==` 的规则，但实际开发中**没有理由使用 `==`**。几乎所有现代 ESLint 配置都禁止使用 `==`。
 
 ---
 
@@ -222,12 +222,12 @@ obj2.greet();  // undefined（箭头函数的 this 不会指向 obj2）
 class Timer {
     constructor() {
         this.seconds = 0;
-        // ✅ 箭头函数捕获外部 this
+        // ✓ 箭头函数捕获外部 this
         setInterval(() => {
             this.seconds++;  // this 指向 Timer 实例
         }, 1000);
         
-        // ❌ 普通函数会丢失 this
+        // ✗ 普通函数会丢失 this
         setInterval(function() {
             this.seconds++;  // this 指向全局对象
         }, 1000);
@@ -235,7 +235,7 @@ class Timer {
 }
 ```
 
-> 🎯 **箭头函数使用原则**：
+> **箭头函数使用原则**：
 > - 需要 `this` 指向当前对象的方法 → 用 `function` 声明或类方法
 > - 所有回调、闭包 → 用箭头函数
 > - 不需要 `this` 的工具函数 → 用箭头函数
@@ -266,7 +266,7 @@ const html = `
 const message = `订单总额：${(price * quantity * 1.13).toFixed(2)} 元`;
 ```
 
-> 💡 后端开发者使用模板字面量的场景：拼接 SQL（警惕注入）、拼接 URL、生成 HTML 片段。
+> 后端开发者使用模板字面量的场景：拼接 SQL（警惕注入）、拼接 URL、生成 HTML 片段。
 
 ---
 
@@ -395,7 +395,7 @@ const activeAdultNames = users
 //     .collect(Collectors.toList());
 ```
 
-> 💡 熟悉 Java Stream 的后端开发者可以很自然地过渡到 JS 数组方法。唯一差异：JS 的 `map` 不要求返回的类型一致，而 Java 的 `map` 是类型安全的。
+> 熟悉 Java Stream 的后端开发者可以很自然地过渡到 JS 数组方法。唯一差异：JS 的 `map` 不要求返回的类型一致，而 Java 的 `map` 是类型安全的。
 
 ---
 
@@ -437,7 +437,7 @@ const user = {
 // 旧写法（层层判空）
 const city = user && user.profile && user.profile.address && user.profile.address.city;
 
-// ✅ 可选链（Optional Chaining）?.   —— ES2020
+// ✓ 可选链（Optional Chaining）?.   —— ES2020
 const city2 = user?.profile?.address?.city;  // undefined（不报错）
 
 // 空值合并（Nullish Coalescing）??   —— ES2020
@@ -450,7 +450,7 @@ const count2 = 0 || 100;    // 100（|| 对所有 falsy 值生效）
 const result = user.save?.();  // 如果 save 不存在则不调用
 ```
 
-> 🎯 `?.` 和 `??` 是后端开发者在 JS 中最需要的语法糖，能将判空代码减少 80%。
+> `?.` 和 `??` 是后端开发者在 JS 中最需要的语法糖，能将判空代码减少 80%。
 
 ---
 
@@ -519,14 +519,14 @@ getUserOrders(1)
 ```javascript
 // 串行 vs 并行
 
-// ❌ 串行（不必要的等待）
+// ✗ 串行（不必要的等待）
 async function serial() {
     const user = await fetchUser(1);
     const orders = await fetchOrders(1);     // 等 user 返回后才开始
     const profile = await fetchProfile(1);   // 等 orders 返回后才开始
 }
 
-// ✅ 并行
+// ✓ 并行
 async function parallel() {
     const [user, orders, profile] = await Promise.all([
         fetchUser(1),          // 三个请求同时发出
@@ -556,7 +556,7 @@ const timeout = new Promise((_, reject) =>
 const result = await Promise.race([fetchUser(1), timeout]);
 ```
 
-> ⚠️ 后端开发者常见错误：忘记 `await` 会导致 Promise 在后台静默执行，后续代码拿不到结果。未 catch 的 Promise 拒绝会触发 `unhandledRejection` 事件。
+> 后端开发者常见错误：忘记 `await` 会导致 Promise 在后台静默执行，后续代码拿不到结果。未 catch 的 Promise 拒绝会触发 `unhandledRejection` 事件。
 
 ---
 
@@ -620,7 +620,7 @@ setTimeout(() => {
 // 输出：微任务1 → 宏任务1 → 微任务2 → 宏任务2
 ```
 
-> 💡 对于后端开发者，事件循环的实用价值在于理解 `Promise` 的回调总是先于 `setTimeout` 执行，以及为什么 `await` 之后的代码会在微任务中执行。
+> 对于后端开发者，事件循环的实用价值在于理解 `Promise` 的回调总是先于 `setTimeout` 执行，以及为什么 `await` 之后的代码会在微任务中执行。
 
 ---
 
@@ -629,12 +629,12 @@ setTimeout(() => {
 ### ES6 模块（ESM）—— 现代标准
 
 ```javascript
-// 📁 math.js —— 导出
+// math.js —— 导出
 export const PI = 3.14159;
 export function add(a, b) { return a + b; }
 export default class Calculator { ... }
 
-// 📁 app.js —— 导入
+// app.js —— 导入
 import Calculator, { PI, add as sum } from './math.js';
 import * as MathUtils from './math.js';  // 全部导入
 ```
@@ -642,13 +642,13 @@ import * as MathUtils from './math.js';  // 全部导入
 ### CommonJS（Node.js 传统方式）
 
 ```javascript
-// 📁 math.js —— 导出
+// math.js —— 导出
 const PI = 3.14159;
 function add(a, b) { return a + b; }
 module.exports = { PI, add };
 module.exports.default = Calculator;
 
-// 📁 app.js —— 导入
+// app.js —— 导入
 const { PI, add } = require('./math.js');
 ```
 
@@ -660,7 +660,7 @@ const { PI, add } = require('./math.js');
 | Tree Shaking | 支持 | 不支持 |
 | 文件扩展 | `.mjs` 或 `"type": "module"` | `.cjs` 或默认 |
 
-> 💡 浏览器环境使用 ES6 模块，Node.js 环境两者并存，新项目建议使用 ESM。
+> 浏览器环境使用 ES6 模块，Node.js 环境两者并存，新项目建议使用 ESM。
 
 ---
 
@@ -713,7 +713,7 @@ async function fetchData() {
 }
 ```
 
-> ⚠️ 注意 JSON.parse 包裹的是无效 JSON 字符串时会抛出异常，应始终放在 try-catch 中。另外，`fetch` 在遇到 404/500 时**不会** reject（见本系列后续章节）。
+> 注意 JSON.parse 包裹的是无效 JSON 字符串时会抛出异常，应始终放在 try-catch 中。另外，`fetch` 在遇到 404/500 时**不会** reject（见本系列后续章节）。
 
 ---
 
@@ -785,7 +785,7 @@ const savedUser = JSON.parse(localStorage.getItem('user'));
 sessionStorage.setItem('tempData', '当前页面临时数据');
 ```
 
-> 💡 后端开发者注意：JWT token 通常存在 `localStorage`（SPA 场景）或 `HttpOnly Cookie`（传统场景）。存在 `localStorage` 的 token 在每次请求时通过 JavaScript 读取并放至 `Authorization` 头。
+> 后端开发者注意：JWT token 通常存在 `localStorage`（SPA 场景）或 `HttpOnly Cookie`（传统场景）。存在 `localStorage` 的 token 在每次请求时通过 JavaScript 读取并放至 `Authorization` 头。
 
 ---
 
@@ -794,7 +794,7 @@ sessionStorage.setItem('tempData', '当前页面临时数据');
 一个完整的异步数据获取和处理函数，涵盖本文大多数知识点：
 
 ```javascript
-// 📁 userService.js
+// userService.js
 
 import axios from 'axios';  // 或使用 fetch
 
@@ -863,7 +863,7 @@ export async function getUserWithOrders(userId) {
     }
 }
 
-// 📁 app.js —— 使用示例
+// app.js —— 使用示例
 
 (async () => {
     try {
@@ -888,7 +888,7 @@ export async function getUserWithOrders(userId) {
 })();
 ```
 
-> 🎯 **总结：后端开发者掌握 JS 的捷径**
+> **总结：后端开发者掌握 JS 的捷径**
 > 1. 记住 JS 不同于 Java 的三大特性：动态类型、一等函数、事件循环
 > 2. 熟练掌握 `async/await` + `Promise.all`（这是前后端交互的核心）
 > 3. 用 `const` 代替 `var`，用 `===` 代替 `==`

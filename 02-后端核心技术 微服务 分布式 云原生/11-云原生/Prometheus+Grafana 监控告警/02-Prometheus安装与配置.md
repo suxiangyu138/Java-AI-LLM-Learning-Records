@@ -1,6 +1,6 @@
 # 02 - Prometheus 安装与配置
 
-> 🎯 从 Docker 快速体验到生产级二进制部署、从 prometheus.yml 到 scrape 配置 — 搭起来是理解一切的前提
+> 从 Docker 快速体验到生产级二进制部署、从 prometheus.yml 到 scrape 配置 — 搭起来是理解一切的前提
 
 ---
 
@@ -244,7 +244,7 @@ scrape_configs:
 
 ## 6. Federation 联邦集群
 
-> 💡 当监控规模超过单机 Prometheus 时，使用 Federation 分层聚合。
+> 当监控规模超过单机 Prometheus 时，使用 Federation 分层聚合。
 
 ```
                     ┌──────────────┐
@@ -275,4 +275,4 @@ scrape_configs:
           - 'prometheus-k8s:9090'
 ```
 
-> 🎯 **建议**：单集群/中小规模直接单机 Prometheus；大规模（>1000 Target 或 >100 万 Series）使用 Federation 或 Thanos/Cortex 方案。
+> **建议**：单集群/中小规模直接单机 Prometheus；大规模（>1000 Target 或 >100 万 Series）使用 Federation 或 Thanos/Cortex 方案。

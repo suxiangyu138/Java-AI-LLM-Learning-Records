@@ -1,7 +1,7 @@
 # 02-Jenkins 与 GitLab CI 实践
 > 两大 CI 引擎的实战：Jenkins Pipeline 全流程、GitLab CI 配置、对比选型——"重而强"与"轻而简"
 
-## 📚 目录
+## 目录
 1. [对比总览](#1-对比总览)
 2. [Jenkins 架构与部署](#2-jenkins-架构与部署)
 3. [Jenkins Pipeline 实战](#3-jenkins-pipeline-实战)
@@ -50,7 +50,7 @@ docker logs jenkins | grep -A2 'initialAdminPassword'   # 初始密码
 | 凭证管理 | 凭据（Token/SSH/镜像仓库账号）安全存储 |
 | 插件 | 构建工具/通知/凭证集成 |
 
-> ⚠️ **Jenkins 常见坑**：内存占用高（2G+ 起步）；插件升级破坏兼容；Agent 环境不一致——**用容器化 Agent（maven 镜像）保证构建环境一致**。
+> **Jenkins 常见坑**：内存占用高（2G+ 起步）；插件升级破坏兼容；Agent 环境不一致——**用容器化 Agent（maven 镜像）保证构建环境一致**。
 
 ## 3. Jenkins Pipeline 实战
 
@@ -125,7 +125,7 @@ pipeline {
 | `input` | 发布确认按钮（持续交付） |
 | `post` | 失败自动回滚 + 报告归档 |
 
-> 💡 **Jenkins 最佳实践**：容器化 Agent、凭证管理、`input` 发布门、post 失败回滚——四件套是生产级 Jenkins 的标配。
+> **Jenkins 最佳实践**：容器化 Agent、凭证管理、`input` 发布门、post 失败回滚——四件套是生产级 Jenkins 的标配。
 
 ## 4. GitLab CI 架构与配置
 
@@ -241,7 +241,7 @@ deploy-prod:
 | 云原生新项目 | GitHub Actions 或 Tekton（见 03） |
 | 纯 K8s 团队 | Tekton + ArgoCD |
 
-> 🎯 **2026 选型结论**：新项目优先 GitLab CI 或 GitHub Actions（Pipeline as Code + 轻量）；Jenkins 用于存量与复杂场景；纯云原生用 Tekton——**别为"功能多"选重工具，为"够用且简单"选轻工具**。
+> **2026 选型结论**：新项目优先 GitLab CI 或 GitHub Actions（Pipeline as Code + 轻量）；Jenkins 用于存量与复杂场景；纯云原生用 Tekton——**别为"功能多"选重工具，为"够用且简单"选轻工具**。
 
 ## 7. 高频避坑
 
@@ -258,7 +258,7 @@ deploy-prod:
 
 ## 8. 核心要点
 
-> 🎯 **核心要点**：
+> **核心要点**：
 > - Jenkins：重而强（Groovy Pipeline + 1500 插件 + 容器化 Agent）；
 > - GitLab CI：轻而简（YAML + Git 原生 + Runner）；
 > - 生产级四件套：容器化构建、凭证管理、发布按钮（manual/input）、失败回滚；

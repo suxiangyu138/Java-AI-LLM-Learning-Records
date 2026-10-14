@@ -4,7 +4,7 @@
 
 ---
 
-## 📚 目录
+## 目录
 
 1. [类型驱动：一份标注三样产出](#1-类型驱动一份标注三样产出)
 2. [Starlette 基座与 ASGI 原生异步](#2-starlette-基座与-asgi-原生异步)
@@ -129,11 +129,11 @@ from sse_starlette.sse import EventSourceResponse
 
 补充两个"成长中的短板"：**安全组件分散**——CORS/CSRF/限流/防暴力破解没有 Django 式的内置基线，需要 `CORSMiddleware` + `SlowAPI` 等中间件逐个组装，且"漏装一个"没有编译期提醒；**迁移与版本兼容成本**——FastAPI 版本迭代快（0.x 至今），Pydantic v1→v2 迁移曾让大量存量项目重构，2026 年的教训是"锁版本 + 依赖 Pydantic 2.x 新生态"。这些短板不改变"API 场景选 FastAPI"的结论，但**"组装安全组件"与"版本兼容纪律"应该写进 FastAPI 团队的工程规范**——FastAPI 的快节奏是优势也是责任。
 
-> 🎯 **核心要点**：FastAPI = 类型驱动的 API 体验层 + Starlette 异步基座；一份标注换校验/文档/IDE 三产出；流式/SSE/WebSocket 原生支持让它成为 AI 模型服务事实标准（42% ML 工程师）；短板在"全栈组装"——它管 API 不管后台，这正是与 Django 互补的边界。
+> **核心要点**：FastAPI = 类型驱动的 API 体验层 + Starlette 异步基座；一份标注换校验/文档/IDE 三产出；流式/SSE/WebSocket 原生支持让它成为 AI 模型服务事实标准（42% ML 工程师）；短板在"全栈组装"——它管 API 不管后台，这正是与 Django 互补的边界。
 
 ## 7. 核心要点与思考题
 
-> 🎯 **本章三句话总结**：
+> **本章三句话总结**：
 > 1. 类型驱动闭环（校验+文档+IDE）是 FastAPI 的护城河，Pydantic v2 是其引擎；
 > 2. ASGI 原生异步带来流式/SSE/WebSocket 三件套——LLM 流式输出的刚需让 AI 项目默认 FastAPI；
 > 3. 42% ML 工程师 + OpenAI/HF 背书 = 模型服务事实标准；短板在无 ORM/Admin，与 Django 互补。

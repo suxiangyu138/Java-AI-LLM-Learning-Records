@@ -1,7 +1,7 @@
 # 11-Git 配置安全与最佳实践
 > 规范是为了减少混乱、自动化是为了减少失误、安全是为了防范灾难——GPG/SSH 签名、敏感信息清理、分支保护、团队规范模板
 
-## 📚 目录
+## 目录
 1. [安全全景：四道防线](#1-安全全景四道防线)
 2. [GPG 签名提交](#2-gpg-签名提交)
 3. [SSH 签名（Git 2.34+）](#3-ssh-签名git-234)
@@ -26,7 +26,7 @@
 | ③ 仓库权限 | 分支保护 + 平台安全套件（Dependabot/Secret scanning） | 越权与漏洞 |
 | ④ 泄露补救 | filter-repo / BFG + revoke 密钥 | 已泄露的历史 |
 
-> 🎯 **核心要点**：安全策略必须在**服务端 enforce**——本地 hook 可被 `--no-verify` 跳过，分支保护与 Secret scanning 不能。
+> **核心要点**：安全策略必须在**服务端 enforce**——本地 hook 可被 `--no-verify` 跳过，分支保护与 Secret scanning 不能。
 
 ## 2. GPG 签名提交
 
@@ -47,7 +47,7 @@ git verify-commit HEAD
 git verify-tag v1.0.0
 ```
 
-> 💡 GitHub 显示 "Verified ✓"——即使用户名被伪造，GPG 签名无法伪造。企业高安全要求：平台开启 "Require signed commits"。
+> GitHub 显示 "Verified ✓"——即使用户名被伪造，GPG 签名无法伪造。企业高安全要求：平台开启 "Require signed commits"。
 
 ## 3. SSH 签名（Git 2.34+）
 
@@ -93,8 +93,8 @@ echo "credentials.json" >> .gitignore
   application-prod.yml         → 生产配置，可提交（不含密钥）
 
 密钥管理：
-  ❌ 密钥写在 application-prod.yml 中
-  ✅ 密钥存在环境变量/K8s Secret/Vault 中，通过 ${DB_PASSWORD} 引用
+  ✗ 密钥写在 application-prod.yml 中
+  ✓ 密钥存在环境变量/K8s Secret/Vault 中，通过 ${DB_PASSWORD} 引用
 ```
 
 ## 5. 历史清理：filter-repo / BFG / git-secrets
@@ -112,7 +112,7 @@ git push --force --all                                      # 清理后强制推
 git push --force --tags
 ```
 
-> ⚠️ 改写历史！确保团队知晓——**所有协作者需要重新 clone**。
+> 改写历史！确保团队知晓——**所有协作者需要重新 clone**。
 
 ### 5.2 BFG Repo-Cleaner
 
@@ -147,22 +147,22 @@ git filter-branch --force --index-filter \
 
 ```text
 main / develop 保护（GitHub/GitLab 平台配置）：
-  ✅ 禁止直接 push（必须通过 PR/MR 合并）
-  ✅ Require approvals（至少 1 人，main 建议 2 人）
-  ✅ Require status checks（CI 全部通过）
-  ✅ Require conversation resolution
-  ✅ 分支必须最新（禁止落后于目标分支）
-  ✅ Require signed commits（高安全要求）
-  ✅ 禁止 force push
-  ✅ Include administrators（管理员也受约束）
-  ⚠️ 可选：Require linear history / Require review from Code Owners
+  ✓ 禁止直接 push（必须通过 PR/MR 合并）
+  ✓ Require approvals（至少 1 人，main 建议 2 人）
+  ✓ Require status checks（CI 全部通过）
+  ✓ Require conversation resolution
+  ✓ 分支必须最新（禁止落后于目标分支）
+  ✓ Require signed commits（高安全要求）
+  ✓ 禁止 force push
+  ✓ Include administrators（管理员也受约束）
+  可选：Require linear history / Require review from Code Owners
 ```
 
 | 角色 | 可创建分支 | 可合并到 | 可删除分支 | 可修改保护规则 |
 |------|:---:|:---:|:---:|:---:|
 | Developer | feature/fix/* | — | 自己的 feature | — |
 | Tech Lead | 全部 | develop | feature/fix | — |
-| Maintainer | 全部 | main/release | 全部 | ✅ |
+| Maintainer | 全部 | main/release | 全部 | ✓ |
 
 ## 7. 推荐完整 .gitconfig
 
@@ -282,13 +282,13 @@ subject: ≤50 字符，现在时，首字母小写
 | `ci` | CI/CD | `ci: 添加代码覆盖率检查` |
 
 ```text
-✅ 好的粒度：
+✓ 好的粒度：
   feat(user): 添加用户注册接口
   feat(user): 添加用户名唯一性校验
   test(user): 补充注册功能单元测试
 
-❌ 太大：feat: 完成用户模块（改了20个文件，无法 review）
-❌ 太小：fix: typo / fix: another typo（应该 squash 或 amend）
+✗ 太大：feat: 完成用户模块（改了20个文件，无法 review）
+✗ 太小：fix: typo / fix: another typo（应该 squash 或 amend）
 ```
 
 ### 9.2 与 Issue 关联
@@ -311,7 +311,7 @@ Related to #1230"
 | `Related to #1234` | 关联但不关闭 |
 | `Refs #1234` | 无自动行为 |
 
-> 🎯 **黄金法则**：假设半年后的你在看 `git blame`——TA 能凭 commit message 理解"为什么有这个变更"。没有 Issue 关联的 commit 半年后就是"考古现场"。
+> **黄金法则**：假设半年后的你在看 `git blame`——TA 能凭 commit message 理解"为什么有这个变更"。没有 Issue 关联的 commit 半年后就是"考古现场"。
 
 ## 10. 协作流程最佳实践
 
@@ -332,21 +332,21 @@ Related to #1230"
 ### 10.2 PR 描述模板
 
 ```markdown
-## 📝 变更概述
+## 变更概述
 新增用户邮箱验证功能
 
-## 🔗 关联Issue
+## 关联Issue
 Closes #1234
 
-## 🧪 测试
+## 测试
 - [x] 单元测试：验证码生成与校验
 - [x] 集成测试：注册→验证→登录完整流程
 - [x] 异常测试：过期验证码、错误验证码
 
-## 📸 截图
+## 截图
 <如有UI变更>
 
-## ⚠️ 风险提示
+## 风险提示
 - 依赖邮件服务，需确认测试环境邮件配置
 ```
 
@@ -354,8 +354,8 @@ Closes #1234
 
 ```bash
 # 收到 Review 意见后：
-# ❌ 直接 amend 原 commit → reviewer 看不到你改了什么
-# ✅ 新增 fixup commit → reviewer 只需看这个新 commit
+# ✗ 直接 amend 原 commit → reviewer 看不到你改了什么
+# ✓ 新增 fixup commit → reviewer 只需看这个新 commit
 git commit -m "fixup! feat(user): 添加用户登录逻辑"
 
 # PR 最终合并前整理：
@@ -412,7 +412,7 @@ type: feat|fix|refactor|test|docs|chore|perf|ci
 
 ## 13. 核心要点
 
-> 🎯 **核心要点**：
+> **核心要点**：
 > - 四道防线：预防（gitignore+hook）→ 身份（GPG/SSH 签名）→ 权限（分支保护）→ 补救（filter-repo + revoke）；
 > - 密钥泄露处理顺序：**先 revoke 再清历史**（revoke 最高优先级）；
 > - 分支保护：PR 强制 + Approvals + CI 通过 + 禁 force push 四件套；

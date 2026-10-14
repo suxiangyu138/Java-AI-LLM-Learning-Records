@@ -2,7 +2,7 @@
 
 > 定位：Agent 生产工程化组件之「多智能体协作」——从单体 Agent 走向 Agent 群（swarm）的工程：架构拓扑、A2A 协议、任务交接、框架选型、级联安全与轨迹评估。2026 核心共识：**协议标准化（A2A/MCP 分层）是互操作基石；级联失败是主导威胁（~12% 长运行含传播错误）；AutoGen 进入维护模式，MAF 继任**。总览做索引与速查，子主题各一篇。
 
-## 📚 目录
+## 目录
 
 1. [知识体系导图](#1-知识体系导图)
 2. [模块导航](#2-模块导航)
@@ -72,7 +72,7 @@ Multi-Agent 协作组件
 
 ## 5. 2026 生态基准
 
-> 📅 基准窗口：2026-08。版本与事实以各模块【参考来源】为准。
+> 基准窗口：2026-08。版本与事实以各模块【参考来源】为准。
 
 - **Swarm 取代单体**：生产团队偏好 Triage Agent 路由 + 窄专家（SQL Agent 一个 execute_query、Python Agent 隔离容器）而非一个大模型挂几十个工具；Agent 单次调用无状态、系统跨流程保状态。
 - **协议标准化年**：A2A 一周年（150+ 组织、生产部署于供应链/金融/保险/IT 运维、Spec 1.0.0、集成 Azure AI Foundry/AWS Bedrock AgentCore/GCP）；**MCP 管"垂直"（Agent→工具）、A2A 管"水平"（Agent↔Agent）——分层组合是 2026 架构共识**；ACP 新协议推进安全联邦编排（Agent Cards + 混合发现 + 四阶段协商）；IETF 筹备 AIPROTO WG；NIST AI Agent Standards Initiative（2026-02-17）。

@@ -1,6 +1,6 @@
 # 01 - Spring AI 核心原理
 
-> 🎯 Spring AI = Spring 生态的 AI 集成层 — 统一 ChatClient 接口屏蔽 OpenAI/Claude/Ollama 差异、自动配置开箱即用
+> Spring AI = Spring 生态的 AI 集成层 — 统一 ChatClient 接口屏蔽 OpenAI/Claude/Ollama 差异、自动配置开箱即用
 
 ## 1. 架构设计
 
@@ -76,12 +76,12 @@ public interface ChatModel {
 
 | 提供商 | Starter | 支持 Chat | Embedding | 图片 |
 |--------|---------|:---:|:---:|:---:|
-| OpenAI | `spring-ai-starter-openai` | ✅ | ✅ | ✅ |
-| Azure OpenAI | `spring-ai-starter-azure-openai` | ✅ | ✅ | — |
-| Ollama | `spring-ai-starter-ollama` | ✅ | ✅ | — |
-| Anthropic | `spring-ai-starter-anthropic` | ✅ | — | — |
-| 智谱 GLM | `spring-ai-starter-zhipuai` | ✅ | ✅ | — |
-| 通义千问 | `spring-ai-starter-qianfan` | ✅ | ✅ | — |
+| OpenAI | `spring-ai-starter-openai` | ✓ | ✓ | ✓ |
+| Azure OpenAI | `spring-ai-starter-azure-openai` | ✓ | ✓ | — |
+| Ollama | `spring-ai-starter-ollama` | ✓ | ✓ | — |
+| Anthropic | `spring-ai-starter-anthropic` | ✓ | — | — |
+| 智谱 GLM | `spring-ai-starter-zhipuai` | ✓ | ✓ | — |
+| 通义千问 | `spring-ai-starter-qianfan` | ✓ | ✓ | — |
 
 ## 4. Embedding 统一 API
 

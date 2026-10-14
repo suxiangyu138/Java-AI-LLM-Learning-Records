@@ -30,7 +30,7 @@ ApplicationContext（在 BeanFactory 之上扩展五大能力）
 | 能力扩展 | 环境、事件、国际化、资源、AOP 集成 | `ApplicationContext` |
 | 高级能力 | 自动注册后置处理器、单例预加载 | `AbstractApplicationContext`（模板） |
 
-> 🎯 一句话：**BeanFactory 是「发动机」，ApplicationContext 是「整车」**——面试被问区别，先说职责拆分，再讲 refresh()。
+> 一句话：**BeanFactory 是「发动机」，ApplicationContext 是「整车」**——面试被问区别，先说职责拆分，再讲 refresh()。
 
 ---
 
@@ -60,7 +60,7 @@ public interface BeanFactory {
 | `ConfigurableBeanFactory` | 作用域/类型转换器 | 同上 |
 | `ConfigurableListableBeanFactory` | 冻结配置、预实例化 | 同上（最终形态） |
 
-> 💡 面试加分：**接口分层 = 职责分离的教科书案例**——每个接口只暴露「使用者需要的」能力，实现类层层叠加。
+> 面试加分：**接口分层 = 职责分离的教科书案例**——每个接口只暴露「使用者需要的」能力，实现类层层叠加。
 
 ### 2.3 DefaultListableBeanFactory 的核心字段
 
@@ -170,7 +170,7 @@ public void refresh() throws BeansException {
 | ⑪ | **预实例化单例** | Bean 生命周期主场 |
 | ⑫ | finishRefresh | 发布 ContextRefreshedEvent |
 
-> 🎯 面试必答：**⑤ 和 ⑪ 是两座大山**——⑤ 处理「bean 定义」阶段（改元数据），⑪ 处理「bean 实例」阶段（真正创建对象）。BeanFactoryPostProcessor 与 BeanPostProcessor 一字之差，作用对象完全不同。
+> 面试必答：**⑤ 和 ⑪ 是两座大山**——⑤ 处理「bean 定义」阶段（改元数据），⑪ 处理「bean 实例」阶段（真正创建对象）。BeanFactoryPostProcessor 与 BeanPostProcessor 一字之差，作用对象完全不同。
 
 ### 4.3 ⑤ 与 ⑪ 的深入分工
 
@@ -256,7 +256,7 @@ new AnnotationConfigApplicationContext(AppConfig.class);
 | 为什么要有父子容器？ | 子容器可覆盖/共享父容器 bean（SpringMVC 的 root/child 结构） |
 | Spring 7.0 有什么变化？ | 见 6.2/6.3 表述 |
 
-> 🎯 **核心要点**：容器体系 = **BeanFactory（引擎）+ ApplicationContext（整车）+ refresh()（启动流程）** 三件套。记忆锚点：十二步中的 ⑤（BeanDefinition 后置处理）与 ⑪（单例创建）是面试主战场；`new AnnotationConfigApplicationContext(xxx.class)` 一行背后是「注册默认后置处理器 → 注册配置类 → refresh」。Spring 7.0（2026）新增 BeanRegistrar/@Fallback/并行初始化，但十二步骨架与三级缓存不变——面试答「核心机制稳定、能力增量演进」最稳。
+> **核心要点**：容器体系 = **BeanFactory（引擎）+ ApplicationContext（整车）+ refresh()（启动流程）** 三件套。记忆锚点：十二步中的 ⑤（BeanDefinition 后置处理）与 ⑪（单例创建）是面试主战场；`new AnnotationConfigApplicationContext(xxx.class)` 一行背后是「注册默认后置处理器 → 注册配置类 → refresh」。Spring 7.0（2026）新增 BeanRegistrar/@Fallback/并行初始化，但十二步骨架与三级缓存不变——面试答「核心机制稳定、能力增量演进」最稳。
 
 ---
 
