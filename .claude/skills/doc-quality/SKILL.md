@@ -1,6 +1,6 @@
 ---
 name: doc-quality
-description: 校验 Markdown 技术文档质量：格式层（代码围栏/链接/锚点/表格/导航/空格与成对符号/大小写路径）+ 内容层（事实/逻辑/术语/示例/陈旧/阅读体验/受众）+ 用户风格要求（11 篇模板/2000 字/长段拆分/参考来源每行一条）。用户要求"自检"、"校验"、"检查文档"时使用。
+description: 校验 Markdown 技术文档质量：格式层（代码围栏/链接/锚点/表格/导航/空格与成对符号/大小写路径/emoji 残留）+ 内容层（事实/逻辑/术语/示例/陈旧/阅读体验/受众）+ 用户风格要求（11 篇模板/无字数门禁/禁用 emoji/长段拆分/参考来源每行一条）。用户要求"自检"、"校验"、"检查文档"时使用。
 ---
 
 # Doc Quality：文档质量校验
@@ -26,6 +26,7 @@ description: 校验 Markdown 技术文档质量：格式层（代码围栏/链�
 | 章节编号 | `## N.` 编号唯一、连续顺延 | 编号重复/跳号 |
 | 孤立短段 | 正文段 <45 字且语义断裂（拆分脚本副作用） | 孤句段 |
 | 句尾标点 | 正文段以句号结尾；代码块/ASCII/目录/标题行不加 | 判断句缺句号 |
+| emoji 残留 | 文档禁用一切 emoji（含 ✅❌⭐，2026-10-14 用户指示） | `## 📚 目录` / `> 🎯` |
 
 ## 校验脚本
 
@@ -52,13 +53,17 @@ for f in sorted(base.glob('*.md')):
         path_part = urllib.parse.unquote(link.split('#')[0])
         if path_part and not (f.parent / path_part).resolve().exists() and not (base / path_part).resolve().exists():
             print(f'{f.name}: 链接缺失 -> {link}')
-    # 锚点
-    if '## 📚 目录' in text:
-        toc = text.split('## 📚 目录')[1].split('## 1.')[0]
+    # 锚点（兼容新规范 ## 目录 与存量 ## 📚 目录）
+    m_toc = re.search(r'^## (?:📚 )?目录\s*$', text, re.M)
+    if m_toc:
+        toc = text[m_toc.end():].split('## 1.')[0]
         headers = re.findall(r'^#{1,3} (.+)$', text, re.M)
         for a in re.findall(r'\]\(#([^)]+)\)', toc):
             if not any(a == re.sub(r'[^\w一-鿿 -]','',h).lower().replace(' ','-') for h in headers):
                 print(f'{f.name}: 锚点缺失 #{a}')
+    # emoji 残留（2026-10-14 新规范：文档禁用 emoji）
+    for m in re.finditer(r'[\U0001F000-\U0001FAFF\u2600-\u27BF\u2B00-\u2BFF\uFE0F]', text):
+        print(f'{f.name}: emoji 残留 {m.group()!r}')
 print('校验完成')
 "
 ```
@@ -78,7 +83,8 @@ print('校验完成')
 ## 三、用户风格要求（2026-08-10 汇总）
 
 - 知识体系统一 **10 篇正文 + 00 总览 = 11 篇**（见 memory `documentation-structure-standard`）
-- 单篇约 **2000 中文字符**（1600-2500 通过线）
+- **篇幅不设字数门禁**（2026-10-14 起）：知识点讲完即止，禁止为凑字数补充内容
+- **文档禁用一切 emoji**（2026-10-14 用户指示）：含 ✅❌⭐；提示块用 `> **警告**：`/`> **提示**：`/`> **要点**：` 文字标签
 - **长段落必须换行分句**（单段 >150-200 字按逻辑断点拆分，多要点用分段而非长句堆叠）
 - 参考来源**每条独立一行**（论文参考文献风格）
 - 排版六要素（标题层级/间距/强调/表格/代码/列表）见 memory `enterprise-doc-quality-standard`
