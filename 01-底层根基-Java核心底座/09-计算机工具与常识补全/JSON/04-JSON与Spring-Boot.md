@@ -4,13 +4,13 @@
 
 ## 目录
 
-1. [Spring Boot Jackson 自动配置](#1)
-2. [application.yml 配置大全](#2)
-3. [自定义 ObjectMapper](#3)
-4. [REST API JSON 最佳实践](#4)
-5. [全局异常处理](#5)
-6. [日期时间处理](#6)
-7. [使用 Gson / Fastjson2 替换 Jackson](#7)
+1. [Spring Boot Jackson 自动配置](#1-spring-boot-jackson-自动配置-1)
+2. [application.yml 配置大全](#2-applicationyml-配置大全-2)
+3. [自定义 ObjectMapper](#3-自定义-objectmapper-3)
+4. [REST API JSON 最佳实践](#4-rest-api-json-最佳实践-4)
+5. [全局异常处理](#5-全局异常处理-5)
+6. [日期时间处理](#6-日期时间处理-6)
+7. [使用 Gson / Fastjson2 替换 Jackson](#7-使用-gson--fastjson2-替换-jackson-7)
 
 ---
 

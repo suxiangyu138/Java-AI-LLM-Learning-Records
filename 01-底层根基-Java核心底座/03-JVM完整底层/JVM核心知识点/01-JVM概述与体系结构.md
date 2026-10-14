@@ -8,7 +8,7 @@
 2. [JVM整体架构：三大子系统](#2-jvm整体架构三大子系统)
 3. [JVM家族：HotSpot/OpenJ9/GraalVM](#3-jvm家族hotspotopenj9graalvm)
 4. [JVM与JDK版本演进](#4-jvm与jdk版本演进)
-5. [编译与执行：解释执行/JIT/AOT](#5-编译与执行解释执行jit-aot)
+5. [编译与执行：解释执行/JIT/AOT](#5-编译与执行解释执行jitaot)
 6. [JVM启动与退出](#6-jvm启动与退出)
 7. [常用JVM参数速查](#7-常用jvm参数速查)
 8. [面试高频考点](#8-面试高频考点)

@@ -9,7 +9,7 @@
 1. [NLTK：教学首选](#1-nltk教学首选)
 2. [spaCy：工业级 NLP](#2-spacy工业级-nlp)
 3. [jieba：中文分词利器](#3-jieba中文分词利器)
-4. [HuggingFace：LLM 时代标配](#4-huggingface-llm-时代标配)
+4. [HuggingFace：LLM 时代标配](#4-huggingfacellm-时代标配)
 5. [工具选型指南](#5-工具选型指南)
 
 ---

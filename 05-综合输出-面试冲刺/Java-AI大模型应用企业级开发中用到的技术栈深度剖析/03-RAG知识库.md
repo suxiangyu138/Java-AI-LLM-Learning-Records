@@ -9,7 +9,7 @@
 3. [向量库选型](#3-向量库选型)
 4. [检索与调优](#4-检索与调优)
 5. [RAG 的硬伤与升级](#5-rag-的硬伤与升级)
-6. [Agentic RAG](#6-agenic-rag)
+6. [Agentic RAG](#6-agentic-rag)
 
 ---
 

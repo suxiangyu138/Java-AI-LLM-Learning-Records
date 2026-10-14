@@ -6,7 +6,7 @@
 
 ## 目录
 
-1. [OpenCode 是什么](#1-OpenCode-是什么)
+1. [OpenCode 是什么](#1-opencode-是什么)
 2. [三种使用形态](#2-三种使用形态)
 3. [Plan/Build 双模式](#3-planbuild-双模式)
 4. [与同类工具全景对比](#4-与同类工具全景对比)

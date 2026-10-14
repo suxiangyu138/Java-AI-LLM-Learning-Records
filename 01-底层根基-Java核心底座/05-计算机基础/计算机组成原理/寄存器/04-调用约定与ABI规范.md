@@ -6,7 +6,7 @@
 ## 目录
 
 1. [为什么要调用约定](#1-为什么要调用约定)
-2. [System V AMD64（Linux/macOS）](#2-system-v-amd64linuxmacos)
+2. [System V AMD64（Linux/macOS）](#2-system-v-amd64linuxmacosbsd)
 3. [Windows x64](#3-windows-x64)
 4. [ARM64 AAPCS64](#4-arm64-aapcs64)
 5. [RISC-V ABI](#5-risc-v-abi)

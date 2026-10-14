@@ -4,14 +4,14 @@
 
 ## 目录
 
-1. [Batch 脚本基础语法](#1)
-2. [Java 环境变量与编译运行](#2)
-3. [Maven/Gradle Wrapper —— mvnw.cmd & gradlew.bat](#3)
-4. [Java 服务管理脚本](#4)
-5. [批量操作与文件处理](#5)
-6. [定时任务与自动化](#6)
-7. [Batch vs PowerShell 选型](#7)
-8. [常见陷阱与调试技巧](#8)
+1. [Batch 脚本基础语法](#1-batch-脚本基础语法-1)
+2. [Java 环境变量与编译运行](#2-java-环境变量与编译运行-2)
+3. [Maven/Gradle Wrapper —— mvnw.cmd & gradlew.bat](#3-mavengradle-wrapper--mvnwcmd--gradlewbat-3)
+4. [Java 服务管理脚本](#4-java-服务管理脚本-4)
+5. [批量操作与文件处理](#5-批量操作与文件处理-5)
+6. [定时任务与自动化](#6-定时任务与自动化-6)
+7. [Batch vs PowerShell 选型](#7-batch-vs-powershell-选型-7)
+8. [常见陷阱与调试技巧](#8-常见陷阱与调试技巧-8)
 
 ---
 

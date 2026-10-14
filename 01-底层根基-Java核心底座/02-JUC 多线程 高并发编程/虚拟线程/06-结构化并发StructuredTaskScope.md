@@ -11,7 +11,7 @@
 3. [核心 API 与基本用法（JDK 25/26 形态）](#3-核心-api-与基本用法jdk-2526-形态)
 4. [错误处理与取消机制](#4-错误处理与取消机制)
 5. [超时控制：joinUntil 与 onTimeout](#5-超时控制joinuntil-与-ontimeout)
-6. [自定义 Joiner（源码级）](#6-自定义-joinersource-级)
+6. [自定义 Joiner（源码级）](#6-自定义-joiner源码级)
 7. [与 CompletableFuture 的选型](#7-与-completablefuture-的选型)
 8. [使用前提与版本窗口](#8-使用前提与版本窗口)
 9. [核心要点与思考题](#9-核心要点与思考题)

@@ -8,7 +8,7 @@
 
 1. [firewalld 架构原理](#1-firewalld-架构原理)
 2. [Zone 区域精讲](#2-zone-区域精讲)
-3. [规则体系：Service → Port → Rich Rule → Direct](#3-规则体系)
+3. [规则体系：Service → Port → Rich Rule → Direct](#3-规则体系service--port--rich-rule--direct)
 4. [端口转发与 NAT](#4-端口转发与-nat)
 5. [生产环境典型配置](#5-生产环境典型配置)
 

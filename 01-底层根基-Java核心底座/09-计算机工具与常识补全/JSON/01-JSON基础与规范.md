@@ -4,12 +4,12 @@
 
 ## 目录
 
-1. [JSON 语法规范 (RFC 8259)](#1)
-2. [JSON 数据类型详解](#2)
-3. [JSON 数据结构设计](#3)
-4. [JSONPath —— JSON 的 XPath](#4)
-5. [JSON Schema 入门](#5)
-6. [JSON vs 其他数据格式](#6)
+1. [JSON 语法规范 (RFC 8259)](#1-json-语法规范-rfc-8259-1)
+2. [JSON 数据类型详解](#2-json-数据类型详解-2)
+3. [JSON 数据结构设计](#3-json-数据结构设计-3)
+4. [JSONPath —— JSON 的 XPath](#4-jsonpath--json-的-xpath-4)
+5. [JSON Schema 入门](#5-json-schema-入门-5)
+6. [JSON vs 其他数据格式](#6-json-vs-其他数据格式-6)
 
 ---
 

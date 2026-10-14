@@ -7,8 +7,8 @@
 1. [Windows 安装详解](#1-windows-安装详解)
 2. [macOS 安装详解](#2-macos-安装详解)
 3. [Linux 安装详解](#3-linux-安装详解)
-4. [多版本JDK管理工具](#4-多版本jdk管理工具)
-5. [Maven/Gradle 中指定JDK版本](#5-mavengradle-中指定jdk版本)
+4. [多版本JDK管理工具](#4-多版本-jdk-管理工具)
+5. [Maven/Gradle 中指定JDK版本](#5-mavengradle-中指定-jdk-版本)
 6. [环境变量详解](#6-环境变量详解)
 7. [常见安装问题排错](#7-常见安装问题排错)
 

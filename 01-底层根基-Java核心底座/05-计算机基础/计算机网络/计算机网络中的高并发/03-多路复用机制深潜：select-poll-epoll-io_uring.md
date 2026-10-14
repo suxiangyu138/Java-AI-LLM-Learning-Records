@@ -8,7 +8,7 @@
 
 1. [select：1024 个 fd 的轮询时代](#1-select1024-个-fd-的轮询时代)
 2. [poll：解除数量限制](#2-poll解除数量限制)
-3. [epoll：事件驱动的地基](#3-epollevent-驱动的地基)
+3. [epoll：事件驱动的地基](#3-epoll事件驱动的地基)
 4. [LT 与 ET：两种触发语义](#4-lt-与-et两种触发语义)
 5. [kqueue 与 IOCP：对照坐标系](#5-kqueue-与-iocp对照坐标系)
 6. [io_uring：环形队列与零系统调用（2026）](#6-io_uring环形队列与零系统调用2026)

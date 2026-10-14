@@ -7,7 +7,7 @@
 ## 目录
 
 1. [Webhook 核心概念](#1-webhook-核心概念)
-2. [与 API/Polling/WebSocket 的对比](#2-与-apipollingwebsocket-的对比)
+2. [与 API/Polling/WebSocket 的对比](#2-与-api--polling--websocket-的对比)
 3. [工作流程三步](#3-工作流程三步)
 4. [安全四件套](#4-安全四件套)
 5. [可靠性保障](#5-可靠性保障)

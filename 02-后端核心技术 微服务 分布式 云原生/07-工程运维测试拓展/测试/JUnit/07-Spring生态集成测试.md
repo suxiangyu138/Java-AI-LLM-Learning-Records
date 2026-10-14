@@ -4,13 +4,13 @@
 
 ## 目录
 
-1. [Spring 测试体系架构](#1)
-2. [单元级：SpringExtension](#2)
-3. [集成级：@SpringBootTest](#3)
-4. [切片测试](#4)
-5. [Mock 集成：@MockitoBean](#5)
-6. [Testcontainers：真实依赖容器化](#6)
-7. [上下文缓存与性能](#7)
+1. [Spring 测试体系架构](#1-spring-测试体系架构)
+2. [单元级：SpringExtension](#2-单元级springextension)
+3. [集成级：@SpringBootTest](#3-集成级springboottest)
+4. [切片测试](#4-切片测试)
+5. [Mock 集成：@MockitoBean](#5-mock-集成mockitobean)
+6. [Testcontainers：真实依赖容器化](#6-testcontainers真实依赖容器化)
+7. [上下文缓存与性能](#7-上下文缓存与性能)
 
 ## 1. Spring 测试体系架构
 

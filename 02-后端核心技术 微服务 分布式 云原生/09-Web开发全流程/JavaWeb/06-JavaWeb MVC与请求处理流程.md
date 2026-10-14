@@ -10,7 +10,7 @@
 2. [JavaWeb MVC 的实现方式](#2-javaweb-mvc-的实现方式)
 3. [一次请求的完整处理流程](#3-一次请求的完整处理流程)
 4. [Forward 与 Redirect 深度辨析](#4-forward-与-redirect-深度辨析)
-5. [三层架构：Controller-Service-DAO](#5-三层架构controllerservicedao)
+5. [三层架构：Controller-Service-DAO](#5-三层架构controller-service-dao)
 6. [经典项目结构与包命名](#6-经典项目结构与包命名)
 7. [请求参数封装与校验](#7-请求参数封装与校验)
 8. [统一结果返回与异常处理](#8-统一结果返回与异常处理)

@@ -7,11 +7,11 @@
 ## 目录
 
 1. [核心概念：pipeline / job / stage](#1-核心概念pipeline--job--stage)
-2. [第一个 .gitlab-ci.yml](#2-第一个-gitlabciyml)
+2. [第一个 .gitlab-ci.yml](#2-第一个-gitlab-ciyml)
 3. [Artifacts 与 Cache：产物与缓存的分工](#3-artifacts-与-cache产物与缓存的分工)
 4. [变量体系](#4-变量体系)
 5. [Rules：条件控制（取代 only/except）](#5-rules条件控制取代-onlyexcept)
-6. [Include：复用](#6-includereuse复用)
+6. [Include：复用](#6-include复用)
 7. [CI/CD 在 MR 中的位置](#7-cicd-在-mr-中的位置)
 8. [五个常见坑](#8-五个常见坑)
 9. [练习 5 题](#9-练习-5-题)

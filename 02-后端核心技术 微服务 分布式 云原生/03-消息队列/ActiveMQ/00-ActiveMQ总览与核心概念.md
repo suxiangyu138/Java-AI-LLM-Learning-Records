@@ -6,7 +6,7 @@
 
 1. [ActiveMQ 是什么](#1-activemq-是什么)
 2. [Classic vs Artemis 深度对比](#2-classic-vs-artemis-深度对比)
-3. [协议体系：OpenWire/AMQP/MQTT/STOMP](#3-协议体系openwireamqpmqttstomp)
+3. [协议体系：OpenWire/AMQP/MQTT/STOMP](#3-协议体系openwire--amqp--mqtt--stomp)
 4. [ActiveMQ vs RabbitMQ vs Kafka 选型矩阵](#4-activemq-vs-rabbitmq-vs-kafka-选型矩阵)
 5. [JMS 核心概念](#5-jms-核心概念)
 6. [模块导航](#6-模块导航)

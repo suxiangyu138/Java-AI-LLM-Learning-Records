@@ -4,11 +4,11 @@
 
 ## 目录
 
-1. [Gson 核心实战](#1)
-2. [Gson vs Jackson 选型](#2)
-3. [Fastjson2 实战与迁移](#3)
-4. [Fastjson2 安全配置（必读）](#4)
-5. [三库全景性能对比](#5)
+1. [Gson 核心实战](#1-gson-核心实战-1)
+2. [Gson vs Jackson 选型](#2-gson-vs-jackson-选型-2)
+3. [Fastjson2 实战与迁移](#3-fastjson2-实战与迁移-3)
+4. [Fastjson2 安全配置（必读）](#4-fastjson2-安全配置必读-4)
+5. [三库全景性能对比](#5-三库全景性能对比-5)
 
 ---
 

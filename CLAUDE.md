@@ -149,10 +149,10 @@ When user points to an empty directory (via `& 'path'`), build a comprehensive m
 > One-line positioning
 
 ## 目录
-1. [知识体系导图](#1)
-2. [模块导航](#2)
-3. [学习路线推荐](#3)
-4. [核心概念速查](#4)
+1. [知识体系导图](#1-知识体系导图)
+2. [模块导航](#2-模块导航)
+3. [学习路线推荐](#3-学习路线推荐)
+4. [核心概念速查](#4-核心概念速查)
 
 ## 1. 知识体系导图
 (ASCII tree showing module hierarchy)
@@ -172,7 +172,7 @@ When user points to an empty directory (via `& 'path'`), build a comprehensive m
 > Positioning
 
 ## 目录
-1. [Section Name](#anchor)
+1. [Section Name](#1-section-name)
 
 ## 1. Section Name
 ### 1.1 Subsection

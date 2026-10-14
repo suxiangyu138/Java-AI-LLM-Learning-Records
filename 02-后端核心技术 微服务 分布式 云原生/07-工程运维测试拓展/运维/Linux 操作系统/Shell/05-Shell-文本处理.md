@@ -14,7 +14,7 @@
 5. [cut / sort / uniq / wc](#5-cutsortuniqwc)
 6. [文本处理流水线（pipeline）](#6-文本处理流水线pipeline)
 7. [文件重定向与管道](#7-文件重定向与管道)
-8. [FAQ / 常见问题](#8-faq-常见问题)
+8. [FAQ / 常见问题](#8-faq--常见问题)
 
 ---
 

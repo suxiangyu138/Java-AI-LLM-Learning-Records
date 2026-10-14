@@ -8,7 +8,7 @@
 
 1. [Switch 表达式](#1-switch-表达式)
 2. [instanceof 模式匹配](#2-instanceof-模式匹配)
-3. [Switch 模式匹配](#3-switch-模式匹配)
+3. [Switch 模式匹配](#3-switch-模式匹配-java-21)
 
 ---
 

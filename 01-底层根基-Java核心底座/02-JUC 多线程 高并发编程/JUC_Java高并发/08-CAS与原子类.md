@@ -9,7 +9,7 @@
 3. [CAS的三大问题：ABA、自旋开销、单变量限制](#3-cas的三大问题aba自旋开销单变量限制)
 4. [基本类型原子类：AtomicInteger/AtomicLong/AtomicBoolean](#4-基本类型原子类atomicintegeratomiclongatomicboolean)
 5. [数组原子类：AtomicIntegerArray/AtomicLongArray/AtomicReferenceArray](#5-数组原子类atomicintegerarrayatomiclongarrayatomicreferencearray)
-6. [引用原子类：AtomicReference/AtomicStampedReference/AtomicMarkableReference](#6-引用原子类atomicreferenceatomicstampedreferenceatomicmarkablereference)
+6. [引用原子类：AtomicReference/AtomicStampedReference/AtomicMarkableReference](#6-引用原子类atomicreference--atomicstampedreference--atomicmarkablereference)
 7. [LongAdder与LongAccumulator（JDK 8+分层累加原理）](#7-longadder与longaccumulatorjdk-8分层累加原理)
 8. [CAS vs synchronized vs Lock性能对比](#8-cas-vs-synchronized-vs-lock性能对比)
 9. [原子类选型指南](#9-原子类选型指南)

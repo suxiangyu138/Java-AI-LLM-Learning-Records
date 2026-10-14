@@ -4,11 +4,11 @@
 
 ## 目录
 
-1. [三平台架构分层](#1)
-2. [Jupiter 注解族](#2)
-3. [断言 Assertions](#3)
-4. [假设 Assumptions](#4)
-5. [显示名称与标签](#5)
+1. [三平台架构分层](#1-三平台架构分层)
+2. [Jupiter 注解族](#2-jupiter-注解族)
+3. [断言 Assertions](#3-断言-assertions)
+4. [假设 Assumptions](#4-假设-assumptions)
+5. [显示名称与标签](#5-显示名称与标签)
 
 ## 1. 三平台架构分层
 

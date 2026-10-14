@@ -4,13 +4,13 @@
 
 ## 目录
 
-1. [ObjectMapper 核心配置](#1)
-2. [Jackson 注解完全指南](#2)
-3. [泛型与复杂类型处理](#3)
-4. [流式 API (Streaming API)](#4)
-5. [树模型 (Tree Model)](#5)
-6. [扩展模块](#6)
-7. [Jackson 2.18/2.19 新特性](#7)
+1. [ObjectMapper 核心配置](#1-objectmapper-核心配置-1)
+2. [Jackson 注解完全指南](#2-jackson-注解完全指南-2)
+3. [泛型与复杂类型处理](#3-泛型与复杂类型处理-3)
+4. [流式 API (Streaming API)](#4-流式-api-streaming-api-4)
+5. [树模型 (Tree Model)](#5-树模型-tree-model-5)
+6. [扩展模块](#6-扩展模块-6)
+7. [Jackson 2.18/2.19 新特性](#7-jackson-218219-新特性-7)
 
 ---
 

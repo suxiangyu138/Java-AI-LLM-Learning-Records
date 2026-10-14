@@ -4,12 +4,12 @@
 
 ## 目录
 
-1. [JSR 223 / javax.script 详解](#1)
-2. [Nashorn 到 GraalVM 的迁移之路](#2)
-3. [Groovy 脚本生态](#3)
-4. [Kotlin 脚本 (.kts)](#4)
-5. [JBang —— Java 脚本新范式](#5)
-6. [JVM 脚本语言全景对比](#6)
+1. [JSR 223 / javax.script 详解](#1-jsr-223--javaxscript-详解-1)
+2. [Nashorn 到 GraalVM 的迁移之路](#2-nashorn-到-graalvm-的迁移之路-2)
+3. [Groovy 脚本生态](#3-groovy-脚本生态-3)
+4. [Kotlin 脚本 (.kts)](#4-kotlin-脚本-kts-4)
+5. [JBang —— Java 脚本新范式](#5-jbang--java-脚本新范式-5)
+6. [JVM 脚本语言全景对比](#6-jvm-脚本语言全景对比-6)
 
 ---
 

@@ -10,8 +10,8 @@
 2. [TaskExecutor 体系与线程池选型](#2-taskexecutor-体系与线程池选型)
 3. [返回值：void / Future / CompletableFuture](#3-返回值void--future--completablefuture)
 4. [异步异常处理与回调](#4-异步异常处理与回调)
-5. [事务与 SecurityContext 的传播](#5-事务与-securitycontext-的传播)
-6. [异步场景清单：何时该用何时不该用](#6-异步场景清单何时该用何时不该用)
+5. [事务与 SecurityContext 的传播](#42-事务与-securitycontext-的传播)
+6. [异步场景清单：何时该用何时不该用](#5-异步场景清单何时该用何时不该用)
 
 ---
 

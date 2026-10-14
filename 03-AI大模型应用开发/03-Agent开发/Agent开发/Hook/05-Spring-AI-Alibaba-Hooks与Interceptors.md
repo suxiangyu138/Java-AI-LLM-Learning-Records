@@ -10,7 +10,7 @@
 2. [ModelHook 与 AgentHook](#2-modelhook-与-agenthook)
 3. [ModelInterceptor 与 ToolInterceptor](#3-modelinterceptor-与-toolinterceptor)
 4. [完整执行流程](#4-完整执行流程)
-5. [内置 Hook/Interceptor 清单](#5-内置-hookinterceptor-清单)
+5. [内置 Hook/Interceptor 清单](#5-内置-hook--interceptor-清单)
 6. [框架对比（LangChain vs Spring AI vs Alibaba）](#6-框架对比langchain-vs-spring-ai-vs-alibaba)
 
 ---
