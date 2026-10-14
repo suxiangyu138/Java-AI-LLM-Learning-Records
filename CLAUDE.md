@@ -8,7 +8,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Personal Java backend + AI learning knowledge base. **5,752 markdown technical documents** organized as a **5-layer pyramid**. All content is documentation (not runnable code). The primary task is creating and maintaining high-quality modular knowledge systems.
 
-> 🏁 **Phase status (2026-08-12)**: 阶段性批量开发已落幕（280 次提交收官，3,910 → 5,752 篇）。仓库进入维护模式——只做内容修正（死链/错字/过时校准），新知识体系按需创建、不再批量扩建。
+> **Phase status (2026-08-12)**: 阶段性批量开发已落幕（280 次提交收官，3,910 → 5,752 篇）。仓库进入维护模式——只做内容修正（死链/错字/过时校准），新知识体系按需创建、不再批量扩建。
 
 ---
 
@@ -148,7 +148,7 @@ When user points to an empty directory (via `& 'path'`), build a comprehensive m
 # Title
 > One-line positioning
 
-## 📚 目录
+## 目录
 1. [知识体系导图](#1)
 2. [模块导航](#2)
 3. [学习路线推荐](#3)
@@ -171,14 +171,14 @@ When user points to an empty directory (via `& 'path'`), build a comprehensive m
 # Title
 > Positioning
 
-## 📚 目录
+## 目录
 1. [Section Name](#anchor)
 
 ## 1. Section Name
 ### 1.1 Subsection
 (content with tables, code blocks)
 
-> 🎯 **核心要点**：(key takeaway)
+> **核心要点**：(key takeaway)
 
 ---
 
@@ -192,7 +192,7 @@ When user points to an empty directory (via `& 'path'`), build a comprehensive m
 - `> 一句话定位` blockquote under `# Title`
 - **Prose-first, tables for contrast**: 机制/取舍/演进逻辑用文字论述（配代码示例）；表格仅用于对比、API 速查、检查清单等真正适合枚举的场景，禁止用表格代替论述或凑字数（2026-08-09 用户反馈表格过度）
 - **Code blocks** MUST specify language: ` ```java ` ` ```yaml ` ` ```bash ` ` ```text ` ` ```json `
-- Blockquotes: `> ⚠️` warning, `> 💡` tip, `> 🎯` summary
+- Blockquotes: plain-text labels, no emoji: `> **警告**：`, `> **提示**：`, `> **要点**：`（2026-10-14 用户指示：文档禁用一切 emoji，含 ✅❌⭐）
 - Chinese content with English technical terms
 - Anchor links in TOC must match section headers exactly
 - Cross-references at file end: `**下一模块：**` or `**返回总览：**`
