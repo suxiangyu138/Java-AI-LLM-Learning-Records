@@ -6,9 +6,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Repository Purpose
 
-Personal Java backend + AI learning knowledge base. **5,752 markdown technical documents** organized as a **5-layer pyramid**. All content is documentation (not runnable code). The primary task is creating and maintaining high-quality modular knowledge systems.
+Personal Java backend + AI learning knowledge base. **5,883 markdown technical documents** organized as a **5-layer pyramid**. All content is documentation (not runnable code). The primary task is creating and maintaining high-quality modular knowledge systems.
 
-> **Phase status (2026-08-12)**: 阶段性批量开发已落幕（280 次提交收官，3,910 → 5,752 篇）。仓库进入维护模式——只做内容修正（死链/错字/过时校准），新知识体系按需创建、不再批量扩建。
+> **Phase status (2026-08-12)**: 阶段性批量开发已落幕（280 次提交收官，3,910 → 5,752 篇）。仓库进入维护模式——只做内容修正（死链/错字/过时校准），新知识体系按需创建、不再批量扩建。截至 2026-10-26 按需增补至 5,883 篇（HBase / 强化学习 / 算法竞赛高阶）。
 
 ---
 

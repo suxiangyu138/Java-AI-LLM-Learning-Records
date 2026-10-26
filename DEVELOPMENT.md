@@ -1,6 +1,6 @@
 # DEVELOPMENT.md — 开发说明文档
 
-> 本仓库（Java 后端 + AI 大模型知识库，5,752 篇文档）的 Git 分支策略与开发规范。基于 **Git Flow** 适配文档维护场景：常驻 `main` + `develop`，动态 `feature/release/hotfix`
+> 本仓库（Java 后端 + AI 大模型知识库，5,883 篇文档）的 Git 分支策略与开发规范。基于 **Git Flow** 适配文档维护场景：常驻 `main` + `develop`，动态 `feature/release/hotfix`
 >
 > 最后更新：2026-08-12
 

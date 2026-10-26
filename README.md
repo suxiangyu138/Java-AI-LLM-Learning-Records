@@ -1,35 +1,35 @@
 # Java 后端 + AI 大模型 系统化学习仓库
 
 > 面向 **Java 后端开发工程师** 与 **AI 大模型应用开发工程师** 的全栈知识体系。
-> **5,752 篇标准化 Markdown 技术文档**，按 5 层金字塔组织，覆盖从底层基础到面试冲刺的完整学习路径。
-> **阶段性开发已于 2026-08-12 落幕**，仓库进入维护模式。
+> **5,883 篇标准化 Markdown 技术文档**，按 5 层金字塔组织，覆盖从底层基础到面试冲刺的完整学习路径。
+> **阶段性开发已于 2026-08-12 落幕**，仓库进入维护模式，新知识体系按需增补。
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Docs](https://img.shields.io/badge/docs-5%2C752%20%E7%AF%87%20Markdown-2ea44f?style=flat)](.)
+[![Docs](https://img.shields.io/badge/docs-5%2C883%20%E7%AF%87%20Markdown-2ea44f?style=flat)](.)
 
 ---
 
 ## 五层金字塔知识体系
 
 ```text
-Java-AI-LLM-Learning-Records/  (5,752 篇 .md 文件)
+Java-AI-LLM-Learning-Records/  (5,883 篇 .md 文件)
 │
-├── 01-底层根基-Java核心底座/        1826 篇  地基：Java核心+JUC+JVM+DSA+计算机基础(四大件+数学体系+硬件专题)+工具+设计思想(DDD/MVC/SOLID)
+├── 01-底层根基-Java核心底座/        1916 篇  地基：Java核心+JUC+JVM+DSA(含竞赛高阶)+计算机基础(四大件+数学体系+硬件专题)+工具+设计思想(DDD/MVC/SOLID)
 │
-├── 02-后端核心技术 微服务 分布式 云原生/ 1266 篇  骨架：MySQL+Redis+MQ+ES+Spring全家桶+MyBatisPlus+DevOps+Web开发全流程
+├── 02-后端核心技术 微服务 分布式 云原生/ 1288 篇  骨架：MySQL+HBase+Redis+MQ+ES+Spring全家桶+MyBatisPlus+DevOps+Web开发全流程
 │
-├── 03-AI大模型应用开发/             2044 篇  差异：DeepSeek+RAG(阶段1-5)+Agent内核+MCP+微调多模态+Python数据分析+部署工程化
+├── 03-AI大模型应用开发/             2066 篇  差异：DeepSeek+RAG(阶段1-5)+Agent内核+MCP+微调多模态+强化学习(RLHF/GRPO/RLVR)+Python数据分析+部署工程化
 │
 ├── 04-项目能力综合提升/             340 篇  证明：Java-AI/Python-LLM 能力建设 L1-L3+FlavorDash/SuGuangMall/LingShu+84门课程索引
 │
-└── 05-综合输出-面试冲刺/            276 篇  输出：152题题库+手写代码+简历模板+速查手册+面试四阶段（基础复盘→专项攻坚→项目打磨→模拟面试）
+└── 05-综合输出-面试冲刺/            273 篇  输出：152题题库+手写代码+简历模板+速查手册+面试四阶段（基础复盘→专项攻坚→项目打磨→模拟面试）
 ```
 
 ---
 
 ## 各层详解
 
-### 01-底层根基 — Java 核心底座（1,826 篇）
+### 01-底层根基 — Java 核心底座（1,916 篇）
 
 | 子模块 | 内容 |
 |--------|------|
@@ -45,15 +45,16 @@ Java-AI-LLM-Learning-Records/  (5,752 篇 .md 文件)
 | 计算机基础 | OS、网络、组成原理（CPU/GPU/缓存与Cache/寄存器）、数学基础（离散/数论/信息论/密码学）、分布式理论、计算机安全 |
 | **计算机硬件方向系统学习清单** | 10+ 专题：内存墙、量化背后硬件约束、GPU 硬件架构、NPU 概念、PCIe 带宽、RISC-V、微机原理 x86 汇编（8086→x86-64）、关键硬件-软件映射、凸优化、最优化理论 |
 | **设计思想与架构工程能力** | 软件工程上的设计思想（11 篇，28 条思想）、MVC 架构模式（11 篇）、DDD 领域驱动设计（11 篇） |
-| 数据结构与算法 | LeetCode Hot100、算法导论、排序、图论 |
+| 数据结构与算法 | LeetCode Hot100、算法导论、排序、图论；竞赛高阶：树链剖分、虚树、Link-Cut Tree、莫队、CDQ 分治 + 训练路线题单 |
 | 高并发与性能优化 | 高并发设计、池化技术、异步编程 |
 | 工具 | Vim、文件后缀名、SSH、JSON、快捷键、命令行 |
 
-### 02-后端核心技术 微服务 分布式 云原生（1,266 篇）
+### 02-后端核心技术 微服务 分布式 云原生（1,288 篇）
 
 | 子模块 | 内容 |
 |--------|------|
 | MySQL 与持久层 | InnoDB、B+树、MVCC、SQL 调优、MyBatis |
+| **HBase** | 11 篇：数据模型→架构与 Region→LSM 存储→读写缓存→RowKey/预分区→部署→调优排障→Java/Spring→生态迁移→选型面试（3.0.0/JDK 17） |
 | **MyBatisPlus** | 10 篇：定位→实体映射→BaseMapper→Wrapper→IService→插件分页→代码生成→生产实践→面试 |
 | Redis 缓存层 | 五大结构、持久化、缓存三问题、分布式锁、Lua |
 | RabbitMQ/RocketMQ/Kafka | 消息可靠性、死信/延迟队列、事务消息 |
@@ -66,7 +67,7 @@ Java-AI-LLM-Learning-Records/  (5,752 篇 .md 文件)
 | 工具链 | Postman、JMeter、Ubuntu、CentOS、项目全流程 |
 | **Web 开发全流程** | RESTful API（RFC 9457+幂等键+OpenAPI 3.1）、Cookie & Session、Servlet/Filter/Listener/JSP、SpringBoot Web、Web 服务器、Web 高阶知识 |
 
-### 03-AI 大模型应用开发（2,044 篇）
+### 03-AI 大模型应用开发（2,066 篇）
 
 | 子模块 | 内容 |
 |--------|------|
@@ -85,6 +86,7 @@ Java-AI-LLM-Learning-Records/  (5,752 篇 .md 文件)
 | **向量数据库** | Chroma、PgVector、Qdrant、Redis Stack、Milvus、FAISS + 选型（2026 双轨格局） |
 | Milvus | 10 篇：定位版本（3.0）→数据模型→部署→Schema→索引→混合检索→生态集成→生产实践→面试 |
 | 深度学习 | 11 篇：概述→CNN→RNN/LSTM→GAN→迁移学习→强化学习→模型压缩→训练技巧→框架（LLM 视角） |
+| **强化学习** | 11 篇：MDP/Bellman 推导→DP/MC/TD→Q-Learning/DQN→策略梯度/Actor-Critic→PPO/TRPO→RLHF/DPO→GRPO/RLVR（DAPO/GSPO）→TRL/verl 工程→选型面试 |
 | 模型推理与部署 | KV Cache→投机采样→量化→压测→成本 |
 | 部署工具 | Docker/K8s→vLLM/Ollama/TensorRT/ONNX→服务化→MLOps→监控→灰度（2026 引擎格局） |
 | 多模态与微调前沿 | DeepSeek、Doubao 豆包、模型微调（PEFT/trl/bitsandbytes） |
@@ -103,7 +105,7 @@ Java-AI-LLM-Learning-Records/  (5,752 篇 .md 文件)
 | 课程索引（176 篇） | 84+ 门 B 站课程标准化大纲：Java 后端 26 门、中间件 16 门、AI 大模型 23 门、工具运维 12 门、前端语言 11 门 |
 | 项目场景题 | 高频项目场景与架构设计题 |
 
-### 05-综合输出 — 面试冲刺（276 篇）
+### 05-综合输出 — 面试冲刺（273 篇）
 
 | 子模块 | 内容 |
 |--------|------|
@@ -117,7 +119,7 @@ Java-AI-LLM-Learning-Records/  (5,752 篇 .md 文件)
 
 ---
 
-## 活跃知识体系（2026-08-12 阶段收官）
+## 活跃知识体系（2026-10-26 按需增补）
 
 | 系统 | 位置 | 篇数 | 亮点 |
 |------|------|:---:|------|
@@ -147,6 +149,7 @@ Java-AI-LLM-Learning-Records/  (5,752 篇 .md 文件)
 | 部署工具 | 03-.../部署工具/ | 12 | 2026 引擎格局（vLLM 默认/TGI 退役） |
 | 模型推理与部署 | 03-.../模型推理与部署/ | 11 | KV Cache + 投机采样 + FP8 + 弹性 |
 | 深度学习 | 03-.../深度学习/ | 11 | LLM 视角对照表 + 2026 框架格局 |
+| **强化学习** | 03-.../大模型相关底层理论/强化学习/ | 11 | MDP/Bellman 推导 → PPO → RLHF/DPO → GRPO/RLVR（DAPO/GSPO）→ TRL/verl 工程 |
 | CPU | 01-.../计算机组成原理/CPU/ | 8 | 流水线→超标量→现代核心→封装→AI 演进（2025-2026 实例） |
 | GPU | 01-.../计算机组成原理/GPU/ | 8 | SIMT→存储→调度→CUDA→Blackwell/Rubin→AI 时代 |
 | 缓存与Cache | 01-.../计算机组成原理/缓存与Cache/ | 8 | 结构→替换→一致性→侧信道安全→3D V-Cache |
@@ -159,6 +162,7 @@ Java-AI-LLM-Learning-Records/  (5,752 篇 .md 文件)
 | JMM | 01-.../03-JVM完整底层/JMM/ | 8 | 三大保证→Happens-Before→volatile/锁语义→CAS→JEP 491（JDK 24） |
 | 消息队列理论与实战 | 02-.../03-消息队列/消息队列理论与实战/ | 9 | 可靠性→顺序→消费→延迟死信→高可用→分布式事务→选型（Kafka 4.0/RocketMQ 5.x） |
 | SQLite | 02-.../01-关系型数据库/SQLite/ | 10 | JSONB→FTS5→向量搜索（sqlite-vec）→WAL→Java 集成（3.53） |
+| **HBase** | 02-.../02-非关系型数据库/HBase/ | 11 | LSM-Tree + Region 分裂 + RowKey 设计 + 读写路径 + HBase 3.0（JDK 17）运维调优 |
 | Memcached | 02-.../02-非关系型数据库/Memcached/ | 9 | slab 内存→一致性哈希→多线程→缓存三问题→Java→vs Redis 选型 |
 | Neo4j | 02-.../02-非关系型数据库/Neo4j/ | 9 | Cypher→图算法→原生 Vector→SEARCH→GraphRAG→Spring Data Neo4j |
 | Pulsar | 02-.../03-消息队列/Pulsar/ | 9 | 三层架构→多租户→跨地域复制→分层存储→Functions→vs Kafka 选型 |
@@ -166,7 +170,7 @@ Java-AI-LLM-Learning-Records/  (5,752 篇 .md 文件)
 | JUnit | 02-.../07-工程运维基础/JUnit/ | 10 | JUnit 6.1.1（Java 17 基线）→三平台架构→生命周期→参数化→扩展→Mock→Boot 4 集成→CI→迁移 |
 | Linux | 02-.../运维/Linux 操作系统/Linux/ | 12 | 基础→命令→系统管理→网络安全→服务→速查→权限深度→JVM 排查→日志（Rocky 10/Ubuntu 26.04） |
 | Shell | 02-.../运维/Linux 操作系统/Shell/ | 6 | 入门→变量→流程控制→函数实战→grep/sed/awk 三剑客 |
-| 数据结构与算法 | 01-.../06-数据结构与算法/ | 33 主题 | 四阶段路线（前置基础→核心思想→高频专题→中高级），73 目录归并编号 |
+| 数据结构与算法 | 01-.../06-数据结构与算法/ | 33 主题 | 四阶段路线（前置基础→核心思想→高频专题→中高级），73 目录归并编号；竞赛高阶：树链剖分/虚树/LCT/莫队/CDQ + 训练路线题单 |
 | 爬虫阶段6：爬虫框架 | 03-AI.../12-Python爬虫/阶段 6：爬虫框架（工程化，写大型爬虫）/ | 10 | Scrapy 2.16 异步现代化 + scrapy-playwright + scrapy-redis 分布式 + 部署监控 |
 | Python 异步 + FastAPI | 03-AI.../01-Python语言/Python 异步 + FastAPI/ | 11 | asyncio 事件循环（3.14）+ FastAPI 0.139 全栈（Starlette 1.0/Uvicorn 0.51） |
 | Function Calling 函数调用 | 03-AI.../02-大模型基础与Prompt工程/Function Calling 函数调用【Agent 基石】/ | 11 | Agent 基石：协议对照 + 循环工程 + 工具安全 + prompt caching（2026-08） |
@@ -208,7 +212,7 @@ Java-AI-LLM-Learning-Records/  (5,752 篇 .md 文件)
 - **论述优先**：机制/取舍/演进逻辑用文字论述（配代码示例）；表格仅用于对比、API 速查、检查清单
 - **Code Block 标注语言**：\```java, \```yaml, \```bash
 - **Blockquote 提示**：`> ` 警告 `> ` 技巧 `> ` 总结
-- **篇幅标准**：单篇中文字数 2000-2500（2026-08 统一门禁）
+- **篇幅标准**：知识点讲完即止，不设字数门禁（2026-10 废除原有 2000-2500 门禁）
 - **时效性**：所有版本/特性标注来源与时间（如 Spring 7.0 GA 2025-11）
 - **交叉引用**：系统间导航（**下一模块** / **返回总览** / 专题交叉）
 
@@ -252,7 +256,7 @@ Java-AI-LLM-Learning-Records/  (5,752 篇 .md 文件)
 
 > 完整流程见 **[CONTRIBUTING.md](./CONTRIBUTING.md)**；安全相关见 **[SECURITY.md](./SECURITY.md)**。
 
-1. **新建知识体系**：`00-总览` + 按序模块（`01-`、`02-`...），每篇 2000-2500 中文字符
+1. **新建知识体系**：`00-总览` + 按序模块（`01-`、`02-`...），篇幅按知识点讲完即止
 2. **增强现有文档**：就地补充，保留原有结构与风格
 3. **时效性**：写前检索最新官方信息（版本/特性必须标注来源）
 4. **规范**：遵循上方文档规范（论述优先/代码块/引用/交叉导航）
@@ -261,4 +265,4 @@ Java-AI-LLM-Learning-Records/  (5,752 篇 .md 文件)
 
 ---
 
-*最后更新：2026-08-12 | 5,752 篇 Markdown 文档 | 5 层金字塔 + 70+ 知识体系 | 阶段性开发落幕，进入维护模式*
+*最后更新：2026-10-26 | 5,883 篇 Markdown 文档 | 5 层金字塔 + 70+ 知识体系 | 维护模式，按需增补*
