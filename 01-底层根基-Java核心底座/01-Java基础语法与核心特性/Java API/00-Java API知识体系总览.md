@@ -192,7 +192,7 @@ Java API 知识体系
 |---------|------|---------|
 | Java 基础语法 | 语法是"怎么写"，API 是"用什么写" | `../01-Java基础语法与核心特性/` |
 | Java 高级语法 | Stream / Lambda / Optional / 泛型 | `../Java高级语法/` |
-| Lambda 表达式 | 函数式接口是 Lambda 的目标类型 | `../Lambda表达式/` |
+| Lambda 表达式 | 函数式接口是 Lambda 的目标类型 | `../Lambda表达式 面试问答.md` |
 | JUC 高并发 | `java.util.concurrent` 是集合/线程池的并发扩展 | `../02-JUC高并发编程/` |
 | 数据结构与算法 | API 是数据结构的标准实现 | `../06-数据结构与算法/` |
 | Spring 框架 | Spring 大量重用 Java 标准 API（Resource、类型转换等） | `../../02-后端中间件.../Spring/` |

@@ -6,9 +6,9 @@ This file provides guidance to Codex (Codex.ai/code) when working with code in t
 
 ## Repository Purpose
 
-Personal Java backend + AI learning knowledge base. **2,912 markdown technical documents** in a **5-layer pyramid**. A local-only archive of 2,979 documents sits in `前方的路 以后再来探索吧/`, which is git-ignored and never pushed. All content is documentation (not runnable code). The primary task is creating and maintaining high-quality modular knowledge systems.
+Personal Java backend + AI learning knowledge base. **2,896 markdown technical documents** in a **5-layer pyramid**. A local-only archive of 2,997 documents sits in `前方的路 以后再来探索吧/`, which is git-ignored and never pushed. All content is documentation (not runnable code). The primary task is creating and maintaining high-quality modular knowledge systems.
 
-> **Phase status (2026-10-30)**: 仓库已按求职简历（Java 后端开发实习生 / AI 大模型应用开发方向）收敛，并做了第二轮去重。主线保留简历技术栈与配套组件；简历以外的替代品、相邻方向、学习产物，以及同一技术的旧版与汇总版重复体系、秋招不考的高阶专题，共 2,979 篇迁入本地归档区 `前方的路 以后再来探索吧/`。该目录已写入 .gitignore，只存在本机，不提交、不推送。维护模式不变：只做内容修正，新知识体系按需创建。
+> **Phase status (2026-10-30)**: 仓库已按求职简历（Java 后端开发实习生 / AI 大模型应用开发方向）收敛，并做了第二轮去重。主线保留简历技术栈与配套组件；简历以外的替代品、相邻方向、学习产物，以及同一技术的旧版与汇总版重复体系、秋招不考的高阶专题，共 2,997 篇迁入本地归档区 `前方的路 以后再来探索吧/`。该目录已写入 .gitignore，只存在本机，不提交、不推送。维护模式不变：只做内容修正，新知识体系按需创建。
 
 ---
 

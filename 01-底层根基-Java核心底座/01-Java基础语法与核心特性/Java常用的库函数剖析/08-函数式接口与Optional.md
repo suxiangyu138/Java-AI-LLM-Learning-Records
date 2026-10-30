@@ -17,7 +17,7 @@
 
 ## 1. Function 家族五兄弟
 
-**java.util.function 的核心五兄弟**（与 `Lambda表达式/` 联动）：
+**java.util.function 的核心五兄弟**（与 `Lambda表达式 面试问答.md` 联动）：
 
 ```java
 // ① Function<T, R>：转换（一个入参一个返回）
@@ -58,7 +58,7 @@ hasA.or(hasB).test("a");               // true
 hasA.negate().test("x");               // true
 ```
 
-> **核心要点**：五兄弟 = "**Function 转换/Predicate 判断/Consumer 消费/Supplier 供应/BiFunction 双参**"——**"test/apply/get/accept"四个调用动词**是记忆锚；组合方法（andThen/and/or）让函数可复用（`Lambda表达式/02` 全家桶深挖）。
+> **核心要点**：五兄弟 = "**Function 转换/Predicate 判断/Consumer 消费/Supplier 供应/BiFunction 双参**"——**"test/apply/get/accept"四个调用动词**是记忆锚；组合方法（andThen/and/or）让函数可复用（`Lambda表达式 面试问答.md` 函数式接口部分）。
 
 ---
 
@@ -94,7 +94,7 @@ Lambda：逻辑简单（比较/条件）→ 更直观
 准则：能引用就引用，不能引用才写 Lambda
 ```
 
-> **核心要点**：方法引用四形态 = "**静态/特定实例/任意实例/构造器**"——**"String::length 与 instance::concat 的区别（参数位置）"是易混点**；准则 = 能引用优先（`Lambda表达式/03` 深挖）。
+> **核心要点**：方法引用四形态 = "**静态/特定实例/任意实例/构造器**"——**"String::length 与 instance::concat 的区别（参数位置）"是易混点**；准则 = 能引用优先（`Lambda表达式 面试问答.md` 方法引用部分）。
 
 ---
 
@@ -239,7 +239,7 @@ Optional 三件事：ofNullable 创建、orElse 取值、map 链转换
 Optional 边界：返回值用、字段参数不用（七反模式）
 ```
 
-> **核心要点**：速查 10 项 = "**函数式 + Optional 的完整考点**"——**"Optional 返回值专用 + 链式（map/flatMap/orElse）"两条主线**；方法引用与函数式组合（`Lambda表达式/02-03`）联动深挖。
+> **核心要点**：速查 10 项 = "**函数式 + Optional 的完整考点**"——**"Optional 返回值专用 + 链式（map/flatMap/orElse）"两条主线**；方法引用与函数式组合（`Lambda表达式 面试问答.md`）联动。
 
 ---
 
