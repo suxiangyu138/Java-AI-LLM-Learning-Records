@@ -6,9 +6,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Repository Purpose
 
-Personal Java backend + AI learning knowledge base. **2,918 markdown technical documents** in a **5-layer pyramid**. A local-only archive of 2,973 documents sits in `前方的路 以后再来探索吧/`, which is git-ignored and never pushed. All content is documentation (not runnable code). The primary task is creating and maintaining high-quality modular knowledge systems.
+Personal Java backend + AI learning knowledge base. **2,912 markdown technical documents** in a **5-layer pyramid**. A local-only archive of 2,979 documents sits in `前方的路 以后再来探索吧/`, which is git-ignored and never pushed. All content is documentation (not runnable code). The primary task is creating and maintaining high-quality modular knowledge systems.
 
-> **Phase status (2026-10-30)**: 仓库已按求职简历（Java 后端开发实习生 / AI 大模型应用开发方向）收敛，并做了第二轮去重。主线保留简历技术栈与配套组件；简历以外的替代品、相邻方向、学习产物，以及同一技术的旧版与汇总版重复体系、秋招不考的高阶专题，共 2,973 篇迁入本地归档区 `前方的路 以后再来探索吧/`。该目录已写入 .gitignore，只存在本机，不提交、不推送。维护模式不变：只做内容修正，新知识体系按需创建。
+> **Phase status (2026-10-30)**: 仓库已按求职简历（Java 后端开发实习生 / AI 大模型应用开发方向）收敛，并做了第二轮去重。主线保留简历技术栈与配套组件；简历以外的替代品、相邻方向、学习产物，以及同一技术的旧版与汇总版重复体系、秋招不考的高阶专题，共 2,979 篇迁入本地归档区 `前方的路 以后再来探索吧/`。该目录已写入 .gitignore，只存在本机，不提交、不推送。维护模式不变：只做内容修正，新知识体系按需创建。
 
 ---
 
@@ -20,7 +20,6 @@ Personal Java backend + AI learning knowledge base. **2,918 markdown technical d
 03-AI大模型应用开发/                    # Prompt/Function Calling, Agent, MCP, RAG (阶段1-5), Milvus, Python crawler + data analysis
 04-项目能力综合提升/                    # Java-AI capability building L1-L3, projects (FlavorDash/SuGuangMall/LingShu), pitfalls, scenario questions
 05-综合输出-面试冲刺/                    # Interview: 152 Q&A, 面试四阶段, resume, cheat sheets, tech-stack deep dives
-06-学习日志/                            # Daily learning log
 
 # 本地归档区（已 .gitignore，不入库）：前方的路 以后再来探索吧/
 ```
