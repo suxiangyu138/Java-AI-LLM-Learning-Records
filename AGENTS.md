@@ -6,9 +6,9 @@ This file provides guidance to Codex (Codex.ai/code) when working with code in t
 
 ## Repository Purpose
 
-Personal Java backend + AI learning knowledge base. **3,540 markdown technical documents** in a **5-layer pyramid**. A local-only archive of 2,347 documents sits in `前方的路 以后再来探索吧/`, which is git-ignored and never pushed. All content is documentation (not runnable code). The primary task is creating and maintaining high-quality modular knowledge systems.
+Personal Java backend + AI learning knowledge base. **2,918 markdown technical documents** in a **5-layer pyramid**. A local-only archive of 2,973 documents sits in `前方的路 以后再来探索吧/`, which is git-ignored and never pushed. All content is documentation (not runnable code). The primary task is creating and maintaining high-quality modular knowledge systems.
 
-> **Phase status (2026-10-30)**: 仓库已按求职简历（Java 后端开发实习生 / AI 大模型应用开发方向）收敛，并做了第二轮去重。主线保留简历技术栈与配套组件；简历以外的替代品、相邻方向、学习产物，以及同一技术的旧版与汇总版重复体系，共 2,347 篇迁入本地归档区 `前方的路 以后再来探索吧/`。该目录已写入 .gitignore，只存在本机，不提交、不推送。维护模式不变：只做内容修正，新知识体系按需创建。
+> **Phase status (2026-10-30)**: 仓库已按求职简历（Java 后端开发实习生 / AI 大模型应用开发方向）收敛，并做了第二轮去重。主线保留简历技术栈与配套组件；简历以外的替代品、相邻方向、学习产物，以及同一技术的旧版与汇总版重复体系、秋招不考的高阶专题，共 2,973 篇迁入本地归档区 `前方的路 以后再来探索吧/`。该目录已写入 .gitignore，只存在本机，不提交、不推送。维护模式不变：只做内容修正，新知识体系按需创建。
 
 ---
 
@@ -61,8 +61,6 @@ Personal Java backend + AI learning knowledge base. **3,540 markdown technical d
 | Docker | `02-.../11-云原生/Docker/` | 12（另有 `_archive-v1/` 存档旧版 18 篇） | 总览→核心概念与架构(容器vsVM/镜像分层/Namespace/Cgroups/OCI)→容器生命周期与常用命令→Dockerfile与镜像构建(指令/多阶段/缓存/安全)→镜像发布与仓库分发(Registry/Harbor/HTTPS)→网络配置与通信(端口映射/自定义网络/容器名通信)→存储卷与数据持久化(绑定挂载/管理卷/tmpfs/共享)→Compose多服务编排(声明式/healthcheck/多环境/生产配置)→安全与资源限制(四大危险/最小权限/非root)→多主机与Swarm(Machine/Stack/高可用/Secrets)→Docker与Kubernetes衔接(三探针/蓝绿/金丝雀/Istio/CI-CD)→应用场景与学习索引(八大场景/实战清单)（2026-08 重构：18 篇两代重叠体系去重为 12 篇，55KB 巨文件 K8s 章节收敛为衔接篇并交叉引用同级 Kubernetes 体系） |
 | Docker Compose（深化） | `02-.../11-云原生/Docker/Docker Compose/` | 7 | 总览(与上级07的入门/深化分工)→Compose Spec文件规范全解(顶层键/depends_on三条件/profiles/extends/include/多文件合并)→网络与卷高级配置(networks/volumes字段/external/三种挂载长语法)→服务生命周期与依赖管理(up-down语义/重建规则/healthcheck五参数/restart)→多环境与配置管理(.env插值/-f合并/configs-secrets/日志轮转)→开发工作流与Compose Watch(sync-rebuild-sync+restart三action/dev分离/Java热重载)→生产实践与故障排查(12项清单/Compose Bridge转K8s/三板斧/面试题)（2026-08：Compose v5、version字段废弃、watch v2.22+ GA、CVE-2025-62725 已修复） |
 | 模型推理与部署 | `03-AI.../07-模型部署与工程化/模型推理与部署/` | 11 | KV Cache→投机采样→量化→压测→成本 |
-| Agent开发 | `03-AI.../Agent开发/` | 12 | P-A-M-E→patterns→framework→MCP→eval→prod |
-| Harness Engineering | `03-AI.../03-Agent开发/Agent开发/Harness Engineering/` | 8 | Agent=Model+Harness→security→governance |
 | Python虚拟环境 | `03-AI.../01-Python语言/Python虚拟环境/` | 7 | PEP 405→venv/conda/uv→lock→CI/Docker |
 | 爬虫阶段1：前置基础 | `03-AI.../12-Python爬虫/阶段 1：前置基础（必备）/` | 9 | 总览(定位:学习路径第一站,与12篇主体系课本vs字典分工)→Python环境与爬虫工具箱(3.14.6/venv-uv/requests-bs4-lxml三件套/curl探针)→HTTP协议基础爬虫视角(对话本质/请求响应/状态码判定字典403-429/Headers/UA/Cookie与Session/HTTPS证书CA信任库)→网页三件套与DOM(HTML骨架/CSS皮肤/JS肌肉/数据藏在哪层/内嵌JSON宝矿/稳定锚点)→选择器与定位技术(CSS全解/XPath谓词与轴/文本匹配独门/Chrome生成与泛化)→数据格式与编码(JSON主角/XML遗留/UTF-8与GBK/乱码四步法/HTML实体与xa0)→正则表达式基础(元字符/分组捕获/贪婪vs懒惰/re模块/高频模板/正则vs解析库分工)→浏览器开发者工具实战(F12四板斧/Network找接口/Console验证/Application看Cookie/定位接口五步法/curl转requests)→爬虫法律与伦理(robots.txt/个保法数据安全法反不正当竞争/技术合规四原则/礼貌爬虫三不/合规自检10问)→阶段实战与自测(综合实战/接口直取/20道自测题/毕业检查单)（2026-08：Python 3.14.6基准、3.15将于2026-10发布PEP 686 UTF-8默认、requests 2.34） |
 | 爬虫阶段2：静态网页爬虫 | `03-AI.../12-Python爬虫/阶段 2：静态网页爬虫（入门）/` | 9 | 总览(定位:请求解析存储最小闭环,毕业=独立写完整爬虫)→Requests库实战(2.34.2/GET-POST-params-json-files/Session会话/响应三件套/流式下载/工程习惯)→请求进阶异常重试代理(异常体系/raise_for_status必须手动/超时(3,15)分离/指数退避重试规则/HTTPAdapter/代理/verify=CA信任库正确姿势/健壮封装模板)→BeautifulSoup解析实战(lxml后端/对象模型/find族class_坑/select选择器/判空三连/容器先行模式)→lxml与XPath解析(双重身份/etree.HTML/XPath文本定位轴/1开始索引/性能5-10倍/bs4协同)→数据提取与清洗(四步合一/清洗规则xa0全角换行/类型转换to_int-to_date/urljoin补全/去重去噪/结构化输出规范)→翻页与爬取策略(四种分页模式/终止四条件/防循环seen+max_pages/节奏随机间隔/429处理/失败清单与断点/列表详情两层架构)→数据存储入门(CSV utf-8-sig/JSON ensure_ascii/Excel交付/SQLite UNIQUE去重与参数化/存储规范)→综合实战完整爬虫项目(请求解析存储四模块/端到端代码/运行验证/五扩展任务/11项自评)→阶段自测与常见问题(报错排查表/三层定位方法论/20道自测/毕业检查单)（2026-08：requests 2.34.2(2026-05-14)弃3.9/内联类型/CVE-2026-25645已修复） |

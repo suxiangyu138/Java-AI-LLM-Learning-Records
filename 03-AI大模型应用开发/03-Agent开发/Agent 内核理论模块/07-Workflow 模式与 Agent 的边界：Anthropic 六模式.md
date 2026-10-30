@@ -66,7 +66,7 @@ fan-out：翻译成 5 种语言并行
 |------|------|
 | 机制 | 编排者（LLM）拆解任务 → 分配工人（LLM/Agent）→ 汇总 |
 | 与多 Agent 的区别 | 图结构固定（Workflow 骨架），节点内可自主（Agent 局部） |
-| 2026 相关 | 对应多 Agent 模块的 Supervisor 模式（代码实现见[多 Agent 模块 02](../Agent%20开发框架层（工程加速）/多%20Agent（Multi‑Agent）框架/02-多%20Agent%20编排范式与模式：Supervisor%20Swarm%20Handoff%20Router.md)） |
+| 2026 相关 | 对应多 Agent 模块的 Supervisor 模式（代码实现见多 Agent 模块 02） |
 | 适用 | 复杂多步、子任务可分解的任务 |
 
 ```text

@@ -1,8 +1,8 @@
 # Java 后端 + AI 大模型 系统化学习仓库
 
 > 面向 **Java 后端开发工程师** 与 **AI 大模型应用开发工程师** 的全栈知识体系。
-> **3,540 篇标准化 Markdown 技术文档**，按 5 层金字塔组织，覆盖从底层基础到面试冲刺的完整学习路径。
-> 2026-10-30 按求职简历收敛并二次去重：简历之外的 2,347 篇迁入本地归档区 `前方的路 以后再来探索吧/`，该目录已 git 忽略，只留在本机，不推送。
+> **2,918 篇标准化 Markdown 技术文档**，按 5 层金字塔组织，覆盖从底层基础到面试冲刺的完整学习路径。
+> 2026-10-30 按求职简历收敛，并按「秋招是否真会考」三轮裁剪：2,973 篇迁入本地归档区 `前方的路 以后再来探索吧/`，该目录已 git 忽略，只留在本机，不推送。
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Docs](https://img.shields.io/badge/docs-3%2C540%20%E7%AF%87%20Markdown-2ea44f?style=flat)](.)
@@ -12,19 +12,19 @@
 ## 五层金字塔知识体系
 
 ```text
-Java-AI-LLM-Learning-Records/  (3,540 篇 .md 文件)
+Java-AI-LLM-Learning-Records/  (2,918 篇 .md 文件)
 │
-├── 01-底层根基-Java核心底座/        1423 篇  地基：Java核心+JUC+JVM+DSA+OS/计网+设计模式+高并发专题
+├── 01-底层根基-Java核心底座/        1166 篇  地基：Java核心+JUC+JVM+DSA+OS/计网+设计模式+高并发专题
 │
-├── 02-后端核心技术 微服务 分布式 云原生/ 717 篇  骨架：MySQL+Redis+RabbitMQ+ES+Spring全家桶+SpringCloudAlibaba+Docker/Nginx
+├── 02-后端核心技术 微服务 分布式 云原生/ 651 篇  骨架：MySQL+Redis+RabbitMQ+ES+Spring全家桶+SpringCloudAlibaba+Docker/Nginx
 │
-├── 03-AI大模型应用开发/             1150 篇  差异：Prompt/Function Calling+Agent+MCP+RAG+Milvus+Python爬虫与数据分析
+├── 03-AI大模型应用开发/             847 篇  差异：Prompt/Function Calling+Agent+MCP+RAG+Milvus+Python爬虫与数据分析
 │
 ├── 04-项目能力综合提升/             109 篇  证明：Java-AI 能力建设 L1-L3+FlavorDash/SuGuangMall/LingShu
 │
 ├── 05-综合输出-面试冲刺/            139 篇  输出：题库+手写代码+简历+速查+面试四阶段
 │
-└── 06-学习日志/                      2 篇
+└── 06-学习日志/                      6 篇
 ```
 
 ---
@@ -74,7 +74,7 @@ Java-AI-LLM-Learning-Records/  (3,540 篇 .md 文件)
 | 大模型基础与 Prompt 工程 | Token/上下文、CoT、Few-shot、结构化输出、LLM API、OpenAI/Anthropic 兼容接口、Embedding |
 | **Function Calling 函数调用** | 11 篇（Agent 基石）：原理演进→协议全解（OpenAI/Anthropic/DeepSeek 对照）→循环工程→工具设计→安全校验→流式→生产成本→面试 |
 | **LiteLLM 多模型适配** | 11 篇：v1.94（Router Plugins/Rust 网关迁移）→SDK 统一接口→Proxy 虚拟 key→预算治理→生态集成 |
-| **Agent 内核与组件体系** | 40+ 套：内核理论模块、四大核心组件、子组件专项（Memory/Planner/Output Parser/Reflection/Tool/Guardrails/编排/Multi-Agent）、ReAct 范式、面试专项 |
+| **Agent 内核与组件体系** | 内核理论模块（11）、四大核心组件（11）、配套工具生态（代码沙盒/联网搜索/文档解析/数据库交互）、调优排错与安全、幻觉治理、阶段 1-5 实战路径 |
 | **RAG 阶段 1-5** | 45 篇：基础概念→动手实现 Basic RAG→进阶调优（工程核心）→高级 RAG（GraphRAG/Agentic）→工程化部署 |
 | **MCP 与 Agent Skill 体系** | 50+ 套：MCP 阶段 1-4、MCP 核心架构（CS 客户端-服务器）、主流 MCP 开发框架、Agent Skill 阶段 1-5 |
 | AI 开发框架 | Spring AI、LangChain4j、LangChain（Java AI 生态为核心） |
@@ -82,7 +82,7 @@ Java-AI-LLM-Learning-Records/  (3,540 篇 .md 文件)
 | **Python 数据分析全体系** | 60+ 套：阶段 1-5（NumPy/Pandas/Matplotlib·Seaborn/数据来源/实战项目/业务分析/机器学习/高阶） |
 | Milvus 与向量数据库 | Milvus 10 篇 + 向量索引原理 + 2026 选型格局 |
 | 模型推理与部署 | KV Cache→投机采样→量化→压测→成本；vLLM/Ollama、私有化部署、MLOps |
-| AI 开发工具 | Claude Code、AI 编码工作流、主流大模型 API 调用、AI 编程 CLI 工具全景 |
+| AI 开发工具 | Claude Code、主流大模型 API 调用（OpenAI / Claude / DeepSeek / Qwen，同一套兼容协议） |
 
 ### 04-项目能力综合提升（109 篇）
 
@@ -103,10 +103,10 @@ Java-AI-LLM-Learning-Records/  (3,540 篇 .md 文件)
 | 手写代码题库 | HashMap/线程池/分布式锁/SSE/RAG/Agent 手写 |
 | 简历与职业发展 | 多版本简历 + 职业规划 |
 | 参考速查 | 核心知识点速查手册 + AI/数学名词图谱 |
-| 技术栈深度剖析 | Java 后端/Java-AI 大模型企业级开发中用到的技术栈全剖析 |
+| 技术栈深度剖析 | Java-AI 大模型企业级开发中用到的技术栈全剖析 |
 | 名词剖析 | Java 后端开发名词剖析与知识体系搭建 |
 
-### 本地归档区（2,347 篇，不入库）
+### 本地归档区（2,973 篇，不入库）
 
 > 迁出的内容只留在本机 `前方的路 以后再来探索吧/`，该目录已写入 `.gitignore`，不提交、不推送。需要时按目录移回即可。
 
@@ -114,7 +114,8 @@ Java-AI-LLM-Learning-Records/  (3,540 篇 .md 文件)
 |------|------|
 | 简历未写的同类替代品 | Oracle、PostgreSQL、SQL Server、SQLite、MongoDB、HBase、Memcached、Neo4j、Kafka、RocketMQ、Pulsar、ActiveMQ、Chroma、Qdrant、PgVector、MinIO |
 | 简历未写的相邻方向 | Kubernetes/Prometheus、前端全套（HTML/CSS/JS/Vue/React）、模型微调与多模态、强化学习、深度学习、组成原理与数学、测试工具（JUnit/Postman/JMeter） |
-| 旧版与汇总版重复体系 | Spring Core、Spring 全家桶、旧版 Spring Data Redis、JavaWeb 汇总、Agent 子组件专项、LLM Agent 理论课、Java 后端技术全览 |
+| 旧版与汇总版重复体系 | Spring Core、Spring 全家桶、旧版 Spring Data Redis、JavaWeb 汇总、Agent 子组件专项、LLM Agent 理论课、Java 后端技术全览、Spring 底层核心组件手册、Agent 进阶工程化组件 |
+| 秋招不考的高阶专题 | 算法竞赛（树链剖分/虚树/LCT/莫队/CDQ/AC自动机/Manacher/后缀数组/网络流类图论/博弈/随机算法）、Harness/Hook/Loop Engineering、Agent 开发框架层与 Skill、架构师 L3/L4、模型部署容灾运维、6 家重复供应商 API |
 | 学习过程产物 | 84 门课程大纲、软件工程与 MVC/DDD 方法论、职业规划与软技能 |
 | 工具类百科与个人环境文档 | Vim、Markdown、文件后缀名、键盘符号、快捷键、VPN、飞书、本机环境说明书 |
 
@@ -140,7 +141,7 @@ Java-AI-LLM-Learning-Records/  (3,540 篇 .md 文件)
 | 雪花算法 | 02-.../08-分布式系统与架构/雪花算法/ | 10 | 原理→时钟回拨→变体→ID方案→UUIDv7（RFC 9562）→选型 |
 | Linux | 02-.../07-工程运维测试拓展/运维/Linux 操作系统/ | 12 | 基础→命令→系统管理→网络安全→服务→速查→权限深度→JVM 排查→日志（Rocky 10/Ubuntu 26.04） |
 | Shell | 02-.../07-工程运维测试拓展/运维/Linux 操作系统/Shell/ | 6 | 入门→变量→流程控制→函数实战→grep/sed/awk 三剑客 |
-| **Agent 内核与组件体系** | 03-.../03-Agent开发/ | 40+ | 内核理论 + 四大核心组件 + 子组件专项 15 套 + 面试专项 |
+| **Agent 内核与组件体系** | 03-.../03-Agent开发/ | 200+ | 内核理论 + 四大核心组件 + 工具生态 + 阶段 1-5 + 面试专项 |
 | 主流 Agent 范式 | 03-.../03-Agent开发/主流 Agent 范式/ | 10 | 工作流vs Agent→ReAct→PnE→反思→Agentic Reasoning→多Agent→框架 |
 | Multi-Agent/MCP 深化 | 03-.../03-Agent开发/Agent与MCP协议/（12-16） | 5 | 无状态 MCP（2026-07）+ A2A + 工具投毒防御 |
 | **RAG 阶段 1-5** | 03-.../04-RAG检索增强生成/ | 45 | 基础概念 → Basic RAG → 进阶调优 → 高级 RAG → 工程化部署 |
@@ -163,7 +164,7 @@ Java-AI-LLM-Learning-Records/  (3,540 篇 .md 文件)
 
 | 版本 / 日期 | 内容 |
 |------|------|
-| **2026-10-30** | 按求职简历收敛并二次去重：主线 3,540 篇，2,347 篇迁入本地归档区（git 忽略，不推送） |
+| **2026-10-30** | 按简历 + 秋招范围三轮裁剪：主线 2,918 篇，2,973 篇迁入本地归档区（git 忽略，不推送） |
 | **v1.0.0（2026-08-12）** | 阶段性开发收官：280 次提交 / 170+ 套知识体系 / 3,910 → 5,752 篇（+1,842），思想体系收官（设计思想/MVC/DDD/LoRA） |
 | 2026-08-08 | 5 大知识体系 54 篇 + 目录重组（爬虫阶段 6 / FastAPI / Function Calling / HuggingFace / LiteLLM） |
 | 2026-08-06 | 18 个知识体系 153 篇（组成原理四大件 / 数学四套 / JMM / MQ / SQLite / Memcached / Neo4j / Pulsar / 雪花 / JUnit） |
@@ -242,4 +243,4 @@ Java-AI-LLM-Learning-Records/  (3,540 篇 .md 文件)
 
 ---
 
-*最后更新：2026-10-30 | 3,540 篇 Markdown 文档 | 5 层金字塔 + 40+ 知识体系 | 维护模式，按需增补*
+*最后更新：2026-10-30 | 2,918 篇 Markdown 文档 | 5 层金字塔 + 30+ 知识体系 | 维护模式，按需增补*

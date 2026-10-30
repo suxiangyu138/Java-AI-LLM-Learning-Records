@@ -53,7 +53,7 @@ Tools & Skill 工具组件（最简定义）
 - **设计规范**：工具 = 正式契约（清晰命名/1-3 句何时用/枚举/约束/每参数描述/additionalProperties:false）；**工具数 >30-50 选择准确率线性下降**——按组路由；原子不重叠（描述出现"或"= 两个工具）。
 - **鲁棒性**：输入校验 + 输出验证 + 超时重试（幂等）+ 类型化错误返回（非裸堆栈）+ 顺序默认并行后置 + 断路器（三连败）+ 日志不可谈判。
 - **评估**：ToolSelectionAccuracy/FunctionCallAccuracy/JSONValidation 三独立失败模式；BFCL v3 前沿 88-94%（GPT-5.x ~89%/Claude Opus 4.7 ~87%/Gemini 3 Pro ~85%）——**差距在 irrelevance 与 missing-tool**。
-- **与体系分工**：Tool 工具开发与注册 深潜工具本体；本体系只做最简速记；[Multi-Agent](..%2F..%2F进阶工程化组件（生产环境必备）%2FMulti-Agent协作组件（多智能体）%2F00-Multi-Agent协作组件总览.md) 03 篇管 A2A 工具委派。
+- **与体系分工**：Tool 工具开发与注册 深潜工具本体；本体系只做最简速记；Multi-Agent 03 篇管 A2A 工具委派。
 
 ---
 

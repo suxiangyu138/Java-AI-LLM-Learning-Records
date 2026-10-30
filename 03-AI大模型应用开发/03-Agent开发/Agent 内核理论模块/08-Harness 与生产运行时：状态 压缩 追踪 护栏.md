@@ -41,7 +41,7 @@
 | 会话恢复 | 按会话 ID 恢复完整上下文 |
 | 2026 前沿 | 两阶段初始化 + git 式状态持久化（长运行 harness） |
 
-> **原理对应**：LangGraph 的 checkpointer、CrewAI 的 checkpointing 都是本节的工程实现——原理一致（每节点保存），实现各异（详见[框架层](../Agent%20开发框架层（工程加速）/单%20Agent%20框架/00-总览：单%20Agent%20框架知识体系.md)）。
+> **原理对应**：LangGraph 的 checkpointer、CrewAI 的 checkpointing 都是本节的工程实现——原理一致（每节点保存），实现各异（详见框架层）。
 
 ## 3. 上下文压缩：运行时第一职责
 

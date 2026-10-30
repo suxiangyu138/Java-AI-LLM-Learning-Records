@@ -54,7 +54,7 @@ Planning & Reflection 规划反思组件（最简定义）
 - **反思前提不变**：**"只有可验证 oracle 才加反思"**——无 oracle 的批评退化为自证偏见；Reflexion 91% vs 80% 基线证明语言化反馈有效（NeurIPS 2023 奠基结论 2026 仍适用）。
 - **规划失败编目（PlanBench-XL，2026-06）**：327 任务/1665 工具——GPT-5.4 无阻塞 51.90% → 严重阻塞 **11.36%**；**静默失败最破坏性**（无错误信号的错误值 → value contamination 级联）；**Irrecoverable Drift 是主要失败模式**（GPT-4o >70% 失败）；工具选择瓶颈（过度依赖最近检索的工具而非最相关的）。
 - **自适应规划**：AdaPlanBench（2026）隐藏约束逐步揭示——最好模型仅 67.75%；SPIRAL（IBM，AAAI 2026）Planner/Simulator/Critic 三 Agent 进 MCTS——DailyLifeAPIs **83.6%**（+16 点）。
-- **护栏共识**：max_steps 步数预算 + 成本上限（一次无界查询可级联成数百次 LLM 调用 $5-50）+ 长任务 checkpoint + 高风险计划人工批准（与 [Orchestrator Runtime](..%2F..%2F进阶工程化组件（生产环境必备）%2FOrchestrator%20%20Runtime%20编排调度器%2F00-OrchestratorRuntime编排调度器总览.md) 预算联动）。
+- **护栏共识**：max_steps 步数预算 + 成本上限（一次无界查询可级联成数百次 LLM 调用 $5-50）+ 长任务 checkpoint + 高风险计划人工批准（与 Orchestrator Runtime 预算联动）。
 - **与体系分工**：Planner 规划器 深潜规划本体；Reflection 反思模块 深潜反思本体；本体系只做最简速记。
 
 ---
