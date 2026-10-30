@@ -141,7 +141,7 @@ Spring Task 知识体系
           └────────────────────┘   └────────────────────────┘
 ```
 
-- **向上承接**：[Spring全家桶-19-分布式定时任务](../Spring全家桶/19-分布式定时任务.md) 有框架级对比；本体系做 Spring Task 自身机制的深度化。
+- **向上承接**：Spring全家桶-19-分布式定时任务 有框架级对比；本体系做 Spring Task 自身机制的深度化。
 - **横向联动**：分布式锁（[Spring Data Redis](../Spring Data Redis/00-Spring Data Redis知识体系总览.md) 04 篇 Lua 实现）是 ShedLock 的底层；[Spring框架核心-事件驱动](../Spring框架核心/07-事件驱动机制.md) 与 @Async 共用线程池概念。
 - **向下延伸**：Quartz 的 JobStore、XXL-Job 的调度中心架构，均以本体系的"调度语义 + 分布式一致性"为理解地基。
 

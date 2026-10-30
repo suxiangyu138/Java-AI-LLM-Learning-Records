@@ -167,7 +167,7 @@
 
 | 速查文档 | 深度体系模块 |
 |---------|-------------|
-| 02-HTTP 客户端速查 | [Spring全家桶-04-Spring-MVC-Web层框架](../../../Spring全家桶/04-Spring-MVC-Web层框架.md) |
+| 02-HTTP 客户端速查 | Spring全家桶-04-Spring-MVC-Web层框架 |
 | 03-消息转换与内容协商速查 | [SpringMVC-04-响应与消息转换：HttpMessageConverter与Jackson 3](../../../SpringMVC/04-响应与消息转换：HttpMessageConverter与Jackson 3.md) |
 | 04-数据绑定与 HTTP 消息速查 | [SpringMVC-03-参数绑定与数据校验](../../../SpringMVC/03-参数绑定与数据校验.md) |
 | 05-Web 上下文与作用域速查 | [SpringMVC-01-DispatcherServlet请求处理全链路](../../../SpringMVC/01-DispatcherServlet请求处理全链路.md) |

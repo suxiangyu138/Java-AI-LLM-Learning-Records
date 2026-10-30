@@ -82,7 +82,7 @@ Servlet 体系（9 篇，Servlet 6.1 / Jakarta EE 11 / Tomcat 11 基准，2026-0
 | 体系 | 与 Servlet 的关系 |
 |------|------------------|
 | [Filter 过滤器](..%2FFilter%20过滤器%2F00-Filter过滤器总览.md) | 请求**进入 Servlet 前**的拦截关卡（洋葱外层） |
-| [Listener 监听器](..%2FListener%20监听器%2F00-Listener监听器总览.md) | 监听容器/会话/请求的**事件**（生命周期观察者） |
+| [Listener 监听器](../../../前方的路%20以后再来探索吧/02-后端核心技术%20微服务%20分布式%20云原生/09-Web开发全流程/Listener%20监听器/00-Listener监听器总览.md) | 监听容器/会话/请求的**事件**（生命周期观察者） |
 | [Cookie & Session](..%2FCookie%20%26%20Session（会话技术）%2F00-会话技术总览.md) | Servlet 通过 HttpSession API 管理**会话状态** |
 | [Tomcat](..%2FTomcat%2F00-Tomcat总览与核心概念.md) | Servlet 规范的标准**实现容器** |
 | [Spring Boot](..%2F..%2F06-Spring全家桶%2FSpringBoot%2F00-SpringBoot总览与核心概念.md) | DispatcherServlet 是 Servlet 的**框架级封装** |

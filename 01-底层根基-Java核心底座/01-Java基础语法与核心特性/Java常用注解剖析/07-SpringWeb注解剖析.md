@@ -98,7 +98,7 @@ Boot 4 升级的三个 Web 层变化：starter 更名 `spring-boot-starter-webmv
 
 **下一模块**：[08 持久层注解剖析](./08-持久层注解剖析.md) · **返回总览**：[00 总览](./00-Java常用注解知识体系总览.md)
 
-**相关体系**：[SpringBoot Web（DispatcherServlet 全链路）](../../../02-后端核心技术%20微服务%20分布式%20云原生/09-Web开发全流程/SpringBoot%20Web/00-SpringBootWeb总览.md) · [MVC](../../../01-底层根基-Java核心底座/10-计算机设计思想与架构工程能力/MVC/00-MVC架构模式总览.md)
+**相关体系**：[SpringBoot Web（DispatcherServlet 全链路）](../../../02-后端核心技术%20微服务%20分布式%20云原生/09-Web开发全流程/SpringBoot%20Web/00-SpringBootWeb总览.md) · [MVC](../../../前方的路%20以后再来探索吧/01-底层根基-Java核心底座/10-计算机设计思想与架构工程能力/MVC/00-MVC架构模式总览.md)
 
 ---
 

@@ -153,7 +153,7 @@ Spring Security 与 OAuth2 知识体系
           └────────────────────┘   └────────────────────────┘
 ```
 
-- **向上承接**：[Spring全家桶-07-Spring-Security认证与授权](../Spring全家桶/07-Spring-Security认证与授权.md) 有基础篇；本体系做 7.0 代际深度化与 OAuth2 全链路。
+- **向上承接**：Spring全家桶-07-Spring-Security认证与授权 有基础篇；本体系做 7.0 代际深度化与 OAuth2 全链路。
 - **横向联动**：[SpringBoot-06-安全与认证](../SpringBoot/06-SpringBoot安全与认证.md) 讲 Boot 视角的自动配置；本体系讲 Security 内部机制。分布式锁/会话场景联动 [Spring Data Redis](../Spring Data Redis/00-Spring Data Redis知识体系总览.md)。
 - **向下延伸**：JWT（jjwt/nimbus）、API 网关鉴权、OIDC 协议细节，均以本体系的 OAuth2 三件套为地基。
 

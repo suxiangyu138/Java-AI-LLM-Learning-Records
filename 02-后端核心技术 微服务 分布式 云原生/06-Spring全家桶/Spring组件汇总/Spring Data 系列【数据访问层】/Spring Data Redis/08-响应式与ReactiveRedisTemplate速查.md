@@ -27,7 +27,7 @@
 ```text
 响应式全链路（2026 主流组合）：
   WebFlux（Netty）→ WebClient（第三方）→ ReactiveRedisTemplate（Redis）
-                                          → R2DBC（MySQL/PostgreSQL，[R2DBC 系列](../../Spring%20Data%20系列【数据访问层】/Spring%20Data%20R2DBC/00-Spring%20Data%20R2DBC组件总览.md)）
+                                          → R2DBC（MySQL/PostgreSQL，[R2DBC 系列](../../../../../前方的路%20以后再来探索吧/02-后端核心技术%20微服务%20分布式%20云原生/06-Spring全家桶/Spring组件汇总/Spring%20Data%20系列【数据访问层】/Spring%20Data%20R2DBC/00-Spring%20Data%20R2DBC组件总览.md)）
   全程非阻塞：一个线程同时服务 N 个请求（IO 等待期间线程去干别的）
 ```
 
@@ -141,7 +141,7 @@ WebFlux 请求 → 嵌入（Reactive 嵌入调用）→ ReactiveRedisTemplate �
 @Service
 @RequiredArgsConstructor
 public class ProductReactiveService {
-    private final ProductRepository productRepository;          // R2DBC（[R2DBC 系列](../../Spring%20Data%20系列【数据访问层】/Spring%20Data%20R2DBC/04-Repository速查.md)）
+    private final ProductRepository productRepository;          // R2DBC（[R2DBC 系列](../../../../../前方的路%20以后再来探索吧/02-后端核心技术%20微服务%20分布式%20云原生/06-Spring全家桶/Spring组件汇总/Spring%20Data%20系列【数据访问层】/Spring%20Data%20R2DBC/04-Repository速查.md)）
     private final ReactiveRedisTemplate<String, Object> redis;
 
     // Cache-Aside（响应式版）：缓存 → miss 查库 → 回填
@@ -168,7 +168,7 @@ public class ProductReactiveService {
 }
 ```
 
-> 面试必答：**"响应式项目里数据库和 Redis 怎么配合？"**——Cache-Aside 响应式版：`redis.get → switchIfEmpty(db.find) → 回填`；写路径 `R2DBC 事务更新 + ReactiveRedis 删缓存`——**全链路 Mono/Flux 贯穿**，任何一环 block 都会破坏非阻塞（[R2DBC 08 篇](../../Spring%20Data%20系列【数据访问层】/Spring%20Data%20R2DBC/08-WebFlux响应式集成速查.md) 阻塞陷阱同源）。
+> 面试必答：**"响应式项目里数据库和 Redis 怎么配合？"**——Cache-Aside 响应式版：`redis.get → switchIfEmpty(db.find) → 回填`；写路径 `R2DBC 事务更新 + ReactiveRedis 删缓存`——**全链路 Mono/Flux 贯穿**，任何一环 block 都会破坏非阻塞（[R2DBC 08 篇](../../../../../前方的路%20以后再来探索吧/02-后端核心技术%20微服务%20分布式%20云原生/06-Spring全家桶/Spring组件汇总/Spring%20Data%20系列【数据访问层】/Spring%20Data%20R2DBC/08-WebFlux响应式集成速查.md) 阻塞陷阱同源）。
 
 ## 5. 阻塞陷阱与性能
 
@@ -178,7 +178,7 @@ public class ProductReactiveService {
 |---|------|------|------|
 | ① | WebFlux 里用同步 RedisTemplate | 事件循环线程被阻塞（IO 等待） | 换 ReactiveRedisTemplate |
 | ② | 响应式方法里 `.block()` | 线程占用 + 全服务卡死 | Mono/Flux 贯穿到底 |
-| ③ | 响应式链路里混同步组件 | 局部阻塞拖全链路 | 全组件响应式（[R2DBC 08 篇](../../Spring%20Data%20系列【数据访问层】/Spring%20Data%20R2DBC/08-WebFlux响应式集成速查.md) 3 节） |
+| ③ | 响应式链路里混同步组件 | 局部阻塞拖全链路 | 全组件响应式（[R2DBC 08 篇](../../../../../前方的路%20以后再来探索吧/02-后端核心技术%20微服务%20分布式%20云原生/06-Spring全家桶/Spring组件汇总/Spring%20Data%20系列【数据访问层】/Spring%20Data%20R2DBC/08-WebFlux响应式集成速查.md) 3 节） |
 | ④ | 响应式里配了连接池 | 池化开销 + 语义冲突 | Lettuce 共享连接即可（[02 篇](02-快速开始与连接配置速查.md) 3 节） |
 
 ```java
@@ -206,12 +206,12 @@ Flux.fromIterable(products)
         .then();
 ```
 
-> 响应式批量的优势：**并发度可调 + 背压天然**——比管道"一把梭"更精细（管道要么全发要么分批，响应式按需拉取）；大批量导入的响应式姿势（[R2DBC 07 篇](../../Spring%20Data%20系列【数据访问层】/Spring%20Data%20R2DBC/07-性能优化与批量速查.md) 流式思路同源）。
+> 响应式批量的优势：**并发度可调 + 背压天然**——比管道"一把梭"更精细（管道要么全发要么分批，响应式按需拉取）；大批量导入的响应式姿势（[R2DBC 07 篇](../../../../../前方的路%20以后再来探索吧/02-后端核心技术%20微服务%20分布式%20云原生/06-Spring全家桶/Spring组件汇总/Spring%20Data%20系列【数据访问层】/Spring%20Data%20R2DBC/07-性能优化与批量速查.md) 流式思路同源）。
 
 ## 6. 响应式测试
 
 ```java
-// StepVerifier（与 R2DBC/WebFlux 同一套断言，[R2DBC 08 篇](../../Spring%20Data%20系列【数据访问层】/Spring%20Data%20R2DBC/08-WebFlux响应式集成速查.md) 5 节）
+// StepVerifier（与 R2DBC/WebFlux 同一套断言，[R2DBC 08 篇](../../../../../前方的路%20以后再来探索吧/02-后端核心技术%20微服务%20分布式%20云原生/06-Spring全家桶/Spring组件汇总/Spring%20Data%20系列【数据访问层】/Spring%20Data%20R2DBC/08-WebFlux响应式集成速查.md) 5 节）
 @SpringBootTest
 class ReactiveRedisCacheTest {
 
@@ -252,4 +252,4 @@ class ReactiveRedisCacheTest {
 
 **下一模块**：[09-消息Pub/Sub与Stream速查](09-消息Pub-Sub与Stream速查.md)　**返回总览**：[00-组件总览](00-Spring Data Redis组件总览.md)
 
-**【参考来源】**：[Spring Data Redis 官方参考文档（响应式）](https://docs.spring.io/spring-data/redis/reference/redis/reactive.html)、[Lettuce 官方文档（响应式）](https://lettuce.io/docs/)、[R2DBC 系列-响应式集成](../../Spring%20Data%20系列【数据访问层】/Spring%20Data%20R2DBC/08-WebFlux响应式集成速查.md)
+**【参考来源】**：[Spring Data Redis 官方参考文档（响应式）](https://docs.spring.io/spring-data/redis/reference/redis/reactive.html)、[Lettuce 官方文档（响应式）](https://lettuce.io/docs/)、[R2DBC 系列-响应式集成](../../../../../前方的路%20以后再来探索吧/02-后端核心技术%20微服务%20分布式%20云原生/06-Spring全家桶/Spring组件汇总/Spring%20Data%20系列【数据访问层】/Spring%20Data%20R2DBC/08-WebFlux响应式集成速查.md)

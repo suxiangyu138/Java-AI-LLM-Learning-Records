@@ -63,7 +63,7 @@ Netty 文档里的"零拷贝"有四种含义，面试常混（内核零拷贝的
 - **优雅停机**：`channel.closeFuture().sync()` + 业务线程池 shutdown 后再退进程，否则发布时在途请求被硬杀，客户端表现为连接重置（[08 篇](08-网络层与连接治理.md)的 CLOSE_WAIT 也常源于此）。
 - **引用计数纪律**：入站 `ByteBuf` 归 Netty 管、出站归业务管——handler 里 `retain/release` 错一对，线上就是泄漏或复用错误；`SimpleChannelInboundHandler` 自动释放是安全默认。与"连接泄漏"并列，**内存泄漏是 Netty 应用最隐蔽的生产事故**，配合 4.2 的 leak detector 在测试环境全开，生产不背这个债。
 
-Netty 的 API 全解、编解码器、与 Spring 集成见 [Netty 体系](../../../02-后端核心技术%20微服务%20分布式%20云原生/09-Web开发全流程/Netty/00-Netty知识体系总览.md)。一句话总结定位：**Netty 把"并发正确性"用线程模型解决，把"内存效率"用内存池解决，把"CPU 效率"用零拷贝解决**——三个维度互不替代。
+Netty 的 API 全解、编解码器、与 Spring 集成见 [Netty 体系](../../../前方的路%20以后再来探索吧/02-后端核心技术%20微服务%20分布式%20云原生/09-Web开发全流程/Netty/00-Netty知识体系总览.md)。一句话总结定位：**Netty 把"并发正确性"用线程模型解决，把"内存效率"用内存池解决，把"CPU 效率"用零拷贝解决**——三个维度互不替代。
 
 > **核心要点**：EventLoop 串行无锁是 Netty 高并发的第一来源，一个 Channel 永远只被一个线程处理，跨线程通信走 execute()；EventLoop 内禁止阻塞；内存池（arena 分片 + thread-local 缓存 + buddy 大块）让 ByteBuf 分配近乎零 GC，4.2 的 AdaptiveByteBuf 与 io_uring 是 2026 两大升级；零拷贝四形态分清逻辑零拷贝与内核零拷贝（FileRegion）；4.2.15 安全版本必须升级。
 

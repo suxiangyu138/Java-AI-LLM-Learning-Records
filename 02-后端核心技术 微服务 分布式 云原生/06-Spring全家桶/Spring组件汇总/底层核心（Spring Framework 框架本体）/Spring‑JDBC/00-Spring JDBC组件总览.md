@@ -152,11 +152,11 @@
 
 | 速查文档 | 深度体系模块 |
 |---------|-------------|
-| 02-JdbcTemplate 速查 | [Spring全家桶-06-Spring-Data数据访问层](../../../Spring全家桶/06-Spring-Data数据访问层.md) |
+| 02-JdbcTemplate 速查 | Spring全家桶-06-Spring-Data数据访问层 |
 | 04-DataSource 与连接池速查 | [SpringBoot-04-SpringBoot数据访问](../../../SpringBoot/04-SpringBoot数据访问.md) |
 | 06-异常体系与错误映射速查 | [Spring框架核心-06-声明式事务管理（异常与回滚）](../../../Spring框架核心/06-声明式事务管理.md) |
 | 07-与事务/ORM 集成速查 | [Spring生态深度剖析-04-AOP代理创建与事务管理内核](../../../Spring生态深度剖析/04-AOP代理创建与事务管理内核.md) |
-| 08-集成地图与常见问题 | [Spring全家桶-06-Spring-Data数据访问层](../../../Spring全家桶/06-Spring-Data数据访问层.md) |
+| 08-集成地图与常见问题 | Spring全家桶-06-Spring-Data数据访问层 |
 
 > 本系列定位"查得快"——JDBC 的 ORM 生态（JPA/MyBatisPlus）与数据库细节（MySQL）见 Spring Data 系列与关系型数据库系列；事务纵深见 Spring-TX 系列。
 
@@ -167,7 +167,7 @@
 | 快速上手写代码 | 02 / 03 / 05（API 与可运行示例） | - |
 | 理解事务传播与回滚 | 07（接轨概览） | [Spring-TX 系列](../Spring‑TX（Spring‑Transaction）/00-Spring TX组件总览.md) |
 | 面试深挖连接池 / 翻译器 | 04 / 06（含源码级小节） | Spring 框架核心系列 |
-| 数据层整体选型 | 08（集成地图） | [Spring全家桶-06-Spring-Data数据访问层](../../../Spring全家桶/06-Spring-Data数据访问层.md) |
+| 数据层整体选型 | 08（集成地图） | Spring全家桶-06-Spring-Data数据访问层 |
 
 > 本系列每篇的"面试官追问"小节就是速查 → 深度体系之间的"桥"——先照着追问自测，答不出的知识点再去深度体系里补，比从头通读效率高得多。
 
@@ -318,7 +318,7 @@ public class OrderController {
 |------|------|
 | 事务传播 / 隔离 / 回滚规则 | [Spring-TX 系列](../Spring‑TX（Spring‑Transaction）/00-Spring TX组件总览.md) |
 | Boot 数据访问自动配置源码 | [SpringBoot-04-SpringBoot数据访问](../../../SpringBoot/04-SpringBoot数据访问.md) |
-| MyBatis / JPA 选型与混用 | [Spring全家桶-06-Spring-Data数据访问层](../../../Spring全家桶/06-Spring-Data数据访问层.md) |
+| MyBatis / JPA 选型与混用 | Spring全家桶-06-Spring-Data数据访问层 |
 | MySQL 底层（索引 / 锁 / 事务） | 关系型数据库系列 |
 
 本系列定位"JDBC 层的速查与收口"——当问题超出"连接、模板、异常、事务接轨"这个范围（比如慢 SQL 优化、分库分表、分布式事务），就应该切换到对应深度体系，而不是在本系列里硬找答案；速查文档的价值是"快速定位与记忆锚点"，深度体系才是完整理解的来源。

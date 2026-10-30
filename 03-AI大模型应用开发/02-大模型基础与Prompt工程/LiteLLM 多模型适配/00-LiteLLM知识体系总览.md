@@ -116,7 +116,7 @@ LiteLLM 多模型适配 ——11 篇（v1.94.0 基准，2026-08）
 - [OpenAI兼容接口/04-API聚合网关.md](../OpenAI兼容接口/04-API聚合网关.md)（网关横向对比）
 - [LLM-API 体系](../LLM-API/00-LLM%20API知识体系总览.md)（各家 API 使用）
 - [Function Calling 体系](../Function%20Calling%20函数调用【Agent%20基石】/00-FunctionCalling知识体系总览.md)（适配层上层）
-- [Python 异步 + FastAPI](../../01-Python语言/Python%20异步%20+%20FastAPI/00-Python异步与FastAPI知识体系总览.md)（服务端工程）
+- [Python 异步 + FastAPI](../../../前方的路%20以后再来探索吧/03-AI大模型应用开发/01-Python语言/Python%20异步%20+%20FastAPI/00-Python异步与FastAPI知识体系总览.md)（服务端工程）
 
 ---
 

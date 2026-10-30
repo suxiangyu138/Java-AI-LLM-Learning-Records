@@ -62,7 +62,7 @@ public class ProductService {
 | key 生成 | SpEL（`#id`/`#user.id`）；默认 SimpleKey 拼接参数 |
 | condition | 进缓存前判断（`#id > 0`） |
 | unless | 结果不缓存条件（`#result == null`——**null 默认不缓存，防穿透要特殊处理**） |
-| 失效 | **方法内自调用失效**（同类 this 调用——AOP 代理，同 [JPA 事务失效](../../Spring%20Data%20系列【数据访问层】/Spring%20Data%20JPA/06-事务与并发控制速查.md) 同源） |
+| 失效 | **方法内自调用失效**（同类 this 调用——AOP 代理，同 [JPA 事务失效](../../../../../前方的路%20以后再来探索吧/02-后端核心技术%20微服务%20分布式%20云原生/06-Spring全家桶/Spring组件汇总/Spring%20Data%20系列【数据访问层】/Spring%20Data%20JPA/06-事务与并发控制速查.md) 同源） |
 
 > 面试必答：**"@Cacheable 的 condition 和 unless 区别？"**——condition 在**方法执行前**判断（决定要不要查缓存）；unless 在**方法执行后**判断（决定结果要不要写缓存）——`@Cacheable(condition = "#id > 0", unless = "#result == null")` 是标准组合（空结果不缓存，防穿透）。
 
@@ -131,7 +131,7 @@ cacheManager.resetCaches();
 
 ## 3. 缓存三大难题：穿透、击穿、雪崩
 
-> 与 [JPA 系列缓存难题](../../Spring%20Data%20系列【数据访问层】/Spring%20Data%20JPA/07-性能优化与批量操作速查.md) 同源三问，此处给 Redis/Spring Cache 视角的解法。
+> 与 [JPA 系列缓存难题](../../../../../前方的路%20以后再来探索吧/02-后端核心技术%20微服务%20分布式%20云原生/06-Spring全家桶/Spring组件汇总/Spring%20Data%20系列【数据访问层】/Spring%20Data%20JPA/07-性能优化与批量操作速查.md) 同源三问，此处给 Redis/Spring Cache 视角的解法。
 
 ### 3.1 对比表（面试必考）
 

@@ -56,7 +56,7 @@ SpringBoot Web 体系（8 篇，Boot 4.1 / Framework 7.0 / Tomcat 11 / Servlet 6
 | 应用进阶（2 天） | 要搞懂框架机制 | 04 → 05 → 06 |
 | 面试冲刺（1 天） | 备战后端面试 | 00 → 02 → 03 → 05 → 08 |
 
-> 前置要求：本体系假设已了解 [Servlet](../Servlet/00-Servlet总览.md)、[Filter 过滤器](../Filter%20过滤器/00-Filter过滤器总览.md)、[Listener 监听器](../Listener%20监听器/00-Listener监听器总览.md)。**先学 Servlet 再看本体系，理解深度完全不同**。
+> 前置要求：本体系假设已了解 [Servlet](../Servlet/00-Servlet总览.md)、[Filter 过滤器](../Filter%20过滤器/00-Filter过滤器总览.md)、[Listener 监听器](../../../前方的路%20以后再来探索吧/02-后端核心技术%20微服务%20分布式%20云原生/09-Web开发全流程/Listener%20监听器/00-Listener监听器总览.md)。**先学 Servlet 再看本体系，理解深度完全不同**。
 
 ## 4. SpringBoot Web 定位
 
@@ -81,7 +81,7 @@ SpringBoot Web 体系（8 篇，Boot 4.1 / Framework 7.0 / Tomcat 11 / Servlet 6
 |---------|---------------|
 | [Servlet](../Servlet/00-Servlet总览.md) | DispatcherServlet 就是 Servlet，规范即底层 |
 | [Filter 过滤器](../Filter%20过滤器/00-Filter过滤器总览.md) | Boot 中 Filter 注册的框架化三路径（04 深化） |
-| [Listener 监听器](../Listener%20监听器/00-Listener监听器总览.md) | 容器事件监听在 Boot 的等价物（ApplicationListener） |
+| [Listener 监听器](../../../前方的路%20以后再来探索吧/02-后端核心技术%20微服务%20分布式%20云原生/09-Web开发全流程/Listener%20监听器/00-Listener监听器总览.md) | 容器事件监听在 Boot 的等价物（ApplicationListener） |
 | [Cookie & Session](../Cookie%20%26%20Session（会话技术）/00-会话技术总览.md) | Session 配置在 Boot：`server.servlet.session.*` |
 
 ## 5. 核心概念速查

@@ -80,7 +80,7 @@ Orchestrator Runtime 编排调度器
 - **Temporal/LangGraph 互补定型**："框架在引擎内"（LangGraph 管 Agent 逻辑 + Temporal 管持久性）成为 2026 生产形态；Temporal LangGraph 插件（图节点为 Activity、每节点 checkpoint）；LangGraph Platform 改名 **LangSmith Deployment**（2025-10）；选型五测试（durability 测试/重试分类/并行扇出 100-1000/可观测/成本投影——重试尾支配 p99）。
 - **MAF checkpointing 缺陷编目**（Diagrid 审查）：resume 全手动、无自动失败检测（无心跳/租约/watchdog）、无重复执行防护（两进程可并发恢复同一 checkpoint）、superstep 粒度丢并行子步——**框架 checkpoint ≠ 持久执行**（"MS Agent Framework 与 Strands 重蹈同样错误"）。
 - **行业格局**：云厂商开源工具层、基础设施赚钱（Google Agent Executor、MS MAF、AWS Bedrock AgentCore）——"上面的工具必须开源，否则没人信任"；运行时基础设施不解决治理（问责/可解释/策略仍要监管层）。
-- **与体系分工**：[Multi-Agent 协作组件 02 篇](..%2FMulti-Agent协作组件（多智能体）%2F02-架构拓扑：编排vs编排舞.md) 讲多 Agent 拓扑中的编排概念；本体系深潜"编排器/运行时本体"（执行引擎/持久化/调度/幂等/沙箱）；[Tool 06 篇](..%2F..%2F..%2FAgent%20子组件专项学习%2FTool%20工具开发与注册%2F06-工具执行：执行器与调用循环.md) 讲执行循环内单调用纪律；[观测&可观测组件](..%2F观测%26可观测组件%2F00-观测可观测组件总览.md) 管运行时可观测。
+- **与体系分工**：[Multi-Agent 协作组件 02 篇](..%2FMulti-Agent协作组件（多智能体）%2F02-架构拓扑：编排vs编排舞.md) 讲多 Agent 拓扑中的编排概念；本体系深潜"编排器/运行时本体"（执行引擎/持久化/调度/幂等/沙箱）；Tool 06 篇 讲执行循环内单调用纪律；[观测&可观测组件](..%2F观测%26可观测组件%2F00-观测可观测组件总览.md) 管运行时可观测。
 
 ---
 

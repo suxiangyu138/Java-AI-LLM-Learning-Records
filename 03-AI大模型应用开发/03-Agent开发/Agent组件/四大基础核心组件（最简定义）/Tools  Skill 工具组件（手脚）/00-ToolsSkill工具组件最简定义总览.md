@@ -1,6 +1,6 @@
 # Tools & Skill 工具组件最简定义总览
 
-> 定位：四大基础核心组件之「工具（手脚）」的最简速记层——3 分钟看懂"Agent 怎么碰世界"；深化见 [Tool 工具开发与注册](..%2F..%2F..%2FAgent%20子组件专项学习%2FTool%20工具开发与注册%2F00-Tool工具开发与注册总览.md)（11 篇）与 [Function Calling](..%2F..%2F..%2F..%2F02-大模型基础与Prompt工程%2FFunction%20Calling%20函数调用【Agent%20基石】%2F00-FunctionCalling知识体系总览.md)。2026 一句话：**工具 = Agent 的手（动作能力），Skill = 手的用法（怎么做）——"MCP 给 Agent 手，Skills 给知识和可配置能力"**。
+> 定位：四大基础核心组件之「工具（手脚）」的最简速记层——3 分钟看懂"Agent 怎么碰世界"；深化见 Tool 工具开发与注册（11 篇）与 [Function Calling](..%2F..%2F..%2F..%2F02-大模型基础与Prompt工程%2FFunction%20Calling%20函数调用【Agent%20基石】%2F00-FunctionCalling知识体系总览.md)。2026 一句话：**工具 = Agent 的手（动作能力），Skill = 手的用法（怎么做）——"MCP 给 Agent 手，Skills 给知识和可配置能力"**。
 
 ## 目录
 
@@ -40,7 +40,7 @@ Tools & Skill 工具组件（最简定义）
 | 路径 | 目标 |
 |---|---|
 | 速记（10 分钟） | 本体系 01-03——概念入门 |
-| 工具深化（1 天） | [Tool 工具开发与注册](..%2F..%2F..%2FAgent%20子组件专项学习%2FTool%20工具开发与注册%2F00-Tool工具开发与注册总览.md) 11 篇 |
+| 工具深化（1 天） | Tool 工具开发与注册 11 篇 |
 | 协议深化（1 天） | [Function Calling](..%2F..%2F..%2F..%2F02-大模型基础与Prompt工程%2FFunction%20Calling%20函数调用【Agent%20基石】%2F00-FunctionCalling知识体系总览.md) + [MCP 知识体系](..%2F..%2F..%2F..%2F06-MCP协议与Agent%20Skill%2FMCP学习%2FMCP%2F00-MCP知识体系总览.md) |
 
 ## 4. 2026 关键事实
@@ -53,7 +53,7 @@ Tools & Skill 工具组件（最简定义）
 - **设计规范**：工具 = 正式契约（清晰命名/1-3 句何时用/枚举/约束/每参数描述/additionalProperties:false）；**工具数 >30-50 选择准确率线性下降**——按组路由；原子不重叠（描述出现"或"= 两个工具）。
 - **鲁棒性**：输入校验 + 输出验证 + 超时重试（幂等）+ 类型化错误返回（非裸堆栈）+ 顺序默认并行后置 + 断路器（三连败）+ 日志不可谈判。
 - **评估**：ToolSelectionAccuracy/FunctionCallAccuracy/JSONValidation 三独立失败模式；BFCL v3 前沿 88-94%（GPT-5.x ~89%/Claude Opus 4.7 ~87%/Gemini 3 Pro ~85%）——**差距在 irrelevance 与 missing-tool**。
-- **与体系分工**：[Tool 工具开发与注册](..%2F..%2F..%2FAgent%20子组件专项学习%2FTool%20工具开发与注册%2F00-Tool工具开发与注册总览.md) 深潜工具本体；本体系只做最简速记；[Multi-Agent](..%2F..%2F进阶工程化组件（生产环境必备）%2FMulti-Agent协作组件（多智能体）%2F00-Multi-Agent协作组件总览.md) 03 篇管 A2A 工具委派。
+- **与体系分工**：Tool 工具开发与注册 深潜工具本体；本体系只做最简速记；[Multi-Agent](..%2F..%2F进阶工程化组件（生产环境必备）%2FMulti-Agent协作组件（多智能体）%2F00-Multi-Agent协作组件总览.md) 03 篇管 A2A 工具委派。
 
 ---
 

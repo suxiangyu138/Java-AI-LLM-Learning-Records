@@ -92,7 +92,7 @@ with gr.Blocks(title="Agent Demo") as demo:
 | 自动 API 文档 | 每个组件自带 live 文档（gr.ChatInterface 即 REST 端点） |
 | 轻量安装 | 6.x 依赖精简，体积更小 |
 
-> 与 HuggingFace 生态的关系：本仓库 [HuggingFace 知识体系](..%2F..%2F..%2F02-大模型基础与Prompt工程%2FHuggingFace%2F00-HuggingFace知识体系总览.md) 第 09 篇（Gradio 与 Spaces）已讲 HF 视角的部署细节；本篇聚焦"Agent 演示界面"选型视角，Spaces 部署细节见彼处。
+> 与 HuggingFace 生态的关系：本仓库 [HuggingFace 知识体系](../../../../前方的路%20以后再来探索吧/03-AI大模型应用开发/02-大模型基础与Prompt工程/HuggingFace/00-HuggingFace知识体系总览.md) 第 09 篇（Gradio 与 Spaces）已讲 HF 视角的部署细节；本篇聚焦"Agent 演示界面"选型视角，Spaces 部署细节见彼处。
 
 ## 6. 用 Gradio 演示 Agent 的姿势
 

@@ -1,6 +1,6 @@
 # 00 Nacos 知识体系总览
 
-> 组件卡片：Nacos 是什么、版本现状、能做什么、与深度体系如何衔接——**注册中心 + 配置中心双职责**，2026 已从"云原生平台"转型"AI Agent 平台"。对照体系见 [ZooKeeper 知识体系](../../../../../09-Web开发全流程/ZooKeeper/00-ZooKeeper知识体系总览.md)
+> 组件卡片：Nacos 是什么、版本现状、能做什么、与深度体系如何衔接——**注册中心 + 配置中心双职责**，2026 已从"云原生平台"转型"AI Agent 平台"。对照体系见 [ZooKeeper 知识体系](../../../../../../前方的路%20以后再来探索吧/02-后端核心技术%20微服务%20分布式%20云原生/09-Web开发全流程/ZooKeeper/00-ZooKeeper知识体系总览.md)
 
 ---
 
@@ -152,8 +152,8 @@
 
 | 速查文档 | 对照/深度体系 |
 |---------|-------------|
-| 03-注册中心实战 | [ZooKeeper 知识体系](../../../../../09-Web开发全流程/ZooKeeper/00-ZooKeeper知识体系总览.md)（CP 对照）、[Dubbo（09-Web开发全流程）](../../../../../09-Web开发全流程/Dubbo/) |
-| 05-核心原理（一致性） | [ZooKeeper-04 Session 与 Watcher](../../../../../09-Web开发全流程/ZooKeeper/04-Session与Watcher机制.md)（事件通知对照） |
+| 03-注册中心实战 | [ZooKeeper 知识体系](../../../../../../前方的路%20以后再来探索吧/02-后端核心技术%20微服务%20分布式%20云原生/09-Web开发全流程/ZooKeeper/00-ZooKeeper知识体系总览.md)（CP 对照）、[Dubbo（09-Web开发全流程）](../../../../../09-Web开发全流程/Dubbo/) |
+| 05-核心原理（一致性） | [ZooKeeper-04 Session 与 Watcher](../../../../../../前方的路%20以后再来探索吧/02-后端核心技术%20微服务%20分布式%20云原生/09-Web开发全流程/ZooKeeper/04-Session与Watcher机制.md)（事件通知对照） |
 | 06-高可用 | [Redis-05 高可用架构](../../../../../02-非关系型数据库/Redis/05-Redis高可用架构.md)（集群/选举对照思维） |
 | 09-集成地图 | Spring Cloud Gateway/LoadBalancer/OpenFeign（同级目录） |
 
@@ -268,7 +268,7 @@ public class OrderProperties { private int timeout; }
 | 前置主题 | 所在文档 | 与本系列的关系 |
 |---------|---------|--------------|
 | 微服务基础 | Spring Cloud 家族（同级目录） | OpenFeign/LoadBalancer/Gateway 是联动前提 |
-| 一致性基础 | [ZooKeeper 知识体系](../../../../../09-Web开发全流程/ZooKeeper/00-ZooKeeper知识体系总览.md) | AP/CP 与选举协议对照 |
+| 一致性基础 | [ZooKeeper 知识体系](../../../../../../前方的路%20以后再来探索吧/02-后端核心技术%20微服务%20分布式%20云原生/09-Web开发全流程/ZooKeeper/00-ZooKeeper知识体系总览.md) | AP/CP 与选举协议对照 |
 | Spring 配置机制 | Spring Cloud Config（同级目录） | 配置中心的对比视角 |
 | MCP/AI 概念 | [MCP 协议与 Agent Skill](../../../../../../03-AI大模型应用开发/06-MCP协议与Agent Skill/) | 08 篇 AI Registry 的基础 |
 

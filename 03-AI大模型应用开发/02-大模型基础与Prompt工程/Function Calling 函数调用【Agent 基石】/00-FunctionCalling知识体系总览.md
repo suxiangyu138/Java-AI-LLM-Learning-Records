@@ -114,7 +114,7 @@ Function Calling 函数调用【Agent 基石】——11 篇（2026-08 基准：O
 - [Function Calling 2026 生产模式](https://thepromptbench.com/structured-outputs/function-calling-patterns-that-work/)
 - [LLM-API/09-Function Calling与Tool Use深度实战.md](../LLM-API/09-Function%20Calling与Tool%20Use深度实战.md)（速查版）
 - [03-Agent开发/主流 Agent 范式](../../03-Agent开发/主流%20Agent%20范式/00-主流Agent范式知识体系总览.md)（上层范式）
-- [Python 异步 + FastAPI](../../01-Python语言/Python%20异步%20+%20FastAPI/00-Python异步与FastAPI知识体系总览.md)（Agent 服务端工程）
+- [Python 异步 + FastAPI](../../../前方的路%20以后再来探索吧/03-AI大模型应用开发/01-Python语言/Python%20异步%20+%20FastAPI/00-Python异步与FastAPI知识体系总览.md)（Agent 服务端工程）
 
 ---
 

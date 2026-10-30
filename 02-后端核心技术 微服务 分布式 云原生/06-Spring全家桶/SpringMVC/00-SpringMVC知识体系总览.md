@@ -147,7 +147,7 @@ SpringMVC 知识体系
           └────────────────────┘   └────────────────────────┘
 ```
 
-- **向上承接**：[Spring全家桶-04-Spring-MVC-Web层框架](../Spring全家桶/04-Spring-MVC-Web层框架.md) 有基础篇；[Spring生态深度剖析-05-DispatcherServlet请求处理全链路](../Spring生态深度剖析/05-DispatcherServlet请求处理全链路.md) 有源码级解析；本体系做 7.0 框架级系统化。
+- **向上承接**：Spring全家桶-04-Spring-MVC-Web层框架 有基础篇；[Spring生态深度剖析-05-DispatcherServlet请求处理全链路](../Spring生态深度剖析/05-DispatcherServlet请求处理全链路.md) 有源码级解析；本体系做 7.0 框架级系统化。
 - **横向联动**：[Spring Security](../Spring Security与Spring Security OAuth2/00-Spring Security与OAuth2知识体系总览.md) 的过滤器链在 DispatcherServlet 之前；[Spring Task](../Spring Task/00-Spring Task知识体系总览.md) 的异步与 MVC 异步共用线程模型。
 - **向下延伸**：REST 客户端（RestClient/RestTemplate）、API 网关转发，均以 MVC 的请求/响应语义为地基。
 

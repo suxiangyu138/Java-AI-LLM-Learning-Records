@@ -1,6 +1,6 @@
 # Tools vs Skills vs MCP
 
-> 概念速记：三个概念的定位区分。深潜见 [Tool 09 篇](..%2F..%2F..%2FAgent%20子组件专项学习%2FTool%20工具开发与注册%2F09-框架与生态：从注解到MCP.md) 与 [MCP 知识体系](..%2F..%2F..%2F..%2F06-MCP协议与Agent%20Skill%2FMCP学习%2FMCP%2F00-MCP知识体系总览.md)。
+> 概念速记：三个概念的定位区分。深潜见 Tool 09 篇 与 [MCP 知识体系](..%2F..%2F..%2F..%2F06-MCP协议与Agent%20Skill%2FMCP学习%2FMCP%2F00-MCP知识体系总览.md)。
 
 ## 三者定位
 

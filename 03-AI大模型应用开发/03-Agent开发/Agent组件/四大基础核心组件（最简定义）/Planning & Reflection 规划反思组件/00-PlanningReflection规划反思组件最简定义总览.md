@@ -1,6 +1,6 @@
 # Planning & Reflection 规划反思组件最简定义总览
 
-> 定位：四大基础核心组件之「规划与反思」的最简速记层——3 分钟看懂"想清楚再做 + 做后复盘"；深化见 [Planner 规划器](..%2F..%2F..%2FAgent%20子组件专项学习%2FPlanner%20规划器%2F00-Planner规划器总览.md) 与 [Reflection 反思模块](..%2F..%2F..%2FAgent%20子组件专项学习%2FReflection%20反思模块%2F00-Reflection反思模块总览.md)（各 11 篇）。2026 一句话：**规划 = 先想清楚再做（Plan-Execute）；反思 = 做后复盘改进（≠重试）；两者都只在"可验证"时可靠**。
+> 定位：四大基础核心组件之「规划与反思」的最简速记层——3 分钟看懂"想清楚再做 + 做后复盘"；深化见 Planner 规划器 与 Reflection 反思模块（各 11 篇）。2026 一句话：**规划 = 先想清楚再做（Plan-Execute）；反思 = 做后复盘改进（≠重试）；两者都只在"可验证"时可靠**。
 
 ## 目录
 
@@ -42,8 +42,8 @@ Planning & Reflection 规划反思组件（最简定义）
 | 路径 | 目标 |
 |---|---|
 | 速记（10 分钟） | 本体系 01-03——概念入门 |
-| 规划深化（1 天） | [Planner 规划器](..%2F..%2F..%2FAgent%20子组件专项学习%2FPlanner%20规划器%2F00-Planner规划器总览.md) 11 篇 |
-| 反思深化（1 天） | [Reflection 反思模块](..%2F..%2F..%2FAgent%20子组件专项学习%2FReflection%20反思模块%2F00-Reflection反思模块总览.md) 11 篇 |
+| 规划深化（1 天） | Planner 规划器 11 篇 |
+| 反思深化（1 天） | Reflection 反思模块 11 篇 |
 | 范式（半天） | [主流 Agent 范式 04-Plan-and-Execute](..%2F..%2F..%2F主流%20Agent%20范式%2F04-Plan-and-Execute范式.md) |
 
 ## 4. 2026 关键事实
@@ -55,7 +55,7 @@ Planning & Reflection 规划反思组件（最简定义）
 - **规划失败编目（PlanBench-XL，2026-06）**：327 任务/1665 工具——GPT-5.4 无阻塞 51.90% → 严重阻塞 **11.36%**；**静默失败最破坏性**（无错误信号的错误值 → value contamination 级联）；**Irrecoverable Drift 是主要失败模式**（GPT-4o >70% 失败）；工具选择瓶颈（过度依赖最近检索的工具而非最相关的）。
 - **自适应规划**：AdaPlanBench（2026）隐藏约束逐步揭示——最好模型仅 67.75%；SPIRAL（IBM，AAAI 2026）Planner/Simulator/Critic 三 Agent 进 MCTS——DailyLifeAPIs **83.6%**（+16 点）。
 - **护栏共识**：max_steps 步数预算 + 成本上限（一次无界查询可级联成数百次 LLM 调用 $5-50）+ 长任务 checkpoint + 高风险计划人工批准（与 [Orchestrator Runtime](..%2F..%2F进阶工程化组件（生产环境必备）%2FOrchestrator%20%20Runtime%20编排调度器%2F00-OrchestratorRuntime编排调度器总览.md) 预算联动）。
-- **与体系分工**：[Planner 规划器](..%2F..%2F..%2FAgent%20子组件专项学习%2FPlanner%20规划器%2F00-Planner规划器总览.md) 深潜规划本体；[Reflection 反思模块](..%2F..%2F..%2FAgent%20子组件专项学习%2FReflection%20反思模块%2F00-Reflection反思模块总览.md) 深潜反思本体；本体系只做最简速记。
+- **与体系分工**：Planner 规划器 深潜规划本体；Reflection 反思模块 深潜反思本体；本体系只做最简速记。
 
 ---
 
