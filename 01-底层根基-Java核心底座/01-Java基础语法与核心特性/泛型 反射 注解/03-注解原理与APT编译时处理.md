@@ -140,16 +140,16 @@ public @interface ValidAnnotation {
 }
 
 public @interface InvalidAnnotation {
-    // ✗ 不合法——不能使用包装类型（除Class外）
+    // 不合法——不能使用包装类型（除Class外）
     // Integer count();
 
-    // ✗ 不合法——不能是Object或其他任意引用类型
+    // 不合法——不能是Object或其他任意引用类型
     // Object obj();
 
-    // ✗ 不合法——不能是数组的数组
+    // 不合法——不能是数组的数组
     // String[][] matrix();
 
-    // ✗ 不合法——不能有泛型
+    // 不合法——不能有泛型
     // <T> T value();
 }
 
@@ -1045,10 +1045,10 @@ public class InheritedDemo {
                 (childAnno != null ? childAnno.value() : "无"));
         // 输出: 子类有注解: parent
 
-        // ✗ @Inherited 对接口无效
+        // @Inherited 对接口无效
         // 实现接口的类不会继承接口上的@Inherited注解
 
-        // ✗ @Inherited 对方法/字段等无效
+        // @Inherited 对方法/字段等无效
         // 仅对类/接口上的注解有效
     }
 }
@@ -1070,7 +1070,7 @@ class Base {
 class Derived extends Base {
     @Override
     public void doSomething() {}
-    // ✗ 子类重写的方法上 @MethodAnnotation 不会继承
+    // 子类重写的方法上 @MethodAnnotation 不会继承
     // getAnnotation(MethodAnnotation.class) -> null
 }
 ```
@@ -1080,7 +1080,7 @@ class Derived extends Base {
 Java的注解**不能使用 `extends` 关键字继承另一个注解**。这与接口的继承不同。
 
 ```java
-// ✗ 这不会编译！注解不能继承注解
+// 这不会编译！注解不能继承注解
 // public @interface SubAnnotation extends BaseAnnotation {
 // }
 
